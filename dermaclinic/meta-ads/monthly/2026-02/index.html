@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DermaClinic × Digital AI — Meta Ads Fevereiro 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --dai-dark:    #1a1a2e;
+      --dai-darker:  #16213e;
+      --dai-accent:  #0f3460;
+      --dai-red:     #e94560;
+      --dai-text:    #eaeaea;
+      --dai-success: #4CAF50;
+      --dai-warning: #FF9800;
+      --dai-muted:   #8892a4;
+      --derma-rose:  #e8b4b8;
+      --derma-nude:  #f5e6e8;
+      --derma-deep:  #c9848a;
+      --card-bg:     rgba(255,255,255,0.04);
+      --card-border: rgba(255,255,255,0.08);
+      --radius:      16px;
+      --radius-sm:   10px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', 'DM Sans', sans-serif;
+      background: var(--dai-dark);
+      color: var(--dai-text);
+      overflow-x: hidden;
+    }
+
+    /* ===== NAVIGATION DOTS ===== */
+    .nav-dots {
+      position: fixed;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .nav-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      padding: 0;
+    }
+
+    .nav-dot.active {
+      background: var(--dai-red);
+      transform: scale(1.4);
+      box-shadow: 0 0 10px var(--dai-red);
+    }
+
+    .nav-dot:hover { background: var(--derma-rose); transform: scale(1.2); }
+
+    /* ===== SLIDE BASE ===== */
+    .slide {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide-number {
+      position: absolute;
+      top: 30px;
+      right: 60px;
+      font-size: 12px;
+      color: var(--dai-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ===== ANIMATIONS ===== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fade-in-delay-1 { transition-delay: 0.1s; }
+    .fade-in-delay-2 { transition-delay: 0.2s; }
+    .fade-in-delay-3 { transition-delay: 0.3s; }
+    .fade-in-delay-4 { transition-delay: 0.4s; }
+    .fade-in-delay-5 { transition-delay: 0.5s; }
+
+    /* ===== SLIDE 1 — COVER ===== */
+    #slide-1 {
+      background: linear-gradient(135deg, var(--dai-dark) 0%, var(--dai-darker) 50%, var(--dai-accent) 100%);
+      align-items: center;
+      text-align: center;
+    }
+
+    #slide-1::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 30%, rgba(233,69,96,0.15) 0%, transparent 60%),
+                  radial-gradient(ellipse at 20% 80%, rgba(232,180,184,0.1) 0%, transparent 50%);
+    }
+
+    .cover-brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 48px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: -1px;
+    }
+
+    .brand-dai {
+      background: linear-gradient(135deg, var(--dai-red), #c73652);
+      color: white;
+    }
+
+    .brand-derma {
+      background: linear-gradient(135deg, var(--derma-rose), var(--derma-deep));
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .brand-separator {
+      width: 2px;
+      height: 50px;
+      background: rgba(255,255,255,0.2);
+    }
+
+    .cover-eyebrow {
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--derma-rose);
+      margin-bottom: 20px;
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cover-title {
+      font-size: clamp(36px, 5vw, 72px);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+      background: linear-gradient(135deg, #fff 0%, var(--derma-rose) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .cover-subtitle {
+      font-size: 20px;
+      color: var(--dai-muted);
+      margin-bottom: 48px;
+      font-weight: 400;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cover-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 100px;
+      padding: 10px 24px;
+      font-size: 14px;
+      color: var(--dai-text);
+      position: relative;
+      z-index: 1;
+    }
+
+    .cover-badge::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--dai-success);
+      box-shadow: 0 0 8px var(--dai-success);
+    }
+
+    /* ===== SLIDE HEADER ===== */
+    .slide-header {
+      margin-bottom: 48px;
+    }
+
+    .slide-tag {
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--derma-rose);
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .slide-title {
+      font-size: clamp(28px, 3.5vw, 48px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.1;
+    }
+
+    .slide-title span { color: var(--dai-red); }
+
+    /* ===== SLIDE 2 — KPI CARDS ===== */
+    #slide-2 {
+      background: linear-gradient(160deg, var(--dai-darker) 0%, var(--dai-dark) 100%);
+    }
+
+    .executive-summary {
+      background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(232,180,184,0.05));
+      border: 1px solid rgba(233,69,96,0.2);
+      border-radius: var(--radius);
+      padding: 24px 32px;
+      margin-bottom: 40px;
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--dai-text);
+    }
+
+    .executive-summary strong { color: var(--derma-rose); }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(233,69,96,0.3);
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+
+    .kpi-card.primary::before { background: linear-gradient(90deg, var(--dai-red), var(--derma-rose)); }
+    .kpi-card.blue::before { background: linear-gradient(90deg, #4fc3f7, #0288d1); }
+    .kpi-card.green::before { background: linear-gradient(90deg, var(--dai-success), #2e7d32); }
+    .kpi-card.orange::before { background: linear-gradient(90deg, #ff9800, #e65100); }
+
+    .kpi-icon { font-size: 28px; margin-bottom: 12px; }
+    .kpi-value {
+      font-size: clamp(28px, 3vw, 42px);
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .kpi-card.primary .kpi-value { color: var(--derma-rose); }
+    .kpi-card.blue .kpi-value { color: #4fc3f7; }
+    .kpi-card.green .kpi-value { color: var(--dai-success); }
+    .kpi-card.orange .kpi-value { color: var(--dai-warning); }
+    .kpi-label { font-size: 13px; color: var(--dai-muted); font-weight: 500; }
+
+    /* ===== SLIDE 3 — BENCHMARKS ===== */
+    #slide-3 {
+      background: linear-gradient(160deg, var(--dai-dark) 0%, var(--dai-darker) 100%);
+    }
+
+    .benchmark-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .benchmark-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .benchmark-card:hover { transform: translateX(4px); }
+
+    .benchmark-status {
+      font-size: 36px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .benchmark-info { flex: 1; }
+
+    .benchmark-metric {
+      font-size: 13px;
+      color: var(--dai-muted);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .benchmark-value {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 6px;
+    }
+
+    .benchmark-card.ok .benchmark-value { color: var(--dai-success); }
+    .benchmark-card.warn .benchmark-value { color: var(--dai-warning); }
+
+    .benchmark-range {
+      font-size: 13px;
+      color: var(--dai-muted);
+      margin-bottom: 10px;
+    }
+
+    .benchmark-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-ok { background: rgba(76,175,80,0.15); color: var(--dai-success); border: 1px solid rgba(76,175,80,0.3); }
+    .badge-warn { background: rgba(255,152,0,0.15); color: var(--dai-warning); border: 1px solid rgba(255,152,0,0.3); }
+
+    /* ===== SLIDE 4 — SEMANAL ===== */
+    #slide-4 {
+      background: linear-gradient(160deg, var(--dai-darker) 0%, var(--dai-dark) 100%);
+    }
+
+    .chart-container {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 28px;
+      position: relative;
+    }
+
+    .chart-wrapper { height: 340px; }
+
+    .alert-banner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,152,0,0.1);
+      border: 1px solid rgba(255,152,0,0.3);
+      border-radius: var(--radius-sm);
+      padding: 14px 20px;
+      margin-top: 20px;
+      font-size: 14px;
+      color: var(--dai-warning);
+    }
+
+    /* ===== SLIDE 5 — DIÁRIO ===== */
+    #slide-5 {
+      background: linear-gradient(160deg, var(--dai-dark) 0%, var(--dai-darker) 100%);
+    }
+
+    .peaks-grid {
+      display: flex;
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .peak-badge {
+      flex: 1;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      text-align: center;
+    }
+
+    .peak-date { font-size: 12px; color: var(--dai-muted); margin-bottom: 4px; }
+    .peak-value { font-size: 20px; font-weight: 700; color: var(--derma-rose); }
+    .peak-label { font-size: 11px; color: var(--dai-muted); margin-top: 2px; }
+
+    /* ===== SLIDE 6 — DESTAQUES ===== */
+    #slide-6 {
+      background: linear-gradient(160deg, var(--dai-darker) 0%, var(--dai-dark) 100%);
+    }
+
+    .highlights-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .highlight-card {
+      background: linear-gradient(135deg, rgba(76,175,80,0.07), rgba(76,175,80,0.02));
+      border: 1px solid rgba(76,175,80,0.2);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(76,175,80,0.1);
+    }
+
+    .highlight-icon { font-size: 40px; margin-bottom: 16px; }
+    .highlight-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--dai-success);
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+    .highlight-subtitle {
+      font-size: 14px;
+      color: var(--derma-rose);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .highlight-desc { font-size: 14px; color: var(--dai-muted); line-height: 1.6; }
+
+    /* ===== SLIDE 7 — ALERTAS ===== */
+    #slide-7 {
+      background: linear-gradient(160deg, var(--dai-dark) 0%, var(--dai-darker) 100%);
+    }
+
+    .alerts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .alert-card {
+      background: linear-gradient(135deg, rgba(255,152,0,0.07), rgba(255,152,0,0.02));
+      border: 1px solid rgba(255,152,0,0.2);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      transition: transform 0.3s ease;
+    }
+
+    .alert-card:hover { transform: translateY(-4px); }
+
+    .alert-icon { font-size: 36px; margin-bottom: 16px; }
+    .alert-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--dai-warning);
+      margin-bottom: 12px;
+    }
+    .alert-desc { font-size: 14px; color: var(--dai-muted); line-height: 1.6; }
+    .alert-desc strong { color: var(--dai-text); }
+
+    /* ===== SLIDE 8 — ESTRATÉGIA ===== */
+    #slide-8 {
+      background: linear-gradient(160deg, var(--dai-darker) 0%, var(--dai-dark) 100%);
+    }
+
+    .strategy-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .strategy-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 28px;
+      display: flex;
+      gap: 20px;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .strategy-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(233,69,96,0.3);
+    }
+
+    .strategy-number {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .strategy-card.alta .strategy-number {
+      background: rgba(233,69,96,0.15);
+      color: var(--dai-red);
+      border: 1px solid rgba(233,69,96,0.3);
+    }
+
+    .strategy-card.media .strategy-number {
+      background: rgba(255,152,0,0.15);
+      color: var(--dai-warning);
+      border: 1px solid rgba(255,152,0,0.3);
+    }
+
+    .strategy-priority {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .strategy-card.alta .strategy-priority { color: var(--dai-red); }
+    .strategy-card.media .strategy-priority { color: var(--dai-warning); }
+
+    .strategy-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+    .strategy-desc { font-size: 13px; color: var(--dai-muted); line-height: 1.5; }
+
+    /* ===== SLIDE 9 — PROJEÇÃO ===== */
+    #slide-9 {
+      background: linear-gradient(160deg, var(--dai-dark) 0%, var(--dai-darker) 100%);
+    }
+
+    .projection-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .projection-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .projection-card.optimized {
+      background: linear-gradient(135deg, rgba(76,175,80,0.08), rgba(76,175,80,0.02));
+      border-color: rgba(76,175,80,0.3);
+    }
+
+    .projection-label {
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--dai-muted);
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .projection-main {
+      font-size: 56px;
+      font-weight: 900;
+      letter-spacing: -2px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .projection-card:not(.optimized) .projection-main { color: var(--dai-text); }
+    .projection-card.optimized .projection-main { color: var(--dai-success); }
+
+    .projection-sub {
+      font-size: 20px;
+      color: var(--dai-muted);
+      margin-bottom: 20px;
+    }
+
+    .projection-card.optimized .projection-sub { color: rgba(76,175,80,0.7); }
+
+    .projection-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .projection-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      padding: 8px 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .projection-item-label { color: var(--dai-muted); }
+    .projection-item-value { font-weight: 600; }
+
+    .growth-banner {
+      background: linear-gradient(135deg, rgba(76,175,80,0.15), rgba(232,180,184,0.08));
+      border: 1px solid rgba(76,175,80,0.3);
+      border-radius: var(--radius);
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .growth-text { font-size: 18px; font-weight: 700; color: var(--dai-success); }
+    .growth-sub { font-size: 13px; color: var(--dai-muted); margin-top: 4px; }
+
+    .growth-badge {
+      background: var(--dai-success);
+      color: white;
+      padding: 10px 24px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* ===== SLIDE 10 — FOOTER ===== */
+    #slide-10 {
+      background: linear-gradient(160deg, var(--dai-darker) 0%, #0a0a1a 100%);
+      align-items: center;
+      text-align: center;
+    }
+
+    #slide-10::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, rgba(233,69,96,0.08) 0%, transparent 70%);
+    }
+
+    .footer-logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--dai-red), #c73652);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 900;
+      margin: 0 auto 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-title {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-subtitle {
+      font-size: 16px;
+      color: var(--dai-muted);
+      margin-bottom: 48px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-info {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-next {
+      background: rgba(232,180,184,0.1);
+      border: 1px solid rgba(232,180,184,0.2);
+      border-radius: 100px;
+      padding: 12px 28px;
+      font-size: 14px;
+      color: var(--derma-rose);
+    }
+
+    .footer-divider {
+      width: 60px;
+      height: 1px;
+      background: rgba(255,255,255,0.1);
+      margin: 20px auto;
+    }
+
+    .footer-company {
+      font-size: 13px;
+      color: var(--dai-muted);
+    }
+
+    .footer-company span { color: var(--dai-red); font-weight: 700; }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      margin-top: 16px;
+    }
+
+    .footer-link {
+      font-size: 13px;
+      color: var(--dai-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover { color: var(--derma-rose); }
+
+    /* ===== UTILITY ===== */
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .w-full { width: 100%; }
+
+    /* ===== PRINT ===== */
+    @media print {
+      .nav-dots { display: none; }
+      .slide { min-height: auto; page-break-after: always; padding: 40px; }
+      body { background: white; color: black; }
+      .slide-title, .kpi-value, .benchmark-value { color: #333 !important; }
+      .kpi-card, .benchmark-card, .highlight-card, .alert-card, .strategy-card { border: 1px solid #ddd !important; background: #f9f9f9 !important; }
+      canvas { max-width: 100% !important; }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .slide { padding: 60px 24px; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .benchmark-grid { grid-template-columns: 1fr; }
+      .highlights-grid, .alerts-grid { grid-template-columns: 1fr; }
+      .strategy-grid { grid-template-columns: 1fr; }
+      .projection-grid { grid-template-columns: 1fr; }
+      .nav-dots { display: none; }
+      .peaks-grid { flex-wrap: wrap; }
+    }
+
+    @media (max-width: 600px) {
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+      .slide-title { font-size: 24px; }
+      .cover-title { font-size: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation Dots -->
+<nav class="nav-dots" id="navDots" aria-label="Navegação por slides">
+  <button class="nav-dot active" onclick="scrollToSlide(0)" title="Cover"></button>
+  <button class="nav-dot" onclick="scrollToSlide(1)" title="Resumo Executivo"></button>
+  <button class="nav-dot" onclick="scrollToSlide(2)" title="Benchmarks"></button>
+  <button class="nav-dot" onclick="scrollToSlide(3)" title="Evolução Semanal"></button>
+  <button class="nav-dot" onclick="scrollToSlide(4)" title="Distribuição Diária"></button>
+  <button class="nav-dot" onclick="scrollToSlide(5)" title="Destaques"></button>
+  <button class="nav-dot" onclick="scrollToSlide(6)" title="Alertas"></button>
+  <button class="nav-dot" onclick="scrollToSlide(7)" title="Estratégia Março"></button>
+  <button class="nav-dot" onclick="scrollToSlide(8)" title="Projeção Março"></button>
+  <button class="nav-dot" onclick="scrollToSlide(9)" title="Assinatura"></button>
+</nav>
+
+<!-- ===== SLIDE 1 — COVER ===== -->
+<section class="slide" id="slide-1">
+  <div class="cover-brand fade-in">
+    <div class="brand-logo brand-derma">DC</div>
+    <div class="brand-separator"></div>
+    <div class="brand-logo brand-dai">DAI</div>
+  </div>
+  <p class="cover-eyebrow fade-in fade-in-delay-1">Meta Ads · Campanha [Digital AI] Mensagens</p>
+  <h1 class="cover-title fade-in fade-in-delay-2">Relatório Mensal<br/>Fevereiro 2026</h1>
+  <p class="cover-subtitle fade-in fade-in-delay-3">DermaClinic · Dermatologia &amp; Estética Médica · Joinville SC</p>
+  <div class="cover-badge fade-in fade-in-delay-4">
+    02 a 26 de fevereiro de 2026 &nbsp;·&nbsp; 25 dias ativos
+  </div>
+  <div class="slide-number">01 / 10</div>
+</section>
+
+<!-- ===== SLIDE 2 — RESUMO EXECUTIVO ===== -->
+<section class="slide" id="slide-2">
+  <div class="slide-header fade-in">
+    <p class="slide-tag">Visão Geral</p>
+    <h2 class="slide-title">Resumo <span>Executivo</span></h2>
+  </div>
+
+  <div class="executive-summary fade-in fade-in-delay-1">
+    Em fevereiro, a campanha entregou <strong>79 conversas iniciadas</strong> com investimento de
+    <strong>R$795,81</strong>, alcançando quase <strong>22 mil pessoas únicas</strong> com frequência saudável de
+    1,24x. O CPL de <strong>R$10,07</strong> ficou na faixa inferior do benchmark do setor (R$5–25),
+    e o CTR de <strong>2,65%</strong> superou em 76% o mínimo recomendado, sinalizando criativos relevantes
+    e audiência bem segmentada.
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card primary fade-in fade-in-delay-1">
+      <div class="kpi-icon">💰</div>
+      <div class="kpi-value">R$795,81</div>
+      <div class="kpi-label">Investimento Total</div>
+    </div>
+    <div class="kpi-card blue fade-in fade-in-delay-2">
+      <div class="kpi-icon">👁️</div>
+      <div class="kpi-value">21.977</div>
+      <div class="kpi-label">Pessoas Alcançadas</div>
+    </div>
+    <div class="kpi-card green fade-in fade-in-delay-3">
+      <div class="kpi-icon">💬</div>
+      <div class="kpi-value">79</div>
+      <div class="kpi-label">Conversas Iniciadas</div>
+    </div>
+    <div class="kpi-card orange fade-in fade-in-delay-4">
+      <div class="kpi-icon">🎯</div>
+      <div class="kpi-value">R$10,07</div>
+      <div class="kpi-label">Custo por Lead (CPL)</div>
+    </div>
+  </div>
+  <div class="slide-number">02 / 10</div>
+</section>
+
+<!-- ===== SLIDE 3 — BENCHMARKS ===== -->
+<section class="slide" id="slide-3">
+  <div class="slide-header fade-in">
+    <p class="slide-tag">Análise de Performance</p>
+    <h2 class="slide-title">Performance vs <span>Benchmarks</span></h2>
+  </div>
+
+  <div class="benchmark-grid">
+    <div class="benchmark-card ok fade-in fade-in-delay-1">
+      <div class="benchmark-status">✅</div>
+      <div class="benchmark-info">
+        <div class="benchmark-metric">CTR — Taxa de Cliques</div>
+        <div class="benchmark-value">2,65%</div>
+        <div class="benchmark-range">Benchmark mínimo: 1,5% · Referência setor: 1,5–3%</div>
+        <span class="benchmark-badge badge-ok">76% acima do mínimo</span>
+      </div>
+    </div>
+
+    <div class="benchmark-card ok fade-in fade-in-delay-2">
+      <div class="benchmark-status">✅</div>
+      <div class="benchmark-info">
+        <div class="benchmark-metric">Frequência de Exposição</div>
+        <div class="benchmark-value">1,24x</div>
+        <div class="benchmark-range">Saudável: &lt; 3,0x · Saturação: &gt; 4,0x</div>
+        <span class="benchmark-badge badge-ok">Audiência saudável</span>
+      </div>
+    </div>
+
+    <div class="benchmark-card ok fade-in fade-in-delay-3">
+      <div class="benchmark-status">✅</div>
+      <div class="benchmark-info">
+        <div class="benchmark-metric">CPM — Custo por Mil Impressões</div>
+        <div class="benchmark-value">R$29,24</div>
+        <div class="benchmark-range">Benchmark setor saúde: R$15–35</div>
+        <span class="benchmark-badge badge-ok">Dentro do intervalo</span>
+      </div>
+    </div>
+
+    <div class="benchmark-card ok fade-in fade-in-delay-4">
+      <div class="benchmark-status">✅</div>
+      <div class="benchmark-info">
+        <div class="benchmark-metric">CPL — Custo por Lead</div>
+        <div class="benchmark-value">R$10,07</div>
+        <div class="benchmark-range">Benchmark dermatologia: R$5–25</div>
+        <span class="benchmark-badge badge-ok">Custo eficiente</span>
+      </div>
+    </div>
+  </div>
+  <div class="slide-number">03 / 10</div>
+</section>
+
+<!-- ===== SLIDE 4 — SEMANAL ===== -->
+<section class="slide" id="slide-4">
+  <div class="slide-header fade-in">
+    <p class="slide-tag">Tendência Temporal</p>
+    <h2 class="slide-title">Evolução <span>Semanal</span></h2>
+  </div>
+
+  <div class="chart-container fade-in fade-in-delay-1">
+    <div class="chart-wrapper">
+      <canvas id="weeklyChart"></canvas>
+    </div>
+  </div>
+
+  <div class="alert-banner fade-in fade-in-delay-2">
+    ⚠️ <strong>Semana 3 (16–22/02):</strong> CTR manteve-se elevado (2,70%) mas conversas caíram 59% — indica gargalo entre clique e início de mensagem. CPL disparou para R$20,49.
+  </div>
+  <div class="slide-number">04 / 10</div>
+</section>
+
+<!-- ===== SLIDE 5 — DIÁRIO ===== -->
+<section class="slide" id="slide-5">
+  <div class="slide-header fade-in">
+    <p class="slide-tag">Granularidade Diária</p>
+    <h2 class="slide-title">Distribuição <span>Diária</span></h2>
+  </div>
+
+  <div class="chart-container fade-in fade-in-delay-1">
+    <div class="chart-wrapper">
+      <canvas id="dailyChart"></canvas>
+    </div>
+  </div>
+
+  <div class="peaks-grid fade-in fade-in-delay-2">
+    <div class="peak-badge">
+      <div class="peak-date">05/02 (Qua)</div>
+      <div class="peak-value">10 conversas</div>
+      <div class="peak-label">Melhor dia do mês · CTR 3,67%</div>
+    </div>
+    <div class="peak-badge">
+      <div class="peak-date">12/02 (Qui)</div>
+      <div class="peak-value">9 conversas</div>
+      <div class="peak-label">CTR 2,65% · Volume consistente</div>
+    </div>
+    <div class="peak-badge">
+      <div class="peak-date">23–24/02 (Dom–Seg)</div>
+      <div class="peak-value">CTR 4,40–4,41%</div>
+      <div class="peak-label">Melhor CTR da campanha</div>
+    </div>
+    <div class="peak-badge">
+      <div class="peak-date">09/02 & 16–17/02</div>
+      <div class="peak-value">0 conversas</div>
+      <div class="peak-label">Domingos e início S3 — gargalo</div>
+    </div>
+  </div>
+  <div class="slide-number">05 / 10</div>
+</section>
+
+<!-- ===== SLIDE 6 — DESTAQUES ===== -->
+<section class="slide" id="slide-6">
+  <div class="slide-header fade-in">
+    <p class="slide-tag">Pontos Positivos</p>
+    <h2 class="slide-title">O que <span>funcionou bem</span></h2>
+  </div>
+
+  <div class="highlights-grid">
+    <div class="highlight-card fade-in fade-in-delay-1">
+      <div class="highlight-icon">🏆</div>
+      <div class="highlight-title">R$10,07 CPL</div>
+      <div class="highlight-subtitle">Faixa inferior do mercado</div>
+      <div class="highlight-desc">
+        Custo por lead 60% mais barato que o teto do benchmark de dermatologia (R$25).
+        Cada nova paciente custou menos de 10 reais para entrar em contato.
+      </div>
+    </div>
+
+    <div class="highlight-card fade-in fade-in-delay-2">
+      <div class="highlight-icon">⭐</div>
+      <div class="highlight-title">CTR 2,65%</div>
+      <div class="highlight-subtitle">76% acima do benchmark mínimo</div>
+      <div class="highlight-desc">
+        Taxa de cliques consistentemente acima do esperado indica que os criativos
+        ressoam com a audiência e a segmentação está bem calibrada.
+      </div>
+    </div>
+
+    <div class="highlight-card fade-in fade-in-delay-3">
+      <div class="highlight-icon">💬</div>
+      <div class="highlight-title">84,8% Resposta</div>
+      <div class="highlight-subtitle">67 primeiras respostas de 79 conversas</div>
+      <div class="highlight-desc">
+        Alta taxa de resposta indica leads com intenção real de agendamento —
+        o perfil de paciente que chega é qualificado e engajado.
+      </div>
+    </div>
+  </div>
+  <div class="slide-number">06 / 10</div>
+</section>
+
+<!-- ===== SLIDE 7 — ALERTAS ===== -->
+<section class="slide" id="slide-7">
+  <div class="slide-header fade-in">
+    <p class="slide-tag">Oportunidades de Melhoria</p>
+    <h2 class="slide-title">Pontos de <span>Atenção</span></h2>
+  </div>
+
+  <div class="alerts-grid">
+    <div class="alert-card fade-in fade-in-delay-1">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-title">Semana 3 — Gargalo Clique→Mensagem</div>
+      <div class="alert-desc">
+        CTR de <strong>2,70%</strong> com apenas <strong>11 conversas</strong> (vs 27–28 nas semanas anteriores).
+        Sugestão de problema no CTA ou na página de destino das mensagens — o usuário clicava mas não iniciava a conversa.
+      </div>
+    </div>
+
+    <div class="alert-card fade-in fade-in-delay-2">
+      <div class="alert-icon">📅</div>
+      <div class="alert-title">Domingos Zerados</div>
+      <div class="alert-desc">
+        Dias 09/02 e 16/02 (domingos) registraram <strong>0 conversas</strong> com orçamento
+        ativo. Ausência de atendimento no fim de semana desperdiça leads quentes.
+        <strong>Automação WhatsApp</strong> pode recuperar 15–20% dessas conversas.
+      </div>
+    </div>
+
+    <div class="alert-card fade-in fade-in-delay-3">
+      <div class="alert-icon">🔀</div>
+      <div class="alert-title">AdSets Fragmentados</div>
+      <div class="alert-desc">
+        <strong>4 grupos de anúncio</strong> com budgets individuais baixos mantêm cada
+        AdSet na fase de aprendizado, limitando a otimização automática do algoritmo.
+        Consolidar para 2 AdSets libera o algoritmo para otimizar com mais dados.
+      </div>
+    </div>
+  </div>
+  <div class="slide-number">07 / 10</div>
+</section>
+
+<!-- ===== SLIDE 8 — ESTRATÉGIA MARÇO ===== -->
+<section class="slide" id="slide-8">
+  <div class="slide-header fade-in">
+    <p class="slide-tag">Próximos Passos</p>
+    <h2 class="slide-title">Estratégia para <span>Março</span></h2>
+  </div>
+
+  <div class="strategy-grid">
+    <div class="strategy-card alta fade-in fade-in-delay-1">
+      <div class="strategy-number">1</div>
+      <div>
+        <div class="strategy-priority">Alta Prioridade</div>
+        <div class="strategy-title">Consolidar AdSets: 4 → 2</div>
+        <div class="strategy-desc">
+          Unificar grupos de anúncio para sair da fase de aprendizado e dar ao
+          algoritmo do Meta volume suficiente para otimizar automaticamente.
+          Meta: cada AdSet com mínimo de 50 conversões/semana.
+        </div>
+      </div>
+    </div>
+
+    <div class="strategy-card alta fade-in fade-in-delay-2">
+      <div class="strategy-number">2</div>
+      <div>
+        <div class="strategy-priority">Alta Prioridade</div>
+        <div class="strategy-title">Otimizar CTA clique→mensagem</div>
+        <div class="strategy-desc">
+          Taxa atual de 9,6% (cliques → conversas) deve subir para 15%+.
+          Testar CTAs diretos "Agendar consulta", "Falar com especialista" e
+          revisão da experiência pós-clique no botão Messenger.
+        </div>
+      </div>
+    </div>
+
+    <div class="strategy-card media fade-in fade-in-delay-3">
+      <div class="strategy-number">3</div>
+      <div>
+        <div class="strategy-priority">Média Prioridade</div>
+        <div class="strategy-title">Automação WhatsApp fins de semana</div>
+        <div class="strategy-desc">
+          Implementar fluxo automático de qualificação para domingos e feriados.
+          Projeção: +15–20% de conversas capturadas sem custo adicional de mídia.
+          Retorno esperado: 12–16 conversas/mês extras.
+        </div>
+      </div>
+    </div>
+
+    <div class="strategy-card media fade-in fade-in-delay-4">
+      <div class="strategy-number">4</div>
+      <div>
+        <div class="strategy-priority">Média Prioridade</div>
+        <div class="strategy-title">Budget scheduling por dia da semana</div>
+        <div class="strategy-desc">
+          Reforçar quintas e sextas (CTR histórico &gt; 3,5%) com 20% mais
+          orçamento. Reduzir segunda e terça (CTR &lt; 2%). Sem aumentar
+          investimento total, maximizar eficiência de alocação.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-number">08 / 10</div>
+</section>
+
+<!-- ===== SLIDE 9 — PROJEÇÃO ===== -->
+<section class="slide" id="slide-9">
+  <div class="slide-header fade-in">
+    <p class="slide-tag">Cenários para Março</p>
+    <h2 class="slide-title">Projeção de <span>Resultados</span></h2>
+  </div>
+
+  <div class="projection-grid">
+    <div class="projection-card fade-in fade-in-delay-1">
+      <div class="projection-label">Cenário Base</div>
+      <div class="projection-main">~98</div>
+      <div class="projection-sub">conversas estimadas</div>
+      <div class="projection-meta">
+        <div class="projection-item">
+          <span class="projection-item-label">Investimento</span>
+          <span class="projection-item-value">R$795,81</span>
+        </div>
+        <div class="projection-item">
+          <span class="projection-item-label">CPL estimado</span>
+          <span class="projection-item-value">~R$14,00</span>
+        </div>
+        <div class="projection-item">
+          <span class="projection-item-label">Pacientes (20% conv.)</span>
+          <span class="projection-item-value">~20 novas</span>
+        </div>
+        <div class="projection-item">
+          <span class="projection-item-label">AdSets</span>
+          <span class="projection-item-value">Mantém estrutura atual</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="projection-card optimized fade-in fade-in-delay-2">
+      <div class="projection-label">Cenário Otimizado</div>
+      <div class="projection-main">130–150</div>
+      <div class="projection-sub">conversas estimadas</div>
+      <div class="projection-meta">
+        <div class="projection-item">
+          <span class="projection-item-label">Investimento</span>
+          <span class="projection-item-value">R$795,81</span>
+        </div>
+        <div class="projection-item">
+          <span class="projection-item-label">CPL estimado</span>
+          <span class="projection-item-value">R$9–11</span>
+        </div>
+        <div class="projection-item">
+          <span class="projection-item-label">Pacientes (20% conv.)</span>
+          <span class="projection-item-value">~30 novas</span>
+        </div>
+        <div class="projection-item">
+          <span class="projection-item-label">AdSets</span>
+          <span class="projection-item-value">Consolidado 4→2</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="growth-banner fade-in fade-in-delay-3">
+    <div>
+      <div class="growth-text">33–53% mais conversas sem aumentar investimento</div>
+      <div class="growth-sub">Apenas com otimizações estruturais e de CTA — mesmo orçamento de fevereiro</div>
+    </div>
+    <div class="growth-badge">+30 pacientes/mês</div>
+  </div>
+  <div class="slide-number">09 / 10</div>
+</section>
+
+<!-- ===== SLIDE 10 — FOOTER ===== -->
+<section class="slide" id="slide-10">
+  <div class="footer-logo fade-in">DAI</div>
+  <h2 class="footer-title fade-in fade-in-delay-1">Digital AI</h2>
+  <p class="footer-subtitle fade-in fade-in-delay-2">Relatório gerado pela equipe Digital AI · digital-ai.tech</p>
+
+  <div class="footer-info fade-in fade-in-delay-3">
+    <div class="footer-next">
+      Próximo relatório: <strong>01 de abril de 2026</strong>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-company">
+      Desenvolvido por <span>Digital AI</span> · Itumbiara/GO
+    </div>
+    <div class="footer-links">
+      <a href="../../../index.html" class="footer-link">Portal DermaClinic</a>
+      <a href="#slide-1" class="footer-link">Voltar ao início</a>
+    </div>
+  </div>
+  <div class="slide-number">10 / 10</div>
+</section>
+
+<script>
+// ===== SMOOTH SCROLL TO SLIDE =====
+const slides = document.querySelectorAll('.slide');
+const navDots = document.querySelectorAll('.nav-dot');
+
+function scrollToSlide(index) {
+  slides[index].scrollIntoView({ behavior: 'smooth' });
+}
+
+// ===== INTERSECTION OBSERVER — NAV DOTS =====
+const slideObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && entry.intersectionRatio > 0.4) {
+      const idx = Array.from(slides).indexOf(entry.target);
+      navDots.forEach(d => d.classList.remove('active'));
+      if (navDots[idx]) navDots[idx].classList.add('active');
+    }
+  });
+}, { threshold: 0.4 });
+
+slides.forEach(slide => slideObserver.observe(slide));
+
+// ===== INTERSECTION OBSERVER — FADE IN =====
+const fadeEls = document.querySelectorAll('.fade-in');
+const fadeObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.15 });
+
+fadeEls.forEach(el => fadeObserver.observe(el));
+
+// ===== CHART: SEMANAL =====
+(function() {
+  const ctx = document.getElementById('weeklyChart').getContext('2d');
+
+  const weeks = ['S1 (02–08/02)', 'S2 (09–15/02)', 'S3 (16–22/02) ⚠️', 'S4 (23–26/02)'];
+  const conversas = [28, 27, 11, 13];
+  const cpl = [8.21, 8.13, 20.49, 9.31];
+  const ctr = [2.40, 2.60, 2.70, 3.40];
+
+  const barColors = [
+    'rgba(232,180,184,0.85)',
+    'rgba(232,180,184,0.85)',
+    'rgba(255,152,0,0.85)',
+    'rgba(76,175,80,0.85)'
+  ];
+
+  const borderColors = [
+    'rgba(232,180,184,1)',
+    'rgba(232,180,184,1)',
+    'rgba(255,152,0,1)',
+    'rgba(76,175,80,1)'
+  ];
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: weeks,
+      datasets: [
+        {
+          label: 'Conversas',
+          data: conversas,
+          backgroundColor: barColors,
+          borderColor: borderColors,
+          borderWidth: 2,
+          borderRadius: 8,
+          yAxisID: 'y',
+        },
+        {
+          label: 'CPL (R$)',
+          data: cpl,
+          type: 'line',
+          borderColor: '#e94560',
+          backgroundColor: 'rgba(233,69,96,0.1)',
+          pointBackgroundColor: '#e94560',
+          pointRadius: 6,
+          pointHoverRadius: 8,
+          tension: 0.4,
+          fill: false,
+          yAxisID: 'y2',
+        },
+        {
+          label: 'CTR (%)',
+          data: ctr,
+          type: 'line',
+          borderColor: '#4fc3f7',
+          backgroundColor: 'rgba(79,195,247,0.1)',
+          pointBackgroundColor: '#4fc3f7',
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          tension: 0.4,
+          fill: false,
+          yAxisID: 'y3',
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          labels: { color: '#eaeaea', font: { family: 'Inter', size: 12 }, padding: 20 }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(22,33,62,0.95)',
+          borderColor: 'rgba(255,255,255,0.1)',
+          borderWidth: 1,
+          titleColor: '#eaeaea',
+          bodyColor: '#8892a4',
+          padding: 12,
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: '#8892a4', font: { family: 'Inter', size: 11 } },
+          grid: { color: 'rgba(255,255,255,0.05)' }
+        },
+        y: {
+          type: 'linear',
+          position: 'left',
+          title: { display: true, text: 'Conversas', color: '#8892a4', font: { size: 11 } },
+          ticks: { color: '#8892a4', font: { family: 'Inter', size: 11 } },
+          grid: { color: 'rgba(255,255,255,0.05)' }
+        },
+        y2: {
+          type: 'linear',
+          position: 'right',
+          title: { display: true, text: 'CPL (R$)', color: '#e94560', font: { size: 11 } },
+          ticks: { color: '#e94560', font: { family: 'Inter', size: 11 },
+            callback: v => 'R$' + v.toFixed(2) },
+          grid: { drawOnChartArea: false }
+        },
+        y3: {
+          type: 'linear',
+          position: 'right',
+          display: false,
+          min: 0,
+          max: 6,
+        }
+      }
+    }
+  });
+})();
+
+// ===== CHART: DIÁRIO =====
+(function() {
+  const ctx = document.getElementById('dailyChart').getContext('2d');
+
+  const dias = [
+    '02/02','03/02','04/02','05/02','06/02','07/02','08/02',
+    '09/02','10/02','11/02','12/02','13/02','14/02','15/02',
+    '16/02','17/02','18/02','19/02','20/02','21/02','22/02',
+    '23/02','24/02','25/02','26/02'
+  ];
+
+  const invest = [
+    28.97,38.40,38.65,37.74,29.37,25.81,30.91,
+    31.09,34.54,43.60,41.59,26.13,21.03,21.58,
+    24.59,25.46,27.97,44.90,40.44,22.40,39.60,
+    35.68,34.15,11.13,40.08
+  ];
+
+  const conversas = [
+    2,2,1,10,6,2,5,
+    0,7,3,9,4,2,2,
+    0,0,1,1,3,2,4,
+    4,6,0,3
+  ];
+
+  const ctr = [
+    1.90,1.51,2.17,3.67,2.51,1.81,3.17,
+    1.80,2.32,2.54,2.65,3.07,4.01,1.70,
+    2.42,1.85,1.27,2.54,4.12,3.76,3.42,
+    4.41,4.40,2.01,2.30
+  ];
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: dias,
+      datasets: [
+        {
+          label: 'Conversas',
+          data: conversas,
+          borderColor: '#e8b4b8',
+          backgroundColor: 'rgba(232,180,184,0.15)',
+          pointBackgroundColor: (ctx) => {
+            const val = conversas[ctx.dataIndex];
+            if (val >= 8) return '#4CAF50';
+            if (val === 0) return '#e94560';
+            return '#e8b4b8';
+          },
+          pointRadius: 5,
+          pointHoverRadius: 8,
+          tension: 0.3,
+          fill: true,
+          yAxisID: 'y',
+        },
+        {
+          label: 'Investimento (R$)',
+          data: invest,
+          borderColor: 'rgba(233,69,96,0.7)',
+          backgroundColor: 'transparent',
+          pointRadius: 3,
+          pointHoverRadius: 6,
+          tension: 0.3,
+          borderDash: [4, 4],
+          yAxisID: 'y2',
+        },
+        {
+          label: 'CTR (%)',
+          data: ctr,
+          borderColor: 'rgba(79,195,247,0.8)',
+          backgroundColor: 'transparent',
+          pointRadius: 0,
+          tension: 0.3,
+          yAxisID: 'y3',
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          labels: { color: '#eaeaea', font: { family: 'Inter', size: 12 }, padding: 20 }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(22,33,62,0.95)',
+          borderColor: 'rgba(255,255,255,0.1)',
+          borderWidth: 1,
+          titleColor: '#eaeaea',
+          bodyColor: '#8892a4',
+          padding: 12,
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: '#8892a4',
+            font: { family: 'Inter', size: 10 },
+            maxRotation: 45,
+          },
+          grid: { color: 'rgba(255,255,255,0.04)' }
+        },
+        y: {
+          type: 'linear',
+          position: 'left',
+          title: { display: true, text: 'Conversas', color: '#e8b4b8', font: { size: 11 } },
+          ticks: { color: '#8892a4', font: { family: 'Inter', size: 11 }, stepSize: 2 },
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          min: 0,
+        },
+        y2: {
+          type: 'linear',
+          position: 'right',
+          title: { display: true, text: 'Investimento R$', color: '#e94560', font: { size: 11 } },
+          ticks: {
+            color: '#e94560', font: { family: 'Inter', size: 11 },
+            callback: v => 'R$' + v.toFixed(0)
+          },
+          grid: { drawOnChartArea: false },
+          min: 0,
+          max: 60,
+        },
+        y3: {
+          type: 'linear',
+          position: 'right',
+          display: false,
+          min: 0,
+          max: 8,
+        }
+      }
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
