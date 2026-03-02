@@ -1,0 +1,505 @@
+/* ===========================
+   DAI Reports — Shared Styles
+   Dark theme compatível com Chatwoot
+   =========================== */
+
+:root {
+  --bg: #151718;
+  --surface: #1c1e20;
+  --surface-2: #222527;
+  --border: #2d3035;
+  --text: #e4e8eb;
+  --text-muted: #8c9097;
+  --text-subtle: #5a5f66;
+  --brand: #6ea8fe;
+  --brand-dim: rgba(110, 168, 254, 0.12);
+  --teal: #2de4a9;
+  --teal-dim: rgba(45, 228, 169, 0.1);
+  --amber: #fbbf24;
+  --amber-dim: rgba(251, 191, 36, 0.1);
+  --ruby: #f87171;
+  --ruby-dim: rgba(248, 113, 113, 0.1);
+  --green: #4ade80;
+  --yellow: #facc15;
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ---------- GATES ---------- */
+.gate {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: var(--bg);
+  z-index: 100;
+}
+
+.gate.hidden { display: none; }
+
+.gate-icon {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--brand);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.gate-title {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.gate-sub {
+  font-size: 12px;
+  color: var(--text-subtle);
+  max-width: 280px;
+  text-align: center;
+}
+
+/* ---------- LAYOUT ---------- */
+.app {
+  display: none;
+  flex-direction: column;
+  height: 100%;
+}
+
+.app.visible { display: flex; }
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  flex-shrink: 0;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-logo-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--brand);
+}
+
+.header-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.header-sep {
+  color: var(--text-subtle);
+  font-size: 12px;
+}
+
+.header-client {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* ---------- GRID DE CARDS ---------- */
+.report-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.report-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.report-card:hover {
+  border-color: var(--brand);
+  background: var(--surface-2);
+}
+
+.report-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.report-card-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 16px;
+}
+
+.icon-trafego { background: var(--brand-dim); }
+.icon-atendimento { background: var(--teal-dim); }
+
+.report-card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.report-card-period {
+  font-size: 11px;
+  color: var(--brand);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.report-card-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-top: 6px;
+}
+
+.report-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.report-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-trafego {
+  background: var(--brand-dim);
+  color: var(--brand);
+}
+
+.badge-atendimento {
+  background: var(--teal-dim);
+  color: var(--teal);
+}
+
+.report-card-arrow {
+  color: var(--text-subtle);
+  font-size: 16px;
+  transition: color 0.15s;
+}
+
+.report-card:hover .report-card-arrow {
+  color: var(--brand);
+}
+
+/* ---------- SECTION HEADER ---------- */
+.section-header {
+  max-width: 900px;
+  margin: 0 auto 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-subtle);
+}
+
+/* ---------- REPORT PAGE ---------- */
+.report-page {
+  display: none;
+  flex-direction: column;
+  height: 100%;
+}
+
+.report-page.visible { display: flex; }
+
+.report-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  flex-shrink: 0;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+.report-header-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.report-header-sub {
+  font-size: 11px;
+  color: var(--text-subtle);
+  margin-left: auto;
+}
+
+/* ---------- REPORT CONTENT ---------- */
+.report-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 20px;
+}
+
+.report-body {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.report-body h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.report-body h2 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+  margin: 28px 0 14px;
+}
+
+.report-body h3 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 20px 0 10px;
+}
+
+.report-body p {
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+
+.report-body strong { color: var(--text); }
+
+.report-body .subtitle {
+  font-size: 13px;
+  color: var(--text-subtle);
+  margin-bottom: 6px;
+}
+
+.report-body .meta-line {
+  font-size: 11px;
+  color: var(--text-subtle);
+  margin-bottom: 20px;
+}
+
+.report-body .meta-line span { margin-right: 16px; }
+
+/* ---------- TABELAS ---------- */
+.report-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 20px;
+  font-size: 12px;
+}
+
+.report-body th {
+  text-align: left;
+  padding: 8px 10px;
+  background: var(--surface-2);
+  color: var(--text-subtle);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border);
+}
+
+.report-body td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.report-body tr:last-child td { border-bottom: none; }
+.report-body tr:hover td { background: var(--surface-2); }
+
+/* ---------- KPI CARDS ---------- */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+  margin: 12px 0 20px;
+}
+
+.kpi-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+}
+
+.kpi-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-subtle);
+  margin-bottom: 6px;
+}
+
+.kpi-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.kpi-sub {
+  font-size: 11px;
+  color: var(--text-subtle);
+  margin-top: 3px;
+}
+
+.kpi-good { border-top: 2px solid var(--teal); }
+.kpi-warn { border-top: 2px solid var(--amber); }
+.kpi-bad  { border-top: 2px solid var(--ruby); }
+.kpi-neutral { border-top: 2px solid var(--brand); }
+
+/* ---------- ALERTAS ---------- */
+.alert {
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 10px 0;
+}
+
+.alert-info { background: var(--brand-dim); border-left: 3px solid var(--brand); color: var(--text-muted); }
+.alert-success { background: var(--teal-dim); border-left: 3px solid var(--teal); color: var(--text-muted); }
+.alert-warn { background: var(--amber-dim); border-left: 3px solid var(--amber); color: var(--text-muted); }
+.alert-danger { background: var(--ruby-dim); border-left: 3px solid var(--ruby); color: var(--text-muted); }
+
+.alert strong { color: var(--text); }
+
+/* ---------- FUNNEL ---------- */
+.funnel {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  font-family: monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.8;
+  margin: 12px 0;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* ---------- STATUS BADGES ---------- */
+.status-good { color: var(--teal); font-weight: 600; }
+.status-warn { color: var(--amber); font-weight: 600; }
+.status-bad { color: var(--ruby); font-weight: 600; }
+.status-neutral { color: var(--brand); font-weight: 600; }
+
+/* ---------- DIVIDER ---------- */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 24px 0;
+}
+
+/* ---------- FOOTER ---------- */
+.report-footer {
+  font-size: 11px;
+  color: var(--text-subtle);
+  text-align: center;
+  padding: 20px 0 8px;
+  border-top: 1px solid var(--border);
+  margin-top: 32px;
+}
+
+/* ---------- ANIMATIONS ---------- */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in { animation: fadeIn 0.25s ease forwards; }
