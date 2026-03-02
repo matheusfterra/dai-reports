@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FORA DA SEITA — TotalPass × TrendsOn 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --coral: #e76066;
+      --dark: #242426;
+      --dark-card: #2e2e31;
+      --dark-border: #3a3a3d;
+      --text: #f0f0f0;
+      --muted: #9a9a9f;
+      --film: #c0a060;
+      --ep1: #e74c3c;
+      --ep2: #27ae60;
+      --ep3: #f5a623;
+      --ep4: #9b59b6;
+      --ep5: #2980b9;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--dark);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .page-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ── COVER ── */
+    .cover {
+      background: linear-gradient(160deg, #1a1a1c 0%, #242426 50%, #1f1a0f 100%);
+      border-bottom: 3px solid var(--film);
+      padding: 72px 40px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--ep1), var(--ep2), var(--ep3), var(--ep4), var(--ep5));
+    }
+
+    .cover-film-strip {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .film-frame {
+      width: 48px;
+      height: 32px;
+      border: 2px solid var(--film);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--film);
+      background: rgba(192,160,96,0.08);
+    }
+
+    .cover-label {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--film);
+      margin-bottom: 16px;
+    }
+
+    .cover-title {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: clamp(42px, 8vw, 72px);
+      line-height: 1;
+      letter-spacing: -2px;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .cover-subtitle {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: clamp(16px, 3vw, 22px);
+      color: var(--film);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .cover-tagline {
+      font-size: 17px;
+      color: rgba(240,240,240,0.8);
+      font-style: italic;
+      max-width: 520px;
+      margin: 0 auto 32px;
+    }
+
+    .cover-meta {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .ep-chips {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 28px 0 0;
+    }
+
+    .ep-chip {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1.5px solid;
+      text-transform: uppercase;
+    }
+    .ep-chip.ep1 { color: var(--ep1); border-color: var(--ep1); background: rgba(231,76,60,0.1); }
+    .ep-chip.ep2 { color: var(--ep2); border-color: var(--ep2); background: rgba(39,174,96,0.1); }
+    .ep-chip.ep3 { color: var(--ep3); border-color: var(--ep3); background: rgba(245,166,35,0.1); }
+    .ep-chip.ep4 { color: var(--ep4); border-color: var(--ep4); background: rgba(155,89,182,0.1); }
+    .ep-chip.ep5 { color: var(--ep5); border-color: var(--ep5); background: rgba(41,128,185,0.1); }
+
+    /* ── SECTIONS ── */
+    .section {
+      padding: 56px 0 20px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: clamp(22px, 4vw, 30px);
+      line-height: 1.2;
+      margin-bottom: 24px;
+    }
+
+    /* ── COMPARE TABLE ── */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin: 8px 0 24px;
+    }
+
+    .compare-table th {
+      background: var(--dark-card);
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-bottom: 2px solid var(--dark-border);
+    }
+
+    .compare-table th.col-seita { color: var(--coral); }
+    .compare-table th.col-troca { color: var(--film); }
+
+    .compare-table td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--dark-border);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .compare-table td:first-child {
+      font-weight: 600;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .compare-table .highlight-troca { color: var(--film); font-weight: 600; }
+
+    /* ── INSIGHT BLOCK ── */
+    .insight-block {
+      background: rgba(192,160,96,0.08);
+      border-left: 3px solid var(--film);
+      border-radius: 0 8px 8px 0;
+      padding: 18px 20px;
+      margin: 16px 0;
+      font-size: 15px;
+      font-style: italic;
+    }
+
+    /* ── TENSION BAR ── */
+    .tension-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--dark-card);
+      border: 1px solid var(--dark-border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 20px 0;
+    }
+
+    .tension-pole {
+      text-align: center;
+      flex: 1;
+    }
+
+    .tension-pole-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .tension-pole-text {
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    .tension-arrow {
+      font-size: 22px;
+      color: var(--film);
+      flex-shrink: 0;
+    }
+
+    .tension-middle {
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .tension-middle-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+    }
+
+    .tension-middle-brand {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 13px;
+      color: var(--coral);
+    }
+
+    /* ── EPISODE CARDS ── */
+    .episode-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-top: 16px;
+    }
+
+    .episode-card {
+      background: var(--dark-card);
+      border: 1px solid var(--dark-border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .episode-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 20px 14px;
+      border-bottom: 1px solid var(--dark-border);
+    }
+
+    .ep-number {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 36px;
+      line-height: 1;
+      opacity: 0.3;
+      flex-shrink: 0;
+      width: 44px;
+    }
+
+    .ep-info { flex: 1; }
+
+    .ep-title {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    .ep-flow {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .ep-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .episode-body { padding: 16px 20px 18px; }
+
+    .acts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .acts-grid { grid-template-columns: 1fr; }
+    }
+
+    .act-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--dark-border);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .act-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+    .act-label.ato1 { color: var(--ep1); }
+    .act-label.ato2 { color: var(--film); }
+    .act-label.ato3 { color: var(--ep2); }
+
+    .act-desc { font-size: 12px; color: rgba(240,240,240,0.8); line-height: 1.5; }
+
+    .ep-triggers {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 500px) {
+      .ep-triggers { grid-template-columns: 1fr; }
+    }
+
+    .trigger-box {
+      background: rgba(255,255,255,0.03);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+    }
+
+    .trigger-box-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+    .trigger-box-label.comico { color: var(--film); }
+    .trigger-box-label.emocional { color: var(--ep4); }
+
+    /* ── INFLUENCER TABLES ── */
+    .seita-block {
+      margin-bottom: 28px;
+    }
+
+    .seita-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+    .seita-cross { background: rgba(231,76,60,0.15); color: var(--ep1); }
+    .seita-yoga  { background: rgba(39,174,96,0.15); color: var(--ep2); }
+    .seita-bt    { background: rgba(245,166,35,0.15); color: var(--ep3); }
+    .seita-run   { background: rgba(155,89,182,0.15); color: var(--ep4); }
+    .seita-vel   { background: rgba(41,128,185,0.15); color: var(--ep5); }
+
+    .influ-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .influ-table th {
+      text-align: left;
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      background: var(--dark-card);
+      color: var(--muted);
+      border-bottom: 1px solid var(--dark-border);
+    }
+
+    .influ-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid rgba(58,58,61,0.5);
+      vertical-align: top;
+    }
+
+    .influ-table td:first-child { font-family: 'Inter', monospace; color: var(--coral); font-weight: 600; }
+    .influ-table td:nth-child(2) { font-weight: 600; }
+    .influ-table td:last-child { font-size: 12px; color: rgba(240,240,240,0.7); }
+
+    /* ── KPI SECTION ── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+      margin: 16px 0;
+    }
+
+    .kpi-card {
+      background: var(--dark-card);
+      border: 1px solid var(--dark-border);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .kpi-value {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 24px;
+      color: var(--film);
+      line-height: 1.1;
+    }
+
+    .kpi-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    /* ── DECISION TABLE ── */
+    .decision-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin: 16px 0;
+    }
+
+    .decision-table th {
+      background: var(--dark-card);
+      padding: 12px 14px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      border-bottom: 2px solid var(--dark-border);
+    }
+
+    .decision-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--dark-border);
+      vertical-align: top;
+    }
+
+    .decision-table td:last-child {
+      font-weight: 700;
+    }
+
+    .tag-troca { color: var(--film); }
+    .tag-seita { color: var(--coral); }
+    .tag-both  { color: var(--ep2); }
+
+    /* ── SERIES FORMAT BLOCK ── */
+    .series-block {
+      background: var(--dark-card);
+      border: 1px solid var(--dark-border);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 20px 0;
+    }
+
+    .series-block-title {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 18px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .series-block-title::before {
+      content: '▶';
+      color: var(--film);
+      font-size: 14px;
+    }
+
+    .timestamps {
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 2;
+      background: rgba(0,0,0,0.3);
+      border-radius: 8px;
+      padding: 16px 18px;
+    }
+
+    .ts-time { color: var(--film); font-weight: 700; margin-right: 12px; }
+    .ts-label { color: rgba(240,240,240,0.9); }
+    .ts-desc { color: var(--muted); font-size: 12px; display: block; padding-left: 56px; margin-top: -4px; margin-bottom: 4px; }
+
+    /* ── GENERIC ── */
+    .divider {
+      height: 1px;
+      background: var(--dark-border);
+      margin: 40px 0;
+    }
+
+    .text-muted { color: var(--muted); }
+
+    .badge-new {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: rgba(192,160,96,0.2);
+      color: var(--film);
+      border: 1px solid var(--film);
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    @media (max-width: 600px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    .info-card {
+      background: var(--dark-card);
+      border: 1px solid var(--dark-border);
+      border-radius: 10px;
+      padding: 18px;
+    }
+
+    .info-card h4 {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+
+    .info-card p, .info-card li {
+      font-size: 13px;
+      color: rgba(240,240,240,0.8);
+      line-height: 1.6;
+    }
+
+    .info-card ul { padding-left: 16px; }
+    .info-card li { margin-bottom: 4px; }
+
+    .b2b-block {
+      background: rgba(155,89,182,0.08);
+      border: 1px solid rgba(155,89,182,0.3);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 20px 0;
+    }
+
+    .b2b-block h4 {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 16px;
+      color: var(--ep4);
+      margin-bottom: 12px;
+    }
+
+    .linkedin-sample {
+      background: rgba(0,0,0,0.3);
+      border-left: 3px solid #0077b5;
+      border-radius: 0 8px 8px 0;
+      padding: 14px 16px;
+      font-size: 13px;
+      line-height: 1.7;
+      white-space: pre-line;
+    }
+
+    footer {
+      border-top: 1px solid var(--dark-border);
+      padding: 32px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    footer .brand {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      color: var(--coral);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── COVER ── -->
+<div class="cover">
+  <div class="cover-film-strip">
+    <div class="film-frame" style="border-color:var(--ep1);color:var(--ep1)">EP 1</div>
+    <div class="film-frame" style="border-color:var(--ep2);color:var(--ep2)">EP 2</div>
+    <div class="film-frame" style="border-color:var(--ep3);color:var(--ep3)">EP 3</div>
+    <div class="film-frame" style="border-color:var(--ep4);color:var(--ep4)">EP 4</div>
+    <div class="film-frame" style="border-color:var(--ep5);color:var(--ep5)">EP 5</div>
+  </div>
+  <div class="cover-label">TrendsOn × TotalPass — Estratégia Alternativa 2026</div>
+  <div class="cover-title">FORA DA SEITA</div>
+  <div class="cover-subtitle">Troca de Seita — A Micro-Série</div>
+  <div class="cover-tagline">"O TotalPass te manda pra seita que você nunca ia sozinho."</div>
+  <div class="cover-meta">
+    <span>Cliente: TotalPass</span>
+    <span>Agência: TrendsOn / TOI</span>
+    <span>27 de fevereiro de 2026</span>
+    <span>Estratégia Opção 2</span>
+  </div>
+  <div class="ep-chips">
+    <span class="ep-chip ep1">CrossFit → Yoga</span>
+    <span class="ep-chip ep2">Yoga → CrossFit</span>
+    <span class="ep-chip ep3">Faria Limer → Maratona</span>
+    <span class="ep-chip ep4">Maratonista → Yoga</span>
+    <span class="ep-chip ep5">Velocity → CrossFit</span>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <!-- ── TL;DR ── -->
+  <div class="section">
+    <div class="section-label">TL;DR Executivo</div>
+    <div class="section-title">Fish-out-of-water como motor narrativo</div>
+    <div class="insight-block">
+      Enquanto a estratégia "Seita Total" celebra o orgulho tribal de pertencer a uma seita, "Troca de Seita" explora o oposto: o que acontece quando o mais obcecado de cada seita é forçado a tentar a seita rival? O TotalPass é quem possibilita essa troca — e a descoberta do que você estava perdendo se torna o conteúdo. O resultado é uma micro-série de 5 episódios que posiciona o @totalpass como produtor de entretenimento fitness, não apenas canal de marca corporativa.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── COMPARATIVO ── -->
+  <div class="section">
+    <div class="section-label">Comparativo Estratégico</div>
+    <div class="section-title">Seita Total vs. Troca de Seita — 14 Dimensões</div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Dimensão</th>
+          <th class="col-seita">Seita Total</th>
+          <th class="col-troca">Troca de Seita</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Premissa central</td>
+          <td>Celebrar o pertencimento à própria seita</td>
+          <td class="highlight-troca">Descobrir o que você estava perdendo na seita rival</td>
+        </tr>
+        <tr>
+          <td>Tom emocional</td>
+          <td>Orgulho tribal + humor interno</td>
+          <td class="highlight-troca">Surpresa + transformação + comédia de situação</td>
+        </tr>
+        <tr>
+          <td>Tipo de conteúdo</td>
+          <td>Challenge participativo (UGC massivo)</td>
+          <td class="highlight-troca">Narrativa de descoberta (série episódica)</td>
+        </tr>
+        <tr>
+          <td>Personagem principal</td>
+          <td>Gran Mestre que se infiltra</td>
+          <td class="highlight-troca">O influenciador da seita como protagonista</td>
+        </tr>
+        <tr>
+          <td>Arco narrativo</td>
+          <td>Pertencimento → Convergência</td>
+          <td class="highlight-troca">Resistência → Tentativa → Revelação</td>
+        </tr>
+        <tr>
+          <td>Como o TotalPass aparece</td>
+          <td>Como viabilizador de acesso a TODAS as seitas</td>
+          <td class="highlight-troca">Como viabilizador da TROCA — demonstração real</td>
+        </tr>
+        <tr>
+          <td>Engajamento esperado</td>
+          <td>Alto UGC imediato (#SeitaTotal)</td>
+          <td class="highlight-troca">Altos saves, shares e watch time por episódio</td>
+        </tr>
+        <tr>
+          <td>Prova de produto</td>
+          <td>Declarativa ("serve todas as seitas")</td>
+          <td class="highlight-troca">Demonstrativa — mostra o acesso funcionando</td>
+        </tr>
+        <tr>
+          <td>Camada B2B</td>
+          <td>Ausente (foco B2C)</td>
+          <td class="highlight-troca">Presente (LinkedIn Creators + ângulo RH)</td>
+        </tr>
+        <tr>
+          <td>Formato principal</td>
+          <td>Reels 30-60s + Stories</td>
+          <td class="highlight-troca">Reels longos 3-5min + micro-série</td>
+        </tr>
+        <tr>
+          <td>Potencial de PR</td>
+          <td>Moderado</td>
+          <td class="highlight-troca">Alto — formato de pauta jornalística por episódio</td>
+        </tr>
+        <tr>
+          <td>Duração</td>
+          <td>8 semanas</td>
+          <td class="highlight-troca">6-8 semanas + conteúdo permanente</td>
+        </tr>
+        <tr>
+          <td>Melhor para...</td>
+          <td>Awareness massivo rápido + UGC</td>
+          <td class="highlight-troca">Engajamento qualificado + posicionamento editorial</td>
+        </tr>
+        <tr>
+          <td>Dificuldade de replicar</td>
+          <td>Média</td>
+          <td class="highlight-troca">Alta — formato original difícil de copiar</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── DIAGNÓSTICO ── -->
+  <div class="section">
+    <div class="section-label">Por que esta abordagem</div>
+    <div class="section-title">A psicologia do fish-out-of-water</div>
+
+    <p style="margin-bottom:18px">O insider que celebra sua casa fala principalmente para quem já está dentro. A narrativa de descoberta é diferente — quando você vê alguém que odiava hot yoga entrar numa sala de 40°C pela primeira vez, não precisa praticar yoga para se importar. É uma história humana universal: sair da zona de conforto e ser surpreendido pelo que encontrou.</p>
+
+    <div class="two-col">
+      <div class="info-card">
+        <h4>4 mecanismos psicológicos</h4>
+        <ul>
+          <li><strong>Contraste cria expectativa</strong> — sabemos que o crossfitter vai sofrer no yoga. Queremos ver quanto.</li>
+          <li><strong>Vulnerabilidade gera empatia</strong> — o especialista que vira iniciante humaniza sua seita.</li>
+          <li><strong>Superação vira inspiração</strong> — o momento em que o resistente gosta é catártico e compartilhável.</li>
+          <li><strong>Surpresa é o produto</strong> — o TotalPass não precisa declarar que tem tudo. Ele mostra.</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h4>A tensão criativa central</h4>
+        <div class="tension-bar" style="flex-direction:column;gap:10px;padding:16px;">
+          <div style="display:flex;align-items:center;gap:12px;width:100%">
+            <div class="tension-pole" style="text-align:left">
+              <div class="tension-pole-label">Polo A</div>
+              <div class="tension-pole-text">"Eu nunca faria isso"</div>
+            </div>
+            <div class="tension-arrow">→</div>
+            <div class="tension-pole" style="text-align:right">
+              <div class="tension-pole-label">Polo B</div>
+              <div class="tension-pole-text">"Não acredito que gostei"</div>
+            </div>
+          </div>
+          <div style="text-align:center;padding-top:8px;border-top:1px solid var(--dark-border);width:100%">
+            <div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted)">Motor da Troca</div>
+            <div style="font-family:'Nunito',sans-serif;font-weight:900;color:var(--coral);font-size:14px">TotalPass</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight-block">
+      <strong>O insight central:</strong> O TotalPass não precisa dizer "nós temos tudo". O próprio ato de trocar de seita mostra que ele tem tudo. <em>Demonstração, não declaração.</em>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── CONCEITO CRIATIVO ── -->
+  <div class="section">
+    <div class="section-label">Identidade da Campanha</div>
+    <div class="section-title">Conceito, Naming e Tom de Voz</div>
+
+    <div class="two-col">
+      <div class="info-card">
+        <h4>Naming</h4>
+        <p style="margin-bottom:8px"><strong>Série:</strong> <span style="color:var(--film)">FORA DA SEITA</span></p>
+        <p style="margin-bottom:8px"><strong>Conceito interno:</strong> Troca de Seita</p>
+        <p style="margin-bottom:8px"><strong>Hashtag:</strong> <span style="color:var(--coral)">#TrocaDeSeita</span></p>
+        <p style="margin-bottom:12px; font-size:12px; color:var(--muted)">Por episódio: #CrossFitterNoYoga / #YoguiNoCross / #FariaLimerNaMaratona / #MaratonistaNoBT / #VelocitarianaNoCross</p>
+      </div>
+      <div class="info-card">
+        <h4>Taglines</h4>
+        <p style="margin-bottom:8px; font-style:italic">"O TotalPass te manda pra seita que você nunca ia sozinho."</p>
+        <p style="margin-bottom:8px; font-style:italic; font-size:13px; color:var(--muted)">"Você pensava que só existia uma seita. O TotalPass te mostrou o que você estava perdendo."</p>
+        <p style="font-style:italic; font-size:13px; color:var(--ep4)">"Na sua empresa tem gente de todas as seitas. O TotalPass serve todas elas." <span style="font-size:10px; text-transform:uppercase; letter-spacing:1px; font-style:normal">(B2B)</span></p>
+      </div>
+    </div>
+
+    <div style="margin-top:16px">
+      <div class="info-card">
+        <h4>Tom de Voz — O que muda em relação à Seita Total</h4>
+        <table style="width:100%;font-size:13px;border-collapse:collapse;margin-top:8px">
+          <tr>
+            <th style="text-align:left;padding:6px 10px;font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;border-bottom:1px solid var(--dark-border)">Momento</th>
+            <th style="text-align:left;padding:6px 10px;font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;border-bottom:1px solid var(--dark-border)">Tom</th>
+          </tr>
+          <tr><td style="padding:8px 10px;border-bottom:1px solid rgba(58,58,61,0.4)">Abertura</td><td style="padding:8px 10px;border-bottom:1px solid rgba(58,58,61,0.4);font-style:italic">Confissão relutante: "Ok, eu concordei com isso. Não sei por quê."</td></tr>
+          <tr><td style="padding:8px 10px;border-bottom:1px solid rgba(58,58,61,0.4)">Durante</td><td style="padding:8px 10px;border-bottom:1px solid rgba(58,58,61,0.4)">Comédia de situação genuína — sem script, câmera no caos</td></tr>
+          <tr><td style="padding:8px 10px;border-bottom:1px solid rgba(58,58,61,0.4)">Clímax</td><td style="padding:8px 10px;border-bottom:1px solid rgba(58,58,61,0.4)">Vulnerabilidade real — quando o resistente descobre algo sobre si</td></tr>
+          <tr><td style="padding:8px 10px;border-bottom:1px solid rgba(58,58,61,0.4)">Fechamento</td><td style="padding:8px 10px;border-bottom:1px solid rgba(58,58,61,0.4)">Não conclusivo: não "se converte" — admite o que encontrou</td></tr>
+          <tr><td style="padding:8px 10px">Papel do TotalPass</td><td style="padding:8px 10px">Aparece na ação — no momento de reservar o estúdio novo pelo app</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── SÉRIE FORMAT ── -->
+  <div class="section">
+    <div class="section-label">Formato Editorial</div>
+    <div class="section-title">A Micro-Série "FORA DA SEITA" — 5 Episódios</div>
+
+    <div class="series-block">
+      <div class="series-block-title">Estrutura de Cada Episódio (3-5 minutos)</div>
+      <div class="timestamps">
+        <div><span class="ts-time">[0:00–0:30]</span><span class="ts-label">COLD OPEN</span>
+        <span class="ts-desc">Influenciador no seu habitat natural. "Eu sou [nome]. Sou da seita do [modalidade]. E esta semana, vou para a seita que eu nunca pisaria sozinho."</span></div>
+        <div><span class="ts-time">[0:30–1:30]</span><span class="ts-label">SETUP</span>
+        <span class="ts-desc">Por que ele nunca foi antes? Preconceito + estereótipo (com humor). Revela que o TotalPass vai custear — mostra reserva no app.</span></div>
+        <div><span class="ts-time">[1:30–3:30]</span><span class="ts-label">A TROCA</span>
+        <span class="ts-desc">Experiência sem cortes forçados. Os melhores momentos: os erros, as correções, as reações genuínas. O momento de virada fica aqui.</span></div>
+        <div><span class="ts-time">[3:30–4:30]</span><span class="ts-label">DEBRIEF</span>
+        <span class="ts-desc">Talking head 20 min após a experiência. Não editado para parecer conclusivo. A pergunta central: "Você voltaria?"</span></div>
+        <div><span class="ts-time">[4:30–5:00]</span><span class="ts-label">FECHAMENTO</span>
+        <span class="ts-desc">App do TotalPass. "A troca foi possível porque o TotalPass te dá acesso a tudo." Teaser do próximo episódio.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── EPISÓDIOS ── -->
+  <div class="section">
+    <div class="section-label">Os 5 Episódios</div>
+    <div class="section-title">Arcos Narrativos Completos</div>
+
+    <div class="episode-grid">
+
+      <!-- EP 1 -->
+      <div class="episode-card">
+        <div class="episode-header">
+          <div class="ep-number" style="color:var(--ep1)">01</div>
+          <div class="ep-info">
+            <div class="ep-title">"O CrossFitter que foi ao Hot Yoga"</div>
+            <div class="ep-flow">CrossFit → Hot Yoga &nbsp;·&nbsp; 5 minutos &nbsp;·&nbsp; Maior tensão filosófica</div>
+          </div>
+          <div class="ep-badge" style="background:rgba(231,76,60,0.15);color:var(--ep1);border:1px solid rgba(231,76,60,0.3)">Episódio de abertura</div>
+        </div>
+        <div class="episode-body">
+          <div class="acts-grid">
+            <div class="act-card">
+              <div class="act-label ato1">Ato 1 — Resistência</div>
+              <div class="act-desc">Filmado no box antes de ir. "Yoga não é treino. Mas topei o desafio." Sai com a bolsa, Nalgene na mão, cara de quem vai para batalha.</div>
+            </div>
+            <div class="act-card">
+              <div class="act-label ato2">Ato 2 — A Experiência</div>
+              <div class="act-desc">Primeiro choque: o calor. Segundo: o silêncio. Tenta as posturas e não consegue metade. A instrutora corrige com voz tranquila enquanto ele sua torrencialmente.</div>
+            </div>
+            <div class="act-card">
+              <div class="act-label ato3">Ato 3 — Revelação</div>
+              <div class="act-desc">Shavasana final. O crossfitter imóvel por 5 min pela primeira vez em meses. "Há algo naquele silêncio que nunca vivo no box." Mostra o app reservando a próxima sessão.</div>
+            </div>
+          </div>
+          <div class="ep-triggers">
+            <div class="trigger-box">
+              <div class="trigger-box-label comico">Gatilho Cômico</div>
+              O crossfitter tenta uma postura simples de ioga e cai — enquanto a senhora de 60 anos ao lado mantém com perfeição absoluta. A câmera captura. Ele olha para ela. Pausa. Silêncio.
+            </div>
+            <div class="trigger-box">
+              <div class="trigger-box-label emocional">Gatilho Emocional</div>
+              A revelação de que seu corpo, que ele achava conhecer completamente, não consegue fazer coisas que pareciam "fáceis". O Shavasana: o cara mais durão descobre que descanso é difícil.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EP 2 -->
+      <div class="episode-card">
+        <div class="episode-header">
+          <div class="ep-number" style="color:var(--ep2)">02</div>
+          <div class="ep-info">
+            <div class="ep-title">"A Yogui que entrou no Box"</div>
+            <div class="ep-flow">Hot Yoga → CrossFit &nbsp;·&nbsp; 5 minutos &nbsp;·&nbsp; Arco espelho</div>
+          </div>
+          <div class="ep-badge" style="background:rgba(39,174,96,0.15);color:var(--ep2);border:1px solid rgba(39,174,96,0.3)">Arco de superação</div>
+        </div>
+        <div class="episode-body">
+          <div class="acts-grid">
+            <div class="act-card">
+              <div class="act-label ato1">Ato 1 — Resistência</div>
+              <div class="act-desc">Ritual matinal de chá e meditação antes de ir ao box. Voz over: "Eu acredito em respeitar o corpo. CrossFit me parece o oposto disso. Mas topei."</div>
+            </div>
+            <div class="act-card">
+              <div class="act-label ato2">Ato 2 — A Experiência</div>
+              <div class="act-desc">Ela chega no box. Ruído, música alta, gente gritando. Tenta um WOD iniciante. Descoberta: flexibilidade incrível, mas força explosiva = zero. O coach elogia a mobilidade.</div>
+            </div>
+            <div class="act-card">
+              <div class="act-label ato3">Ato 3 — Revelação</div>
+              <div class="act-desc">"No yoga, saio leve. Aqui, saí destruída. São completamente diferentes. Mas entendi por que as pessoas são viciadas nisso. É sobre conquista." App do TotalPass.</div>
+            </div>
+          </div>
+          <div class="ep-triggers">
+            <div class="trigger-box">
+              <div class="trigger-box-label comico">Gatilho Cômico</div>
+              A yogui tentando fazer um burpee pela primeira vez e não entendendo a sequência. O coach repete 3 vezes, mais devagar a cada vez. Câmera captura a cara de "parece errado de toda forma".
+            </div>
+            <div class="trigger-box">
+              <div class="trigger-box-label emocional">Gatilho Emocional</div>
+              O coach percebe a mobilidade dela e diz: "Você tem uma vantagem absurda — a maioria dos crossfitters nunca vai ter isso." Ela realiza que anos de yoga criaram algo valioso que o CrossFit reconhece.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EP 3 -->
+      <div class="episode-card">
+        <div class="episode-header">
+          <div class="ep-number" style="color:var(--ep3)">03</div>
+          <div class="ep-info">
+            <div class="ep-title">"O Faria Limer na Meia Maratona"</div>
+            <div class="ep-flow">Beach Tennis → Corrida &nbsp;·&nbsp; 6 minutos &nbsp;·&nbsp; Maior carga social</div>
+          </div>
+          <div class="ep-badge" style="background:rgba(245,166,35,0.15);color:var(--ep3);border:1px solid rgba(245,166,35,0.3)">Alto potencial de PR</div>
+        </div>
+        <div class="episode-body">
+          <div class="acts-grid">
+            <div class="act-card">
+              <div class="act-label ato1">Ato 1 — Resistência</div>
+              <div class="act-desc">Na quadra de beach tennis. "Corrida? Aquela coisa de ficar andando sozinho olhando pro chão? Prefiro um ace bem colocado." Cut: comprando tênis de corrida — e levando o tênis de tennis.</div>
+            </div>
+            <div class="act-card">
+              <div class="act-label ato2">Ato 2 — A Experiência</div>
+              <div class="act-desc">Largada da corrida. 3.000 corredores. Os primeiros 5km passam bem. No km 8 começa o inferno. Conversa com outros corredores — médicos, professores, MEIs. Toda a faixa social.</div>
+            </div>
+            <div class="act-card">
+              <div class="act-label ato3">Ato 3 — Revelação</div>
+              <div class="act-desc">Cruzando a linha dos 21km sem conseguir falar. Recebe a medalha. "Não tem nada mais honesto do que seus próprios pés no asfalto. E o TotalPass é quem me tirou da quadra."</div>
+            </div>
+          </div>
+          <div class="ep-triggers">
+            <div class="trigger-box">
+              <div class="trigger-box-label comico">Gatilho Cômico</div>
+              No km 15, sofrendo, passa por um homem de 65 anos com camiseta "minha 47ª maratona". O homem dá um aceno amigável. O influenciador olha para câmera sem conseguir falar.
+            </div>
+            <div class="trigger-box">
+              <div class="trigger-box-label emocional">Gatilho Emocional</div>
+              Conversa com outros corredores na largada. Quando percebe a diversidade — e que era a única pessoa de uma classe social específica — há abertura genuína: "Eu achei que corrida era coisa de atleta."
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EP 4 -->
+      <div class="episode-card">
+        <div class="episode-header">
+          <div class="ep-number" style="color:var(--ep4)">04</div>
+          <div class="ep-info">
+            <div class="ep-title">"O Maratonista que Parou de Correr"</div>
+            <div class="ep-flow">Corrida → Hot Yoga &nbsp;·&nbsp; 4 minutos &nbsp;·&nbsp; O atleta que descobre o corpo</div>
+          </div>
+          <div class="ep-badge" style="background:rgba(155,89,182,0.15);color:var(--ep4);border:1px solid rgba(155,89,182,0.3)">Revelação mais emocional</div>
+        </div>
+        <div class="episode-body">
+          <div class="acts-grid">
+            <div class="act-card">
+              <div class="act-label ato1">Ato 1 — Resistência</div>
+              <div class="act-desc">Termina um treino longo de 18km. Câmera. "Ok, agora vou para algo que nunca fiz: ficar parado numa sala quente por 60 minutos. Parece perda de tempo."</div>
+            </div>
+            <div class="act-card">
+              <div class="act-label ato2">Ato 2 — A Experiência</div>
+              <div class="act-desc">O calor choca — mas o segundo choque é maior: não consegue tocar o chão em Uttanasana, básica no yoga. A instrutora: "Você corre muito, né? Seu corpo está pedindo isso há meses."</div>
+            </div>
+            <div class="act-card">
+              <div class="act-label ato3">Ato 3 — Revelação</div>
+              <div class="act-desc">"Passei anos correndo. Nunca fiz nada por esse corpo exceto exigi-lo. O yoga foi a primeira vez que eu dei algo de volta pra ele." Reserva próxima semana no TotalPass.</div>
+            </div>
+          </div>
+          <div class="ep-triggers">
+            <div class="trigger-box">
+              <div class="trigger-box-label comico">Gatilho Cômico</div>
+              Durante o Guerreiro II, o maratonista começa a calcular calorias queimadas. Sussurra para câmera: "Isso deve ser o equivalente a 400m de corrida." A instrutora: "Pode soltar o Garmin agora." A turma ri.
+            </div>
+            <div class="trigger-box">
+              <div class="trigger-box-label emocional">Gatilho Emocional</div>
+              A instrutora identifica uma lesão no quadril que ele vinha ignorando. "Você sabe que está compensando o lado direito há meses?" O atleta que "só escuta o Strava" descobre que o corpo pedia socorro.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EP 5 -->
+      <div class="episode-card">
+        <div class="episode-header">
+          <div class="ep-number" style="color:var(--ep5)">05</div>
+          <div class="ep-info">
+            <div class="ep-title">"A Velocitariana no Box"</div>
+            <div class="ep-flow">Velocity → CrossFit &nbsp;·&nbsp; 5 minutos &nbsp;·&nbsp; Seita vs. Seita</div>
+          </div>
+          <div class="ep-badge" style="background:rgba(41,128,185,0.15);color:var(--ep5);border:1px solid rgba(41,128,185,0.3)">O culto encontra o box</div>
+        </div>
+        <div class="episode-body">
+          <div class="acts-grid">
+            <div class="act-card">
+              <div class="act-label ato1">Ato 1 — Resistência</div>
+              <div class="act-desc">Chegando na aula de Velocity — seu território. "Minha seita tem música, tem vibe, tem família. O CrossFit tem... barulho." Corte para a chegada no box.</div>
+            </div>
+            <div class="act-card">
+              <div class="act-label ato2">Ato 2 — A Experiência</div>
+              <div class="act-desc">A ausência de música pop estranha imediatamente. No WOD, ela que é explosiva em pernas voa nas partes cardio. O coach: "Você tem motor cardiovascular de atleta." A turma começa a torcer.</div>
+            </div>
+            <div class="act-card">
+              <div class="act-label ato3">Ato 3 — Revelação</div>
+              <div class="act-desc">Sentada no chão com o grupo após o WOD. "Não seria minha seita. Mas eu entendi por que vocês são assim. É real aqui." A tribo que ela não esperava encontrar fora da bike.</div>
+            </div>
+          </div>
+          <div class="ep-triggers">
+            <div class="trigger-box">
+              <div class="trigger-box-label comico">Gatilho Cômico</div>
+              O box toca uma música de WOD — e ela, por instinto, começa a "pedalar" imaginariamente sincronizada com a batida. O grupo ri. Ela percebe. Fica vermelha.
+            </div>
+            <div class="trigger-box">
+              <div class="trigger-box-label emocional">Gatilho Emocional</div>
+              Quando o grupo do box — que ela entrou desconfiada — começa a torcer para ela completar o WOD. "Eu achei que minha tribo era a Velocity. Mas toda seita tem seu jeito de cuidar de quem está com elas."
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── B2B LAYER ── -->
+  <div class="section">
+    <div class="section-label">Diferencial Exclusivo</div>
+    <div class="section-title">Camada B2B <badge class="badge-new">Ausente na Seita Total</badge></div>
+
+    <div class="b2b-block">
+      <h4>A empresa que tem gente de todas as seitas</h4>
+      <p style="font-size:13px;margin-bottom:14px">Numa empresa de 500 funcionários: 12 maratonistas, 8 fanáticos de CrossFit, 15 praticantes de hot yoga, 20 jogadores de beach tennis, 30 que fazem cycling/funcional e 200 que queriam ter acesso fácil. O argumento de vendas para o RH: <em>"Você não precisa escolher um benefício para o crossfitter ou para o yogui. O TotalPass serve os dois — e todos os outros."</em></p>
+      <p style="font-size:13px;font-weight:600;margin-bottom:8px;color:var(--ep4)">Exemplo de post LinkedIn — Episódio 1 (CrossFitter no Yoga):</p>
+      <div class="linkedin-sample">"Passei 5 anos no CrossFit. Achei que conhecia todos os meus limites.
+
+Semana passada, o TotalPass me mandou para o Hot Yoga.
+
+Em 60 minutos, descobri que meu corpo estava pedindo socorro e eu estava ignorando.
+
+A instrutora disse algo que não saio da cabeça:
+'Você tem muita força. Mas força sem flexibilidade quebra.'
+
+Lembrei imediatamente da minha gestão de equipe.
+
+Na sua empresa, tem gente que 'força sem dobrar' e gente que 'dobra sem força'.
+O TotalPass serve os dois — e todos entre eles.
+
+#TrocaDeSeita #TotalPass #BenefíciosCorporativos #Wellness"</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── INFLUENCIADORES ── -->
+  <div class="section">
+    <div class="section-label">Casting da Série</div>
+    <div class="section-title">15 Perfis Selecionados para a Dinâmica de Troca</div>
+
+    <p style="margin-bottom:24px;color:var(--muted);font-size:13px">A seleção aqui é diferente da "Seita Total": não basta ter seguidores — é preciso ter identidade tribal forte o suficiente para gerar resistência genuína e carisma para que o desconforto seja entretenimento.</p>
+
+    <div class="seita-block">
+      <div class="seita-title seita-vel">Velocity → CrossFit</div>
+      <table class="influ-table">
+        <thead><tr><th>Handle</th><th>Nome</th><th>Seguidores</th><th>Por que funciona para Troca de Seita</th></tr></thead>
+        <tbody>
+          <tr><td>@kellbbboa</td><td>Kell BBB</td><td>5M+</td><td>Identidade velocity muito forte, humor natural. A troca para CrossFit seria épica.</td></tr>
+          <tr><td>@loreimprota</td><td>Lore Improta</td><td>4M+</td><td>Velocity é parte da identidade fitness. Vibe de desafio constante. Público feminino massivo.</td></tr>
+          <tr><td>@tataestaniecki</td><td>Tatá Estaniecki</td><td>4M+</td><td>Humor ácido e natural. Transição de Velocity para qualquer seita "séria" geraria comédia viral.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="seita-block">
+      <div class="seita-title seita-yoga">Hot Yoga → CrossFit</div>
+      <table class="influ-table">
+        <thead><tr><th>Handle</th><th>Nome</th><th>Seguidores</th><th>Por que funciona para Troca de Seita</th></tr></thead>
+        <tbody>
+          <tr><td>@camilaqueiroz</td><td>Camila Queiroz</td><td>14M+</td><td>Estética serena e espiritual. Ela no CrossFit seria contraste visual e emocional máximo.</td></tr>
+          <tr><td>@carolsaraiva</td><td>Carol Saraiva</td><td>600k</td><td>Criadora de conteúdo yoga com identidade fortíssima. Autenticidade no desconforto garantida.</td></tr>
+          <tr><td>@yannalavigne</td><td>Yanna Lavigne</td><td>4M+</td><td>Wellness e yoga são core da persona. Desconforto no box seria genuíno e cativante.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="seita-block">
+      <div class="seita-title seita-cross">CrossFit → Hot Yoga</div>
+      <table class="influ-table">
+        <thead><tr><th>Handle</th><th>Nome</th><th>Seguidores</th><th>Por que funciona para Troca de Seita</th></tr></thead>
+        <tbody>
+          <tr><td>@fernandosardinha</td><td>Fernando Sardinha</td><td>1.5M+</td><td>Um dos maiores creators de CrossFit BR. Identidade fortíssima no box. No yoga, seria o episódio mais assistido.</td></tr>
+          <tr><td>@muriloaggio</td><td>Murilo Aggio</td><td>800k</td><td>Atleta crossfit com conteúdo técnico e humor. Perfeito para desconforto genuíno no yoga.</td></tr>
+          <tr><td>@tiagogtoguro</td><td>Tiago Toguro</td><td>11M+</td><td>Bodybuilder com identidade ainda mais extrema. No Hot Yoga seria um meme ambulante — com revelação real.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="seita-block">
+      <div class="seita-title seita-run">Corrida → Hot Yoga</div>
+      <table class="influ-table">
+        <thead><tr><th>Handle</th><th>Nome</th><th>Seguidores</th><th>Por que funciona para Troca de Seita</th></tr></thead>
+        <tbody>
+          <tr><td>@caio.caliari</td><td>Caio Caliari</td><td>600k</td><td>Maratonista ultrarunner com conteúdo reflexivo. No yoga seria a revelação mais emocional da série.</td></tr>
+          <tr><td>@pamela.oliveira</td><td>Pâmela Oliveira</td><td>2M+</td><td>Identidade fitness forte, corrida presente. Vulnerabilidade e humor naturais.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="seita-block">
+      <div class="seita-title seita-bt">Beach Tennis → Corrida</div>
+      <table class="influ-table">
+        <thead><tr><th>Handle</th><th>Nome</th><th>Seguidores</th><th>Por que funciona para Troca de Seita</th></tr></thead>
+        <tbody>
+          <tr><td>@felipeandreolioficial</td><td>Felipe Andreoli</td><td>2.5M+</td><td>Associação com beach tennis e lifestyle SP urbano. Corrida seria o choque máximo — sofreria de forma cativante.</td></tr>
+          <tr><td>@alokofficial</td><td>Alok</td><td>26M+</td><td>Joga beach tennis publicamente. Num evento de corrida de rua seria o cruzamento mais inesperado. PR altíssimo.</td></tr>
+          <tr><td>@carol.buffara</td><td>Carol Buffara</td><td>500k</td><td>Creator beach tennis com público AB feminino. Na corrida longa seria a transformação mais autêntica.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── KPIs ── -->
+  <div class="section">
+    <div class="section-label">Como esta campanha se mede</div>
+    <div class="section-title">KPIs Diferenciados — Narrativa, não Mobilização</div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-value">500k–1M</div>
+        <div class="kpi-label">Views por episódio</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">&gt;60%</div>
+        <div class="kpi-label">Watch time médio</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">&gt;3%</div>
+        <div class="kpi-label">Save rate por episódio</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">&gt;2%</div>
+        <div class="kpi-label">Share rate por episódio</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">1.000+</div>
+        <div class="kpi-label">Comentários por Reel</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">5+</div>
+        <div class="kpi-label">Menções editoriais (PR)</div>
+      </div>
+    </div>
+
+    <div class="insight-block" style="margin-top:20px">
+      <strong>Por que salvar e compartilhar importa mais aqui:</strong> O save é "quero guardar para voltar". O share é "pensei em alguém específico quando vi isso". Exemplos: <em>"Olha isso — parece você que fica falando que nunca ia fazer yoga"</em> · <em>"Salva isso — para quando você tiver desculpa para não tentar algo novo"</em>. Esses comportamentos emergem da narrativa — não precisam de challenge para acontecer.
+    </div>
+
+    <h4 style="margin:20px 0 12px;font-family:'Nunito',sans-serif;font-size:16px">Pautas de PR por Episódio (potencial editorial)</h4>
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <tr style="border-bottom:1px solid var(--dark-border)">
+        <td style="padding:8px 12px;font-weight:600">Ep. 1 — CrossFitter no Yoga</td>
+        <td style="padding:8px 12px;color:var(--muted)">Boa Forma, Runner's World: "O fisiculturista que descobriu o yoga — e o que mudou"</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--dark-border)">
+        <td style="padding:8px 12px;font-weight:600">Ep. 3 — Faria Limer na Maratona</td>
+        <td style="padding:8px 12px;color:var(--muted)">Folha, UOL: "Faria Limer corre meia maratona" (pauta de comportamento urbano)</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--dark-border)">
+        <td style="padding:8px 12px;font-weight:600">Série completa</td>
+        <td style="padding:8px 12px;color:var(--muted)">Exame, StartSe: "TotalPass lança série sobre troca de modalidades" (ângulo de produto)</td>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px;font-weight:600">Ep. 4 — Maratonista no Yoga</td>
+        <td style="padding:8px 12px;color:var(--muted)">GQ, Elle: "O que acontece quando você sai da sua seita fitness" (comportamento)</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── DECISÃO FINAL ── -->
+  <div class="section">
+    <div class="section-label">Guia de Decisão</div>
+    <div class="section-title">Quando escolher cada estratégia</div>
+
+    <table class="decision-table">
+      <thead>
+        <tr>
+          <th>Se o TotalPass quer...</th>
+          <th>Estratégia recomendada</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Awareness massivo rápido + UGC em escala</td><td class="tag-seita">Seita Total</td></tr>
+        <tr><td>Posicionamento de conteúdo + engajamento qualificado</td><td class="tag-troca">Troca de Seita</td></tr>
+        <tr><td>Demonstrar cobertura de modalidades de forma inegável</td><td class="tag-troca">Troca de Seita</td></tr>
+        <tr><td>Ativar comunidades existentes de cada seita</td><td class="tag-seita">Seita Total</td></tr>
+        <tr><td>Gerar conteúdo permanente no @totalpass</td><td class="tag-troca">Troca de Seita</td></tr>
+        <tr><td>Ativar camada B2B para vendas a RH</td><td class="tag-troca">Troca de Seita</td></tr>
+        <tr><td>Primeiro movimento com budget limitado</td><td class="tag-seita">Seita Total (menor produção por peça)</td></tr>
+        <tr><td>Diferenciação de concorrentes em 2026</td><td class="tag-troca">Troca de Seita (mais difícil de replicar)</td></tr>
+        <tr><td>Budget para execução ampla em 2 fases</td><td class="tag-both">Seita Total (1º sem.) → Troca de Seita (2º sem.)</td></tr>
+      </tbody>
+    </table>
+
+    <div class="insight-block" style="margin-top:24px">
+      <strong>Recomendação da TrendsOn:</strong> As duas estratégias não são concorrentes — são arquiteturas narrativas diferentes para objetivos distintos. Se o TotalPass quiser optar por uma, escolha baseada no KPI prioritário: <span style="color:var(--coral)">Seita Total = volume e UGC</span> · <span style="color:var(--film)">Troca de Seita = qualidade, narrativa e B2B</span>. Se o budget permitir: sequenciar as duas no mesmo ano de 2026.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <footer>
+    <div>
+      <span class="brand">TrendsOn</span> &nbsp;×&nbsp; Digital AI
+      &nbsp;·&nbsp; Estratégia NEXUS + DRAFT
+      &nbsp;·&nbsp; Confidencial — não circular sem autorização
+    </div>
+    <div>TotalPass · Opção 2 · 27/02/2026</div>
+  </footer>
+
+</div>
+</body>
+</html>
