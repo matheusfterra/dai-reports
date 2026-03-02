@@ -12,6 +12,74 @@
       color: var(--text-subtle);
       font-size: 13px;
     }
+
+    /* Viewer inline — oculto por padrão */
+    .report-viewer { display: none; flex-direction: column; height: 100%; }
+    .report-viewer.active { display: flex; }
+
+    /* Lista — visível por padrão */
+    .list-view { display: flex; flex-direction: column; height: 100%; }
+    .list-view.hidden { display: none; }
+
+    /* Breadcrumb dinâmico no header */
+    #header-report-crumb { display: none; align-items: center; gap: 6px; }
+    #header-report-crumb.visible { display: flex; }
+
+    #header-list-crumb.hidden { display: none; }
+
+    /* Back button no header */
+    .header-back-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+      margin-right: 4px;
+    }
+    .header-back-btn:hover {
+      border-color: var(--brand);
+      color: var(--brand);
+    }
+
+    /* Loading inline do relatório */
+    .report-loading {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .report-loading-icon {
+      width: 28px;
+      height: 28px;
+      border: 2px solid var(--border);
+      border-top-color: var(--brand);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    .report-loading-text {
+      font-size: 12px;
+      color: var(--text-subtle);
+    }
+
+    /* Erro de carregamento */
+    .report-error {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--text-subtle);
+      font-size: 13px;
+    }
   </style>
 </head>
 <body>
@@ -35,6 +103,8 @@
 
   <!-- App: autenticado -->
   <div class="app" id="app">
+
+    <!-- Header unificado -->
     <div class="header">
       <div class="header-logo">
         <div class="header-logo-dot"></div>
@@ -42,19 +112,44 @@
       </div>
       <span class="header-sep">/</span>
       <span class="header-client">DermaClinic</span>
-      <span class="header-sep">/</span>
-      <span class="header-client" style="color: var(--text-subtle);">Relatórios</span>
+
+      <!-- Crumb: listagem -->
+      <span id="header-list-crumb" style="display:flex;align-items:center;gap:6px;">
+        <span class="header-sep">/</span>
+        <span class="header-client" style="color: var(--text-subtle);">Relatórios</span>
+      </span>
+
+      <!-- Crumb: relatório aberto (oculto até clicar) -->
+      <div id="header-report-crumb">
+        <span class="header-sep">/</span>
+        <button class="header-back-btn" onclick="goBack()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+          Relatórios
+        </button>
+        <span class="header-sep">/</span>
+        <span class="header-client" id="header-report-title" style="color: var(--text);">—</span>
+      </div>
     </div>
 
-    <div class="content">
-      <div class="section-header">
-        <p class="section-title">Relatórios disponíveis</p>
-      </div>
-
-      <div class="report-grid" id="report-grid">
-        <!-- cards renderizados via JS -->
+    <!-- VISTA: Listagem -->
+    <div class="list-view" id="list-view">
+      <div class="content">
+        <div class="section-header">
+          <p class="section-title">Relatórios disponíveis</p>
+        </div>
+        <div class="report-grid" id="report-grid">
+          <!-- cards renderizados via JS -->
+        </div>
       </div>
     </div>
+
+    <!-- VISTA: Relatório inline -->
+    <div class="report-viewer" id="report-viewer">
+      <!-- Conteúdo injetado via JS -->
+    </div>
+
   </div>
 
   <script src="../_shared/auth.js"></script>
@@ -69,9 +164,87 @@
       'atendimento':  { icon: '🏥', cls: 'icon-atendimento', badge: 'badge-atendimento' },
     };
 
-    function formatPeriod(period) {
-      return period;
+    // ────────────────────────────────────────────
+    // Navegação entre listagem e relatório inline
+    // ────────────────────────────────────────────
+
+    function goBack() {
+      // Ocultar viewer, mostrar lista
+      document.getElementById('report-viewer').classList.remove('active');
+      document.getElementById('list-view').classList.remove('hidden');
+
+      // Restaurar breadcrumb
+      document.getElementById('header-list-crumb').classList.remove('hidden');
+      document.getElementById('header-report-crumb').classList.remove('visible');
+
+      // Limpar conteúdo do viewer
+      document.getElementById('report-viewer').innerHTML = '';
+
+      // Voltar ao topo
+      window.scrollTo(0, 0);
     }
+
+    async function openReport(file, title) {
+      const viewer = document.getElementById('report-viewer');
+
+      // Mostrar loading
+      viewer.innerHTML = `
+        <div class="report-loading">
+          <div class="report-loading-icon"></div>
+          <p class="report-loading-text">Carregando relatório...</p>
+        </div>
+      `;
+
+      // Esconder lista, mostrar viewer
+      document.getElementById('list-view').classList.add('hidden');
+      viewer.classList.add('active');
+
+      // Atualizar breadcrumb
+      document.getElementById('header-list-crumb').classList.add('hidden');
+      document.getElementById('header-report-title').textContent = title;
+      document.getElementById('header-report-crumb').classList.add('visible');
+
+      window.scrollTo(0, 0);
+
+      try {
+        const res = await fetch(file);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const html = await res.text();
+
+        // Extrair apenas o .report-body do HTML do relatório
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const body = doc.querySelector('.report-body');
+
+        if (!body) {
+          throw new Error('Conteúdo do relatório não encontrado.');
+        }
+
+        // Injetar numa estrutura com scroll
+        viewer.innerHTML = `
+          <div class="report-content animate-in">
+            <div class="report-body">
+              ${body.innerHTML}
+            </div>
+          </div>
+        `;
+
+      } catch (err) {
+        viewer.innerHTML = `
+          <div class="report-error">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:#5a5f66">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/>
+            </svg>
+            <p>Erro ao carregar o relatório.</p>
+            <p style="font-size:11px">${err.message}</p>
+          </div>
+        `;
+      }
+    }
+
+    // ────────────────────────────────────────────
+    // Renderizar cards da listagem
+    // ────────────────────────────────────────────
 
     function renderCards(reports) {
       const grid = document.getElementById('report-grid');
@@ -83,13 +256,17 @@
       grid.innerHTML = reports.map(r => {
         const cat = CATEGORY_ICONS[r.category] || { icon: '📄', cls: '', badge: '' };
         const label = CATEGORY_LABELS[r.category] || r.category;
+        // data-file e data-title para o onclick
         return `
-          <a class="report-card animate-in" href="${r.file}" target="_blank">
+          <div class="report-card animate-in"
+               onclick="openReport('${r.file}', '${r.title} — ${r.period}')"
+               role="button" tabindex="0"
+               onkeydown="if(event.key==='Enter') openReport('${r.file}', '${r.title} — ${r.period}')">
             <div class="report-card-header">
               <div class="report-card-icon ${cat.cls}">${cat.icon}</div>
               <div>
                 <div class="report-card-title">${r.title}</div>
-                <div class="report-card-period">${formatPeriod(r.period)}</div>
+                <div class="report-card-period">${r.period}</div>
               </div>
             </div>
             <p class="report-card-desc">${r.description}</p>
@@ -97,10 +274,14 @@
               <span class="report-badge ${cat.badge}">${label}</span>
               <span class="report-card-arrow">→</span>
             </div>
-          </a>
+          </div>
         `;
       }).join('');
     }
+
+    // ────────────────────────────────────────────
+    // Gates e auth
+    // ────────────────────────────────────────────
 
     function showApp() {
       document.getElementById('gate-loading').classList.add('hidden');
@@ -113,13 +294,10 @@
       document.getElementById('gate-direct').classList.remove('hidden');
     }
 
-    // Carregar relatórios do registry
-    fetch('../dermaclinic/registry.json')
-      .catch(() => fetch('./registry.json'))
+    // Carregar registry
+    fetch('./registry.json')
       .then(r => r.json())
-      .then(data => {
-        renderCards(data.reports);
-      })
+      .then(data => renderCards(data.reports))
       .catch(() => {
         document.getElementById('report-grid').innerHTML =
           '<p class="empty">Erro ao carregar lista de relatórios.</p>';
@@ -127,7 +305,7 @@
 
     // Auth Chatwoot
     initChatwootAuth(
-      function onAuth(ctx) { showApp(); },
+      function onAuth() { showApp(); },
       function onTimeout() { showDirectGate(); }
     );
   </script>
