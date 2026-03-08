@@ -1,11 +1,108 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="refresh" content="0; url=dermaclinic/" />
-  <title>Redirecionando...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital AI — Reports</title>
+  <link rel="stylesheet" href="_shared/style.css" />
+  <style>
+    .hub-wrapper {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 48px 16px;
+    }
+    .hub-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .hub-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+    .client-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .client-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .client-card:hover {
+      border-color: var(--brand);
+      background: var(--surface-2);
+    }
+    .client-card-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .client-card-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .client-card-arrow {
+      font-size: 14px;
+      color: var(--brand);
+      margin-top: 4px;
+    }
+    .client-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      letter-spacing: 0.04em;
+    }
+    .tag-reports { background: rgba(110,168,254,0.1); color: var(--brand); }
+    .tag-calc { background: rgba(74,222,128,0.1); color: var(--green); }
+  </style>
 </head>
 <body>
-  <p>Redirecionando para <a href="dermaclinic/">DermaClinic Reports</a>...</p>
+  <div class="app visible">
+    <div class="header">
+      <div class="header-logo">
+        <div class="header-logo-dot"></div>
+        <span class="header-title">Digital AI</span>
+      </div>
+      <span class="header-sep">/</span>
+      <span class="header-client" style="color:var(--text-subtle)">Portal de Relatórios</span>
+    </div>
+
+    <div class="hub-wrapper">
+      <p class="hub-title">Portal de Relatórios</p>
+      <p class="hub-sub">Acesse os relatórios e ferramentas por cliente.</p>
+
+      <div class="client-grid">
+
+        <a href="dermaclinic/" class="client-card">
+          <span class="client-tag tag-reports">Relatórios</span>
+          <div class="client-card-name">DermaClinic</div>
+          <div class="client-card-desc">Tráfego pago Meta Ads e atendimento via Chatwoot.</div>
+          <div class="client-card-arrow">→</div>
+        </a>
+
+        <a href="engie/" class="client-card">
+          <span class="client-tag tag-calc">Calculadora</span>
+          <div class="client-card-name">ENGIE Brasil</div>
+          <div class="client-card-desc">Calculadora PCH — geração e faturamento PROINFA (PHJG + PHRO).</div>
+          <div class="client-card-arrow">→</div>
+        </a>
+
+      </div>
+    </div>
+  </div>
 </body>
 </html>

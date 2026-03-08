@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora PCH — ENGIE Brasil</title>
+  <link rel="stylesheet" href="../_shared/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <style>
+    /* ── Layout ─────────────────────────────── */
+    .calc-wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 16px 48px;
+    }
+
+    /* ── Sticky Inputs ──────────────────────── */
+    .inputs-bar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      margin: 0 -16px 24px;
+    }
+    .inputs-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-end;
+    }
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+      min-width: 160px;
+    }
+    .input-group label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .input-group input {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 600;
+      padding: 8px 12px;
+      outline: none;
+      transition: border-color 0.15s;
+      width: 100%;
+    }
+    .input-group input:focus { border-color: var(--brand); }
+    .input-unit {
+      font-size: 11px;
+      color: var(--text-subtle);
+      margin-top: 2px;
+    }
+
+    /* ── Section titles ─────────────────────── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── PCH Cards grid ─────────────────────── */
+    .pch-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 680px) {
+      .pch-grid { grid-template-columns: 1fr; }
+    }
+
+    .pch-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .pch-card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .pch-card-sub {
+      font-size: 11px;
+      color: var(--text-subtle);
+      margin-bottom: 16px;
+    }
+
+    /* Barra de potência */
+    .power-bar-wrap { margin-bottom: 16px; }
+    .power-bar-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .power-bar-value { font-weight: 700; color: var(--text); font-size: 13px; }
+    .power-bar-track {
+      height: 6px;
+      background: var(--surface-2);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .power-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: var(--brand);
+      transition: width 0.3s;
+    }
+
+    /* Métricas da usina */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .metric-cell {
+      background: var(--surface-2);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+    }
+    .metric-cell-label {
+      font-size: 10px;
+      color: var(--text-subtle);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 3px;
+    }
+    .metric-cell-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .metric-cell-unit {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    /* Status contrato */
+    .contract-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 600;
+      width: 100%;
+      justify-content: center;
+    }
+    .contract-badge.ok {
+      background: rgba(74, 222, 128, 0.1);
+      color: var(--green);
+      border: 1px solid rgba(74, 222, 128, 0.2);
+    }
+    .contract-badge.deficit {
+      background: var(--ruby-dim);
+      color: var(--ruby);
+      border: 1px solid rgba(248, 113, 113, 0.2);
+    }
+
+    .loss-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .loss-cell {
+      background: var(--ruby-dim);
+      border: 1px solid rgba(248, 113, 113, 0.15);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      text-align: center;
+    }
+    .loss-cell-label { font-size: 10px; color: var(--ruby); opacity: 0.8; }
+    .loss-cell-value { font-size: 13px; font-weight: 700; color: var(--ruby); }
+
+    /* ── Total combinado ────────────────────── */
+    .total-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 32px;
+    }
+    .total-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 520px) {
+      .total-grid { grid-template-columns: 1fr; }
+    }
+    .total-cell {
+      background: var(--surface-2);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      text-align: center;
+    }
+    .total-cell-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+    .total-cell-value { font-size: 20px; font-weight: 800; color: var(--brand); }
+    .total-cell-sub { font-size: 11px; color: var(--text-subtle); margin-top: 2px; }
+    .total-loss-banner {
+      margin-top: 12px;
+      background: var(--ruby-dim);
+      border: 1px solid rgba(248, 113, 113, 0.2);
+      border-radius: var(--radius-sm);
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .total-loss-label { font-size: 12px; color: var(--ruby); }
+    .total-loss-value { font-size: 16px; font-weight: 700; color: var(--ruby); }
+    .total-loss-banner.hidden { display: none; }
+
+    /* ── Histórico ──────────────────────────── */
+    .historico-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .chart-wrap {
+      position: relative;
+      height: 240px;
+      margin-bottom: 24px;
+    }
+
+    .hist-table-wrap { overflow-x: auto; }
+    .hist-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .hist-table th {
+      text-align: left;
+      padding: 8px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .hist-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .hist-table tr:last-child td { border-bottom: none; }
+    .hist-table tr.alert-row td { color: var(--amber); }
+    .hist-table tr.media-row td { color: var(--text-muted); font-style: italic; border-top: 1px solid var(--border); }
+    .hist-table tr.atual-row td { color: var(--brand); font-weight: 700; }
+    .pct-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .pct-ok { background: rgba(74, 222, 128, 0.12); color: var(--green); }
+    .pct-low { background: var(--amber-dim); color: var(--amber); }
+    .pct-crit { background: var(--ruby-dim); color: var(--ruby); }
+
+    /* ── Misc ───────────────────────────────── */
+    .footnote {
+      font-size: 11px;
+      color: var(--text-subtle);
+      margin-top: 24px;
+      text-align: center;
+      line-height: 1.6;
+    }
+    .badge-engie {
+      display: inline-block;
+      background: rgba(0, 155, 58, 0.12);
+      color: #4ade80;
+      border: 1px solid rgba(74, 222, 128, 0.2);
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      letter-spacing: 0.05em;
+      vertical-align: middle;
+      margin-left: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app visible" id="app">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="header-logo">
+        <div class="header-logo-dot"></div>
+        <span class="header-title">Digital AI</span>
+      </div>
+      <span class="header-sep">/</span>
+      <span class="header-client">ENGIE Brasil</span>
+      <span class="header-sep">/</span>
+      <span class="header-client" style="color: var(--text-subtle);">Calculadora PCH</span>
+    </div>
+
+    <!-- Conteúdo -->
+    <div class="calc-wrapper">
+
+      <!-- Inputs Sticky -->
+      <div class="inputs-bar">
+        <div class="inputs-inner">
+          <div class="input-group">
+            <label>Vazão Q</label>
+            <input type="number" id="inp-q" value="19.064" step="0.001" min="0" />
+            <span class="input-unit">m³/s — média horária</span>
+          </div>
+          <div class="input-group">
+            <label>Tarifa PROINFA</label>
+            <input type="number" id="inp-tarifa" value="441.04" step="0.01" min="0" />
+            <span class="input-unit">R$/MWh</span>
+          </div>
+          <div class="input-group" style="max-width: 200px;">
+            <label>MW Disponível PHJG</label>
+            <input type="number" id="inp-mw-phjg" placeholder="auto" step="0.01" min="0" />
+            <span class="input-unit">Opcional — usa Q se vazio</span>
+          </div>
+          <div class="input-group" style="max-width: 200px;">
+            <label>MW Disponível PHRO</label>
+            <input type="number" id="inp-mw-phro" placeholder="auto" step="0.01" min="0" />
+            <span class="input-unit">Opcional — usa Q se vazio</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Usinas -->
+      <div class="content">
+
+        <p class="section-label">Usinas</p>
+        <div class="pch-grid">
+
+          <!-- PHJG -->
+          <div class="pch-card">
+            <div class="pch-card-title">PCH José Gelazio <span class="badge-engie">PHJG</span></div>
+            <div class="pch-card-sub">Potência máx. 23,7 MW · Vazão máx. 48,9 m³/s · PROINFA 80.973 MW/ano</div>
+
+            <div class="power-bar-wrap">
+              <div class="power-bar-label">
+                <span>Potência gerada</span>
+                <span class="power-bar-value" id="phjg-w-label">—</span>
+              </div>
+              <div class="power-bar-track">
+                <div class="power-bar-fill" id="phjg-w-bar" style="width:0%"></div>
+              </div>
+            </div>
+
+            <div class="metrics-grid">
+              <div class="metric-cell">
+                <div class="metric-cell-label">MWh/dia</div>
+                <div class="metric-cell-value" id="phjg-mwh-dia">—</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-cell-label">MWh/mês</div>
+                <div class="metric-cell-value" id="phjg-mwh-mes">—</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-cell-label">MWh/ano</div>
+                <div class="metric-cell-value" id="phjg-mwh-ano">—</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-cell-label">R$/dia</div>
+                <div class="metric-cell-value" id="phjg-r-dia">—</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-cell-label">R$/mês</div>
+                <div class="metric-cell-value" id="phjg-r-mes">—</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-cell-label">R$/ano</div>
+                <div class="metric-cell-value" id="phjg-r-ano">—</div>
+              </div>
+            </div>
+
+            <div id="phjg-status-wrap">
+              <div class="contract-badge" id="phjg-badge">—</div>
+              <div class="loss-row" id="phjg-loss-row" style="display:none">
+                <div class="loss-cell">
+                  <div class="loss-cell-label">Perda/dia</div>
+                  <div class="loss-cell-value" id="phjg-loss-dia">—</div>
+                </div>
+                <div class="loss-cell">
+                  <div class="loss-cell-label">Perda/semana</div>
+                  <div class="loss-cell-value" id="phjg-loss-sem">—</div>
+                </div>
+                <div class="loss-cell">
+                  <div class="loss-cell-label">Perda/mês</div>
+                  <div class="loss-cell-value" id="phjg-loss-mes">—</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PHRO -->
+          <div class="pch-card">
+            <div class="pch-card-title">PCH Rondonópolis <span class="badge-engie">PHRO</span></div>
+            <div class="pch-card-sub">Potência máx. 26,6 MW · Vazão máx. 49,8 m³/s · PROINFA 88.511 MW/ano</div>
+
+            <div class="power-bar-wrap">
+              <div class="power-bar-label">
+                <span>Potência gerada</span>
+                <span class="power-bar-value" id="phro-w-label">—</span>
+              </div>
+              <div class="power-bar-track">
+                <div class="power-bar-fill" id="phro-w-bar" style="width:0%"></div>
+              </div>
+            </div>
+
+            <div class="metrics-grid">
+              <div class="metric-cell">
+                <div class="metric-cell-label">MWh/dia</div>
+                <div class="metric-cell-value" id="phro-mwh-dia">—</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-cell-label">MWh/mês</div>
+                <div class="metric-cell-value" id="phro-mwh-mes">—</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-cell-label">MWh/ano</div>
+                <div class="metric-cell-value" id="phro-mwh-ano">—</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-cell-label">R$/dia</div>
+                <div class="metric-cell-value" id="phro-r-dia">—</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-cell-label">R$/mês</div>
+                <div class="metric-cell-value" id="phro-r-mes">—</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-cell-label">R$/ano</div>
+                <div class="metric-cell-value" id="phro-r-ano">—</div>
+              </div>
+            </div>
+
+            <div id="phro-status-wrap">
+              <div class="contract-badge" id="phro-badge">—</div>
+              <div class="loss-row" id="phro-loss-row" style="display:none">
+                <div class="loss-cell">
+                  <div class="loss-cell-label">Perda/dia</div>
+                  <div class="loss-cell-value" id="phro-loss-dia">—</div>
+                </div>
+                <div class="loss-cell">
+                  <div class="loss-cell-label">Perda/semana</div>
+                  <div class="loss-cell-value" id="phro-loss-sem">—</div>
+                </div>
+                <div class="loss-cell">
+                  <div class="loss-cell-label">Perda/mês</div>
+                  <div class="loss-cell-value" id="phro-loss-mes">—</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /pch-grid -->
+
+        <!-- Total Combinado -->
+        <p class="section-label">Total Combinado (PHJG + PHRO)</p>
+        <div class="total-card">
+          <div class="total-grid">
+            <div class="total-cell">
+              <div class="total-cell-label">Faturamento / dia</div>
+              <div class="total-cell-value" id="total-dia">—</div>
+              <div class="total-cell-sub">PHJG + PHRO</div>
+            </div>
+            <div class="total-cell">
+              <div class="total-cell-label">Faturamento / mês</div>
+              <div class="total-cell-value" id="total-mes">—</div>
+              <div class="total-cell-sub">730 horas</div>
+            </div>
+            <div class="total-cell">
+              <div class="total-cell-label">Faturamento / ano</div>
+              <div class="total-cell-value" id="total-ano">—</div>
+              <div class="total-cell-sub">8.760 horas</div>
+            </div>
+          </div>
+          <div class="total-loss-banner hidden" id="total-loss-banner">
+            <span class="total-loss-label">⚠ Perda estimada / mês (abaixo do contratado)</span>
+            <span class="total-loss-value" id="total-loss-mes">—</span>
+          </div>
+        </div>
+
+        <!-- Histórico -->
+        <p class="section-label">Histórico 2015–2025</p>
+
+        <div class="historico-card">
+          <div class="chart-wrap">
+            <canvas id="chart-historico"></canvas>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+            <div>
+              <p style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">PCH José Gelazio (PHJG)</p>
+              <div class="hist-table-wrap">
+                <table class="hist-table" id="table-phjg"></table>
+              </div>
+            </div>
+            <div>
+              <p style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">PCH Rondonópolis (PHRO)</p>
+              <div class="hist-table-wrap">
+                <table class="hist-table" id="table-phro"></table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Linha de comparação atual -->
+          <div style="background:var(--surface-2);border-radius:var(--radius-sm);padding:12px 16px;margin-top:8px;">
+            <p style="font-size:11px;color:var(--text-muted);margin-bottom:8px;font-weight:600;">Comparativo: Projeção Atual vs Média Histórica</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div id="cmp-phjg" style="font-size:12px;line-height:1.8;color:var(--text-muted);"></div>
+              <div id="cmp-phro" style="font-size:12px;line-height:1.8;color:var(--text-muted);"></div>
+            </div>
+          </div>
+        </div>
+
+        <p class="footnote">
+          Dados históricos: 2015–2025 · PROINFA contratado: PHJG 80.973 MW/ano | PHRO 88.511 MW/ano<br/>
+          Tarifa e vazão inseridas manualmente. Fórmula: W = (Q/Q_máx) × W_máx · MWh = W × horas · R$ = MWh × tarifa<br/>
+          Digital AI — <a href="https://digital-ai.tech" style="color:var(--brand)">digital-ai.tech</a>
+        </p>
+
+      </div><!-- /content -->
+    </div><!-- /calc-wrapper -->
+  </div><!-- /app -->
+
+  <script>
+    // ── Dados das usinas ─────────────────────────────────────────────────────
+    const USINAS = {
+      PHJG: {
+        nome: 'PCH José Gelazio',
+        w_max: 23.7,
+        q_max: 48.9,
+        proinfa_ano: 80973,
+        historico: [
+          { ano: 2015, pct: 93,  mwh: 75304,  vazao: 19.07 },
+          { ano: 2016, pct: 83,  mwh: 67207,  vazao: 16.88 },
+          { ano: 2017, pct: 102, mwh: 82592,  vazao: 19.55 },
+          { ano: 2018, pct: 109, mwh: 88260,  vazao: 21.94 },
+          { ano: 2019, pct: 110, mwh: 89070,  vazao: 21.44 },
+          { ano: 2020, pct: 73,  mwh: 59110,  vazao: 13.61 },
+          { ano: 2021, pct: 63,  mwh: 51012,  vazao: 12.08 },
+          { ano: 2022, pct: 65,  mwh: 52632,  vazao: 12.34 },
+          { ano: 2023, pct: 91,  mwh: 73685,  vazao: 16.73 },
+          { ano: 2024, pct: 53,  mwh: 42915,  vazao: 12.64 },
+          { ano: 2025, pct: 63,  mwh: 51012,  vazao: 14.55 },
+        ]
+      },
+      PHRO: {
+        nome: 'PCH Rondonópolis',
+        w_max: 26.6,
+        q_max: 49.8,
+        proinfa_ano: 88511,
+        historico: [
+          { ano: 2015, pct: 97,  mwh: 85855,  vazao: 19.32 },
+          { ano: 2016, pct: 87,  mwh: 77004,  vazao: 17.07 },
+          { ano: 2017, pct: 100, mwh: 88511,  vazao: 19.64 },
+          { ano: 2018, pct: 114, mwh: 100902, vazao: 22.50 },
+          { ano: 2019, pct: 110, mwh: 97362,  vazao: 22.33 },
+          { ano: 2020, pct: 70,  mwh: 61957,  vazao: 15.78 },
+          { ano: 2021, pct: 62,  mwh: 54876,  vazao: 12.93 },
+          { ano: 2022, pct: 63,  mwh: 55761,  vazao: 13.32 },
+          { ano: 2023, pct: 87,  mwh: 77004,  vazao: 16.40 },
+          { ano: 2024, pct: 53,  mwh: 46910,  vazao: 13.31 },
+          { ano: 2025, pct: 60,  mwh: 53106,  vazao: 14.21 },
+        ]
+      }
+    };
+
+    // ── Formatação ───────────────────────────────────────────────────────────
+    const fmtRS = v => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(v);
+    const fmtN  = (v, d=1) => new Intl.NumberFormat('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d }).format(v);
+    const fmtN3 = v => fmtN(v, 3);
+
+    // ── Fórmulas ─────────────────────────────────────────────────────────────
+    function calcW(q, usina) {
+      const w = (q / usina.q_max) * usina.w_max;
+      return Math.min(w, usina.w_max);
+    }
+    function calcGeracaoFat(w, tarifa) {
+      const mwh_dia = w * 24;
+      const mwh_mes = w * 730;
+      const mwh_ano = w * 8760;
+      return {
+        mwh_dia, mwh_mes, mwh_ano,
+        r_dia: mwh_dia * tarifa,
+        r_mes: mwh_mes * tarifa,
+        r_ano: mwh_ano * tarifa,
+      };
+    }
+    function calcPerda(w, usina, tarifa) {
+      const w_necessario = usina.proinfa_ano / 8760;
+      const deficit = w_necessario - w; // positivo = deficit
+      if (deficit <= 0) return { deficit: 0, loss_dia: 0, loss_sem: 0, loss_mes: 0 };
+      const loss_dia = deficit * 24 * tarifa;
+      return { deficit, loss_dia, loss_sem: loss_dia * 7, loss_mes: loss_dia * 30 };
+    }
+
+    // ── Atualizar DOM ────────────────────────────────────────────────────────
+    function setEl(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
+
+    function renderUsina(prefix, usina, w, fat, perda) {
+      const pct = (w / usina.w_max) * 100;
+      setEl(prefix + '-w-label', fmtN3(w) + ' MW');
+      const bar = document.getElementById(prefix + '-w-bar');
+      if (bar) bar.style.width = Math.min(pct, 100) + '%';
+
+      setEl(prefix + '-mwh-dia', fmtN(fat.mwh_dia));
+      setEl(prefix + '-mwh-mes', fmtN(fat.mwh_mes, 0));
+      setEl(prefix + '-mwh-ano', fmtN(fat.mwh_ano, 0));
+      setEl(prefix + '-r-dia',   fmtRS(fat.r_dia));
+      setEl(prefix + '-r-mes',   fmtRS(fat.r_mes));
+      setEl(prefix + '-r-ano',   fmtRS(fat.r_ano));
+
+      const badge = document.getElementById(prefix + '-badge');
+      const lossRow = document.getElementById(prefix + '-loss-row');
+      const wNec = usina.proinfa_ano / 8760;
+
+      if (perda.deficit > 0) {
+        badge.className = 'contract-badge deficit';
+        badge.textContent = `⬇ Abaixo do contrato: −${fmtN3(perda.deficit)} MW (necessário ${fmtN3(wNec)} MW/h)`;
+        lossRow.style.display = 'grid';
+        setEl(prefix + '-loss-dia', fmtRS(perda.loss_dia));
+        setEl(prefix + '-loss-sem', fmtRS(perda.loss_sem));
+        setEl(prefix + '-loss-mes', fmtRS(perda.loss_mes));
+      } else {
+        badge.className = 'contract-badge ok';
+        badge.textContent = `✓ Acima do contrato: +${fmtN3(Math.abs(perda.deficit))} MW (necessário ${fmtN3(wNec)} MW/h)`;
+        lossRow.style.display = 'none';
+      }
+    }
+
+    // ── Calcular e renderizar tudo ───────────────────────────────────────────
+    let chartInstance = null;
+
+    function recalc() {
+      const q      = parseFloat(document.getElementById('inp-q').value)      || 0;
+      const tarifa = parseFloat(document.getElementById('inp-tarifa').value)  || 0;
+      const mwPhjg = parseFloat(document.getElementById('inp-mw-phjg').value) || null;
+      const mwPhro = parseFloat(document.getElementById('inp-mw-phro').value) || null;
+
+      // Potências
+      const wPhjg = mwPhjg !== null ? Math.min(mwPhjg, USINAS.PHJG.w_max) : calcW(q, USINAS.PHJG);
+      const wPhro = mwPhro !== null ? Math.min(mwPhro, USINAS.PHRO.w_max) : calcW(q, USINAS.PHRO);
+
+      const fatPhjg  = calcGeracaoFat(wPhjg, tarifa);
+      const fatPhro  = calcGeracaoFat(wPhro, tarifa);
+      const perdaPhjg = calcPerda(wPhjg, USINAS.PHJG, tarifa);
+      const perdaPhro = calcPerda(wPhro, USINAS.PHRO, tarifa);
+
+      renderUsina('phjg', USINAS.PHJG, wPhjg, fatPhjg, perdaPhjg);
+      renderUsina('phro', USINAS.PHRO, wPhro, fatPhro, perdaPhro);
+
+      // Totais
+      setEl('total-dia', fmtRS(fatPhjg.r_dia + fatPhro.r_dia));
+      setEl('total-mes', fmtRS(fatPhjg.r_mes + fatPhro.r_mes));
+      setEl('total-ano', fmtRS(fatPhjg.r_ano + fatPhro.r_ano));
+
+      const totalLoss = perdaPhjg.loss_mes + perdaPhro.loss_mes;
+      const banner = document.getElementById('total-loss-banner');
+      if (totalLoss > 0) {
+        banner.classList.remove('hidden');
+        setEl('total-loss-mes', fmtRS(totalLoss));
+      } else {
+        banner.classList.add('hidden');
+      }
+
+      // Comparativo histórico
+      renderComparativo('phjg', USINAS.PHJG, wPhjg, fatPhjg);
+      renderComparativo('phro', USINAS.PHRO, wPhro, fatPhro);
+
+      // Persistir inputs
+      localStorage.setItem('engie-q', q);
+      localStorage.setItem('engie-tarifa', tarifa);
+    }
+
+    // ── Histórico ─────────────────────────────────────────────────────────────
+    function pctClass(pct) {
+      if (pct >= 90) return 'pct-ok';
+      if (pct >= 75) return 'pct-low';
+      return 'pct-crit';
+    }
+    function rowClass(pct) {
+      if (pct < 75) return 'alert-row';
+      return '';
+    }
+
+    function buildTable(tableId, usina) {
+      const avg = {
+        pct:   usina.historico.reduce((s, r) => s + r.pct, 0)   / usina.historico.length,
+        mwh:   usina.historico.reduce((s, r) => s + r.mwh, 0)   / usina.historico.length,
+        vazao: usina.historico.reduce((s, r) => s + r.vazao, 0) / usina.historico.length,
+      };
+
+      const rows = usina.historico.map(r => `
+        <tr class="${rowClass(r.pct)}">
+          <td>${r.ano}</td>
+          <td><span class="pct-badge ${pctClass(r.pct)}">${r.pct}%</span></td>
+          <td>${fmtN(r.mwh, 0)}</td>
+          <td>${fmtN(r.vazao)}</td>
+        </tr>
+      `).join('');
+
+      const mediaRow = `
+        <tr class="media-row">
+          <td>Média</td>
+          <td><span class="pct-badge ${pctClass(avg.pct)}">${fmtN(avg.pct)}%</span></td>
+          <td>${fmtN(avg.mwh, 0)}</td>
+          <td>${fmtN(avg.vazao)}</td>
+        </tr>
+      `;
+
+      const el = document.getElementById(tableId);
+      el.innerHTML = `
+        <thead>
+          <tr>
+            <th>Ano</th><th>% Cont.</th><th>MWh</th><th>Vazão m³/s</th>
+          </tr>
+        </thead>
+        <tbody>${rows}${mediaRow}</tbody>
+      `;
+    }
+
+    function renderComparativo(prefix, usina, w, fat) {
+      const wNec  = usina.proinfa_ano / 8760;
+      const pctAtual = ((w / wNec) * 100);
+      const avgPct = usina.historico.reduce((s, r) => s + r.pct, 0) / usina.historico.length;
+      const avgVazao = usina.historico.reduce((s, r) => s + r.vazao, 0) / usina.historico.length;
+      const projecaoAnual = fat.mwh_ano;
+
+      const el = document.getElementById('cmp-' + prefix);
+      el.innerHTML = `
+        <b style="color:var(--text)">${usina.nome}</b><br/>
+        Projeção anual: <b style="color:var(--brand)">${fmtN(projecaoAnual, 0)} MWh</b><br/>
+        % do contratado: <b style="color:${pctAtual >= 100 ? 'var(--green)' : pctAtual >= 80 ? 'var(--amber)' : 'var(--ruby)'}">${fmtN(pctAtual)}%</b><br/>
+        Média histórica: <b>${fmtN(avgPct)}%</b> do contratado<br/>
+        Vazão média histórica: <b>${fmtN(avgVazao)} m³/s</b>
+      `;
+    }
+
+    function buildChart() {
+      const anos = USINAS.PHJG.historico.map(r => r.ano);
+      const pctPhjg = USINAS.PHJG.historico.map(r => r.pct);
+      const pctPhro = USINAS.PHRO.historico.map(r => r.pct);
+
+      const avgPhjg = pctPhjg.reduce((s, v) => s + v, 0) / pctPhjg.length;
+      const avgPhro = pctPhro.reduce((s, v) => s + v, 0) / pctPhro.length;
+
+      if (chartInstance) chartInstance.destroy();
+
+      const ctx = document.getElementById('chart-historico').getContext('2d');
+      chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: anos,
+          datasets: [
+            {
+              label: 'PHJG % Contratado',
+              data: pctPhjg,
+              borderColor: '#6ea8fe',
+              backgroundColor: 'rgba(110,168,254,0.08)',
+              borderWidth: 2,
+              pointRadius: 4,
+              pointBackgroundColor: '#6ea8fe',
+              fill: true,
+              tension: 0.3,
+            },
+            {
+              label: 'PHRO % Contratado',
+              data: pctPhro,
+              borderColor: '#4ade80',
+              backgroundColor: 'rgba(74,222,128,0.06)',
+              borderWidth: 2,
+              pointRadius: 4,
+              pointBackgroundColor: '#4ade80',
+              fill: true,
+              tension: 0.3,
+            },
+            {
+              label: `Média PHJG (${avgPhjg.toFixed(0)}%)`,
+              data: Array(anos.length).fill(avgPhjg),
+              borderColor: 'rgba(110,168,254,0.35)',
+              borderDash: [5, 4],
+              borderWidth: 1,
+              pointRadius: 0,
+              fill: false,
+            },
+            {
+              label: `Média PHRO (${avgPhro.toFixed(0)}%)`,
+              data: Array(anos.length).fill(avgPhro),
+              borderColor: 'rgba(74,222,128,0.35)',
+              borderDash: [5, 4],
+              borderWidth: 1,
+              pointRadius: 0,
+              fill: false,
+            },
+            {
+              label: '100% contratado',
+              data: Array(anos.length).fill(100),
+              borderColor: 'rgba(251,191,36,0.4)',
+              borderDash: [3, 3],
+              borderWidth: 1,
+              pointRadius: 0,
+              fill: false,
+            },
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: { color: '#8c9097', font: { size: 11 }, boxWidth: 14, padding: 12 }
+            },
+            tooltip: {
+              callbacks: {
+                label: ctx => ` ${ctx.dataset.label}: ${ctx.raw.toFixed(1)}%`
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#5a5f66', font: { size: 11 } },
+              grid:  { color: '#2d3035' }
+            },
+            y: {
+              ticks: {
+                color: '#5a5f66',
+                font: { size: 11 },
+                callback: v => v + '%'
+              },
+              grid: { color: '#2d3035' },
+              min: 40,
+            }
+          }
+        }
+      });
+    }
+
+    // ── Init ─────────────────────────────────────────────────────────────────
+    (function init() {
+      // Restaurar valores do localStorage
+      const savedQ      = localStorage.getItem('engie-q');
+      const savedTarifa = localStorage.getItem('engie-tarifa');
+      if (savedQ)      document.getElementById('inp-q').value      = savedQ;
+      if (savedTarifa) document.getElementById('inp-tarifa').value = savedTarifa;
+
+      // Construir tabelas e gráfico uma vez
+      buildTable('table-phjg', USINAS.PHJG);
+      buildTable('table-phro', USINAS.PHRO);
+      buildChart();
+
+      // Listeners
+      ['inp-q', 'inp-tarifa', 'inp-mw-phjg', 'inp-mw-phro'].forEach(id => {
+        document.getElementById(id).addEventListener('input', recalc);
+      });
+
+      // Primeiro cálculo
+      recalc();
+    })();
+  </script>
+</body>
+</html>
