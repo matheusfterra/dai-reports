@@ -301,6 +301,127 @@
     .pct-low { background: var(--amber-dim); color: var(--amber); }
     .pct-crit { background: var(--ruby-dim); color: var(--ruby); }
 
+    /* ── Mobile: Hamburguer + Drawer ────────── */
+    .mobile-topbar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 60;
+    }
+    .mobile-topbar-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .mobile-topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hamburger-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .hamburger-btn:hover { border-color: var(--brand); color: var(--brand); }
+    .hamburger-btn svg { flex-shrink: 0; }
+
+    /* Drawer overlay */
+    .drawer-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 80;
+    }
+    .drawer-overlay.open { display: block; }
+
+    /* Drawer panel */
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: min(360px, 92vw);
+      height: 100%;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      z-index: 90;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-y: auto;
+    }
+    .drawer.open { right: 0; }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .drawer-title { font-size: 15px; font-weight: 700; color: var(--text); }
+    .drawer-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+    }
+    .drawer-close:hover { color: var(--text); background: var(--surface-2); }
+
+    .drawer-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .drawer-body .input-group { min-width: unset; flex: unset; }
+    .drawer-body .input-group input { font-size: 17px; }
+
+    /* Chip de valores atuais na topbar mobile */
+    .current-q-chip {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--brand);
+      background: var(--brand-dim);
+      border-radius: 6px;
+      padding: 4px 10px;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 768px) {
+      .mobile-topbar { display: flex; }
+      .inputs-bar { display: none; }
+      .calc-wrapper { padding: 0 12px 48px; }
+      .pch-grid { grid-template-columns: 1fr; }
+      .metrics-grid { grid-template-columns: 1fr 1fr; }
+      .loss-row { grid-template-columns: 1fr; }
+      .total-grid { grid-template-columns: 1fr; }
+      /* tabelas histórico empilhadas */
+      .historico-card > div[style*="grid-template-columns:1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
     /* ── Misc ───────────────────────────────── */
     .footnote {
       font-size: 13px;
@@ -328,7 +449,7 @@
 
   <div class="app visible" id="app">
 
-    <!-- Header -->
+    <!-- Header (desktop) -->
     <div class="header">
       <div class="header-logo">
         <div class="header-logo-dot"></div>
@@ -338,6 +459,57 @@
       <span class="header-client">ENGIE Brasil</span>
       <span class="header-sep">/</span>
       <span class="header-client" style="color: var(--text-subtle);">Calculadora PCH</span>
+    </div>
+
+    <!-- Topbar mobile com botão hambúrguer -->
+    <div class="mobile-topbar">
+      <span class="mobile-topbar-title">Calculadora PCH</span>
+      <div class="mobile-topbar-right">
+        <span class="current-q-chip" id="chip-q">Q: —</span>
+        <button class="hamburger-btn" onclick="openDrawer()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/>
+          </svg>
+          Dados
+        </button>
+      </div>
+    </div>
+
+    <!-- Overlay do drawer -->
+    <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+
+    <!-- Drawer de inputs (mobile) -->
+    <div class="drawer" id="drawer">
+      <div class="drawer-header">
+        <span class="drawer-title">Dados de entrada</span>
+        <button class="drawer-close" onclick="closeDrawer()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="drawer-body">
+        <div class="input-group">
+          <label>Vazão Q</label>
+          <input type="number" id="inp-q-drawer" value="19.064" step="0.001" min="0" />
+          <span class="input-unit">m³/s — média horária</span>
+        </div>
+        <div class="input-group">
+          <label>Tarifa PROINFA</label>
+          <input type="number" id="inp-tarifa-drawer" value="441.04" step="0.01" min="0" />
+          <span class="input-unit">R$/MWh</span>
+        </div>
+        <div class="input-group">
+          <label>MW Disponível PHJG</label>
+          <input type="number" id="inp-mw-phjg-drawer" placeholder="auto" step="0.01" min="0" />
+          <span class="input-unit">Opcional — usa Q se vazio</span>
+        </div>
+        <div class="input-group">
+          <label>MW Disponível PHRO</label>
+          <input type="number" id="inp-mw-phro-drawer" placeholder="auto" step="0.01" min="0" />
+          <span class="input-unit">Opcional — usa Q se vazio</span>
+        </div>
+      </div>
     </div>
 
     <!-- Conteúdo -->
@@ -674,21 +846,72 @@
       }
     }
 
+    // ── Drawer mobile ────────────────────────────────────────────────────────
+    function openDrawer() {
+      document.getElementById('drawer').classList.add('open');
+      document.getElementById('drawer-overlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeDrawer() {
+      document.getElementById('drawer').classList.remove('open');
+      document.getElementById('drawer-overlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    // Fechar drawer com Escape
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+
+    // ── Leitura de inputs (desktop ou drawer) ────────────────────────────────
+    function getVal(desktopId, drawerId) {
+      // Usa desktop se visível, caso contrário drawer
+      const desktopEl = document.getElementById(desktopId);
+      const drawerEl  = document.getElementById(drawerId);
+      if (desktopEl && getComputedStyle(desktopEl.closest('.inputs-bar') || document.body).display !== 'none') {
+        return desktopEl.value;
+      }
+      return drawerEl ? drawerEl.value : '';
+    }
+
+    // Sincronizar desktop → drawer e vice-versa
+    function syncInputs(sourceId, targetId) {
+      const src = document.getElementById(sourceId);
+      const tgt = document.getElementById(targetId);
+      if (src && tgt && src.value !== tgt.value) tgt.value = src.value;
+    }
+
     // ── Calcular e renderizar tudo ───────────────────────────────────────────
     let chartInstance = null;
 
-    function recalc() {
-      const q      = parseFloat(document.getElementById('inp-q').value)      || 0;
-      const tarifa = parseFloat(document.getElementById('inp-tarifa').value)  || 0;
-      const mwPhjg = parseFloat(document.getElementById('inp-mw-phjg').value) || null;
-      const mwPhro = parseFloat(document.getElementById('inp-mw-phro').value) || null;
+    function recalc(sourceEl) {
+      // Sincronizar pares desktop ↔ drawer
+      const pairs = [
+        ['inp-q', 'inp-q-drawer'],
+        ['inp-tarifa', 'inp-tarifa-drawer'],
+        ['inp-mw-phjg', 'inp-mw-phjg-drawer'],
+        ['inp-mw-phro', 'inp-mw-phro-drawer'],
+      ];
+      if (sourceEl) {
+        const id = sourceEl.id;
+        const pair = pairs.find(p => p.includes(id));
+        if (pair) {
+          const otherId = pair[0] === id ? pair[1] : pair[0];
+          syncInputs(id, otherId);
+        }
+      }
+
+      // Ler de qualquer origem (ambas estão sincronizadas)
+      const q      = parseFloat(document.getElementById('inp-q').value)           || 0;
+      const tarifa = parseFloat(document.getElementById('inp-tarifa').value)       || 0;
+      const mwPhjgRaw = document.getElementById('inp-mw-phjg').value;
+      const mwPhroRaw = document.getElementById('inp-mw-phro').value;
+      const mwPhjg = mwPhjgRaw !== '' ? parseFloat(mwPhjgRaw) : null;
+      const mwPhro = mwPhroRaw !== '' ? parseFloat(mwPhroRaw) : null;
 
       // Potências
       const wPhjg = mwPhjg !== null ? Math.min(mwPhjg, USINAS.PHJG.w_max) : calcW(q, USINAS.PHJG);
       const wPhro = mwPhro !== null ? Math.min(mwPhro, USINAS.PHRO.w_max) : calcW(q, USINAS.PHRO);
 
-      const fatPhjg  = calcGeracaoFat(wPhjg, tarifa);
-      const fatPhro  = calcGeracaoFat(wPhro, tarifa);
+      const fatPhjg   = calcGeracaoFat(wPhjg, tarifa);
+      const fatPhro   = calcGeracaoFat(wPhro, tarifa);
       const perdaPhjg = calcPerda(wPhjg, USINAS.PHJG, tarifa);
       const perdaPhro = calcPerda(wPhro, USINAS.PHRO, tarifa);
 
@@ -713,7 +936,11 @@
       renderComparativo('phjg', USINAS.PHJG, wPhjg, fatPhjg);
       renderComparativo('phro', USINAS.PHRO, wPhro, fatPhro);
 
-      // Persistir inputs
+      // Chip de Q na topbar mobile
+      const chip = document.getElementById('chip-q');
+      if (chip) chip.textContent = `Q: ${fmtN(q, 3)} m³/s · R$ ${fmtN(tarifa, 2)}`;
+
+      // Persistir
       localStorage.setItem('engie-q', q);
       localStorage.setItem('engie-tarifa', tarifa);
     }
@@ -886,21 +1113,28 @@
       // Restaurar valores do localStorage
       const savedQ      = localStorage.getItem('engie-q');
       const savedTarifa = localStorage.getItem('engie-tarifa');
-      if (savedQ)      document.getElementById('inp-q').value      = savedQ;
-      if (savedTarifa) document.getElementById('inp-tarifa').value = savedTarifa;
+      const allQInputs  = ['inp-q', 'inp-q-drawer'];
+      const allTInputs  = ['inp-tarifa', 'inp-tarifa-drawer'];
+      if (savedQ)      allQInputs.forEach(id => { const el = document.getElementById(id); if (el) el.value = savedQ; });
+      if (savedTarifa) allTInputs.forEach(id => { const el = document.getElementById(id); if (el) el.value = savedTarifa; });
 
       // Construir tabelas e gráfico uma vez
       buildTable('table-phjg', USINAS.PHJG);
       buildTable('table-phro', USINAS.PHRO);
       buildChart();
 
-      // Listeners
-      ['inp-q', 'inp-tarifa', 'inp-mw-phjg', 'inp-mw-phro'].forEach(id => {
-        document.getElementById(id).addEventListener('input', recalc);
+      // Listeners — desktop e drawer
+      const allInputIds = [
+        'inp-q', 'inp-tarifa', 'inp-mw-phjg', 'inp-mw-phro',
+        'inp-q-drawer', 'inp-tarifa-drawer', 'inp-mw-phjg-drawer', 'inp-mw-phro-drawer',
+      ];
+      allInputIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', () => recalc(el));
       });
 
       // Primeiro cálculo
-      recalc();
+      recalc(null);
     })();
   </script>
 </body>
