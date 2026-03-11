@@ -178,6 +178,78 @@
       line-height: 1.5;
     }
 
+    /* ── Appointments table ──────────────────────────────── */
+    .apt-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .apt-table th {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--text-subtle);
+      text-align: left;
+      padding: 0 10px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .apt-table td {
+      padding: 10px;
+      border-bottom: 1px solid rgba(255,255,255,.04);
+      color: var(--text-muted);
+      vertical-align: middle;
+    }
+    .apt-table tr:last-child td { border-bottom: none; }
+    .apt-date { font-weight: 700; color: var(--text); margin-right: 4px; }
+    .apt-time { font-size: 11px; color: var(--text-subtle); }
+    .apt-phone { font-family: monospace; font-size: 11px; color: var(--text-subtle); }
+    .apt-dr-empty { color: var(--text-subtle); }
+    .apt-value { font-weight: 700; color: var(--text); }
+    .apt-value-high { color: var(--teal); }
+    .apt-value-tbd { color: var(--text-subtle); font-style: italic; font-weight: 400; }
+    .apt-tag {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      padding: 2px 8px;
+      border-radius: 100px;
+    }
+    .apt-bot   { background: rgba(110,168,254,.15); color: #6ea8fe; }
+    .apt-human { background: rgba(251,191,36,.12);  color: var(--amber); }
+
+    /* ── ROI bar ──────────────────────────────────────────── */
+    .roi-bar-wrap { margin-top: 14px; }
+    .roi-bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-subtle);
+      margin-bottom: 6px;
+    }
+    .roi-track {
+      height: 20px;
+      background: rgba(255,255,255,.04);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      display: flex;
+    }
+    .roi-cost-fill {
+      height: 100%;
+      background: rgba(248,113,113,.6);
+      border-right: 2px solid rgba(248,113,113,.8);
+      flex-shrink: 0;
+    }
+    .roi-rev-fill {
+      height: 100%;
+      background: linear-gradient(90deg, rgba(45,228,169,.4) 0%, rgba(45,228,169,.7) 100%);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      width: 0%;
+      transition: width 1.4s cubic-bezier(.4,0,.2,1);
+    }
+
     /* ── Tags ────────────────────────────────────────────── */
     .tag {
       display: inline-block;
@@ -458,10 +530,118 @@
           <strong>Potencial imediato:</strong> Ações 1 + 2 estimam <strong>5–8 agendamentos adicionais</strong> sem nova mídia — aproveitando a inteligência já gerada.
         </div>
 
+        <!-- ── AGENDAMENTOS GERADOS ──────────────── -->
+        <div class="sec-label" style="margin-top:8px">Agendamentos Gerados pela Campanha</div>
+        <div class="viz-card" style="margin-bottom:14px;overflow-x:auto">
+          <table class="apt-table">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Paciente</th>
+                <th>Telefone</th>
+                <th>Médico(a)</th>
+                <th>Procedimento</th>
+                <th>Valor</th>
+                <th>Origem</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="apt-date">11/03</span><span class="apt-time">14h00</span></td>
+                <td>Fabiana N. Bressanin</td>
+                <td class="apt-phone">(47) 9247-8883</td>
+                <td><span class="apt-dr-empty">—</span></td>
+                <td>Consulta Avaliativa</td>
+                <td class="apt-value">R$ 400</td>
+                <td><span class="apt-tag apt-human">atendente</span></td>
+              </tr>
+              <tr>
+                <td><span class="apt-date">11/03</span><span class="apt-time">15h00</span></td>
+                <td>Ana dos Santos</td>
+                <td class="apt-phone">(47) 9692-0455</td>
+                <td>Dra. Eoda</td>
+                <td>Consulta Dermatológica</td>
+                <td class="apt-value apt-value-high">R$ 880</td>
+                <td><span class="apt-tag apt-human">atendente</span></td>
+              </tr>
+              <tr>
+                <td><span class="apt-date">16/03</span><span class="apt-time">13h00</span></td>
+                <td>Deonilda P. C. Lima</td>
+                <td class="apt-phone">(47) 9760-6666</td>
+                <td>Dra. Eoda</td>
+                <td>Consulta Avaliativa</td>
+                <td class="apt-value">R$ 400</td>
+                <td><span class="apt-tag apt-bot">bot</span></td>
+              </tr>
+              <tr>
+                <td><span class="apt-date">18/03</span><span class="apt-time">09h00</span></td>
+                <td>Andreia A. Pescara</td>
+                <td class="apt-phone">(47) 9998-4415</td>
+                <td>Dra. Morgana</td>
+                <td>Consulta Dermatológica</td>
+                <td class="apt-value apt-value-high">R$ 880</td>
+                <td><span class="apt-tag apt-bot">bot</span></td>
+              </tr>
+              <tr>
+                <td><span class="apt-date">19/03</span><span class="apt-time">09h00</span></td>
+                <td>Emanoela Klock</td>
+                <td class="apt-phone">(47) 8805-8385</td>
+                <td>Dra. Raquel</td>
+                <td>Botox</td>
+                <td class="apt-value apt-value-tbd">a confirmar</td>
+                <td><span class="apt-tag apt-human">atendente</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="font-size:11px;color:var(--text-subtle);margin-top:10px;line-height:1.5">
+            * Somente agendamentos confirmados após 08/03/2026 (data do disparo). 4 contatos descartados: 1 pré-campanha, 1 cancelado, 1 sem data, 1 procedimento já realizado.
+          </div>
+        </div>
+
+        <!-- ── ROI ─────────────────────────────── -->
+        <div class="sec-label">Retorno sobre Investimento (ROI)</div>
+        <div class="hero-grid" style="margin-bottom:14px">
+          <div class="hero-card" style="--accent-color:var(--ruby)">
+            <div class="hero-label">Custo da Campanha</div>
+            <div class="hero-value" style="font-size:22px">$ 7,44</div>
+            <div class="hero-sub">≈ R$ 43,52 (USD → BRL)</div>
+          </div>
+          <div class="hero-card" style="--accent-color:var(--teal)">
+            <div class="hero-label">Receita Confirmada</div>
+            <div class="hero-value" style="font-size:22px">R$ 2.560</div>
+            <div class="hero-sub">4 procedimentos com valor</div>
+          </div>
+          <div class="hero-card" style="--accent-color:var(--amber)">
+            <div class="hero-label">ROI Mínimo</div>
+            <div class="hero-value roi-counter" data-target="5780" style="font-size:24px;color:var(--amber)">0%</div>
+            <div class="hero-sub">excluindo Botox</div>
+          </div>
+          <div class="hero-card" style="--accent-color:var(--brand)">
+            <div class="hero-label">Break-even</div>
+            <div class="hero-value" style="font-size:22px">1</div>
+            <div class="hero-sub">agendamento · cobriu 20× o custo</div>
+          </div>
+        </div>
+
+        <div class="roi-bar-wrap">
+          <div class="roi-bar-label">
+            <span>Custo: R$ 43,52</span>
+            <span style="color:var(--teal)">Receita: R$ 2.560</span>
+          </div>
+          <div class="roi-track">
+            <div class="roi-cost-fill" style="width:1.7%"></div>
+            <div class="roi-rev-fill roi-rev-anim" data-w="100"></div>
+          </div>
+        </div>
+
+        <div class="alert alert-success" style="margin-top:12px">
+          <strong>Cada R$ 1,00 investido retornou R$ 58,80</strong> — e ainda há 1 agendamento (Botox) com valor a confirmar. Se o Botox valer R$ 600, o ROI sobe para ~7.300%.
+        </div>
+
         <hr class="divider" />
         <div class="report-footer">
           Relatório gerado em 11/03/2026 · Digital AI — Sistema de Inteligência Clínica<br />
-          Fonte: Chatwoot + PostgreSQL · Campanha: 08/03/2026
+          Fonte: Chatwoot + PostgreSQL + Feegow · Campanha: 08/03/2026
         </div>
 
       </div>
@@ -491,6 +671,28 @@
       // Interesse bars
       document.querySelectorAll('.ibar-fill[data-w]').forEach(function(el, i) {
         setTimeout(function() { el.style.width = el.dataset.w + '%'; }, 300 + i * 60);
+      });
+
+      // ROI revenue bar
+      document.querySelectorAll('.roi-rev-anim[data-w]').forEach(function(el) {
+        setTimeout(function() { el.style.width = el.dataset.w + '%'; }, 400);
+      });
+
+      // ROI counter
+      document.querySelectorAll('.roi-counter[data-target]').forEach(function(el) {
+        var target = parseInt(el.dataset.target);
+        var start = 0;
+        var duration = 1800;
+        var startTime = null;
+        function step(ts) {
+          if (!startTime) startTime = ts;
+          var progress = Math.min((ts - startTime) / duration, 1);
+          var ease = 1 - Math.pow(1 - progress, 3);
+          var current = Math.round(ease * target);
+          el.textContent = current.toLocaleString('pt-BR') + '%';
+          if (progress < 1) requestAnimationFrame(step);
+        }
+        setTimeout(function() { requestAnimationFrame(step); }, 500);
       });
 
       // Donut segments
