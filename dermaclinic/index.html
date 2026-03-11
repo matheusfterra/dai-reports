@@ -157,11 +157,13 @@
     const CATEGORY_LABELS = {
       'trafego-pago': 'Tráfego Pago',
       'atendimento': 'Atendimento',
+      'campanha': 'Campanha',
     };
 
     const CATEGORY_ICONS = {
-      'trafego-pago': { icon: '📊', cls: 'icon-trafego', badge: 'badge-trafego' },
+      'trafego-pago': { icon: '📊', cls: 'icon-trafego',    badge: 'badge-trafego' },
       'atendimento':  { icon: '🏥', cls: 'icon-atendimento', badge: 'badge-atendimento' },
+      'campanha':     { icon: '📣', cls: 'icon-campanha',    badge: 'badge-campanha' },
     };
 
     // ────────────────────────────────────────────
@@ -183,6 +185,9 @@
       // Voltar ao topo
       window.scrollTo(0, 0);
     }
+
+    // Armazena auth recebido para uso nos reports
+    var _currentAuth = null;
 
     async function openReport(file, title) {
       const viewer = document.getElementById('report-viewer');
@@ -206,21 +211,32 @@
 
       window.scrollTo(0, 0);
 
+      // Limpar bundle anterior e estilos injetados
+      window.__reportBundle = null;
+      var prevStyle = document.getElementById('__injected-report-style');
+      if (prevStyle) prevStyle.remove();
+
       try {
         const res = await fetch(file);
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const html = await res.text();
 
-        // Extrair apenas o .report-body do HTML do relatório
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
         const body = doc.querySelector('.report-body');
 
-        if (!body) {
-          throw new Error('Conteúdo do relatório não encontrado.');
+        if (!body) throw new Error('Conteúdo do relatório não encontrado.');
+
+        // 1. Injetar <style> do relatório no <head> da página
+        const styles = doc.querySelectorAll('style');
+        if (styles.length) {
+          const styleEl = document.createElement('style');
+          styleEl.id = '__injected-report-style';
+          styleEl.textContent = Array.from(styles).map(s => s.textContent).join('\n');
+          document.head.appendChild(styleEl);
         }
 
-        // Injetar numa estrutura com scroll
+        // 2. Injetar o conteúdo
         viewer.innerHTML = `
           <div class="report-content animate-in">
             <div class="report-body">
@@ -228,6 +244,23 @@
             </div>
           </div>
         `;
+
+        // 3. Executar scripts do relatório, exceto o bloco de auth standalone
+        doc.querySelectorAll('script:not([src])').forEach(function(s) {
+          if (s.id === 'report-standalone-auth') return; // pula auth
+          const el = document.createElement('script');
+          el.textContent = s.textContent;
+          document.head.appendChild(el);
+          document.head.removeChild(el);
+        });
+
+        // 4. Acionar bundle: links e animações
+        setTimeout(function() {
+          if (window.__reportBundle) {
+            if (_currentAuth) window.__reportBundle.buildConvLinks(_currentAuth);
+            window.__reportBundle.animateAll();
+          }
+        }, 80);
 
       } catch (err) {
         viewer.innerHTML = `
@@ -305,7 +338,7 @@
 
     // Auth Chatwoot
     initChatwootAuth(
-      function onAuth() { showApp(); },
+      function onAuth(auth) { _currentAuth = auth; showApp(); },
       function onTimeout() { showDirectGate(); }
     );
   </script>

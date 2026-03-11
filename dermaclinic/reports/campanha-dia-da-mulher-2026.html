@@ -648,6 +648,7 @@
     </div>
 
     <div class="report-content">
+      <div class="report-body">
 
       <!-- ── PAGE HERO ──────────────────────────── -->
       <div class="page-hero">
@@ -1206,81 +1207,80 @@
         Fonte: Chatwoot + PostgreSQL + Feegow · Campanha: 08/03/2026
       </div>
 
+      </div><!-- /.report-body -->
     </div>
   </div>
 
   <script src="../../_shared/auth.js"></script>
-  <script>
+
+  <!-- Script 1: funções puras — executado também quando embutido no index -->
+  <script id="report-bundle">
+    (function() {
+      function buildConvLinks(auth) {
+        var base = auth.chatwootUrl + '/app/accounts/' + auth.accountId + '/conversations/';
+        document.querySelectorAll('[data-conv-id]').forEach(function(el) {
+          var convId = el.dataset.convId;
+          if (convId) el.setAttribute('href', base + convId);
+        });
+      }
+
+      function animateAll() {
+        document.querySelectorAll('.funnel-fill[data-w]').forEach(function(el, i) {
+          setTimeout(function() { el.style.width = el.dataset.w + '%'; }, i * 90);
+        });
+        document.querySelectorAll('.ibar-fill[data-w]').forEach(function(el, i) {
+          setTimeout(function() { el.style.width = el.dataset.w + '%'; }, 350 + i * 70);
+        });
+        document.querySelectorAll('.roi-rev-anim[data-w]').forEach(function(el) {
+          setTimeout(function() { el.style.width = el.dataset.w + '%'; }, 500);
+        });
+        document.querySelectorAll('.roi-counter[data-target]').forEach(function(el, idx) {
+          var target = parseInt(el.dataset.target);
+          var duration = 1800;
+          var delay = 400 + idx * 100;
+          function runCounter() {
+            var startTime = null;
+            function step(ts) {
+              if (!startTime) startTime = ts;
+              var progress = Math.min((ts - startTime) / duration, 1);
+              var ease = 1 - Math.pow(1 - progress, 3);
+              el.textContent = Math.round(ease * target).toLocaleString('pt-BR') + '%';
+              if (progress < 1) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+          }
+          setTimeout(runCounter, delay);
+        });
+        var circ = 326.7;
+        document.querySelectorAll('.donut-seg[data-arr]').forEach(function(el) {
+          var len = parseFloat(el.dataset.arr);
+          var off = parseFloat(el.dataset.off || '0');
+          el.setAttribute('stroke-dashoffset', off);
+          setTimeout(function() {
+            el.setAttribute('stroke-dasharray', len + ' ' + (circ - len));
+          }, 250);
+        });
+      }
+
+      // Expõe para uso externo (quando embutido no index)
+      window.__reportBundle = { buildConvLinks: buildConvLinks, animateAll: animateAll };
+    })();
+  </script>
+
+  <!-- Script 2: auth standalone — ignorado quando embutido no index -->
+  <script id="report-standalone-auth">
     initChatwootAuth(
       function onAuth(auth) {
         document.getElementById('gate-loading').classList.add('hidden');
         document.getElementById('app').classList.add('visible');
-        buildConvLinks(auth);
-        requestAnimationFrame(function() { setTimeout(animateAll, 120); });
+        window.__reportBundle.buildConvLinks(auth);
+        requestAnimationFrame(function() { setTimeout(window.__reportBundle.animateAll, 120); });
       },
       function onTimeout() {
         document.getElementById('gate-loading').classList.add('hidden');
         document.getElementById('gate-direct').classList.remove('hidden');
       }
     );
-
-    function buildConvLinks(auth) {
-      var base = auth.chatwootUrl + '/app/accounts/' + auth.accountId + '/conversations/';
-      document.querySelectorAll('[data-conv-id]').forEach(function(el) {
-        var convId = el.dataset.convId;
-        if (convId) {
-          el.setAttribute('href', base + convId);
-        }
-      });
-    }
-
-    function animateAll() {
-      // Funnel fills
-      document.querySelectorAll('.funnel-fill[data-w]').forEach(function(el, i) {
-        setTimeout(function() { el.style.width = el.dataset.w + '%'; }, i * 90);
-      });
-
-      // Interest bars
-      document.querySelectorAll('.ibar-fill[data-w]').forEach(function(el, i) {
-        setTimeout(function() { el.style.width = el.dataset.w + '%'; }, 350 + i * 70);
-      });
-
-      // Revenue bar
-      document.querySelectorAll('.roi-rev-anim[data-w]').forEach(function(el) {
-        setTimeout(function() { el.style.width = el.dataset.w + '%'; }, 500);
-      });
-
-      // ROI counters (hero card + big panel)
-      document.querySelectorAll('.roi-counter[data-target]').forEach(function(el, idx) {
-        var target = parseInt(el.dataset.target);
-        var duration = 1800;
-        var delay = 400 + idx * 100;
-        function runCounter() {
-          var startTime = null;
-          function step(ts) {
-            if (!startTime) startTime = ts;
-            var progress = Math.min((ts - startTime) / duration, 1);
-            var ease = 1 - Math.pow(1 - progress, 3);
-            var current = Math.round(ease * target);
-            el.textContent = current.toLocaleString('pt-BR') + '%';
-            if (progress < 1) requestAnimationFrame(step);
-          }
-          requestAnimationFrame(step);
-        }
-        setTimeout(runCounter, delay);
-      });
-
-      // Donut segments
-      var circ = 326.7;
-      document.querySelectorAll('.donut-seg[data-arr]').forEach(function(el) {
-        var len = parseFloat(el.dataset.arr);
-        var off = parseFloat(el.dataset.off || '0');
-        el.setAttribute('stroke-dashoffset', off);
-        setTimeout(function() {
-          el.setAttribute('stroke-dasharray', len + ' ' + (circ - len));
-        }, 250);
-      });
-    }
   </script>
 </body>
 </html>
