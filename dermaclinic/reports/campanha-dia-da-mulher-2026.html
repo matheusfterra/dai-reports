@@ -6,34 +6,66 @@
   <title>Campanha Dia da Mulher 2026 | DermaClinic</title>
   <link rel="stylesheet" href="../../_shared/style.css" />
   <style>
-    /* ── Typography overrides ─────────────────────────────── */
-    .report-body h1 { font-size: 20px; }
-    .report-body p  { font-size: 14px; }
-
-    /* ── Section label ───────────────────────────────────── */
-    .sec-label {
+    /* ── Page header ────────────────────────────────── */
+    .page-hero {
+      background: linear-gradient(135deg, rgba(110,168,254,.08) 0%, rgba(45,228,169,.05) 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px 18px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--brand), var(--teal));
+    }
+    .page-hero-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .page-hero-meta {
+      font-size: 12px;
+      color: var(--text-subtle);
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .tag-encerrada {
+      display: inline-block;
       font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: .1em;
-      color: var(--text-subtle);
-      margin-bottom: 12px;
+      letter-spacing: .08em;
+      padding: 3px 10px;
+      border-radius: 100px;
+      background: rgba(251,191,36,.12);
+      color: var(--amber);
+      vertical-align: middle;
     }
 
-    /* ── Hero KPIs ───────────────────────────────────────── */
+    /* ── Hero KPIs ───────────────────────────────────── */
     .hero-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
-      margin: 0 0 20px;
+      margin-bottom: 14px;
     }
-    @media (max-width: 600px) { .hero-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) { .hero-grid { grid-template-columns: repeat(2, 1fr); } }
 
     .hero-card {
       background: var(--surface-2);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 14px 16px;
+      padding: 16px 18px;
       position: relative;
       overflow: hidden;
     }
@@ -42,123 +74,357 @@
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 2px;
-      background: var(--accent-color, var(--brand));
+      background: var(--c, var(--brand));
     }
-    .hero-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-subtle); margin-bottom: 8px; }
-    .hero-value { font-size: 30px; font-weight: 800; color: var(--accent-color, var(--text)); line-height: 1; margin-bottom: 3px; }
-    .hero-sub   { font-size: 11px; color: var(--text-subtle); }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      color: var(--text-subtle);
+      margin-bottom: 10px;
+    }
+    .hero-value {
+      font-size: 38px;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--c, var(--text));
+      margin-bottom: 5px;
+      letter-spacing: -1px;
+    }
+    .hero-sub {
+      font-size: 11px;
+      color: var(--text-subtle);
+    }
 
-    /* ── Two-col visual grid ─────────────────────────────── */
-    .viz-row {
+    /* ── 2-col grid ──────────────────────────────────── */
+    .row2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-bottom: 14px;
+      gap: 12px;
+      margin-bottom: 12px;
     }
-    @media (max-width: 600px) { .viz-row { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { .row2 { grid-template-columns: 1fr; } }
 
-    .viz-card {
+    .panel {
       background: var(--surface-2);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 18px 20px;
     }
+    .panel-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--text-subtle);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .panel-label-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--c, var(--brand));
+      flex-shrink: 0;
+    }
 
-    /* ── Funnel visual ───────────────────────────────────── */
-    .funnel-list { display: flex; flex-direction: column; gap: 6px; }
-
-    .funnel-stage { display: flex; flex-direction: column; }
-    .funnel-meta  { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+    /* ── Funnel ──────────────────────────────────────── */
+    .funnel-list { display: flex; flex-direction: column; gap: 4px; }
+    .funnel-stage { display: flex; flex-direction: column; gap: 5px; }
+    .funnel-meta  { display: flex; justify-content: space-between; align-items: center; }
     .funnel-name  { font-size: 12px; color: var(--text-muted); }
-    .funnel-badges { display: flex; align-items: center; gap: 8px; }
-    .funnel-num   { font-size: 14px; font-weight: 700; color: var(--text); }
-    .funnel-rate  { font-size: 11px; color: var(--text-subtle); }
-
+    .funnel-right { display: flex; align-items: center; gap: 8px; }
+    .funnel-num   { font-size: 15px; font-weight: 700; color: var(--text); }
+    .funnel-rate  { font-size: 11px; color: var(--text-subtle); background: rgba(255,255,255,.04); padding: 1px 7px; border-radius: 100px; }
     .funnel-track {
-      height: 28px;
-      background: rgba(255,255,255,.04);
+      height: 30px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--border);
       border-radius: var(--radius-sm);
       overflow: hidden;
-      position: relative;
     }
     .funnel-fill {
       height: 100%;
       border-radius: var(--radius-sm);
       width: 0%;
       transition: width 1.1s cubic-bezier(.4,0,.2,1);
-      display: flex;
-      align-items: center;
-      padding-left: 10px;
+      position: relative;
     }
-
-    .funnel-connector {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 2px 0;
-      margin: 0 6px;
+    .funnel-fill::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.08) 100%);
     }
-    .funnel-connector-line { flex: 1; height: 1px; background: var(--border); }
-    .funnel-connector-text { font-size: 10px; color: var(--text-subtle); white-space: nowrap; }
-
-    /* ── Donut chart ─────────────────────────────────────── */
-    .donut-inner {
+    .funnel-arrow {
+      text-align: center;
+      font-size: 10px;
+      color: var(--text-subtle);
+      padding: 1px 0;
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 8px;
+    }
+    .funnel-arrow-line { flex: 1; height: 1px; background: var(--border); }
+    .funnel-arrow-text { white-space: nowrap; }
+
+    /* ── Donut ───────────────────────────────────────── */
+    .donut-wrap {
+      display: flex;
+      align-items: center;
+      gap: 20px;
     }
     .donut-svg { flex-shrink: 0; }
-    .donut-legend { display: flex; flex-direction: column; gap: 12px; flex: 1; }
+    .donut-legend { display: flex; flex-direction: column; gap: 14px; flex: 1; }
     .dl-item { display: flex; align-items: center; gap: 8px; }
-    .dl-dot   { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .dl-swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
     .dl-label { font-size: 13px; color: var(--text-muted); flex: 1; }
-    .dl-count { font-size: 14px; font-weight: 700; color: var(--text); }
-    .dl-pct   { font-size: 11px; color: var(--text-subtle); margin-left: 3px; }
-
+    .dl-num   { font-size: 16px; font-weight: 800; color: var(--text); }
+    .dl-pct   { font-size: 11px; color: var(--text-subtle); width: 34px; text-align: right; }
     .donut-seg {
       stroke-dasharray: 0 326.7;
       transition: stroke-dasharray 1.2s cubic-bezier(.4,0,.2,1);
     }
     #seg-positivo { transition-delay: .15s; }
-    #seg-negativo { transition-delay: .3s; }
+    #seg-negativo { transition-delay: .35s; }
 
-    /* ── Interesse bars ──────────────────────────────────── */
-    .ibar-list {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
+    /* ── Interest bars ───────────────────────────────── */
+    .ibar-list { display: flex; flex-direction: column; gap: 16px; }
+    .ibar-row  { display: flex; flex-direction: column; gap: 6px; }
+    .ibar-meta { display: flex; justify-content: space-between; align-items: center; }
+    .ibar-name { font-size: 13px; color: var(--text-muted); }
+    .ibar-right { display: flex; align-items: center; gap: 6px; }
+    .ibar-num  { font-size: 15px; font-weight: 700; color: var(--text); }
+    .ibar-pct  { font-size: 11px; color: var(--text-subtle); }
+    .ibar-track {
+      height: 10px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      overflow: hidden;
     }
-    .ibar-item {}
-    .ibar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-    .ibar-name   { font-size: 13px; color: var(--text-muted); }
-    .ibar-meta   { display: flex; align-items: center; gap: 6px; }
-    .ibar-count  { font-size: 14px; font-weight: 700; color: var(--text); }
-    .ibar-pct    { font-size: 11px; color: var(--text-subtle); }
-    .ibar-track  { height: 8px; background: rgba(255,255,255,.05); border-radius: 99px; overflow: hidden; }
-    .ibar-fill   {
+    .ibar-fill {
       height: 100%;
-      border-radius: 99px;
+      border-radius: 100px;
       width: 0%;
       transition: width 1.2s cubic-bezier(.4,0,.2,1);
     }
 
-    /* ── Ações ───────────────────────────────────────────── */
-    .actions-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 16px;
+    /* ── Appointments ────────────────────────────────── */
+    .apt-table {
+      width: 100%;
+      border-collapse: collapse;
     }
-    @media (max-width: 600px) { .actions-grid { grid-template-columns: 1fr; } }
+    .apt-table th {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text-subtle);
+      text-align: left;
+      padding: 0 12px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .apt-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.04);
+      font-size: 13px;
+      color: var(--text-muted);
+      vertical-align: middle;
+    }
+    .apt-table tr:last-child td { border-bottom: none; }
+    .apt-table tr:hover td { background: rgba(255,255,255,.02); }
+    .apt-name { font-weight: 600; color: var(--text); }
+    .apt-phone { font-family: monospace; font-size: 12px; }
+    .apt-date-n { font-weight: 700; color: var(--text); }
+    .apt-time-n { font-size: 11px; color: var(--text-subtle); }
+    .apt-value-n { font-size: 15px; font-weight: 800; color: var(--teal); }
+    .apt-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      padding: 2px 9px;
+      border-radius: 100px;
+    }
+    .badge-bot   { background: rgba(110,168,254,.15); color: #6ea8fe; }
+    .badge-human { background: rgba(251,191,36,.12); color: var(--amber); }
 
-    .action-card {
+    /* ── ROI Section ─────────────────────────────────── */
+    .roi-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 640px) { .roi-grid { grid-template-columns: 1fr 1fr; } }
+
+    .roi-hero-card {
       background: var(--surface-2);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 16px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
     }
-    .action-tag {
+    .roi-hero-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--c, var(--brand));
+    }
+    .roi-hero-label {
       font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text-subtle);
+      margin-bottom: 8px;
+    }
+    .roi-hero-value {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--c, var(--text));
+      line-height: 1.1;
+      letter-spacing: -1px;
+    }
+    .roi-hero-sub {
+      font-size: 11px;
+      color: var(--text-subtle);
+      margin-top: 3px;
+    }
+
+    /* Big ROI counter panel */
+    .roi-big-panel {
+      background: linear-gradient(135deg, rgba(45,228,169,.06) 0%, rgba(110,168,254,.04) 100%);
+      border: 1px solid rgba(45,228,169,.2);
+      border-radius: var(--radius);
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .roi-big-panel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--teal), var(--brand));
+    }
+    .roi-big-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--text-subtle);
+      margin-bottom: 8px;
+    }
+    .roi-big-number {
+      font-size: 72px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--teal), var(--brand));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      letter-spacing: -3px;
+      margin-bottom: 6px;
+    }
+    .roi-big-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .roi-big-sub strong { color: var(--text); }
+
+    /* ROI visual bar */
+    .roi-bar-panel {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 12px;
+    }
+    .roi-bar-title {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text-subtle);
+      margin-bottom: 12px;
+    }
+    .roi-comparison {
+      display: flex;
+      align-items: stretch;
+      gap: 2px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+    .roi-cost-seg {
+      background: linear-gradient(90deg, rgba(248,113,113,.5), rgba(248,113,113,.7));
+      border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 700;
+      color: #f87171;
+      white-space: nowrap;
+      padding: 0 8px;
+      width: 3.3%;
+    }
+    .roi-rev-seg {
+      background: linear-gradient(90deg, rgba(45,228,169,.3), rgba(45,228,169,.6));
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      flex: 1;
+      width: 0%;
+      transition: width 1.4s cubic-bezier(.4,0,.2,1);
+      display: flex;
+      align-items: center;
+      padding-left: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--teal);
+    }
+    .roi-bar-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--text-subtle);
+    }
+
+    /* ── Actions ─────────────────────────────────────── */
+    .actions-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 640px) { .actions-row { grid-template-columns: 1fr; } }
+    .action-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      position: relative;
+    }
+    .action-num {
+      font-size: 9px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: .08em;
@@ -178,87 +444,43 @@
       line-height: 1.5;
     }
 
-    /* ── Appointments table ──────────────────────────────── */
-    .apt-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
+    /* ── Divider label ───────────────────────────────── */
+    .section-sep {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 16px 0 12px;
     }
-    .apt-table th {
+    .section-sep-line { flex: 1; height: 1px; background: var(--border); }
+    .section-sep-text {
       font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: .07em;
+      letter-spacing: .1em;
       color: var(--text-subtle);
-      text-align: left;
-      padding: 0 10px 10px;
-      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
     }
-    .apt-table td {
-      padding: 10px;
-      border-bottom: 1px solid rgba(255,255,255,.04);
-      color: var(--text-muted);
-      vertical-align: middle;
-    }
-    .apt-table tr:last-child td { border-bottom: none; }
-    .apt-date { font-weight: 700; color: var(--text); margin-right: 4px; }
-    .apt-time { font-size: 11px; color: var(--text-subtle); }
-    .apt-phone { font-family: monospace; font-size: 11px; color: var(--text-subtle); }
-    .apt-dr-empty { color: var(--text-subtle); }
-    .apt-value { font-weight: 700; color: var(--text); }
-    .apt-value-high { color: var(--teal); }
-    .apt-value-tbd { color: var(--text-subtle); font-style: italic; font-weight: 400; }
-    .apt-tag {
-      display: inline-block;
-      font-size: 9px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      padding: 2px 8px;
-      border-radius: 100px;
-    }
-    .apt-bot   { background: rgba(110,168,254,.15); color: #6ea8fe; }
-    .apt-human { background: rgba(251,191,36,.12);  color: var(--amber); }
 
-    /* ── ROI bar ──────────────────────────────────────────── */
-    .roi-bar-wrap { margin-top: 14px; }
-    .roi-bar-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      color: var(--text-subtle);
-      margin-bottom: 6px;
-    }
-    .roi-track {
-      height: 20px;
-      background: rgba(255,255,255,.04);
-      border-radius: var(--radius-sm);
-      overflow: hidden;
-      display: flex;
-    }
-    .roi-cost-fill {
-      height: 100%;
-      background: rgba(248,113,113,.6);
-      border-right: 2px solid rgba(248,113,113,.8);
-      flex-shrink: 0;
-    }
-    .roi-rev-fill {
-      height: 100%;
-      background: linear-gradient(90deg, rgba(45,228,169,.4) 0%, rgba(45,228,169,.7) 100%);
+    /* ── Alert inline ────────────────────────────────── */
+    .insight {
+      background: rgba(45,228,169,.07);
+      border-left: 3px solid var(--teal);
       border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-      width: 0%;
-      transition: width 1.4s cubic-bezier(.4,0,.2,1);
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      line-height: 1.5;
     }
-
-    /* ── Tags ────────────────────────────────────────────── */
-    .tag {
-      display: inline-block;
-      font-size: 10px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: .06em;
-      padding: 2px 9px; border-radius: 100px;
-      margin-left: 10px; vertical-align: middle;
+    .insight strong { color: var(--text); }
+    .insight-warn {
+      background: rgba(251,191,36,.07);
+      border-left: 3px solid var(--amber);
     }
-    .tag-encerrada { background: rgba(251,191,36,.12); color: var(--amber); }
+    .insight-info {
+      background: rgba(110,168,254,.07);
+      border-left: 3px solid var(--brand);
+    }
   </style>
 </head>
 <body>
@@ -284,367 +506,373 @@
     </div>
 
     <div class="report-content">
-      <div class="report-body">
 
-        <h1>Dia da Mulher 2026 <span class="tag tag-encerrada">Encerrada</span></h1>
-        <p class="meta-line">
+      <!-- ── PAGE HERO ──────────────────────────── -->
+      <div class="page-hero">
+        <div class="page-hero-title">
+          Dia da Mulher 2026
+          <span class="tag-encerrada">Encerrada</span>
+        </div>
+        <div class="page-hero-meta">
           <span>📅 Disparo: 08/03/2026</span>
           <span>📊 Análise: 11/03/2026</span>
-        </p>
-
-        <!-- ── HERO KPIs ─────────────────────────── -->
-        <div class="hero-grid">
-          <div class="hero-card" style="--accent-color:var(--brand)">
-            <div class="hero-label">Disparado</div>
-            <div class="hero-value">2.808</div>
-            <div class="hero-sub">contatos da base</div>
-          </div>
-          <div class="hero-card" style="--accent-color:var(--teal)">
-            <div class="hero-label">Responderam</div>
-            <div class="hero-value">15</div>
-            <div class="hero-sub">taxa: 0,53%</div>
-          </div>
-          <div class="hero-card" style="--accent-color:var(--teal)">
-            <div class="hero-label">Agendamentos</div>
-            <div class="hero-value">9</div>
-            <div class="hero-sub">0,32% · 60% das respostas</div>
-          </div>
-          <div class="hero-card" style="--accent-color:var(--amber)">
-            <div class="hero-label">Conversão</div>
-            <div class="hero-value" style="--accent-color:var(--amber)">60%</div>
-            <div class="hero-sub">resposta → agenda</div>
-          </div>
+          <span>📱 WhatsApp Marketing</span>
         </div>
+      </div>
 
-        <!-- ── FUNNEL + DONUT ────────────────────── -->
-        <div class="viz-row">
-
-          <!-- Funil -->
-          <div class="viz-card">
-            <div class="sec-label">Funil da Campanha</div>
-            <div class="funnel-list">
-
-              <div class="funnel-stage">
-                <div class="funnel-meta">
-                  <span class="funnel-name">Disparado</span>
-                  <div class="funnel-badges">
-                    <span class="funnel-num">2.808</span>
-                    <span class="funnel-rate">100%</span>
-                  </div>
-                </div>
-                <div class="funnel-track">
-                  <div class="funnel-fill" data-w="100" style="background:rgba(110,168,254,.35);border:1px solid rgba(110,168,254,.5)"></div>
-                </div>
-              </div>
-
-              <div class="funnel-connector">
-                <div class="funnel-connector-line"></div>
-                <span class="funnel-connector-text">0,53% responderam</span>
-                <div class="funnel-connector-line"></div>
-              </div>
-
-              <div class="funnel-stage">
-                <div class="funnel-meta">
-                  <span class="funnel-name">Responderam com mensagem</span>
-                  <div class="funnel-badges">
-                    <span class="funnel-num">15</span>
-                    <span class="funnel-rate">0,53%</span>
-                  </div>
-                </div>
-                <div class="funnel-track">
-                  <div class="funnel-fill" data-w="52" style="background:rgba(110,168,254,.35);border:1px solid rgba(110,168,254,.5)"></div>
-                </div>
-              </div>
-
-              <div class="funnel-connector">
-                <div class="funnel-connector-line"></div>
-                <span class="funnel-connector-text">60% agendaram</span>
-                <div class="funnel-connector-line"></div>
-              </div>
-
-              <div class="funnel-stage">
-                <div class="funnel-meta">
-                  <span class="funnel-name">Agendaram consulta</span>
-                  <div class="funnel-badges">
-                    <span class="funnel-num" style="color:var(--teal)">9 ✓</span>
-                    <span class="funnel-rate">0,32%</span>
-                  </div>
-                </div>
-                <div class="funnel-track">
-                  <div class="funnel-fill" data-w="30" style="background:rgba(45,228,169,.4);border:1px solid rgba(45,228,169,.6)"></div>
-                </div>
-              </div>
-
-              <div class="funnel-connector">
-                <div class="funnel-connector-line"></div>
-                <span class="funnel-connector-text">66,7% intenção positiva</span>
-                <div class="funnel-connector-line"></div>
-              </div>
-
-              <div class="funnel-stage">
-                <div class="funnel-meta">
-                  <span class="funnel-name">Intenção positiva</span>
-                  <div class="funnel-badges">
-                    <span class="funnel-num" style="color:var(--teal)">10</span>
-                    <span class="funnel-rate">66,7%</span>
-                  </div>
-                </div>
-                <div class="funnel-track">
-                  <div class="funnel-fill" data-w="35" style="background:rgba(45,228,169,.25);border:1px solid rgba(45,228,169,.4)"></div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- Donut sentimento -->
-          <div class="viz-card">
-            <div class="sec-label">Sentimento das Respostas <span style="font-weight:400;color:var(--text-subtle)">(15 respostas reais)</span></div>
-            <div class="donut-inner">
-              <svg class="donut-svg" width="124" height="124" viewBox="0 0 124 124">
-                <!-- track -->
-                <circle cx="62" cy="62" r="52" fill="none" stroke="#1e2124" stroke-width="18"/>
-                <g transform="rotate(-90, 62, 62)">
-                  <!-- positivo 10/15 = 66.7% → 326.7 * .667 = 217.8 -->
-                  <circle id="seg-positivo" cx="62" cy="62" r="52" fill="none" stroke="#2de4a9" stroke-width="18" class="donut-seg" data-arr="217.8"/>
-                  <!-- neutro 3/15 = 20% → 326.7 * .20 = 65.3  offset=-217.8 -->
-                  <circle id="seg-neutro"   cx="62" cy="62" r="52" fill="none" stroke="#4a5060" stroke-width="18" class="donut-seg" data-arr="65.3"  data-off="-217.8"/>
-                  <!-- negativo 2/15 = 13.3% → 326.7 * .133 = 43.5  offset=-283.1 -->
-                  <circle id="seg-negativo" cx="62" cy="62" r="52" fill="none" stroke="#f87171" stroke-width="18" class="donut-seg" data-arr="43.5"  data-off="-283.1"/>
-                </g>
-                <text x="62" y="55" text-anchor="middle" font-size="22" font-weight="800" fill="#e4e8eb">15</text>
-                <text x="62" y="68" text-anchor="middle" font-size="8" fill="#5a5f66" font-weight="700" letter-spacing="0.5">RESPOSTAS</text>
-                <text x="62" y="79" text-anchor="middle" font-size="7.5" fill="#4a5060" letter-spacing="0.3">reais</text>
-              </svg>
-
-              <div class="donut-legend">
-                <div class="dl-item">
-                  <div class="dl-dot" style="background:#2de4a9"></div>
-                  <span class="dl-label">Positivo</span>
-                  <span class="dl-count" style="color:var(--teal)">10</span>
-                  <span class="dl-pct">67%</span>
-                </div>
-                <div class="dl-item">
-                  <div class="dl-dot" style="background:#4a5060"></div>
-                  <span class="dl-label">Neutro</span>
-                  <span class="dl-count">3</span>
-                  <span class="dl-pct">20%</span>
-                </div>
-                <div class="dl-item">
-                  <div class="dl-dot" style="background:#f87171"></div>
-                  <span class="dl-label">Negativo</span>
-                  <span class="dl-count">2</span>
-                  <span class="dl-pct">13%</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="alert alert-success" style="margin-top:16px;padding:10px 12px;font-size:12px;line-height:1.5">
-              <strong>10 positivos</strong> com intenção real de agendar — alvo prioritário de follow-up imediato.
-            </div>
-          </div>
-
+      <!-- ── HERO KPIs ──────────────────────────── -->
+      <div class="hero-grid">
+        <div class="hero-card" style="--c:var(--brand)">
+          <div class="hero-label">Disparado</div>
+          <div class="hero-value">2.808</div>
+          <div class="hero-sub">contatos na base</div>
         </div>
+        <div class="hero-card" style="--c:var(--teal)">
+          <div class="hero-label">Responderam</div>
+          <div class="hero-value" style="color:var(--teal)">15</div>
+          <div class="hero-sub">taxa 0,53%</div>
+        </div>
+        <div class="hero-card" style="--c:var(--amber)">
+          <div class="hero-label">Agendamentos</div>
+          <div class="hero-value" style="color:var(--amber)">2</div>
+          <div class="hero-sub">13,3% dos respondentes</div>
+        </div>
+        <div class="hero-card" style="--c: #c084fc">
+          <div class="hero-label">ROI Confirmado</div>
+          <div class="hero-value roi-counter" data-target="2840" style="color:#c084fc;font-size:32px">0%</div>
+          <div class="hero-sub">R$1 investido → R$29,40</div>
+        </div>
+      </div>
 
-        <!-- ── INTERESSE ──────────────────────────── -->
-        <div class="viz-card" style="margin-bottom:14px">
-          <div class="sec-label">Principal Interesse Declarado <span style="font-weight:400;color:var(--text-subtle)">(15 respostas reais)</span></div>
-          <div class="ibar-list">
+      <!-- ── FUNIL + SENTIMENTO ─────────────────── -->
+      <div class="row2">
 
-            <div class="ibar-item">
-              <div class="ibar-header">
-                <span class="ibar-name">Estética</span>
-                <div class="ibar-meta">
-                  <span class="ibar-count">8</span>
-                  <span class="ibar-pct">53,3%</span>
+        <!-- Funil -->
+        <div class="panel" style="--c:var(--brand)">
+          <div class="panel-label">
+            <div class="panel-label-dot" style="background:var(--brand)"></div>
+            Funil da Campanha
+          </div>
+          <div class="funnel-list">
+
+            <div class="funnel-stage">
+              <div class="funnel-meta">
+                <span class="funnel-name">Disparados</span>
+                <div class="funnel-right">
+                  <span class="funnel-num">2.808</span>
+                  <span class="funnel-rate">100%</span>
                 </div>
               </div>
-              <div class="ibar-track">
-                <div class="ibar-fill" data-w="53.3" style="background:var(--brand)"></div>
+              <div class="funnel-track">
+                <div class="funnel-fill" data-w="100" style="background:rgba(110,168,254,.3)"></div>
               </div>
             </div>
 
-            <div class="ibar-item">
-              <div class="ibar-header">
-                <span class="ibar-name">Consulta Dermatológica</span>
-                <div class="ibar-meta">
-                  <span class="ibar-count">3</span>
-                  <span class="ibar-pct">20,0%</span>
+            <div class="funnel-arrow">
+              <div class="funnel-arrow-line"></div>
+              <span class="funnel-arrow-text">0,53% responderam</span>
+              <div class="funnel-arrow-line"></div>
+            </div>
+
+            <div class="funnel-stage">
+              <div class="funnel-meta">
+                <span class="funnel-name">Responderam com mensagem</span>
+                <div class="funnel-right">
+                  <span class="funnel-num">15</span>
+                  <span class="funnel-rate">0,53%</span>
                 </div>
               </div>
-              <div class="ibar-track">
-                <div class="ibar-fill" data-w="20" style="background:var(--amber)"></div>
+              <div class="funnel-track">
+                <div class="funnel-fill" data-w="62" style="background:rgba(110,168,254,.4)"></div>
               </div>
             </div>
 
-            <div class="ibar-item">
-              <div class="ibar-header">
-                <span class="ibar-name">Dúvidas Gerais</span>
-                <div class="ibar-meta">
-                  <span class="ibar-count">2</span>
-                  <span class="ibar-pct">13,3%</span>
+            <div class="funnel-arrow">
+              <div class="funnel-arrow-line"></div>
+              <span class="funnel-arrow-text">66,7% positivos</span>
+              <div class="funnel-arrow-line"></div>
+            </div>
+
+            <div class="funnel-stage">
+              <div class="funnel-meta">
+                <span class="funnel-name">Intenção positiva</span>
+                <div class="funnel-right">
+                  <span class="funnel-num" style="color:var(--teal)">10</span>
+                  <span class="funnel-rate">66,7%</span>
                 </div>
               </div>
-              <div class="ibar-track">
-                <div class="ibar-fill" data-w="13.3" style="background:var(--teal)"></div>
+              <div class="funnel-track">
+                <div class="funnel-fill" data-w="42" style="background:rgba(45,228,169,.35)"></div>
               </div>
             </div>
 
-            <div class="ibar-item">
-              <div class="ibar-header">
-                <span class="ibar-name">Sem Interesse</span>
-                <div class="ibar-meta">
-                  <span class="ibar-count">2</span>
-                  <span class="ibar-pct">13,3%</span>
+            <div class="funnel-arrow">
+              <div class="funnel-arrow-line"></div>
+              <span class="funnel-arrow-text">20% dos positivos agendaram</span>
+              <div class="funnel-arrow-line"></div>
+            </div>
+
+            <div class="funnel-stage">
+              <div class="funnel-meta">
+                <span class="funnel-name">Agendamentos confirmados</span>
+                <div class="funnel-right">
+                  <span class="funnel-num" style="color:var(--amber)">2 ✓</span>
+                  <span class="funnel-rate">13,3%</span>
                 </div>
               </div>
-              <div class="ibar-track">
-                <div class="ibar-fill" data-w="13.3" style="background:var(--ruby)"></div>
+              <div class="funnel-track">
+                <div class="funnel-fill" data-w="22" style="background:rgba(251,191,36,.4)"></div>
               </div>
             </div>
 
           </div>
         </div>
 
-        <!-- ── PRÓXIMAS AÇÕES ─────────────────────── -->
-        <div class="sec-label">Próximas Ações</div>
-        <div class="actions-grid">
-          <div class="action-card">
-            <div class="action-tag">Ação 1 · Imediato</div>
-            <div class="action-title">Follow-up nos 10 Positivos</div>
-            <div class="action-desc">Oferta exclusiva "para você que respondeu no Dia da Mulher" → est. +4–6 agendamentos, custo zero de mídia.</div>
+        <!-- Donut Sentimento -->
+        <div class="panel" style="--c:var(--teal)">
+          <div class="panel-label">
+            <div class="panel-label-dot" style="background:var(--teal)"></div>
+            Sentimento
+            <span style="font-weight:400;color:var(--text-subtle);text-transform:none;letter-spacing:0">(15 reais)</span>
           </div>
-          <div class="action-card">
-            <div class="action-tag">Ação 2 · Próxima semana</div>
-            <div class="action-title">Campanha Estética Segmentada</div>
-            <div class="action-desc">Disparo específico para as 8 interessadas em Estética → taxa esperada 15–20%, bem acima da média geral.</div>
-          </div>
-          <div class="action-card">
-            <div class="action-tag">Ação 3 · Abril</div>
-            <div class="action-title">Re-engajamento dos 2.793 Pendentes</div>
-            <div class="action-desc">Segunda mensagem diferenciada → base já aquecida, estimativa de 1,5–2× mais resposta que o disparo inicial.</div>
-          </div>
-        </div>
+          <div class="donut-wrap">
+            <svg class="donut-svg" width="130" height="130" viewBox="0 0 130 130">
+              <circle cx="65" cy="65" r="52" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="20"/>
+              <g transform="rotate(-90, 65, 65)">
+                <!-- positivo 10/15 = 66.7% → 326.7 × .667 = 217.8 -->
+                <circle id="seg-positivo" cx="65" cy="65" r="52" fill="none" stroke="#2de4a9" stroke-width="20"
+                  class="donut-seg" data-arr="217.8"/>
+                <!-- neutro 3/15 = 20% → 65.3, offset=-217.8 -->
+                <circle id="seg-neutro" cx="65" cy="65" r="52" fill="none" stroke="#3d4350" stroke-width="20"
+                  class="donut-seg" data-arr="65.3" data-off="-217.8"/>
+                <!-- negativo 2/15 = 13.3% → 43.5, offset=-283.1 -->
+                <circle id="seg-negativo" cx="65" cy="65" r="52" fill="none" stroke="#f87171" stroke-width="20"
+                  class="donut-seg" data-arr="43.5" data-off="-283.1"/>
+              </g>
+              <text x="65" y="59" text-anchor="middle" font-size="26" font-weight="900" fill="#e4e8eb">15</text>
+              <text x="65" y="74" text-anchor="middle" font-size="9" fill="#5a5f66" font-weight="700" letter-spacing="1">REPOSTAS</text>
+            </svg>
 
-        <div class="alert alert-success">
-          <strong>Potencial imediato:</strong> Ações 1 + 2 estimam <strong>5–8 agendamentos adicionais</strong> sem nova mídia — aproveitando a inteligência já gerada.
-        </div>
+            <div class="donut-legend">
+              <div class="dl-item">
+                <div class="dl-swatch" style="background:#2de4a9"></div>
+                <span class="dl-label">Positivo</span>
+                <span class="dl-num" style="color:var(--teal)">10</span>
+                <span class="dl-pct">67%</span>
+              </div>
+              <div class="dl-item">
+                <div class="dl-swatch" style="background:#3d4350"></div>
+                <span class="dl-label">Neutro</span>
+                <span class="dl-num">3</span>
+                <span class="dl-pct">20%</span>
+              </div>
+              <div class="dl-item">
+                <div class="dl-swatch" style="background:#f87171"></div>
+                <span class="dl-label">Negativo</span>
+                <span class="dl-num" style="color:var(--ruby)">2</span>
+                <span class="dl-pct">13%</span>
+              </div>
+            </div>
+          </div>
 
-        <!-- ── AGENDAMENTOS GERADOS ──────────────── -->
-        <div class="sec-label" style="margin-top:8px">Agendamentos Gerados pela Campanha</div>
-        <div class="viz-card" style="margin-bottom:14px;overflow-x:auto">
-          <table class="apt-table">
-            <thead>
-              <tr>
-                <th>Data</th>
-                <th>Paciente</th>
-                <th>Telefone</th>
-                <th>Médico(a)</th>
-                <th>Procedimento</th>
-                <th>Valor</th>
-                <th>Origem</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><span class="apt-date">11/03</span><span class="apt-time">14h00</span></td>
-                <td>Fabiana N. Bressanin</td>
-                <td class="apt-phone">(47) 9247-8883</td>
-                <td><span class="apt-dr-empty">—</span></td>
-                <td>Consulta Avaliativa</td>
-                <td class="apt-value">R$ 400</td>
-                <td><span class="apt-tag apt-human">atendente</span></td>
-              </tr>
-              <tr>
-                <td><span class="apt-date">11/03</span><span class="apt-time">15h00</span></td>
-                <td>Ana dos Santos</td>
-                <td class="apt-phone">(47) 9692-0455</td>
-                <td>Dra. Eoda</td>
-                <td>Consulta Dermatológica</td>
-                <td class="apt-value apt-value-high">R$ 880</td>
-                <td><span class="apt-tag apt-human">atendente</span></td>
-              </tr>
-              <tr>
-                <td><span class="apt-date">16/03</span><span class="apt-time">13h00</span></td>
-                <td>Deonilda P. C. Lima</td>
-                <td class="apt-phone">(47) 9760-6666</td>
-                <td>Dra. Eoda</td>
-                <td>Consulta Avaliativa</td>
-                <td class="apt-value">R$ 400</td>
-                <td><span class="apt-tag apt-bot">bot</span></td>
-              </tr>
-              <tr>
-                <td><span class="apt-date">18/03</span><span class="apt-time">09h00</span></td>
-                <td>Andreia A. Pescara</td>
-                <td class="apt-phone">(47) 9998-4415</td>
-                <td>Dra. Morgana</td>
-                <td>Consulta Dermatológica</td>
-                <td class="apt-value apt-value-high">R$ 880</td>
-                <td><span class="apt-tag apt-bot">bot</span></td>
-              </tr>
-              <tr>
-                <td><span class="apt-date">19/03</span><span class="apt-time">09h00</span></td>
-                <td>Emanoela Klock</td>
-                <td class="apt-phone">(47) 8805-8385</td>
-                <td>Dra. Raquel</td>
-                <td>Botox</td>
-                <td class="apt-value apt-value-tbd">a confirmar</td>
-                <td><span class="apt-tag apt-human">atendente</span></td>
-              </tr>
-            </tbody>
-          </table>
-          <div style="font-size:11px;color:var(--text-subtle);margin-top:10px;line-height:1.5">
-            * Somente agendamentos confirmados após 08/03/2026 (data do disparo). 4 contatos descartados: 1 pré-campanha, 1 cancelado, 1 sem data, 1 procedimento já realizado.
+          <div class="insight" style="margin-top:16px;margin-bottom:0">
+            <strong>10 com interesse real</strong> — alvo prioritário para follow-up.
           </div>
-        </div>
-
-        <!-- ── ROI ─────────────────────────────── -->
-        <div class="sec-label">Retorno sobre Investimento (ROI)</div>
-        <div class="hero-grid" style="margin-bottom:14px">
-          <div class="hero-card" style="--accent-color:var(--ruby)">
-            <div class="hero-label">Custo da Campanha</div>
-            <div class="hero-value" style="font-size:22px">$ 7,44</div>
-            <div class="hero-sub">≈ R$ 43,52 (USD → BRL)</div>
-          </div>
-          <div class="hero-card" style="--accent-color:var(--teal)">
-            <div class="hero-label">Receita Confirmada</div>
-            <div class="hero-value" style="font-size:22px">R$ 2.560</div>
-            <div class="hero-sub">4 procedimentos com valor</div>
-          </div>
-          <div class="hero-card" style="--accent-color:var(--amber)">
-            <div class="hero-label">ROI Mínimo</div>
-            <div class="hero-value roi-counter" data-target="5780" style="font-size:24px;color:var(--amber)">0%</div>
-            <div class="hero-sub">excluindo Botox</div>
-          </div>
-          <div class="hero-card" style="--accent-color:var(--brand)">
-            <div class="hero-label">Break-even</div>
-            <div class="hero-value" style="font-size:22px">1</div>
-            <div class="hero-sub">agendamento · cobriu 20× o custo</div>
-          </div>
-        </div>
-
-        <div class="roi-bar-wrap">
-          <div class="roi-bar-label">
-            <span>Custo: R$ 43,52</span>
-            <span style="color:var(--teal)">Receita: R$ 2.560</span>
-          </div>
-          <div class="roi-track">
-            <div class="roi-cost-fill" style="width:1.7%"></div>
-            <div class="roi-rev-fill roi-rev-anim" data-w="100"></div>
-          </div>
-        </div>
-
-        <div class="alert alert-success" style="margin-top:12px">
-          <strong>Cada R$ 1,00 investido retornou R$ 58,80</strong> — e ainda há 1 agendamento (Botox) com valor a confirmar. Se o Botox valer R$ 600, o ROI sobe para ~7.300%.
-        </div>
-
-        <hr class="divider" />
-        <div class="report-footer">
-          Relatório gerado em 11/03/2026 · Digital AI — Sistema de Inteligência Clínica<br />
-          Fonte: Chatwoot + PostgreSQL + Feegow · Campanha: 08/03/2026
         </div>
 
       </div>
+
+      <!-- ── INTERESSE (full width) ─────────────── -->
+      <div class="panel" style="margin-bottom:12px">
+        <div class="panel-label">
+          <div class="panel-label-dot" style="background:var(--amber)"></div>
+          Principal Interesse Declarado
+        </div>
+        <div class="ibar-list">
+
+          <div class="ibar-row">
+            <div class="ibar-meta">
+              <span class="ibar-name">Estética</span>
+              <div class="ibar-right"><span class="ibar-num">8</span><span class="ibar-pct">53,3%</span></div>
+            </div>
+            <div class="ibar-track">
+              <div class="ibar-fill" data-w="53.3" style="background:linear-gradient(90deg,rgba(110,168,254,.5),var(--brand))"></div>
+            </div>
+          </div>
+
+          <div class="ibar-row">
+            <div class="ibar-meta">
+              <span class="ibar-name">Consulta Dermatológica</span>
+              <div class="ibar-right"><span class="ibar-num">3</span><span class="ibar-pct">20,0%</span></div>
+            </div>
+            <div class="ibar-track">
+              <div class="ibar-fill" data-w="20" style="background:linear-gradient(90deg,rgba(251,191,36,.5),var(--amber))"></div>
+            </div>
+          </div>
+
+          <div class="ibar-row">
+            <div class="ibar-meta">
+              <span class="ibar-name">Dúvidas Gerais</span>
+              <div class="ibar-right"><span class="ibar-num">2</span><span class="ibar-pct">13,3%</span></div>
+            </div>
+            <div class="ibar-track">
+              <div class="ibar-fill" data-w="13.3" style="background:linear-gradient(90deg,rgba(45,228,169,.4),var(--teal))"></div>
+            </div>
+          </div>
+
+          <div class="ibar-row">
+            <div class="ibar-meta">
+              <span class="ibar-name">Sem Interesse</span>
+              <div class="ibar-right"><span class="ibar-num">2</span><span class="ibar-pct">13,3%</span></div>
+            </div>
+            <div class="ibar-track">
+              <div class="ibar-fill" data-w="13.3" style="background:rgba(248,113,113,.4)"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── AGENDAMENTOS ────────────────────────── -->
+      <div class="section-sep">
+        <div class="section-sep-line"></div>
+        <span class="section-sep-text">Agendamentos Gerados pela Campanha</span>
+        <div class="section-sep-line"></div>
+      </div>
+
+      <div class="panel" style="margin-bottom:12px;overflow-x:auto">
+        <table class="apt-table">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Paciente</th>
+              <th>Telefone</th>
+              <th>Médico(a)</th>
+              <th>Procedimento</th>
+              <th>Valor</th>
+              <th>Origem</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="apt-date-n">11/03/2026</div>
+                <div class="apt-time-n">14h00</div>
+              </td>
+              <td class="apt-name">Fabiana N. Bressanin</td>
+              <td class="apt-phone">(47) 9247-8883</td>
+              <td style="color:var(--text-subtle)">—</td>
+              <td>Consulta Avaliativa</td>
+              <td class="apt-value-n">R$ 400</td>
+              <td><span class="apt-badge badge-human">atendente</span></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="apt-date-n">18/03/2026</div>
+                <div class="apt-time-n">09h00</div>
+              </td>
+              <td class="apt-name">Andreia A. Pescara</td>
+              <td class="apt-phone">(47) 9998-4415</td>
+              <td>Dra. Morgana</td>
+              <td>Consulta Dermatológica</td>
+              <td class="apt-value-n">R$ 880</td>
+              <td><span class="apt-badge badge-bot">bot</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="font-size:11px;color:var(--text-subtle);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">
+          * Apenas agendamentos confirmados após 08/03/2026 e atribuídos à campanha.
+        </div>
+      </div>
+
+      <!-- ── ROI ────────────────────────────────── -->
+      <div class="section-sep">
+        <div class="section-sep-line"></div>
+        <span class="section-sep-text">Retorno sobre Investimento</span>
+        <div class="section-sep-line"></div>
+      </div>
+
+      <!-- Big ROI counter -->
+      <div class="roi-big-panel">
+        <div class="roi-big-label">ROI da Campanha</div>
+        <div class="roi-big-number roi-counter" data-target="2840">0%</div>
+        <div class="roi-big-sub">
+          <strong>R$ 1,00</strong> investido gerou <strong>R$ 29,40</strong> de retorno
+        </div>
+      </div>
+
+      <!-- 4 KPI cards -->
+      <div class="roi-grid">
+        <div class="roi-hero-card" style="--c:var(--ruby)">
+          <div class="roi-hero-label">Custo da Campanha</div>
+          <div class="roi-hero-value">$ 7,44</div>
+          <div class="roi-hero-sub">≈ R$ 43,52</div>
+        </div>
+        <div class="roi-hero-card" style="--c:var(--teal)">
+          <div class="roi-hero-label">Receita Confirmada</div>
+          <div class="roi-hero-value">R$ 1.280</div>
+          <div class="roi-hero-sub">2 procedimentos</div>
+        </div>
+        <div class="roi-hero-card" style="--c:var(--amber)">
+          <div class="roi-hero-label">Lucro Líquido</div>
+          <div class="roi-hero-value">R$ 1.237</div>
+          <div class="roi-hero-sub">descontando custo</div>
+        </div>
+        <div class="roi-hero-card" style="--c:var(--brand)">
+          <div class="roi-hero-label">Break-even</div>
+          <div class="roi-hero-value">1</div>
+          <div class="roi-hero-sub">consulta · cobriu 20× o custo</div>
+        </div>
+      </div>
+
+      <!-- Revenue bar -->
+      <div class="roi-bar-panel">
+        <div class="roi-bar-title">Custo vs Receita</div>
+        <div class="roi-comparison">
+          <div class="roi-cost-seg">R$44</div>
+          <div class="roi-rev-seg roi-rev-anim" data-w="96.7">R$ 1.280</div>
+        </div>
+        <div class="roi-bar-labels">
+          <span style="color:var(--ruby)">Custo: R$ 43,52 <span style="opacity:.5">(3,3%)</span></span>
+          <span style="color:var(--teal)">Receita: R$ 1.280 <span style="opacity:.5">(96,7%)</span></span>
+        </div>
+      </div>
+
+      <!-- ── PRÓXIMAS AÇÕES ──────────────────────── -->
+      <div class="section-sep">
+        <div class="section-sep-line"></div>
+        <span class="section-sep-text">Próximas Ações</span>
+        <div class="section-sep-line"></div>
+      </div>
+
+      <div class="actions-row">
+        <div class="action-card">
+          <div class="action-num">Ação 1 · Imediato</div>
+          <div class="action-title">Follow-up nos 10 Positivos</div>
+          <div class="action-desc">Oferta exclusiva "para quem respondeu no Dia da Mulher" → est. +4–6 agendamentos, custo zero de mídia.</div>
+        </div>
+        <div class="action-card">
+          <div class="action-num">Ação 2 · Esta semana</div>
+          <div class="action-title">Campanha Estética Segmentada</div>
+          <div class="action-desc">Disparo para as 8 interessadas em Estética → taxa esperada 15–20%, acima da média geral.</div>
+        </div>
+        <div class="action-card">
+          <div class="action-num">Ação 3 · Abril</div>
+          <div class="action-title">Re-engajamento dos 2.793</div>
+          <div class="action-desc">Segunda mensagem diferenciada para a base que não respondeu — estimativa 1,5–2× mais que o disparo inicial.</div>
+        </div>
+      </div>
+
+      <div class="insight insight-info" style="margin-bottom:0">
+        <strong>Potencial imediato:</strong> Ações 1 + 2 estimam <strong>+5–8 agendamentos</strong> sem nova mídia — aproveitando a inteligência já gerada nesta campanha.
+      </div>
+
+      <hr class="divider" />
+      <div class="report-footer">
+        Relatório gerado em 11/03/2026 · Digital AI — Inteligência Clínica<br />
+        Fonte: Chatwoot + PostgreSQL + Feegow · Campanha: 08/03/2026
+      </div>
+
     </div>
   </div>
 
@@ -654,7 +882,7 @@
       function onAuth() {
         document.getElementById('gate-loading').classList.add('hidden');
         document.getElementById('app').classList.add('visible');
-        requestAnimationFrame(function() { setTimeout(animateAll, 80); });
+        requestAnimationFrame(function() { setTimeout(animateAll, 120); });
       },
       function onTimeout() {
         document.getElementById('gate-loading').classList.add('hidden');
@@ -665,34 +893,37 @@
     function animateAll() {
       // Funnel fills
       document.querySelectorAll('.funnel-fill[data-w]').forEach(function(el, i) {
-        setTimeout(function() { el.style.width = el.dataset.w + '%'; }, i * 80);
+        setTimeout(function() { el.style.width = el.dataset.w + '%'; }, i * 90);
       });
 
-      // Interesse bars
+      // Interest bars
       document.querySelectorAll('.ibar-fill[data-w]').forEach(function(el, i) {
-        setTimeout(function() { el.style.width = el.dataset.w + '%'; }, 300 + i * 60);
+        setTimeout(function() { el.style.width = el.dataset.w + '%'; }, 350 + i * 70);
       });
 
-      // ROI revenue bar
+      // Revenue bar
       document.querySelectorAll('.roi-rev-anim[data-w]').forEach(function(el) {
-        setTimeout(function() { el.style.width = el.dataset.w + '%'; }, 400);
+        setTimeout(function() { el.style.width = el.dataset.w + '%'; }, 500);
       });
 
-      // ROI counter
-      document.querySelectorAll('.roi-counter[data-target]').forEach(function(el) {
+      // ROI counters (hero card + big panel)
+      document.querySelectorAll('.roi-counter[data-target]').forEach(function(el, idx) {
         var target = parseInt(el.dataset.target);
-        var start = 0;
         var duration = 1800;
-        var startTime = null;
-        function step(ts) {
-          if (!startTime) startTime = ts;
-          var progress = Math.min((ts - startTime) / duration, 1);
-          var ease = 1 - Math.pow(1 - progress, 3);
-          var current = Math.round(ease * target);
-          el.textContent = current.toLocaleString('pt-BR') + '%';
-          if (progress < 1) requestAnimationFrame(step);
+        var delay = 400 + idx * 100;
+        function runCounter() {
+          var startTime = null;
+          function step(ts) {
+            if (!startTime) startTime = ts;
+            var progress = Math.min((ts - startTime) / duration, 1);
+            var ease = 1 - Math.pow(1 - progress, 3);
+            var current = Math.round(ease * target);
+            el.textContent = current.toLocaleString('pt-BR') + '%';
+            if (progress < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
         }
-        setTimeout(function() { requestAnimationFrame(step); }, 500);
+        setTimeout(runCounter, delay);
       });
 
       // Donut segments
@@ -703,7 +934,7 @@
         el.setAttribute('stroke-dashoffset', off);
         setTimeout(function() {
           el.setAttribute('stroke-dasharray', len + ' ' + (circ - len));
-        }, 200);
+        }, 250);
       });
     }
   </script>
