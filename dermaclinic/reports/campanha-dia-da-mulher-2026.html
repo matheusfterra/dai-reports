@@ -408,6 +408,148 @@
       color: var(--text-subtle);
     }
 
+    /* ── Respondentes ────────────────────────────────── */
+    .resp-agendou-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    @media (max-width: 600px) { .resp-agendou-grid { grid-template-columns: 1fr; } }
+
+    .resp-agendou-card {
+      background: rgba(251,191,36,.06);
+      border: 1px solid rgba(251,191,36,.35);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+    .resp-agendou-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--amber);
+    }
+    .resp-agendou-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--amber);
+      margin-bottom: 2px;
+    }
+    .resp-agendou-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .resp-agendou-detail {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .resp-agendou-value {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--teal);
+    }
+    .resp-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--amber);
+      text-decoration: none;
+      opacity: .85;
+      transition: opacity .15s;
+    }
+    .resp-link:hover { opacity: 1; }
+    .resp-link-disabled { color: var(--text-subtle); cursor: default; }
+
+    .resp-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .resp-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      background: transparent;
+      transition: background .12s;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .resp-row:hover { background: rgba(255,255,255,.04); }
+
+    .resp-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .resp-name {
+      font-size: 13px;
+      color: var(--text-muted);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .resp-interesse {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 100px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .ri-estetica   { background: rgba(110,168,254,.12); color: var(--brand); }
+    .ri-consulta   { background: rgba(251,191,36,.12); color: var(--amber); }
+    .ri-duvidas    { background: rgba(45,228,169,.12); color: var(--teal); }
+    .ri-sem        { background: rgba(248,113,113,.1); color: var(--ruby); }
+    .ri-empty      { background: rgba(255,255,255,.05); color: var(--text-subtle); }
+
+    .resp-sentiment {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      width: 52px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .rs-pos { color: var(--teal); }
+    .rs-neu { color: var(--text-subtle); }
+    .rs-neg { color: var(--ruby); }
+
+    .resp-ver {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--brand);
+      white-space: nowrap;
+      flex-shrink: 0;
+      opacity: .7;
+      transition: opacity .12s;
+    }
+    .resp-row:hover .resp-ver { opacity: 1; }
+    .resp-no-link .resp-ver { color: var(--text-subtle); }
+
     /* ── Actions ─────────────────────────────────────── */
     .actions-row {
       display: grid;
@@ -682,6 +824,197 @@
 
       </div>
 
+      <!-- ── RESPONDENTES ──────────────────────── -->
+      <div class="section-sep">
+        <div class="section-sep-line"></div>
+        <span class="section-sep-text">Respondentes da Campanha</span>
+        <div class="section-sep-line"></div>
+      </div>
+
+      <!-- 2 que agendaram — destaque no topo -->
+      <div class="resp-agendou-grid">
+
+        <div class="resp-agendou-card">
+          <div class="resp-agendou-badge">
+            ✓ Agendou · Bot
+          </div>
+          <div class="resp-agendou-name">Andreia Aparecida Pescara</div>
+          <div class="resp-agendou-detail">
+            <span>18/03 · 09h00</span>
+            <span>·</span>
+            <span>Dra. Morgana</span>
+          </div>
+          <div class="resp-agendou-detail">
+            <span>Consulta Dermatológica</span>
+            <span>·</span>
+            <span class="resp-agendou-value">R$ 880</span>
+          </div>
+          <a class="resp-link" data-conv-id="1557" href="#" target="_blank">
+            Ver conversa →
+          </a>
+        </div>
+
+        <div class="resp-agendou-card">
+          <div class="resp-agendou-badge">
+            ✓ Agendou · Atendente
+          </div>
+          <div class="resp-agendou-name">Fabiana Nunes Bressanin</div>
+          <div class="resp-agendou-detail">
+            <span>11/03 · 14h00</span>
+            <span>·</span>
+            <span>—</span>
+          </div>
+          <div class="resp-agendou-detail">
+            <span>Consulta Avaliativa</span>
+            <span>·</span>
+            <span class="resp-agendou-value">R$ 400</span>
+          </div>
+          <a class="resp-link" data-conv-id="3855" href="#" target="_blank">
+            Ver conversa →
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Lista de 15 respondentes com texto -->
+      <div class="panel" style="margin-bottom:12px">
+        <div class="panel-label">
+          <div class="panel-label-dot" style="background:var(--brand)"></div>
+          Respondentes com mensagem de texto
+          <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-subtle)">(15)</span>
+        </div>
+        <div class="resp-list">
+
+          <!-- Positivos -->
+          <a class="resp-row" data-conv-id="1224" href="#" target="_blank">
+            <div class="resp-dot" style="background:var(--teal)"></div>
+            <span class="resp-name">Amanda Fernandes</span>
+            <span class="resp-interesse ri-estetica">Estética</span>
+            <span class="resp-sentiment rs-pos">Positivo</span>
+            <span class="resp-ver">Ver →</span>
+          </a>
+
+          <a class="resp-row" data-conv-id="1307" href="#" target="_blank">
+            <div class="resp-dot" style="background:var(--teal)"></div>
+            <span class="resp-name">Ana Clara Melo</span>
+            <span class="resp-interesse ri-estetica">Estética</span>
+            <span class="resp-sentiment rs-pos">Positivo</span>
+            <span class="resp-ver">Ver →</span>
+          </a>
+
+          <a class="resp-row" data-conv-id="1354" href="#" target="_blank">
+            <div class="resp-dot" style="background:var(--teal)"></div>
+            <span class="resp-name">Ana Larissa Rauen Lopes</span>
+            <span class="resp-interesse ri-consulta">Consulta Derm</span>
+            <span class="resp-sentiment rs-pos">Positivo</span>
+            <span class="resp-ver">Ver →</span>
+          </a>
+
+          <a class="resp-row" data-conv-id="1380" href="#" target="_blank">
+            <div class="resp-dot" style="background:var(--teal)"></div>
+            <span class="resp-name">Ana Maria Mendes Araujo</span>
+            <span class="resp-interesse ri-estetica">Estética</span>
+            <span class="resp-sentiment rs-pos">Positivo</span>
+            <span class="resp-ver">Ver →</span>
+          </a>
+
+          <a class="resp-row" data-conv-id="1439" href="#" target="_blank">
+            <div class="resp-dot" style="background:var(--teal)"></div>
+            <span class="resp-name">Ana Streit</span>
+            <span class="resp-interesse ri-estetica">Estética</span>
+            <span class="resp-sentiment rs-pos">Positivo</span>
+            <span class="resp-ver">Ver →</span>
+          </a>
+
+          <a class="resp-row" data-conv-id="1581" href="#" target="_blank">
+            <div class="resp-dot" style="background:var(--teal)"></div>
+            <span class="resp-name">Andressa Badio</span>
+            <span class="resp-interesse ri-consulta">Consulta Derm</span>
+            <span class="resp-sentiment rs-pos">Positivo</span>
+            <span class="resp-ver">Ver →</span>
+          </a>
+
+          <a class="resp-row" data-conv-id="1655" href="#" target="_blank">
+            <div class="resp-dot" style="background:var(--teal)"></div>
+            <span class="resp-name">Angela Maria Gastaldi Krieger</span>
+            <span class="resp-interesse ri-estetica">Estética</span>
+            <span class="resp-sentiment rs-pos">Positivo</span>
+            <span class="resp-ver">Ver →</span>
+          </a>
+
+          <a class="resp-row" data-conv-id="2026" href="#" target="_blank">
+            <div class="resp-dot" style="background:var(--teal)"></div>
+            <span class="resp-name">Karina Pereira Bottene</span>
+            <span class="resp-interesse ri-estetica">Estética</span>
+            <span class="resp-sentiment rs-pos">Positivo</span>
+            <span class="resp-ver">Ver →</span>
+          </a>
+
+          <a class="resp-row" data-conv-id="2147" href="#" target="_blank">
+            <div class="resp-dot" style="background:var(--teal)"></div>
+            <span class="resp-name">Bruna de Ramos</span>
+            <span class="resp-interesse ri-estetica">Estética</span>
+            <span class="resp-sentiment rs-pos">Positivo</span>
+            <span class="resp-ver">Ver →</span>
+          </a>
+
+          <a class="resp-row" data-conv-id="2117" href="#" target="_blank">
+            <div class="resp-dot" style="background:var(--teal)"></div>
+            <span class="resp-name">Bruna Marzarotto</span>
+            <span class="resp-interesse ri-estetica">Estética</span>
+            <span class="resp-sentiment rs-pos">Positivo</span>
+            <span class="resp-ver">Ver →</span>
+          </a>
+
+          <!-- Divider Neutro -->
+          <div style="height:1px;background:var(--border);margin:4px 0"></div>
+
+          <a class="resp-row" data-conv-id="1334" href="#" target="_blank">
+            <div class="resp-dot" style="background:#4a5060"></div>
+            <span class="resp-name">Ana Elizabete Gomes Machado</span>
+            <span class="resp-interesse ri-duvidas">Dúvidas</span>
+            <span class="resp-sentiment rs-neu">Neutro</span>
+            <span class="resp-ver">Ver →</span>
+          </a>
+
+          <a class="resp-row" data-conv-id="1580" href="#" target="_blank">
+            <div class="resp-dot" style="background:#4a5060"></div>
+            <span class="resp-name">Andresa Vieira Huscher</span>
+            <span class="resp-interesse ri-duvidas">Dúvidas</span>
+            <span class="resp-sentiment rs-neu">Neutro</span>
+            <span class="resp-ver">Ver →</span>
+          </a>
+
+          <a class="resp-row" data-conv-id="357" href="#" target="_blank">
+            <div class="resp-dot" style="background:#4a5060"></div>
+            <span class="resp-name">Elaine Caroline Cardoso</span>
+            <span class="resp-interesse ri-consulta">Consulta Derm</span>
+            <span class="resp-sentiment rs-neu">Neutro</span>
+            <span class="resp-ver">Ver →</span>
+          </a>
+
+          <!-- Divider Negativo -->
+          <div style="height:1px;background:var(--border);margin:4px 0"></div>
+
+          <a class="resp-row" data-conv-id="1970" href="#" target="_blank">
+            <div class="resp-dot" style="background:var(--ruby)"></div>
+            <span class="resp-name">Bianca de Goes Franco</span>
+            <span class="resp-interesse ri-empty">—</span>
+            <span class="resp-sentiment rs-neg">Negativo</span>
+            <span class="resp-ver">Ver →</span>
+          </a>
+
+          <a class="resp-row" data-conv-id="2712" href="#" target="_blank">
+            <div class="resp-dot" style="background:var(--ruby)"></div>
+            <span class="resp-name">Maria Auxiliadora Harry Soares</span>
+            <span class="resp-interesse ri-empty">—</span>
+            <span class="resp-sentiment rs-neg">Negativo</span>
+            <span class="resp-ver">Ver →</span>
+          </a>
+
+        </div>
+      </div>
+
       <!-- ── INTERESSE (full width) ─────────────── -->
       <div class="panel" style="margin-bottom:12px">
         <div class="panel-label">
@@ -879,9 +1212,10 @@
   <script src="../../_shared/auth.js"></script>
   <script>
     initChatwootAuth(
-      function onAuth() {
+      function onAuth(auth) {
         document.getElementById('gate-loading').classList.add('hidden');
         document.getElementById('app').classList.add('visible');
+        buildConvLinks(auth);
         requestAnimationFrame(function() { setTimeout(animateAll, 120); });
       },
       function onTimeout() {
@@ -889,6 +1223,16 @@
         document.getElementById('gate-direct').classList.remove('hidden');
       }
     );
+
+    function buildConvLinks(auth) {
+      var base = auth.chatwootUrl + '/app/accounts/' + auth.accountId + '/conversations/';
+      document.querySelectorAll('[data-conv-id]').forEach(function(el) {
+        var convId = el.dataset.convId;
+        if (convId) {
+          el.setAttribute('href', base + convId);
+        }
+      });
+    }
 
     function animateAll() {
       // Funnel fills
