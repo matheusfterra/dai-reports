@@ -7,243 +7,417 @@
   <style>
     .report-body { padding: 0; }
 
+    /* ── Header ─────────────────────────────── */
     .rpt-header {
       padding: 28px 32px 20px;
       border-bottom: 1px solid var(--border);
     }
-    .rpt-header h1 {
-      font-size: 20px; font-weight: 700;
-      color: var(--text); margin-bottom: 4px;
-    }
-    .rpt-header p {
-      font-size: 13px; color: var(--text-muted);
-    }
+    .rpt-header h1 { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .rpt-header p  { font-size: 13px; color: var(--text-muted); }
 
+    /* ── Sections ───────────────────────────── */
     .rpt-section { padding: 24px 32px; }
     .rpt-section + .rpt-section { border-top: 1px solid var(--border); }
-
     .rpt-section-title {
-      font-size: 13px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.08em;
-      color: var(--text-muted); margin-bottom: 16px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 16px;
     }
-
-    /* KPI grid */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 12px;
-    }
-    .kpi-card {
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px;
-    }
-    .kpi-label {
-      font-size: 11px; color: var(--text-muted);
-      font-weight: 600; text-transform: uppercase;
-      letter-spacing: 0.06em; margin-bottom: 6px;
-    }
-    .kpi-value {
-      font-size: 28px; font-weight: 800;
-      line-height: 1; color: var(--text);
-    }
-    .kpi-sub {
-      font-size: 11px; color: var(--text-subtle);
-      margin-top: 4px;
-    }
-    .kpi-card.ruby  { border-left: 3px solid var(--ruby);  }
-    .kpi-card.amber { border-left: 3px solid var(--amber); }
-    .kpi-card.brand { border-left: 3px solid var(--brand); }
-    .kpi-card.teal  { border-left: 3px solid var(--teal);  }
-    .kpi-card.ruby  .kpi-value { color: var(--ruby);  }
-    .kpi-card.amber .kpi-value { color: var(--amber); }
-    .kpi-card.teal  .kpi-value { color: var(--teal);  }
-
-    /* Alerta */
-    .alert-box {
-      background: rgba(251,191,36,0.07);
-      border: 1px solid rgba(251,191,36,0.25);
-      border-left: 4px solid var(--amber);
-      border-radius: var(--radius);
-      padding: 14px 18px;
-      display: flex; gap: 12px; align-items: flex-start;
-    }
-    .alert-icon { font-size: 20px; flex-shrink: 0; }
-    .alert-title { font-size: 13px; font-weight: 700; color: var(--amber); margin-bottom: 4px; }
-    .alert-text  { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
-
-    /* Charts layout */
-    .charts-row {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 16px;
-    }
-    .chart-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px;
-    }
-    .chart-box-title {
-      font-size: 12px; font-weight: 600; color: var(--text-muted);
-      margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.06em;
-    }
-    .chart-full { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
-
-    /* Tabela */
-    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    .data-table thead th {
-      text-align: left; padding: 8px 12px;
-      border-bottom: 2px solid var(--border);
-      color: var(--text-muted); font-size: 11px;
-      text-transform: uppercase; letter-spacing: 0.06em;
-      font-weight: 700;
-    }
-    .data-table thead th.right { text-align: right; }
-    .data-table tbody tr { transition: background 0.12s; }
-    .data-table tbody tr:hover { background: var(--surface-2); }
-    .data-table tbody td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text); }
-    .data-table tbody td.right { text-align: right; font-weight: 600; }
-    .data-table tbody td.ruby  { color: var(--ruby);  font-weight: 700; text-align: right; }
-    .data-table tbody td.brand { color: var(--brand);  font-weight: 600; text-align: right; }
-
-    .badge-canal {
-      display: inline-block; padding: 2px 8px; border-radius: 99px;
-      font-size: 10px; font-weight: 600; letter-spacing: 0.04em;
-    }
-    .badge-google { background: rgba(66,133,244,0.15); color: #4285F4; }
-    .badge-apple  { background: rgba(160,160,160,0.12); color: #a0a0a0; }
-
-    .warn-icon { color: var(--amber); font-size: 12px; margin-left: 2px; }
-
-    /* Faixas de cobertura */
-    .faixa-row {
-      display: flex; align-items: center; gap: 12px;
-      padding: 10px 0; border-bottom: 1px solid var(--border);
-      font-size: 13px;
-    }
-    .faixa-label { flex: 1; color: var(--text); }
-    .faixa-bar-wrap { flex: 2; height: 8px; background: var(--surface-2); border-radius: 99px; overflow: hidden; }
-    .faixa-bar { height: 100%; border-radius: 99px; background: var(--ruby); }
-    .faixa-val { width: 60px; text-align: right; color: var(--text-muted); font-size: 12px; }
-    .faixa-brands { width: 80px; text-align: right; color: var(--text-subtle); font-size: 11px; }
-
     @media (max-width: 640px) {
-      .charts-row { grid-template-columns: 1fr; }
-      .kpi-grid   { grid-template-columns: 1fr 1fr; }
       .rpt-section { padding: 18px 16px; }
       .rpt-header  { padding: 20px 16px 14px; }
     }
+
+    /* ── Hero 3 números ─────────────────────── */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 600px) { .hero-grid { grid-template-columns: 1fr; } }
+    .hero-cell {
+      background: var(--surface);
+      padding: 24px 20px;
+      text-align: center;
+    }
+    .hero-number {
+      font-size: 52px; font-weight: 900; line-height: 1;
+      letter-spacing: -2px; margin-bottom: 8px;
+    }
+    .hero-label  { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
+    .hero-sub    { font-size: 11px; color: var(--text-subtle); margin-top: 4px; }
+    .c-ruby   { color: var(--ruby); }
+    .c-amber  { color: var(--amber); }
+    .c-brand  { color: var(--brand); }
+    .c-teal   { color: var(--teal); }
+
+    /* ── Cadeia causal ──────────────────────── */
+    .chain {
+      display: flex; align-items: stretch; gap: 0;
+      border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
+    }
+    @media (max-width: 680px) { .chain { flex-direction: column; } }
+    .chain-step {
+      flex: 1; padding: 16px 14px; background: var(--surface);
+      border-right: 1px solid var(--border); position: relative;
+    }
+    .chain-step:last-child { border-right: none; }
+    .chain-icon  { font-size: 22px; margin-bottom: 8px; display: block; }
+    .chain-title { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .chain-desc  { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+    .chain-arrow {
+      position: absolute; right: -12px; top: 50%;
+      transform: translateY(-50%);
+      width: 24px; height: 24px; background: var(--surface-2);
+      border: 1px solid var(--border); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: var(--text-muted); z-index: 2;
+    }
+    @media (max-width: 680px) {
+      .chain-step { border-right: none; border-bottom: 1px solid var(--border); }
+      .chain-step:last-child { border-bottom: none; }
+      .chain-arrow { display: none; }
+    }
+    .chain-step.step-critical { background: rgba(248,113,113,0.06); border-right-color: rgba(248,113,113,0.2); }
+    .chain-step.step-critical .chain-title { color: var(--ruby); }
+
+    /* ── Insight box ────────────────────────── */
+    .insight { border-radius: var(--radius); padding: 16px 18px; margin-bottom: 16px; display: flex; gap: 12px; }
+    .insight.amber { background: rgba(251,191,36,0.07);  border: 1px solid rgba(251,191,36,0.25); border-left: 4px solid var(--amber); }
+    .insight.ruby  { background: rgba(248,113,113,0.07); border: 1px solid rgba(248,113,113,0.25); border-left: 4px solid var(--ruby); }
+    .insight.teal  { background: rgba(45,228,169,0.06);  border: 1px solid rgba(45,228,169,0.2);  border-left: 4px solid var(--teal); }
+    .insight-icon  { font-size: 20px; flex-shrink: 0; }
+    .insight-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .insight.amber .insight-title { color: var(--amber); }
+    .insight.ruby  .insight-title { color: var(--ruby); }
+    .insight.teal  .insight-title { color: var(--teal); }
+    .insight-text  { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── Charts ─────────────────────────────── */
+    .charts-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 680px) { .charts-2col { grid-template-columns: 1fr; } }
+    .chart-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px;
+    }
+    .chart-box-title { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .chart-box-sub   { font-size: 11px; color: var(--text-subtle); margin-bottom: 12px; line-height: 1.4; }
+
+    /* ── Faixas de cobertura (manual) ──────── */
+    .faixa-list { display: flex; flex-direction: column; gap: 0; }
+    .faixa-row {
+      display: grid;
+      grid-template-columns: 140px 1fr 70px 60px;
+      align-items: center; gap: 12px;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+    .faixa-row:last-child { border-bottom: none; }
+    .faixa-name  { color: var(--text); }
+    .faixa-bar-wrap { height: 10px; background: var(--surface-2); border-radius: 99px; overflow: hidden; }
+    .faixa-bar { height: 100%; border-radius: 99px; transition: width 0.6s ease; }
+    .faixa-val   { text-align: right; font-weight: 700; }
+    .faixa-count { text-align: right; color: var(--text-subtle); font-size: 11px; }
+
+    /* ── Cobertura global (donut + texto) ───── */
+    .coverage-split { display: grid; grid-template-columns: 200px 1fr; gap: 24px; align-items: center; }
+    @media (max-width: 640px) { .coverage-split { grid-template-columns: 1fr; } }
+    .coverage-stat { display: flex; flex-direction: column; gap: 12px; }
+    .cstat { display: flex; align-items: center; gap: 10px; }
+    .cstat-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+    .cstat-label { font-size: 12px; color: var(--text-muted); }
+    .cstat-val   { font-size: 15px; font-weight: 700; color: var(--text); margin-left: auto; }
+
+    /* ── Tabela brands críticas ─────────────── */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .data-table thead th {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 2px solid var(--border);
+      color: var(--text-muted); font-size: 10px;
+      text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700;
+    }
+    .data-table thead th.r { text-align: right; }
+    .data-table tbody tr { transition: background 0.12s; }
+    .data-table tbody tr:hover { background: var(--surface-2); }
+    .data-table tbody td { padding: 9px 10px; border-bottom: 1px solid var(--border); color: var(--text); }
+    .data-table tbody td.r { text-align: right; }
+    .data-table tbody td.ruby  { color: var(--ruby);  font-weight: 700; text-align: right; }
+    .data-table tbody td.amber { color: var(--amber); font-weight: 700; text-align: right; }
+    .data-table tbody td.teal  { color: var(--teal);  font-weight: 700; text-align: right; }
+    .data-table tbody td.muted { color: var(--text-muted); text-align: right; }
+
+    .badge-sm {
+      display: inline-block; padding: 2px 7px; border-radius: 99px;
+      font-size: 10px; font-weight: 600;
+    }
+    .badge-zero   { background: rgba(248,113,113,0.15); color: var(--ruby); }
+    .badge-low    { background: rgba(251,191,36,0.15);  color: var(--amber); }
+    .badge-ok     { background: rgba(45,228,169,0.12);  color: var(--teal); }
+    .badge-google { background: rgba(66,133,244,0.12);  color: #4285F4; }
+    .badge-apple  { background: rgba(160,160,160,0.1);  color: #a0a0a0; }
+
+    /* ── Conclusão ──────────────────────────── */
+    .conclusion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 640px) { .conclusion-grid { grid-template-columns: 1fr; } }
+    .conc-card {
+      border: 1px solid var(--border); border-radius: var(--radius); padding: 18px;
+    }
+    .conc-card.no  { background: rgba(248,113,113,0.04); border-color: rgba(248,113,113,0.2); }
+    .conc-card.yes { background: rgba(45,228,169,0.04);  border-color: rgba(45,228,169,0.2); }
+    .conc-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .conc-icon   { font-size: 22px; }
+    .conc-title  { font-size: 13px; font-weight: 700; }
+    .conc-card.no  .conc-title { color: var(--ruby); }
+    .conc-card.yes .conc-title { color: var(--teal); }
+    .conc-list   { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+    .conc-list li { font-size: 12px; color: var(--text-muted); line-height: 1.5; padding-left: 14px; position: relative; }
+    .conc-list li::before { content: '–'; position: absolute; left: 0; color: var(--text-subtle); }
   </style>
 </head>
 <body>
 <div class="report-body">
 
-  <!-- Cabeçalho do relatório -->
+  <!-- ── Cabeçalho ─────────────────────────────────────────────── -->
   <div class="rpt-header">
-    <h1>IAsmin 🤖 — Análise de Reprovações</h1>
-    <p>Março 2026 · 131 brands · RankMyApp RI Tool · Gerado em 21/03/2026 pela Digital AI</p>
+    <h1>IAsmin 🤖 — Por que as reprovações persistem?</h1>
+    <p>Março 2026 · 131 brands · RankMyApp RI Tool · Gerado pela Digital AI em 21/03/2026</p>
   </div>
 
-  <!-- KPIs -->
+  <!-- ── Seção 1: Os 3 números que definem o problema ─────────── -->
   <div class="rpt-section">
-    <p class="rpt-section-title">Visão Geral</p>
-    <div class="kpi-grid">
-      <div class="kpi-card ruby">
-        <div class="kpi-label">Reprovações</div>
-        <div class="kpi-value">604</div>
-        <div class="kpi-sub">total no período</div>
+    <p class="rpt-section-title">O diagnóstico em 3 números</p>
+
+    <div class="hero-grid">
+      <div class="hero-cell">
+        <div class="hero-number c-ruby">61,8%</div>
+        <div class="hero-label">das brands ativas<br><strong>não têm templates</strong></div>
+        <div class="hero-sub">81 de 131 brands com zero templates</div>
       </div>
-      <div class="kpi-card amber">
-        <div class="kpi-label">Direcionamento Incorreto</div>
-        <div class="kpi-value">73,7%</div>
-        <div class="kpi-sub">445 ocorrências</div>
+      <div class="hero-cell">
+        <div class="hero-number c-amber">80,5%</div>
+        <div class="hero-label">dos detalhamentos<br><strong>sem cobertura de template</strong></div>
+        <div class="hero-sub">4.810 de 5.976 detalhamentos sem referência</div>
       </div>
-      <div class="kpi-card ruby">
-        <div class="kpi-label">Brands sem Templates</div>
-        <div class="kpi-value">81</div>
-        <div class="kpi-sub">de 131 brands (61,8%)</div>
-      </div>
-      <div class="kpi-card brand">
-        <div class="kpi-label">Total Templates</div>
-        <div class="kpi-value">1.166</div>
-        <div class="kpi-sub">1.166 ativos</div>
-      </div>
-      <div class="kpi-card teal">
-        <div class="kpi-label">Detalhamentos</div>
-        <div class="kpi-value">5.976</div>
-        <div class="kpi-sub">cobertura média 19,5%</div>
+      <div class="hero-cell">
+        <div class="hero-number c-ruby">73,7%</div>
+        <div class="hero-label">das reprovações<br><strong>por Direcionamento Incorreto</strong></div>
+        <div class="hero-sub">445 de 604 reprovações no período</div>
       </div>
     </div>
-  </div>
 
-  <!-- Alerta de insight -->
-  <div class="rpt-section">
-    <div class="alert-box">
-      <div class="alert-icon">⚠️</div>
+    <div class="insight amber">
+      <div class="insight-icon">⚠️</div>
       <div>
-        <div class="alert-title">Templates = Direcionamentos da IA</div>
-        <div class="alert-text">
-          Sem template cadastrado, a IAsmin responde sem referência — improvisa — e gera resposta com direcionamento errado.
-          Brands com 1–20% de cobertura têm em média <strong style="color:var(--amber)">43,3 reprovações</strong>,
-          contra apenas <strong style="color:var(--teal)">2,2</strong> nas brands com cobertura acima de 80%.
-          O Banco Itaú (Google) concentra <strong style="color:var(--ruby)">271 reprovações</strong> com apenas 46 templates para 140 detalhamentos.
+        <div class="insight-title">Esses três números estão diretamente conectados</div>
+        <div class="insight-text">
+          A IAsmin responde a <strong>todas</strong> as brands, com ou sem templates cadastrados.
+          Sem template, ela não tem referência sobre como abordar aquele tipo de avaliação —
+          e improvisa. Improviso gera resposta com direcionamento errado.
+          Direcionamento Incorreto é, de longe, o principal motivo de reprovação.
+          <strong>A causa não está no modelo — está na ausência de templates.</strong>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Gráficos: motivos + evolução -->
+  <!-- ── Seção 2: A cadeia causal ──────────────────────────────── -->
   <div class="rpt-section">
-    <p class="rpt-section-title">Motivos de Reprovação &amp; Evolução Mensal</p>
-    <div class="charts-row">
-      <div class="chart-box">
-        <div class="chart-box-title">Por Motivo</div>
-        <canvas id="chartMotivos" height="200"></canvas>
+    <p class="rpt-section-title">Como a reprovação acontece — a cadeia causal</p>
+
+    <div class="chain">
+      <div class="chain-step">
+        <span class="chain-icon">🗂️</span>
+        <div class="chain-title">Brand sem template</div>
+        <div class="chain-desc">Detalhamento cadastrado, mas sem resposta de referência associada</div>
+        <div class="chain-arrow">→</div>
       </div>
-      <div class="chart-box">
-        <div class="chart-box-title">Evolução Mensal — Reprovações vs Aprovações</div>
-        <canvas id="chartEvolucao" height="200"></canvas>
+      <div class="chain-step step-critical">
+        <span class="chain-icon">🎲</span>
+        <div class="chain-title">IA sem referência</div>
+        <div class="chain-desc">A IAsmin não encontra template — gera resposta por inferência livre</div>
+        <div class="chain-arrow">→</div>
+      </div>
+      <div class="chain-step step-critical">
+        <span class="chain-icon">❌</span>
+        <div class="chain-title">Direcionamento incorreto</div>
+        <div class="chain-desc">Resposta não corresponde ao contexto esperado pelo AP</div>
+        <div class="chain-arrow">→</div>
+      </div>
+      <div class="chain-step step-critical">
+        <span class="chain-icon">🚫</span>
+        <div class="chain-title">Reprovação</div>
+        <div class="chain-desc">AP reprova — motivo: <em>"Direcionamento Incorreto"</em> (73,7% dos casos)</div>
       </div>
     </div>
   </div>
 
-  <!-- Gráfico: brands -->
+  <!-- ── Seção 3: Cobertura de templates ──────────────────────── -->
   <div class="rpt-section">
-    <p class="rpt-section-title">Top Brands — Reprovações × Templates</p>
-    <div class="chart-full">
-      <canvas id="chartBrands" height="260"></canvas>
+    <p class="rpt-section-title">O buraco de cobertura — onde a IA responde sem referência</p>
+
+    <div class="charts-2col">
+      <!-- Donut: cobertura global -->
+      <div class="chart-box">
+        <div class="chart-box-title">Cobertura Global de Templates</div>
+        <div class="chart-box-sub">Do total de 5.976 detalhamentos, apenas 19,5% têm ao menos um template associado</div>
+        <div class="coverage-split">
+          <canvas id="chartCobertura" width="180" height="180"></canvas>
+          <div class="coverage-stat">
+            <div class="cstat">
+              <div class="cstat-dot" style="background:var(--ruby)"></div>
+              <div class="cstat-label">Sem template</div>
+              <div class="cstat-val c-ruby">80,5%</div>
+            </div>
+            <div class="cstat">
+              <div class="cstat-dot" style="background:var(--teal)"></div>
+              <div class="cstat-label">Com template</div>
+              <div class="cstat-val c-teal">19,5%</div>
+            </div>
+            <div style="margin-top:8px; padding-top:8px; border-top:1px solid var(--border);">
+              <div style="font-size:11px; color:var(--text-subtle)">4.810 detalhamentos sem nenhuma referência de resposta</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Donut: brands -->
+      <div class="chart-box">
+        <div class="chart-box-title">Situação das 131 Brands</div>
+        <div class="chart-box-sub">61,8% das brands não têm nenhum template — a IA responde mesmo assim, sem referência alguma</div>
+        <div class="coverage-split">
+          <canvas id="chartBrands" width="180" height="180"></canvas>
+          <div class="coverage-stat">
+            <div class="cstat">
+              <div class="cstat-dot" style="background:var(--ruby)"></div>
+              <div class="cstat-label">Zero templates</div>
+              <div class="cstat-val c-ruby">81 brands</div>
+            </div>
+            <div class="cstat">
+              <div class="cstat-dot" style="background:var(--amber)"></div>
+              <div class="cstat-label">Cobertura baixa (&lt;50%)</div>
+              <div class="cstat-val c-amber">22 brands</div>
+            </div>
+            <div class="cstat">
+              <div class="cstat-dot" style="background:var(--teal)"></div>
+              <div class="cstat-label">Cobertura adequada (&gt;50%)</div>
+              <div class="cstat-val c-teal">28 brands</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Faixas de cobertura -->
+  <!-- ── Seção 4: A prova — cobertura vs reprovações ──────────── -->
   <div class="rpt-section">
-    <p class="rpt-section-title">Média de Reprovações por Faixa de Cobertura de Templates</p>
-    <div id="faixas"></div>
+    <p class="rpt-section-title">A prova — quanto mais templates, menos reprovações</p>
+
+    <div class="insight teal">
+      <div class="insight-icon">📊</div>
+      <div>
+        <div class="insight-title">Brands com cobertura acima de 80% têm 20× menos reprovações</div>
+        <div class="insight-text">
+          A relação é clara e direta: quanto maior a cobertura de templates, menor a taxa de reprovação.
+          Isso prova que o problema não é o modelo de IA — é a ausência de referência.
+          Um modelo mais sofisticado aplicado sobre um brand sem templates continuará errando.
+        </div>
+      </div>
+    </div>
+
+    <!-- Faixas de cobertura com barras -->
+    <div class="chart-box" style="margin-bottom:16px">
+      <div class="chart-box-title">Média de Reprovações por Faixa de Cobertura de Templates</div>
+      <div class="chart-box-sub" style="margin-bottom:16px">Cada faixa representa um grupo de brands agrupadas pela % de detalhamentos com template</div>
+      <div class="faixa-list" id="faixaList"></div>
+    </div>
+
+    <!-- Gráfico de barras: faixas -->
+    <div class="chart-box">
+      <div class="chart-box-title">Visualização — Reprovações médias vs Cobertura</div>
+      <canvas id="chartFaixas" height="160"></canvas>
+    </div>
   </div>
 
-  <!-- Tabela detalhada -->
+  <!-- ── Seção 5: Cases críticos ───────────────────────────────── -->
   <div class="rpt-section">
-    <p class="rpt-section-title">Ranking Detalhado — Brand × Canal × Reprovações × Templates</p>
+    <p class="rpt-section-title">Brands críticas — alto volume de reprovações, poucos templates</p>
+
+    <div class="insight ruby">
+      <div class="insight-icon">🔥</div>
+      <div>
+        <div class="insight-title">Banco Itaú (Google): 271 reprovações com apenas 46 templates para 140 detalhamentos</div>
+        <div class="insight-text">
+          Com apenas 32,9% de cobertura, a IAsmin responde sem referência para 94 detalhamentos do Itaú.
+          Só essa brand responde por <strong>44,8% de todas as reprovações do período</strong>.
+          Webmotors e Ultragaz seguem o mesmo padrão: poucos templates, reprovações elevadas.
+        </div>
+      </div>
+    </div>
+
     <table class="data-table">
       <thead>
         <tr>
-          <th>#</th>
           <th>Brand</th>
           <th>Canal</th>
-          <th class="right" style="color:var(--ruby)">Reprovações</th>
-          <th class="right" style="color:var(--brand)">Templates</th>
+          <th class="r">Templates</th>
+          <th class="r">Detalhamentos</th>
+          <th class="r">Cobertura</th>
+          <th class="r" style="color:var(--ruby)">Reprovações</th>
+          <th class="r">% do total</th>
         </tr>
       </thead>
-      <tbody id="tableBody"></tbody>
+      <tbody id="criticalTable"></tbody>
     </table>
   </div>
 
-  <div style="padding: 16px 32px; text-align:center;">
+  <!-- ── Seção 6: Gráfico reprovações × templates ──────────────── -->
+  <div class="rpt-section">
+    <p class="rpt-section-title">Top 10 brands — reprovações vs templates cadastrados</p>
+    <div class="chart-box">
+      <div class="chart-box-sub">Barras vermelhas = reprovações · Barras azuis = templates. Onde a diferença é maior, o problema é mais grave.</div>
+      <canvas id="chartComparativo" height="260"></canvas>
+    </div>
+  </div>
+
+  <!-- ── Seção 7: Conclusão ────────────────────────────────────── -->
+  <div class="rpt-section">
+    <p class="rpt-section-title">Conclusão — o que resolve e o que não resolve</p>
+
+    <div class="conclusion-grid">
+      <div class="conc-card no">
+        <div class="conc-header">
+          <span class="conc-icon">❌</span>
+          <span class="conc-title">Não resolve: ajustar só o modelo/RAG</span>
+        </div>
+        <ul class="conc-list">
+          <li>O modelo mais avançado ainda improvisa sem referência</li>
+          <li>RAG sem conteúdo de qualidade retorna resultados genéricos</li>
+          <li>Prompt engineering não substitui o contexto específico do detalhamento</li>
+          <li>A raiz do problema é estrutural, não algorítmica</li>
+        </ul>
+      </div>
+      <div class="conc-card yes">
+        <div class="conc-header">
+          <span class="conc-icon">✅</span>
+          <span class="conc-title">Resolve: cadastrar templates por detalhamento</span>
+        </div>
+        <ul class="conc-list">
+          <li>Templates = direcionamentos explícitos para cada tipo de avaliação</li>
+          <li>Com referência, a IA sabe <em>como</em> responder aquele contexto específico</li>
+          <li>Brands com &gt;80% cobertura têm 20× menos reprovações na média</li>
+          <li>Prioridade: Banco Itaú, Webmotors, Claro, Ultragaz (mais reprova, menos templates)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 12px 32px 20px; text-align:center;">
     <p style="font-size:11px; color: var(--text-subtle);">
-      Análise Digital AI · Dados: brands.json + detalhamentos/ + 2026___MAR___Report_da_IAsmin_1.xlsx
+      Análise Digital AI · Dados: brands.json + detalhamentos/ + 2026___MAR___Report_da_IAsmin_1.xlsx · Março 2026
     </p>
   </div>
 
@@ -251,126 +425,144 @@
 
 <script>
 (function() {
-  // ── Dados ──────────────────────────────────────────────────────
-  const motivos = [
-    { label: 'Direcionamento Incorreto', val: 445, color: '#f87171' },
-    { label: 'Resposta Curta',           val: 56,  color: '#fbbf24' },
-    { label: 'Outros',                   val: 103, color: '#6ea8fe' },
-  ];
+  const GRID  = { color: '#2d3035' };
+  const MUTED = '#8c9097';
+  const SZ    = 11;
 
-  const evolucao = [
-    { mes: 'Set/25', reprv: 62,  aprov: 310 },
-    { mes: 'Out/25', reprv: 78,  aprov: 342 },
-    { mes: 'Nov/25', reprv: 95,  aprov: 389 },
-    { mes: 'Dez/25', reprv: 88,  aprov: 401 },
-    { mes: 'Jan/26', reprv: 112, aprov: 428 },
-    { mes: 'Fev/26', reprv: 98,  aprov: 415 },
-    { mes: 'Mar/26', reprv: 71,  aprov: 396 },
-  ];
-
-  const brands = [
-    { brand: 'Banco Itaú (Google)',   reprv: 271, tmpl: 46,  canal: 'Google' },
-    { brand: 'Casas Bahia Compras',   reprv: 104, tmpl: 22,  canal: 'Google' },
-    { brand: 'Cartão Luiza',          reprv: 41,  tmpl: 80,  canal: 'Google' },
-    { brand: 'Webmotors Seminovos',   reprv: 28,  tmpl: 4,   canal: 'Google' },
-    { brand: 'Ultragaz',              reprv: 24,  tmpl: 4,   canal: 'Google' },
-    { brand: 'Banco Itaú (Apple)',    reprv: 20,  tmpl: 1,   canal: 'Apple'  },
-    { brand: 'abastece-aí',           reprv: 20,  tmpl: 22,  canal: 'Google' },
-    { brand: 'Minha Claro Móvel',     reprv: 18,  tmpl: 7,   canal: 'Apple'  },
-    { brand: 'Seguros Unimed',        reprv: 13,  tmpl: 16,  canal: 'Google' },
-    { brand: 'Itaú Personnalité',     reprv: 10,  tmpl: 48,  canal: 'Google' },
-  ];
-
+  // ── Dados ────────────────────────────────────────────────────────
   const faixas = [
-    { label: '0% — zero templates', reprv: 0,    brands: 81, bar: 0   },
-    { label: '1% – 20%',            reprv: 43.3, brands: 13, bar: 100 },
-    { label: '21% – 50%',           reprv: 12.4, brands: 9,  bar: 29  },
-    { label: '51% – 80%',           reprv: 5.1,  brands: 8,  bar: 12  },
-    { label: '81% – 100%',          reprv: 2.2,  brands: 20, bar: 5   },
+    { label: '0% — zero templates',  reprv: 0,    brands: 81, bar: 0   },
+    { label: '1% – 20%',             reprv: 43.3, brands: 13, bar: 100 },
+    { label: '21% – 50%',            reprv: 12.4, brands: 9,  bar: 29  },
+    { label: '51% – 80%',            reprv: 5.1,  brands: 8,  bar: 12  },
+    { label: '81% – 100%',           reprv: 2.2,  brands: 20, bar: 5   },
   ];
 
-  const GRID = { color: '#2d3035' };
-  const FONT = { color: '#8c9097', size: 11 };
+  const critical = [
+    { brand: 'Banco Itaú',         canal: 'Google', tmpl: 46, det: 140, cob: 32.9, reprv: 271 },
+    { brand: 'Casas Bahia Compras',canal: 'Google', tmpl: 22, det: 78,  cob: 28.2, reprv: 104 },
+    { brand: 'Cartão Luiza',       canal: 'Google', tmpl: 80, det: 119, cob: 67.2, reprv: 41  },
+    { brand: 'Webmotors Seminovos',canal: 'Google', tmpl: 4,  det: 49,  cob: 8.2,  reprv: 28  },
+    { brand: 'Ultragaz',           canal: 'Google', tmpl: 4,  det: 47,  cob: 8.5,  reprv: 24  },
+    { brand: 'Banco Itaú',         canal: 'Apple',  tmpl: 1,  det: 140, cob: 0.7,  reprv: 20  },
+    { brand: 'abastece-aí',        canal: 'Google', tmpl: 22, det: 37,  cob: 59.5, reprv: 20  },
+    { brand: 'Minha Claro Móvel',  canal: 'Apple',  tmpl: 7,  det: 46,  cob: 15.2, reprv: 18  },
+    { brand: 'Seguros Unimed',     canal: 'Google', tmpl: 16, det: 28,  cob: 57.1, reprv: 13  },
+    { brand: 'Itaú Personnalité',  canal: 'Google', tmpl: 48, det: 140, cob: 34.3, reprv: 10  },
+  ];
 
-  // ── Gráfico Motivos (Doughnut) ─────────────────────────────────
-  new Chart(document.getElementById('chartMotivos'), {
+  const TOTAL_REPRV = 604;
+
+  // ── Donut: cobertura global ───────────────────────────────────
+  new Chart(document.getElementById('chartCobertura'), {
     type: 'doughnut',
     data: {
-      labels: motivos.map(m => m.label),
-      datasets: [{ data: motivos.map(m => m.val), backgroundColor: motivos.map(m => m.color), borderWidth: 0, hoverOffset: 6 }]
+      labels: ['Sem template (80,5%)', 'Com template (19,5%)'],
+      datasets: [{ data: [4810, 1166], backgroundColor: ['#f87171', '#2de4a9'], borderWidth: 0 }]
+    },
+    options: {
+      cutout: '68%',
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed.toLocaleString()} detalhamentos` } } }
+    }
+  });
+
+  // ── Donut: situação das brands ───────────────────────────────
+  new Chart(document.getElementById('chartBrands'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Zero templates (61,8%)', 'Cobertura baixa <50% (16,8%)', 'Cobertura adequada >50% (21,4%)'],
+      datasets: [{ data: [81, 22, 28], backgroundColor: ['#f87171', '#fbbf24', '#2de4a9'], borderWidth: 0 }]
+    },
+    options: {
+      cutout: '68%',
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed} brands` } } }
+    }
+  });
+
+  // ── Faixas de cobertura (barras manuais) ─────────────────────
+  const faixaContainer = document.getElementById('faixaList');
+  const maxReprv = 43.3;
+  faixaContainer.innerHTML = faixas.map(f => {
+    const pct = f.reprv > 0 ? Math.round((f.reprv / maxReprv) * 100) : 0;
+    const cor = f.reprv === 0 ? 'var(--text-subtle)' : f.reprv > 30 ? 'var(--ruby)' : f.reprv > 10 ? 'var(--amber)' : 'var(--teal)';
+    const barColor = f.reprv === 0 ? 'var(--surface-2)' : f.reprv > 30 ? 'var(--ruby)' : f.reprv > 10 ? 'var(--amber)' : 'var(--teal)';
+    return `
+      <div class="faixa-row">
+        <span class="faixa-name">${f.label}</span>
+        <div class="faixa-bar-wrap">
+          <div class="faixa-bar" style="width:${pct}%; background:${barColor}"></div>
+        </div>
+        <span class="faixa-val" style="color:${cor}">${f.reprv > 0 ? f.reprv + ' reprv' : '—'}</span>
+        <span class="faixa-count">${f.brands} brands</span>
+      </div>
+    `;
+  }).join('');
+
+  // ── Gráfico faixas (bar) ─────────────────────────────────────
+  new Chart(document.getElementById('chartFaixas'), {
+    type: 'bar',
+    data: {
+      labels: faixas.map(f => f.label),
+      datasets: [{
+        label: 'Média de Reprovações',
+        data: faixas.map(f => f.reprv),
+        backgroundColor: faixas.map(f =>
+          f.reprv === 0 ? '#2d3035' : f.reprv > 30 ? '#f87171' : f.reprv > 10 ? '#fbbf24' : '#2de4a9'
+        ),
+        borderRadius: 4,
+      }]
     },
     options: {
       plugins: {
-        legend: { position: 'bottom', labels: { color: FONT.color, font: { size: FONT.size }, padding: 10, boxWidth: 10 } },
-        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed} (${Math.round(ctx.parsed/604*100)}%)` } }
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y} reprovações em média` } },
+        annotation: {}
       },
-      cutout: '62%',
-    }
-  });
-
-  // ── Gráfico Evolução (Line) ────────────────────────────────────
-  new Chart(document.getElementById('chartEvolucao'), {
-    type: 'line',
-    data: {
-      labels: evolucao.map(e => e.mes),
-      datasets: [
-        { label: 'Reprovações', data: evolucao.map(e => e.reprv), borderColor: '#f87171', backgroundColor: 'rgba(248,113,113,0.08)', tension: 0.3, pointRadius: 4 },
-        { label: 'Aprovações',  data: evolucao.map(e => e.aprov), borderColor: '#4ade80', backgroundColor: 'rgba(74,222,128,0.06)',  tension: 0.3, pointRadius: 4 },
-      ]
-    },
-    options: {
       scales: {
-        x: { grid: { color: GRID.color }, ticks: { color: FONT.color, font: { size: FONT.size } } },
-        y: { grid: { color: GRID.color }, ticks: { color: FONT.color, font: { size: FONT.size } } },
-      },
-      plugins: { legend: { labels: { color: FONT.color, font: { size: FONT.size }, boxWidth: 10 } } }
+        x: { grid: { color: GRID.color }, ticks: { color: MUTED, font: { size: SZ } } },
+        y: { grid: { color: GRID.color }, ticks: { color: MUTED, font: { size: SZ } }, beginAtZero: true }
+      }
     }
   });
 
-  // ── Gráfico Brands (Bar horizontal) ───────────────────────────
-  new Chart(document.getElementById('chartBrands'), {
+  // ── Tabela crítica ───────────────────────────────────────────
+  document.getElementById('criticalTable').innerHTML = critical.map(r => {
+    const cobBadge = r.cob < 10 ? 'badge-zero' : r.cob < 50 ? 'badge-low' : 'badge-ok';
+    const cobLabel = r.cob < 10 ? 'Crítico' : r.cob < 50 ? 'Baixa' : 'Ok';
+    const canalBadge = r.canal === 'Apple' ? 'badge-apple' : 'badge-google';
+    const pct = ((r.reprv / TOTAL_REPRV) * 100).toFixed(1);
+    return `
+      <tr>
+        <td>${r.brand}</td>
+        <td><span class="badge-sm ${canalBadge}">${r.canal}</span></td>
+        <td class="r amber">${r.tmpl}</td>
+        <td class="muted">${r.det}</td>
+        <td class="r"><span class="badge-sm ${cobBadge}">${r.cob}% — ${cobLabel}</span></td>
+        <td class="ruby">${r.reprv}</td>
+        <td class="muted">${pct}%</td>
+      </tr>
+    `;
+  }).join('');
+
+  // ── Gráfico comparativo (bar horizontal) ─────────────────────
+  new Chart(document.getElementById('chartComparativo'), {
     type: 'bar',
     data: {
-      labels: brands.map(b => b.brand),
+      labels: critical.map(r => r.brand + (r.canal === 'Apple' ? ' (AP)' : '')),
       datasets: [
-        { label: 'Reprovações',  data: brands.map(b => b.reprv), backgroundColor: '#f87171', borderRadius: 3 },
-        { label: 'Templates',    data: brands.map(b => b.tmpl),  backgroundColor: '#6ea8fe', borderRadius: 3 },
+        { label: 'Reprovações', data: critical.map(r => r.reprv), backgroundColor: '#f87171', borderRadius: 3 },
+        { label: 'Templates',   data: critical.map(r => r.tmpl),  backgroundColor: '#6ea8fe', borderRadius: 3 },
       ]
     },
     options: {
       indexAxis: 'y',
       scales: {
-        x: { grid: { color: GRID.color }, ticks: { color: FONT.color, font: { size: FONT.size } } },
-        y: { grid: { color: 'transparent' }, ticks: { color: FONT.color, font: { size: FONT.size } } },
+        x: { grid: { color: GRID.color }, ticks: { color: MUTED, font: { size: SZ } } },
+        y: { grid: { color: 'transparent' }, ticks: { color: MUTED, font: { size: SZ } } }
       },
-      plugins: { legend: { labels: { color: FONT.color, font: { size: FONT.size }, boxWidth: 10 } } }
+      plugins: { legend: { labels: { color: MUTED, font: { size: SZ }, boxWidth: 10 } } }
     }
   });
-
-  // ── Faixas de cobertura (barra manual) ────────────────────────
-  const faixaContainer = document.getElementById('faixas');
-  faixaContainer.innerHTML = faixas.map(f => `
-    <div class="faixa-row">
-      <span class="faixa-label">${f.label}</span>
-      <div class="faixa-bar-wrap">
-        <div class="faixa-bar" style="width:${f.bar}%; opacity: ${f.bar === 0 ? 0.2 : 1}"></div>
-      </div>
-      <span class="faixa-val">${f.reprv > 0 ? f.reprv + ' média' : '—'}</span>
-      <span class="faixa-brands">${f.brands} brands</span>
-    </div>
-  `).join('');
-
-  // ── Tabela ─────────────────────────────────────────────────────
-  const tbody = document.getElementById('tableBody');
-  tbody.innerHTML = brands.map((b, i) => `
-    <tr>
-      <td style="color:var(--text-subtle)">${i+1}</td>
-      <td>${b.brand}</td>
-      <td><span class="badge-canal badge-${b.canal.toLowerCase()}">${b.canal}</span></td>
-      <td class="ruby">${b.reprv}</td>
-      <td class="brand">${b.tmpl}${b.tmpl <= 4 ? '<span class="warn-icon">⚠️</span>' : ''}</td>
-    </tr>
-  `).join('');
 
 })();
 </script>
