@@ -51,22 +51,7 @@
 </head>
 <body>
 
-  <div class="gate" id="gate-loading">
-    <div class="gate-icon"></div>
-    <p class="gate-title">Conectando ao Chat...</p>
-    <p class="gate-sub">Aguardando autenticação Chatwoot</p>
-  </div>
-
-  <div class="gate hidden" id="gate-direct">
-    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#5a5f66" stroke-width="1.5">
-      <rect x="3" y="11" width="18" height="11" rx="2" />
-      <path d="M7 11V7a5 5 0 0110 0v4" />
-    </svg>
-    <p class="gate-title">Acesso exclusivo via Chat</p>
-    <p class="gate-sub">Esta página está disponível somente no painel Chatwoot do RankMyApp.</p>
-  </div>
-
-  <div class="app" id="app">
+  <div class="app visible" id="app">
 
     <div class="header">
       <div class="header-logo">
@@ -107,7 +92,6 @@
 
   </div>
 
-  <script src="../_shared/auth.js"></script>
   <script>
     const CATEGORY_LABELS = {
       'iasmin': 'IAsmin IA',
@@ -233,16 +217,6 @@
       }).join('');
     }
 
-    function showApp() {
-      document.getElementById('gate-loading').classList.add('hidden');
-      document.getElementById('gate-direct').classList.add('hidden');
-      document.getElementById('app').classList.add('visible');
-    }
-    function showDirectGate() {
-      document.getElementById('gate-loading').classList.add('hidden');
-      document.getElementById('gate-direct').classList.remove('hidden');
-    }
-
     fetch('./registry.json')
       .then(r => r.json())
       .then(data => renderCards(data.reports))
@@ -250,11 +224,6 @@
         document.getElementById('report-grid').innerHTML =
           '<p class="empty">Erro ao carregar lista de relatórios.</p>';
       });
-
-    initChatwootAuth(
-      function onAuth(auth) { _currentAuth = auth; showApp(); },
-      function onTimeout() { showDirectGate(); }
-    );
   </script>
 </body>
 </html>
