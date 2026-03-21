@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Relatórios — RankMyApp</title>
+  <link rel="stylesheet" href="../_shared/style.css" />
+  <style>
+    .empty {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--text-subtle);
+      font-size: 13px;
+    }
+
+    .report-viewer { display: none; flex-direction: column; flex: 1; min-height: 0; }
+    .report-viewer.active { display: flex; }
+
+    .list-view { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+    .list-view.hidden { display: none; }
+
+    #header-report-crumb { display: none; align-items: center; gap: 6px; }
+    #header-report-crumb.visible { display: flex; }
+    #header-list-crumb.hidden { display: none; }
+
+    .header-back-btn {
+      display: flex; align-items: center; gap: 5px;
+      padding: 4px 10px; border: 1px solid var(--border); border-radius: 6px;
+      background: transparent; color: var(--text-muted); font-size: 12px;
+      cursor: pointer; transition: all 0.15s; margin-right: 4px;
+    }
+    .header-back-btn:hover { border-color: var(--brand); color: var(--brand); }
+
+    .report-loading {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 10px;
+    }
+    .report-loading-icon {
+      width: 28px; height: 28px; border: 2px solid var(--border);
+      border-top-color: var(--brand); border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    .report-loading-text { font-size: 12px; color: var(--text-subtle); }
+
+    .report-error {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 8px;
+      color: var(--text-subtle); font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="gate" id="gate-loading">
+    <div class="gate-icon"></div>
+    <p class="gate-title">Conectando ao Chat...</p>
+    <p class="gate-sub">Aguardando autenticação Chatwoot</p>
+  </div>
+
+  <div class="gate hidden" id="gate-direct">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#5a5f66" stroke-width="1.5">
+      <rect x="3" y="11" width="18" height="11" rx="2" />
+      <path d="M7 11V7a5 5 0 0110 0v4" />
+    </svg>
+    <p class="gate-title">Acesso exclusivo via Chat</p>
+    <p class="gate-sub">Esta página está disponível somente no painel Chatwoot do RankMyApp.</p>
+  </div>
+
+  <div class="app" id="app">
+
+    <div class="header">
+      <div class="header-logo">
+        <div class="header-logo-dot"></div>
+        <span class="header-title">Digital AI</span>
+      </div>
+      <span class="header-sep">/</span>
+      <span class="header-client">RankMyApp</span>
+
+      <span id="header-list-crumb" style="display:flex;align-items:center;gap:6px;">
+        <span class="header-sep">/</span>
+        <span class="header-client" style="color: var(--text-subtle);">Relatórios</span>
+      </span>
+
+      <div id="header-report-crumb">
+        <span class="header-sep">/</span>
+        <button class="header-back-btn" onclick="goBack()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+          Relatórios
+        </button>
+        <span class="header-sep">/</span>
+        <span class="header-client" id="header-report-title" style="color: var(--text);">—</span>
+      </div>
+    </div>
+
+    <div class="list-view" id="list-view">
+      <div class="content">
+        <div class="section-header">
+          <p class="section-title">Relatórios disponíveis</p>
+        </div>
+        <div class="report-grid" id="report-grid"></div>
+      </div>
+    </div>
+
+    <div class="report-viewer" id="report-viewer"></div>
+
+  </div>
+
+  <script src="../_shared/auth.js"></script>
+  <script>
+    const CATEGORY_LABELS = {
+      'iasmin': 'IAsmin IA',
+      'trafego-pago': 'Tráfego Pago',
+      'atendimento': 'Atendimento',
+    };
+
+    const CATEGORY_ICONS = {
+      'iasmin':       { icon: '🤖', cls: 'icon-atendimento', badge: 'badge-atendimento' },
+      'trafego-pago': { icon: '📊', cls: 'icon-trafego',     badge: 'badge-trafego' },
+      'atendimento':  { icon: '📋', cls: 'icon-atendimento', badge: 'badge-atendimento' },
+    };
+
+    var _currentAuth = null;
+
+    function goBack() {
+      document.getElementById('report-viewer').classList.remove('active');
+      document.getElementById('list-view').classList.remove('hidden');
+      document.getElementById('header-list-crumb').classList.remove('hidden');
+      document.getElementById('header-report-crumb').classList.remove('visible');
+      document.getElementById('report-viewer').innerHTML = '';
+      window.scrollTo(0, 0);
+    }
+
+    async function openReport(file, title) {
+      const viewer = document.getElementById('report-viewer');
+      viewer.innerHTML = `
+        <div class="report-loading">
+          <div class="report-loading-icon"></div>
+          <p class="report-loading-text">Carregando relatório...</p>
+        </div>
+      `;
+      document.getElementById('list-view').classList.add('hidden');
+      viewer.classList.add('active');
+      document.getElementById('header-list-crumb').classList.add('hidden');
+      document.getElementById('header-report-title').textContent = title;
+      document.getElementById('header-report-crumb').classList.add('visible');
+      window.scrollTo(0, 0);
+
+      window.__reportBundle = null;
+      var prevStyle = document.getElementById('__injected-report-style');
+      if (prevStyle) prevStyle.remove();
+
+      try {
+        const res = await fetch(file);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const html = await res.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const body = doc.querySelector('.report-body');
+        if (!body) throw new Error('Conteúdo do relatório não encontrado.');
+
+        const styles = doc.querySelectorAll('style');
+        if (styles.length) {
+          const styleEl = document.createElement('style');
+          styleEl.id = '__injected-report-style';
+          styleEl.textContent = Array.from(styles).map(s => s.textContent).join('\n');
+          document.head.appendChild(styleEl);
+        }
+
+        viewer.innerHTML = `
+          <div class="report-content animate-in">
+            <div class="report-body">${body.innerHTML}</div>
+          </div>
+        `;
+
+        doc.querySelectorAll('script:not([src])').forEach(function(s) {
+          if (s.id === 'report-standalone-auth') return;
+          const el = document.createElement('script');
+          el.textContent = s.textContent;
+          document.head.appendChild(el);
+          document.head.removeChild(el);
+        });
+
+        setTimeout(function() {
+          if (window.__reportBundle) {
+            if (_currentAuth) window.__reportBundle.buildConvLinks(_currentAuth);
+            window.__reportBundle.animateAll();
+          }
+        }, 80);
+
+      } catch (err) {
+        viewer.innerHTML = `
+          <div class="report-error">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:#5a5f66">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/>
+            </svg>
+            <p>Erro ao carregar o relatório.</p>
+            <p style="font-size:11px">${err.message}</p>
+          </div>
+        `;
+      }
+    }
+
+    function renderCards(reports) {
+      const grid = document.getElementById('report-grid');
+      if (!reports || reports.length === 0) {
+        grid.innerHTML = '<p class="empty">Nenhum relatório disponível ainda.</p>';
+        return;
+      }
+      grid.innerHTML = reports.map(r => {
+        const cat = CATEGORY_ICONS[r.category] || { icon: '📄', cls: '', badge: '' };
+        const label = CATEGORY_LABELS[r.category] || r.category;
+        return `
+          <div class="report-card animate-in"
+               onclick="openReport('${r.file}', '${r.title} — ${r.period}')"
+               role="button" tabindex="0"
+               onkeydown="if(event.key==='Enter') openReport('${r.file}', '${r.title} — ${r.period}')">
+            <div class="report-card-header">
+              <div class="report-card-icon ${cat.cls}">${cat.icon}</div>
+              <div>
+                <div class="report-card-title">${r.title}</div>
+                <div class="report-card-period">${r.period}</div>
+              </div>
+            </div>
+            <p class="report-card-desc">${r.description}</p>
+            <div class="report-card-footer">
+              <span class="report-badge ${cat.badge}">${label}</span>
+              <span class="report-card-arrow">→</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function showApp() {
+      document.getElementById('gate-loading').classList.add('hidden');
+      document.getElementById('gate-direct').classList.add('hidden');
+      document.getElementById('app').classList.add('visible');
+    }
+    function showDirectGate() {
+      document.getElementById('gate-loading').classList.add('hidden');
+      document.getElementById('gate-direct').classList.remove('hidden');
+    }
+
+    fetch('./registry.json')
+      .then(r => r.json())
+      .then(data => renderCards(data.reports))
+      .catch(() => {
+        document.getElementById('report-grid').innerHTML =
+          '<p class="empty">Erro ao carregar lista de relatórios.</p>';
+      });
+
+    initChatwootAuth(
+      function onAuth(auth) { _currentAuth = auth; showApp(); },
+      function onTimeout() { showDirectGate(); }
+    );
+  </script>
+</body>
+</html>

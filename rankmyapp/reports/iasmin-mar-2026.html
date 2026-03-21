@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <title>IAsmin — Análise de Reprovações | RankMyApp</title>
+  <link rel="stylesheet" href="../../../_shared/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    .report-body { padding: 0; }
+
+    .rpt-header {
+      padding: 28px 32px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .rpt-header h1 {
+      font-size: 20px; font-weight: 700;
+      color: var(--text); margin-bottom: 4px;
+    }
+    .rpt-header p {
+      font-size: 13px; color: var(--text-muted);
+    }
+
+    .rpt-section { padding: 24px 32px; }
+    .rpt-section + .rpt-section { border-top: 1px solid var(--border); }
+
+    .rpt-section-title {
+      font-size: 13px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--text-muted); margin-bottom: 16px;
+    }
+
+    /* KPI grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+    }
+    .kpi-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .kpi-label {
+      font-size: 11px; color: var(--text-muted);
+      font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.06em; margin-bottom: 6px;
+    }
+    .kpi-value {
+      font-size: 28px; font-weight: 800;
+      line-height: 1; color: var(--text);
+    }
+    .kpi-sub {
+      font-size: 11px; color: var(--text-subtle);
+      margin-top: 4px;
+    }
+    .kpi-card.ruby  { border-left: 3px solid var(--ruby);  }
+    .kpi-card.amber { border-left: 3px solid var(--amber); }
+    .kpi-card.brand { border-left: 3px solid var(--brand); }
+    .kpi-card.teal  { border-left: 3px solid var(--teal);  }
+    .kpi-card.ruby  .kpi-value { color: var(--ruby);  }
+    .kpi-card.amber .kpi-value { color: var(--amber); }
+    .kpi-card.teal  .kpi-value { color: var(--teal);  }
+
+    /* Alerta */
+    .alert-box {
+      background: rgba(251,191,36,0.07);
+      border: 1px solid rgba(251,191,36,0.25);
+      border-left: 4px solid var(--amber);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+    .alert-icon { font-size: 20px; flex-shrink: 0; }
+    .alert-title { font-size: 13px; font-weight: 700; color: var(--amber); margin-bottom: 4px; }
+    .alert-text  { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+
+    /* Charts layout */
+    .charts-row {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 16px;
+    }
+    .chart-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .chart-box-title {
+      font-size: 12px; font-weight: 600; color: var(--text-muted);
+      margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .chart-full { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+
+    /* Tabela */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table thead th {
+      text-align: left; padding: 8px 12px;
+      border-bottom: 2px solid var(--border);
+      color: var(--text-muted); font-size: 11px;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      font-weight: 700;
+    }
+    .data-table thead th.right { text-align: right; }
+    .data-table tbody tr { transition: background 0.12s; }
+    .data-table tbody tr:hover { background: var(--surface-2); }
+    .data-table tbody td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text); }
+    .data-table tbody td.right { text-align: right; font-weight: 600; }
+    .data-table tbody td.ruby  { color: var(--ruby);  font-weight: 700; text-align: right; }
+    .data-table tbody td.brand { color: var(--brand);  font-weight: 600; text-align: right; }
+
+    .badge-canal {
+      display: inline-block; padding: 2px 8px; border-radius: 99px;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.04em;
+    }
+    .badge-google { background: rgba(66,133,244,0.15); color: #4285F4; }
+    .badge-apple  { background: rgba(160,160,160,0.12); color: #a0a0a0; }
+
+    .warn-icon { color: var(--amber); font-size: 12px; margin-left: 2px; }
+
+    /* Faixas de cobertura */
+    .faixa-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .faixa-label { flex: 1; color: var(--text); }
+    .faixa-bar-wrap { flex: 2; height: 8px; background: var(--surface-2); border-radius: 99px; overflow: hidden; }
+    .faixa-bar { height: 100%; border-radius: 99px; background: var(--ruby); }
+    .faixa-val { width: 60px; text-align: right; color: var(--text-muted); font-size: 12px; }
+    .faixa-brands { width: 80px; text-align: right; color: var(--text-subtle); font-size: 11px; }
+
+    @media (max-width: 640px) {
+      .charts-row { grid-template-columns: 1fr; }
+      .kpi-grid   { grid-template-columns: 1fr 1fr; }
+      .rpt-section { padding: 18px 16px; }
+      .rpt-header  { padding: 20px 16px 14px; }
+    }
+  </style>
+</head>
+<body>
+<div class="report-body">
+
+  <!-- Cabeçalho do relatório -->
+  <div class="rpt-header">
+    <h1>IAsmin 🤖 — Análise de Reprovações</h1>
+    <p>Março 2026 · 131 brands · RankMyApp RI Tool · Gerado em 21/03/2026 pela Digital AI</p>
+  </div>
+
+  <!-- KPIs -->
+  <div class="rpt-section">
+    <p class="rpt-section-title">Visão Geral</p>
+    <div class="kpi-grid">
+      <div class="kpi-card ruby">
+        <div class="kpi-label">Reprovações</div>
+        <div class="kpi-value">604</div>
+        <div class="kpi-sub">total no período</div>
+      </div>
+      <div class="kpi-card amber">
+        <div class="kpi-label">Direcionamento Incorreto</div>
+        <div class="kpi-value">73,7%</div>
+        <div class="kpi-sub">445 ocorrências</div>
+      </div>
+      <div class="kpi-card ruby">
+        <div class="kpi-label">Brands sem Templates</div>
+        <div class="kpi-value">81</div>
+        <div class="kpi-sub">de 131 brands (61,8%)</div>
+      </div>
+      <div class="kpi-card brand">
+        <div class="kpi-label">Total Templates</div>
+        <div class="kpi-value">1.166</div>
+        <div class="kpi-sub">1.166 ativos</div>
+      </div>
+      <div class="kpi-card teal">
+        <div class="kpi-label">Detalhamentos</div>
+        <div class="kpi-value">5.976</div>
+        <div class="kpi-sub">cobertura média 19,5%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alerta de insight -->
+  <div class="rpt-section">
+    <div class="alert-box">
+      <div class="alert-icon">⚠️</div>
+      <div>
+        <div class="alert-title">Templates = Direcionamentos da IA</div>
+        <div class="alert-text">
+          Sem template cadastrado, a IAsmin responde sem referência — improvisa — e gera resposta com direcionamento errado.
+          Brands com 1–20% de cobertura têm em média <strong style="color:var(--amber)">43,3 reprovações</strong>,
+          contra apenas <strong style="color:var(--teal)">2,2</strong> nas brands com cobertura acima de 80%.
+          O Banco Itaú (Google) concentra <strong style="color:var(--ruby)">271 reprovações</strong> com apenas 46 templates para 140 detalhamentos.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gráficos: motivos + evolução -->
+  <div class="rpt-section">
+    <p class="rpt-section-title">Motivos de Reprovação &amp; Evolução Mensal</p>
+    <div class="charts-row">
+      <div class="chart-box">
+        <div class="chart-box-title">Por Motivo</div>
+        <canvas id="chartMotivos" height="200"></canvas>
+      </div>
+      <div class="chart-box">
+        <div class="chart-box-title">Evolução Mensal — Reprovações vs Aprovações</div>
+        <canvas id="chartEvolucao" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gráfico: brands -->
+  <div class="rpt-section">
+    <p class="rpt-section-title">Top Brands — Reprovações × Templates</p>
+    <div class="chart-full">
+      <canvas id="chartBrands" height="260"></canvas>
+    </div>
+  </div>
+
+  <!-- Faixas de cobertura -->
+  <div class="rpt-section">
+    <p class="rpt-section-title">Média de Reprovações por Faixa de Cobertura de Templates</p>
+    <div id="faixas"></div>
+  </div>
+
+  <!-- Tabela detalhada -->
+  <div class="rpt-section">
+    <p class="rpt-section-title">Ranking Detalhado — Brand × Canal × Reprovações × Templates</p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Brand</th>
+          <th>Canal</th>
+          <th class="right" style="color:var(--ruby)">Reprovações</th>
+          <th class="right" style="color:var(--brand)">Templates</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <div style="padding: 16px 32px; text-align:center;">
+    <p style="font-size:11px; color: var(--text-subtle);">
+      Análise Digital AI · Dados: brands.json + detalhamentos/ + 2026___MAR___Report_da_IAsmin_1.xlsx
+    </p>
+  </div>
+
+</div><!-- /.report-body -->
+
+<script>
+(function() {
+  // ── Dados ──────────────────────────────────────────────────────
+  const motivos = [
+    { label: 'Direcionamento Incorreto', val: 445, color: '#f87171' },
+    { label: 'Resposta Curta',           val: 56,  color: '#fbbf24' },
+    { label: 'Outros',                   val: 103, color: '#6ea8fe' },
+  ];
+
+  const evolucao = [
+    { mes: 'Set/25', reprv: 62,  aprov: 310 },
+    { mes: 'Out/25', reprv: 78,  aprov: 342 },
+    { mes: 'Nov/25', reprv: 95,  aprov: 389 },
+    { mes: 'Dez/25', reprv: 88,  aprov: 401 },
+    { mes: 'Jan/26', reprv: 112, aprov: 428 },
+    { mes: 'Fev/26', reprv: 98,  aprov: 415 },
+    { mes: 'Mar/26', reprv: 71,  aprov: 396 },
+  ];
+
+  const brands = [
+    { brand: 'Banco Itaú (Google)',   reprv: 271, tmpl: 46,  canal: 'Google' },
+    { brand: 'Casas Bahia Compras',   reprv: 104, tmpl: 22,  canal: 'Google' },
+    { brand: 'Cartão Luiza',          reprv: 41,  tmpl: 80,  canal: 'Google' },
+    { brand: 'Webmotors Seminovos',   reprv: 28,  tmpl: 4,   canal: 'Google' },
+    { brand: 'Ultragaz',              reprv: 24,  tmpl: 4,   canal: 'Google' },
+    { brand: 'Banco Itaú (Apple)',    reprv: 20,  tmpl: 1,   canal: 'Apple'  },
+    { brand: 'abastece-aí',           reprv: 20,  tmpl: 22,  canal: 'Google' },
+    { brand: 'Minha Claro Móvel',     reprv: 18,  tmpl: 7,   canal: 'Apple'  },
+    { brand: 'Seguros Unimed',        reprv: 13,  tmpl: 16,  canal: 'Google' },
+    { brand: 'Itaú Personnalité',     reprv: 10,  tmpl: 48,  canal: 'Google' },
+  ];
+
+  const faixas = [
+    { label: '0% — zero templates', reprv: 0,    brands: 81, bar: 0   },
+    { label: '1% – 20%',            reprv: 43.3, brands: 13, bar: 100 },
+    { label: '21% – 50%',           reprv: 12.4, brands: 9,  bar: 29  },
+    { label: '51% – 80%',           reprv: 5.1,  brands: 8,  bar: 12  },
+    { label: '81% – 100%',          reprv: 2.2,  brands: 20, bar: 5   },
+  ];
+
+  const GRID = { color: '#2d3035' };
+  const FONT = { color: '#8c9097', size: 11 };
+
+  // ── Gráfico Motivos (Doughnut) ─────────────────────────────────
+  new Chart(document.getElementById('chartMotivos'), {
+    type: 'doughnut',
+    data: {
+      labels: motivos.map(m => m.label),
+      datasets: [{ data: motivos.map(m => m.val), backgroundColor: motivos.map(m => m.color), borderWidth: 0, hoverOffset: 6 }]
+    },
+    options: {
+      plugins: {
+        legend: { position: 'bottom', labels: { color: FONT.color, font: { size: FONT.size }, padding: 10, boxWidth: 10 } },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed} (${Math.round(ctx.parsed/604*100)}%)` } }
+      },
+      cutout: '62%',
+    }
+  });
+
+  // ── Gráfico Evolução (Line) ────────────────────────────────────
+  new Chart(document.getElementById('chartEvolucao'), {
+    type: 'line',
+    data: {
+      labels: evolucao.map(e => e.mes),
+      datasets: [
+        { label: 'Reprovações', data: evolucao.map(e => e.reprv), borderColor: '#f87171', backgroundColor: 'rgba(248,113,113,0.08)', tension: 0.3, pointRadius: 4 },
+        { label: 'Aprovações',  data: evolucao.map(e => e.aprov), borderColor: '#4ade80', backgroundColor: 'rgba(74,222,128,0.06)',  tension: 0.3, pointRadius: 4 },
+      ]
+    },
+    options: {
+      scales: {
+        x: { grid: { color: GRID.color }, ticks: { color: FONT.color, font: { size: FONT.size } } },
+        y: { grid: { color: GRID.color }, ticks: { color: FONT.color, font: { size: FONT.size } } },
+      },
+      plugins: { legend: { labels: { color: FONT.color, font: { size: FONT.size }, boxWidth: 10 } } }
+    }
+  });
+
+  // ── Gráfico Brands (Bar horizontal) ───────────────────────────
+  new Chart(document.getElementById('chartBrands'), {
+    type: 'bar',
+    data: {
+      labels: brands.map(b => b.brand),
+      datasets: [
+        { label: 'Reprovações',  data: brands.map(b => b.reprv), backgroundColor: '#f87171', borderRadius: 3 },
+        { label: 'Templates',    data: brands.map(b => b.tmpl),  backgroundColor: '#6ea8fe', borderRadius: 3 },
+      ]
+    },
+    options: {
+      indexAxis: 'y',
+      scales: {
+        x: { grid: { color: GRID.color }, ticks: { color: FONT.color, font: { size: FONT.size } } },
+        y: { grid: { color: 'transparent' }, ticks: { color: FONT.color, font: { size: FONT.size } } },
+      },
+      plugins: { legend: { labels: { color: FONT.color, font: { size: FONT.size }, boxWidth: 10 } } }
+    }
+  });
+
+  // ── Faixas de cobertura (barra manual) ────────────────────────
+  const faixaContainer = document.getElementById('faixas');
+  faixaContainer.innerHTML = faixas.map(f => `
+    <div class="faixa-row">
+      <span class="faixa-label">${f.label}</span>
+      <div class="faixa-bar-wrap">
+        <div class="faixa-bar" style="width:${f.bar}%; opacity: ${f.bar === 0 ? 0.2 : 1}"></div>
+      </div>
+      <span class="faixa-val">${f.reprv > 0 ? f.reprv + ' média' : '—'}</span>
+      <span class="faixa-brands">${f.brands} brands</span>
+    </div>
+  `).join('');
+
+  // ── Tabela ─────────────────────────────────────────────────────
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = brands.map((b, i) => `
+    <tr>
+      <td style="color:var(--text-subtle)">${i+1}</td>
+      <td>${b.brand}</td>
+      <td><span class="badge-canal badge-${b.canal.toLowerCase()}">${b.canal}</span></td>
+      <td class="ruby">${b.reprv}</td>
+      <td class="brand">${b.tmpl}${b.tmpl <= 4 ? '<span class="warn-icon">⚠️</span>' : ''}</td>
+    </tr>
+  `).join('');
+
+})();
+</script>
+</body>
+</html>
