@@ -883,7 +883,7 @@
       .header-title h2 { font-size: 22px; }
       .header-badges { align-items: flex-start; }
       .header-inner { flex-direction: column; }
-      thead th:nth-child(n+4), tbody td:nth-child(n+4) { display: none; }
+      thead th:nth-child(n+5), tbody td:nth-child(n+5) { display: none; }
     }
 
     /* ========== PRINT ========== */
@@ -891,6 +891,46 @@
       .header { background: var(--primary) !important; -webkit-print-color-adjust: exact; }
       .kpi-card, .chart-card, .table-card, .action-item { break-inside: avoid; }
       body { background: white; }
+    }
+
+    /* ========== COMPARATIVO FEV vs MAR ========== */
+    .kpi-compare {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    .compare-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-muted);
+      background: var(--bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .compare-value {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .compare-value.up { color: var(--success); }
+    .compare-value.down { color: var(--danger); }
+    .compare-value.neutral { color: var(--text-muted); }
+
+    /* badge de comparativo inline na tabela */
+    .compare-inline {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--success);
+      margin-left: 4px;
     }
   </style>
 </head>
@@ -908,7 +948,7 @@
         </div>
       </div>
       <div class="header-badges">
-        <span class="badge badge-period">📅 01 a 22/03/2026</span>
+        <span class="badge badge-period">📅 01 a 22/03/2026 (+comparativo fev/26)</span>
         <span class="badge badge-dai">⚡ Gerado por Digital AI</span>
         <span class="badge badge-date">23 de março de 2026</span>
       </div>
@@ -944,6 +984,10 @@
           </div>
           <div class="kpi-value">R$688<span style="font-size:20px">,47</span></div>
           <div class="kpi-sub">~R$31,29 por dia de veiculação</div>
+          <div class="kpi-compare">
+            <span class="compare-label">vs fev</span>
+            <span class="compare-value neutral">≈ proporcional ao período · era R$795,81 em 25 dias</span>
+          </div>
         </div>
 
         <!-- Conversas Iniciadas -->
@@ -955,6 +999,10 @@
           </div>
           <div class="kpi-value">70</div>
           <div class="kpi-sub">69 mensagens recebidas via WhatsApp</div>
+          <div class="kpi-compare">
+            <span class="compare-label">vs fev</span>
+            <span class="compare-value neutral">≈ 3,18/dia vs 3,16/dia (22d vs 25d)</span>
+          </div>
         </div>
 
         <!-- Custo por Conversa -->
@@ -966,6 +1014,10 @@
           </div>
           <div class="kpi-value">R$9<span style="font-size:20px">,98</span></div>
           <div class="kpi-sub">Benchmark: abaixo de R$12 = excelente</div>
+          <div class="kpi-compare">
+            <span class="compare-label">vs fev</span>
+            <span class="compare-value up">↑ melhorou · era R$10,07 em fev</span>
+          </div>
         </div>
 
         <!-- CTR -->
@@ -977,6 +1029,10 @@
           </div>
           <div class="kpi-value">3,32<span style="font-size:20px">%</span></div>
           <div class="kpi-sub">Benchmark dermatologia: &gt;3,0% = verde</div>
+          <div class="kpi-compare">
+            <span class="compare-label">vs fev</span>
+            <span class="compare-value up">↑ melhorou +25% · era 2,65% em fev (+0,67pp)</span>
+          </div>
         </div>
 
         <!-- Alcance -->
@@ -987,6 +1043,10 @@
           </div>
           <div class="kpi-value">14.877</div>
           <div class="kpi-sub">22.108 impressões totais no período</div>
+          <div class="kpi-compare">
+            <span class="compare-label">vs fev</span>
+            <span class="compare-value neutral">≈ proporcional ao período · era 21.977 em 25 dias</span>
+          </div>
         </div>
 
         <!-- Frequência -->
@@ -998,6 +1058,10 @@
           </div>
           <div class="kpi-value">1,49<span style="font-size:20px">x</span></div>
           <div class="kpi-sub">Limite de alerta: 2,0x · Limite crítico: 2,5x</div>
+          <div class="kpi-compare">
+            <span class="compare-label">vs fev</span>
+            <span class="compare-value down">↓ subiu 0,25x · era 1,24x em fev (+20,2%)</span>
+          </div>
           <div class="kpi-progress">
             <div class="kpi-progress-bar-bg">
               <div class="kpi-progress-bar-fill" style="width:49.7%; background: linear-gradient(90deg, #27AE60, #f39c12);"></div>
@@ -1016,7 +1080,7 @@
       <div style="margin-top: 12px; display: grid; grid-template-columns: 1fr; gap: 0;">
         <div class="insight-box">
           <span class="insight-icon">⚠️</span>
-          <p><strong>CPM em atenção:</strong> R$31,14 — dentro do intervalo de alerta do benchmark (R$28–R$35 para dermatologia). Nos últimos dias o CPM chegou a R$34,64, sinalizando tendência de alta. Monitorar de perto.</p>
+          <p><strong>CPM em atenção:</strong> R$31,14 — dentro do intervalo de alerta do benchmark (R$28–R$35 para dermatologia). Nos últimos dias o CPM chegou a R$34,64, sinalizando tendência de alta. Monitorar de perto. <span style="color: var(--danger); font-weight:700;">↓ vs fev: subiu R$1,90 · era R$29,24 (+6,5%)</span></p>
         </div>
       </div>
     </section>
@@ -1175,7 +1239,7 @@
       <div class="table-card">
         <div class="table-header">
           <h3>Top 5 Criativos — Eficiência de Conversão</h3>
-          <p>Classificação: Verde = Excelente (&lt;R$10/msg) · Amarelo = Bom (R$10–12) · Vermelho = Atenção (&gt;R$12)</p>
+          <p>Classificação: Verde = Excelente (&lt;R$10/msg) · Amarelo = Bom (R$10–12) · Vermelho = Atenção (&gt;R$12) · <span style="color: var(--success); font-weight:600;">↑ vs fev: custo médio era R$10,07/msg</span></p>
         </div>
         <table>
           <thead>
@@ -1184,6 +1248,7 @@
               <th>Eficiência</th>
               <th>Mensagens</th>
               <th>Custo/Msg</th>
+              <th>vs Fev</th>
               <th>CTR</th>
               <th>Investido</th>
             </tr>
@@ -1200,6 +1265,7 @@
               <td><span class="efficiency-badge green">EXCELENTE</span></td>
               <td><span class="metric-value green">30</span></td>
               <td><span class="metric-value green">R$7,69</span></td>
+              <td><span style="font-size:11px; color: var(--success); font-weight:700;">↑ -23,6%</span><br><span style="font-size:10px; color: var(--text-muted);">vs R$10,07 fev</span></td>
               <td><span class="metric-value">3,16%</span></td>
               <td>R$230,61</td>
             </tr>
@@ -1210,6 +1276,7 @@
               <td><span class="efficiency-badge green">EXCELENTE</span></td>
               <td><span class="metric-value green">16</span></td>
               <td><span class="metric-value green">R$8,49</span></td>
+              <td><span style="font-size:11px; color: var(--success); font-weight:700;">↑ -15,7%</span><br><span style="font-size:10px; color: var(--text-muted);">vs R$10,07 fev</span></td>
               <td><span class="metric-value green">3,58%</span></td>
               <td>R$135,98</td>
             </tr>
@@ -1220,6 +1287,7 @@
               <td><span class="efficiency-badge green">EXCELENTE</span></td>
               <td><span class="metric-value green">6</span></td>
               <td><span class="metric-value green">R$5,65</span></td>
+              <td><span style="font-size:11px; color: var(--success); font-weight:700;">↑ -43,9%</span><br><span style="font-size:10px; color: var(--text-muted);">vs R$10,07 fev</span></td>
               <td><span class="metric-value">2,62%</span></td>
               <td>R$33,90</td>
             </tr>
@@ -1230,6 +1298,7 @@
               <td><span class="efficiency-badge green">EXCELENTE</span></td>
               <td><span class="metric-value green">5</span></td>
               <td><span class="metric-value green">R$6,67</span></td>
+              <td><span style="font-size:11px; color: var(--success); font-weight:700;">↑ -33,8%</span><br><span style="font-size:10px; color: var(--text-muted);">vs R$10,07 fev</span></td>
               <td><span class="metric-value green">3,27%</span></td>
               <td>R$33,37</td>
             </tr>
@@ -1240,6 +1309,7 @@
               <td><span class="efficiency-badge yellow">BOM</span></td>
               <td><span class="metric-value">6</span></td>
               <td><span class="metric-value yellow">R$10,17</span></td>
+              <td><span style="font-size:11px; color: var(--success); font-weight:700;">↑ +1,0%</span><br><span style="font-size:10px; color: var(--text-muted);">vs R$10,07 fev</span></td>
               <td><span class="metric-value green">3,34%</span></td>
               <td>R$61,03</td>
             </tr>
@@ -1558,7 +1628,7 @@
               <td class="metric-value green">&lt; R$12</td>
               <td class="metric-value yellow">R$12–20</td>
               <td class="metric-value red">&gt; R$20</td>
-              <td><span class="efficiency-badge green">R$9,98 ✅</span></td>
+              <td><span class="efficiency-badge green">R$9,98 ✅</span><br><span style="font-size:11px; color: var(--success); font-weight:600;">↑ era R$10,07 em fev (-R$0,09)</span></td>
             </tr>
             <tr>
               <td style="font-weight:600;">Frequência</td>
