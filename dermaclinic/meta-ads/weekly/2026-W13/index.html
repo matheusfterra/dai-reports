@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DermaClinic — Relatório Semanal Meta Ads | Semana 13 · 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <style>
+    /* ===== TOKENS ===== */
+    :root {
+      --gold-light: #D4AF7A;
+      --gold:       #C9A96E;
+      --gold-dark:  #B8964A;
+      --gold-deep:  #8B6914;
+      --cream:      #FAFAF8;
+      --cream-2:    #F5F0EA;
+      --white:      #FFFFFF;
+      --text:       #1A1410;
+      --text-body:  #3D3128;
+      --text-muted: #7A6A58;
+      --border:     #E8DDD0;
+      --shadow-sm:  0 2px 8px rgba(139,105,20,.07);
+      --shadow-md:  0 6px 24px rgba(139,105,20,.11);
+      --shadow-lg:  0 16px 48px rgba(139,105,20,.13);
+      --success:    #2E7D4F;
+      --success-bg: #EBF5EE;
+      --warning:    #8B5A00;
+      --warning-bg: #FFF6E0;
+      --danger:     #9B2335;
+      --danger-bg:  #FBE9EC;
+      --radius:     16px;
+      --radius-sm:  10px;
+      --radius-xs:  6px;
+    }
+
+    /* ===== RESET ===== */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--cream);
+      color: var(--text-body);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== LAYOUT ===== */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section {
+      padding: 64px 0;
+    }
+
+    section:nth-child(even) {
+      background: var(--white);
+    }
+
+    /* ===== TYPOGRAPHY ===== */
+    .playfair { font-family: 'Playfair Display', Georgia, serif; }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(24px, 3vw, 32px);
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .section-subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      max-width: 560px;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      background: linear-gradient(160deg, #1A1410 0%, #2D2118 45%, #3D2E1E 100%);
+      padding: 80px 0 72px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 70% at 80% 30%, rgba(201,169,110,.12) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 50% at 10% 80%, rgba(201,169,110,.07) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-ornament {
+      position: absolute;
+      top: 0; right: 0;
+      width: 340px; height: 340px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,169,110,.10) 0%, transparent 70%);
+      transform: translate(30%, -30%);
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .hero-badges {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 100px;
+    }
+
+    .badge-gold {
+      background: rgba(201,169,110,.18);
+      color: var(--gold-light);
+      border: 1px solid rgba(201,169,110,.3);
+    }
+
+    .badge-outline {
+      background: transparent;
+      color: rgba(255,255,255,.55);
+      border: 1px solid rgba(255,255,255,.2);
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.15;
+    }
+
+    .hero-title span {
+      background: linear-gradient(90deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .hero-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .hero-meta-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.4);
+    }
+
+    .hero-meta-value {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255,255,255,.85);
+    }
+
+    .hero-divider {
+      width: 1px;
+      height: 32px;
+      background: rgba(255,255,255,.15);
+    }
+
+    .hero-notice {
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: rgba(255,246,224,.08);
+      border: 1px solid rgba(201,169,110,.25);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      max-width: 560px;
+    }
+
+    .hero-notice-icon {
+      width: 16px; height: 16px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      color: var(--gold-light);
+    }
+
+    .hero-notice p {
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: rgba(255,255,255,.65);
+    }
+
+    .hero-notice strong {
+      color: var(--gold-light);
+    }
+
+    /* ===== HIGHLIGHT CARDS (RESUMO EXECUTIVO) ===== */
+    .highlights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .highlight-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow .2s, transform .2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .highlight-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+
+    .highlight-card.gold::before { background: linear-gradient(90deg, var(--gold), var(--gold-dark)); }
+    .highlight-card.success::before { background: linear-gradient(90deg, #2E7D4F, #4CAF7D); }
+    .highlight-card.info::before { background: linear-gradient(90deg, #2563EB, #7C3AED); }
+
+    .highlight-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .highlight-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .highlight-card.gold .highlight-icon { background: rgba(201,169,110,.12); }
+    .highlight-card.success .highlight-icon { background: var(--success-bg); }
+    .highlight-card.info .highlight-icon { background: rgba(37,99,235,.08); }
+
+    .highlight-tag {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .highlight-card.gold .highlight-tag { color: var(--gold-dark); }
+    .highlight-card.success .highlight-tag { color: var(--success); }
+    .highlight-card.info .highlight-tag { color: #2563EB; }
+
+    .highlight-number {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 44px;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .highlight-card.gold .highlight-number { color: var(--gold-deep); }
+    .highlight-card.success .highlight-number { color: var(--success); }
+    .highlight-card.info .highlight-number { color: #2563EB; }
+
+    .highlight-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .highlight-desc {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* ===== KPI TABLE ===== */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 16px;
+    }
+
+    .kpi-card {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 20px 18px;
+      position: relative;
+    }
+
+    .kpi-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .kpi-card-name {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      line-height: 1.4;
+      max-width: 120px;
+    }
+
+    .kpi-status {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 100px;
+    }
+
+    .kpi-status.excellent { background: var(--success-bg); color: var(--success); }
+    .kpi-status.good      { background: #E8F4FD; color: #1565C0; }
+    .kpi-status.normal    { background: var(--cream-2); color: var(--text-muted); }
+    .kpi-status.almost    { background: var(--warning-bg); color: var(--warning); }
+
+    .kpi-value {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .kpi-benchmark {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .kpi-delta {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 11.5px;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+
+    .kpi-delta.up   { color: var(--success); }
+    .kpi-delta.down { color: var(--danger); }
+    .kpi-delta.down-good { color: var(--success); }
+
+    /* ===== CHARTS WRAPPER ===== */
+    .chart-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .chart-card-header {
+      margin-bottom: 28px;
+    }
+
+    .chart-card-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .chart-card-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .chart-canvas-wrap {
+      position: relative;
+      height: 260px;
+    }
+
+    .charts-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 700px) {
+      .charts-row { grid-template-columns: 1fr; }
+    }
+
+    /* ===== ADSET TABLE ===== */
+    .adset-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .adset-row {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 18px 20px;
+      display: grid;
+      grid-template-columns: 1fr 160px 100px 90px;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    @media (max-width: 640px) {
+      .adset-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+    }
+
+    .adset-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .adset-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .adset-bar {
+      flex: 1;
+      height: 8px;
+      background: var(--cream-2);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+
+    .adset-bar-fill {
+      height: 100%;
+      border-radius: 100px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-dark));
+    }
+
+    .adset-spend {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      text-align: right;
+    }
+
+    .adset-msgs {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .adset-cpm-label {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 100px;
+      text-align: center;
+    }
+
+    .adset-cpm-label.efficient  { background: var(--success-bg); color: var(--success); }
+    .adset-cpm-label.moderate   { background: var(--warning-bg); color: var(--warning); }
+    .adset-cpm-label.expensive  { background: var(--danger-bg);  color: var(--danger); }
+
+    /* ===== CREATIVE CARDS ===== */
+    .creatives-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .creative-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow .2s, transform .2s;
+    }
+
+    .creative-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .creative-card-banner {
+      padding: 20px 22px 16px;
+      position: relative;
+    }
+
+    .creative-card.top    .creative-card-banner { background: linear-gradient(135deg, #1A3C28, #2E6B45); }
+    .creative-card.rising .creative-card-banner { background: linear-gradient(135deg, #1A2C4A, #1E4080); }
+    .creative-card.pause  .creative-card-banner { background: linear-gradient(135deg, #3A1A1A, #6B2020); }
+
+    .creative-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 100px;
+      margin-bottom: 10px;
+    }
+
+    .creative-card.top    .creative-badge { background: rgba(46,125,79,.4);  color: #90EEB5; border: 1px solid rgba(144,238,181,.3); }
+    .creative-card.rising .creative-badge { background: rgba(30,64,128,.5);  color: #93C5FD; border: 1px solid rgba(147,197,253,.3); }
+    .creative-card.pause  .creative-badge { background: rgba(107,32,32,.5);  color: #FCA5A5; border: 1px solid rgba(252,165,165,.3); }
+
+    .creative-card-name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.3;
+    }
+
+    .creative-card-body {
+      padding: 20px 22px;
+    }
+
+    .creative-card-desc {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 16px;
+    }
+
+    .creative-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .creative-metric {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xs);
+      padding: 10px 12px;
+    }
+
+    .creative-metric-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .creative-metric-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .creative-action {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+
+    .creative-action.rec-up     { color: var(--success); }
+    .creative-action.rec-test   { color: #2563EB; }
+    .creative-action.rec-pause  { color: var(--danger); }
+
+    /* ===== INSIGHTS ===== */
+    .insights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .insight-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 24px 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .insight-number {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 14px;
+    }
+
+    .insight-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+
+    .insight-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ===== RECOMMENDATIONS ===== */
+    .recs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .rec-item {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 20px 22px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .rec-priority {
+      flex-shrink: 0;
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .rec-priority.p1 { background: var(--danger-bg);  color: var(--danger); }
+    .rec-priority.p2 { background: var(--warning-bg); color: var(--warning); }
+    .rec-priority.p3 { background: var(--success-bg); color: var(--success); }
+    .rec-priority.p4 { background: #E8F4FD; color: #1565C0; }
+    .rec-priority.p5 { background: var(--cream-2); color: var(--text-muted); }
+
+    .rec-content {}
+
+    .rec-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .rec-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* ===== NOTICE ===== */
+    .notice-card {
+      background: linear-gradient(135deg, #FFF9EC, #FFF4DC);
+      border: 1px solid rgba(201,169,110,.35);
+      border-radius: var(--radius);
+      padding: 32px 32px;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .notice-icon {
+      flex-shrink: 0;
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: rgba(201,169,110,.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+
+    .notice-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--gold-deep);
+      margin-bottom: 10px;
+    }
+
+    .notice-desc {
+      font-size: 14px;
+      color: var(--text-body);
+      line-height: 1.65;
+    }
+
+    .notice-desc strong {
+      color: var(--gold-deep);
+      font-weight: 600;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: var(--text);
+      padding: 52px 0 40px;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+
+    .footer-tagline {
+      font-size: 12.5px;
+      color: rgba(255,255,255,.45);
+      margin-bottom: 16px;
+    }
+
+    .footer-contact {
+      font-size: 12px;
+      color: rgba(255,255,255,.5);
+    }
+
+    .footer-divider-v {
+      width: 1px;
+      background: rgba(255,255,255,.1);
+      align-self: stretch;
+    }
+
+    .footer-next {
+      text-align: right;
+    }
+
+    .footer-next-label {
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .footer-next-date {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .footer-next-sub {
+      font-size: 12px;
+      color: rgba(255,255,255,.45);
+    }
+
+    .footer-gold-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,169,110,.3), transparent);
+      margin-bottom: 32px;
+    }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .footer-copy {
+      font-size: 11.5px;
+      color: rgba(255,255,255,.3);
+    }
+
+    .footer-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gold);
+      border: 1px solid rgba(201,169,110,.3);
+      border-radius: 100px;
+      padding: 4px 12px;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      section { padding: 48px 0; }
+      .highlights-grid { grid-template-columns: 1fr; }
+      .creatives-grid { grid-template-columns: 1fr; }
+      .insights-grid { grid-template-columns: 1fr 1fr; }
+      .footer-inner { flex-direction: column; }
+      .footer-next { text-align: left; }
+      .footer-divider-v { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .container { padding: 0 16px; }
+      .hero { padding: 52px 0 48px; }
+      .insights-grid { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== 1. HERO / CAPA ===== -->
+  <section class="hero">
+    <div class="hero-ornament"></div>
+    <div class="container">
+      <div class="hero-inner">
+
+        <div class="hero-badges">
+          <span class="badge badge-gold">DermaClinic</span>
+          <span class="badge badge-gold">Meta Ads</span>
+          <span class="badge badge-outline">Semana 13 · 2026</span>
+        </div>
+
+        <div>
+          <h1 class="hero-title playfair">
+            Relatório Semanal<br><span>Meta Ads</span>
+          </h1>
+        </div>
+
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Período</span>
+            <span class="hero-meta-value">23 – 29 de Março de 2026</span>
+          </div>
+          <div class="hero-divider"></div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Semana</span>
+            <span class="hero-meta-value">W13 / 2026</span>
+          </div>
+          <div class="hero-divider"></div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Gerado em</span>
+            <span class="hero-meta-value">30 de Março de 2026</span>
+          </div>
+          <div class="hero-divider"></div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Gestor</span>
+            <span class="hero-meta-value">Digital AI</span>
+          </div>
+        </div>
+
+        <div class="hero-notice">
+          <svg class="hero-notice-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+          </svg>
+          <p>
+            <strong>Semana com dados parciais.</strong> Falha técnica na integração com a Meta (18–22/03) limitou a coleta por 5 dias. Esta análise baseia-se em <strong>3 dias completos</strong> de dados. Os anúncios funcionaram normalmente — apenas a medição foi afetada.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== 2. RESUMO EXECUTIVO ===== -->
+  <section>
+    <div class="container">
+      <span class="section-label">Resumo Executivo</span>
+      <h2 class="section-title">Os 3 Destaques da Semana</h2>
+      <p class="section-subtitle">Retomada das campanhas com resultados excepcionais nos principais indicadores de eficiência.</p>
+
+      <div class="highlights-grid">
+
+        <div class="highlight-card gold">
+          <div class="highlight-icon">💰</div>
+          <div class="highlight-tag">Custo por Mensagem</div>
+          <div class="highlight-number">-54%</div>
+          <div class="highlight-label">Metade do custo anterior</div>
+          <div class="highlight-desc">De R$15,31 para R$6,98 por mensagem recebida via WhatsApp. Pagamos menos da metade para cada paciente que contata a clínica.</div>
+        </div>
+
+        <div class="highlight-card success">
+          <div class="highlight-icon">📱</div>
+          <div class="highlight-tag">Volume de Mensagens</div>
+          <div class="highlight-number">+83%</div>
+          <div class="highlight-label">Quase o dobro de contatos</div>
+          <div class="highlight-desc">Média de 3,7 mensagens/dia contra 2,0 da semana anterior. Mais conversas com pacientes potenciais, com menor investimento diário.</div>
+        </div>
+
+        <div class="highlight-card info">
+          <div class="highlight-icon">📊</div>
+          <div class="highlight-tag">CPM — Custo de Exibição</div>
+          <div class="highlight-number">-22%</div>
+          <div class="highlight-label">Anúncios mais baratos de exibir</div>
+          <div class="highlight-desc">De R$34,45 para R$26,77 por mil impressões. Saímos de uma zona elevada para um patamar saudável — indicando melhor qualidade de entrega.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== 3. KPIs DA SEMANA ===== -->
+  <section>
+    <div class="container">
+      <span class="section-label">Performance Geral</span>
+      <h2 class="section-title">KPIs da Semana 13</h2>
+      <p class="section-subtitle">Cinco indicadores essenciais com status e comparativo em relação à semana anterior (W12).</p>
+
+      <div class="kpi-grid">
+
+        <div class="kpi-card">
+          <div class="kpi-card-header">
+            <span class="kpi-card-name">Invest. Médio / Dia</span>
+            <span class="kpi-status normal">Normal</span>
+          </div>
+          <div class="kpi-value">R$25,58</div>
+          <div class="kpi-benchmark">Ref. anterior: R$30,62</div>
+          <div class="kpi-delta down-good">▼ -16,5%</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-card-header">
+            <span class="kpi-card-name">Custo por Mensagem</span>
+            <span class="kpi-status excellent">Excelente</span>
+          </div>
+          <div class="kpi-value">R$6,98</div>
+          <div class="kpi-benchmark">Meta: abaixo de R$25</div>
+          <div class="kpi-delta down-good">▼ -54,4% vs W12</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-card-header">
+            <span class="kpi-card-name">Mensagens / Dia</span>
+            <span class="kpi-status good">Bom</span>
+          </div>
+          <div class="kpi-value">3,7</div>
+          <div class="kpi-benchmark">Ref. anterior: 2,0/dia</div>
+          <div class="kpi-delta up">▲ +83% vs W12</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-card-header">
+            <span class="kpi-card-name">CPM</span>
+            <span class="kpi-status good">Saudável</span>
+          </div>
+          <div class="kpi-value">R$26,77</div>
+          <div class="kpi-benchmark">Faixa ideal: R$15–R$35</div>
+          <div class="kpi-delta down-good">▼ -22,3% vs W12</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-card-header">
+            <span class="kpi-card-name">CTR (Taxa de Cliques)</span>
+            <span class="kpi-status almost">Quase lá</span>
+          </div>
+          <div class="kpi-value">3,77%</div>
+          <div class="kpi-benchmark">Meta: acima de 4%</div>
+          <div class="kpi-delta up">▲ +19,7% vs W12</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== 4. EVOLUÇÃO DIÁRIA — SPEND ===== -->
+  <section>
+    <div class="container">
+      <span class="section-label">Evolução Diária</span>
+      <h2 class="section-title">Investimento por Dia</h2>
+      <p class="section-subtitle">Dias com dados completos disponíveis. O lançamento de R$688 em 23/03 foi catch-up de 6 dias acumulados e foi excluído para não distorcer a leitura diária.</p>
+
+      <div class="chart-card">
+        <div class="chart-canvas-wrap">
+          <canvas id="chartSpend"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== 5 & 6. CPM, CTR E MENSAGENS ===== -->
+  <section>
+    <div class="container">
+      <span class="section-label">Eficiência de Campanha</span>
+      <h2 class="section-title">CPM, CTR e Mensagens por Dia</h2>
+      <p class="section-subtitle">Comparação dos indicadores de qualidade e engajamento entre os dias disponíveis de W13 e o benchmark médio de W12.</p>
+
+      <div class="charts-row">
+
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-card-title">CPM — Custo por Mil Impressões</div>
+            <div class="chart-card-subtitle">W13 vs benchmark W12 (R$34,45)</div>
+          </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="chartCPM"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-card-title">CTR — Taxa de Cliques</div>
+            <div class="chart-card-subtitle">W13 vs benchmark W12 (3,15%)</div>
+          </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="chartCTR"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MENSAGENS POR DIA ===== -->
+  <section>
+    <div class="container">
+      <span class="section-label">Conversão via WhatsApp</span>
+      <h2 class="section-title">Mensagens Recebidas por Dia</h2>
+      <p class="section-subtitle">Contatos gerados por dia em W13 comparado com a média diária da semana anterior.</p>
+
+      <div class="chart-card">
+        <div class="chart-canvas-wrap">
+          <canvas id="chartMsgs"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== 7. DISTRIBUIÇÃO POR ADSET ===== -->
+  <section>
+    <div class="container">
+      <span class="section-label">Segmentação de Audiência</span>
+      <h2 class="section-title">Distribuição por Adset</h2>
+      <p class="section-subtitle">Investimento, mensagens geradas e eficiência de custo por grupo de público.</p>
+
+      <div class="adset-grid">
+
+        <div class="adset-row">
+          <div>
+            <div class="adset-name">Luxo + Dermatologia</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:3px;">43 mensagens recebidas</div>
+          </div>
+          <div class="adset-bar-wrap">
+            <div class="adset-bar"><div class="adset-bar-fill" style="width:88%"></div></div>
+          </div>
+          <div class="adset-spend">R$338,33</div>
+          <div><span class="adset-cpm-label efficient">R$7,87/msg</span></div>
+        </div>
+
+        <div class="adset-row">
+          <div>
+            <div class="adset-name">Quente</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:3px;">29 mensagens recebidas</div>
+          </div>
+          <div class="adset-bar-wrap">
+            <div class="adset-bar"><div class="adset-bar-fill" style="width:72%"></div></div>
+          </div>
+          <div class="adset-spend">R$276,68</div>
+          <div><span class="adset-cpm-label efficient">R$9,54/msg</span></div>
+        </div>
+
+        <div class="adset-row">
+          <div>
+            <div class="adset-name">Data Comemorativa</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:3px;">8 mensagens recebidas</div>
+          </div>
+          <div class="adset-bar-wrap">
+            <div class="adset-bar"><div class="adset-bar-fill" style="width:39%"></div></div>
+          </div>
+          <div class="adset-spend">R$150,21</div>
+          <div><span class="adset-cpm-label expensive">R$18,78/msg</span></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== 8. CRIATIVOS EM DESTAQUE ===== -->
+  <section>
+    <div class="container">
+      <span class="section-label">Performance Criativa</span>
+      <h2 class="section-title">Criativos em Destaque</h2>
+      <p class="section-subtitle">Análise dos criativos com melhor performance, potencial emergente e candidatos a pausa.</p>
+
+      <div class="creatives-grid">
+
+        <!-- TOP PERFORMER -->
+        <div class="creative-card top">
+          <div class="creative-card-banner">
+            <div class="creative-badge">⭐ Top Performer</div>
+            <div class="creative-card-name">AN | PELE 40+</div>
+          </div>
+          <div class="creative-card-body">
+            <p class="creative-card-desc">Criativo voltado para mulheres acima de 40 anos preocupadas com saúde da pele. Alta taxa de cliques e o menor custo por mensagem da conta — ressonância direta com o público-alvo da clínica.</p>
+            <div class="creative-metrics">
+              <div class="creative-metric">
+                <div class="creative-metric-label">Spend</div>
+                <div class="creative-metric-value">R$110,83</div>
+              </div>
+              <div class="creative-metric">
+                <div class="creative-metric-label">Mensagens</div>
+                <div class="creative-metric-value">14</div>
+              </div>
+              <div class="creative-metric">
+                <div class="creative-metric-label">CTR</div>
+                <div class="creative-metric-value">4,07%</div>
+              </div>
+              <div class="creative-metric">
+                <div class="creative-metric-label">Custo/Msg</div>
+                <div class="creative-metric-value">R$7,92</div>
+              </div>
+            </div>
+            <div class="creative-action rec-up">
+              <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z" clip-rule="evenodd"/></svg>
+              Aumentar investimento 15–20%
+            </div>
+          </div>
+        </div>
+
+        <!-- EMERGENTE -->
+        <div class="creative-card rising">
+          <div class="creative-card-banner">
+            <div class="creative-badge">🚀 Criativo Emergente</div>
+            <div class="creative-card-name">Maior Desafio da Mulher Atual</div>
+          </div>
+          <div class="creative-card-body">
+            <p class="creative-card-desc">CTR de link de 7,69% — o mais alto da conta. Ainda com baixo volume de exibições (26 impressões), precisa de orçamento para confirmar se o resultado se sustenta em escala.</p>
+            <div class="creative-metrics">
+              <div class="creative-metric">
+                <div class="creative-metric-label">CTR Link</div>
+                <div class="creative-metric-value">7,69%</div>
+              </div>
+              <div class="creative-metric">
+                <div class="creative-metric-label">Impressões</div>
+                <div class="creative-metric-value">26</div>
+              </div>
+              <div class="creative-metric">
+                <div class="creative-metric-label">Status</div>
+                <div class="creative-metric-value" style="font-size:13px;">Em Teste</div>
+              </div>
+              <div class="creative-metric">
+                <div class="creative-metric-label">Meta</div>
+                <div class="creative-metric-value" style="font-size:13px;">500 imp.</div>
+              </div>
+            </div>
+            <div class="creative-action rec-test">
+              <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.433a.75.75 0 000-1.5H3.989a.75.75 0 00-.75.75v4.242a.75.75 0 001.5 0v-2.43l.31.31a7 7 0 0011.712-3.138.75.75 0 00-1.449-.39zm1.23-3.723a.75.75 0 00.219-.53V2.929a.75.75 0 00-1.5 0V5.36l-.31-.31A7 7 0 003.239 8.188a.75.75 0 101.448.389A5.5 5.5 0 0113.89 6.11l.311.31h-2.432a.75.75 0 000 1.5h4.243a.75.75 0 00.53-.219z"/></svg>
+              Ampliar orçamento de teste
+            </div>
+          </div>
+        </div>
+
+        <!-- PAUSAR -->
+        <div class="creative-card pause">
+          <div class="creative-card-banner">
+            <div class="creative-badge">⚠️ Para Pausar</div>
+            <div class="creative-card-name">AN | DIA DA MULHER</div>
+          </div>
+          <div class="creative-card-body">
+            <p class="creative-card-desc">Data comemorativa passou há 3 semanas. O criativo tem o pior CTR da conta (2,32%) e custo por mensagem 2,4x acima do segmento Luxo+Dermatologia. Orçamento deve ser redistribuído.</p>
+            <div class="creative-metrics">
+              <div class="creative-metric">
+                <div class="creative-metric-label">Spend</div>
+                <div class="creative-metric-value">R$57,05</div>
+              </div>
+              <div class="creative-metric">
+                <div class="creative-metric-label">Mensagens</div>
+                <div class="creative-metric-value">7</div>
+              </div>
+              <div class="creative-metric">
+                <div class="creative-metric-label">CTR</div>
+                <div class="creative-metric-value">2,32%</div>
+              </div>
+              <div class="creative-metric">
+                <div class="creative-metric-label">Adset</div>
+                <div class="creative-metric-value" style="font-size:13px;">Data Com.</div>
+              </div>
+            </div>
+            <div class="creative-action rec-pause">
+              <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M2 10a8 8 0 1116 0 8 8 0 01-16 0zm5-2.25A.75.75 0 017.75 7h.5a.75.75 0 01.75.75v4.5a.75.75 0 01-.75.75h-.5a.75.75 0 01-.75-.75v-4.5zm4.25 0a.75.75 0 01.75.75v4.5a.75.75 0 01-.75.75h-.5a.75.75 0 01-.75-.75v-4.5a.75.75 0 01.75-.75h.5z" clip-rule="evenodd"/></svg>
+              Pausar imediatamente
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== 9. INSIGHTS ESTRATÉGICOS ===== -->
+  <section>
+    <div class="container">
+      <span class="section-label">Análise Estratégica</span>
+      <h2 class="section-title">Insights da Semana</h2>
+      <p class="section-subtitle">Quatro leituras estratégicas extraídas dos dados disponíveis de W13.</p>
+
+      <div class="insights-grid">
+
+        <div class="insight-card">
+          <div class="insight-number">1</div>
+          <div class="insight-title">Janela de oportunidade para escalar</div>
+          <div class="insight-desc">Com CPM em queda e custo/msg na metade do valor anterior, cada real investido rende significativamente mais. Este é o momento ideal para considerar aumento gradual de orçamento antes de uma possível alta nos custos de exibição.</div>
+        </div>
+
+        <div class="insight-card">
+          <div class="insight-number">2</div>
+          <div class="insight-title">Luxo + Dermatologia é o segmento mais eficiente</div>
+          <div class="insight-desc">R$7,87 por mensagem — menor custo entre todos os adsets. O segmento Data Comemorativa custa R$18,78/msg, 2,4x mais caro. Realocação de orçamento para o segmento principal pode ampliar o resultado sem aumentar o investimento total.</div>
+        </div>
+
+        <div class="insight-card">
+          <div class="insight-number">3</div>
+          <div class="insight-title">CTR se aproximando da faixa de excelência</div>
+          <div class="insight-desc">Subiu de 3,15% para 3,77%, se aproximando da meta de 4%. Indica que os criativos estão ressoando com o público e a segmentação está no caminho certo. Com o ajuste de criativos recomendado, é possível ultrapassar 4% em W14.</div>
+        </div>
+
+        <div class="insight-card">
+          <div class="insight-number">4</div>
+          <div class="insight-title">Algoritmo possivelmente recalibrado a favor</div>
+          <div class="insight-desc">A retomada após a interrupção técnica pode ter "resetado" o algoritmo de entrega, resultando em custos menores. Efeito que pode ser temporário — monitoramento próximo nas semanas seguintes é essencial para confirmar a tendência.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== 10. RECOMENDAÇÕES W14 ===== -->
+  <section>
+    <div class="container">
+      <span class="section-label">Plano de Ação</span>
+      <h2 class="section-title">Recomendações para W14</h2>
+      <p class="section-subtitle">Cinco ações prioritárias para a próxima semana, ordenadas por impacto esperado.</p>
+
+      <div class="recs-list">
+
+        <div class="rec-item">
+          <div class="rec-priority p1">P1</div>
+          <div class="rec-content">
+            <div class="rec-title">Pausar o anúncio "Dia da Mulher"</div>
+            <div class="rec-desc">A data passou há 3 semanas e o criativo tem o pior desempenho da conta (CTR 2,32%). O orçamento liberado (~R$57) deve ser redirecionado imediatamente para criativos de melhor performance.</div>
+          </div>
+        </div>
+
+        <div class="rec-item">
+          <div class="rec-priority p2">P2</div>
+          <div class="rec-content">
+            <div class="rec-title">Aumentar orçamento do segmento Luxo + Dermatologia em 20–30%</div>
+            <div class="rec-desc">É o segmento mais eficiente (R$7,87/msg) e os custos estão favoráveis. Aproveitar a janela de CPM baixo antes de possível alta sazonal.</div>
+          </div>
+        </div>
+
+        <div class="rec-item">
+          <div class="rec-priority p2">P2</div>
+          <div class="rec-content">
+            <div class="rec-title">Ampliar investimento no criativo "Pele 40+" em 15–20%</div>
+            <div class="rec-desc">Melhor criativo ativo em termos de CTR e custo/mensagem. Considerar também replicar em novo grupo de público para testar a performance em audiência fria.</div>
+          </div>
+        </div>
+
+        <div class="rec-item">
+          <div class="rec-priority p3">P3</div>
+          <div class="rec-content">
+            <div class="rec-title">Testar "Maior Desafio da Mulher Atual" com orçamento dedicado</div>
+            <div class="rec-desc">CTR de link em 7,69% é excepcionalmente alto, mas amostra de 26 impressões é insuficiente. Alocar orçamento para chegar a pelo menos 500 impressões e validar o resultado em escala.</div>
+          </div>
+        </div>
+
+        <div class="rec-item">
+          <div class="rec-priority p4">P4</div>
+          <div class="rec-content">
+            <div class="rec-title">Garantir cobertura completa de dados em W14</div>
+            <div class="rec-desc">Esta semana teve lacunas por falha técnica na integração com a Meta. W14 será a semana de confirmação das tendências observadas — dados completos de 7 dias são essenciais para uma análise definitiva.</div>
+          </div>
+        </div>
+
+        <div class="rec-item">
+          <div class="rec-priority p5">P5</div>
+          <div class="rec-content">
+            <div class="rec-title">Monitorar evolução do CPM semanalmente</div>
+            <div class="rec-desc">A queda no CPM pode ser temporária (efeito do reset do algoritmo pós-interrupção). Acompanhar a evolução para identificar se os custos voltam a subir e ajustar a estratégia de lances conforme necessário.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== 11. NOTA DE COBERTURA ===== -->
+  <section>
+    <div class="container">
+
+      <div class="notice-card">
+        <div class="notice-icon">📋</div>
+        <div>
+          <div class="notice-title">Nota sobre a Cobertura de Dados desta Semana</div>
+          <p class="notice-desc">
+            Esta semana foi atípica do ponto de vista de coleta de dados. Uma <strong>falha técnica na integração com a Meta</strong> (renovação de credencial de acesso) causou uma interrupção entre <strong>18 e 22 de março</strong>. O sistema foi restabelecido em 23/03 e as campanhas continuaram rodando normalmente durante todo o período — a interrupção afetou apenas a coleta de dados, não a veiculação dos anúncios.
+            <br><br>
+            Como resultado, esta análise se baseia em <strong>3 dias completos de dados individuais</strong> (24, 25 e 28 de março). Os indicadores são direcionais e consistentes entre si, mas a <strong>semana W14</strong>, com dados completos de 7 dias, fornecerá a confirmação definitiva das tendências observadas. Não há motivo para preocupação — os anúncios funcionaram normalmente.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ===== 12. FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-brand playfair">Digital AI</div>
+          <div class="footer-tagline">Inteligência em performance digital</div>
+          <div class="footer-contact">contato@digital-ai.tech · reports.digital-ai.tech</div>
+        </div>
+        <div class="footer-divider-v"></div>
+        <div class="footer-next">
+          <div class="footer-next-label">Próximo Relatório</div>
+          <div class="footer-next-date">06 de Abril · 2026</div>
+          <div class="footer-next-sub">Semana W14 · Dados completos</div>
+        </div>
+      </div>
+
+      <div class="footer-gold-line" style="margin-top:32px;"></div>
+
+      <div class="footer-bottom">
+        <span class="footer-copy">© 2026 Digital AI · DermaClinic Meta Ads · Relatório W13</span>
+        <span class="footer-badge">
+          <svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.403 12.652a3 3 0 000-5.304 3 3 0 00-3.75-3.751 3 3 0 00-5.305 0 3 3 0 00-3.751 3.75 3 3 0 000 5.305 3 3 0 003.75 3.751 3 3 0 005.305 0 3 3 0 003.751-3.75zm-2.546-4.46a.75.75 0 00-1.214-.883l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
+          Gerado por Digital AI · 30/03/2026
+        </span>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ===== CHARTS SCRIPTS ===== -->
+  <script>
+    // Palette DermaClinic
+    const GOLD       = '#C9A96E';
+    const GOLD_DARK  = '#8B6914';
+    const GOLD_LIGHT = '#D4AF7A';
+    const CREAM_2    = '#F5F0EA';
+    const TEXT_MUTED = '#7A6A58';
+    const SUCCESS    = '#2E7D4F';
+    const BLUE       = '#2563EB';
+
+    // Global defaults
+    Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
+    Chart.defaults.color = '#7A6A58';
+
+    const gridLines = {
+      color: 'rgba(0,0,0,0.05)',
+      drawBorder: false
+    };
+
+    // ===== CHART 1: SPEND POR DIA =====
+    new Chart(document.getElementById('chartSpend'), {
+      type: 'bar',
+      data: {
+        labels: ['24/03 (Seg)', '25/03 (Ter)', '28/03 (Sex)'],
+        datasets: [{
+          label: 'Investimento Diário (R$)',
+          data: [32.32, 33.22, 11.21],
+          backgroundColor: [
+            'rgba(201,169,110,0.85)',
+            'rgba(201,169,110,0.85)',
+            'rgba(201,169,110,0.45)'
+          ],
+          borderColor: [GOLD, GOLD, '#D4AF7A'],
+          borderWidth: 2,
+          borderRadius: 8,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => ` R$ ${ctx.parsed.y.toFixed(2)}`
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { font: { size: 12 } }
+          },
+          y: {
+            grid: gridLines,
+            ticks: {
+              callback: v => `R$${v}`,
+              font: { size: 11 }
+            },
+            beginAtZero: true,
+            suggestedMax: 45
+          }
+        }
+      }
+    });
+
+    // ===== CHART 2: CPM =====
+    new Chart(document.getElementById('chartCPM'), {
+      type: 'line',
+      data: {
+        labels: ['24/03', '25/03', '28/03'],
+        datasets: [
+          {
+            label: 'CPM W13',
+            data: [24.71, 26.30, 37.87],
+            borderColor: GOLD,
+            backgroundColor: 'rgba(201,169,110,0.1)',
+            borderWidth: 2.5,
+            fill: true,
+            tension: 0.3,
+            pointBackgroundColor: GOLD,
+            pointRadius: 5
+          },
+          {
+            label: 'Benchmark W12',
+            data: [34.45, 34.45, 34.45],
+            borderColor: '#CBD5E1',
+            borderWidth: 1.5,
+            borderDash: [6, 4],
+            fill: false,
+            tension: 0,
+            pointRadius: 0
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { font: { size: 11 }, boxWidth: 14, padding: 12 }
+          },
+          tooltip: {
+            callbacks: {
+              label: ctx => ` R$ ${ctx.parsed.y.toFixed(2)}`
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { font: { size: 11 } }
+          },
+          y: {
+            grid: gridLines,
+            ticks: {
+              callback: v => `R$${v}`,
+              font: { size: 11 }
+            },
+            suggestedMin: 15,
+            suggestedMax: 45
+          }
+        }
+      }
+    });
+
+    // ===== CHART 3: CTR =====
+    new Chart(document.getElementById('chartCTR'), {
+      type: 'line',
+      data: {
+        labels: ['24/03', '25/03', '28/03'],
+        datasets: [
+          {
+            label: 'CTR W13',
+            data: [2.75, 4.20, 6.42],
+            borderColor: SUCCESS,
+            backgroundColor: 'rgba(46,125,79,0.08)',
+            borderWidth: 2.5,
+            fill: true,
+            tension: 0.3,
+            pointBackgroundColor: SUCCESS,
+            pointRadius: 5
+          },
+          {
+            label: 'Benchmark W12',
+            data: [3.15, 3.15, 3.15],
+            borderColor: '#CBD5E1',
+            borderWidth: 1.5,
+            borderDash: [6, 4],
+            fill: false,
+            tension: 0,
+            pointRadius: 0
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { font: { size: 11 }, boxWidth: 14, padding: 12 }
+          },
+          tooltip: {
+            callbacks: {
+              label: ctx => ` ${ctx.parsed.y.toFixed(2)}%`
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { font: { size: 11 } }
+          },
+          y: {
+            grid: gridLines,
+            ticks: {
+              callback: v => `${v}%`,
+              font: { size: 11 }
+            },
+            beginAtZero: true,
+            suggestedMax: 8
+          }
+        }
+      }
+    });
+
+    // ===== CHART 4: MENSAGENS POR DIA =====
+    new Chart(document.getElementById('chartMsgs'), {
+      type: 'bar',
+      data: {
+        labels: ['24/03', '25/03', '28/03', 'Média W12 / dia'],
+        datasets: [{
+          label: 'Mensagens',
+          data: [3, 4, 4, 2],
+          backgroundColor: [
+            'rgba(201,169,110,0.85)',
+            'rgba(201,169,110,0.85)',
+            'rgba(201,169,110,0.85)',
+            'rgba(203,213,225,0.6)'
+          ],
+          borderColor: [GOLD, GOLD, GOLD, '#CBD5E1'],
+          borderWidth: 2,
+          borderRadius: 8,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => ` ${ctx.parsed.y} mensagens`
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { font: { size: 12 } }
+          },
+          y: {
+            grid: gridLines,
+            ticks: {
+              stepSize: 1,
+              font: { size: 11 }
+            },
+            beginAtZero: true,
+            suggestedMax: 6
+          }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
