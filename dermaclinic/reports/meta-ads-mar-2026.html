@@ -527,6 +527,7 @@
       border: 1px solid var(--dai-border);
       border-radius: var(--radius);
       padding: 24px;
+      position: relative;
     }
     .chart-title {
       font-size: 13px;
@@ -539,7 +540,7 @@
       color: var(--dai-muted);
       margin-bottom: 20px;
     }
-    canvas { max-height: 280px; }
+    canvas { max-height: 280px; display: block; width: 100% !important; }
 
     /* ── DIVIDER ────────────────────────── */
     .divider {
@@ -1472,13 +1473,14 @@
 
 <!-- ═══════════════ CHARTS ═══════════════ -->
 <script>
+  var _charts = [];
   function initCharts() {
       Chart.defaults.color = '#94A3B8';
       Chart.defaults.borderColor = '#334155';
       Chart.defaults.font.family = "'Inter', sans-serif";
 
       // Custo por conversa — fev vs mar
-      new Chart(document.getElementById('chartCusto'), {
+      _charts.push(new Chart(document.getElementById('chartCusto'), {
         type: 'bar',
         data: {
           labels: ['Fevereiro 2026', 'Março 2026'],
@@ -1501,10 +1503,10 @@
             x: { grid: { display: false } }
           }
         }
-      });
+      }));
 
       // Volume e investimento
-      new Chart(document.getElementById('chartVolume'), {
+      _charts.push(new Chart(document.getElementById('chartVolume'), {
         type: 'bar',
         data: {
           labels: ['Fevereiro 2026', 'Março 2026'],
@@ -1536,10 +1538,10 @@
             x: { grid: { display: false } }
           }
         }
-      });
+      }));
 
       // Distribuição de conversas — Lifting vs demais
-      new Chart(document.getElementById('chartCreativos'), {
+      _charts.push(new Chart(document.getElementById('chartCreativos'), {
         type: 'doughnut',
         data: {
           labels: ['AN|LIFTING|01', 'AN|PELE 40+|01 (LUXO)', 'AN|DIA DA MULHER|01', 'AN|PELE 40+|01 (QUENTE)', 'AN|BOTOX|01 (QUENTE)', 'Demais'],
@@ -1559,7 +1561,7 @@
             tooltip: { callbacks: { label: (c) => ` ${c.label}: ${c.parsed} conversas (${((c.parsed/81)*100).toFixed(1)}%)` } }
           }
         }
-      });
+      }));
 
       // Bar chart: custo por conversa por criativo
       var labelsCriativos = ['PELE 40+ (LUXO)','DIA DA MULHER','LIFTING (QUENTE)','PELE 40+ (QUENTE)','LIFTING (LUXO)','BOTOX (QUENTE)','CANETAS','PROCEDIMENTOS'];
@@ -1567,7 +1569,7 @@
       var colors = custos.map(function(v) { return v <= 8 ? 'rgba(16,185,129,0.75)' : v <= 10 ? 'rgba(245,158,11,0.7)' : 'rgba(239,68,68,0.7)'; });
       var borders = custos.map(function(v) { return v <= 8 ? '#10B981' : v <= 10 ? '#F59E0B' : '#EF4444'; });
 
-      new Chart(document.getElementById('chartBar'), {
+      _charts.push(new Chart(document.getElementById('chartBar'), {
         type: 'bar',
         data: {
           labels: labelsCriativos,
@@ -1585,7 +1587,12 @@
             y: { grid: { display: false }, ticks: { font: { size: 11 } } }
           }
         }
-      });
+      }));
+
+      // Force resize so Chart.js recalculates after flex layout
+      setTimeout(function() {
+        _charts.forEach(function(c) { c.resize(); });
+      }, 50);
   } // end initCharts
 </script>
 
@@ -1599,7 +1606,12 @@
       function onAuth() {
         document.getElementById('gate-loading').classList.add('hidden');
         document.getElementById('app').classList.add('visible');
-        setTimeout(initCharts, 150);
+        // Double rAF: garantia de 2 frames completos de layout antes do Chart.js
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() {
+            initCharts();
+          });
+        });
       },
       function onTimeout() {
         document.getElementById('gate-loading').classList.add('hidden');
