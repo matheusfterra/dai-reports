@@ -815,15 +815,79 @@
         </div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <!-- Custo por Conversa -->
         <div class="chart-wrap">
           <div class="chart-title">Custo por Conversa (R$)</div>
           <div class="chart-subtitle">Quanto menor, melhor. Limite "bom" = R$10</div>
-          <canvas id="chartCusto" style="height:240px;"></canvas>
+          <div style="display:flex;flex-direction:column;gap:12px;margin-top:20px;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:110px;font-size:12px;color:var(--dai-muted);flex-shrink:0;">Fevereiro 2026</div>
+              <div style="flex:1;background:var(--dai-bg);border-radius:6px;overflow:hidden;height:28px;">
+                <div style="width:82%;height:100%;background:rgba(99,102,241,0.6);border:1px solid #6366F1;border-radius:6px;display:flex;align-items:center;padding-left:8px;">
+                  <span style="font-size:12px;font-weight:700;color:#fff;">R$ 9,92</span>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:110px;font-size:12px;color:var(--dai-muted);flex-shrink:0;">Março 2026</div>
+              <div style="flex:1;background:var(--dai-bg);border-radius:6px;overflow:hidden;height:28px;">
+                <div style="width:80%;height:100%;background:rgba(16,185,129,0.75);border:1px solid #10B981;border-radius:6px;display:flex;align-items:center;padding-left:8px;">
+                  <span style="font-size:12px;font-weight:700;color:#fff;">R$ 9,76</span>
+                </div>
+              </div>
+            </div>
+            <div style="margin-top:8px;padding:10px 12px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:8px;">
+              <span style="font-size:11px;color:#10B981;font-weight:600;">▼ −1,6% de melhoria</span>
+              <span style="font-size:11px;color:var(--dai-muted);margin-left:8px;">Abaixo do limite R$10 ✓</span>
+            </div>
+          </div>
         </div>
+        <!-- Volume vs Investimento -->
         <div class="chart-wrap">
           <div class="chart-title">Volume de Conversas vs Investimento</div>
           <div class="chart-subtitle">Fevereiro → Março</div>
-          <canvas id="chartVolume" style="height:240px;"></canvas>
+          <div style="display:flex;flex-direction:column;gap:16px;margin-top:20px;">
+            <div>
+              <div style="font-size:11px;color:var(--dai-muted);margin-bottom:6px;">Conversas geradas</div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div style="flex:1;display:flex;flex-direction:column;gap:6px;">
+                  <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--dai-muted);">
+                    <span>Fev</span><span style="color:#818cf8;font-weight:700;">87</span>
+                  </div>
+                  <div style="background:var(--dai-bg);border-radius:4px;height:10px;">
+                    <div style="width:85%;height:100%;background:rgba(99,102,241,0.5);border-radius:4px;"></div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--dai-muted);">
+                    <span>Mar</span><span style="color:#6366F1;font-weight:700;">92</span>
+                  </div>
+                  <div style="background:var(--dai-bg);border-radius:4px;height:10px;">
+                    <div style="width:90%;height:100%;background:rgba(99,102,241,0.8);border-radius:4px;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:11px;color:var(--dai-muted);margin-bottom:6px;">Investimento (R$)</div>
+              <div style="display:flex;flex-direction:column;gap:6px;">
+                <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--dai-muted);">
+                  <span>Fev</span><span style="color:#F59E0B;font-weight:700;">R$ 862,76</span>
+                </div>
+                <div style="background:var(--dai-bg);border-radius:4px;height:10px;">
+                  <div style="width:88%;height:100%;background:rgba(245,158,11,0.35);border-radius:4px;"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--dai-muted);">
+                  <span>Mar</span><span style="color:#fbbf24;font-weight:700;">R$ 898,01</span>
+                </div>
+                <div style="background:var(--dai-bg);border-radius:4px;height:10px;">
+                  <div style="width:92%;height:100%;background:rgba(245,158,11,0.55);border-radius:4px;"></div>
+                </div>
+              </div>
+            </div>
+            <div style="padding:10px 12px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);border-radius:8px;">
+              <span style="font-size:11px;color:#818cf8;font-weight:600;">▲ +5,7% conversas</span>
+              <span style="font-size:11px;color:var(--dai-muted);margin-left:8px;">com +4,1% de investimento</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1478,67 +1542,6 @@
       Chart.defaults.color = '#94A3B8';
       Chart.defaults.borderColor = '#334155';
       Chart.defaults.font.family = "'Inter', sans-serif";
-
-      // Custo por conversa — fev vs mar
-      _charts.push(new Chart(document.getElementById('chartCusto'), {
-        type: 'bar',
-        data: {
-          labels: ['Fevereiro 2026', 'Março 2026'],
-          datasets: [{
-            label: 'Custo por Conversa (R$)',
-            data: [9.92, 9.76],
-            backgroundColor: ['rgba(99,102,241,0.6)', 'rgba(16,185,129,0.75)'],
-            borderColor: ['#6366F1', '#10B981'],
-            borderWidth: 2, borderRadius: 8, borderSkipped: false,
-          }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: { callbacks: { label: (c) => ` R$${c.parsed.y.toFixed(2)}` } }
-          },
-          scales: {
-            y: { min: 7, max: 12, grid: { color: '#1E293B' }, ticks: { callback: (v) => 'R$' + v } },
-            x: { grid: { display: false } }
-          }
-        }
-      }));
-
-      // Volume e investimento
-      _charts.push(new Chart(document.getElementById('chartVolume'), {
-        type: 'bar',
-        data: {
-          labels: ['Fevereiro 2026', 'Março 2026'],
-          datasets: [
-            {
-              label: 'Conversas',
-              data: [87, 92],
-              backgroundColor: ['rgba(99,102,241,0.5)', 'rgba(99,102,241,0.8)'],
-              borderColor: ['#6366F1', '#818cf8'],
-              borderWidth: 2, borderRadius: 6, borderSkipped: false,
-              yAxisID: 'y',
-            },
-            {
-              label: 'Investimento (R$)',
-              data: [862.76, 898.01],
-              backgroundColor: ['rgba(245,158,11,0.35)', 'rgba(245,158,11,0.55)'],
-              borderColor: ['#F59E0B', '#fbbf24'],
-              borderWidth: 2, borderRadius: 6, borderSkipped: false,
-              yAxisID: 'y1',
-            }
-          ]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 14, font: { size: 11 } } } },
-          scales: {
-            y: { position: 'left', min: 70, max: 100, grid: { color: '#1E293B' }, ticks: { stepSize: 5 } },
-            y1: { position: 'right', min: 600, max: 950, grid: { drawOnChartArea: false }, ticks: { callback: (v) => 'R$' + v } },
-            x: { grid: { display: false } }
-          }
-        }
-      }));
 
       // Distribuição de conversas — Lifting vs demais
       _charts.push(new Chart(document.getElementById('chartCreativos'), {
