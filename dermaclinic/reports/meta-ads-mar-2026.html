@@ -1439,8 +1439,92 @@
       </div>
       <div class="chart-wrap">
         <div class="chart-title">Custo por Conversa por Criativo (R$)</div>
-        <div class="chart-subtitle">Barra vermelha = limite "bom" de R$10. Sem barra = zero conversão.</div>
-        <canvas id="chartBar" style="height:320px;"></canvas>
+        <div class="chart-subtitle">Verde ≤ R$8 · Amarelo ≤ R$10 · Vermelho > R$10 · Sem barra = zero conversão</div>
+        <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;position:relative;">
+          <!-- Linhas de referência -->
+          <div style="position:absolute;top:0;bottom:0;left:130px;right:48px;pointer-events:none;">
+            <div style="position:absolute;left:calc(8/16*100%);top:0;bottom:0;border-left:1px dashed rgba(16,185,129,0.35);"></div>
+            <div style="position:absolute;left:calc(10/16*100%);top:0;bottom:0;border-left:2px dashed rgba(239,68,68,0.5);"></div>
+          </div>
+          <!-- PELE 40+ LUXO — R$3,60 — verde -->
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:130px;font-size:11px;color:var(--dai-muted);flex-shrink:0;text-align:right;padding-right:6px;">PELE 40+ (LUXO)</div>
+            <div style="flex:1;background:var(--dai-bg);border-radius:4px;height:22px;position:relative;">
+              <div style="width:calc(3.60/16*100%);height:100%;background:rgba(16,185,129,0.75);border:1px solid #10B981;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
+                <span style="font-size:11px;font-weight:700;color:#fff;white-space:nowrap;">R$3,60</span>
+              </div>
+            </div>
+          </div>
+          <!-- DIA DA MULHER — R$6,86 — verde -->
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:130px;font-size:11px;color:var(--dai-muted);flex-shrink:0;text-align:right;padding-right:6px;">DIA DA MULHER</div>
+            <div style="flex:1;background:var(--dai-bg);border-radius:4px;height:22px;">
+              <div style="width:calc(6.86/16*100%);height:100%;background:rgba(16,185,129,0.75);border:1px solid #10B981;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
+                <span style="font-size:11px;font-weight:700;color:#fff;white-space:nowrap;">R$6,86</span>
+              </div>
+            </div>
+          </div>
+          <!-- PELE 40+ QUENTE — R$7,47 — verde -->
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:130px;font-size:11px;color:var(--dai-muted);flex-shrink:0;text-align:right;padding-right:6px;">PELE 40+ (QUENTE)</div>
+            <div style="flex:1;background:var(--dai-bg);border-radius:4px;height:22px;">
+              <div style="width:calc(7.47/16*100%);height:100%;background:rgba(16,185,129,0.75);border:1px solid #10B981;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
+                <span style="font-size:11px;font-weight:700;color:#fff;white-space:nowrap;">R$7,47</span>
+              </div>
+            </div>
+          </div>
+          <!-- LIFTING QUENTE — R$7,54 — verde -->
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:130px;font-size:11px;color:var(--dai-muted);flex-shrink:0;text-align:right;padding-right:6px;">LIFTING (QUENTE)</div>
+            <div style="flex:1;background:var(--dai-bg);border-radius:4px;height:22px;">
+              <div style="width:calc(7.54/16*100%);height:100%;background:rgba(16,185,129,0.75);border:1px solid #10B981;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
+                <span style="font-size:11px;font-weight:700;color:#fff;white-space:nowrap;">R$7,54</span>
+              </div>
+            </div>
+          </div>
+          <!-- LIFTING LUXO — R$8,02 — verde -->
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:130px;font-size:11px;color:var(--dai-muted);flex-shrink:0;text-align:right;padding-right:6px;">LIFTING (LUXO)</div>
+            <div style="flex:1;background:var(--dai-bg);border-radius:4px;height:22px;">
+              <div style="width:calc(8.02/16*100%);height:100%;background:rgba(16,185,129,0.75);border:1px solid #10B981;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
+                <span style="font-size:11px;font-weight:700;color:#fff;white-space:nowrap;">R$8,02</span>
+              </div>
+            </div>
+          </div>
+          <!-- BOTOX QUENTE — R$8,06 — verde -->
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:130px;font-size:11px;color:var(--dai-muted);flex-shrink:0;text-align:right;padding-right:6px;">BOTOX (QUENTE)</div>
+            <div style="flex:1;background:var(--dai-bg);border-radius:4px;height:22px;">
+              <div style="width:calc(8.06/16*100%);height:100%;background:rgba(16,185,129,0.75);border:1px solid #10B981;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
+                <span style="font-size:11px;font-weight:700;color:#fff;white-space:nowrap;">R$8,06</span>
+              </div>
+            </div>
+          </div>
+          <!-- CANETAS — R$11,46 — vermelho -->
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:130px;font-size:11px;color:var(--dai-muted);flex-shrink:0;text-align:right;padding-right:6px;">CANETAS</div>
+            <div style="flex:1;background:var(--dai-bg);border-radius:4px;height:22px;">
+              <div style="width:calc(11.46/16*100%);height:100%;background:rgba(239,68,68,0.7);border:1px solid #EF4444;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
+                <span style="font-size:11px;font-weight:700;color:#fff;white-space:nowrap;">R$11,46</span>
+              </div>
+            </div>
+          </div>
+          <!-- PROCEDIMENTOS — R$14,93 — vermelho -->
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:130px;font-size:11px;color:var(--dai-muted);flex-shrink:0;text-align:right;padding-right:6px;">PROCEDIMENTOS</div>
+            <div style="flex:1;background:var(--dai-bg);border-radius:4px;height:22px;">
+              <div style="width:calc(14.93/16*100%);height:100%;background:rgba(239,68,68,0.7);border:1px solid #EF4444;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
+                <span style="font-size:11px;font-weight:700;color:#fff;white-space:nowrap;">R$14,93</span>
+              </div>
+            </div>
+          </div>
+          <!-- Legenda de referência -->
+          <div style="margin-top:8px;display:flex;gap:16px;flex-wrap:wrap;">
+            <span style="font-size:10px;color:#10B981;">▬ R$8 — zona verde</span>
+            <span style="font-size:10px;color:#EF4444;">▬ R$10 — limite "bom"</span>
+            <span style="font-size:10px;color:var(--dai-muted);">6 de 8 criativos abaixo do limite</span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -1596,43 +1680,6 @@
 
 <!-- ═══════════════ CHARTS ═══════════════ -->
 <script>
-  var _charts = [];
-  function initCharts() {
-      Chart.defaults.color = '#94A3B8';
-      Chart.defaults.borderColor = '#334155';
-      Chart.defaults.font.family = "'Inter', sans-serif";
-
-      // Bar chart: custo por conversa por criativo
-      var labelsCriativos = ['PELE 40+ (LUXO)','DIA DA MULHER','LIFTING (QUENTE)','PELE 40+ (QUENTE)','LIFTING (LUXO)','BOTOX (QUENTE)','CANETAS','PROCEDIMENTOS'];
-      var custos = [3.60, 6.86, 7.54, 7.47, 8.02, 8.06, 11.46, 14.93];
-      var colors = custos.map(function(v) { return v <= 8 ? 'rgba(16,185,129,0.75)' : v <= 10 ? 'rgba(245,158,11,0.7)' : 'rgba(239,68,68,0.7)'; });
-      var borders = custos.map(function(v) { return v <= 8 ? '#10B981' : v <= 10 ? '#F59E0B' : '#EF4444'; });
-
-      _charts.push(new Chart(document.getElementById('chartBar'), {
-        type: 'bar',
-        data: {
-          labels: labelsCriativos,
-          datasets: [{ label: 'Custo por Conversa (R$)', data: custos, backgroundColor: colors, borderColor: borders, borderWidth: 2, borderRadius: 6, borderSkipped: false }]
-        },
-        options: {
-          indexAxis: 'y',
-          responsive: true, maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: { callbacks: { label: (c) => ` R$${c.parsed.x.toFixed(2)}` } }
-          },
-          scales: {
-            x: { grid: { color: '#1E293B' }, ticks: { callback: (v) => 'R$' + v } },
-            y: { grid: { display: false }, ticks: { font: { size: 11 } } }
-          }
-        }
-      }));
-
-      // Force resize so Chart.js recalculates after flex layout
-      setTimeout(function() {
-        _charts.forEach(function(c) { c.resize(); });
-      }, 50);
-  } // end initCharts
 </script>
 
       </div><!-- /.report-body -->
@@ -1645,12 +1692,6 @@
       function onAuth() {
         document.getElementById('gate-loading').classList.add('hidden');
         document.getElementById('app').classList.add('visible');
-        // Double rAF: garantia de 2 frames completos de layout antes do Chart.js
-        requestAnimationFrame(function() {
-          requestAnimationFrame(function() {
-            initCharts();
-          });
-        });
       },
       function onTimeout() {
         document.getElementById('gate-loading').classList.add('hidden');
