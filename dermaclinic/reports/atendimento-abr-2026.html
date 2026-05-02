@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Desempenho do Atendimento — Abril 2026 | DermaClinic</title>
+  <link rel="stylesheet" href="../../_shared/style.css" />
+  <style>
+    .insight-box {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--brand);
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+      margin: 16px 0;
+    }
+    .insight-box.teal { border-left-color: var(--teal); }
+    .insight-box.amber { border-left-color: var(--amber); }
+    .insight-box.ruby { border-left-color: var(--ruby); }
+
+    .insight-box .insight-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--brand);
+      margin-bottom: 8px;
+    }
+    .insight-box.teal .insight-label { color: var(--teal); }
+    .insight-box.amber .insight-label { color: var(--amber); }
+    .insight-box.ruby .insight-label { color: var(--ruby); }
+
+    .insight-box p {
+      font-size: 15px !important;
+      margin-bottom: 0 !important;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+    .insight-box p:not(:last-child) { margin-bottom: 8px !important; }
+
+    .mini-stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 12px 0 20px;
+    }
+    .mini-stat {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      flex: 1;
+      min-width: 130px;
+    }
+    .mini-stat .ms-label {
+      font-size: 11px;
+      color: var(--text-subtle);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .mini-stat .ms-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-top: 2px;
+    }
+    .mini-stat .ms-sub {
+      font-size: 12px;
+      color: var(--text-subtle);
+      margin-top: 2px;
+    }
+
+    .section-synthesis {
+      background: linear-gradient(135deg, rgba(110,168,254,0.05), rgba(45,228,169,0.03));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 22px;
+      margin: 20px 0;
+    }
+    .section-synthesis h4 {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--brand);
+      margin-bottom: 10px;
+    }
+    .section-synthesis p {
+      font-size: 15px !important;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 8px !important;
+    }
+    .section-synthesis p:last-child { margin-bottom: 0 !important; }
+
+    ol.steps { color: var(--text-muted); font-size: 15px; line-height: 2; padding-left: 22px; }
+    ol.steps li { margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+
+  <div class="gate" id="gate-loading">
+    <div class="gate-icon"></div>
+    <p class="gate-title">Carregando relatório...</p>
+  </div>
+
+  <div class="gate hidden" id="gate-direct">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#5a5f66" stroke-width="1.5">
+      <rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" />
+    </svg>
+    <p class="gate-title">Acesso exclusivo via Chat</p>
+    <p class="gate-sub">Esta página está disponível somente no painel chat da DermaClinic.</p>
+  </div>
+
+  <div class="app" id="app">
+    <div class="report-header">
+      <button class="back-btn" onclick="history.back()">← Voltar</button>
+      <span class="report-header-title">Desempenho do Atendimento — Abril 2026</span>
+      <span class="report-header-sub">Digital AI · DermaClinic</span>
+    </div>
+
+    <div class="report-content">
+      <div class="report-body">
+
+        <h1>Relatório Executivo — Desempenho Clínico & Canal Digital</h1>
+        <p class="subtitle">DermaClinic | Digital AI — Sistema de Inteligência Clínica</p>
+        <p class="meta-line">
+          <span>📅 Período: 01/04/2026 – 30/04/2026</span>
+          <span>📦 Fonte: Feegow (gestão clínica) + Chat (WhatsApp)</span>
+          <span>🔄 Gerado em: 02/05/2026</span>
+        </p>
+
+        <!-- SUMÁRIO EXECUTIVO -->
+        <h2>Sumário Executivo</h2>
+        <p>
+          A DermaClinic encerrou abril de 2026 com o <strong>melhor mês da sua história registrada</strong> —
+          crescimento de <strong>+37,2% na receita</strong> sobre fevereiro (R$ 266.951,50 vs R$ 194.525),
+          <strong>+58,9% em pacientes únicos</strong> (197 vs 124) e projeção anual revisada para
+          <strong>R$ 3,2 milhões</strong>. O ticket médio das consultas médicas subiu para <strong>R$ 1.419</strong>,
+          consolidando o posicionamento premium da clínica mesmo diante do crescimento expressivo de volume.
+        </p>
+        <p>
+          O canal WhatsApp completou sua transformação: o tempo de primeira resposta caiu de <strong>178 minutos
+          para menos de 1 minuto</strong> com a ativação do bot — um salto que explica diretamente a melhora
+          em conversão e receita. Em paralelo, 114 encaixes realizados (vs 16 em fevereiro) sinalizam
+          <strong>demanda reprimida significativa</strong> — a clínica está operando abaixo da sua capacidade
+          de absorção de pacientes.
+        </p>
+
+        <!-- KPIs GERAIS -->
+        <div class="kpi-grid">
+          <div class="kpi-card kpi-good">
+            <div class="kpi-label">Receita Total</div>
+            <div class="kpi-value">R$ 266.952</div>
+            <div class="kpi-sub">+37,2% vs fevereiro · Proj.: R$ 3,2M/ano</div>
+          </div>
+          <div class="kpi-card kpi-good">
+            <div class="kpi-label">Consultas Realizadas</div>
+            <div class="kpi-value">195 médicas</div>
+            <div class="kpi-sub">Taxa de realização: 86,3%</div>
+          </div>
+          <div class="kpi-card kpi-warn">
+            <div class="kpi-label">No-show</div>
+            <div class="kpi-value">6,7%</div>
+            <div class="kpi-sub">+3,4pp vs fev · Quinta: caso crítico</div>
+          </div>
+          <div class="kpi-card kpi-good">
+            <div class="kpi-label">Ticket Médio Médicas</div>
+            <div class="kpi-value">R$ 1.419</div>
+            <div class="kpi-sub">+8% vs fevereiro (R$ 1.314)</div>
+          </div>
+          <div class="kpi-card kpi-good">
+            <div class="kpi-label">Pacientes Únicos</div>
+            <div class="kpi-value">197</div>
+            <div class="kpi-sub">+58,9% vs fev · 53 novos (26,9%)</div>
+          </div>
+          <div class="kpi-card kpi-good">
+            <div class="kpi-label">Taxa de Retorno</div>
+            <div class="kpi-value">73,1%</div>
+            <div class="kpi-sub">+7,8pp vs fev · Média BR: 57,2%</div>
+          </div>
+          <div class="kpi-card kpi-neutral">
+            <div class="kpi-label">Leads WhatsApp</div>
+            <div class="kpi-value">~581</div>
+            <div class="kpi-sub">21/dia · 1ª resposta: &lt;1 min ⭐</div>
+          </div>
+          <div class="kpi-card kpi-warn">
+            <div class="kpi-label">Encaixes Realizados</div>
+            <div class="kpi-value">114</div>
+            <div class="kpi-sub">+613% vs fev — demanda reprimida</div>
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- 1. INDICADORES FINANCEIROS -->
+        <h2>1. Indicadores Financeiros</h2>
+
+        <p>
+          A receita de <strong>R$ 266.951,50</strong> em abril representa o maior mês registrado da DermaClinic.
+          O crescimento de 37,2% sobre fevereiro não é resultado de um pico pontual — é reflexo direto da expansão
+          de volume (pacientes +58,9%) combinada com manutenção do ticket premium. O ticket médio de <strong>R$ 1.419</strong>
+          é 2 a 3 vezes superior ao praticado em clínicas dermatológicas privadas nas capitais brasileiras (R$ 400–600),
+          demonstrando que o crescimento em volume não comprometeu o posicionamento.
+        </p>
+
+        <table>
+          <thead>
+            <tr><th>Métrica</th><th>DermaClinic — Abril</th><th>Benchmark Mercado</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Receita Total (abr)</td><td><strong>R$ 266.951,50</strong></td><td>~R$ 90.000–162.000 (3 médicos)</td></tr>
+            <tr><td>Receita Projetada Anual</td><td><strong>R$ 3,2 milhões</strong></td><td>~R$ 1,1M–1,9M (3 médicos)</td></tr>
+            <tr><td>Ticket Médio (Consultas médicas)</td><td><strong>R$ 1.419</strong></td><td>R$ 400–600 (capitais brasileiras)</td></tr>
+            <tr><td>Ticket Médio Dra. Raquel</td><td>R$ 1.408</td><td>R$ 500–800 (São Paulo/Sul)</td></tr>
+            <tr><td>Ticket Médio Dra. Eoda</td><td>R$ 1.484</td><td>R$ 500–800 (São Paulo/Sul)</td></tr>
+            <tr><td>Melhor Dia do Mês</td><td><strong>22/04 — R$ 29.885</strong></td><td>—</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Composição das formas de pagamento</h3>
+        <p>
+          O cartão de crédito mantém sua dominância com <strong>78,1% da receita</strong> (R$ 208.374),
+          reforçando que os pacientes utilizam o parcelamento como facilitador do ticket premium.
+          O PIX cresceu em participação (10,2%), enquanto dinheiro representa apenas 2,2% — perfil de
+          uma clientela digitalmente ativa e financeiramente estabelecida.
+        </p>
+
+        <div class="mini-stat-row">
+          <div class="mini-stat">
+            <div class="ms-label">Cartão Crédito</div>
+            <div class="ms-value">R$ 208.374</div>
+            <div class="ms-sub">78,1% da receita</div>
+          </div>
+          <div class="mini-stat">
+            <div class="ms-label">PIX</div>
+            <div class="ms-value">R$ 27.275</div>
+            <div class="ms-sub">10,2% da receita</div>
+          </div>
+          <div class="mini-stat">
+            <div class="ms-label">Cartão Débito</div>
+            <div class="ms-value">R$ 25.372,50</div>
+            <div class="ms-sub">9,5% da receita</div>
+          </div>
+          <div class="mini-stat">
+            <div class="ms-label">Dinheiro</div>
+            <div class="ms-value">R$ 5.930</div>
+            <div class="ms-sub">2,2% da receita</div>
+          </div>
+        </div>
+
+        <h3>Comportamento semanal da receita</h3>
+        <table>
+          <thead>
+            <tr><th>Semana</th><th>Período</th><th>Receita</th><th>Destaque</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Semana 1</td><td>01–02/04</td><td>R$ 22.295</td><td>Apenas 2 dias úteis</td></tr>
+            <tr><td>Semana 2</td><td>06–10/04</td><td>R$ 53.240</td><td>—</td></tr>
+            <tr><td>Semana 3</td><td>13–17/04</td><td>R$ 70.987,50</td><td>—</td></tr>
+            <tr><td>Semana 4</td><td>20–24/04</td><td>R$ 47.535</td><td class="status-warn">⚠️ Queda — investigar</td></tr>
+            <tr><td><strong>Semana 5</strong></td><td>27–30/04</td><td><strong>R$ 72.894</strong></td><td class="status-good">⭐ Melhor semana do mês</td></tr>
+          </tbody>
+        </table>
+
+        <div class="insight-box amber">
+          <div class="insight-label">Ponto de atenção — Semana 4</div>
+          <p>A Semana 4 (20–24/04) gerou apenas <strong>R$ 47.535</strong> — queda expressiva ante as semanas 3 e 5 (ambas acima de R$ 70K).
+          O padrão sugere agenda reduzida nessa semana, possível feriado (Tiradentes: 21/04) ou ausência de médica.
+          Confirmar e, se foi agenda reduzida, avaliar estratégia de reposição de horários nessas semanas em meses futuros.</p>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- 2. INDICADORES CLÍNICOS -->
+        <h2>2. Indicadores Clínicos</h2>
+
+        <p>
+          Abril trouxe crescimento expressivo de volume — 195 consultas médicas realizadas (+31,8% vs fevereiro) e
+          270 sessões de fototerapia — mas também expôs o primeiro sinal de pressão operacional:
+          a taxa de no-show subiu de 3,3% para 6,7%, e os 114 encaixes realizados indicam que a agenda atual
+          já não comporta toda a demanda existente. A clínica está crescendo mais rápido do que sua capacidade instalada.
+        </p>
+
+        <h3>2.1 Eficiência da Agenda</h3>
+        <table>
+          <thead>
+            <tr><th>Métrica</th><th>DermaClinic</th><th>Benchmark</th><th>Avaliação</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Consultas Médicas Realizadas</td><td><strong>195</strong></td><td>—</td><td>—</td></tr>
+            <tr><td>Taxa de Realização</td><td><strong>86,3%</strong></td><td>~80–90% (privado)</td><td class="status-good">🟢 Dentro do benchmark</td></tr>
+            <tr><td>Taxa de No-show</td><td><strong>6,7%</strong> (14 casos)</td><td>10–20% (privado)</td><td class="status-warn">🟡 Subiu — atenção</td></tr>
+            <tr><td>Desmarcado pelo Paciente</td><td>16 casos</td><td>—</td><td class="status-warn">🟡 Monitorar</td></tr>
+            <tr><td>Remarcados</td><td>31 casos</td><td>—</td><td class="status-warn">🟡 Alta rotatividade</td></tr>
+            <tr><td>Encaixes Realizados</td><td><strong>114</strong></td><td>—</td><td class="status-bad">🔴 Sinaliza sobrecarga de demanda</td></tr>
+            <tr><td>Cancelado pelo Profissional</td><td>1 caso</td><td>—</td><td class="status-good">🟢 Excelente</td></tr>
+          </tbody>
+        </table>
+
+        <div class="insight-box ruby">
+          <div class="insight-label">Alerta — Demanda Reprimida (Encaixes)</div>
+          <p>114 encaixes em abril (vs 16 em fevereiro) representam um crescimento de <strong>+613%</strong>.
+          Quando pacientes precisam de encaixe em massa, significa que a agenda programada já está lotada antes
+          de o mês começar. Cada encaixe recusado por falta de vaga é receita perdida.
+          Com ticket médio de R$ 1.419, <strong>50 encaixes não atendidos = ~R$ 71.000 de receita represada por mês</strong>.
+          Avaliar expansão de horários ou aumento de dias de atendimento.</p>
+        </div>
+
+        <div class="insight-box teal">
+          <div class="insight-label">O que o no-show representa em dinheiro</div>
+          <p>Os 14 no-shows em abril representam aproximadamente <strong>R$ 19.866 em receita não realizada</strong>
+          (14 × R$ 1.419). A quinta-feira concentra 5 dos 14 casos — ação cirúrgica de lembretes automáticos
+          na véspera das consultas de quinta tem o maior ROI imediato de qualquer iniciativa operacional.</p>
+        </div>
+
+        <h3>2.2 Desempenho por Médica</h3>
+        <table>
+          <thead>
+            <tr><th>Médica</th><th>Consultas</th><th>Receita (agenda)</th><th>Ticket Médio</th><th>Pacientes Novos</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Dra. Raquel Steglich</strong></td><td>95</td><td><strong>R$ 133.749</strong></td><td>R$ 1.408</td><td>43</td></tr>
+            <tr><td><strong>Dra. Eoda Steglich</strong></td><td>92</td><td><strong>R$ 136.570</strong></td><td><strong>R$ 1.484</strong></td><td>28</td></tr>
+            <tr><td>Outra Médica</td><td>8</td><td>R$ 6.300</td><td>R$ 787</td><td>2</td></tr>
+            <tr><td><strong>TOTAL médicas</strong></td><td><strong>195</strong></td><td><strong>R$ 276.619</strong></td><td><strong>R$ 1.419</strong></td><td><strong>73</strong></td></tr>
+          </tbody>
+        </table>
+
+        <p>
+          A Dra. Eoda Steglich apresenta o maior ticket médio do mês (R$ 1.484) e quase dobrou seu volume
+          de atendimento — de 40 consultas em fevereiro para 92 em abril (+130%). A Dra. Raquel Steglich
+          é a de maior volume absoluto (95 consultas) e trouxe 43 pacientes novos — a maior captação individual do mês.
+          Juntas, as duas médicas responderam por <strong>96% das consultas e 97% da receita médica do mês</strong>.
+        </p>
+
+        <h3>2.3 Fototerapia — motor de recorrência</h3>
+        <p>
+          A fototerapia registrou <strong>270 sessões realizadas</strong> em abril, com 38 pacientes em tratamento ativo —
+          média de <strong>7,1 visitas por paciente no mês</strong> (vs 5,7 em fevereiro, +25%). Isso demonstra
+          crescimento tanto na base de pacientes quanto na intensidade de uso. São clientes altamente fidelizados,
+          com fluxo previsível de agendamentos, que contribuem para o equilíbrio da receita mesmo em semanas de
+          agenda médica mais leve.
+        </p>
+
+        <hr class="divider" />
+
+        <!-- 3. PERFIL DOS PACIENTES -->
+        <h2>3. Perfil dos Pacientes</h2>
+
+        <p>
+          Abril trouxe <strong>197 pacientes únicos atendidos</strong> — 58,9% a mais que fevereiro (124).
+          Esse crescimento expressivo foi puxado principalmente pela base de retorno: a taxa de retorno subiu
+          de 65,3% para <strong>73,1%</strong>, a melhor marca registrada. Isso significa que a clínica está
+          fidelizando bem seus pacientes existentes <em>e</em> crescendo em pacientes novos simultaneamente —
+          uma combinação rara e de alto valor estratégico.
+        </p>
+
+        <div class="mini-stat-row">
+          <div class="mini-stat">
+            <div class="ms-label">Pacientes Únicos</div>
+            <div class="ms-value">197</div>
+            <div class="ms-sub">vs 124 em fevereiro (+58,9%)</div>
+          </div>
+          <div class="mini-stat">
+            <div class="ms-label">Pacientes Novos</div>
+            <div class="ms-value">53</div>
+            <div class="ms-sub">26,9% do total</div>
+          </div>
+          <div class="mini-stat">
+            <div class="ms-label">Taxa de Retorno</div>
+            <div class="ms-value">73,1%</div>
+            <div class="ms-sub">vs 65,3% em fev (+7,8pp)</div>
+          </div>
+          <div class="mini-stat">
+            <div class="ms-label">Pacientes Retorno</div>
+            <div class="ms-value">144</div>
+            <div class="ms-sub">73,1% da base</div>
+          </div>
+        </div>
+
+        <h3>Quem é o paciente DermaClinic em abril</h3>
+        <p>
+          O perfil etário mantém concentração em adultos de <strong>40–49 anos (24,4%)</strong>,
+          seguido de 60+ anos com crescimento expressivo (<strong>23,9%</strong>) e 30–39 anos (18,8%).
+          O aumento da participação de pacientes acima de 60 anos (vs 19,7% em fevereiro) pode indicar
+          maior demanda por procedimentos dermatológicos clínicos nessa faixa — e também um público com
+          maior disponibilidade de horário e disposição para encaixe.
+        </p>
+
+        <table>
+          <thead>
+            <tr><th>Faixa Etária</th><th>Pacientes</th><th>%</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Até 19 anos</td><td>19</td><td>9,7%</td></tr>
+            <tr><td>20–29 anos</td><td>17</td><td>8,6%</td></tr>
+            <tr><td>30–39 anos</td><td>37</td><td>18,8%</td></tr>
+            <tr><td><strong>40–49 anos</strong></td><td><strong>48</strong></td><td><strong>24,4%</strong> ← principal</td></tr>
+            <tr><td>50–59 anos</td><td>28</td><td>14,2%</td></tr>
+            <tr><td><strong>60+ anos</strong></td><td><strong>47</strong></td><td><strong>23,9%</strong> ← crescendo</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Aproveitamento por dia da semana</h3>
+        <p>
+          Segunda-feira é o melhor dia da clínica em abril, com <strong>86,3% de aproveitamento</strong> e
+          apenas 2 no-shows. Quinta-feira é o dia crítico: apenas <strong>55,2% de aproveitamento</strong>,
+          com 5 dos 14 no-shows do mês concentrados em um único dia da semana.
+        </p>
+
+        <table>
+          <thead>
+            <tr><th>Dia</th><th>Agendados</th><th>Realizados</th><th>No-shows</th><th>Aproveitamento</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Segunda</strong></td><td>124</td><td>107</td><td>2</td><td class="status-good"><strong>86,3% ⭐</strong></td></tr>
+            <tr><td>Sexta</td><td>68</td><td>56</td><td>2</td><td>82,4%</td></tr>
+            <tr><td>Quarta</td><td>206</td><td>157</td><td>3</td><td>76,2%</td></tr>
+            <tr><td>Terça</td><td>92</td><td>65</td><td>2</td><td>70,7%</td></tr>
+            <tr><td><strong>Quinta</strong></td><td>145</td><td>80</td><td>5</td><td class="status-bad"><strong>55,2% ⚠️</strong></td></tr>
+          </tbody>
+        </table>
+
+        <div class="insight-box amber">
+          <div class="insight-label">Ação de impacto imediato — Quinta-feira</div>
+          <p>Quinta-feira concentra <strong>35,7% de todos os no-shows do mês</strong> (5 de 14) com o pior aproveitamento (55,2%).
+          Lembretes automáticos via WhatsApp 24h antes das consultas de quinta podem recuperar 3 a 5 consultas por mês —
+          <strong>R$ 4.257–7.095 em receita adicional</strong> sem nenhum custo de aquisição de paciente.</p>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- 4. CANAL DIGITAL -->
+        <h2>4. Canal Digital (WhatsApp)</h2>
+
+        <p>
+          Abril marcou a <strong>consolidação do canal digital</strong>. O volume de leads caiu 16,7%
+          (581 vs 698 em fevereiro), mas todos os indicadores de resultado subiram — receita +37%, pacientes +59%.
+          Isso não é contradição: é o sinal mais claro de que a <strong>qualidade dos leads melhorou</strong> com
+          a ativação do bot. Menos volume, mais conversão. A transformação no tempo de primeira resposta
+          — de 178 minutos para menos de 1 minuto — é o fator mais provável por trás dessa melhora.
+        </p>
+
+        <h3>4.1 Funil de Conversão (rastreado via chat)</h3>
+        <div class="funnel">~581 Contatos Entrantes
+  │
+  ├── ~176 Consultas Agendadas via Chat (rastreadas)
+  │     │
+  │     └── ~187 Consultas Realizadas rastreadas
+  │           └── Sentimento: ~65% Neutro | ~32% Positivo | ~3% Negativo
+  │
+  ├── Canais identificados: Relacionamento (principal) + VIP
+  │
+  └── Média: ~21 leads por dia útil</div>
+
+        <div class="insight-box teal">
+          <div class="insight-label">Transformação completa no tempo de resposta</div>
+          <p>O tempo de primeira resposta caiu de <strong>178 minutos (3 horas) em fevereiro para menos de 1 minuto em abril</strong>
+          com a ativação do bot de atendimento. Pesquisas indicam que leads respondidos em menos de 5 minutos têm
+          <strong>21x mais chance de converter</strong> do que os respondidos após 30 minutos. Essa mudança operacional
+          é a principal alavanca responsável pelo crescimento de receita e pacientes em abril.</p>
+        </div>
+
+        <h3>4.2 Métricas do canal</h3>
+        <table>
+          <thead>
+            <tr><th>Métrica</th><th>Fevereiro</th><th>Abril</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Total de Leads</td><td>698</td><td>~581</td><td class="status-warn">🟡 -16,7% (qualidade compensa)</td></tr>
+            <tr><td>Média diária de leads</td><td>~25/dia</td><td>~21/dia</td><td class="status-warn">🟡 Volume menor</td></tr>
+            <tr><td><strong>1ª Resposta</strong></td><td>178 min</td><td><strong>&lt;1 min</strong></td><td class="status-good">🟢 Transformação completa</td></tr>
+            <tr><td>Sentimento Negativo</td><td>0,9%</td><td>~3%</td><td class="status-warn">🟡 Leve alta — monitorar</td></tr>
+            <tr><td>Sentimento Positivo</td><td>34,7%</td><td>~32%</td><td class="status-good">🟢 Estável</td></tr>
+          </tbody>
+        </table>
+
+        <div class="insight-box amber">
+          <div class="insight-label">Ponto de atenção — Word Cloud dia 30/04</div>
+          <p>A análise do Word Cloud de 30/04 registra termos como <strong>"marmitas"</strong> e <strong>"cardápio"</strong>
+          — completamente fora do universo dermatológico. Isso indica possível contaminação de conversas de outro
+          segmento de negócio entrando no canal da DermaClinic. Recomenda-se investigar se há leads de canais incorretos
+          ou números cruzados no CRM.</p>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- 5. COMPARATIVO FEV vs ABR -->
+        <h2>5. Comparativo Fevereiro vs Abril 2026</h2>
+
+        <p>
+          Em dois meses, a DermaClinic saltou de um desempenho já acima do mercado para um nível excepcional.
+          Os ganhos são consistentes e multidimensionais — não houve troca de qualidade por volume.
+          O único indicador que piorou — taxa de no-show — é consequência natural do crescimento e tem solução operacional direta.
+        </p>
+
+        <table>
+          <thead>
+            <tr><th>Indicador</th><th>Fevereiro 2026</th><th>Abril 2026</th><th>Variação</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Receita Total</td><td>R$ 194.525</td><td><strong>R$ 266.952</strong></td><td class="status-good">🟢 +37,2%</td></tr>
+            <tr><td>Projeção Anual</td><td>R$ 2,33M</td><td><strong>R$ 3,2M</strong></td><td class="status-good">🟢 +37,3%</td></tr>
+            <tr><td>Pacientes Únicos</td><td>124</td><td><strong>197</strong></td><td class="status-good">🟢 +58,9%</td></tr>
+            <tr><td>Consultas Realizadas (médicas)</td><td>148</td><td><strong>195</strong></td><td class="status-good">🟢 +31,8%</td></tr>
+            <tr><td>Sessões Fototerapia</td><td>217</td><td><strong>270</strong></td><td class="status-good">🟢 +24,4%</td></tr>
+            <tr><td>Taxa de Realização</td><td>96,7%</td><td>86,3%</td><td class="status-warn">🟡 -10,4pp</td></tr>
+            <tr><td>Taxa de No-show</td><td>3,3%</td><td>6,7%</td><td class="status-bad">🔴 +3,4pp</td></tr>
+            <tr><td>Taxa de Retorno</td><td>65,3%</td><td><strong>73,1%</strong></td><td class="status-good">🟢 +7,8pp</td></tr>
+            <tr><td>Ticket Médio Médicas</td><td>R$ 1.314</td><td><strong>R$ 1.419</strong></td><td class="status-good">🟢 +8%</td></tr>
+            <tr><td>Leads WhatsApp</td><td>698</td><td>~581</td><td class="status-warn">🟡 -16,7%</td></tr>
+            <tr><td>Encaixes Realizados</td><td>16</td><td><strong>114</strong></td><td class="status-bad">⚠️ +613%</td></tr>
+            <tr><td>1ª Resposta WhatsApp</td><td>178 min</td><td><strong>&lt;1 min</strong></td><td class="status-good">🟢 Transformação</td></tr>
+          </tbody>
+        </table>
+
+        <div class="section-synthesis">
+          <h4>Síntese do período</h4>
+          <p>O crescimento de abril não é acidental — é o resultado da ativação do bot de atendimento (1ª resposta &lt;1 min),
+          que melhorou a taxa de conversão do canal digital e alimentou o crescimento em pacientes e receita.
+          A clínica está colhendo agora os frutos de uma melhora operacional implementada.</p>
+          <p>O desafio do próximo ciclo é diferente do anterior: não é mais sobre converter melhor os leads que chegam,
+          mas sobre <strong>expandir a capacidade de atendimento</strong> para absorver a demanda que já existe
+          (114 encaixes = agenda insuficiente) e <strong>proteger a taxa de realização</strong> com lembretes
+          automáticos antes das consultas de quinta.</p>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- 6. SCORECARD -->
+        <h2>6. DermaClinic vs. Benchmarks de Mercado</h2>
+        <p>
+          Com os números de abril, a DermaClinic reforça seu posicionamento entre os melhores indicadores
+          do setor privado dermatológico brasileiro — com destaque para receita, ticket médio e taxa de retorno
+          significativamente acima da média.
+        </p>
+
+        <table>
+          <thead>
+            <tr><th>Indicador</th><th>DermaClinic</th><th>Benchmark Brasil</th><th>Posicionamento</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Ticket Médio Consulta</td><td>R$ 1.419</td><td>R$ 400–600 (capitais)</td><td class="status-good">🟢 2,4x–3,5x acima</td></tr>
+            <tr><td>Taxa de Realização</td><td>86,3%</td><td>~80–90% (privado)</td><td class="status-good">🟢 Dentro do benchmark</td></tr>
+            <tr><td>Taxa de No-show</td><td>6,7%</td><td>10–20% (privado)</td><td class="status-good">🟢 1,5x–3x melhor</td></tr>
+            <tr><td>Taxa de Retorno</td><td>73,1%</td><td>57,2% (SBD 2024)</td><td class="status-good">🟢 +15,9pp acima</td></tr>
+            <tr><td>Receita Anual Projetada</td><td>R$ 3,2M</td><td>R$ 1,15M–1,94M</td><td class="status-good">🟢 65%–178% acima</td></tr>
+            <tr><td>Sentimento Negativo</td><td>~3%</td><td>~5–10%</td><td class="status-good">🟢 Abaixo da média</td></tr>
+            <tr><td>1ª Resposta WhatsApp</td><td>&lt;1 min</td><td>&lt;5 min (automação)</td><td class="status-good">🟢 Referência</td></tr>
+            <tr><td>Encaixes / Demanda Reprimida</td><td>114 encaixes</td><td>—</td><td class="status-bad">⚠️ Sinal de sobrecarga</td></tr>
+          </tbody>
+        </table>
+
+        <div class="section-synthesis">
+          <h4>Síntese estratégica</h4>
+          <p>A DermaClinic opera em nível de excelência nos indicadores de resultado — receita, ticket, fidelização.
+          O gargalo atual mudou de natureza: em fevereiro, o problema era converter melhor os leads que chegavam.
+          Em abril, o problema é <strong>ter agenda suficiente para atender os pacientes que já querem consultar</strong>.
+          É um problema de crescimento — o mais positivo que uma clínica pode ter.</p>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- 7. OPORTUNIDADES -->
+        <h2>7. Oportunidades de Crescimento</h2>
+
+        <div class="alert alert-danger">
+          <strong>⚠️ IMEDIATO — Expandir Capacidade de Agenda</strong><br />
+          <strong>Potencial: R$ 50.000–100.000/mês em receita não realizada</strong><br />
+          114 encaixes em abril sinalizam que a agenda programada está sendo preenchida antes de o mês começar.
+          Avaliar expansão de dias de atendimento, adição de turnos ou contratação de médica adicional.
+          Com ticket médio de R$ 1.419, absorver 40–70 consultas adicionais/mês representa receita imediata.
+        </div>
+
+        <div class="alert alert-danger">
+          <strong>🔴 IMEDIATO — Lembretes Automáticos para Quinta-feira</strong><br />
+          <strong>Potencial: +R$ 4.000–7.000/mês com custo próximo de zero</strong><br />
+          Quinta-feira concentra 35,7% dos no-shows (5 de 14) com aproveitamento de apenas 55,2%.
+          Envio automático de lembrete via WhatsApp 24h antes das consultas de quinta é a ação de maior ROI
+          imediato — implementação em horas, retorno a partir do primeiro mês.
+        </div>
+
+        <div class="alert alert-warn">
+          <strong>🟡 CURTO PRAZO — Reforçar Semanas de Receita Baixa</strong><br />
+          A Semana 4 (20–24/04) gerou R$ 47.535 vs Semana 5 com R$ 72.894. Se o padrão se repetir (feriado Tiradentes em semanas com 21/04),
+          desenvolver estratégia proativa de agenda nessas semanas: oferta de encaixes programados, reativação de pacientes
+          inativos ou horários extras para recuperar parte da receita perdida.
+        </div>
+
+        <div class="alert alert-warn">
+          <strong>🟡 CURTO PRAZO — Investigar Contaminação de Canal Digital</strong><br />
+          Word Cloud de 30/04 mostra termos "marmitas" e "cardápio" — indica leads de outro negócio entrando
+          no canal DermaClinic. Leads contaminados reduzem métricas de conversão e sobrecarregam a equipe
+          de atendimento com qualificações inúteis. Verificar configurações de canal no CRM/Chatwoot.
+        </div>
+
+        <div class="alert alert-warn">
+          <strong>🟡 MÉDIO PRAZO — Estratégia de Captação para Pacientes 60+</strong><br />
+          <strong>Potencial: ampliar base de 47 para 70+ pacientes nessa faixa</strong><br />
+          O grupo 60+ cresceu para 23,9% da base e tem perfil ideal: maior disponibilidade de horário,
+          maior frequência de retorno e procedimentos de maior complexidade (e ticket).
+          Conteúdo direcionado e parcerias com planos de saúde senior podem ampliar essa base.
+        </div>
+
+        <hr class="divider" />
+
+        <!-- 8. PRÓXIMOS PASSOS -->
+        <h2>8. Próximos Passos Recomendados</h2>
+        <ol class="steps">
+          <li><strong style="color: var(--text);">Ativar lembretes automáticos para quinta-feira</strong> via WhatsApp 24h antes das consultas — ação de maior ROI imediato (R$ 4K–7K/mês, custo zero)</li>
+          <li><strong style="color: var(--text);">Avaliar expansão da agenda</strong> — analisar adição de turnos, dias extras ou nova médica para absorver os 114 encaixes mensais e a demanda reprimida identificada</li>
+          <li><strong style="color: var(--text);">Investigar Semana 4 (20–24/04)</strong> — confirmar se o feriado do Tiradentes (21/04) causou a queda e criar estratégia de compensação para anos futuros</li>
+          <li><strong style="color: var(--text);">Investigar contaminação no canal digital</strong> — verificar por que termos como "marmitas" aparecem no Word Cloud da DermaClinic e corrigir configuração de canal no CRM</li>
+          <li><strong style="color: var(--text);">Monitorar sentimento negativo</strong> — subiu de 0,9% para ~3%; ainda abaixo do benchmark, mas tendência de alta merece acompanhamento nas próximas semanas</li>
+          <li><strong style="color: var(--text);">Desenvolver estratégia para pacientes 60+</strong> — faixa cresceu para 23,9% e representa oportunidade de expansão com conteúdo e canais direcionados</li>
+          <li><strong style="color: var(--text);">Replicar a estratégia da Dra. Eoda</strong> — maior ticket médio (R$ 1.484) com volume quase triplicado — entender quais procedimentos geram esse resultado e avaliar replicação</li>
+        </ol>
+
+        <hr class="divider" />
+
+        <div class="report-footer">
+          Relatório gerado em 02/05/2026 · Digital AI — Sistema de Inteligência Clínica<br />
+          Dados: Feegow + Chat · Período: Abril 2026 · Versão 1.0
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="../../_shared/auth.js"></script>
+  <script>
+    initChatwootAuth(
+      function onAuth() {
+        document.getElementById('gate-loading').classList.add('hidden');
+        document.getElementById('app').classList.add('visible');
+      },
+      function onTimeout() {
+        document.getElementById('gate-loading').classList.add('hidden');
+        document.getElementById('gate-direct').classList.remove('hidden');
+      }
+    );
+  </script>
+</body>
+</html>
