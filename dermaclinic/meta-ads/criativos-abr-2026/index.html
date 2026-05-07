@@ -40,7 +40,7 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--navy);color:v
 .header{background:rgba(15,23,42,0.95);border-bottom:1px solid var(--bord);padding:0 32px;position:sticky;top:0;z-index:200;backdrop-filter:blur(16px)}
 .h-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px;gap:16px}
 .logo{display:flex;align-items:center;gap:10px}
-.logo-mark{width:34px;height:34px;background:linear-gradient(135deg,var(--ind),#4f46e5);border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:#fff;letter-spacing:-0.5px;flex-shrink:0}
+.logo-mark{width:34px;height:34px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .logo-name{font-size:14px;font-weight:700}
 .logo-tag{font-size:10px;color:var(--mut);font-weight:400}
 .h-right{display:flex;align-items:center;gap:10px}
@@ -282,7 +282,18 @@ tbody td{padding:10px 14px;font-size:12px;vertical-align:middle}
 <header class="header">
   <div class="h-inner">
     <div class="logo">
-      <div class="logo-mark">DA</div>
+      <div class="logo-mark">
+        <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="34" height="34" rx="9" fill="url(#dai-grad)"/>
+          <defs>
+            <linearGradient id="dai-grad" x1="0" y1="0" x2="34" y2="34" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#818CF8"/>
+              <stop offset="100%" stop-color="#4F46E5"/>
+            </linearGradient>
+          </defs>
+          <path d="M10 8h7.5C21.9 8 26 12.1 26 17s-4.1 9-8.5 9H10V8zm3 3v12h4.5c3.3 0 5.5-2.7 5.5-6s-2.2-6-5.5-6H13z" fill="white"/>
+        </svg>
+      </div>
       <div><div class="logo-name">Digital AI</div><div class="logo-tag">AI-as-a-Service</div></div>
     </div>
     <div class="h-right">
@@ -295,12 +306,12 @@ tbody td{padding:10px 14px;font-size:12px;vertical-align:middle}
 <!-- TABS -->
 <nav class="tabs">
   <div class="tabs-inner">
-    <button class="tab-btn active" onclick="scrollTo('sec-podium')">🏆 Pódium</button>
-    <button class="tab-btn" onclick="scrollTo('sec-grid')">🎬 Criativos</button>
-    <button class="tab-btn" onclick="scrollTo('sec-charts')">📊 Gráficos</button>
-    <button class="tab-btn" onclick="scrollTo('sec-patterns')">🧠 Padrões</button>
-    <button class="tab-btn" onclick="scrollTo('sec-strategy')">🚀 Estratégia Maio</button>
-    <button class="tab-btn" onclick="scrollTo('sec-table')">📋 Tabela Completa</button>
+    <button class="tab-btn active" onclick="scrollToSection('sec-podium',this)">🏆 Pódium</button>
+    <button class="tab-btn" onclick="scrollToSection('sec-grid',this)">🎬 Criativos</button>
+    <button class="tab-btn" onclick="scrollToSection('sec-charts',this)">📊 Gráficos</button>
+    <button class="tab-btn" onclick="scrollToSection('sec-patterns',this)">🧠 Padrões</button>
+    <button class="tab-btn" onclick="scrollToSection('sec-strategy',this)">🚀 Estratégia Maio</button>
+    <button class="tab-btn" onclick="scrollToSection('sec-table',this)">📋 Tabela Completa</button>
   </div>
 </nav>
 
@@ -313,12 +324,12 @@ tbody td{padding:10px 14px;font-size:12px;vertical-align:middle}
     <div class="kpis">
       <div class="kpi i">
         <div class="kpi-lbl">Total Investido</div>
-        <div class="kpi-val i">R$728,77</div>
-        <div class="kpi-note">3 adsets · 10 criativos rastreados</div>
+        <div class="kpi-val i">R$878,51</div>
+        <div class="kpi-note">3 adsets · 15 criativos · Abril 2026</div>
       </div>
       <div class="kpi t">
         <div class="kpi-lbl">Conversas Geradas</div>
-        <div class="kpi-val t">115</div>
+        <div class="kpi-val t">127</div>
         <div class="kpi-note">Mensagens qualificadas no WhatsApp</div>
       </div>
       <div class="kpi a">
@@ -419,7 +430,7 @@ tbody td{padding:10px 14px;font-size:12px;vertical-align:middle}
     <div style="font-size:13px;color:var(--mut);line-height:1.5">
       <strong style="color:var(--txt)">AN|LIFTING|01 domina o top 3</strong>
       <span style="display:inline-flex;align-items:center;gap:4px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;color:var(--amber);margin:0 6px;vertical-align:middle">⚠ Mesmo criativo · 3 públicos</span>
-      — o mesmo vídeo veiculado em 3 adsets distintos (QUENTE, LUXO+DERM, MORNO) gerou <strong style="color:var(--teal)">69 conversas (60% do total)</strong> com CPR entre R$5,24 e R$6,76. É o criativo âncora da conta: escalar com segurança em maio.
+      — o mesmo vídeo veiculado em 3 adsets distintos (QUENTE, LUXO+DERM, MORNO) gerou <strong style="color:var(--teal)">69 conversas (54% do total)</strong> com CPR entre R$5,24 e R$6,76. É o criativo âncora da conta: escalar com segurança em maio.
     </div>
   </div>
 </div>
@@ -576,7 +587,7 @@ tbody td{padding:10px 14px;font-size:12px;vertical-align:middle}
     </div>
 
     <!-- CARD 7 -->
-    <div class="cr-card" data-rank="7" data-adset="MORNO" data-status="eficiente" data-conv="4" data-cpr="3.48" data-ctr="0" data-invest="13.93" onclick="window.open('https://www.facebook.com/61570812722285/posts/pfbid02ZYut42XXUgpmrceTcTSYd95tUV34ciwGLR3npaewLMesnP5EXvH2CLX6zNAE8h1Tl','_blank')">
+    <div class="cr-card" data-rank="7" data-adset="LUXO+DERM" data-status="eficiente" data-conv="4" data-cpr="3.48" data-ctr="0" data-invest="13.93" onclick="window.open('https://www.facebook.com/61570812722285/posts/pfbid02ZYut42XXUgpmrceTcTSYd95tUV34ciwGLR3npaewLMesnP5EXvH2CLX6zNAE8h1Tl','_blank')">
       <div class="cr-thumb" style="background:linear-gradient(135deg,#1a1040,#0f172a)">
         <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--sub)"><div style="font-size:36px">💉</div><div style="font-size:11px">Canetas Emagr.</div></div>
         <div class="cr-rank">#7</div>
@@ -584,7 +595,7 @@ tbody td{padding:10px 14px;font-size:12px;vertical-align:middle}
       </div>
       <div class="cr-body">
         <div class="cr-name">AN|CANETAS EMAGR.|01</div>
-        <div class="cr-conj">🌡 MORNO + QUENTE</div>
+        <div class="cr-conj">💎 LUXO+DERM</div>
         <div class="cr-m">
           <div><div class="cr-ml">Conversas</div><div class="cr-mv w">4</div></div>
           <div><div class="cr-ml">C/Msg</div><div class="cr-mv g">R$3,48 🏆</div></div>
@@ -706,7 +717,7 @@ tbody td{padding:10px 14px;font-size:12px;vertical-align:middle}
         </div>
         <div class="pattern-item">
           <div class="pattern-num">3</div>
-          <div class="pattern-text"><strong>Âncora: 1 criativo, 3 adsets</strong><br>LIFTING|01 em QUENTE, LUXO e MORNO = 69 conversas (60% do total). Quando o criativo funciona, distribua para múltiplos públicos.</div>
+          <div class="pattern-text"><strong>Âncora: 1 criativo, 3 adsets</strong><br>LIFTING|01 em QUENTE, LUXO e MORNO = 69 conversas (54% do total). Quando o criativo funciona, distribua para múltiplos públicos.</div>
         </div>
         <div class="pattern-item">
           <div class="pattern-num">4</div>
@@ -969,7 +980,7 @@ tbody td{padding:10px 14px;font-size:12px;vertical-align:middle}
         <tr><td><span class="rk">4</span></td><td><code style="font-size:11px;color:var(--bordo2)">AN|MELASMA|02</code></td><td><span class="tag">QUENTE</span></td><td style="font-size:11px;color:var(--mut)">Lookalike Eng./VideoViews</td><td class="mp">107,72</td><td class="mp g">17</td><td class="mp a">0,593%</td><td class="mp m">22,81</td><td class="mp">6,34</td><td><span class="cr-status st-sc" style="border-radius:5px;padding:2px 7px;font-size:9px">Carro-chefe 2</span></td><td><a class="lbtn" href="https://www.facebook.com/61570812722285/videos/953870484254283" target="_blank">▶</a></td></tr>
         <tr><td><span class="rk">5</span></td><td><code style="font-size:11px;color:var(--bordo2)">AN|MELASMA|02</code></td><td><span class="tag">LUXO+DERM</span></td><td style="font-size:11px;color:var(--mut)">Interesse Luxo+Dermatologia</td><td class="mp">107,65</td><td class="mp">13</td><td class="mp a">0,538%</td><td class="mp m">18,45</td><td class="mp a">8,28</td><td><span class="cr-status st-wn" style="border-radius:5px;padding:2px 7px;font-size:9px">Renovar</span></td><td><a class="lbtn" href="https://www.facebook.com/61570812722285/videos/4297230260493949" target="_blank">▶</a></td></tr>
         <tr><td><span class="rk">6</span></td><td><code style="font-size:11px;color:var(--teal)">AN|BOTOX|01</code></td><td><span class="tag">LUXO+DERM</span></td><td style="font-size:11px;color:var(--mut)">Interesse Luxo+Dermatologia</td><td class="mp">55,60</td><td class="mp">7</td><td class="mp a">0,538%</td><td class="mp m">18,45</td><td class="mp">7,94</td><td><span class="cr-status st-sc" style="border-radius:5px;padding:2px 7px;font-size:9px">Bom Volume</span></td><td><a class="lbtn" href="https://www.facebook.com/61570812722285/videos/1562630871501639" target="_blank">▶</a></td></tr>
-        <tr><td><span class="rk">7</span></td><td><code style="font-size:11px">AN|CANETAS EMAGR.|01</code></td><td><span class="tag">MORNO+QUENTE</span></td><td style="font-size:11px;color:var(--mut)">Advantage+/Lookalike</td><td class="mp">13,93</td><td class="mp">4</td><td class="mp m">—</td><td class="mp m">—</td><td class="mp g">3,48</td><td><span class="cr-status st-top" style="border-radius:5px;padding:2px 7px;font-size:9px">Eficiente</span></td><td><a class="lbtn" href="https://www.facebook.com/61570812722285/posts/pfbid02ZYut42XXUgpmrceTcTSYd95tUV34ciwGLR3npaewLMesnP5EXvH2CLX6zNAE8h1Tl" target="_blank">🔗</a></td></tr>
+        <tr><td><span class="rk">7</span></td><td><code style="font-size:11px">AN|CANETAS EMAGR.|01</code></td><td><span class="tag">LUXO+DERM</span></td><td style="font-size:11px;color:var(--mut)">Interesse Luxo+Dermatologia</td><td class="mp">13,93</td><td class="mp">4</td><td class="mp m">—</td><td class="mp m">—</td><td class="mp g">3,48</td><td><span class="cr-status st-top" style="border-radius:5px;padding:2px 7px;font-size:9px">Eficiente</span></td><td><a class="lbtn" href="https://www.facebook.com/61570812722285/posts/pfbid02ZYut42XXUgpmrceTcTSYd95tUV34ciwGLR3npaewLMesnP5EXvH2CLX6zNAE8h1Tl" target="_blank">🔗</a></td></tr>
         <tr><td><span class="rk">8</span></td><td><code style="font-size:11px;color:var(--teal)">AN|BOTOX|01</code></td><td><span class="tag">MORNO</span></td><td style="font-size:11px;color:var(--mut)">Advantage+ Broad</td><td class="mp">6,65</td><td class="mp">2</td><td class="mp m">—</td><td class="mp m">—</td><td class="mp g">3,33 ⭐</td><td><span class="cr-status st-top" style="border-radius:5px;padding:2px 7px;font-size:9px">Promissor</span></td><td><a class="lbtn" href="https://www.facebook.com/61570812722285/videos/27353292440926514" target="_blank">▶</a></td></tr>
         <tr><td><span class="rk">9</span></td><td><code style="font-size:11px">AN|PELE 40+|01</code></td><td><span class="tag">MORNO</span></td><td style="font-size:11px;color:var(--mut)">Advantage+ Broad</td><td class="mp">10,50</td><td class="mp">2</td><td class="mp m">—</td><td class="mp m">—</td><td class="mp">5,25</td><td><span class="cr-status st-sc" style="border-radius:5px;padding:2px 7px;font-size:9px">Consistente</span></td><td><a class="lbtn" href="https://www.facebook.com/61570812722285/videos/1632980234616632" target="_blank">▶</a></td></tr>
         <tr><td><span class="rk">10</span></td><td><code style="font-size:11px">AN|DIA DA MULHER|01</code></td><td><span class="tag">LUXO+DERM</span></td><td style="font-size:11px;color:var(--mut)">Interesse Luxo+Derm.</td><td class="mp">16,56</td><td class="mp">1</td><td class="mp m">—</td><td class="mp m">—</td><td class="mp r">16,56</td><td><span class="cr-status st-ps" style="border-radius:5px;padding:2px 7px;font-size:9px">Pausar</span></td><td><a class="lbtn" href="https://www.facebook.com/61570812722285/posts/pfbid0H2hpEH2DEeRWfYX7AByVS5G5VYqz8ahkxPin4ENxYmqHH7XJYtA8Dk4vA2j7LsHEl" target="_blank">🔗</a></td></tr>
@@ -1131,10 +1142,14 @@ function closeModal(id){
 document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(m=>closeModal(m.id))});
 
 // ── TABS ──
-function scrollTo(id){
-  document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});
+function scrollToSection(id,btn){
+  const el=document.getElementById(id);
+  if(!el) return;
+  const offset=116; // header 60px + tabs ~56px
+  const top=el.getBoundingClientRect().top+window.scrollY-offset;
+  window.scrollTo({top,behavior:'smooth'});
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  event.target.classList.add('active');
+  if(btn) btn.classList.add('active');
 }
 
 // ── FILTERS ──
