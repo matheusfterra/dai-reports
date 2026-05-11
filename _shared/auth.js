@@ -80,11 +80,11 @@ window.initChatwootAuth = initChatwootAuth;
  * @param {Function} callback - chamado com (authorized: boolean, email: string|null)
  */
 function checkChatwootPermission(auth, allowedEmails, callback) {
-  fetch('https://webhook.digital-ai.tech/webhook/dermaclinic-auth-check', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ token: auth.accessToken, chatwootUrl: auth.chatwootUrl }),
-  })
+  // GET sem headers customizados = simple request (sem preflight CORS)
+  var url = 'https://webhook.digital-ai.tech/webhook/dermaclinic-auth-check'
+    + '?token=' + encodeURIComponent(auth.accessToken)
+    + '&chatwootUrl=' + encodeURIComponent(auth.chatwootUrl);
+  fetch(url)
     .then(function(res) {
       if (!res.ok) throw new Error('HTTP ' + res.status);
       return res.json();
