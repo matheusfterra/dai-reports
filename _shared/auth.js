@@ -80,11 +80,11 @@ window.initChatwootAuth = initChatwootAuth;
  * @param {Function} callback - chamado com (authorized: boolean, email: string|null)
  */
 function checkChatwootPermission(auth, allowedEmails, callback) {
-  // GET sem headers customizados = simple request (sem preflight CORS)
-  var url = 'https://webhook.digital-ai.tech/webhook/dermaclinic-auth-check'
-    + '?token=' + encodeURIComponent(auth.accessToken)
-    + '&chatwootUrl=' + encodeURIComponent(auth.chatwootUrl);
-  fetch(url)
+  // Usa o proxy Nginx do chat-kanban (CORS habilitado para reports.digital-ai.tech)
+  // Mesmo mecanismo do funil — sem n8n, sem preflight problem
+  fetch('https://chat-kanban.digital-ai.tech/proxy/chat-cors/api/v1/profile', {
+    headers: { 'api_access_token': auth.accessToken },
+  })
     .then(function(res) {
       if (!res.ok) throw new Error('HTTP ' + res.status);
       return res.json();
