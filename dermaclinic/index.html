@@ -101,6 +101,16 @@
     <p class="gate-sub">Esta página está disponível somente no painel Chatwoot da DermaClinic.</p>
   </div>
 
+  <!-- Gate: sem permissão (autenticado mas não autorizado) -->
+  <div class="gate hidden" id="gate-unauthorized">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#5a5f66" stroke-width="1.5">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+    </svg>
+    <p class="gate-title">Acesso restrito</p>
+    <p class="gate-sub">Você não tem permissão para acessar esta página.</p>
+  </div>
+
   <!-- App: autenticado -->
   <div class="app" id="app">
 
@@ -327,6 +337,14 @@
       document.getElementById('gate-direct').classList.remove('hidden');
     }
 
+    function showUnauthorized() {
+      document.getElementById('gate-loading').classList.add('hidden');
+      document.getElementById('gate-unauthorized').classList.remove('hidden');
+    }
+
+    // Emails autorizados a acessar os relatórios DermaClinic
+    var ALLOWED_EMAILS = ['raquelsteglich@yahoo.com.br'];
+
     // Carregar registry
     fetch('./registry.json')
       .then(r => r.json())
@@ -338,7 +356,16 @@
 
     // Auth Chatwoot
     initChatwootAuth(
-      function onAuth(auth) { _currentAuth = auth; showApp(); },
+      function onAuth(auth) {
+        _currentAuth = auth;
+        checkChatwootPermission(auth, ALLOWED_EMAILS, function(authorized) {
+          if (authorized) {
+            showApp();
+          } else {
+            showUnauthorized();
+          }
+        });
+      },
       function onTimeout() { showDirectGate(); }
     );
   </script>

@@ -71,3 +71,33 @@ function initChatwootAuth(onAuth, onTimeout) {
 }
 
 window.initChatwootAuth = initChatwootAuth;
+
+/**
+ * Verifica permissão do usuário autenticado via n8n webhook (CORS-safe).
+ * Fail-closed: qualquer erro → callback(false, null).
+ * @param {Object} auth - objeto retornado por initChatwootAuth
+ * @param {string[]} allowedEmails - lista de emails autorizados (case-insensitive)
+ * @param {Function} callback - chamado com (authorized: boolean, email: string|null)
+ */
+function checkChatwootPermission(auth, allowedEmails, callback) {
+  fetch('https://webhook.digital-ai.tech/webhook/dermaclinic-auth-check', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token: auth.accessToken, chatwootUrl: auth.chatwootUrl }),
+  })
+    .then(function(res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
+    .then(function(data) {
+      var email = (data.email || '').toLowerCase();
+      var normalized = allowedEmails.map(function(e) { return e.toLowerCase(); });
+      callback(normalized.includes(email), email || null);
+    })
+    .catch(function() {
+      // Fail-closed: erro = acesso negado
+      callback(false, null);
+    });
+}
+
+window.checkChatwootPermission = checkChatwootPermission;
