@@ -22,39 +22,62 @@
       background: linear-gradient(90deg, #5451FF 0%, #C34EEA 50%, #FF5A1A 100%);
     }
     .header-inner {
-      padding: 28px 32px 24px;
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 20px;
-      flex-wrap: wrap;
+      padding: 24px 24px 20px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      grid-template-rows: auto auto;
+      gap: 16px 20px;
+      align-items: start;
     }
     .header-logo {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      grid-row: 1;
+      grid-column: 1;
     }
     .dai-icon {
-      width: 36px; height: 36px;
+      width: 34px; height: 34px;
       background: #5451FF;
       border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
-      font-weight: 800; font-size: 18px; color: #fff;
+      font-weight: 800; font-size: 17px; color: #fff;
       font-family: 'Segoe UI', sans-serif;
       flex-shrink: 0;
     }
     .header-brand { display: flex; flex-direction: column; }
-    .header-brand-name { font-weight: 700; font-size: 15px; color: var(--text); line-height: 1.2; }
-    .header-brand-sub  { font-size: 12px; color: var(--text-muted); }
-    .header-title-block { flex: 1; min-width: 220px; }
-    .report-title { font-size: 26px; font-weight: 800; color: var(--text); line-height: 1.2; margin-bottom: 6px; }
-    .report-subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+    .header-brand-name { font-weight: 700; font-size: 14px; color: var(--text); line-height: 1.2; }
+    .header-brand-sub  { font-size: 11px; color: var(--text-muted); }
+
+    .header-title-block {
+      grid-row: 1;
+      grid-column: 2;
+    }
+    .report-title { font-size: 22px; font-weight: 800; color: var(--text); line-height: 1.2; margin-bottom: 5px; }
+    .report-subtitle { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
     .header-meta {
-      display: flex; flex-direction: column; gap: 4px;
-      text-align: right; min-width: 160px;
+      grid-row: 2;
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 24px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
     }
     .meta-item { font-size: 12px; color: var(--text-muted); }
     .meta-item strong { color: var(--text); }
+
+    @media (max-width: 600px) {
+      .header-inner {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+      }
+      .header-logo { grid-row: 1; grid-column: 1; }
+      .header-title-block { grid-row: 2; grid-column: 1; }
+      .header-meta { grid-row: 3; grid-column: 1; }
+      .report-title { font-size: 20px; }
+    }
 
     /* ── Verdict ─────────────────────────────────────── */
     .verdict-bar {
@@ -209,10 +232,6 @@
     .conclusion p:last-child { margin-bottom: 0; }
     .conclusion strong { color: var(--text); }
 
-    /* ── Back nav ────────────────────────────────────── */
-    .back-nav { margin-bottom: 20px; }
-    .back-nav a { font-size: 13px; color: var(--text-muted); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
-    .back-nav a:hover { color: var(--text); }
 
     /* ── Section spacer ──────────────────────────────── */
     .section { margin-bottom: 32px; }
@@ -220,11 +239,6 @@
 </head>
 <body>
 <div class="page">
-
-  <!-- Back -->
-  <div class="back-nav">
-    <a href="../../index.html">← Todos os relatórios</a>
-  </div>
 
   <!-- Header -->
   <div class="report-header">
