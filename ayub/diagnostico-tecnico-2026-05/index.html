@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ayub — Diagnóstico Técnico · Digital AI</title>
+  <link rel="stylesheet" href="../../_shared/style.css" />
+  <style>
+    /* ── Layout ─────────────────────────────────────── */
+    .page { max-width: 960px; margin: 0 auto; padding: 40px 20px 80px; }
+
+    /* ── Header ─────────────────────────────────────── */
+    .report-header {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+    .gradient-bar {
+      height: 3px;
+      background: linear-gradient(90deg, #5451FF 0%, #C34EEA 50%, #FF5A1A 100%);
+    }
+    .header-inner {
+      padding: 28px 32px 24px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .dai-icon {
+      width: 36px; height: 36px;
+      background: #5451FF;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 18px; color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      flex-shrink: 0;
+    }
+    .header-brand { display: flex; flex-direction: column; }
+    .header-brand-name { font-weight: 700; font-size: 15px; color: var(--text); line-height: 1.2; }
+    .header-brand-sub  { font-size: 12px; color: var(--text-muted); }
+    .header-title-block { flex: 1; min-width: 220px; }
+    .report-title { font-size: 26px; font-weight: 800; color: var(--text); line-height: 1.2; margin-bottom: 6px; }
+    .report-subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+    .header-meta {
+      display: flex; flex-direction: column; gap: 4px;
+      text-align: right; min-width: 160px;
+    }
+    .meta-item { font-size: 12px; color: var(--text-muted); }
+    .meta-item strong { color: var(--text); }
+
+    /* ── Verdict ─────────────────────────────────────── */
+    .verdict-bar {
+      display: flex; align-items: center; gap: 16px;
+      background: rgba(239,68,68,0.07);
+      border: 1px solid rgba(239,68,68,0.3);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .verdict-badge {
+      background: #ef4444; color: #fff;
+      font-size: 11px; font-weight: 700;
+      padding: 4px 10px; border-radius: 4px;
+      white-space: nowrap; letter-spacing: 0.04em;
+    }
+    .verdict-text { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+
+    /* ── Section title ───────────────────────────────── */
+    .section-title {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #5451FF;
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 14px;
+    }
+    .section-title::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* ── Gauge Cards ─────────────────────────────────── */
+    .gauges { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
+    @media (max-width: 640px) { .gauges { grid-template-columns: repeat(2, 1fr); } }
+    .gauge-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px; text-align: center;
+    }
+    .gauge-label { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+    .gauge-pct { font-size: 32px; font-weight: 800; line-height: 1; margin-bottom: 8px; }
+    .gauge-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 8px; }
+    .gauge-fill { height: 100%; border-radius: 2px; }
+    .gauge-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+    .c-brand  { color: #5451FF; }
+    .c-yellow { color: #F59E0B; }
+    .c-red    { color: #EF4444; }
+    .c-green  { color: #10B981; }
+    .bg-brand  { background: #5451FF; }
+    .bg-yellow { background: #F59E0B; }
+    .bg-red    { background: #EF4444; }
+    .bg-green  { background: #10B981; }
+
+    /* ── Two-col table ───────────────────────────────── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+    @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+    .kv-table { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .kv-table-title {
+      background: var(--surface-2); border-bottom: 1px solid var(--border);
+      padding: 10px 16px; font-size: 12px; font-weight: 700; color: var(--text);
+    }
+    .kv-row { display: flex; border-bottom: 1px solid var(--border); }
+    .kv-row:last-child { border-bottom: none; }
+    .kv-row:nth-child(even) { background: rgba(255,255,255,0.02); }
+    .kv-key { padding: 8px 12px; font-size: 12px; font-weight: 600; color: var(--text-muted); min-width: 110px; max-width: 130px; }
+    .kv-val { padding: 8px 12px; font-size: 12px; color: var(--text); flex: 1; }
+    .kv-val.warn  { color: #F59E0B; }
+    .kv-val.error { color: #EF4444; }
+    .kv-val.ok    { color: #10B981; }
+
+    /* ── DB Grid ─────────────────────────────────────── */
+    .db-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 28px; }
+    @media (max-width: 560px) { .db-grid { grid-template-columns: 1fr; } }
+    .db-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 10px 12px;
+    }
+    .db-name { font-size: 12px; font-weight: 700; color: #7B79FF; font-family: monospace; margin-bottom: 3px; }
+    .db-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
+    /* ── Feature grid ────────────────────────────────── */
+    .feature-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 28px; }
+    @media (max-width: 560px) { .feature-grid { grid-template-columns: 1fr; } }
+    .feature-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 10px 12px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .feature-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .feature-info { flex: 1; min-width: 0; }
+    .feature-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .feature-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .feature-badge {
+      font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 3px;
+      white-space: nowrap; letter-spacing: 0.04em; flex-shrink: 0;
+    }
+    .badge-ok      { background: rgba(16,185,129,0.15); color: #10B981; }
+    .badge-parcial { background: rgba(245,158,11,0.15); color: #F59E0B; }
+    .badge-ausente { background: rgba(239,68,68,0.15);  color: #EF4444; }
+
+    /* ── Vuln Cards ──────────────────────────────────── */
+    .vuln-section { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .vuln-card {
+      background: rgba(239,68,68,0.05);
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+    }
+    .vuln-card.alto {
+      background: rgba(245,158,11,0.05);
+      border-color: rgba(245,158,11,0.25);
+    }
+    .vuln-header { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+    .vuln-id { font-family: monospace; font-size: 11px; color: var(--text-muted); }
+    .vuln-badge-crit { background: #ef4444; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 3px; letter-spacing: 0.04em; }
+    .vuln-badge-alto { background: #f59e0b; color: #000; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 3px; letter-spacing: 0.04em; }
+    .vuln-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .vuln-desc  { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 6px; }
+    .vuln-ref   { font-family: monospace; font-size: 11px; color: #5451FF; background: rgba(84,81,255,0.1); padding: 3px 8px; border-radius: 4px; display: inline-block; }
+
+    /* ── Deploy table ────────────────────────────────── */
+    .data-table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: var(--radius); overflow: hidden; margin-bottom: 16px; }
+    .data-table thead th { background: var(--surface-2); padding: 10px 14px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); text-align: left; border-bottom: 1px solid var(--border); }
+    .data-table tbody td { padding: 9px 14px; font-size: 13px; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+    .data-table tbody tr:last-child td { border-bottom: none; }
+    .data-table tbody tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+    td.ok    { color: #10B981 !important; font-weight: 600; }
+    td.warn  { color: #F59E0B !important; }
+    td.error { color: #EF4444 !important; }
+    td.block { color: #EF4444 !important; font-weight: 700; font-size: 11px; letter-spacing: 0.04em; }
+
+    /* ── Info boxes ──────────────────────────────────── */
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px; }
+    @media (max-width: 560px) { .info-grid { grid-template-columns: 1fr; } }
+    .info-box {
+      border-radius: var(--radius); padding: 16px 18px;
+      border: 1px solid;
+    }
+    .info-box.green  { background: rgba(16,185,129,0.07);  border-color: rgba(16,185,129,0.25); }
+    .info-box.orange { background: rgba(255,90,26,0.07);   border-color: rgba(255,90,26,0.25); }
+    .info-box.blue   { background: rgba(84,81,255,0.07);   border-color: rgba(84,81,255,0.25); }
+    .info-box-title { font-size: 12px; font-weight: 700; margin-bottom: 6px; }
+    .info-box.green  .info-box-title { color: #10B981; }
+    .info-box.orange .info-box-title { color: #FF5A1A; }
+    .info-box.blue   .info-box-title { color: #7B79FF; }
+    .info-box-text { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── Conclusion ──────────────────────────────────── */
+    .conclusion {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px 28px;
+    }
+    .conclusion p { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-bottom: 12px; }
+    .conclusion p:last-child { margin-bottom: 0; }
+    .conclusion strong { color: var(--text); }
+
+    /* ── Back nav ────────────────────────────────────── */
+    .back-nav { margin-bottom: 20px; }
+    .back-nav a { font-size: 13px; color: var(--text-muted); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+    .back-nav a:hover { color: var(--text); }
+
+    /* ── Section spacer ──────────────────────────────── */
+    .section { margin-bottom: 32px; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Back -->
+  <div class="back-nav">
+    <a href="../../index.html">← Todos os relatórios</a>
+  </div>
+
+  <!-- Header -->
+  <div class="report-header">
+    <div class="gradient-bar"></div>
+    <div class="header-inner">
+      <div class="header-logo">
+        <div class="dai-icon">D</div>
+        <div class="header-brand">
+          <span class="header-brand-name">Digital AI</span>
+          <span class="header-brand-sub">digital-ai.tech</span>
+        </div>
+      </div>
+      <div class="header-title-block">
+        <div class="report-title">Raio-X da Plataforma Ayub</div>
+        <div class="report-subtitle">Diagnóstico técnico completo do software entregue pelo fornecedor — Frontend + Backend</div>
+      </div>
+      <div class="header-meta">
+        <div class="meta-item"><strong>Cliente</strong> Ayub Clínica Odontológica</div>
+        <div class="meta-item"><strong>Data</strong> 26 de Maio de 2026</div>
+        <div class="meta-item"><strong>Arquivos analisados</strong> 551 (2 repos)</div>
+        <div class="meta-item"><strong>Por</strong> Digital AI — Consultoria</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Verdict -->
+  <div class="verdict-bar">
+    <span class="verdict-badge">NÃO APTO PARA PRODUÇÃO</span>
+    <span class="verdict-text">
+      O fornecedor entregou um backend bem arquitetado com apenas <strong>~20% do frontend implementado</strong>,
+      múltiplas vulnerabilidades críticas (incluindo dados reais de pacientes no repositório) e sem configuração
+      adequada de deploy. <strong>6 brechas críticas · Violação direta da LGPD.</strong>
+    </span>
+  </div>
+
+  <!-- Gauges -->
+  <div class="section">
+    <div class="section-title">Estágio Atual do Projeto</div>
+    <div class="gauges">
+      <div class="gauge-card">
+        <div class="gauge-label">Backend API</div>
+        <div class="gauge-pct c-brand">75%</div>
+        <div class="gauge-bar"><div class="gauge-fill bg-brand" style="width:75%"></div></div>
+        <div class="gauge-desc">Rails 6.1 · 32 tabelas · 60+ endpoints</div>
+      </div>
+      <div class="gauge-card">
+        <div class="gauge-label">Frontend UI</div>
+        <div class="gauge-pct c-yellow">20%</div>
+        <div class="gauge-bar"><div class="gauge-fill bg-yellow" style="width:20%"></div></div>
+        <div class="gauge-desc">Nuxt 3 · apenas módulos básicos</div>
+      </div>
+      <div class="gauge-card">
+        <div class="gauge-label">Segurança</div>
+        <div class="gauge-pct c-red">40%</div>
+        <div class="gauge-bar"><div class="gauge-fill bg-red" style="width:40%"></div></div>
+        <div class="gauge-desc">6 críticas · 4 altas · 3 médias</div>
+      </div>
+      <div class="gauge-card">
+        <div class="gauge-label">Deploy / Infra</div>
+        <div class="gauge-pct c-red">40%</div>
+        <div class="gauge-bar"><div class="gauge-fill bg-red" style="width:40%"></div></div>
+        <div class="gauge-desc">Docker incompleto · sem SSL</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stack -->
+  <div class="section">
+    <div class="section-title">Stack Tecnológica</div>
+    <div class="two-col">
+      <div class="kv-table">
+        <div class="kv-table-title">Backend (Rails API)</div>
+        <div class="kv-row"><div class="kv-key">Linguagem</div><div class="kv-val warn">Ruby ~> 3.0 &nbsp;[EOL mar/2024]</div></div>
+        <div class="kv-row"><div class="kv-key">Framework</div><div class="kv-val warn">Rails 6.1.7 &nbsp;[EOL]</div></div>
+        <div class="kv-row"><div class="kv-key">Banco</div><div class="kv-val">PostgreSQL 16</div></div>
+        <div class="kv-row"><div class="kv-key">Autenticação</div><div class="kv-val">Devise 4.2 + JWT</div></div>
+        <div class="kv-row"><div class="kv-key">Serialização</div><div class="kv-val">ActiveModel::Serializers</div></div>
+        <div class="kv-row"><div class="kv-key">Storage</div><div class="kv-val warn">Active Storage local</div></div>
+        <div class="kv-row"><div class="kv-key">Docs API</div><div class="kv-val">Swagger / Rswag</div></div>
+        <div class="kv-row"><div class="kv-key">Admin Panel</div><div class="kv-val">rails_admin 3.1</div></div>
+        <div class="kv-row"><div class="kv-key">Testes</div><div class="kv-val warn">RSpec — cobertura baixa</div></div>
+      </div>
+      <div class="kv-table">
+        <div class="kv-table-title">Frontend (Nuxt 3)</div>
+        <div class="kv-row"><div class="kv-key">Framework</div><div class="kv-val">Nuxt 3.13 (Vue 3.4)</div></div>
+        <div class="kv-row"><div class="kv-key">UI Kit</div><div class="kv-val">Vuetify 3.5</div></div>
+        <div class="kv-row"><div class="kv-key">Estado</div><div class="kv-val">Pinia + persistedstate</div></div>
+        <div class="kv-row"><div class="kv-key">Calendário</div><div class="kv-val">FullCalendar 6.1</div></div>
+        <div class="kv-row"><div class="kv-key">Gráficos</div><div class="kv-val">ApexCharts</div></div>
+        <div class="kv-row"><div class="kv-key">HTTP</div><div class="kv-val">axios 1.6</div></div>
+        <div class="kv-row"><div class="kv-key">TypeScript</div><div class="kv-val">5.5</div></div>
+        <div class="kv-row"><div class="kv-key">Dockerfile</div><div class="kv-val error">AUSENTE</div></div>
+        <div class="kv-row"><div class="kv-key">API URL</div><div class="kv-val error">Hardcoded — pedrost.com</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DB -->
+  <div class="section">
+    <div class="section-title">Banco de Dados — 32 Tabelas Implementadas</div>
+    <div class="db-grid">
+      <div class="db-item"><div class="db-name">customers</div><div class="db-desc">Pacientes completos com plano de saúde, preferências, relacionamentos</div></div>
+      <div class="db-item"><div class="db-name">appointments</div><div class="db-desc">Consultas com sinais vitais (pressão, FC, saturação O2)</div></div>
+      <div class="db-item"><div class="db-name">odontograms / teeth</div><div class="db-desc">Odontograma completo — 32 dentes por paciente com status</div></div>
+      <div class="db-item"><div class="db-name">anamneses / alerts</div><div class="db-desc">Histórico médico, alergias, medicamentos e alertas automáticos</div></div>
+      <div class="db-item"><div class="db-name">clinical_sheets</div><div class="db-desc">Fichas de atendimento clínico por sessão e profissional</div></div>
+      <div class="db-item"><div class="db-name">treatment_plans</div><div class="db-desc">Planos de tratamento com itens e % de conclusão</div></div>
+      <div class="db-item"><div class="db-name">dental_xrays</div><div class="db-desc">Radiografias com upload de imagem via Active Storage</div></div>
+      <div class="db-item"><div class="db-name">budgets / procedures</div><div class="db-desc">Orçamentos com procedimentos mapeados por dente</div></div>
+      <div class="db-item"><div class="db-name">payment_plans</div><div class="db-desc">Parcelamentos com parcelas individuais e controle de status</div></div>
+      <div class="db-item"><div class="db-name">accounting_entries</div><div class="db-desc">Lançamentos contábeis (receitas e despesas da clínica)</div></div>
+      <div class="db-item"><div class="db-name">leads / interactions</div><div class="db-desc">CRM com pipeline de vendas e histórico de contatos</div></div>
+      <div class="db-item"><div class="db-name">smart_boards</div><div class="db-desc">Kanban para gestão visual de pacientes e leads</div></div>
+      <div class="db-item"><div class="db-name">goals</div><div class="db-desc">Metas da clínica com métricas e período mensal/anual</div></div>
+      <div class="db-item"><div class="db-name">products / stock</div><div class="db-desc">Estoque de materiais e movimentações de entrada/saída</div></div>
+      <div class="db-item"><div class="db-name">lab_cases</div><div class="db-desc">Casos enviados ao laboratório com acompanhamento</div></div>
+      <div class="db-item"><div class="db-name">tags / taggings</div><div class="db-desc">Tags polimórficas para categorizar qualquer entidade</div></div>
+      <div class="db-item"><div class="db-name">message_templates</div><div class="db-desc">Templates de mensagens WhatsApp e e-mail</div></div>
+      <div class="db-item"><div class="db-name">clinics / users / jwt</div><div class="db-desc">Multi-tenancy, usuários e blacklist de tokens JWT</div></div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div class="section">
+    <div class="section-title">Status das Funcionalidades — Frontend vs Backend</div>
+    <div class="feature-grid">
+      <div class="feature-item">
+        <div class="feature-dot bg-green"></div>
+        <div class="feature-info"><div class="feature-name">Login / Logout</div><div class="feature-desc">Autenticação JWT funcional</div></div>
+        <span class="feature-badge badge-ok">OK</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-dot bg-green"></div>
+        <div class="feature-info"><div class="feature-name">Cadastro de Pacientes</div><div class="feature-desc">Lista, busca, cadastro e edição</div></div>
+        <span class="feature-badge badge-ok">OK</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-dot bg-green"></div>
+        <div class="feature-info"><div class="feature-name">Agenda (Calendário)</div><div class="feature-desc">FullCalendar com criação de consultas</div></div>
+        <span class="feature-badge badge-ok">OK</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-dot bg-green"></div>
+        <div class="feature-info"><div class="feature-name">Orçamentos</div><div class="feature-desc">Com seleção de dentes e procedimentos</div></div>
+        <span class="feature-badge badge-ok">OK</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-dot bg-yellow"></div>
+        <div class="feature-info"><div class="feature-name">Retornos</div><div class="feature-desc">Apenas listagem, sem ações</div></div>
+        <span class="feature-badge badge-parcial">PARCIAL</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-dot bg-yellow"></div>
+        <div class="feature-info"><div class="feature-name">Dashboard</div><div class="feature-desc">Componente com dados mockados</div></div>
+        <span class="feature-badge badge-parcial">PARCIAL</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-dot bg-red"></div>
+        <div class="feature-info"><div class="feature-name">Odontograma</div><div class="feature-desc">Core da clínica — sem interface</div></div>
+        <span class="feature-badge badge-ausente">AUSENTE</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-dot bg-red"></div>
+        <div class="feature-info"><div class="feature-name">Anamnese</div><div class="feature-desc">Prontuário médico — obrigatório por lei</div></div>
+        <span class="feature-badge badge-ausente">AUSENTE</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-dot bg-red"></div>
+        <div class="feature-info"><div class="feature-name">Fichas Clínicas</div><div class="feature-desc">Histórico de atendimentos do paciente</div></div>
+        <span class="feature-badge badge-ausente">AUSENTE</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-dot bg-red"></div>
+        <div class="feature-info"><div class="feature-name">Planos de Tratamento</div><div class="feature-desc">Planejamento e acompanhamento</div></div>
+        <span class="feature-badge badge-ausente">AUSENTE</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-dot bg-red"></div>
+        <div class="feature-info"><div class="feature-name">Financeiro Completo</div><div class="feature-desc">Planos de pagamento, parcelas, contabilidade</div></div>
+        <span class="feature-badge badge-ausente">AUSENTE</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-dot bg-red"></div>
+        <div class="feature-info"><div class="feature-name">CRM / Leads</div><div class="feature-desc">Pipeline comercial e WhatsApp</div></div>
+        <span class="feature-badge badge-ausente">AUSENTE</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-dot bg-red"></div>
+        <div class="feature-info"><div class="feature-name">Kanban / Smart Boards</div><div class="feature-desc">Gestão visual de pacientes</div></div>
+        <span class="feature-badge badge-ausente">AUSENTE</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-dot bg-red"></div>
+        <div class="feature-info"><div class="feature-name">Estoque / Laboratório</div><div class="feature-desc">Controle de materiais e casos de lab</div></div>
+        <span class="feature-badge badge-ausente">AUSENTE</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Security -->
+  <div class="section">
+    <div class="section-title">Auditoria de Segurança</div>
+
+    <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.3);border-radius:var(--radius);padding:12px 16px;margin-bottom:16px;font-size:13px;color:#F59E0B;font-weight:600;">
+      ⚠ RESULTADO: 6 CRÍTICAS · 4 ALTAS · 3 MÉDIAS — Não pode processar dados de pacientes assim.
+    </div>
+
+    <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:10px;margin-top:20px;">Vulnerabilidades Críticas</div>
+    <div class="vuln-section">
+
+      <div class="vuln-card">
+        <div class="vuln-header">
+          <span class="vuln-id">CRITICO-01</span>
+          <span class="vuln-badge-crit">CRÍTICO</span>
+        </div>
+        <div class="vuln-title">Senha armazenada em cookie em texto plano</div>
+        <div class="vuln-desc">A senha digitada pelo usuário é salva diretamente em um cookie persistido no navegador. Qualquer script XSS, extensão maliciosa ou acesso físico ao computador consegue ler as senhas de todos os usuários.</div>
+        <span class="vuln-ref">stores/useAuthStore/index.ts:11 · handlers/login.ts:16</span>
+      </div>
+
+      <div class="vuln-card">
+        <div class="vuln-header">
+          <span class="vuln-id">CRITICO-02</span>
+          <span class="vuln-badge-crit">CRÍTICO</span>
+        </div>
+        <div class="vuln-title">master.key (chave mestra de criptografia) commitada no repositório</div>
+        <div class="vuln-desc">O arquivo config/master.key está no repositório com a linha de exclusão comentada no .gitignore. Esta chave decripta credentials.yml.enc, expondo JWT secret e todos os secrets da aplicação. Qualquer pessoa com acesso ao código pode forjar tokens de autenticação.</div>
+        <span class="vuln-ref">config/master.key → eaeb1c2ef74ddef8cdd776a8568a70c6</span>
+      </div>
+
+      <div class="vuln-card">
+        <div class="vuln-header">
+          <span class="vuln-id">CRITICO-03</span>
+          <span class="vuln-badge-crit">CRÍTICO</span>
+        </div>
+        <div class="vuln-title">CORS completamente aberto — aceita qualquer origem (origins *)</div>
+        <div class="vuln-desc">origins '*' com todos os métodos HTTP e header Authorization exposto permite que qualquer site malicioso faça requisições autenticadas ao backend em nome do usuário logado.</div>
+        <span class="vuln-ref">config/initializers/cors.rb</span>
+      </div>
+
+      <div class="vuln-card">
+        <div class="vuln-header">
+          <span class="vuln-id">CRITICO-04</span>
+          <span class="vuln-badge-crit">CRÍTICO</span>
+        </div>
+        <div class="vuln-title">Backup do banco com dados reais de pacientes no repositório — LGPD</div>
+        <div class="vuln-desc">O arquivo db/backup.sql contém dados reais de pacientes (CPFs, nomes, histórico médico) e é montado como volume de inicialização do PostgreSQL. Violação direta da LGPD — dados sensíveis de saúde com proteção reforçada (Art. 11, Lei 13.709/2018).</div>
+        <span class="vuln-ref">db/backup.sql → docker-compose.yaml:13</span>
+      </div>
+
+      <div class="vuln-card">
+        <div class="vuln-header">
+          <span class="vuln-id">CRITICO-05</span>
+          <span class="vuln-badge-crit">CRÍTICO</span>
+        </div>
+        <div class="vuln-title">Autenticação desabilitada com RAILS_ENV=development (Dockerfile usa development)</div>
+        <div class="vuln-desc">O Dockerfile define RAILS_ENV=development como padrão. Em modo development a autenticação é substituída por usuário automático criado na hora. Um docker run direto sem env vars expõe toda a API sem autenticação.</div>
+        <span class="vuln-ref">Dockerfile:6 · base_controller.rb:13-14</span>
+      </div>
+
+      <div class="vuln-card">
+        <div class="vuln-header">
+          <span class="vuln-id">CRITICO-06</span>
+          <span class="vuln-badge-crit">CRÍTICO</span>
+        </div>
+        <div class="vuln-title">Registro público permite escolher qualquer clinic_id</div>
+        <div class="vuln-desc">O endpoint POST /users/sign_up aceita clinic_id como parâmetro sem validação. Qualquer pessoa pode criar conta e se vincular a qualquer clínica, acessando todos os dados dos pacientes.</div>
+        <span class="vuln-ref">users/registrations_controller.rb:33</span>
+      </div>
+    </div>
+
+    <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:10px;margin-top:20px;">Vulnerabilidades Altas e Médias</div>
+    <table class="data-table">
+      <thead><tr><th>ID</th><th>Severidade</th><th>Problema</th><th>Arquivo</th></tr></thead>
+      <tbody>
+        <tr><td>ALTO-01</td><td class="warn">ALTO</td><td>JWT decodificado sem especificar algoritmo (algorithm confusion)</td><td style="font-family:monospace;font-size:11px">base_controller.rb:55</td></tr>
+        <tr><td>ALTO-02</td><td class="warn">ALTO</td><td>JWT com validade de 15 dias — excessivo para dados de saúde</td><td style="font-family:monospace;font-size:11px">devise.rb:28</td></tr>
+        <tr><td>ALTO-03</td><td class="warn">ALTO</td><td>URL da API hardcoded para domínio pessoal do dev (pedrost.com)</td><td style="font-family:monospace;font-size:11px">nuxt.config.ts:5</td></tr>
+        <tr><td>ALTO-04</td><td class="warn">ALTO</td><td>Stack trace completo exposto na resposta HTTP de erro 500</td><td style="font-family:monospace;font-size:11px">base_controller.rb:35</td></tr>
+        <tr><td>MEDIO-01</td><td>MÉDIO</td><td>console.log com tokens de autenticação nos server routes</td><td style="font-family:monospace;font-size:11px">server/api/users/[...].ts:16</td></tr>
+        <tr><td>MEDIO-02</td><td>MÉDIO</td><td>Sem lockout de conta após tentativas de login falhas</td><td style="font-family:monospace;font-size:11px">devise.rb:207-224</td></tr>
+        <tr><td>MEDIO-03</td><td>MÉDIO</td><td>SECRET_KEY_BASE não configurado como env var para produção</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Deploy Status -->
+  <div class="section">
+    <div class="section-title">Status de Deploy</div>
+    <div class="two-col">
+      <table class="data-table">
+        <thead><tr><th colspan="2">Backend</th></tr></thead>
+        <tbody>
+          <tr><td>Dockerfile</td><td class="warn">⚠ Parcial — RAILS_ENV errado</td></tr>
+          <tr><td>docker-compose</td><td class="ok">✓ PostgreSQL 16 configurado</td></tr>
+          <tr><td>SSL / HTTPS</td><td class="error">✗ force_ssl comentado</td></tr>
+          <tr><td>SECRET_KEY_BASE</td><td class="error">✗ não configurado</td></tr>
+          <tr><td>Active Storage</td><td class="warn">⚠ Local — arquivos perdidos</td></tr>
+          <tr><td>Ruby version</td><td class="warn">⚠ 3.0 EOL desde mar/2024</td></tr>
+          <tr><td>Rails version</td><td class="warn">⚠ 6.1 EOL — sem atualizações</td></tr>
+          <tr><td>CI/CD Pipeline</td><td class="error">✗ Ausente</td></tr>
+        </tbody>
+      </table>
+      <table class="data-table">
+        <thead><tr><th colspan="2">Frontend</th></tr></thead>
+        <tbody>
+          <tr><td>Dockerfile</td><td class="error">✗ Ausente — não existe</td></tr>
+          <tr><td>.env.example</td><td class="error">✗ Ausente — não existe</td></tr>
+          <tr><td>API URL</td><td class="error">✗ Hardcoded pedrost.com</td></tr>
+          <tr><td>Build script</td><td class="ok">✓ nuxt build presente</td></tr>
+          <tr><td>Modo SSR</td><td class="ok">✓ Nuxt 3 SSR configurado</td></tr>
+          <tr><td>Lock file</td><td class="warn">⚠ Duplo: yarn + pkg-lock</td></tr>
+          <tr><td>CI/CD Pipeline</td><td class="error">✗ Ausente</td></tr>
+          <tr><td>Testes</td><td class="error">✗ Zero testes</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Action Plan -->
+  <div class="section">
+    <div class="section-title">Plano de Ação</div>
+
+    <div style="font-size:12px;font-weight:700;color:#EF4444;margin-bottom:8px;">🚨 Bloqueantes — Obrigatório Antes de Qualquer Deploy</div>
+    <table class="data-table" style="margin-bottom:20px;">
+      <thead><tr><th>#</th><th>Ação</th><th>Prioridade</th><th>Esforço</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Remover armazenamento de senha em cookie (CRITICO-01)</td><td class="block">BLOQUEANTE</td><td>2h</td></tr>
+        <tr><td>2</td><td>Remover master.key do git + rotacionar todos os secrets (CRITICO-02)</td><td class="block">BLOQUEANTE</td><td>4h</td></tr>
+        <tr><td>3</td><td>Remover db/backup.sql + limpar histórico git (CRITICO-04)</td><td class="block">BLOQUEANTE</td><td>4h</td></tr>
+        <tr><td>4</td><td>Restringir CORS para domínios específicos (CRITICO-03)</td><td class="block">BLOQUEANTE</td><td>1h</td></tr>
+        <tr><td>5</td><td>Remover clinic_id dos parâmetros de cadastro público (CRITICO-06)</td><td class="block">BLOQUEANTE</td><td>2h</td></tr>
+        <tr><td>6</td><td>Corrigir Dockerfile: RAILS_ENV=production como padrão (CRITICO-05)</td><td class="block">BLOQUEANTE</td><td>30min</td></tr>
+      </tbody>
+    </table>
+
+    <div style="font-size:12px;font-weight:700;color:#F59E0B;margin-bottom:8px;">🔴 Alta Prioridade — Para Deploy Seguro</div>
+    <table class="data-table" style="margin-bottom:20px;">
+      <thead><tr><th>#</th><th>Ação</th><th>Esforço</th></tr></thead>
+      <tbody>
+        <tr><td>7</td><td>Criar Dockerfile para o frontend + configurar URL via env var</td><td>2h</td></tr>
+        <tr><td>8</td><td>Habilitar force_ssl = true em production.rb</td><td>15min</td></tr>
+        <tr><td>9</td><td>Configurar Active Storage para S3 ou volume persistente</td><td>4h</td></tr>
+        <tr><td>10</td><td>Configurar SECRET_KEY_BASE via variável de ambiente</td><td>1h</td></tr>
+        <tr><td>11</td><td>Adicionar algoritmo na decodificação JWT (algorithms: [HS256])</td><td>1h</td></tr>
+        <tr><td>12</td><td>Reduzir validade JWT para 1–4h + implementar refresh token</td><td>1 dia</td></tr>
+      </tbody>
+    </table>
+
+    <div style="font-size:12px;font-weight:700;color:#7B79FF;margin-bottom:8px;">🟡 Funcionalidades Faltando no Frontend</div>
+    <table class="data-table" style="margin-bottom:16px;">
+      <thead><tr><th>Módulo</th><th>Impacto</th><th>Esforço Estimado</th></tr></thead>
+      <tbody>
+        <tr><td>Odontograma (interface)</td><td class="error">ALTO</td><td>5–8 dias</td></tr>
+        <tr><td>Anamnese (interface)</td><td class="error">ALTO</td><td>2–3 dias</td></tr>
+        <tr><td>Fichas Clínicas</td><td class="error">ALTO</td><td>3–4 dias</td></tr>
+        <tr><td>Planos de Tratamento</td><td class="error">ALTO</td><td>3–4 dias</td></tr>
+        <tr><td>Módulo Financeiro Completo</td><td class="error">ALTO</td><td>8–12 dias</td></tr>
+        <tr><td>CRM / Leads</td><td class="warn">MÉDIO</td><td>5–8 dias</td></tr>
+        <tr><td>Smart Boards / Kanban</td><td class="warn">MÉDIO</td><td>3–5 dias</td></tr>
+        <tr><td>Estoque + Laboratório</td><td class="warn">MÉDIO</td><td>4–6 dias</td></tr>
+      </tbody>
+    </table>
+
+    <div style="background:rgba(84,81,255,0.1);border:1px solid rgba(84,81,255,0.3);border-radius:var(--radius);padding:12px 16px;font-size:13px;color:#7B79FF;font-weight:600;">
+      Estimativa total: ~2 dias para bloqueantes · ~1 semana para deploy seguro · ~3–4 meses para plataforma completa
+    </div>
+  </div>
+
+  <!-- Conclusion -->
+  <div class="section">
+    <div class="section-title">Conclusão e Recomendação</div>
+    <div class="info-grid" style="margin-bottom:16px;">
+      <div class="info-box green">
+        <div class="info-box-title">✓ O que foi entregue de valor</div>
+        <div class="info-box-text">Modelagem de banco rica e bem pensada. Arquitetura multi-tenant correta. Swagger presente. Admin panel funcional. Base técnica sólida — o backend está bem arquitetado.</div>
+      </div>
+      <div class="info-box orange">
+        <div class="info-box-title">✗ O que não foi entregue</div>
+        <div class="info-box-text">~80% da interface de usuário. Segurança mínima para dados de saúde. Configuração de deploy para produção. Testes adequados. Documentação de setup.</div>
+      </div>
+    </div>
+    <div class="conclusion">
+      <p>
+        A entrega do fornecedor representa uma plataforma incompleta com riscos críticos de segurança.
+        A situação mais grave é a presença de <strong>dados reais de pacientes no repositório</strong> (db/backup.sql),
+        que constitui violação direta da LGPD — especialmente sensível por tratar-se de dados de saúde,
+        com proteção reforçada na legislação brasileira (Art. 11 da Lei 13.709/2018).
+      </p>
+      <p>
+        O sistema <strong>NÃO deve ser implantado em produção</strong> sem antes corrigir os 6 itens bloqueantes.
+        A Digital AI recomenda um contrato de continuidade de desenvolvimento para completar as
+        funcionalidades faltantes e garantir conformidade com LGPD e padrões de segurança para dados de saúde.
+      </p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
