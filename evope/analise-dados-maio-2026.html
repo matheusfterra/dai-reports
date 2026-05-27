@@ -1,0 +1,2271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EVOPE — Análise de Dados de Produtividade | Maio 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --dai-navy:       #0F172A;
+      --dai-surface:    #1E293B;
+      --dai-surface2:   #243347;
+      --dai-border:     #334155;
+      --dai-indigo:     #6366F1;
+      --dai-indigo-dim: rgba(99,102,241,0.12);
+      --dai-muted:      #94A3B8;
+      --dai-white:      #FFFFFF;
+      --green:          #10B981;
+      --green-dim:      rgba(16,185,129,0.12);
+      --amber:          #F59E0B;
+      --amber-dim:      rgba(245,158,11,0.12);
+      --red:            #EF4444;
+      --red-dim:        rgba(239,68,68,0.12);
+      --purple:         #A78BFA;
+      --purple-dim:     rgba(167,139,250,0.12);
+      --cyan:           #06B6D4;
+      --cyan-dim:       rgba(6,182,212,0.12);
+      --radius:         14px;
+      --radius-sm:      8px;
+      --shadow:         0 2px 16px rgba(0,0,0,0.35);
+      --shadow-md:      0 6px 32px rgba(0,0,0,0.45);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--dai-navy);
+      color: var(--dai-white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
+      70%  { box-shadow: 0 0 0 12px rgba(239,68,68,0); }
+      100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+
+    .animate { animation: fadeUp 0.55s ease both; }
+    .delay-1 { animation-delay: 0.08s; }
+    .delay-2 { animation-delay: 0.16s; }
+    .delay-3 { animation-delay: 0.24s; }
+    .delay-4 { animation-delay: 0.32s; }
+    .delay-5 { animation-delay: 0.40s; }
+    .delay-6 { animation-delay: 0.48s; }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 28px; }
+    .main { padding: 40px 0 100px; }
+
+    /* ── REPORT HEADER ── */
+    .report-header {
+      background: linear-gradient(160deg, #0a1628 0%, #1a2540 50%, #0f1e38 100%);
+      border-bottom: 1px solid var(--dai-border);
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .report-header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -80px;
+      width: 420px; height: 420px;
+      background: radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .report-header::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: -60px;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(16,185,129,0.06) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .header-inner {
+      padding: 48px 0 40px;
+      position: relative; z-index: 1;
+    }
+    .header-eyebrow {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 16px;
+    }
+    .header-eyebrow-text {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--dai-indigo);
+    }
+    .header-eyebrow-sep { color: var(--dai-border); }
+    .header-eyebrow-sub {
+      font-size: 11px; color: var(--dai-muted);
+      text-transform: uppercase; letter-spacing: 0.07em;
+    }
+    .header-badge {
+      display: inline-flex; align-items: center;
+      padding: 3px 10px; border-radius: 20px;
+      background: var(--amber-dim); color: var(--amber);
+      border: 1px solid rgba(245,158,11,0.25);
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.07em;
+    }
+    .header-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 38px; font-weight: 700;
+      letter-spacing: -0.5px; line-height: 1.2;
+      margin-bottom: 8px;
+    }
+    .header-title span { color: var(--dai-indigo); }
+    .header-subtitle {
+      font-size: 15px; color: var(--dai-muted);
+      margin-bottom: 20px; font-weight: 400;
+    }
+    .header-meta {
+      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    }
+    .header-meta-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--dai-muted);
+    }
+    .header-meta-item svg { opacity: 0.6; }
+    .header-meta-dot {
+      width: 3px; height: 3px; border-radius: 50%;
+      background: var(--dai-border);
+    }
+
+    /* ── SECTION ── */
+    .section { margin-bottom: 56px; }
+    .section-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 24px;
+    }
+    .section-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .section-icon.indigo  { background: var(--dai-indigo-dim); }
+    .section-icon.green   { background: var(--green-dim); }
+    .section-icon.amber   { background: var(--amber-dim); }
+    .section-icon.red     { background: var(--red-dim); }
+    .section-icon.purple  { background: var(--purple-dim); }
+    .section-icon.cyan    { background: var(--cyan-dim); }
+    .section-title { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+    .section-subtitle { font-size: 12px; color: var(--dai-muted); margin-top: 2px; }
+
+    .section-divider {
+      height: 1px; background: var(--dai-border);
+      margin: 48px 0;
+      position: relative;
+    }
+    .section-divider::after {
+      content: '';
+      position: absolute; left: 0; top: 0;
+      width: 60px; height: 1px;
+      background: var(--dai-indigo);
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--dai-surface);
+      border: 1px solid var(--dai-border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    /* ── KPI GRID ── */
+    .kpi-grid-6 {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 14px;
+    }
+    .kpi-card {
+      background: var(--dai-surface);
+      border: 1px solid var(--dai-border);
+      border-radius: var(--radius);
+      padding: 22px 18px;
+      position: relative; overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kpi-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .kpi-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    }
+    .kpi-card.indigo::before { background: linear-gradient(90deg, var(--dai-indigo), #818cf8); }
+    .kpi-card.green::before  { background: linear-gradient(90deg, var(--green), #34d399); }
+    .kpi-card.amber::before  { background: linear-gradient(90deg, var(--amber), #fbbf24); }
+    .kpi-card.red::before    { background: linear-gradient(90deg, var(--red), #f87171); }
+    .kpi-card.purple::before { background: linear-gradient(90deg, var(--purple), #c4b5fd); }
+    .kpi-card.cyan::before   { background: linear-gradient(90deg, var(--cyan), #67e8f9); }
+
+    .kpi-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; margin-bottom: 12px;
+    }
+    .kpi-icon.indigo { background: var(--dai-indigo-dim); }
+    .kpi-icon.green  { background: var(--green-dim); }
+    .kpi-icon.amber  { background: var(--amber-dim); }
+    .kpi-icon.red    { background: var(--red-dim); }
+    .kpi-icon.purple { background: var(--purple-dim); }
+    .kpi-icon.cyan   { background: var(--cyan-dim); }
+
+    .kpi-label {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--dai-muted); margin-bottom: 8px;
+    }
+    .kpi-value {
+      font-size: 26px; font-weight: 800;
+      letter-spacing: -0.8px; line-height: 1;
+      color: var(--dai-white);
+    }
+    .kpi-value.v-red    { color: var(--red); }
+    .kpi-value.v-amber  { color: var(--amber); }
+    .kpi-value.v-green  { color: var(--green); }
+    .kpi-value.v-indigo { color: var(--dai-indigo); }
+    .kpi-value.v-purple { color: var(--purple); }
+    .kpi-value.v-cyan   { color: var(--cyan); }
+    .kpi-caption {
+      margin-top: 6px; font-size: 11px; color: var(--dai-muted);
+      line-height: 1.4;
+    }
+
+    /* ── BADGE ── */
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: 3px 9px; border-radius: 20px;
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+    .badge-burnout {
+      background: rgba(239,68,68,0.15);
+      color: #EF4444;
+      border: 1px solid rgba(239,68,68,0.3);
+    }
+    .badge-highprod {
+      background: rgba(16,185,129,0.12);
+      color: #10B981;
+      border: 1px solid rgba(16,185,129,0.25);
+    }
+    .badge-prod {
+      background: rgba(99,102,241,0.12);
+      color: #6366F1;
+      border: 1px solid rgba(99,102,241,0.25);
+    }
+    .badge-low {
+      background: rgba(245,158,11,0.12);
+      color: #F59E0B;
+      border: 1px solid rgba(245,158,11,0.25);
+    }
+    .badge-absent {
+      background: rgba(148,163,184,0.1);
+      color: #94A3B8;
+      border: 1px solid rgba(148,163,184,0.2);
+    }
+    .badge-nodata {
+      background: rgba(148,163,184,0.08);
+      color: #64748B;
+      border: 1px solid rgba(148,163,184,0.12);
+    }
+    .badge-insufficient {
+      background: rgba(245,158,11,0.08);
+      color: #9CA3AF;
+      border: 1px solid rgba(245,158,11,0.15);
+    }
+
+    /* ── TABLE ── */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--dai-border);
+    }
+    table {
+      width: 100%; border-collapse: collapse;
+      font-size: 13px;
+    }
+    thead tr { background: var(--dai-surface2); }
+    thead th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      color: var(--dai-muted);
+      white-space: nowrap;
+      border-bottom: 1px solid var(--dai-border);
+    }
+    tbody tr {
+      border-bottom: 1px solid rgba(51,65,85,0.5);
+      transition: background 0.15s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(255,255,255,0.03); }
+    tbody td {
+      padding: 12px 16px;
+      color: var(--dai-white);
+      vertical-align: middle;
+    }
+    td.muted { color: var(--dai-muted); font-size: 12px; }
+    td.right { text-align: right; }
+    td.center { text-align: center; }
+
+    /* ── HERO BANNER ── */
+    .hero-banner {
+      background: linear-gradient(135deg, var(--dai-surface) 0%, #1a2540 100%);
+      border: 1px solid var(--dai-border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 24px;
+      position: relative; overflow: hidden;
+    }
+    .hero-banner.danger {
+      border-left: 4px solid var(--red);
+    }
+    .hero-banner.danger::before {
+      content: '';
+      position: absolute; top: 0; right: 0;
+      width: 200px; height: 100%;
+      background: radial-gradient(ellipse at right, rgba(239,68,68,0.05) 0%, transparent 70%);
+    }
+    .hero-eyebrow {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      margin-bottom: 10px;
+    }
+    .hero-eyebrow.red   { color: var(--red); }
+    .hero-eyebrow.green { color: var(--green); }
+    .hero-banner h3 {
+      font-size: 20px; font-weight: 800;
+      letter-spacing: -0.3px; line-height: 1.3;
+      margin-bottom: 8px;
+    }
+    .hero-banner h3 strong { color: var(--red); }
+    .hero-banner p {
+      font-size: 14px; color: var(--dai-muted);
+      line-height: 1.75; max-width: 700px;
+    }
+
+    /* ── ALERT CARDS ── */
+    .alert-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .alert-card {
+      background: var(--dai-surface);
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: var(--radius);
+      padding: 20px;
+      position: relative; overflow: hidden;
+    }
+    .alert-card::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: var(--red);
+    }
+    .alert-card.amber-alert {
+      border-color: rgba(245,158,11,0.25);
+    }
+    .alert-card.amber-alert::before { background: var(--amber); }
+    .alert-name {
+      font-size: 15px; font-weight: 700;
+      letter-spacing: -0.2px; margin-bottom: 4px;
+    }
+    .alert-role {
+      font-size: 11px; color: var(--dai-muted);
+      margin-bottom: 14px;
+    }
+    .alert-metrics {
+      display: flex; gap: 16px; flex-wrap: wrap;
+    }
+    .alert-metric-item { }
+    .alert-metric-label {
+      font-size: 10px; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--dai-muted);
+      margin-bottom: 2px;
+    }
+    .alert-metric-value {
+      font-size: 20px; font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .alert-metric-value.v-red   { color: var(--red); }
+    .alert-metric-value.v-amber { color: var(--amber); }
+    .alert-metric-value.v-green { color: var(--green); }
+    .alert-pulse {
+      position: absolute; top: 16px; right: 16px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--red);
+      animation: pulse-ring 1.8s ease infinite;
+    }
+
+    /* ── CHART CONTAINERS ── */
+    .chart-card {
+      background: var(--dai-surface);
+      border: 1px solid var(--dai-border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .chart-title {
+      font-size: 13px; font-weight: 700;
+      letter-spacing: -0.1px; margin-bottom: 4px;
+    }
+    .chart-desc {
+      font-size: 11px; color: var(--dai-muted);
+      margin-bottom: 20px;
+    }
+    .chart-wrap { position: relative; }
+
+    /* ── GROUP CARDS ── */
+    .group-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .group-card {
+      background: var(--dai-surface);
+      border: 1px solid var(--dai-border);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: transform 0.2s;
+    }
+    .group-card:hover { transform: translateY(-2px); }
+    .group-card-name {
+      font-size: 13px; font-weight: 700;
+      margin-bottom: 14px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .group-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+    }
+    .group-metric-row {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(51,65,85,0.4);
+      font-size: 12px;
+    }
+    .group-metric-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .group-metric-key { color: var(--dai-muted); }
+    .group-metric-val { font-weight: 700; }
+    .progress-bar {
+      height: 4px; background: rgba(255,255,255,0.06);
+      border-radius: 2px; margin-top: 10px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; border-radius: 2px;
+      transition: width 0.8s ease;
+    }
+
+    /* ── WORKFLOW CARDS ── */
+    .workflow-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .workflow-card {
+      background: var(--dai-surface);
+      border: 1px solid var(--dai-border);
+      border-radius: var(--radius);
+      padding: 22px;
+    }
+    .workflow-number {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--dai-muted); margin-bottom: 6px;
+    }
+    .workflow-name {
+      font-size: 15px; font-weight: 700;
+      letter-spacing: -0.2px; margin-bottom: 12px;
+    }
+    .workflow-apps {
+      display: flex; gap: 6px; flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .app-tag {
+      display: inline-flex; align-items: center;
+      padding: 3px 8px; border-radius: 6px;
+      font-size: 10px; font-weight: 600;
+      background: var(--dai-surface2);
+      border: 1px solid var(--dai-border);
+      color: var(--dai-muted);
+    }
+    .workflow-metrics {
+      display: flex; gap: 20px;
+    }
+    .wf-metric { }
+    .wf-metric-num {
+      font-size: 18px; font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .wf-metric-label {
+      font-size: 10px; color: var(--dai-muted);
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+
+    /* ── INSIGHTS ── */
+    .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .insight-card {
+      background: var(--dai-surface);
+      border: 1px solid var(--dai-border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex; gap: 14px;
+    }
+    .insight-icon-wrap {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; flex-shrink: 0;
+    }
+    .insight-icon-wrap.green  { background: var(--green-dim); }
+    .insight-icon-wrap.amber  { background: var(--amber-dim); }
+    .insight-icon-wrap.red    { background: var(--red-dim); }
+    .insight-icon-wrap.purple { background: var(--purple-dim); }
+    .insight-icon-wrap.cyan   { background: var(--cyan-dim); }
+    .insight-body { flex: 1; }
+    .insight-label {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      margin-bottom: 4px;
+    }
+    .insight-label.green  { color: var(--green); }
+    .insight-label.amber  { color: var(--amber); }
+    .insight-label.red    { color: var(--red); }
+    .insight-label.purple { color: var(--purple); }
+    .insight-label.cyan   { color: var(--cyan); }
+    .insight-title {
+      font-size: 13px; font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .insight-text {
+      font-size: 12px; color: var(--dai-muted);
+      line-height: 1.6;
+    }
+
+    /* ── AI BOX ── */
+    .ai-box {
+      background: linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(167,139,250,0.05) 100%);
+      border: 1px solid rgba(99,102,241,0.2);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+    }
+    .ai-box-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 20px;
+    }
+    .ai-box-icon {
+      width: 42px; height: 42px; border-radius: 12px;
+      background: var(--dai-indigo-dim);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    .ai-box-title {
+      font-size: 16px; font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+    .ai-box-sub { font-size: 12px; color: var(--dai-muted); }
+    .ai-questions {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .ai-q {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 12px; color: var(--dai-muted);
+      display: flex; align-items: flex-start; gap: 8px;
+      line-height: 1.5;
+    }
+    .ai-q::before {
+      content: '›';
+      color: var(--dai-indigo);
+      font-size: 16px; font-weight: 700;
+      flex-shrink: 0; margin-top: -1px;
+    }
+
+    /* ── ROADMAP ── */
+    .roadmap { position: relative; padding-left: 28px; }
+    .roadmap::before {
+      content: '';
+      position: absolute; left: 7px; top: 8px; bottom: 8px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--dai-indigo), rgba(99,102,241,0.2));
+    }
+    .roadmap-item {
+      position: relative; margin-bottom: 20px;
+    }
+    .roadmap-item:last-child { margin-bottom: 0; }
+    .roadmap-dot {
+      position: absolute; left: -25px; top: 10px;
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 2px solid var(--dai-border);
+      background: var(--dai-navy);
+    }
+    .roadmap-dot.active {
+      border-color: var(--dai-indigo);
+      background: var(--dai-indigo);
+      box-shadow: 0 0 0 4px rgba(99,102,241,0.2);
+    }
+    .roadmap-dot.done {
+      border-color: var(--green);
+      background: var(--green);
+    }
+    .roadmap-dot.pending {
+      border-color: var(--dai-border);
+      background: var(--dai-surface2);
+    }
+    .roadmap-card {
+      background: var(--dai-surface);
+      border: 1px solid var(--dai-border);
+      border-radius: var(--radius-sm);
+      padding: 16px 18px;
+      transition: border-color 0.2s;
+    }
+    .roadmap-card.active { border-color: rgba(99,102,241,0.35); }
+    .roadmap-card.done   { border-color: rgba(16,185,129,0.25); }
+    .roadmap-sprint {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--dai-muted); margin-bottom: 4px;
+    }
+    .roadmap-name {
+      font-size: 14px; font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .roadmap-desc { font-size: 12px; color: var(--dai-muted); line-height: 1.5; }
+    .roadmap-status {
+      margin-top: 8px;
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 2px 8px; border-radius: 12px;
+    }
+    .roadmap-status.active {
+      background: var(--dai-indigo-dim); color: var(--dai-indigo);
+    }
+    .roadmap-status.pending {
+      background: rgba(255,255,255,0.05); color: var(--dai-muted);
+    }
+
+    /* ── FOCUS INDEX BARS ── */
+    .focus-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(51,65,85,0.4);
+    }
+    .focus-row:last-child { border-bottom: none; }
+    .focus-app { width: 180px; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+    .focus-bar-wrap { flex: 1; height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+    .focus-bar-fill { height: 100%; border-radius: 3px; }
+    .focus-val { width: 70px; text-align: right; font-size: 12px; font-weight: 700; color: var(--dai-muted); }
+    .focus-badge { width: 50px; text-align: right; font-size: 10px; }
+
+    /* ── TRANSITION TABLE highlight ── */
+    .transition-arrow {
+      color: var(--dai-muted); font-size: 11px;
+      padding: 0 4px;
+    }
+    .trans-high { color: var(--dai-indigo); font-weight: 700; }
+    .trans-med  { color: var(--amber); font-weight: 700; }
+    .trans-low  { color: var(--dai-muted); }
+
+    /* ── FOOTER ── */
+    .report-footer {
+      border-top: 1px solid var(--dai-border);
+      padding: 28px 0;
+      margin-top: 60px;
+    }
+    .footer-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-left {
+      font-size: 12px; color: var(--dai-muted);
+    }
+    .footer-left strong { color: var(--dai-white); }
+    .footer-right {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .footer-logo {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--dai-indigo);
+    }
+    .footer-sep {
+      width: 1px; height: 14px;
+      background: var(--dai-border);
+    }
+    .footer-client {
+      font-size: 11px; color: var(--dai-muted);
+    }
+
+    /* ── 2-COL LAYOUT ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .kpi-grid-6 { grid-template-columns: repeat(3, 1fr); }
+      .group-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .header-title { font-size: 26px; }
+      .kpi-grid-6   { grid-template-columns: repeat(2, 1fr); }
+      .alert-grid   { grid-template-columns: 1fr; }
+      .group-grid   { grid-template-columns: 1fr; }
+      .workflow-grid { grid-template-columns: 1fr; }
+      .insight-grid  { grid-template-columns: 1fr; }
+      .two-col       { grid-template-columns: 1fr; }
+      .three-col     { grid-template-columns: 1fr; }
+      .ai-questions  { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     HEADER
+═══════════════════════════════════════════════ -->
+<header class="report-header">
+  <div class="container">
+    <div class="header-inner">
+      <div class="header-eyebrow animate">
+        <span class="header-eyebrow-text">Digital AI</span>
+        <span class="header-eyebrow-sep">×</span>
+        <span class="header-eyebrow-sub">EVOPE — Agente de Insights</span>
+      </div>
+      <h1 class="header-title animate delay-1">
+        <span>EVOPE</span> — Análise de Dados<br>de Produtividade
+      </h1>
+      <p class="header-subtitle animate delay-2">Diagnóstico de comportamento digital dos colaboradores · Maio 2026</p>
+      <div class="header-meta animate delay-3">
+        <div class="header-meta-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Maio 2026
+        </div>
+        <span class="header-meta-dot"></span>
+        <div class="header-meta-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Período de coleta: 01/05 – 31/05
+        </div>
+        <span class="header-meta-dot"></span>
+        <div class="header-meta-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          17 colaboradores
+        </div>
+        <span class="header-meta-dot"></span>
+        <span class="header-badge">Análise Preliminar</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════
+     MAIN
+═══════════════════════════════════════════════ -->
+<main class="main">
+  <div class="container">
+
+    <!-- ══════════ RESUMO EXECUTIVO ══════════ -->
+    <section class="section animate">
+      <div class="section-header">
+        <div class="section-icon indigo">📊</div>
+        <div>
+          <div class="section-title">Resumo Executivo</div>
+          <div class="section-subtitle">Visão consolidada do período analisado</div>
+        </div>
+      </div>
+
+      <div class="kpi-grid-6">
+        <div class="kpi-card indigo animate delay-1">
+          <div class="kpi-icon indigo">👥</div>
+          <div class="kpi-label">Total Colaboradores</div>
+          <div class="kpi-value">17</div>
+          <div class="kpi-caption">Universo monitorado pela plataforma</div>
+        </div>
+        <div class="kpi-card cyan animate delay-2">
+          <div class="kpi-icon cyan">🔍</div>
+          <div class="kpi-label">Monitorados</div>
+          <div class="kpi-value v-cyan">10</div>
+          <div class="kpi-caption">Com dados válidos no período</div>
+        </div>
+        <div class="kpi-card red animate delay-3">
+          <div class="kpi-icon red">🔥</div>
+          <div class="kpi-label">Risco de Burnout</div>
+          <div class="kpi-value v-red">2</div>
+          <div class="kpi-caption">18,2% dos coletados — atenção imediata</div>
+        </div>
+        <div class="kpi-card amber animate delay-4">
+          <div class="kpi-icon amber">⚡</div>
+          <div class="kpi-label">Aproveitamento Médio</div>
+          <div class="kpi-value v-amber">39%</div>
+          <div class="kpi-caption">Master — potencial significativo de melhoria</div>
+        </div>
+        <div class="kpi-card green animate delay-5">
+          <div class="kpi-icon green">⏱</div>
+          <div class="kpi-label">Horas Ativas Totais</div>
+          <div class="kpi-value v-green">839h</div>
+          <div class="kpi-caption">Computadas no período de coleta</div>
+        </div>
+        <div class="kpi-card purple animate delay-6">
+          <div class="kpi-icon purple">🖥</div>
+          <div class="kpi-label">Ferramentas Mapeadas</div>
+          <div class="kpi-value v-purple">35+</div>
+          <div class="kpi-caption">Apps identificados no mapa de processos</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ══════════ P1 — BURNOUT INDIVIDUAL ══════════ -->
+    <section class="section animate">
+      <div class="section-header">
+        <div class="section-icon red">🔥</div>
+        <div>
+          <div class="section-title">P1 — Burnout Individual</div>
+          <div class="section-subtitle">Análise por colaborador · Aproveitamento, entretenimento e classificação de risco</div>
+        </div>
+      </div>
+
+      <!-- Hero Banner Burnout -->
+      <div class="hero-banner danger animate">
+        <div class="hero-eyebrow red">⚠ Alerta Crítico — 2 Colaboradores em Risco</div>
+        <h3><strong>Roberta Reis e Ivan Jesus</strong> estão em Propensão ao Burnout</h3>
+        <p>
+          Ambos ultrapassaram 100% de aproveitamento (uso efetivo maior que horas previstas) com menos de 7% de entretenimento.
+          Esse padrão indica sobrecarga sustentada sem pausas de recuperação — o maior fator de risco para burnout clínico.
+          Recomenda-se intervenção preventiva imediata com gestão.
+        </p>
+      </div>
+
+      <!-- Alert Cards para casos críticos -->
+      <div class="alert-grid animate delay-1" style="margin-bottom: 24px;">
+        <div class="alert-card">
+          <div class="alert-pulse"></div>
+          <div class="alert-name">Roberta Reis</div>
+          <div class="alert-role">Adm / Financeiro · 179h registradas de 160h previstas</div>
+          <div class="alert-metrics">
+            <div class="alert-metric-item">
+              <div class="alert-metric-label">Aproveitamento</div>
+              <div class="alert-metric-value v-red">111%</div>
+            </div>
+            <div class="alert-metric-item">
+              <div class="alert-metric-label">Entretenimento</div>
+              <div class="alert-metric-value v-green">0,9%</div>
+            </div>
+            <div class="alert-metric-item">
+              <div class="alert-metric-label">Excesso de horas</div>
+              <div class="alert-metric-value v-amber">+19h</div>
+            </div>
+          </div>
+        </div>
+        <div class="alert-card">
+          <div class="alert-pulse"></div>
+          <div class="alert-name">Ivan Jesus</div>
+          <div class="alert-role">DEV · 176h registradas de 160h previstas</div>
+          <div class="alert-metrics">
+            <div class="alert-metric-item">
+              <div class="alert-metric-label">Aproveitamento</div>
+              <div class="alert-metric-value v-red">110%</div>
+            </div>
+            <div class="alert-metric-item">
+              <div class="alert-metric-label">Entretenimento</div>
+              <div class="alert-metric-value v-green">0%</div>
+            </div>
+            <div class="alert-metric-item">
+              <div class="alert-metric-label">Excesso de horas</div>
+              <div class="alert-metric-value v-amber">+16h</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gráfico Aproveitamento -->
+      <div class="two-col animate delay-2" style="margin-bottom: 24px;">
+        <div class="chart-card">
+          <div class="chart-title">Aproveitamento por Colaborador (%)</div>
+          <div class="chart-desc">Colaboradores com dados válidos — referência 100% = horas previstas</div>
+          <div class="chart-wrap" style="height: 360px;">
+            <canvas id="chartAproveitamento"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Entretenimento vs Aproveitamento</div>
+          <div class="chart-desc">Dispersão — posicionamento de risco por colaborador</div>
+          <div class="chart-wrap" style="height: 360px;">
+            <canvas id="chartScatter"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabela completa colaboradores -->
+      <div class="table-wrap animate delay-3">
+        <table>
+          <thead>
+            <tr>
+              <th>Colaborador</th>
+              <th>Grupo</th>
+              <th class="right">H. Previstas</th>
+              <th class="right">H. Totais</th>
+              <th class="right">Aproveitamento</th>
+              <th class="right">Entretenimento</th>
+              <th class="center">Classificação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Roberta Reis</strong></td>
+              <td class="muted">Adm/Financeiro</td>
+              <td class="right muted">160h</td>
+              <td class="right">179h</td>
+              <td class="right" style="color:var(--red);font-weight:700;">111%</td>
+              <td class="right">1%</td>
+              <td class="center"><span class="badge badge-burnout">Propensão Burnout</span></td>
+            </tr>
+            <tr>
+              <td><strong>Ivan Jesus</strong></td>
+              <td class="muted">DEV</td>
+              <td class="right muted">160h</td>
+              <td class="right">176h</td>
+              <td class="right" style="color:var(--red);font-weight:700;">110%</td>
+              <td class="right">0%</td>
+              <td class="center"><span class="badge badge-burnout">Propensão Burnout</span></td>
+            </tr>
+            <tr>
+              <td><strong>Vera Lucia Vicente</strong></td>
+              <td class="muted">CS</td>
+              <td class="right muted">160h</td>
+              <td class="right">153h</td>
+              <td class="right" style="color:var(--green);font-weight:700;">93%</td>
+              <td class="right">3%</td>
+              <td class="center"><span class="badge badge-highprod">Alt. Produtivo</span></td>
+            </tr>
+            <tr>
+              <td><strong>Saulo Soares</strong></td>
+              <td class="muted">DEV</td>
+              <td class="right muted">160h</td>
+              <td class="right">146h</td>
+              <td class="right" style="color:var(--green);font-weight:700;">89%</td>
+              <td class="right">2%</td>
+              <td class="center"><span class="badge badge-highprod">Alt. Produtivo</span></td>
+            </tr>
+            <tr>
+              <td>Vinicius Garcia</td>
+              <td class="muted">DEV</td>
+              <td class="right muted">160h</td>
+              <td class="right">120h</td>
+              <td class="right" style="color:var(--amber);font-weight:600;">72%</td>
+              <td class="right">5%</td>
+              <td class="center"><span class="badge badge-low">Baixa Prod.</span></td>
+            </tr>
+            <tr>
+              <td>Hugo Andrade</td>
+              <td class="muted">Atendimento</td>
+              <td class="right muted">160h</td>
+              <td class="right">141h</td>
+              <td class="right" style="color:var(--amber);font-weight:600;">72%</td>
+              <td class="right" style="color:var(--amber);">18%</td>
+              <td class="center"><span class="badge badge-low">Baixa Prod.</span></td>
+            </tr>
+            <tr>
+              <td>Nadielen Martins</td>
+              <td class="muted">Negócios</td>
+              <td class="right muted">160h</td>
+              <td class="right">75h</td>
+              <td class="right" style="color:var(--amber);">41%</td>
+              <td class="right" style="color:var(--amber);">13%</td>
+              <td class="center"><span class="badge badge-low">Baixa Prod.</span></td>
+            </tr>
+            <tr>
+              <td>Debora Amaral</td>
+              <td class="muted">CS</td>
+              <td class="right muted">160h</td>
+              <td class="right">66h</td>
+              <td class="right" style="color:var(--amber);">38%</td>
+              <td class="right">9%</td>
+              <td class="center"><span class="badge badge-low">Baixa Prod.</span></td>
+            </tr>
+            <tr>
+              <td>Ana Joaquim</td>
+              <td class="muted">DEV</td>
+              <td class="right muted">105h</td>
+              <td class="right">1h</td>
+              <td class="right">1%</td>
+              <td class="right" style="color:var(--amber);">22%</td>
+              <td class="center"><span class="badge badge-insufficient">Dado Insufic.</span></td>
+            </tr>
+            <tr>
+              <td>Ana Joaquim — MAC</td>
+              <td class="muted">MacOS</td>
+              <td class="right muted">181h</td>
+              <td class="right">6h</td>
+              <td class="right">3%</td>
+              <td class="right">10%</td>
+              <td class="center"><span class="badge badge-insufficient">Dado Insufic.</span></td>
+            </tr>
+            <tr>
+              <td>Gleidson — MAC</td>
+              <td class="muted">MAC</td>
+              <td class="right muted">161h</td>
+              <td class="right">3h</td>
+              <td class="right">2%</td>
+              <td class="right">11%</td>
+              <td class="center"><span class="badge badge-insufficient">Dado Insufic.</span></td>
+            </tr>
+            <tr>
+              <td>Ricardo Laizo</td>
+              <td class="muted">Marketing</td>
+              <td class="right muted">160h</td>
+              <td class="right muted">0h</td>
+              <td class="right muted">0%</td>
+              <td class="right muted">0%</td>
+              <td class="center"><span class="badge badge-absent">Ausente</span></td>
+            </tr>
+            <tr>
+              <td>Ana Carolina Caetano</td>
+              <td class="muted">CS</td>
+              <td class="right muted">160h</td>
+              <td class="right muted">0h</td>
+              <td class="right muted">0%</td>
+              <td class="right muted">0%</td>
+              <td class="center"><span class="badge badge-absent">Ausente</span></td>
+            </tr>
+            <tr>
+              <td>Bianca dos Santos</td>
+              <td class="muted">CS</td>
+              <td class="right muted">160h</td>
+              <td class="right muted">0h</td>
+              <td class="right muted">0%</td>
+              <td class="right muted">0%</td>
+              <td class="center"><span class="badge badge-absent">Ausente</span></td>
+            </tr>
+            <tr>
+              <td>Marcio Nery</td>
+              <td class="muted">Negócios</td>
+              <td class="right muted">160h</td>
+              <td class="right muted">0h</td>
+              <td class="right muted">0%</td>
+              <td class="right muted">0%</td>
+              <td class="center"><span class="badge badge-absent">Ausente</span></td>
+            </tr>
+            <tr>
+              <td>COLAB EVOPE (Lucas PC)</td>
+              <td class="muted">Master</td>
+              <td class="right muted">160h</td>
+              <td class="right muted">0h</td>
+              <td class="right muted">0%</td>
+              <td class="right muted">0%</td>
+              <td class="center"><span class="badge badge-absent">Ausente</span></td>
+            </tr>
+            <tr>
+              <td>Cínthya</td>
+              <td class="muted">Marketing</td>
+              <td class="right muted">—</td>
+              <td class="right muted">0h</td>
+              <td class="right muted">—</td>
+              <td class="right muted">—</td>
+              <td class="center"><span class="badge badge-nodata">Sem Dados</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Legenda -->
+      <div class="card animate delay-4" style="margin-top:16px; padding: 16px 20px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--dai-muted);margin-bottom:12px;">Legenda das Classificações</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          <span class="badge badge-burnout">Propensão Burnout — Aprov ≥ 100% e Entret &lt; 7%</span>
+          <span class="badge badge-highprod">Altamente Produtivo — Aprov ≥ 80% e Entret &lt; 7%</span>
+          <span class="badge badge-prod">Produtivo — Aprov 60-79%</span>
+          <span class="badge badge-low">Baixa Produtividade — Aprov &lt; 60%</span>
+          <span class="badge badge-absent">Ausente — 0h no período</span>
+          <span class="badge badge-nodata">Sem Dados — não monitorado</span>
+          <span class="badge badge-insufficient">Dado Insuficiente — cobertura &lt; 10%</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ══════════ P2 — ANÁLISE DE GRUPOS ══════════ -->
+    <section class="section animate">
+      <div class="section-header">
+        <div class="section-icon purple">🏢</div>
+        <div>
+          <div class="section-title">P2 — Análise por Grupo</div>
+          <div class="section-subtitle">Consolidado de produtividade e risco por área organizacional</div>
+        </div>
+      </div>
+
+      <!-- Cards de grupo -->
+      <div class="group-grid animate">
+        <!-- MASTER -->
+        <div class="group-card">
+          <div class="group-card-name">
+            <span class="group-dot" style="background:var(--dai-indigo)"></span>
+            Master — Geral
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Colaboradores</span>
+            <span class="group-metric-val">17</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Coletados</span>
+            <span class="group-metric-val">11</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Aproveitamento</span>
+            <span class="group-metric-val" style="color:var(--amber);">39,0%</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Em Burnout</span>
+            <span class="group-metric-val" style="color:var(--red);">2 (18,2%)</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Entretenimento</span>
+            <span class="group-metric-val">43,9h (5,2%)</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:39%;background:var(--amber);"></div>
+          </div>
+        </div>
+
+        <!-- ADM/FINANCEIRO -->
+        <div class="group-card" style="border-color:rgba(239,68,68,0.3);">
+          <div class="group-card-name">
+            <span class="group-dot" style="background:var(--red)"></span>
+            Adm / Financeiro
+            <span class="badge badge-burnout" style="margin-left:auto;font-size:9px;">100% burnout</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Colaboradores</span>
+            <span class="group-metric-val">1 / 1</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Aproveitamento</span>
+            <span class="group-metric-val" style="color:var(--red);">110,7%</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Burnout</span>
+            <span class="group-metric-val" style="color:var(--red);">1 (100%)</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Entretenimento</span>
+            <span class="group-metric-val" style="color:var(--green);">1,3h (0,9%)</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Acima da Meta</span>
+            <span class="group-metric-val">1 colaborador</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:100%;background:var(--red);"></div>
+          </div>
+        </div>
+
+        <!-- DEV -->
+        <div class="group-card">
+          <div class="group-card-name">
+            <span class="group-dot" style="background:var(--cyan)"></span>
+            DEV
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Colaboradores</span>
+            <span class="group-metric-val">6 / 6</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Aproveitamento</span>
+            <span class="group-metric-val" style="color:var(--amber);">47,4%</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Burnout</span>
+            <span class="group-metric-val" style="color:var(--red);">1 (16,7%)</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Entretenimento</span>
+            <span class="group-metric-val" style="color:var(--green);">9,9h (2,7%)</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Distribuição</span>
+            <span class="group-metric-val">3 abaixo · 2 bom · 1 acima</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:47%;background:var(--cyan);"></div>
+          </div>
+        </div>
+
+        <!-- CS -->
+        <div class="group-card">
+          <div class="group-card-name">
+            <span class="group-dot" style="background:var(--green)"></span>
+            Customer Success
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Colaboradores</span>
+            <span class="group-metric-val">4 total / dados parciais</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Aproveitamento</span>
+            <span class="group-metric-val">Vera: 93% · Débora: 38%</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Burnout</span>
+            <span class="group-metric-val" style="color:var(--green);">0</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Ausentes</span>
+            <span class="group-metric-val" style="color:var(--amber);">2 (Ana C. e Bianca)</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:65%;background:var(--green);"></div>
+          </div>
+        </div>
+
+        <!-- NEGÓCIOS -->
+        <div class="group-card">
+          <div class="group-card-name">
+            <span class="group-dot" style="background:var(--amber)"></span>
+            Negócios
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Colaboradores</span>
+            <span class="group-metric-val">2 / 1 coletado</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Aproveitamento</span>
+            <span class="group-metric-val" style="color:var(--red);">15,7%</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Burnout</span>
+            <span class="group-metric-val" style="color:var(--green);">0</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Entretenimento</span>
+            <span class="group-metric-val" style="color:var(--amber);">7,3h (15,3%) ⚠</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Marcio Nery</span>
+            <span class="group-metric-val" style="color:var(--dai-muted);">0h — ausente</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:16%;background:var(--red);"></div>
+          </div>
+        </div>
+
+        <!-- ATENDIMENTO -->
+        <div class="group-card">
+          <div class="group-card-name">
+            <span class="group-dot" style="background:var(--purple)"></span>
+            Atendimento
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Coletados</span>
+            <span class="group-metric-val">3 de 5</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Aproveitamento</span>
+            <span class="group-metric-val" style="color:var(--amber);">39,7%</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Burnout</span>
+            <span class="group-metric-val" style="color:var(--green);">0</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Entretenimento</span>
+            <span class="group-metric-val" style="color:var(--amber);">25,5h (9,1%)</span>
+          </div>
+          <div class="group-metric-row">
+            <span class="group-metric-key">Destaque</span>
+            <span class="group-metric-val">Hugo: 18% entret ⚠</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:40%;background:var(--purple);"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gráfico Grupos -->
+      <div class="two-col animate delay-2" style="margin-bottom:24px;">
+        <div class="chart-card">
+          <div class="chart-title">Aproveitamento por Grupo (%)</div>
+          <div class="chart-desc">Média de aproveitamento consolidada por área — referência 80%</div>
+          <div class="chart-wrap" style="height: 280px;">
+            <canvas id="chartGrupos"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Entretenimento por Grupo (horas)</div>
+          <div class="chart-desc">Total de horas de entretenimento registradas por área</div>
+          <div class="chart-wrap" style="height: 280px;">
+            <canvas id="chartEntretGrupos"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabela Grupos -->
+      <div class="table-wrap animate delay-3">
+        <table>
+          <thead>
+            <tr>
+              <th>Grupo</th>
+              <th class="right">Total</th>
+              <th class="right">Coletados</th>
+              <th class="right">Aproveitamento</th>
+              <th class="right">Burnout</th>
+              <th class="right">Burnout %</th>
+              <th class="right">Entret. (h)</th>
+              <th class="right">Entret. %</th>
+              <th class="right">Abaixo</th>
+              <th class="right">Bom</th>
+              <th class="right">Acima</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Master (Total)</strong></td>
+              <td class="right">17</td>
+              <td class="right">11</td>
+              <td class="right" style="color:var(--amber);font-weight:600;">39,0%</td>
+              <td class="right" style="color:var(--red);font-weight:700;">2</td>
+              <td class="right" style="color:var(--red);">18,2%</td>
+              <td class="right">43,9h</td>
+              <td class="right">5,2%</td>
+              <td class="right">11</td>
+              <td class="right">0</td>
+              <td class="right">2</td>
+            </tr>
+            <tr>
+              <td>Adm/Financeiro</td>
+              <td class="right">1</td>
+              <td class="right">1</td>
+              <td class="right" style="color:var(--red);font-weight:600;">110,7%</td>
+              <td class="right" style="color:var(--red);">1</td>
+              <td class="right" style="color:var(--red);">100,0%</td>
+              <td class="right" style="color:var(--green);">1,3h</td>
+              <td class="right" style="color:var(--green);">0,9%</td>
+              <td class="right">0</td>
+              <td class="right">0</td>
+              <td class="right">1</td>
+            </tr>
+            <tr>
+              <td>DEV</td>
+              <td class="right">6</td>
+              <td class="right">6</td>
+              <td class="right" style="color:var(--amber);">47,4%</td>
+              <td class="right" style="color:var(--red);">1</td>
+              <td class="right" style="color:var(--red);">16,7%</td>
+              <td class="right" style="color:var(--green);">9,9h</td>
+              <td class="right" style="color:var(--green);">2,7%</td>
+              <td class="right">3</td>
+              <td class="right">2</td>
+              <td class="right">1</td>
+            </tr>
+            <tr>
+              <td>Atendimento</td>
+              <td class="right">5</td>
+              <td class="right">3</td>
+              <td class="right" style="color:var(--amber);">39,7%</td>
+              <td class="right" style="color:var(--green);">0</td>
+              <td class="right muted">0,0%</td>
+              <td class="right" style="color:var(--amber);">25,5h</td>
+              <td class="right" style="color:var(--amber);">9,1%</td>
+              <td class="right">3</td>
+              <td class="right">2</td>
+              <td class="right">0</td>
+            </tr>
+            <tr>
+              <td>Negócios</td>
+              <td class="right">2</td>
+              <td class="right">1</td>
+              <td class="right" style="color:var(--red);">15,7%</td>
+              <td class="right" style="color:var(--green);">0</td>
+              <td class="right muted">0,0%</td>
+              <td class="right" style="color:var(--amber);">7,3h</td>
+              <td class="right" style="color:var(--amber);">15,3%</td>
+              <td class="right">2</td>
+              <td class="right">0</td>
+              <td class="right">0</td>
+            </tr>
+            <tr>
+              <td>Marketing</td>
+              <td class="right">2</td>
+              <td class="right muted">0</td>
+              <td class="right muted">N/A</td>
+              <td class="right muted">—</td>
+              <td class="right muted">N/A</td>
+              <td class="right muted">0h</td>
+              <td class="right muted">N/A</td>
+              <td class="right">2</td>
+              <td class="right">0</td>
+              <td class="right">0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Cards de casos especiais (burnout + alto entret) -->
+      <div style="margin-top:24px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:14px;color:var(--dai-muted);text-transform:uppercase;letter-spacing:0.06em;font-size:11px;">Colaboradores que Exigem Atenção</div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;" class="animate delay-4">
+          <!-- Burnout -->
+          <div class="card" style="border-color:rgba(239,68,68,0.25);padding:16px;">
+            <div style="font-size:10px;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;">Burnout</div>
+            <div style="font-size:13px;font-weight:700;margin-bottom:2px;">Roberta Reis</div>
+            <div style="font-size:11px;color:var(--dai-muted);margin-bottom:10px;">Adm/Financeiro</div>
+            <div style="font-size:20px;font-weight:800;color:var(--red);">111%</div>
+            <div style="font-size:10px;color:var(--dai-muted);">Aproveitamento</div>
+          </div>
+          <div class="card" style="border-color:rgba(239,68,68,0.25);padding:16px;">
+            <div style="font-size:10px;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;">Burnout</div>
+            <div style="font-size:13px;font-weight:700;margin-bottom:2px;">Ivan Jesus</div>
+            <div style="font-size:11px;color:var(--dai-muted);margin-bottom:10px;">DEV</div>
+            <div style="font-size:20px;font-weight:800;color:var(--red);">110%</div>
+            <div style="font-size:10px;color:var(--dai-muted);">Aproveitamento</div>
+          </div>
+          <!-- Alto entretenimento -->
+          <div class="card" style="border-color:rgba(245,158,11,0.25);padding:16px;">
+            <div style="font-size:10px;color:var(--amber);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;">Alto Entret.</div>
+            <div style="font-size:13px;font-weight:700;margin-bottom:2px;">Ana Joaquim</div>
+            <div style="font-size:11px;color:var(--dai-muted);margin-bottom:10px;">DEV</div>
+            <div style="font-size:20px;font-weight:800;color:var(--amber);">22%</div>
+            <div style="font-size:10px;color:var(--dai-muted);">Entretenimento</div>
+          </div>
+          <div class="card" style="border-color:rgba(245,158,11,0.25);padding:16px;">
+            <div style="font-size:10px;color:var(--amber);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;">Alto Entret.</div>
+            <div style="font-size:13px;font-weight:700;margin-bottom:2px;">Nadielen Martins</div>
+            <div style="font-size:11px;color:var(--dai-muted);margin-bottom:10px;">Negócios</div>
+            <div style="font-size:20px;font-weight:800;color:var(--amber);">15%</div>
+            <div style="font-size:10px;color:var(--dai-muted);">Entretenimento</div>
+          </div>
+          <div class="card" style="border-color:rgba(245,158,11,0.25);padding:16px;">
+            <div style="font-size:10px;color:var(--amber);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;">Alto Entret.</div>
+            <div style="font-size:13px;font-weight:700;margin-bottom:2px;">Hugo Andrade</div>
+            <div style="font-size:11px;color:var(--dai-muted);margin-bottom:10px;">Atendimento</div>
+            <div style="font-size:20px;font-weight:800;color:var(--amber);">18%</div>
+            <div style="font-size:10px;color:var(--dai-muted);">Entretenimento</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ══════════ P3 — MAPA DE PROCESSOS ══════════ -->
+    <section class="section animate">
+      <div class="section-header">
+        <div class="section-icon cyan">🗺</div>
+        <div>
+          <div class="section-title">P3 — Mapa de Processos</div>
+          <div class="section-subtitle">Ferramentas utilizadas, intensidade de uso e workflows identificados automaticamente</div>
+        </div>
+      </div>
+
+      <!-- Gráfico Apps -->
+      <div class="chart-card animate" style="margin-bottom:24px;">
+        <div class="chart-title">Top Aplicativos por Horas de Uso</div>
+        <div class="chart-desc">Horas totais acumuladas por aplicativo — todos os colaboradores monitorados</div>
+        <div class="chart-wrap" style="height:340px;">
+          <canvas id="chartApps"></canvas>
+        </div>
+      </div>
+
+      <!-- Índice de Foco -->
+      <div class="two-col animate delay-1" style="margin-bottom: 24px;">
+        <div class="card">
+          <div style="font-size:13px;font-weight:700;margin-bottom:4px;">Índice de Foco por Aplicativo</div>
+          <div style="font-size:11px;color:var(--dai-muted);margin-bottom:20px;">(Teclas + Cliques) ÷ Horas — mede intensidade de interação</div>
+
+          <div class="focus-row">
+            <div class="focus-app">WhatsApp</div>
+            <div class="focus-bar-wrap">
+              <div class="focus-bar-fill" style="width:100%;background:linear-gradient(90deg,var(--green),#34d399);"></div>
+            </div>
+            <div class="focus-val" style="color:var(--green);">4.722/h</div>
+            <div class="focus-badge"><span class="badge" style="background:var(--green-dim);color:var(--green);border:none;">máximo</span></div>
+          </div>
+          <div class="focus-row">
+            <div class="focus-app">ChatGPT</div>
+            <div class="focus-bar-wrap">
+              <div class="focus-bar-fill" style="width:50%;background:linear-gradient(90deg,var(--purple),#c4b5fd);"></div>
+            </div>
+            <div class="focus-val" style="color:var(--purple);">2.388/h</div>
+            <div class="focus-badge"><span class="badge" style="background:var(--purple-dim);color:var(--purple);border:none;">alto</span></div>
+          </div>
+          <div class="focus-row">
+            <div class="focus-app">Teams Chat</div>
+            <div class="focus-bar-wrap">
+              <div class="focus-bar-fill" style="width:45%;background:linear-gradient(90deg,var(--dai-indigo),#818cf8);"></div>
+            </div>
+            <div class="focus-val" style="color:var(--dai-indigo);">2.121/h</div>
+            <div class="focus-badge"></div>
+          </div>
+          <div class="focus-row">
+            <div class="focus-app">Visual Studio</div>
+            <div class="focus-bar-wrap">
+              <div class="focus-bar-fill" style="width:17%;background:linear-gradient(90deg,var(--cyan),#67e8f9);"></div>
+            </div>
+            <div class="focus-val" style="color:var(--cyan);">787/h</div>
+            <div class="focus-badge"></div>
+          </div>
+          <div class="focus-row">
+            <div class="focus-app">EVOPE Portal</div>
+            <div class="focus-bar-wrap">
+              <div class="focus-bar-fill" style="width:11%;background:linear-gradient(90deg,var(--amber),#fbbf24);"></div>
+            </div>
+            <div class="focus-val" style="color:var(--amber);">511/h</div>
+            <div class="focus-badge"></div>
+          </div>
+          <div class="focus-row">
+            <div class="focus-app">SSMS (SQL Server)</div>
+            <div class="focus-bar-wrap">
+              <div class="focus-bar-fill" style="width:6%;background:rgba(148,163,184,0.4);"></div>
+            </div>
+            <div class="focus-val">265/h</div>
+            <div class="focus-badge"><span class="badge" style="background:rgba(255,255,255,0.05);color:var(--dai-muted);border:none;font-size:9px;">espera</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="font-size:13px;font-weight:700;margin-bottom:4px;">Destaque — Adoção de IA</div>
+          <div style="font-size:11px;color:var(--dai-muted);margin-bottom:18px;">ChatGPT utilizado por 6 colaboradores — sinal positivo de maturidade digital</div>
+
+          <div style="background:linear-gradient(135deg,rgba(167,139,250,0.08),rgba(99,102,241,0.05));border:1px solid rgba(167,139,250,0.2);border-radius:var(--radius-sm);padding:18px;margin-bottom:14px;">
+            <div style="font-size:24px;font-weight:800;color:var(--purple);letter-spacing:-0.5px;">6</div>
+            <div style="font-size:12px;color:var(--dai-muted);margin-top:2px;">colaboradores utilizando ChatGPT ativamente</div>
+            <div style="font-size:11px;color:var(--dai-muted);margin-top:6px;">3:10h mapeadas · 7.115 teclas · 527 cliques · 334 interações</div>
+          </div>
+
+          <div style="font-size:12px;color:var(--dai-muted);line-height:1.7;">
+            A taxa de adoção de ferramentas de IA é um indicador de modernização operacional.
+            Com 6 de 10 colaboradores utilizando ChatGPT, a EVOPE demonstra abertura à automação — terreno fértil para a implantação do Agente de Insights.
+          </div>
+
+          <div style="margin-top:14px;">
+            <div style="font-size:11px;font-weight:700;color:var(--dai-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">Categorias de uso de apps</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <div style="display:flex;align-items:center;gap:5px;font-size:11px;">
+                <span style="width:8px;height:8px;border-radius:2px;background:var(--cyan);display:inline-block;"></span>
+                Desenvolvimento 109,8h
+              </div>
+              <div style="display:flex;align-items:center;gap:5px;font-size:11px;">
+                <span style="width:8px;height:8px;border-radius:2px;background:var(--dai-indigo);display:inline-block;"></span>
+                Comunicação 68,5h
+              </div>
+              <div style="display:flex;align-items:center;gap:5px;font-size:11px;">
+                <span style="width:8px;height:8px;border-radius:2px;background:var(--amber);display:inline-block;"></span>
+                Gestão 32,1h
+              </div>
+              <div style="display:flex;align-items:center;gap:5px;font-size:11px;">
+                <span style="width:8px;height:8px;border-radius:2px;background:var(--purple);display:inline-block;"></span>
+                IA / Pesquisa 3,2h
+              </div>
+              <div style="display:flex;align-items:center;gap:5px;font-size:11px;">
+                <span style="width:8px;height:8px;border-radius:2px;background:var(--red);display:inline-block;"></span>
+                Entretenimento 2,4h
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Workflows Identificados -->
+      <div style="margin-bottom:24px;" class="animate delay-2">
+        <div class="section-header" style="margin-bottom:16px;">
+          <div style="font-size:14px;font-weight:700;">Workflows Identificados Automaticamente</div>
+          <div style="font-size:11px;color:var(--dai-muted);margin-left:auto;">4 padrões de trabalho detectados via análise de transições</div>
+        </div>
+        <div class="workflow-grid">
+          <div class="workflow-card" style="border-color:rgba(99,102,241,0.3);">
+            <div class="workflow-number">Workflow 01 · Dominante</div>
+            <div class="workflow-name">Monitoramento Operacional</div>
+            <div class="workflow-apps">
+              <span class="app-tag" style="color:var(--dai-indigo);border-color:rgba(99,102,241,0.3);">Teams</span>
+              <span style="color:var(--dai-muted);font-size:12px;">↔</span>
+              <span class="app-tag" style="color:var(--dai-indigo);border-color:rgba(99,102,241,0.3);">EVOPE Portal</span>
+            </div>
+            <div class="workflow-metrics">
+              <div class="wf-metric">
+                <div class="wf-metric-num" style="color:var(--dai-indigo);">1.033</div>
+                <div class="wf-metric-label">Transições</div>
+              </div>
+              <div class="wf-metric">
+                <div class="wf-metric-num">8</div>
+                <div class="wf-metric-label">Colaboradores</div>
+              </div>
+              <div class="wf-metric">
+                <div class="wf-metric-num" style="color:var(--green);">Central</div>
+                <div class="wf-metric-label">Função</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="workflow-card" style="border-color:rgba(6,182,212,0.3);">
+            <div class="workflow-number">Workflow 02 · DEV</div>
+            <div class="workflow-name">Investigação de Falhas</div>
+            <div class="workflow-apps">
+              <span class="app-tag" style="color:var(--cyan);border-color:rgba(6,182,212,0.3);">SSMS</span>
+              <span style="color:var(--dai-muted);font-size:12px;">↔</span>
+              <span class="app-tag" style="color:var(--cyan);border-color:rgba(6,182,212,0.3);">Excel</span>
+              <span style="color:var(--dai-muted);font-size:12px;">↔</span>
+              <span class="app-tag" style="color:var(--cyan);border-color:rgba(6,182,212,0.3);">EVOPE</span>
+            </div>
+            <div class="workflow-metrics">
+              <div class="wf-metric">
+                <div class="wf-metric-num" style="color:var(--cyan);">700+</div>
+                <div class="wf-metric-label">Transições</div>
+              </div>
+              <div class="wf-metric">
+                <div class="wf-metric-num">3</div>
+                <div class="wf-metric-label">Colaboradores</div>
+              </div>
+              <div class="wf-metric">
+                <div class="wf-metric-num" style="color:var(--amber);">Intenso</div>
+                <div class="wf-metric-label">Padrão</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="workflow-card" style="border-color:rgba(245,158,11,0.3);">
+            <div class="workflow-number">Workflow 03 · Financeiro</div>
+            <div class="workflow-name">Ciclo Financeiro</div>
+            <div class="workflow-apps">
+              <span class="app-tag" style="color:var(--amber);border-color:rgba(245,158,11,0.3);">Outlook</span>
+              <span style="color:var(--dai-muted);font-size:12px;">↔</span>
+              <span class="app-tag" style="color:var(--amber);border-color:rgba(245,158,11,0.3);">ContaAzul</span>
+            </div>
+            <div class="workflow-metrics">
+              <div class="wf-metric">
+                <div class="wf-metric-num" style="color:var(--amber);">312</div>
+                <div class="wf-metric-label">Transições</div>
+              </div>
+              <div class="wf-metric">
+                <div class="wf-metric-num">1</div>
+                <div class="wf-metric-label">Colaborador</div>
+              </div>
+              <div class="wf-metric">
+                <div class="wf-metric-num" style="color:var(--red);">Solo</div>
+                <div class="wf-metric-label">Risco dependência</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="workflow-card" style="border-color:rgba(16,185,129,0.3);">
+            <div class="workflow-number">Workflow 04 · Suporte</div>
+            <div class="workflow-name">Suporte via WhatsApp</div>
+            <div class="workflow-apps">
+              <span class="app-tag" style="color:var(--green);border-color:rgba(16,185,129,0.3);">WhatsApp</span>
+              <span style="color:var(--dai-muted);font-size:12px;">→</span>
+              <span class="app-tag" style="color:var(--green);border-color:rgba(16,185,129,0.3);">EVOPE Portal</span>
+            </div>
+            <div class="workflow-metrics">
+              <div class="wf-metric">
+                <div class="wf-metric-num" style="color:var(--green);">105</div>
+                <div class="wf-metric-label">Transições</div>
+              </div>
+              <div class="wf-metric">
+                <div class="wf-metric-num">2</div>
+                <div class="wf-metric-label">Colaboradores</div>
+              </div>
+              <div class="wf-metric">
+                <div class="wf-metric-num" style="color:var(--purple);">4.722/h</div>
+                <div class="wf-metric-label">Foco máximo</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabela Top Transições -->
+      <div class="animate delay-3">
+        <div style="font-size:13px;font-weight:700;margin-bottom:12px;">Top 13 Transições de Aplicativo (Mapa de Fluxo)</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Origem</th>
+                <th></th>
+                <th>Destino</th>
+                <th class="right">Transições</th>
+                <th class="center">Intensidade</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="muted">1</td>
+                <td><strong>Teams Chat</strong></td>
+                <td class="transition-arrow">→</td>
+                <td><strong>EVOPE Portal</strong></td>
+                <td class="right trans-high">320</td>
+                <td class="center"><div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;"><div style="width:100%;height:100%;background:var(--dai-indigo);border-radius:2px;"></div></div></td>
+              </tr>
+              <tr>
+                <td class="muted">2</td>
+                <td><strong>EVOPE Portal</strong></td>
+                <td class="transition-arrow">→</td>
+                <td><strong>Teams Chat</strong></td>
+                <td class="right trans-high">286</td>
+                <td class="center"><div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;"><div style="width:89%;height:100%;background:var(--dai-indigo);border-radius:2px;"></div></div></td>
+              </tr>
+              <tr>
+                <td class="muted">3</td>
+                <td>Teams Microsoft Teams</td>
+                <td class="transition-arrow">→</td>
+                <td>Teams Chat</td>
+                <td class="right trans-high">277</td>
+                <td class="center"><div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;"><div style="width:87%;height:100%;background:var(--dai-indigo);border-radius:2px;"></div></div></td>
+              </tr>
+              <tr>
+                <td class="muted">4</td>
+                <td>EVOPE Portal</td>
+                <td class="transition-arrow">→</td>
+                <td>Teams Microsoft Teams</td>
+                <td class="right trans-high">219</td>
+                <td class="center"><div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;"><div style="width:68%;height:100%;background:var(--dai-indigo);border-radius:2px;"></div></div></td>
+              </tr>
+              <tr>
+                <td class="muted">5</td>
+                <td>Teams Chat</td>
+                <td class="transition-arrow">→</td>
+                <td>Teams Microsoft Teams</td>
+                <td class="right trans-med">216</td>
+                <td class="center"><div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;"><div style="width:67%;height:100%;background:var(--amber);border-radius:2px;"></div></div></td>
+              </tr>
+              <tr>
+                <td class="muted">6</td>
+                <td>Teams Microsoft Teams</td>
+                <td class="transition-arrow">→</td>
+                <td>EVOPE Portal</td>
+                <td class="right trans-med">208</td>
+                <td class="center"><div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;"><div style="width:65%;height:100%;background:var(--amber);border-radius:2px;"></div></div></td>
+              </tr>
+              <tr>
+                <td class="muted">7</td>
+                <td>Excel — Check_Falhas_Ivan</td>
+                <td class="transition-arrow">→</td>
+                <td>SSMS</td>
+                <td class="right trans-med">202</td>
+                <td class="center"><div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;"><div style="width:63%;height:100%;background:var(--cyan);border-radius:2px;"></div></div></td>
+              </tr>
+              <tr>
+                <td class="muted">8</td>
+                <td>SSMS</td>
+                <td class="transition-arrow">→</td>
+                <td>Excel — Check_Falhas_Ivan</td>
+                <td class="right trans-med">198</td>
+                <td class="center"><div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;"><div style="width:62%;height:100%;background:var(--cyan);border-radius:2px;"></div></div></td>
+              </tr>
+              <tr>
+                <td class="muted">9</td>
+                <td>Outlook — Caixa de Entrada</td>
+                <td class="transition-arrow">→</td>
+                <td>ContaAzul</td>
+                <td class="right trans-med">159</td>
+                <td class="center"><div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;"><div style="width:50%;height:100%;background:var(--amber);border-radius:2px;"></div></div></td>
+              </tr>
+              <tr>
+                <td class="muted">10</td>
+                <td>ContaAzul</td>
+                <td class="transition-arrow">→</td>
+                <td>Outlook — Caixa de Entrada</td>
+                <td class="right trans-med">153</td>
+                <td class="center"><div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;"><div style="width:48%;height:100%;background:var(--amber);border-radius:2px;"></div></div></td>
+              </tr>
+              <tr>
+                <td class="muted">11</td>
+                <td>SSMS</td>
+                <td class="transition-arrow">→</td>
+                <td>Excel — Check_Falhas</td>
+                <td class="right trans-low">148</td>
+                <td class="center"><div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;"><div style="width:46%;height:100%;background:var(--cyan);border-radius:2px;"></div></div></td>
+              </tr>
+              <tr>
+                <td class="muted">12</td>
+                <td>Excel — Check_Falhas</td>
+                <td class="transition-arrow">→</td>
+                <td>SSMS</td>
+                <td class="right trans-low">130</td>
+                <td class="center"><div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;"><div style="width:41%;height:100%;background:var(--cyan);border-radius:2px;"></div></div></td>
+              </tr>
+              <tr>
+                <td class="muted">13</td>
+                <td>WhatsApp</td>
+                <td class="transition-arrow">→</td>
+                <td>EVOPE Portal</td>
+                <td class="right trans-low">105</td>
+                <td class="center"><div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;"><div style="width:33%;height:100%;background:var(--green);border-radius:2px;"></div></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ══════════ INSIGHTS ══════════ -->
+    <section class="section animate">
+      <div class="section-header">
+        <div class="section-icon amber">💡</div>
+        <div>
+          <div class="section-title">Insights & Pontos de Atenção</div>
+          <div class="section-subtitle">Interpretação dos dados coletados no período</div>
+        </div>
+      </div>
+
+      <div class="insight-grid animate">
+        <!-- Positivos -->
+        <div class="insight-card">
+          <div class="insight-icon-wrap green">✅</div>
+          <div class="insight-body">
+            <div class="insight-label green">Positivo</div>
+            <div class="insight-title">DEV com melhor higiene digital</div>
+            <div class="insight-text">O grupo DEV apresenta apenas 2,7% de entretenimento — o mais baixo entre os grupos ativos. Ivan e Saulo combinam alta produtividade com foco notável, refletindo uma cultura de engajamento técnico.</div>
+          </div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-icon-wrap green">🤖</div>
+          <div class="insight-body">
+            <div class="insight-label green">Positivo</div>
+            <div class="insight-title">Adoção de IA já acontece na base</div>
+            <div class="insight-text">6 de 10 colaboradores monitorados já utilizam ChatGPT ativamente. Isso indica abertura para ferramentas de IA e facilita a adoção do Agente de Insights sem resistência cultural.</div>
+          </div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-icon-wrap green">🗺</div>
+          <div class="insight-body">
+            <div class="insight-label green">Positivo</div>
+            <div class="insight-title">Workflows bem definidos e repetíveis</div>
+            <div class="insight-text">4 workflows distintos foram identificados com padrões claros de alternância. O ciclo Teams ↔ EVOPE é o DNA operacional da empresa e pode ser monitorado em tempo real pelo Agente.</div>
+          </div>
+        </div>
+
+        <!-- Alertas -->
+        <div class="insight-card">
+          <div class="insight-icon-wrap red">🔥</div>
+          <div class="insight-body">
+            <div class="insight-label red">Alerta Crítico</div>
+            <div class="insight-title">2 colaboradores em risco de burnout agudo</div>
+            <div class="insight-text">Roberta (111%) e Ivan (110%) operam acima da capacidade com zero entretenimento. Sem intervenção, o risco de absenteísmo e queda de qualidade é elevado. Requer ação imediata de gestão.</div>
+          </div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-icon-wrap amber">⚠</div>
+          <div class="insight-body">
+            <div class="insight-label amber">Alerta</div>
+            <div class="insight-title">39% de cobertura efetiva — dados insuficientes</div>
+            <div class="insight-text">5 colaboradores com 0h e 3 com cobertura &lt;10% limitam a representatividade da análise. O Agente de Insights precisará de cobertura ≥80% para gerar alertas confiáveis por grupo.</div>
+          </div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-icon-wrap amber">💸</div>
+          <div class="insight-body">
+            <div class="insight-label amber">Alerta</div>
+            <div class="insight-title">Financeiro como ponto único de falha</div>
+            <div class="insight-text">O workflow Outlook ↔ ContaAzul é operado exclusivamente por Roberta Reis — que já está em risco de burnout. Existe dependência crítica de uma única pessoa em um processo financeiro essencial.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Box Agente de IA -->
+      <div class="ai-box animate delay-3" style="margin-top:24px;">
+        <div class="ai-box-header">
+          <div class="ai-box-icon">🧠</div>
+          <div>
+            <div class="ai-box-title">O que o Agente de Insights vai conseguir responder</div>
+            <div class="ai-box-sub">Perguntas que o agente responderá em linguagem natural após as 3 fases de implementação</div>
+          </div>
+        </div>
+        <div class="ai-questions">
+          <div class="ai-q">Quem está em risco de burnout hoje? Mostre os dados das últimas 2 semanas.</div>
+          <div class="ai-q">Qual colaborador passou mais tempo em entretenimento neste mês?</div>
+          <div class="ai-q">Como está o aproveitamento do time DEV comparado ao mês passado?</div>
+          <div class="ai-q">Quais processos estão gerando mais alternância de aplicativos?</div>
+          <div class="ai-q">Mostre os 5 apps mais usados no último dia de trabalho pelo grupo CS.</div>
+          <div class="ai-q">Quantas horas o time de Atendimento dedicou ao EVOPE Portal esta semana?</div>
+          <div class="ai-q">Identifique colaboradores com queda de produtividade nos últimos 7 dias.</div>
+          <div class="ai-q">Qual é o workflow mais repetitivo do grupo DEV e quanto tempo consome?</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ══════════ ROADMAP ══════════ -->
+    <section class="section animate">
+      <div class="section-header">
+        <div class="section-icon green">🚀</div>
+        <div>
+          <div class="section-title">Próximos Passos do Projeto</div>
+          <div class="section-subtitle">Roadmap de entrega do Agente de Insights EVOPE</div>
+        </div>
+      </div>
+
+      <div class="two-col animate">
+        <div class="roadmap">
+          <div class="roadmap-item">
+            <div class="roadmap-dot active"></div>
+            <div class="roadmap-card active">
+              <div class="roadmap-sprint">Sprint 0 — Atual</div>
+              <div class="roadmap-name">Discovery & Acesso à Plataforma</div>
+              <div class="roadmap-desc">Extração e análise dos primeiros dados reais. Mapeamento de APIs disponíveis, estrutura de dados e capacidades de exportação da plataforma de monitoramento.</div>
+              <span class="roadmap-status active">⬤ Em andamento</span>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-dot pending"></div>
+            <div class="roadmap-card">
+              <div class="roadmap-sprint">Sprint 1</div>
+              <div class="roadmap-name">Agente Burnout (P1) — Live</div>
+              <div class="roadmap-desc">Agente de IA em linguagem natural capaz de responder perguntas sobre aproveitamento individual, classificação de risco e alertas automáticos de burnout.</div>
+              <span class="roadmap-status pending">○ Pendente</span>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-dot pending"></div>
+            <div class="roadmap-card">
+              <div class="roadmap-sprint">Sprint 2</div>
+              <div class="roadmap-name">Agente Grupos (P2) — Live</div>
+              <div class="roadmap-desc">Expansão para análise consolidada por área. Comparações entre grupos, tendências temporais e drill-down por colaborador dentro de cada departamento.</div>
+              <span class="roadmap-status pending">○ Pendente</span>
+            </div>
+          </div>
+        </div>
+        <div class="roadmap">
+          <div class="roadmap-item">
+            <div class="roadmap-dot pending"></div>
+            <div class="roadmap-card">
+              <div class="roadmap-sprint">Sprint 3</div>
+              <div class="roadmap-name">Mapa de Processos (P3) — Live</div>
+              <div class="roadmap-desc">Agente capaz de analisar padrões de uso de aplicativos, identificar workflows repetitivos, medir eficiência de processos e sugerir oportunidades de automação.</div>
+              <span class="roadmap-status pending">○ Pendente</span>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-dot pending"></div>
+            <div class="roadmap-card">
+              <div class="roadmap-sprint">Sprint 4</div>
+              <div class="roadmap-name">Polimento & Go-Live Global</div>
+              <div class="roadmap-desc">Integração dos 3 módulos em interface unificada. Fine-tuning de prompts, validação com gestores EVOPE, treinamento de usuários e lançamento para toda a liderança.</div>
+              <span class="roadmap-status pending">○ Pendente</span>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-dot pending"></div>
+            <div class="roadmap-card" style="background:linear-gradient(135deg,rgba(16,185,129,0.05),rgba(16,185,129,0.02));border-color:rgba(16,185,129,0.2);">
+              <div class="roadmap-sprint">Meta Final</div>
+              <div class="roadmap-name" style="color:var(--green);">Agente Totalmente Operacional</div>
+              <div class="roadmap-desc">Gestores EVOPE consultam dados de produtividade em linguagem natural, recebem alertas proativos e tomam decisões baseadas em dados — sem depender de relatórios manuais.</div>
+              <span class="roadmap-status" style="background:var(--green-dim);color:var(--green);">★ Objetivo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /container -->
+</main>
+
+<!-- ═══════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════ -->
+<footer class="report-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-left">
+        Relatório gerado automaticamente pelo <strong>Agente de Insights Digital AI</strong> ·
+        Dados referentes ao período de coleta Maio 2026
+      </div>
+      <div class="footer-right">
+        <span class="footer-logo">Digital AI</span>
+        <span class="footer-sep"></span>
+        <span class="footer-client">EVOPE — Projeto em desenvolvimento</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════
+     CHARTS
+═══════════════════════════════════════════════ -->
+<script>
+  Chart.defaults.color = '#94A3B8';
+  Chart.defaults.borderColor = 'rgba(51,65,85,0.5)';
+  Chart.defaults.font.family = "'Inter', sans-serif";
+
+  const INDIGO  = '#6366F1';
+  const GREEN   = '#10B981';
+  const AMBER   = '#F59E0B';
+  const RED     = '#EF4444';
+  const PURPLE  = '#A78BFA';
+  const CYAN    = '#06B6D4';
+  const MUTED   = '#94A3B8';
+
+  /* ── CHART 1 — Aproveitamento por Colaborador ── */
+  (function() {
+    const labels = [
+      'Roberta Reis','Ivan Jesus','Vera Lucia','Saulo Soares',
+      'Vinicius Garcia','Hugo Andrade','Nadielen Martins','Debora Amaral'
+    ];
+    const data = [111, 110, 93, 89, 72, 72, 41, 38];
+    const colors = data.map(v => {
+      if (v >= 100) return RED;
+      if (v >= 80)  return GREEN;
+      if (v >= 60)  return AMBER;
+      return 'rgba(245,158,11,0.5)';
+    });
+
+    new Chart(document.getElementById('chartAproveitamento'), {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Aproveitamento (%)',
+          data,
+          backgroundColor: colors,
+          borderRadius: 6,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => ` ${ctx.raw}%`
+            }
+          }
+        },
+        scales: {
+          x: {
+            min: 0, max: 130,
+            grid: { color: 'rgba(51,65,85,0.4)' },
+            ticks: { callback: v => v + '%' }
+          },
+          y: {
+            grid: { display: false },
+            ticks: { font: { size: 11 } }
+          }
+        }
+      }
+    });
+
+    /* annotation manual — linha 100% */
+    // usamos plugin nativo do canvas
+  })();
+
+  /* ── CHART 2 — Scatter Aproveitamento vs Entretenimento ── */
+  (function() {
+    const colabs = [
+      { label: 'Roberta',  x: 111, y: 1,  color: RED,    r: 8 },
+      { label: 'Ivan',     x: 110, y: 0,  color: RED,    r: 8 },
+      { label: 'Vera',     x: 93,  y: 3,  color: GREEN,  r: 7 },
+      { label: 'Saulo',    x: 89,  y: 2,  color: GREEN,  r: 7 },
+      { label: 'Vinicius', x: 72,  y: 5,  color: AMBER,  r: 6 },
+      { label: 'Hugo',     x: 72,  y: 18, color: AMBER,  r: 6 },
+      { label: 'Nadielen', x: 41,  y: 13, color: AMBER,  r: 6 },
+      { label: 'Debora',   x: 38,  y: 9,  color: AMBER,  r: 6 },
+    ];
+
+    const datasets = colabs.map(c => ({
+      label: c.label,
+      data: [{ x: c.x, y: c.y }],
+      backgroundColor: c.color + 'CC',
+      borderColor: c.color,
+      borderWidth: 2,
+      pointRadius: c.r,
+      pointHoverRadius: c.r + 3,
+    }));
+
+    new Chart(document.getElementById('chartScatter'), {
+      type: 'scatter',
+      data: { datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              title: ctx => ctx[0].dataset.label,
+              label: ctx => [`Aproveitamento: ${ctx.raw.x}%`, `Entretenimento: ${ctx.raw.y}%`]
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: { display: true, text: 'Aproveitamento (%)', color: MUTED, font: { size: 11 } },
+            grid: { color: 'rgba(51,65,85,0.4)' },
+            min: 0, max: 130
+          },
+          y: {
+            title: { display: true, text: 'Entretenimento (%)', color: MUTED, font: { size: 11 } },
+            grid: { color: 'rgba(51,65,85,0.4)' },
+            min: 0, max: 25
+          }
+        }
+      }
+    });
+  })();
+
+  /* ── CHART 3 — Aproveitamento por Grupo ── */
+  (function() {
+    const labels = ['Adm/Fin', 'DEV', 'CS*', 'Atendimento', 'Negócios', 'Marketing'];
+    const data   = [110.7, 47.4, 65.5, 39.7, 15.7, 0];
+    const colors = data.map(v => {
+      if (v >= 100) return RED;
+      if (v >= 80)  return GREEN;
+      if (v >= 50)  return AMBER;
+      if (v > 0)    return 'rgba(239,68,68,0.5)';
+      return 'rgba(148,163,184,0.3)';
+    });
+
+    new Chart(document.getElementById('chartGrupos'), {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Aproveitamento (%)',
+          data,
+          backgroundColor: colors,
+          borderRadius: 6,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: { label: ctx => ` ${ctx.raw}%` }
+          }
+        },
+        scales: {
+          x: { grid: { display: false } },
+          y: {
+            min: 0, max: 130,
+            grid: { color: 'rgba(51,65,85,0.4)' },
+            ticks: { callback: v => v + '%' }
+          }
+        }
+      }
+    });
+  })();
+
+  /* ── CHART 4 — Entretenimento por Grupo ── */
+  (function() {
+    const labels = ['Atendimento', 'Master (Geral)', 'Negócios', 'DEV', 'Adm/Fin', 'Marketing'];
+    const data   = [25.5, 43.9, 7.3, 9.9, 1.3, 0];
+    const colors = [AMBER, INDIGO, AMBER, GREEN, GREEN, MUTED];
+
+    new Chart(document.getElementById('chartEntretGrupos'), {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Entretenimento (h)',
+          data,
+          backgroundColor: colors.map(c => c + '99'),
+          borderColor: colors,
+          borderWidth: 1,
+          borderRadius: 6,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: { label: ctx => ` ${ctx.raw}h` }
+          }
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+          y: {
+            grid: { color: 'rgba(51,65,85,0.4)' },
+            ticks: { callback: v => v + 'h' }
+          }
+        }
+      }
+    });
+  })();
+
+  /* ── CHART 5 — Top Apps por Horas ── */
+  (function() {
+    const rawLabels = [
+      'Visual Studio','SQL Server (SSMS)','Azure DevOps','Microsoft Teams',
+      'Teams Chat','EVOPE Portal','ContaAzul','Outlook Inbox',
+      'Outlook','WhatsApp','ChatGPT','PowerPoint','X (Twitter)'
+    ];
+    const hours = [39.57, 37.50, 32.67, 24.02, 21.70, 19.60, 12.52, 10.85, 7.77, 4.20, 3.17, 3.00, 2.35];
+    const catColors = [
+      CYAN, CYAN, CYAN,
+      INDIGO, INDIGO,
+      AMBER, AMBER, INDIGO, INDIGO,
+      GREEN,
+      PURPLE,
+      MUTED,
+      RED
+    ];
+
+    new Chart(document.getElementById('chartApps'), {
+      type: 'bar',
+      data: {
+        labels: rawLabels,
+        datasets: [{
+          label: 'Horas de uso',
+          data: hours,
+          backgroundColor: catColors.map(c => c + 'BB'),
+          borderColor: catColors,
+          borderWidth: 1,
+          borderRadius: 5,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => ` ${ctx.raw.toFixed(1)}h`
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(51,65,85,0.4)' },
+            ticks: { callback: v => v + 'h' }
+          },
+          y: {
+            grid: { display: false },
+            ticks: { font: { size: 11 } }
+          }
+        }
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>
