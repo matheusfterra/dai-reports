@@ -37,6 +37,7 @@
     .kpi-value { font-size: 1.75rem; font-weight: 700; color: #58a6ff; line-height: 1; }
     .kpi-unit { font-size: 0.8rem; color: #8b949e; margin-top: 5px; }
     .kpi-delta { font-size: 0.75rem; font-weight: 600; margin-top: 4px; }
+    .kpi-prev  { font-size: 0.68rem; color: #6e7681; margin-top: 3px; }
     .delta-up   { color: #3fb950; }
     .delta-down { color: #f85149; }
     .delta-warn { color: #f0883e; }
@@ -195,7 +196,6 @@
         <div class="callout">
           <strong>⚠ Alerta crítico:</strong> No-show saltou de 3,1% (abril) para <strong>8,7% em maio</strong> —
           triplicou. Dra. Morgana registrou 23,1% de não comparecimento (3 de 13 pacientes).
-          Implementação urgente de confirmações automáticas é recomendada.
         </div>
         <div class="callout-green">
           <strong>Destaques positivos:</strong> Taxa de retorno subiu 4,4pp (68,6% → 73,0%) ·
@@ -214,54 +214,63 @@
             <div class="kpi-value">R$ 175K</div>
             <div class="kpi-unit">R$ 174.855 no mês</div>
             <div class="kpi-delta delta-down">−34,2% vs abr</div>
+            <div class="kpi-prev">Abr: R$ 263.884</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Consultas Realizadas</div>
             <div class="kpi-value">150</div>
             <div class="kpi-unit">de 221 agendadas</div>
             <div class="kpi-delta delta-down">−23,1% vs abr</div>
+            <div class="kpi-prev">Abr: 194 consultas</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Taxa de Realização</div>
             <div class="kpi-value">68,0%</div>
             <div class="kpi-unit">meta: ≥80%</div>
             <div class="kpi-delta delta-down">−4,2pp vs abr</div>
+            <div class="kpi-prev">Abr: 72,2%</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">No-show</div>
             <div class="kpi-value" style="color:#f85149;">8,7%</div>
             <div class="kpi-unit">13 casos ⚠</div>
             <div class="kpi-delta delta-down">+5,6pp vs abr</div>
+            <div class="kpi-prev">Abr: 3,1% (6 casos)</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Ticket Médio</div>
             <div class="kpi-value">R$ 1.119</div>
             <div class="kpi-unit">por consulta</div>
             <div class="kpi-delta delta-down">−17,9% vs abr</div>
+            <div class="kpi-prev">Abr: R$ 1.363</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Pacientes Únicos</div>
             <div class="kpi-value">126</div>
             <div class="kpi-unit">médicas</div>
             <div class="kpi-delta delta-down">−17,6% vs abr</div>
+            <div class="kpi-prev">Abr: 152 pacientes</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Taxa de Retorno</div>
             <div class="kpi-value">73,0%</div>
             <div class="kpi-unit">recorrência</div>
             <div class="kpi-delta delta-up">+4,4pp vs abr</div>
+            <div class="kpi-prev">Abr: 68,6%</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Leads WhatsApp</div>
             <div class="kpi-value">1.103</div>
             <div class="kpi-unit">entradas no mês</div>
             <div class="kpi-delta delta-up">+42,0% vs abr</div>
+            <div class="kpi-prev">Abr: 777 leads</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Sessões Fototerapia</div>
             <div class="kpi-value">234</div>
             <div class="kpi-unit">43 pacientes únicos</div>
             <div class="kpi-delta delta-down">−13,3% vs abr</div>
+            <div class="kpi-prev">Abr: 270 sessões</div>
           </div>
         </div>
       </div>
@@ -327,7 +336,7 @@
           </table>
         </div>
         <p style="font-size:0.78rem;color:#6e7681;margin-top:-12px;margin-bottom:20px;">
-          * Semana 1 começa em 04/05 pois 01/05 = Dia do Trabalho (feriado) + 02–03/05 = fim de semana.<br>
+          * Semana 1 começa em 04/05: 01/05 = Dia do Trabalho (sexta-feira) — feriado nacional que, junto com o sábado e domingo, formou um final de semana prolongado de 3 dias naturalmente, sem emenda formal decretada.<br>
           ** Dados disponíveis até 27/05/2026; dias 28–30/05 ainda em andamento (~7 consultas estimadas).
         </p>
 
@@ -373,8 +382,7 @@
 
         <div class="alert-banner">
           <strong>⚠ No-show em alerta:</strong> Taxa subiu de 3,1% (abril) para 8,7% (maio), com 13 casos registrados.
-          A taxa nacional de clínicas privadas é 15%–25%, portanto ainda abaixo do benchmark, mas o aumento é expressivo (+178%).
-          Ação corretiva via confirmações automáticas deve ser prioridade imediata.
+          A média de clínicas privadas é ~15%–20% segundo o <span class="bench-source"><a href="https://saudedigitalnews.com.br/13/12/2023/doctoralia-e-feegow-lancam-panorama-das-clinicas-e-hospitais-2024/" target="_blank" rel="noopener">Panorama Doctoralia+Feegow 2024</a></span> — DermaClinic ainda está abaixo, mas o crescimento de +178% em um mês é sinal de alerta.
         </div>
 
         <div class="analysis-block">
@@ -408,7 +416,7 @@
               <tr>
                 <td>Taxa de No-show</td>
                 <td>8,7% (13 casos)</td>
-                <td>15%–25% clínicas privadas — <span class="bench-source"><a href="https://ojs.brazilianjournals.com.br/ojs/index.php/BJHR/article/download/74064/51723/182816" target="_blank" rel="noopener">BJHR 2024</a></span></td>
+                <td>~15%–20% clínicas privadas — <span class="bench-source"><a href="https://saudedigitalnews.com.br/13/12/2023/doctoralia-e-feegow-lancam-panorama-das-clinicas-e-hospitais-2024/" target="_blank" rel="noopener">Panorama Doctoralia+Feegow 2024</a></span></td>
                 <td class="bench-pos-yellow">🟡 Abaixo da média, mas triplicou vs. abril ⚠</td>
               </tr>
               <tr>
@@ -767,6 +775,156 @@
         </div>
       </div>
 
+      <!-- ── SEÇÃO 5.1: ANÁLISE PROFUNDA TRÁFEGO PAGO ── -->
+      <div class="section">
+        <div class="section-title">5.1 Análise Profunda — Tráfego Pago (Chatwoot)</div>
+
+        <div class="analysis-block">
+          <p>
+            Em maio de 2026, o inbox <strong style="color:#e6edf3;">Tráfego Pago</strong> recebeu
+            <span class="highlight">108 conversas</span> — crescimento de +42% vs. abril (77 conversas).
+            Desses 108 leads, <span class="highlight">99 foram qualificados (91,7%)</span> com label "1-lead",
+            indicando alta intenção de compra. Apenas <span class="highlight">1 agendamento</span> foi confirmado
+            via label "3-agendamento" no próprio inbox — uma taxa de conversão lead→agendamento de <strong style="color:#f85149;">1,0%</strong>.
+          </p>
+          <p>
+            Status das conversas: 73 abertas (67,6%) / 35 resolvidas (32,4%).
+            A baixa taxa de resolução sugere que a IA de atendimento está qualificando corretamente,
+            mas as conversas ficam em aberto — pacientes que não agendaram pelo TP possivelmente migraram para
+            o inbox Relacionamento, onde a rastreabilidade se perde.
+          </p>
+        </div>
+
+        <div class="section-subtitle">Diagnóstico de Conversão</div>
+        <div class="two-col">
+          <div class="analysis-block" style="margin-bottom:0;">
+            <p><strong style="color:#f85149;">Principal barreira: custo e parcelamento</strong></p>
+            <p>Os interesses mais citados nas conversas foram:</p>
+            <div style="margin-top:10px;">
+              <div class="progress-group">
+                <div class="progress-label"><span>Consulta avaliativa</span><span>79 conversas (73%)</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:73%;background:#58a6ff;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span>Agendamento</span><span>76 conversas (70%)</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:70%;background:#58a6ff;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span>Valores / preço</span><span>30 conversas (28%)</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:28%;background:#f0883e;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span>Rejuvenescimento</span><span>28 conversas (26%)</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:26%;background:#58a6ff;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span>Valor da consulta</span><span>27 conversas (25%)</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:25%;background:#f0883e;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span>Parcelamento</span><span>19 conversas (18%)</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:18%;background:#f85149;"></div></div>
+              </div>
+            </div>
+            <p style="margin-top:12px;font-size:0.78rem;color:#8b949e;">
+              "Valores" + "valor da consulta" + "parcelamento" = <strong style="color:#f0883e;">76 menções combinadas (70% das conversas)</strong>.
+              O preço é o principal obstáculo à conversão — não o interesse nem a qualificação.
+            </p>
+          </div>
+
+          <div class="analysis-block" style="margin-bottom:0;">
+            <p><strong style="color:#f85149;">Gargalo crítico: ausência de intervenção humana</strong></p>
+            <p>
+              A média de mensagens humanas por conversa foi de apenas
+              <strong style="color:#f85149;">0,2 msg/conversa</strong> — a IA de atendimento conduziu
+              praticamente <strong>100% das interações</strong> sem escalada para humano.
+            </p>
+            <p style="margin-top:10px;">Distribuição de engajamento:</p>
+            <div style="margin-top:8px;">
+              <div class="progress-group">
+                <div class="progress-label"><span>Baixo (2–5 msgs)</span><span>74 conversas (69%)</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:69%;background:#3fb950;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span>Médio (6–10 msgs)</span><span>17 conversas (16%)</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:16%;background:#f0883e;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span>Alto (10+ msgs)</span><span>17 conversas (16%)</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:16%;background:#f85149;"></div></div>
+              </div>
+            </div>
+            <p style="margin-top:12px;font-size:0.78rem;color:#8b949e;">
+              As 17 conversas de alto engajamento (10+ msgs) são os leads mais quentes —
+              nenhum recebeu intervenção humana para fechar o agendamento.
+            </p>
+          </div>
+        </div>
+
+        <div class="section-subtitle">Único Agendamento Confirmado</div>
+        <div class="analysis-block">
+          <p>
+            O único lead confirmado com label "3-agendamento" no inbox TP em maio foi identificado
+            como <strong style="color:#e6edf3;">Jucelia</strong> (conversa #11114), que entrou após
+            assistir a um vídeo da Bruna Marquezine. O contato foi cruzado com a base Feegow e
+            não houve match de agendamento registrado no período — o agendamento pode ter ocorrido
+            pelo inbox Relacionamento ou ainda não foi realizado.
+          </p>
+          <p>
+            Cruzamento de telefones entre os 108 leads do TP e a base Feegow retornou apenas
+            <strong>6 matches</strong> — nenhum com consulta registrada em maio. Isso confirma
+            a hipótese de que a conversão acontece pelo Relacionamento, sem rastreabilidade da origem paga.
+          </p>
+        </div>
+
+        <div class="section-subtitle">Sentimento e Categoria das Conversas</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Dimensão</th>
+                <th>Distribuição</th>
+                <th>Insight</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Sentimento positivo</td>
+                <td>92 conversas (85,2%)</td>
+                <td class="ind-green">🟢 Alta receptividade ao produto/serviço</td>
+              </tr>
+              <tr>
+                <td>Sentimento neutro</td>
+                <td>15 conversas (13,9%)</td>
+                <td class="ind-yellow">🟡 Interesse sem urgência declarada</td>
+              </tr>
+              <tr>
+                <td>Sentimento negativo</td>
+                <td>0 conversas (0%)</td>
+                <td class="ind-green">🟢 Zero objeções severas ao produto</td>
+              </tr>
+              <tr>
+                <td>Categoria "dúvida"</td>
+                <td>107 conversas (99,1%)</td>
+                <td class="ind-yellow">🟡 Leads informacionais — precisam de empurrão para agendar</td>
+              </tr>
+              <tr>
+                <td>Agendamentos confirmados (label)</td>
+                <td>1 conversa (0,9%)</td>
+                <td class="ind-red">🔴 Taxa de conversão criticamente baixa</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="alert-banner" style="margin-top:16px;">
+          <strong>Diagnóstico consolidado:</strong> O problema não é a qualidade dos leads (85% positivos, 92% qualificados)
+          nem a demanda (76 mencionaram "agendamento" explicitamente). O gargalo é a
+          <strong>ausência de intervenção humana no momento de decisão</strong> + <strong>objeção de preço não resolvida pela IA</strong>.
+          Leads que perguntam sobre parcelamento e não recebem resposta personalizada abandonam sem agendar.
+        </div>
+      </div>
+
       <!-- ── SEÇÃO 6: BENCHMARKS ── -->
       <div class="section">
         <div class="section-title">6. Benchmarks do Setor</div>
@@ -808,8 +966,8 @@
               <tr>
                 <td>Taxa de No-show</td>
                 <td>8,7%</td>
-                <td>15%–25% (privado) / ~20% dermato</td>
-                <td class="bench-source"><a href="https://ojs.brazilianjournals.com.br/ojs/index.php/BJHR/article/download/74064/51723/182816" target="_blank" rel="noopener">BJHR 2024</a>; <a href="https://saudedigitalnews.com.br/13/12/2023/doctoralia-e-feegow-lancam-panorama-das-clinicas-e-hospitais-2024/" target="_blank" rel="noopener">Panorama Doctoralia 2024</a></td>
+                <td>~15%–20% clínicas privadas</td>
+                <td class="bench-source"><a href="https://saudedigitalnews.com.br/13/12/2023/doctoralia-e-feegow-lancam-panorama-das-clinicas-e-hospitais-2024/" target="_blank" rel="noopener">Panorama Doctoralia+Feegow 2024</a></td>
                 <td class="bench-pos-yellow">🟡 Ainda abaixo da média, mas cresceu vs. abril</td>
               </tr>
               <tr>
@@ -849,7 +1007,6 @@
             <p>
               No-show triplicou de abril para maio (3,1% → 8,7%). São 13 consultas perdidas,
               equivalentes a R$ 14.547 em receita não realizada (ticket médio R$ 1.119 × 13).
-              Implementar confirmação automática via IA de atendimento 24h antes é a ação de maior ROI disponível.
               Dra. Morgana tem prioridade: 3 de 13 agendamentos falharam (23,1%).
             </p>
           </div>
@@ -919,15 +1076,6 @@
           <li>
             <div class="step-num">1</div>
             <div class="step-text">
-              <strong>Ativar confirmação automática via IA — prioridade máxima</strong>
-              <span>No-show triplicou em maio. Implementar confirmação automática 24h antes para todas as consultas,
-              com ênfase em quarta-feira, quinta-feira e agenda da Dra. Morgana. Estimativa de recuperação:
-              4–6 consultas/mês = R$ 4.500–6.700 de receita evitada.</span>
-            </div>
-          </li>
-          <li>
-            <div class="step-num">2</div>
-            <div class="step-text">
               <strong>Diagnosticar queda de ticket da Dra. Raquel</strong>
               <span>Cruzar mix de procedimentos de abril vs. maio para Dra. Raquel. Verificar se houve mudança
               no protocolo de atendimento, tipo de paciente (mais retornos simples?) ou parcelamento.
@@ -935,30 +1083,41 @@
             </div>
           </li>
           <li>
-            <div class="step-num">3</div>
-            <div class="step-text">
-              <strong>Rastrear conversão de Tráfego Pago → Agendamento</strong>
-              <span>Implementar label de origem "tp" no fluxo de agendamento do Relacionamento para
-              identificar quantos dos 99 leads qualificados de maio efetivamente agendaram, mas via inbox diferente.
-              Isso vai revelar o ROI real das campanhas pagas.</span>
-            </div>
-          </li>
-          <li>
-            <div class="step-num">4</div>
+            <div class="step-num">2</div>
             <div class="step-text">
               <strong>Campanha de reativação dos leads de maio</strong>
-              <span>Com 1.103 leads captados e apenas ~151 convertidos, existe base para reativação.
+              <span>Com 1.103 leads captados e apenas ~150 convertidos, existe base para reativação.
               Segmentar por interesse e acionar fluxo de agendamento via IA de atendimento com oferta de
               data específica nas próximas 2 semanas.</span>
             </div>
           </li>
           <li>
-            <div class="step-num">5</div>
+            <div class="step-num">3</div>
             <div class="step-text">
               <strong>Análise de capacidade da Dra. Eoda em junho</strong>
-              <span>A queda de 91 → 68 atendimentos (−25,3%) foi o principal fator da retração de maio.
+              <span>A queda de 91 → 58 atendimentos (−36,3%) foi o principal fator da retração de maio.
               Confirmar se a redução de agenda foi pontual ou se haverá continuidade — e se há capacidade
               para retomar o ritmo de abril (que gerou o maior ticket médio: R$ 1.400).</span>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">4</div>
+            <div class="step-text">
+              <strong>Google Ads: monitorar CAC e integrar com funil WhatsApp</strong>
+              <span>A conta Google Ads foi aprovada e está ativa. Acompanhar custo por clique, taxa de conversão
+              em landing page e volume de leads gerados. Estruturar landing page dedicada de fundo de funil
+              (consultas específicas: avaliação dermatológica, botox, preenchimento) com CTA direto para o
+              WhatsApp Tráfego Pago — separado do fluxo Relacionamento para manter rastreabilidade.</span>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">5</div>
+            <div class="step-text">
+              <strong>Elevar intervenção humana nas conversas TP de alto valor</strong>
+              <span>A taxa de intervenção humana no inbox Tráfego Pago é de ~2% (média de 0,2 mensagens
+              humanas por conversa). Dos 76 leads com interesse explícito em agendamento, nenhum recebeu
+              follow-up humano. Implementar alerta de escalada quando lead mencionar "valor", "parcelamento"
+              ou demonstrar 3+ interações — esses são os sinais de compra mais fortes identificados em maio.</span>
             </div>
           </li>
         </ul>
