@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DermaClinic — Relatório de Atendimento · Maio 2026</title>
+  <link rel="stylesheet" href="../../_shared/style.css" />
+  <style>
+    .report-header {
+      background: linear-gradient(135deg, #0d2137 0%, #0a3d62 100%);
+      padding: 32px 40px;
+      border-bottom: 1px solid #1e3a5f;
+    }
+    .report-header h1 {
+      font-size: 1.6rem; font-weight: 700; color: #fff; letter-spacing: 0.02em;
+    }
+    .report-header p { color: #7db3d8; font-size: 0.875rem; margin-top: 6px; }
+    .badge {
+      display: inline-block; background: #1e3a5f; color: #58a6ff;
+      border-radius: 20px; padding: 2px 12px; font-size: 0.75rem;
+      font-weight: 600; margin-left: 10px; vertical-align: middle;
+    }
+    .badge-warn {
+      background: rgba(240,136,62,0.15); color: #f0883e;
+    }
+    .report-body { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
+    .kpi-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 16px; margin-bottom: 40px;
+    }
+    .kpi-card {
+      background: #161b22; border: 1px solid #1e3a5f; border-radius: 12px;
+      padding: 22px 18px; text-align: center; transition: transform 0.15s;
+    }
+    .kpi-card:hover { transform: translateY(-2px); }
+    .kpi-label { font-size: 0.7rem; color: #7db3d8; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 8px; }
+    .kpi-value { font-size: 1.75rem; font-weight: 700; color: #58a6ff; line-height: 1; }
+    .kpi-unit { font-size: 0.8rem; color: #8b949e; margin-top: 5px; }
+    .kpi-delta { font-size: 0.75rem; font-weight: 600; margin-top: 4px; }
+    .delta-up   { color: #3fb950; }
+    .delta-down { color: #f85149; }
+    .delta-warn { color: #f0883e; }
+    .section { margin-bottom: 48px; }
+    .section-title {
+      font-size: 0.72rem; font-weight: 700; color: #7db3d8; text-transform: uppercase;
+      letter-spacing: 0.12em; margin-bottom: 20px; padding-bottom: 10px;
+      border-bottom: 1px solid #1e3a5f;
+    }
+    .section-subtitle {
+      font-size: 1rem; font-weight: 600; color: #c9d1d9;
+      margin-bottom: 12px; margin-top: 24px;
+    }
+    .tbl-wrap {
+      background: #161b22; border: 1px solid #1e3a5f; border-radius: 12px;
+      overflow: hidden; overflow-x: auto; margin-bottom: 24px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    thead th {
+      background: #0d2137; color: #7db3d8; font-size: 0.7rem; text-transform: uppercase;
+      letter-spacing: 0.08em; padding: 12px 16px; text-align: right;
+      border-bottom: 1px solid #1e3a5f; white-space: nowrap;
+    }
+    thead th:first-child { text-align: left; }
+    tbody td {
+      padding: 11px 16px; text-align: right; border-bottom: 1px solid #0d1117;
+      color: #c9d1d9; vertical-align: middle;
+    }
+    tbody td:first-child { text-align: left; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: #1c2530; }
+    tbody tr.total-row td {
+      background: #0d2137; font-weight: 700; color: #e6edf3;
+      border-top: 1px solid #1e3a5f;
+    }
+    .opp-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px; margin-bottom: 24px;
+    }
+    .opp-card { background: #161b22; border: 1px solid #1e3a5f; border-radius: 12px; padding: 22px; }
+    .opp-card.priority-alta   { border-left: 4px solid #f85149; }
+    .opp-card.priority-media  { border-left: 4px solid #f0883e; }
+    .opp-card.priority-baixa  { border-left: 4px solid #3fb950; }
+    .opp-tag { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+    .opp-card.priority-alta  .opp-tag { color: #f85149; }
+    .opp-card.priority-media .opp-tag { color: #f0883e; }
+    .opp-card.priority-baixa .opp-tag { color: #3fb950; }
+    .opp-card h3 { font-size: 0.95rem; font-weight: 600; color: #e6edf3; margin-bottom: 8px; }
+    .opp-card p { font-size: 0.82rem; color: #8b949e; line-height: 1.55; }
+    .steps-list { list-style: none; padding: 0; margin: 0; }
+    .steps-list li {
+      display: flex; gap: 14px; padding: 14px 0;
+      border-bottom: 1px solid #1e3a5f; align-items: flex-start;
+    }
+    .steps-list li:last-child { border-bottom: none; }
+    .step-num {
+      flex-shrink: 0; width: 28px; height: 28px; background: #1e3a5f; color: #58a6ff;
+      font-weight: 700; font-size: 0.8rem; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-text strong { display: block; font-size: 0.88rem; color: #e6edf3; margin-bottom: 4px; }
+    .step-text span { font-size: 0.8rem; color: #8b949e; line-height: 1.5; }
+    .analysis-block {
+      background: #161b22; border: 1px solid #1e3a5f; border-radius: 12px;
+      padding: 24px; margin-bottom: 20px; font-size: 0.875rem; color: #c9d1d9; line-height: 1.65;
+    }
+    .analysis-block p + p { margin-top: 10px; }
+    .analysis-block .highlight { color: #58a6ff; font-weight: 600; }
+    .ind-green  { color: #3fb950; font-weight: 600; }
+    .ind-yellow { color: #f0883e; font-weight: 600; }
+    .ind-red    { color: #f85149; font-weight: 600; }
+    .progress-group { margin-bottom: 12px; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: #c9d1d9; margin-bottom: 5px; }
+    .progress-bar { height: 8px; background: #1e3a5f; border-radius: 4px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 4px; background: #58a6ff; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+    @media (max-width: 768px) {
+      .two-col { grid-template-columns: 1fr; }
+      .opp-grid { grid-template-columns: 1fr; }
+      .report-body { padding: 24px 16px; }
+    }
+    .bench-source { font-size: 0.72rem; color: #6e7681; font-style: italic; }
+    .bench-source a { color: #58a6ff; text-decoration: none; font-style: italic; }
+    .bench-source a:hover { text-decoration: underline; color: #79c0ff; }
+    .bench-pos-green  { color: #3fb950; font-weight: 600; }
+    .bench-pos-yellow { color: #f0883e; font-weight: 600; }
+    .bench-pos-red    { color: #f85149; font-weight: 600; }
+    .report-footer { text-align: center; padding: 32px; border-top: 1px solid #1e3a5f; font-size: 0.78rem; color: #6e7681; }
+    .exec-summary {
+      background: linear-gradient(135deg, #0d2137 0%, #091d31 100%);
+      border: 1px solid #1e3a5f; border-radius: 12px; padding: 28px; margin-bottom: 40px;
+    }
+    .exec-summary h2 { font-size: 0.72rem; font-weight: 700; color: #7db3d8; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 16px; }
+    .exec-summary p { font-size: 0.9rem; color: #c9d1d9; line-height: 1.7; }
+    .exec-summary .highlight { color: #58a6ff; font-weight: 600; }
+    .exec-summary .callout {
+      margin-top: 16px; padding: 12px 16px;
+      background: rgba(248,81,73,0.08); border-left: 3px solid #f85149;
+      border-radius: 6px; font-size: 0.85rem; color: #c9d1d9;
+    }
+    .exec-summary .callout-green {
+      margin-top: 12px; padding: 12px 16px;
+      background: rgba(63,185,80,0.08); border-left: 3px solid #3fb950;
+      border-radius: 6px; font-size: 0.85rem; color: #c9d1d9;
+    }
+    .alert-banner {
+      background: rgba(248,81,73,0.06); border: 1px solid rgba(248,81,73,0.25);
+      border-radius: 8px; padding: 14px 18px; margin-bottom: 20px;
+      font-size: 0.85rem; color: #c9d1d9;
+    }
+    .alert-banner strong { color: #f85149; }
+  </style>
+</head>
+<body>
+
+<div id="gate-loading" style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0d1117;">
+  <div style="text-align:center;">
+    <div style="width:40px;height:40px;border:3px solid #1e3a5f;border-top-color:#58a6ff;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;"></div>
+    <p style="color:#7db3d8;font-size:0.85rem;font-family:'Segoe UI',system-ui,sans-serif;">Verificando acesso…</p>
+  </div>
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
+<div id="gate-direct" style="display:none;align-items:center;justify-content:center;min-height:100vh;background:#0d1117;">
+  <div style="text-align:center;max-width:380px;padding:40px 32px;background:#161b22;border:1px solid #1e3a5f;border-radius:16px;font-family:'Segoe UI',system-ui,sans-serif;">
+    <div style="font-size:2.5rem;margin-bottom:16px;">🔒</div>
+    <h2 style="color:#e6edf3;font-size:1.1rem;margin-bottom:8px;">Acesso Restrito</h2>
+    <p style="color:#8b949e;font-size:0.85rem;line-height:1.5;">Este relatório é exclusivo para a equipe DermaClinic.<br>Acesse pelo link enviado pela Digital AI.</p>
+  </div>
+</div>
+
+<div id="app" style="display:none;">
+  <div class="report-content">
+
+    <!-- HEADER -->
+    <div class="report-header">
+      <h1>DermaClinic <span style="color:#7db3d8">—</span> Relatório de Atendimento <span class="badge">Maio 2026</span></h1>
+      <p>Período: 01/05/2026 a 31/05/2026 · Dados atualizados em 28/05/2026 · Fonte: clinic_analytics · Elaborado por Digital AI</p>
+    </div>
+
+    <div class="report-body">
+
+      <!-- ── SUMÁRIO EXECUTIVO ── -->
+      <div class="exec-summary">
+        <h2>Sumário Executivo</h2>
+        <p>
+          Maio de 2026 registrou uma <span class="highlight">retração natural após o recorde histórico de abril</span>,
+          com receita total de <span class="highlight">R$ 174.855</span> (dermatologia R$ 167.880 + fototerapia R$ 6.975)
+          e <span class="highlight">150 consultas médicas realizadas</span> (−23,1% vs. abril).
+          O mês foi impactado pelo feriado do Dia do Trabalho (01/05), agenda reduzida da Dra. Eoda
+          (58 atendimentos vs. 91 em abril) e menor produtividade nas semanas finais do mês.
+          A <span class="highlight">Dra. Raquel manteve volume estável</span> (86 atendimentos),
+          sustentando o fluxo da clínica. A fototerapia completou
+          <span class="highlight">234 sessões</span> com Dr. João.
+        </p>
+        <div class="callout">
+          <strong>⚠ Alerta crítico:</strong> No-show saltou de 3,1% (abril) para <strong>8,7% em maio</strong> —
+          triplicou. Dra. Morgana registrou 23,1% de não comparecimento (3 de 13 pacientes).
+          Implementação urgente de confirmações automáticas é recomendada.
+        </div>
+        <div class="callout-green">
+          <strong>Destaques positivos:</strong> Taxa de retorno subiu 4,4pp (68,6% → 73,0%) ·
+          Leads WhatsApp cresceram +42% vs. abril (1.103 vs. 777) ·
+          PIX avançou para 13,7% do mix de pagamentos ·
+          Dra. Raquel liderou em volume (86 consultas) e novos pacientes (22)
+        </div>
+      </div>
+
+      <!-- ── KPIs PRINCIPAIS ── -->
+      <div class="section">
+        <div class="section-title">KPIs do Mês</div>
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Receita Total</div>
+            <div class="kpi-value">R$ 175K</div>
+            <div class="kpi-unit">R$ 174.855 no mês</div>
+            <div class="kpi-delta delta-down">−34,2% vs abr</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Consultas Realizadas</div>
+            <div class="kpi-value">150</div>
+            <div class="kpi-unit">de 221 agendadas</div>
+            <div class="kpi-delta delta-down">−23,1% vs abr</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Taxa de Realização</div>
+            <div class="kpi-value">68,0%</div>
+            <div class="kpi-unit">meta: ≥80%</div>
+            <div class="kpi-delta delta-down">−4,2pp vs abr</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">No-show</div>
+            <div class="kpi-value" style="color:#f85149;">8,7%</div>
+            <div class="kpi-unit">13 casos ⚠</div>
+            <div class="kpi-delta delta-down">+5,6pp vs abr</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Ticket Médio</div>
+            <div class="kpi-value">R$ 1.119</div>
+            <div class="kpi-unit">por consulta</div>
+            <div class="kpi-delta delta-down">−17,9% vs abr</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Pacientes Únicos</div>
+            <div class="kpi-value">126</div>
+            <div class="kpi-unit">médicas</div>
+            <div class="kpi-delta delta-down">−17,6% vs abr</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Taxa de Retorno</div>
+            <div class="kpi-value">73,0%</div>
+            <div class="kpi-unit">recorrência</div>
+            <div class="kpi-delta delta-up">+4,4pp vs abr</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Leads WhatsApp</div>
+            <div class="kpi-value">1.103</div>
+            <div class="kpi-unit">entradas no mês</div>
+            <div class="kpi-delta delta-up">+42,0% vs abr</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Sessões Fototerapia</div>
+            <div class="kpi-value">234</div>
+            <div class="kpi-unit">43 pacientes únicos</div>
+            <div class="kpi-delta delta-down">−13,3% vs abr</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SEÇÃO 1: FINANCEIRO ── -->
+      <div class="section">
+        <div class="section-title">1. Desempenho Financeiro</div>
+
+        <div class="analysis-block">
+          <p>
+            A receita de dermatologia foi de <span class="highlight">R$ 167.880</span> em maio,
+            com projeção anual conservadora de <span class="highlight">R$ 2,0 milhões</span> (se o ritmo de maio for mantido).
+            Somando a receita de fototerapia de <span class="highlight">R$ 6.975</span>, o total da clínica
+            chegou a <span class="highlight">R$ 174.855</span> no mês.
+            A retração de −36,8% na receita de dermatologia vs. abril reflete o impacto combinado
+            do feriado de 01/05, menor agenda da Dra. Eoda e queda no ticket médio (R$ 1.363 → R$ 1.119).
+          </p>
+          <p>
+            A <span class="highlight">Semana 2 (08–14/05)</span> concentrou 45% da receita mensal (R$ 75.490) —
+            distribuição atípica que reforça o peso do feriado inicial e a redução de atividade nas últimas semanas.
+            O mix de pagamentos manteve o cartão de crédito como dominante (71,4%),
+            enquanto o <span class="highlight">PIX cresceu de 10% → 13,7%</span>, tendência positiva de custo transacional.
+          </p>
+        </div>
+
+        <div class="section-subtitle">Receita por Semana (Dermatologia)</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Semana</th><th>Período</th><th>Receita</th><th>% do Mês</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Semana 1</td>
+                <td>04–07/05 (4 dias úteis)*</td>
+                <td>R$ 42.910,00</td>
+                <td>25,6%</td>
+              </tr>
+              <tr>
+                <td>Semana 2 ★</td>
+                <td>08–14/05</td>
+                <td>R$ 75.490,00</td>
+                <td>45,0%</td>
+              </tr>
+              <tr>
+                <td>Semana 3</td>
+                <td>18–21/05 (4 dias)</td>
+                <td>R$ 31.480,00</td>
+                <td>18,8%</td>
+              </tr>
+              <tr>
+                <td>Semana 4</td>
+                <td>25–27/05 (3 dias)**</td>
+                <td>R$ 18.000,00</td>
+                <td>10,7%</td>
+              </tr>
+              <tr class="total-row">
+                <td colspan="2">Total Maio (parcial)</td>
+                <td>R$ 167.880,00</td>
+                <td>100%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.78rem;color:#6e7681;margin-top:-12px;margin-bottom:20px;">
+          * Semana 1 começa em 04/05 pois 01/05 = Dia do Trabalho (feriado) + 02–03/05 = fim de semana.<br>
+          ** Dados disponíveis até 27/05/2026; dias 28–30/05 ainda em andamento (~7 consultas estimadas).
+        </p>
+
+        <div class="section-subtitle">Formas de Pagamento (Dermatologia)</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Forma de Pagamento</th><th>Valor</th><th>Participação</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Cartão de Crédito</td><td>R$ 119.895,00</td><td>71,4%</td></tr>
+              <tr><td>PIX</td><td>R$ 22.960,00</td><td>13,7%</td></tr>
+              <tr><td>Cartão de Débito</td><td>R$ 17.575,00</td><td>10,5%</td></tr>
+              <tr><td>Dinheiro</td><td>R$ 7.450,00</td><td>4,4%</td></tr>
+              <tr class="total-row"><td>Total</td><td>R$ 167.880,00</td><td>100%</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="analysis-block">
+          <div class="progress-group">
+            <div class="progress-label"><span>Cartão Crédito</span><span>71,4%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:71.4%;background:#58a6ff;"></div></div>
+          </div>
+          <div class="progress-group">
+            <div class="progress-label"><span>PIX ↑</span><span>13,7%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:13.7%;background:#3fb950;"></div></div>
+          </div>
+          <div class="progress-group">
+            <div class="progress-label"><span>Cartão Débito</span><span>10,5%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:10.5%;background:#79c0ff;"></div></div>
+          </div>
+          <div class="progress-group">
+            <div class="progress-label"><span>Dinheiro</span><span>4,4%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:4.4%;background:#f0883e;"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SEÇÃO 2: INDICADORES CLÍNICOS ── -->
+      <div class="section">
+        <div class="section-title">2. Indicadores Clínicos</div>
+
+        <div class="alert-banner">
+          <strong>⚠ No-show em alerta:</strong> Taxa subiu de 3,1% (abril) para 8,7% (maio), com 13 casos registrados.
+          A taxa nacional de clínicas privadas é 15%–25%, portanto ainda abaixo do benchmark, mas o aumento é expressivo (+178%).
+          Ação corretiva via confirmações automáticas deve ser prioridade imediata.
+        </div>
+
+        <div class="analysis-block">
+          <p>
+            Das <span class="highlight">221 consultas médicas agendadas</span>, foram realizadas
+            <span class="highlight">150 (67,9%)</span> — abaixo da meta de 80% e da taxa de abril (72,2%).
+            Os <span class="highlight">13 não comparecimentos</span> (8,7%) incluem 3 casos de Dra. Morgana
+            (23,1% da sua agenda), o que sugere oportunidade de triagem ou confirmação mais ativa para essa agenda específica.
+            Foram <span class="highlight">31 desmarcamentos por paciente</span> e <span class="highlight">16 remarcações</span>
+            — padrão similar ao de abril (31 remarcados), reforçando a necessidade de fluxo de confirmação estruturado.
+          </p>
+        </div>
+
+        <div class="section-subtitle">2.1 Eficiência da Agenda (Dermatologia)</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Métrica</th><th>DermaClinic Mai/26</th><th>Benchmark</th><th>Avaliação</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Consultas Realizadas</td>
+                <td>150</td><td>—</td><td>—</td>
+              </tr>
+              <tr>
+                <td>Taxa de Realização</td>
+                <td>68,0%</td>
+                <td>~80–90% (privado) — <span class="bench-source"><a href="https://saudedigitalnews.com.br/13/12/2023/doctoralia-e-feegow-lancam-panorama-das-clinicas-e-hospitais-2024/" target="_blank" rel="noopener">Panorama Doctoralia 2024</a></span></td>
+                <td class="bench-pos-yellow">🟡 Abaixo — ação recomendada</td>
+              </tr>
+              <tr>
+                <td>Taxa de No-show</td>
+                <td>8,7% (13 casos)</td>
+                <td>15%–25% clínicas privadas — <span class="bench-source"><a href="https://ojs.brazilianjournals.com.br/ojs/index.php/BJHR/article/download/74064/51723/182816" target="_blank" rel="noopener">BJHR 2024</a></span></td>
+                <td class="bench-pos-yellow">🟡 Abaixo da média, mas triplicou vs. abril ⚠</td>
+              </tr>
+              <tr>
+                <td>Desmarcamentos (paciente)</td>
+                <td>31 casos</td><td>—</td>
+                <td class="bench-pos-yellow">🟡 Alta rotatividade — monitorar</td>
+              </tr>
+              <tr>
+                <td>Remarcações</td>
+                <td>16 casos</td><td>—</td>
+                <td class="bench-pos-yellow">🟡 Normal</td>
+              </tr>
+              <tr>
+                <td>Cancelados pelo Profissional</td>
+                <td>4 casos</td><td>—</td>
+                <td class="bench-pos-yellow">🟡 Monitorar (vs 1 em abril)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-subtitle">2.2 Fototerapia</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Indicador</th><th>Maio 2026</th><th>Abril 2026</th><th>Variação</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Sessões Agendadas</td>
+                <td>311</td><td>355</td>
+                <td class="ind-yellow">−12,7%</td>
+              </tr>
+              <tr>
+                <td>Sessões Realizadas</td>
+                <td>234</td><td>270</td>
+                <td class="ind-yellow">−13,3%</td>
+              </tr>
+              <tr>
+                <td>No-shows</td>
+                <td>7</td><td>—</td><td>—</td>
+              </tr>
+              <tr>
+                <td>Taxa de Realização</td>
+                <td>75,2%</td><td>76,1%</td>
+                <td class="ind-yellow">−0,9pp</td>
+              </tr>
+              <tr>
+                <td>Receita Fototerapia</td>
+                <td>R$ 6.975,00</td><td>—</td><td>—</td>
+              </tr>
+              <tr>
+                <td>Pacientes Únicos</td>
+                <td>43</td><td>48</td>
+                <td class="ind-yellow">−10,4%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── SEÇÃO 3: DESEMPENHO POR MÉDICA ── -->
+      <div class="section">
+        <div class="section-title">3. Desempenho por Médica</div>
+
+        <div class="analysis-block">
+          <p>
+            <span class="highlight">Dra. Raquel Steglich</span> liderou em maio com 86 atendimentos e
+            <span class="highlight">22 novos pacientes captados</span> — o maior número de novas aquisições do mês.
+            Sua receita de R$ 78.790 ficou próxima à Dra. Eoda (R$ 80.210), mas com ticket médio menor
+            (R$ 916 vs. R$ 1.383), indicando mix de procedimentos mais simples em maio.
+          </p>
+          <p>
+            <span class="highlight">Dra. Eoda Steglich</span> reduziu significativamente sua agenda
+            (58 realizadas vs. 91 em abril, −36,3%), o que explica grande parte da queda mensal.
+            Seu no-show de 6,8% (6 casos) também aumentou vs. abril (2,2%).
+            <span class="highlight">Dra. Morgana Longo</span> apresenta taxa de não comparecimento crítica
+            (23,1% com 3 de 13 pacientes) — agenda pequena amplifica o impacto de cada ausência.
+          </p>
+        </div>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Médica</th>
+                <th>Realizadas</th>
+                <th>Receita</th>
+                <th>Ticket Médio</th>
+                <th>Novos Pac.</th>
+                <th>Pac. Únicos</th>
+                <th>Taxa Realiz.</th>
+                <th>No-shows</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Dra. Raquel Steglich</td>
+                <td>86</td>
+                <td>R$ 78.790,00</td>
+                <td>R$ 916</td>
+                <td>22</td>
+                <td>74</td>
+                <td class="ind-yellow">71,7%</td>
+                <td>4 (3,3%)</td>
+              </tr>
+              <tr>
+                <td>Dra. Eoda Steglich</td>
+                <td>58</td>
+                <td>R$ 80.210,00</td>
+                <td>R$ 1.383</td>
+                <td>11</td>
+                <td>50</td>
+                <td class="ind-yellow">65,9%</td>
+                <td>6 (6,8%)</td>
+              </tr>
+              <tr>
+                <td>Dra. Morgana Longo</td>
+                <td>6</td>
+                <td>R$ 7.130,00</td>
+                <td>R$ 1.188</td>
+                <td>1</td>
+                <td>6</td>
+                <td class="ind-red">46,2%</td>
+                <td>3 (23,1%) ⚠</td>
+              </tr>
+              <tr class="total-row">
+                <td>TOTAL</td>
+                <td>150</td>
+                <td>R$ 167.880,00 *</td>
+                <td>R$ 1.119</td>
+                <td>34</td>
+                <td>126</td>
+                <td>67,9%</td>
+                <td>13 (8,7%)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.78rem;color:#6e7681;margin-top:-12px;margin-bottom:20px;">
+          * Receita total inclui R$ 1.750 de procedimentos sem vínculo direto a um profissional específico.
+          Ticket médio global = R$ 167.880 ÷ 150 = R$ 1.119.
+        </p>
+      </div>
+
+      <!-- ── SEÇÃO 4: PERFIL DOS PACIENTES ── -->
+      <div class="section">
+        <div class="section-title">4. Perfil dos Pacientes</div>
+
+        <div class="two-col">
+          <!-- Faixa etária -->
+          <div>
+            <div class="section-subtitle" style="margin-top:0;">Distribuição por Faixa Etária</div>
+            <div class="analysis-block">
+              <div class="progress-group">
+                <div class="progress-label"><span>Até 19 anos</span><span>8 pac. (6,5%)</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:6.5%;background:#79c0ff;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span>20–29 anos</span><span>10 pac. (8,1%)</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:8.1%;background:#79c0ff;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span><strong>30–39 anos ★</strong></span><span><strong>28 pac. (22,8%)</strong></span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:22.8%;background:#3fb950;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span>40–49 anos</span><span>27 pac. (22,0%)</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:22.0%;background:#58a6ff;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span>50–59 anos</span><span>21 pac. (17,1%)</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:17.1%;background:#58a6ff;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span><strong>60+ anos</strong></span><span><strong>29 pac. (23,6%)</strong></span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:23.6%;background:#58a6ff;"></div></div>
+              </div>
+            </div>
+            <p style="font-size:0.8rem;color:#8b949e;margin-top:-10px;">
+              ★ Em maio a faixa 30–39 assumiu a liderança (22,8%), empatada com 60+ (23,6%).
+              Pacientes 40+ somam 62,7% da base — perfil estável vs. abril (62,5%).
+            </p>
+          </div>
+
+          <!-- Por dia da semana -->
+          <div>
+            <div class="section-subtitle" style="margin-top:0;">Taxa de Realização por Dia da Semana</div>
+            <div class="analysis-block">
+              <div class="progress-group">
+                <div class="progress-label"><span><strong>Segunda-feira ★</strong></span><span><strong>78,6%</strong></span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:78.6%;background:#3fb950;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span>Terça-feira</span><span>75,6%</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:75.6%;background:#58a6ff;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span><strong>Quarta-feira ⚠</strong></span><span class="ind-yellow"><strong>61,5%</strong></span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:61.5%;background:#f0883e;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span><strong>Quinta-feira ⚠</strong></span><span class="ind-yellow"><strong>58,8%</strong></span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:58.8%;background:#f85149;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span>Sexta-feira</span><span>75,0%</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:75%;background:#58a6ff;"></div></div>
+              </div>
+            </div>
+            <p style="font-size:0.8rem;color:#8b949e;margin-top:-10px;">
+              Quarta e quinta concentram o pior aproveitamento em maio.
+              Segunda-feira continua como melhor dia (78,6%), consistente com abril (86,3%).
+            </p>
+          </div>
+        </div>
+
+        <!-- Novos vs Retorno -->
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Perfil</th><th>Pacientes</th><th>%</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Novos pacientes (1ª consulta)</td>
+                <td>34</td>
+                <td>27,0%</td>
+              </tr>
+              <tr>
+                <td>Pacientes recorrentes</td>
+                <td>92</td>
+                <td>73,0%</td>
+              </tr>
+              <tr class="total-row">
+                <td>Total pacientes únicos</td>
+                <td>126</td>
+                <td>100%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="analysis-block">
+          <p>
+            <span class="highlight">Taxa de retorno de 73,0%</span> — acima do benchmark de 55%–65% para
+            dermatologia privada e melhor que abril (68,6%). A queda de novos pacientes (48 → 34, −29,2%)
+            é esperada em meses com menos dias úteis, mas merece acompanhamento para garantir que a captação
+            não está estagnando estruturalmente.
+            <span class="bench-source">Fonte: <a href="https://www.sbd.org.br/sociedade-brasileira-de-dermatologia-divulga-inquerito-atualizado-sobre-doencas-de-pele-no-brasil/" target="_blank" rel="noopener">Inquérito SBD 2024</a></span>
+          </p>
+        </div>
+      </div>
+
+      <!-- ── SEÇÃO 5: COMPARATIVO ABR vs MAI ── -->
+      <div class="section">
+        <div class="section-title">5. Comparativo Abril × Maio 2026</div>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Indicador</th><th>Abril</th><th>Maio</th><th>Variação</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Receita Dermatologia</td>
+                <td>R$ 265.684</td>
+                <td>R$ 167.880</td>
+                <td class="ind-red">−36,8% 🔴</td>
+              </tr>
+              <tr>
+                <td>Receita Fototerapia</td>
+                <td>—</td>
+                <td>R$ 6.975</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>Pacientes Únicos</td>
+                <td>153</td>
+                <td>126</td>
+                <td class="ind-yellow">−17,6% 🟡</td>
+              </tr>
+              <tr>
+                <td>Consultas Realizadas</td>
+                <td>195</td>
+                <td>150</td>
+                <td class="ind-yellow">−23,1% 🟡</td>
+              </tr>
+              <tr>
+                <td>Taxa de Realização</td>
+                <td>72,2%</td>
+                <td>68,0%</td>
+                <td class="ind-yellow">−4,2pp 🟡</td>
+              </tr>
+              <tr>
+                <td>No-show</td>
+                <td>3,1% (6 casos)</td>
+                <td>8,7% (13 casos)</td>
+                <td class="ind-red">+5,6pp ⚠🔴</td>
+              </tr>
+              <tr>
+                <td>Taxa de Retorno</td>
+                <td>68,6%</td>
+                <td>73,0%</td>
+                <td class="ind-green">+4,4pp 🟢</td>
+              </tr>
+              <tr>
+                <td>Ticket Médio</td>
+                <td>R$ 1.363</td>
+                <td>R$ 1.119</td>
+                <td class="ind-yellow">−17,9% 🟡</td>
+              </tr>
+              <tr>
+                <td>Novos Pacientes</td>
+                <td>48</td>
+                <td>34</td>
+                <td class="ind-yellow">−29,2% 🟡</td>
+              </tr>
+              <tr>
+                <td>Leads WhatsApp (todos inboxes)</td>
+                <td>777</td>
+                <td>1.103</td>
+                <td class="ind-green">+42,0% 🟢</td>
+              </tr>
+              <tr>
+                <td>Fototerapia Realizadas</td>
+                <td>270</td>
+                <td>234</td>
+                <td class="ind-yellow">−13,3% 🟡</td>
+              </tr>
+              <tr>
+                <td>Foto Pacientes Únicos</td>
+                <td>48</td>
+                <td>43</td>
+                <td class="ind-yellow">−10,4% 🟡</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="analysis-block">
+          <p>
+            A retração de maio é em parte <span class="highlight">estrutural</span> (feriado, agenda reduzida da Dra. Eoda)
+            e em parte <span class="highlight">operacional</span> (aumento do no-show, queda no ticket médio da Dra. Raquel).
+            O crescimento de +42% em leads WhatsApp, aliado à manutenção da taxa de retorno em 73%, são sinais
+            positivos da saúde de longo prazo da clínica — a demanda existe, o desafio é converter em agendamentos
+            e garantir a presença.
+          </p>
+          <p>
+            Um ponto de atenção: os <span class="highlight">1.103 leads no WhatsApp</span> geraram apenas
+            <span class="highlight">150 consultas realizadas</span> — taxa de conversão lead→realização de 13,6%.
+            Desses 1.103 leads, 108 vieram pelo Tráfego Pago com 92% de qualificação (99 leads qualificados),
+            mas apenas 1 agendamento confirmado via label no inbox — sugerindo que a conversão final acontece
+            pelo Relacionamento e não está sendo rastreada na origem paga.
+          </p>
+        </div>
+      </div>
+
+      <!-- ── SEÇÃO 6: BENCHMARKS ── -->
+      <div class="section">
+        <div class="section-title">6. Benchmarks do Setor</div>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Indicador</th><th>DermaClinic</th><th>Benchmark Brasil</th><th>Fonte</th><th>Posicionamento</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Ticket Médio Consulta</td>
+                <td>R$ 1.119</td>
+                <td>R$ 300–500 (média nacional)</td>
+                <td class="bench-source"><a href="https://tabelaplanos.com.br/precos-consulta-dermatologista-2025/" target="_blank" rel="noopener">tabelaplanos.com.br 2025</a></td>
+                <td class="bench-pos-green">🟢 2,2×–3,7× acima</td>
+              </tr>
+              <tr>
+                <td>Ticket Médio Dra. Eoda</td>
+                <td>R$ 1.179</td>
+                <td>R$ 400–800 (SP/capitais)</td>
+                <td class="bench-source"><a href="https://emfoco.med.br/quanto-custa-uma-consulta-com-dermatologista/" target="_blank" rel="noopener">Instituto Medicina em Foco SP 2026</a></td>
+                <td class="bench-pos-green">🟢 1,5×–2,9× acima</td>
+              </tr>
+              <tr>
+                <td>Ticket Médio Dra. Raquel</td>
+                <td>R$ 916</td>
+                <td>R$ 400–800 (SP/capitais)</td>
+                <td class="bench-source"><a href="https://emfoco.med.br/quanto-custa-uma-consulta-com-dermatologista/" target="_blank" rel="noopener">Instituto Medicina em Foco SP 2026</a></td>
+                <td class="bench-pos-yellow">🟡 1,1×–2,3× acima — queda vs. abril</td>
+              </tr>
+              <tr>
+                <td>Taxa de Realização</td>
+                <td>68,0%</td>
+                <td>~80–90% (privado)</td>
+                <td class="bench-source"><a href="https://saudedigitalnews.com.br/13/12/2023/doctoralia-e-feegow-lancam-panorama-das-clinicas-e-hospitais-2024/" target="_blank" rel="noopener">Panorama Doctoralia+Feegow 2024</a></td>
+                <td class="bench-pos-yellow">🟡 Abaixo — atenção necessária</td>
+              </tr>
+              <tr>
+                <td>Taxa de No-show</td>
+                <td>8,7%</td>
+                <td>15%–25% (privado) / ~20% dermato</td>
+                <td class="bench-source"><a href="https://ojs.brazilianjournals.com.br/ojs/index.php/BJHR/article/download/74064/51723/182816" target="_blank" rel="noopener">BJHR 2024</a>; <a href="https://saudedigitalnews.com.br/13/12/2023/doctoralia-e-feegow-lancam-panorama-das-clinicas-e-hospitais-2024/" target="_blank" rel="noopener">Panorama Doctoralia 2024</a></td>
+                <td class="bench-pos-yellow">🟡 Ainda abaixo da média, mas cresceu vs. abril</td>
+              </tr>
+              <tr>
+                <td>Taxa de Retorno</td>
+                <td>73,0%</td>
+                <td>55%–65% dermato privada</td>
+                <td class="bench-source"><a href="https://www.sbd.org.br/sociedade-brasileira-de-dermatologia-divulga-inquerito-atualizado-sobre-doencas-de-pele-no-brasil/" target="_blank" rel="noopener">Inquérito SBD 2024</a></td>
+                <td class="bench-pos-green">🟢 +8–18pp acima — melhor que abril</td>
+              </tr>
+              <tr>
+                <td>Receita Anual Projetada</td>
+                <td>R$ 2,0M (base mai)</td>
+                <td>R$ 1,15M–1,94M (3 méd.)</td>
+                <td class="bench-source"><a href="https://saudedigitalnews.com.br/13/12/2023/doctoralia-e-feegow-lancam-panorama-das-clinicas-e-hospitais-2024/" target="_blank" rel="noopener">Panorama Doctoralia+Feegow 2024</a></td>
+                <td class="bench-pos-green">🟢 8%–80% acima da média</td>
+              </tr>
+              <tr>
+                <td>1ª Resposta WhatsApp</td>
+                <td>&lt;1 min</td>
+                <td>&lt;5 min (automação)</td>
+                <td class="bench-source"><a href="https://hbr.org/2011/03/the-short-life-of-online-sales-leads" target="_blank" rel="noopener">HBR — The Short Life of Online Sales Leads</a></td>
+                <td class="bench-pos-green">🟢 Referência de mercado</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── SEÇÃO 7: OPORTUNIDADES ── -->
+      <div class="section">
+        <div class="section-title">7. Oportunidades Identificadas</div>
+
+        <div class="opp-grid">
+          <div class="opp-card priority-alta">
+            <div class="opp-tag">🔴 Alta Prioridade — Urgente</div>
+            <h3>Reverter Crescimento do No-show</h3>
+            <p>
+              No-show triplicou de abril para maio (3,1% → 8,7%). São 13 consultas perdidas,
+              equivalentes a R$ 14.547 em receita não realizada (ticket médio R$ 1.119 × 13).
+              Implementar confirmação automática via IA de atendimento 24h antes é a ação de maior ROI disponível.
+              Dra. Morgana tem prioridade: 3 de 13 agendamentos falharam (23,1%).
+            </p>
+          </div>
+
+          <div class="opp-card priority-alta">
+            <div class="opp-tag">🔴 Alta Prioridade</div>
+            <h3>Recuperar Ticket Médio da Dra. Raquel</h3>
+            <p>
+              O ticket médio de Dra. Raquel caiu de R$ 1.232 (abril) para R$ 916 (maio), queda de −25,7%.
+              Isso representa R$ 27.176 de receita "deixada na mesa" (86 consultas × diferença de R$ 316).
+              Diagnosticar se a queda reflete mix de procedimentos, parcelamento diferente ou consultas
+              de menor valor — e implementar protocolo de venda adicional pós-consulta.
+            </p>
+          </div>
+
+          <div class="opp-card priority-media">
+            <div class="opp-tag">🟡 Curto Prazo</div>
+            <h3>Converter Leads de Tráfego Pago em Agendamentos</h3>
+            <p>
+              108 leads do Tráfego Pago com 92% de qualificação (99 qualificados) geraram apenas
+              1 agendamento confirmado via label. Há provável vazamento: pacientes qualificados
+              no TP migram para o Relacionamento para agendar, sem rastreabilidade.
+              Implementar tag unificada de origem no fluxo de agendamento para medir conversão real.
+            </p>
+          </div>
+
+          <div class="opp-card priority-media">
+            <div class="opp-tag">🟡 Curto Prazo</div>
+            <h3>Otimizar Quarta e Quinta-feira</h3>
+            <p>
+              Quarta (61,5%) e quinta (58,8%) têm as piores taxas de realização em maio.
+              Esses dois dias concentram 116 consultas agendadas (52% da agenda semanal).
+              Lembretes automáticos direcionados para essas datas podem recuperar 8–12 consultas/mês —
+              estimativa de R$ 9.000–13.000 de receita adicional com custo operacional zero.
+            </p>
+          </div>
+
+          <div class="opp-card priority-baixa">
+            <div class="opp-tag">🟢 Médio Prazo</div>
+            <h3>Ativar Base Crescente de Leads (1.103)</h3>
+            <p>
+              Leads WhatsApp cresceram +42% vs. abril mas a taxa de conversão lead→consulta
+              caiu (13,7%). Com 1.103 novos contatos no mês, uma campanha de reativação para
+              os qualificados que não agendaram pode capturar 20–40 novas consultas —
+              potencial de R$ 22–44K com estrutura já existente.
+            </p>
+          </div>
+
+          <div class="opp-card priority-baixa">
+            <div class="opp-tag">🟢 Médio Prazo</div>
+            <h3>Fidelizar Faixa 30–39 (Nova Liderança)</h3>
+            <p>
+              A faixa etária 30–39 assumiu liderança em maio (22,8%) — 6pp acima de abril.
+              Esse grupo tem alta aderência a tratamentos preventivos e estéticos de longo prazo
+              (botox, preenchimento, fototerapia UV). Protocolo específico de indicação pós-consulta
+              pode aumentar ticket médio e frequência de retorno.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SEÇÃO 8: PRÓXIMOS PASSOS ── -->
+      <div class="section">
+        <div class="section-title">8. Próximos Passos</div>
+
+        <ul class="steps-list">
+          <li>
+            <div class="step-num">1</div>
+            <div class="step-text">
+              <strong>Ativar confirmação automática via IA — prioridade máxima</strong>
+              <span>No-show triplicou em maio. Implementar confirmação automática 24h antes para todas as consultas,
+              com ênfase em quarta-feira, quinta-feira e agenda da Dra. Morgana. Estimativa de recuperação:
+              4–6 consultas/mês = R$ 4.500–6.700 de receita evitada.</span>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">2</div>
+            <div class="step-text">
+              <strong>Diagnosticar queda de ticket da Dra. Raquel</strong>
+              <span>Cruzar mix de procedimentos de abril vs. maio para Dra. Raquel. Verificar se houve mudança
+              no protocolo de atendimento, tipo de paciente (mais retornos simples?) ou parcelamento.
+              Meta: recuperar ticket para R$ 1.000+ em junho.</span>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">3</div>
+            <div class="step-text">
+              <strong>Rastrear conversão de Tráfego Pago → Agendamento</strong>
+              <span>Implementar label de origem "tp" no fluxo de agendamento do Relacionamento para
+              identificar quantos dos 99 leads qualificados de maio efetivamente agendaram, mas via inbox diferente.
+              Isso vai revelar o ROI real das campanhas pagas.</span>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">4</div>
+            <div class="step-text">
+              <strong>Campanha de reativação dos leads de maio</strong>
+              <span>Com 1.103 leads captados e apenas ~151 convertidos, existe base para reativação.
+              Segmentar por interesse e acionar fluxo de agendamento via IA de atendimento com oferta de
+              data específica nas próximas 2 semanas.</span>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">5</div>
+            <div class="step-text">
+              <strong>Análise de capacidade da Dra. Eoda em junho</strong>
+              <span>A queda de 91 → 68 atendimentos (−25,3%) foi o principal fator da retração de maio.
+              Confirmar se a redução de agenda foi pontual ou se haverá continuidade — e se há capacidade
+              para retomar o ritmo de abril (que gerou o maior ticket médio: R$ 1.400).</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="report-footer">
+        Relatório gerado em 28/05/2026 · Dados até 27/05/2026 · Digital AI · Fonte: Feegow + Chatwoot
+      </div>
+
+    </div><!-- /report-body -->
+  </div><!-- /report-content -->
+</div><!-- /app -->
+
+<script src="../../_shared/auth.js"></script>
+<script>
+  initChatwootAuth({
+    gateLoading: 'gate-loading',
+    gateDirect:  'gate-direct',
+    gateApp:     'app',
+    client:      'dermaclinic',
+    report:      'atendimento-mai-2026'
+  });
+</script>
+
+</body>
+</html>
