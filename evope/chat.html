@@ -180,6 +180,38 @@
     }
     .btn-remove:hover { color: #ff5555; }
 
+    /* File list (multi-file) */
+    .files-list {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      max-width: 400px;
+    }
+    .files-list.show { display: flex; }
+    .file-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: rgba(220, 248, 76, 0.08);
+      border: 1px solid rgba(220, 248, 76, 0.2);
+      border-radius: var(--evope-radius-sm);
+      font-size: 13px;
+    }
+    .file-chip-type {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: rgba(220, 248, 76, 0.18);
+      color: var(--evope-yellow);
+      font-weight: 700;
+      text-transform: uppercase;
+      white-space: nowrap;
+      flex-shrink: 0;
+      letter-spacing: 0.03em;
+    }
+
     .btn-primary {
       padding: 14px 32px;
       background: var(--evope-yellow);
@@ -451,25 +483,18 @@
       <div class="upload-title">Analisar Mapa de Processos</div>
     </div>
     <div class="upload-subtitle">
-      Carregue o arquivo CSV exportado da EVOPE Platform para que o agente analise os dados e responda suas perguntas.
+      Carregue os CSVs exportados da EVOPE Platform: <strong>Mapa_ProcessosFuncoes</strong>, <strong>Mapa_ProcessosFuncoesColaborador</strong> e <strong>Mapa_ProcessosCaminhos</strong>. Você pode enviar 1, 2 ou 3 arquivos.
     </div>
 
-    <label class="upload-zone" id="uploadZone" for="fileInput" aria-label="Área de upload de arquivo CSV">
-      <input type="file" id="fileInput" accept=".csv" aria-label="Selecionar arquivo CSV" />
+    <label class="upload-zone" id="uploadZone" for="fileInput" aria-label="Área de upload de arquivos CSV">
+      <input type="file" id="fileInput" accept=".csv" multiple aria-label="Selecionar arquivos CSV" />
       <div class="upload-zone-text">
-        <span>Clique para selecionar</span> ou arraste o arquivo CSV aqui<br>
-        <small style="opacity:0.6;font-size:12px">Máximo 10MB</small>
+        <span>Clique para selecionar</span> ou arraste os CSVs aqui<br>
+        <small style="opacity:0.6;font-size:12px">Até 3 arquivos · Máx 10MB cada</small>
       </div>
     </label>
 
-    <div class="file-selected" id="fileSelected" aria-live="polite">
-      <span class="file-icon" aria-hidden="true">📄</span>
-      <div class="file-info">
-        <div class="file-name" id="fileName">arquivo.csv</div>
-        <div class="file-size" id="fileSize">0 KB</div>
-      </div>
-      <button class="btn-remove" onclick="removeFile()" aria-label="Remover arquivo selecionado">✕</button>
-    </div>
+    <div class="files-list" id="filesList" aria-live="polite"></div>
 
     <button class="btn-primary" id="btnAnalyze" disabled onclick="startAnalysis()">
       Analisar dados
@@ -562,7 +587,7 @@
   }
 
   // ===== Upload state =====
-  let selectedFile = null;
+  let selectedFiles = []; // multi-file: até 3 CSVs
   let isUploading = false;
   let isSending = false;
 
@@ -604,12 +629,11 @@
       .replace(/\n/g, '<br>');
   }
 
-  // ===== File Handling (H2 fix) =====
+  // ===== File Handling =====
   const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
   const fileInput = document.getElementById('fileInput');
   const uploadZone = document.getElementById('uploadZone');
-  const fileSelected = document.getElementById('fileSelected');
   const btnAnalyze = document.getElementById('btnAnalyze');
 
   fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
@@ -628,39 +652,65 @@
   });
 
   function handleFiles(files) {
-    const csvFiles = Array.from(files).filter(f =>
-      f.name.toLowerCase().endsWith('.csv')
-    );
+    const csvFiles = Array.from(files).filter(f => f.name.toLowerCase().endsWith('.csv'));
+    if (csvFiles.length === 0) { showToast('Selecione arquivos CSV válidos'); return; }
 
-    if (csvFiles.length === 0) {
-      showToast('Selecione um arquivo CSV válido');
-      return;
+    const existingNames = selectedFiles.map(f => f.name);
+    for (const file of csvFiles) {
+      if (selectedFiles.length >= 3) { showToast('Máximo de 3 arquivos atingido'); break; }
+      if (file.size === 0) { showToast(`${file.name}: arquivo vazio`); continue; }
+      if (file.size > MAX_FILE_SIZE) { showToast(`${file.name}: excede 10MB`); continue; }
+      if (existingNames.includes(file.name)) { showToast(`${file.name}: já adicionado`); continue; }
+      selectedFiles.push(file);
+      existingNames.push(file.name);
     }
 
-    const file = csvFiles[0]; // single file only
-
-    if (file.size === 0) {
-      showToast('O arquivo está vazio');
-      return;
-    }
-
-    if (file.size > MAX_FILE_SIZE) {
-      showToast(`Arquivo excede o limite de 10MB (${formatBytes(file.size)})`);
-      return;
-    }
-
-    selectedFile = file;
-    document.getElementById('fileName').textContent = file.name;
-    document.getElementById('fileSize').textContent = formatBytes(file.size);
-    fileSelected.classList.add('show');
-    btnAnalyze.disabled = false;
+    fileInput.value = '';
+    renderFileList();
+    btnAnalyze.disabled = selectedFiles.length === 0;
   }
 
-  function removeFile() {
-    selectedFile = null;
+  function guessFileType(name) {
+    if (/caminhos/i.test(name)) return 'Caminhos';
+    if (/colaborador/i.test(name)) return 'Colaboradores';
+    if (/funcoes|fun.{1,3}es/i.test(name)) return 'Funções';
+    return '';
+  }
+
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function renderFileList() {
+    const list = document.getElementById('filesList');
+    while (list.lastChild) list.removeChild(list.lastChild);
+    if (selectedFiles.length === 0) { list.classList.remove('show'); return; }
+    list.classList.add('show');
+    selectedFiles.forEach(function(file, idx) {
+      const type = guessFileType(file.name);
+      const chip = document.createElement('div');
+      chip.className = 'file-chip';
+      chip.innerHTML =
+        '<span class="file-icon" aria-hidden="true">📄</span>' +
+        '<div class="file-info" style="flex:1;text-align:left">' +
+          '<div class="file-name">' + escHtml(file.name) + '</div>' +
+          '<div class="file-size">' + formatBytes(file.size) + '</div>' +
+        '</div>' +
+        (type ? '<span class="file-chip-type">' + escHtml(type) + '</span>' : '') +
+        '<button class="btn-remove" onclick="removeFile(' + idx + ')" aria-label="Remover ' + escHtml(file.name) + '">\u2715</button>';
+      list.appendChild(chip);
+    });
+  }
+
+  function removeFile(idx) {
+    if (typeof idx === 'number') {
+      selectedFiles.splice(idx, 1);
+    } else {
+      selectedFiles = [];
+    }
     fileInput.value = '';
-    fileSelected.classList.remove('show');
-    btnAnalyze.disabled = true;
+    renderFileList();
+    btnAnalyze.disabled = selectedFiles.length === 0;
   }
 
   function formatBytes(bytes) {
@@ -678,9 +728,9 @@
   function resetToUpload() {
     CONFIG.sessionId = createSessionId();
     sessionStorage.setItem('evope_chat_session', CONFIG.sessionId);
-    selectedFile = null;
+    selectedFiles = [];
     fileInput.value = '';
-    fileSelected.classList.remove('show');
+    renderFileList();
     btnAnalyze.disabled = true;
     analysisContext = null;
     conversationHistory = [];
@@ -717,9 +767,9 @@
     }
   }
 
-  // ===== Start Analysis (H1 + H3 fix: AbortController + separação de flags) =====
+  // ===== Start Analysis =====
   async function startAnalysis() {
-    if (!selectedFile || isUploading) return;
+    if (selectedFiles.length === 0 || isUploading) return;
     isUploading = true;
     btnAnalyze.disabled = true;
 
@@ -739,9 +789,11 @@
 
     try {
       const formData = new FormData();
-      formData.append('chatInput', 'Analise os arquivos CSV enviados e retorne a análise completa do mapa de processos.');
+      formData.append('chatInput', 'Analise os arquivos CSV enviados e retorne a análise completa do mapa de processos EVOPE.');
       formData.append('sessionId', CONFIG.sessionId);
-      formData.append('files', selectedFile, selectedFile.name);
+      selectedFiles.forEach(function(file, idx) {
+        formData.append('file' + idx, file, file.name);
+      });
 
       const response = await fetch(CONFIG.webhookUrl, {
         method: 'POST',
@@ -957,8 +1009,8 @@
       if (payload.csvData) {
         const blob = new Blob([payload.csvData], { type: 'text/csv' });
         const file = new File([blob], payload.fileName || 'dados.csv', { type: 'text/csv' });
-        handleFiles([file]);
-        setTimeout(() => startAnalysis(), 100);
+        handleFiles([file]); // suporta múltiplos via postMessage iterado
+        if (payload.autoStart !== false) setTimeout(() => startAnalysis(), 100);
       }
     }
 
