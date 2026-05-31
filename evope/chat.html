@@ -566,6 +566,12 @@
   let isUploading = false;
   let isSending = false;
 
+  // ===== Session Context (client-side memory) =====
+  // analysisContext: resumo gerado pelo agente na primeira mensagem (análise do CSV)
+  // conversationHistory: últimas trocas para injetar como contexto
+  let analysisContext = null;
+  let conversationHistory = []; // [{role:'user'|'assistant', content:string}]
+
   // ===== Session Management =====
   function createSessionId() {
     // crypto.randomUUID() para entropia criptográfica
@@ -676,6 +682,8 @@
     fileInput.value = '';
     fileSelected.classList.remove('show');
     btnAnalyze.disabled = true;
+    analysisContext = null;
+    conversationHistory = [];
     // W2 fix: usar replaceChildren em vez de innerHTML = ''
     const msgs = document.getElementById('messages');
     while (msgs.lastChild) msgs.removeChild(msgs.lastChild);
@@ -767,6 +775,9 @@
       setStatus('active', 'Ativo');
       document.getElementById('headerSubtitle').textContent = 'Análise carregada — faça suas perguntas';
       document.getElementById('btnNewAnalysis').style.display = 'inline-block';
+      // Armazenar análise como contexto da sessão
+      analysisContext = reply;
+      conversationHistory = [{ role: 'assistant', content: reply }];
       appendMessage('assistant', reply);
 
     } catch (err) {
@@ -821,10 +832,18 @@
     const timeoutId = setTimeout(() => controller.abort(), 60000); // 1 min
 
     try {
+      // Incluir contexto da análise e histórico recente com cada mensagem
+      const payload = {
+        chatInput: text,
+        sessionId: CONFIG.sessionId,
+        ...(analysisContext ? { analysisContext } : {}),
+        ...(conversationHistory.length > 0 ? { history: conversationHistory.slice(-6) } : {}),
+      };
+
       const response = await fetch(CONFIG.webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chatInput: text, sessionId: CONFIG.sessionId }),
+        body: JSON.stringify(payload),
         signal: controller.signal,
       });
 
@@ -846,6 +865,12 @@
 
       const reply = data?.output || data?.text || data?.message || data?.response;
       if (!reply) throw new Error('Resposta vazia do agente');
+
+      // Atualizar histórico com esta troca
+      conversationHistory.push({ role: 'user', content: text });
+      conversationHistory.push({ role: 'assistant', content: reply });
+      if (conversationHistory.length > 8) conversationHistory = conversationHistory.slice(-8);
+
       appendMessage('assistant', reply);
 
     } catch (err) {
