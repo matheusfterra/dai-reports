@@ -478,30 +478,80 @@
     grupos_detalhes:'Grupos · Resumo',
   };
 
-  // ── File Detection ───────────────────────────────────────────────────────
-  function detectJsonType(arr) {
-    if (!Array.isArray(arr) || arr.length === 0) return null;
-    const s   = arr[0];
-    const keys = Object.keys(s || {}).map(k => k.toLowerCase().replace(/\s+/g, ' ').trim());
-
-    if (keys.some(k => k.includes('aplicativos') || k.includes('aplicativo')))
-      return 'funcoes';
-    if (keys.includes('origem') && keys.includes('destino'))
-      return 'caminhos';
-    if (keys.some(k => k.includes('aproveitamento do grupo')))
-      return 'grupos_detalhes';
-    if (keys.some(k => k.includes('colaborador')) &&
-        keys.some(k => k.includes('aproveitamento')))
-      return (keys.some(k => k.includes('entretenimento'))) ? 'grupos' : 'burnout';
-    return null;
+  // ── Helpers ──────────────────────────────────────────────────────────────
+  // Busca campo no objeto tentando múltiplas variantes de nome
+  function get(obj, ...keys) {
+    for (const k of keys) {
+      if (obj[k] !== undefined && obj[k] !== null && obj[k] !== '') return obj[k];
+    }
+    return undefined;
   }
 
-  // ── Payload Builder ──────────────────────────────────────────────────────
   function toInt(v) {
     if (v == null) return 0;
     return parseInt(String(v).replace(/\./g, '').replace(',', '')) || 0;
   }
 
+  function toFloat(v) {
+    if (v == null) return 0;
+    return parseFloat(String(v).replace('%','').replace(',', '.')) || 0;
+  }
+
+  // Converte "HH:MM" ou número decimal em string "HH:MM"
+  function normalizeHoras(v) {
+    if (!v) return '0:00';
+    const s = String(v).trim();
+    if (s.includes(':')) return s;
+    // número decimal → converter para HH:MM
+    const h = parseFloat(s.replace(',','.')) || 0;
+    const hh = Math.floor(h);
+    const mm = Math.round((h - hh) * 60);
+    return `${hh}:${String(mm).padStart(2,'0')}`;
+  }
+
+  // ── File Detection ───────────────────────────────────────────────────────
+  function detectJsonType(arr) {
+    if (!Array.isArray(arr) || arr.length === 0) return null;
+    const s    = arr[0];
+    const keys = Object.keys(s || {}).map(k => k.toLowerCase().replace(/\s+/g, ' ').trim());
+    const has  = (...terms) => terms.some(t => keys.some(k => k.includes(t)));
+
+    // Mapa — Funções (apps com horas, teclado, copiar/colar)
+    if (has('aplicativos','aplicativo','appname','app_name','application','nome do app','app'))
+      return 'funcoes';
+    // Mapa — Caminhos (origem → destino)
+    if (keys.includes('origem') && keys.includes('destino'))
+      return 'caminhos';
+    // Grupos — Resumo por grupo
+    if (has('aproveitamento do grupo','horas ativas') && has('grupo'))
+      return 'grupos_detalhes';
+    // Colaboradores (burnout ou entretenimento)
+    if (has('colaborador') && has('aproveitamento'))
+      return has('entretenimento') ? 'grupos' : 'burnout';
+    // Heurística: tem "horas" e algo que parece nome → funcoes
+    if (has('horas','hours') && has('nome','name','app','aplicacao','aplicação'))
+      return 'funcoes';
+    return null;
+  }
+
+  // Detecta qual chave do objeto corresponde a "nome do app"
+  function detectAppField(item) {
+    const candidates = [
+      'Aplicativos','Aplicativo','App','AppName','Application','Nome',
+      'NomeApp','Nome do Aplicativo','Aplicacao','Aplicação','Programa',
+      'Software','aplicativo','aplicativos','app','nome','appName',
+    ];
+    for (const k of candidates) {
+      if (item[k] !== undefined && item[k] !== '') return item[k];
+    }
+    // fallback: primeira string não-numérica do objeto
+    for (const v of Object.values(item)) {
+      if (typeof v === 'string' && v.length > 1 && isNaN(v)) return v;
+    }
+    return '';
+  }
+
+  // ── Payload Builder ──────────────────────────────────────────────────────
   function buildPayload(type, data) {
     const base = Object.assign({}, PLATFORM_CONTEXT, {
       PaginaOrigem: '',
@@ -512,14 +562,16 @@
     if (type === 'funcoes') {
       base.PaginaOrigem = 'Mapa';
       base.data.Nodes = data.map(r => ({
-        Aplicativo: r.Aplicativos || r.Aplicativo || '',
-        Horas:      r.Horas || '0:00',
-        Teclado:    toInt(r.Teclado),
-        Mouse:      toInt(r.Mouse),
-        Interacoes: toInt(r.Interacoes || r['Interaçoes'] || r['Interações']),
-        Colaboradores: Math.max(1, toInt(r.Colaboradores)),
-        Copiar: toInt(r.Copiar),
-        Colar:  toInt(r.Colar),
+        Aplicativo: detectAppField(r),
+        Horas: normalizeHoras(
+          get(r, 'Horas','HorasAtivas','Horas Ativas','TotalHoras','Hours','horas','totalHours')
+        ),
+        Teclado:    toInt(get(r,'Teclado','Keyboard','teclado','KeyStrokes','keystrokes') || 0),
+        Mouse:      toInt(get(r,'Mouse','MouseClicks','mouse','clicks') || 0),
+        Interacoes: toInt(get(r,'Interacoes','Interações','Interaçoes','Interactions','interactions') || 0),
+        Colaboradores: Math.max(1, toInt(get(r,'Colaboradores','Collaborators','Users','colaboradores','users','maxColaboradores','Colaboradores(MAX)') || 1)),
+        Copiar: toInt(get(r,'Copiar','Copy','copiar','copy','ctrl_c') || 0),
+        Colar:  toInt(get(r,'Colar','Paste','colar','paste','ctrl_v') || 0),
       }));
       base.data.Edges = [];
     }
@@ -527,9 +579,9 @@
       base.PaginaOrigem = 'Mapa';
       base.data.Nodes = [];
       base.data.Edges = data.map(r => ({
-        Origem:    r.Origem    || '',
-        Destino:   r.Destino   || '',
-        Quantidade: toInt(r.Quantidade),
+        Origem:     get(r,'Origem','From','Source','origem','from','source') || '',
+        Destino:    get(r,'Destino','To','Target','destino','to','target') || '',
+        Quantidade: toInt(get(r,'Quantidade','Count','Contagem','quantidade','count') || 0),
       }));
     }
     else if (type === 'grupos_detalhes') {
@@ -547,13 +599,13 @@
     else if (type === 'burnout') {
       base.PaginaOrigem = 'Burnout';
       const emps = data.map(r => ({
-        Colaborador:   r.Colaborador || '',
-        Grupo:         r.Grupo || r['Colaborador alocado no Grupo'] || '',
-        Aproveitamento: parseFloat(String(r.Aproveitamento||0).replace('%','').replace(',','.')) || 0,
-        Entretenimento: parseFloat(String(r.Entretenimento||0).replace('%','').replace(',','.')) || 0,
-        TotalHoras:    parseFloat(String(r.TotalHoras||0).replace(',','.')) || 0,
-        HorasPrevistas:parseFloat(String(r.HorasPrevistas||160).replace(',','.')) || 160,
-        DiasPropensaoBurnout: 0,
+        Colaborador:    get(r,'Colaborador','Employee','Name','nome','name') || '',
+        Grupo:          get(r,'Grupo','Group','Colaborador alocado no Grupo','grupo') || '',
+        Aproveitamento: toFloat(get(r,'Aproveitamento','Performance','aproveitamento') || 0),
+        Entretenimento: toFloat(get(r,'Entretenimento','Entertainment','entretenimento') || 0),
+        TotalHoras:     toFloat(get(r,'TotalHoras','Total Horas','HorasAtivas','Horas Ativas','totalHoras') || 0),
+        HorasPrevistas: toFloat(get(r,'HorasPrevistas','Horas Previstas','ExpectedHours','horasPrevistas') || 160),
+        DiasPropensaoBurnout: toInt(get(r,'DiasPropensaoBurnout','DiasBurnout') || 0),
       }));
       const burnList = emps.filter(e => e.Aproveitamento >= 100 && e.Entretenimento < 7);
       base.data.EmployeeList     = emps;
@@ -606,18 +658,30 @@
       }
 
       const type = detectJsonType(arr);
+      const sample = arr[0] || {};
+      const detectedKeys = Object.keys(sample).slice(0, 8).join(', ');
+      console.log('[EVOPE] Tipo detectado:', type || 'null (fallback funcoes)');
+      console.log('[EVOPE] Campos encontrados no JSON:', Object.keys(sample).join(', '));
+      console.log('[EVOPE] Primeira linha:', JSON.stringify(sample).slice(0, 300));
+
       if (!type) {
-        // Aceitar mesmo sem tipo detectado — tenta enviar como Mapa genérico
-        console.warn('Tipo não detectado, usando fallback mapa');
+        // Fallback: tentar como Mapa de Funções com campo de app auto-detectado
+        const appField = detectAppField(sample);
+        const fallbackLabel = appField
+          ? `Mapa (campo app: "${Object.keys(sample).find(k => sample[k] === appField)}")`
+          : 'Mapa (campos: ' + detectedKeys + ')';
+        console.warn('[EVOPE] Formato não reconhecido. Usando fallback funcoes. Campos:', detectedKeys);
+
         selectedFile = file;
         parsedData   = arr;
-        detectedType = 'funcoes'; // fallback
+        detectedType = 'funcoes';
         document.getElementById('fileName').textContent = file.name;
         document.getElementById('fileSize').textContent = fmtBytes(file.size);
         document.getElementById('fileChip').classList.add('show');
-        document.getElementById('fileTypeTag').textContent = 'Mapa (auto)';
+        document.getElementById('fileTypeTag').textContent = fallbackLabel;
         document.getElementById('fileTypeTag').classList.add('show');
         document.getElementById('btnAnalyze').disabled = false;
+        showToast(`⚠️ Formato não reconhecido — tentando como Mapa. Campos: ${detectedKeys}`, 8000);
         return;
       }
 
