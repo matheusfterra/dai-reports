@@ -553,6 +553,12 @@
 
   // ── Payload Builder ──────────────────────────────────────────────────────
   function buildPayload(type, data) {
+    // Caso especial: payload EVOPE completo (n8n pinData ou payload direto)
+    if (type === 'n8n_pindata') {
+      // data JÁ é o body completo — só garantir IDSessao
+      return Object.assign({}, data, { IDSessao: SESSION_ID });
+    }
+
     const base = Object.assign({}, PLATFORM_CONTEXT, {
       PaginaOrigem: '',
       IDSessao: SESSION_ID,
@@ -631,24 +637,73 @@
       try { parsed = JSON.parse(raw); }
       catch { showToast('JSON inválido — verifique o arquivo'); return; }
 
-      // Extrair array de qualquer formato (array direto, objeto wrapper, etc.)
+      // ── CASO 1: Export do n8n com pinData (formato EVOPE Platform) ────────
+      // Formato: {name, nodes, pinData: {Webhook: [{json: {body: <payload>}}]}}
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed) &&
+          parsed.pinData && parsed.nodes) {
+        const webhookPin = parsed.pinData.Webhook || parsed.pinData.webhook || [];
+        const body = webhookPin[0]?.json?.body || {};
+        if (body && body.PaginaOrigem && body.data) {
+          // Payload completo da plataforma EVOPE — enviar direto!
+          const pagina = body.PaginaOrigem || 'Mapa';
+          const grupo  = body.Grupo || '';
+          const nodes  = (body.data.Nodes || []).length;
+          const emps   = (body.data.EmployeeList || []).length;
+          const count  = nodes || emps;
+
+          selectedFile = file;
+          parsedData   = body;      // guardar o payload completo
+          detectedType = 'n8n_pindata'; // tipo especial — enviar direto
+
+          document.getElementById('fileName').textContent = file.name;
+          document.getElementById('fileSize').textContent = fmtBytes(file.size);
+          document.getElementById('fileChip').classList.add('show');
+          document.getElementById('fileTypeTag').textContent =
+            `${pagina} · ${grupo} (${count} itens)`;
+          document.getElementById('fileTypeTag').classList.add('show');
+          document.getElementById('btnAnalyze').disabled = false;
+          console.log('[EVOPE] n8n pinData detectado. Payload pronto:', pagina, grupo);
+          return;
+        }
+      }
+
+      // ── CASO 2: Payload EVOPE direto (objeto com PaginaOrigem + data) ─────
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed) &&
+          parsed.PaginaOrigem && parsed.data) {
+        const pagina = parsed.PaginaOrigem || 'Mapa';
+        const grupo  = parsed.Grupo || '';
+        const nodes  = (parsed.data.Nodes || []).length;
+        const emps   = (parsed.data.EmployeeList || []).length;
+
+        selectedFile = file;
+        parsedData   = parsed;
+        detectedType = 'n8n_pindata'; // enviar direto também
+
+        document.getElementById('fileName').textContent = file.name;
+        document.getElementById('fileSize').textContent = fmtBytes(file.size);
+        document.getElementById('fileChip').classList.add('show');
+        document.getElementById('fileTypeTag').textContent =
+          `${pagina} · ${grupo} (${nodes || emps} itens)`;
+        document.getElementById('fileTypeTag').classList.add('show');
+        document.getElementById('btnAnalyze').disabled = false;
+        return;
+      }
+
+      // ── CASO 3: Array de dados brutos ─────────────────────────────────────
       let arr = null;
       if (Array.isArray(parsed)) {
         arr = parsed;
       } else if (parsed && typeof parsed === 'object') {
-        // Tentar chaves comuns de wrapper
-        const wrapperKeys = ['data','items','rows','records','list','nodes','edges',
+        const wrapperKeys = ['data','items','rows','records','list',
                              'Nodes','Edges','result','results','content'];
         for (const k of wrapperKeys) {
           if (Array.isArray(parsed[k]) && parsed[k].length > 0) { arr = parsed[k]; break; }
         }
-        // Fallback: primeira propriedade que seja array
         if (!arr) {
           for (const v of Object.values(parsed)) {
             if (Array.isArray(v) && v.length > 0) { arr = v; break; }
           }
         }
-        // Fallback final: tratar o objeto como item único
         if (!arr) arr = [parsed];
       }
 
@@ -660,28 +715,20 @@
       const type = detectJsonType(arr);
       const sample = arr[0] || {};
       const detectedKeys = Object.keys(sample).slice(0, 8).join(', ');
-      console.log('[EVOPE] Tipo detectado:', type || 'null (fallback funcoes)');
-      console.log('[EVOPE] Campos encontrados no JSON:', Object.keys(sample).join(', '));
-      console.log('[EVOPE] Primeira linha:', JSON.stringify(sample).slice(0, 300));
+      console.log('[EVOPE] Tipo detectado:', type || 'null', '| Campos:', Object.keys(sample).join(', '));
 
       if (!type) {
-        // Fallback: tentar como Mapa de Funções com campo de app auto-detectado
-        const appField = detectAppField(sample);
-        const fallbackLabel = appField
-          ? `Mapa (campo app: "${Object.keys(sample).find(k => sample[k] === appField)}")`
-          : 'Mapa (campos: ' + detectedKeys + ')';
-        console.warn('[EVOPE] Formato não reconhecido. Usando fallback funcoes. Campos:', detectedKeys);
-
+        console.warn('[EVOPE] Formato não reconhecido. Campos:', detectedKeys);
         selectedFile = file;
         parsedData   = arr;
         detectedType = 'funcoes';
         document.getElementById('fileName').textContent = file.name;
         document.getElementById('fileSize').textContent = fmtBytes(file.size);
         document.getElementById('fileChip').classList.add('show');
-        document.getElementById('fileTypeTag').textContent = fallbackLabel;
+        document.getElementById('fileTypeTag').textContent = 'Mapa (auto)';
         document.getElementById('fileTypeTag').classList.add('show');
         document.getElementById('btnAnalyze').disabled = false;
-        showToast(`⚠️ Formato não reconhecido — tentando como Mapa. Campos: ${detectedKeys}`, 8000);
+        showToast(`Campos detectados: ${detectedKeys}`, 6000);
         return;
       }
 
