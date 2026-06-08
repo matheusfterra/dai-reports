@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EVOPE AI Agent — Documentação de Integração</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --y: #DCF84C; --yd: #c8e43a;
+      --bk: #0a0a0a; --g1: #111; --g2: #1a1a1a; --g3: #222; --g4: #2e2e2e;
+      --tx: #e8e8e8; --tm: #888; --td: #555;
+      --bd: #2a2a2a; --bdy: rgba(220,248,76,.15);
+      --green: #4ade80; --red: #f87171; --blue: #60a5fa; --orange: #fb923c;
+      --font: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      --mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+      --r: 10px; --rs: 6px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bk); color: var(--tx); line-height: 1.6; }
+
+    /* ── Layout ── */
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 260px; flex-shrink: 0;
+      background: var(--g1);
+      border-right: 1px solid var(--bd);
+      position: sticky; top: 0; height: 100vh;
+      overflow-y: auto; padding: 24px 0;
+    }
+    .sidebar::-webkit-scrollbar { width: 3px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--bd); }
+
+    .content { flex: 1; max-width: 900px; padding: 48px 56px; }
+
+    /* ── Sidebar ── */
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      padding: 0 20px 20px;
+      border-bottom: 1px solid var(--bd);
+      margin-bottom: 12px;
+    }
+    .logo-badge {
+      width: 28px; height: 28px; background: var(--y);
+      border-radius: 6px; display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 900; color: var(--bk);
+    }
+    .logo-text { font-size: 13px; font-weight: 700; }
+    .logo-sub { font-size: 11px; color: var(--tm); }
+
+    .nav-group { padding: 6px 20px 2px; }
+    .nav-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--td);
+      margin-bottom: 4px; margin-top: 8px;
+    }
+    .nav-link {
+      display: block; padding: 5px 8px;
+      font-size: 13px; color: var(--tm);
+      text-decoration: none; border-radius: var(--rs);
+      transition: color .15s, background .15s;
+    }
+    .nav-link:hover { color: var(--tx); background: var(--g3); }
+    .nav-link.active { color: var(--y); background: rgba(220,248,76,.07); }
+
+    /* ── Content ── */
+    .badge-get  { background: rgba(96,165,250,.15); color: var(--blue); }
+    .badge-post { background: rgba(74,222,128,.15); color: var(--green); }
+    .badge-del  { background: rgba(248,113,113,.15); color: var(--red); }
+
+    .method-badge {
+      display: inline-block; font-size: 11px; font-weight: 800;
+      padding: 2px 8px; border-radius: 4px;
+      font-family: var(--mono); letter-spacing: .5px;
+    }
+
+    h1 { font-size: 32px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 8px; }
+    h2 { font-size: 22px; font-weight: 700; margin: 48px 0 16px; padding-bottom: 10px;
+         border-bottom: 1px solid var(--bd); }
+    h3 { font-size: 15px; font-weight: 700; margin: 28px 0 10px; color: var(--tx); }
+    h4 { font-size: 13px; font-weight: 600; margin: 16px 0 6px; color: var(--tm); }
+    p  { font-size: 14px; color: var(--tm); margin-bottom: 12px; line-height: 1.7; }
+    p strong { color: var(--tx); }
+
+    .lead { font-size: 16px; color: #aaa; margin-bottom: 32px; line-height: 1.7; }
+
+    /* ── Endpoint box ── */
+    .endpoint-box {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--g2); border: 1px solid var(--bd);
+      border-radius: var(--r); padding: 14px 18px;
+      margin: 16px 0;
+    }
+    .endpoint-url {
+      font-family: var(--mono); font-size: 14px; color: var(--tx); flex: 1;
+    }
+    .copy-btn {
+      background: var(--g4); border: none; color: var(--tm);
+      padding: 4px 10px; border-radius: var(--rs); font-size: 12px;
+      cursor: pointer; white-space: nowrap; transition: all .15s;
+    }
+    .copy-btn:hover { background: var(--y); color: var(--bk); }
+
+    /* ── Code block ── */
+    .code-wrap { position: relative; margin: 12px 0 20px; }
+    .code-header {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--g3); border: 1px solid var(--bd);
+      border-bottom: none; border-radius: var(--r) var(--r) 0 0;
+      padding: 8px 14px;
+    }
+    .code-lang { font-size: 11px; color: var(--td); font-family: var(--mono); }
+    .code-copy { background: none; border: none; color: var(--td); font-size: 11px; cursor: pointer; }
+    .code-copy:hover { color: var(--y); }
+    pre {
+      background: var(--g2); border: 1px solid var(--bd);
+      border-radius: 0 0 var(--r) var(--r);
+      padding: 16px 18px; overflow-x: auto;
+      font-family: var(--mono); font-size: 13px; line-height: 1.6;
+    }
+    pre .c  { color: #6b7280; }
+    pre .k  { color: #c792ea; }
+    pre .s  { color: var(--green); }
+    pre .n  { color: var(--y); }
+    pre .v  { color: var(--blue); }
+    pre .p  { color: var(--orange); }
+    pre .b  { color: var(--red); }
+
+    /* ── Table ── */
+    table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0 20px; }
+    th { text-align: left; padding: 8px 12px; background: var(--g3); color: var(--tm);
+         font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+         border-bottom: 1px solid var(--bd); }
+    td { padding: 9px 12px; border-bottom: 1px solid var(--bd); color: var(--tx); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    td code { font-family: var(--mono); font-size: 12px; color: var(--y); background: rgba(220,248,76,.06); padding: 2px 6px; border-radius: 4px; }
+    td .req { color: var(--red); font-size: 11px; font-weight: 700; }
+    td .opt { color: var(--td); font-size: 11px; }
+    td .type { color: var(--blue); font-family: var(--mono); font-size: 12px; }
+
+    /* ── Callout ── */
+    .callout {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 14px 16px; border-radius: var(--r);
+      margin: 16px 0; font-size: 13px; line-height: 1.6;
+    }
+    .callout-info    { background: rgba(96,165,250,.08); border: 1px solid rgba(96,165,250,.2); }
+    .callout-warn    { background: rgba(251,146,60,.08); border: 1px solid rgba(251,146,60,.2); }
+    .callout-success { background: rgba(74,222,128,.08); border: 1px solid rgba(74,222,128,.2); }
+    .callout-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .callout-info    .callout-icon { color: var(--blue); }
+    .callout-warn    .callout-icon { color: var(--orange); }
+    .callout-success .callout-icon { color: var(--green); }
+    .callout p { margin: 0; color: inherit; }
+    .callout strong { color: var(--tx); }
+
+    /* ── Flow diagram ── */
+    .flow {
+      display: flex; align-items: center; gap: 0;
+      margin: 20px 0; flex-wrap: wrap; gap: 4px;
+    }
+    .flow-step {
+      background: var(--g3); border: 1px solid var(--bd);
+      border-radius: var(--rs); padding: 8px 14px;
+      font-size: 12px; font-weight: 600; white-space: nowrap;
+    }
+    .flow-step.yellow { background: rgba(220,248,76,.1); border-color: rgba(220,248,76,.3); color: var(--y); }
+    .flow-arrow { color: var(--td); font-size: 16px; padding: 0 4px; }
+
+    /* ── Response status ── */
+    .status-row { display: flex; gap: 10px; margin: 6px 0; align-items: center; }
+    .status-code { font-family: var(--mono); font-size: 13px; font-weight: 700; min-width: 36px; }
+    .status-200 { color: var(--green); }
+    .status-4xx { color: var(--orange); }
+    .status-5xx { color: var(--red); }
+    .status-desc { font-size: 13px; color: var(--tm); }
+
+    /* ── Section anchor ── */
+    section { padding-top: 12px; }
+    .anchor { color: var(--td); text-decoration: none; margin-left: 8px; font-size: 14px; opacity: 0; }
+    h2:hover .anchor, h3:hover .anchor { opacity: 1; }
+
+    /* ── Quick start card ── */
+    .qs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+    .qs-card {
+      background: var(--g2); border: 1px solid var(--bd); border-radius: var(--r);
+      padding: 18px 20px;
+    }
+    .qs-num { font-size: 11px; font-weight: 800; color: var(--y); letter-spacing: 1px; margin-bottom: 6px; }
+    .qs-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .qs-desc { font-size: 12px; color: var(--tm); }
+
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .content { padding: 32px 24px; }
+      .qs-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <a href="index.html" style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--td);text-decoration:none;padding:0 20px 14px;transition:color .15s;" onmouseover="this.style.color='var(--tx)'" onmouseout="this.style.color='var(--td)'">
+      ← Voltar ao painel
+    </a>
+    <div class="logo">
+      <div class="logo-badge">E</div>
+      <div>
+        <div class="logo-text">EVOPE AI Agent</div>
+        <div class="logo-sub">Docs de Integração</div>
+      </div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Introdução</div>
+      <a href="#overview"    class="nav-link active">Visão Geral</a>
+      <a href="#quickstart"  class="nav-link">Quick Start</a>
+      <a href="#architecture"class="nav-link">Arquitetura</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Endpoint</div>
+      <a href="#endpoint"    class="nav-link">URL e Autenticação</a>
+      <a href="#session"     class="nav-link">Sessão (IDSessao)</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Requisições</div>
+      <a href="#req-analysis" class="nav-link">Análise (1ª mensagem)</a>
+      <a href="#req-chat"     class="nav-link">Chat (follow-up)</a>
+      <a href="#response"     class="nav-link">Resposta</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Payloads</div>
+      <a href="#payload-mapa"    class="nav-link">Mapa de Processos</a>
+      <a href="#payload-burnout" class="nav-link">Burnout</a>
+      <a href="#payload-grupos"  class="nav-link">Grupos</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Integração Front</div>
+      <a href="#button"      class="nav-link">Botão / Widget</a>
+      <a href="#iframe"      class="nav-link">Embed (iframe)</a>
+      <a href="#api-direct"  class="nav-link">API Direta</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Referência</div>
+      <a href="#errors"      class="nav-link">Erros</a>
+      <a href="#examples"    class="nav-link">Exemplos Completos</a>
+    </div>
+  </aside>
+
+  <!-- Content -->
+  <main class="content">
+
+    <!-- ── OVERVIEW ── -->
+    <section id="overview">
+      <h1>EVOPE AI Agent</h1>
+      <p class="lead">
+        Documentação completa de integração do Agente de Insights EVOPE.<br>
+        Integre análise de dados com IA diretamente no front-end da plataforma.
+      </p>
+
+      <div class="callout callout-success">
+        <div class="callout-icon">✦</div>
+        <p><strong>Endpoint de Produção:</strong><br>
+        <code style="font-family:var(--mono);color:var(--y)">https://webhook.digital-ai.tech/webhook/evope/chat</code></p>
+      </div>
+
+      <h3>O que é</h3>
+      <p>
+        O agente recebe os dados já renderizados em tela (JSON do nightly job: Mapa de Processos, Burnout, Grupos),
+        processa com IA, armazena a sessão e retorna um <strong>diagnóstico inicial provocativo</strong>.
+        A partir daí, o usuário pode fazer perguntas livres sobre os dados analisados.
+      </p>
+
+      <h3>Casos de uso</h3>
+      <table>
+        <tr><th>Página</th><th>Tipo de análise</th><th>Dados enviados</th></tr>
+        <tr><td>Mapa de Processos</td><td>Eficiência operacional, automação</td><td>Nodes (apps + horas) + Edges (caminhos)</td></tr>
+        <tr><td>Relatório de Burnout</td><td>Risco de burnout por colaborador</td><td>EmployeeList + BurnoutEmployeeList</td></tr>
+        <tr><td>Grupos</td><td>Aproveitamento e entretenimento por grupo</td><td>GruposDetalhes + Colaboradores</td></tr>
+      </table>
+    </section>
+
+    <!-- ── QUICK START ── -->
+    <section id="quickstart">
+      <h2>Quick Start <a class="anchor" href="#quickstart">#</a></h2>
+      <p>Integração básica em 4 passos:</p>
+
+      <div class="qs-grid">
+        <div class="qs-card">
+          <div class="qs-num">PASSO 01</div>
+          <div class="qs-title">Gerar IDSessao</div>
+          <div class="qs-desc">UUID único por sessão de usuário. Recomendado: <code>UsuarioID-EmpresaID-GrupoID</code></div>
+        </div>
+        <div class="qs-card">
+          <div class="qs-num">PASSO 02</div>
+          <div class="qs-title">Montar o payload</div>
+          <div class="qs-desc">Incluir dados já em memória (JSON da tela atual) + metadados do usuário/grupo</div>
+        </div>
+        <div class="qs-card">
+          <div class="qs-num">PASSO 03</div>
+          <div class="qs-title">POST para o webhook</div>
+          <div class="qs-desc">Content-Type: application/json. Aguardar resposta (20–40s na 1ª mensagem)</div>
+        </div>
+        <div class="qs-card">
+          <div class="qs-num">PASSO 04</div>
+          <div class="qs-title">Exibir diagnóstico + abrir chat</div>
+          <div class="qs-desc">Resposta vem em <code>output</code>. Usar mesmo IDSessao para follow-ups</div>
+        </div>
+      </div>
+
+      <div class="code-wrap">
+        <div class="code-header">
+          <span class="code-lang">javascript — exemplo mínimo</span>
+          <button class="code-copy" onclick="copyCode(this)">copiar</button>
+        </div>
+        <pre><span class="c">// 1. Gerar sessão única por usuário/tela</span>
+<span class="k">const</span> sessionId = <span class="s">`<span class="v">${usuarioId}</span>-<span class="v">${empresaId}</span>-<span class="v">${grupoId}</span>`</span>;
+
+<span class="c">// 2. Montar payload com dados da tela</span>
+<span class="k">const</span> payload = {
+  UsuarioNome: <span class="n">currentUser.nome</span>,
+  UsuarioEmail: <span class="n">currentUser.email</span>,
+  UsuarioID: <span class="n">currentUser.id</span>,
+  EmpresaID: <span class="n">currentCompany.id</span>,
+  GrupoID: <span class="n">currentGroup.id</span>,
+  Grupo: <span class="n">currentGroup.nome</span>,
+  DataInicio: <span class="s">"01/05/2026"</span>,
+  DataFim: <span class="s">"31/05/2026"</span>,
+  IDSessao: sessionId,
+  PaginaOrigem: <span class="s">"Mapa"</span>,
+  data: {
+    Nodes: <span class="n">mapaFuncoesJson</span>,   <span class="c">// array já em memória</span>
+    Edges: <span class="n">mapaCaminhosJson</span>    <span class="c">// array já em memória</span>
+  }
+};
+
+<span class="c">// 3. Chamar o webhook</span>
+<span class="k">const</span> res = <span class="k">await</span> fetch(<span class="s">"https://webhook.digital-ai.tech/webhook/evope/chat"</span>, {
+  method: <span class="s">"POST"</span>,
+  headers: { <span class="s">"Content-Type"</span>: <span class="s">"application/json"</span> },
+  body: JSON.stringify(payload)
+});
+
+<span class="k">const</span> { output } = <span class="k">await</span> res.json();
+<span class="c">// 4. "output" = diagnóstico inicial da IA</span>
+showChatMessage(output);</pre>
+      </div>
+    </section>
+
+    <!-- ── ARCHITECTURE ── -->
+    <section id="architecture">
+      <h2>Arquitetura <a class="anchor" href="#architecture">#</a></h2>
+      <div class="flow">
+        <div class="flow-step yellow">Front-end EVOPE</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">POST /webhook/evope/chat</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">n8n (orquestrador)</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">GPT-4.1-mini (análise)</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">GPT-4o-nano (chat)</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step yellow">Resposta JSON</div>
+      </div>
+      <div class="flow" style="margin-top:4px">
+        <div class="flow-step" style="opacity:.5"></div>
+        <div class="flow-arrow" style="opacity:0">→</div>
+        <div class="flow-step" style="opacity:.5"></div>
+        <div class="flow-arrow">↕</div>
+        <div class="flow-step">PostgreSQL (memória)</div>
+      </div>
+
+      <p style="margin-top:16px">
+        Na <strong>1ª mensagem</strong> (envio de dados), o n8n processa, analisa com IA e armazena a sessão.
+        Nas <strong>mensagens seguintes</strong> (texto livre), recupera o histórico automaticamente via PostgreSQL.
+      </p>
+
+      <h3>Tempo de resposta estimado</h3>
+      <table>
+        <tr><th>Tipo de requisição</th><th>Tempo típico</th></tr>
+        <tr><td>1ª mensagem — análise de dados (Mapa/Burnout)</td><td>20 – 45 segundos</td></tr>
+        <tr><td>Follow-up — pergunta de texto</td><td>5 – 15 segundos</td></tr>
+      </table>
+    </section>
+
+    <!-- ── ENDPOINT ── -->
+    <section id="endpoint">
+      <h2>Endpoint <a class="anchor" href="#endpoint">#</a></h2>
+
+      <div class="endpoint-box">
+        <span class="method-badge badge-post">POST</span>
+        <span class="endpoint-url">https://webhook.digital-ai.tech/webhook/evope/chat</span>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText('https://webhook.digital-ai.tech/webhook/evope/chat')">copiar</button>
+      </div>
+
+      <h3>Headers obrigatórios</h3>
+      <table>
+        <tr><th>Header</th><th>Valor</th><th></th></tr>
+        <tr><td><code>Content-Type</code></td><td><code>application/json</code></td><td><span class="req">obrigatório</span></td></tr>
+      </table>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">ℹ</div>
+        <p>O endpoint <strong>não requer autenticação</strong> por header — a sessão é controlada pelo <code>IDSessao</code> no body. Em produção, o acesso é restrito por IP/origin do servidor EVOPE.</p>
+      </div>
+    </section>
+
+    <!-- ── SESSION ── -->
+    <section id="session">
+      <h2>Sessão — IDSessao <a class="anchor" href="#session">#</a></h2>
+      <p>
+        O <code>IDSessao</code> é o identificador da conversa. Deve ser único por <strong>usuário + relatório</strong>.
+        Toda mensagem (análise inicial + follow-ups) deve usar o <strong>mesmo IDSessao</strong> para manter o contexto.
+      </p>
+
+      <h3>Formato recomendado</h3>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">javascript</span><button class="code-copy" onclick="copyCode(this)">copiar</button></div>
+        <pre><span class="c">// Padrão recomendado: UsuarioID-EmpresaID-GrupoID</span>
+<span class="k">const</span> sessionId = <span class="s">`<span class="v">${usuarioId}</span>-<span class="v">${empresaId}</span>-<span class="v">${grupoId}</span>`</span>;
+<span class="c">// Exemplo: "711-80-22889"</span>
+
+<span class="c">// Alternativa: UUID aleatório por sessão de navegação</span>
+<span class="k">const</span> sessionId = crypto.randomUUID(); <span class="c">// "sess_3ae8d061-7f0d-..."</span></pre>
+      </div>
+
+      <div class="callout callout-warn">
+        <div class="callout-icon">⚠</div>
+        <p><strong>Importante:</strong> Use o mesmo IDSessao em TODAS as mensagens da conversa. Se mudar o IDSessao, o agente perde o contexto e responde como se fosse uma nova sessão.</p>
+      </div>
+
+      <h3>Ciclo de vida da sessão</h3>
+      <table>
+        <tr><th>Evento</th><th>Ação no IDSessao</th></tr>
+        <tr><td>Usuário abre o chat pela 1ª vez</td><td>Gerar novo IDSessao</td></tr>
+        <tr><td>Usuário envia dados + perguntas</td><td>Manter o mesmo IDSessao</td></tr>
+        <tr><td>Usuário clica em "Nova análise" / "Recomeçar"</td><td>Gerar novo IDSessao</td></tr>
+        <tr><td>Usuário muda de relatório (Mapa → Burnout)</td><td>Gerar novo IDSessao ou manter (contexto diferente)</td></tr>
+      </table>
+    </section>
+
+    <!-- ── REQUEST: ANALYSIS ── -->
+    <section id="req-analysis">
+      <h2>Requisição de Análise (1ª mensagem) <a class="anchor" href="#req-analysis">#</a></h2>
+      <p>
+        Enviada quando o usuário abre o chat e envia os dados da tela atual.
+        O agente analisa os dados, gera o diagnóstico inicial e armazena a sessão.
+      </p>
+
+      <h3>Campos do payload (raiz)</h3>
+      <table>
+        <tr><th>Campo</th><th>Tipo</th><th>Descrição</th><th></th></tr>
+        <tr><td><code>PaginaOrigem</code></td><td><span class="type">string</span></td><td>"Mapa", "Burnout" ou "Grupos"</td><td><span class="req">obrigatório</span></td></tr>
+        <tr><td><code>IDSessao</code></td><td><span class="type">string</span></td><td>Identificador único da sessão</td><td><span class="req">obrigatório</span></td></tr>
+        <tr><td><code>EmpresaID</code></td><td><span class="type">number</span></td><td>ID da empresa no sistema EVOPE</td><td><span class="req">obrigatório</span></td></tr>
+        <tr><td><code>GrupoID</code></td><td><span class="type">string</span></td><td>ID do grupo/filtro selecionado</td><td><span class="req">obrigatório</span></td></tr>
+        <tr><td><code>Grupo</code></td><td><span class="type">string</span></td><td>Nome do grupo (ex: "Master &gt; TI")</td><td><span class="req">obrigatório</span></td></tr>
+        <tr><td><code>DataInicio</code></td><td><span class="type">string</span></td><td>Período início no formato "DD/MM/YYYY"</td><td><span class="req">obrigatório</span></td></tr>
+        <tr><td><code>DataFim</code></td><td><span class="type">string</span></td><td>Período fim no formato "DD/MM/YYYY"</td><td><span class="req">obrigatório</span></td></tr>
+        <tr><td><code>UsuarioID</code></td><td><span class="type">number</span></td><td>ID do usuário autenticado</td><td><span class="opt">opcional</span></td></tr>
+        <tr><td><code>UsuarioNome</code></td><td><span class="type">string</span></td><td>Nome do usuário</td><td><span class="opt">opcional</span></td></tr>
+        <tr><td><code>UsuarioEmail</code></td><td><span class="type">string</span></td><td>E-mail do usuário</td><td><span class="opt">opcional</span></td></tr>
+        <tr><td><code>data</code></td><td><span class="type">object</span></td><td>Dados da análise (ver seções abaixo)</td><td><span class="req">obrigatório</span></td></tr>
+      </table>
+    </section>
+
+    <!-- ── REQUEST: CHAT ── -->
+    <section id="req-chat">
+      <h2>Requisição de Chat (follow-up) <a class="anchor" href="#req-chat">#</a></h2>
+      <p>
+        Enviada nas mensagens seguintes, quando o usuário faz perguntas livres.
+        O agente recupera o histórico da sessão automaticamente.
+      </p>
+
+      <h3>Campos</h3>
+      <table>
+        <tr><th>Campo</th><th>Tipo</th><th>Descrição</th><th></th></tr>
+        <tr><td><code>chatInput</code></td><td><span class="type">string</span></td><td>Texto da mensagem do usuário</td><td><span class="req">obrigatório</span></td></tr>
+        <tr><td><code>IDSessao</code></td><td><span class="type">string</span></td><td>Mesmo IDSessao da análise inicial</td><td><span class="req">obrigatório</span></td></tr>
+      </table>
+
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">javascript — follow-up</span><button class="code-copy" onclick="copyCode(this)">copiar</button></div>
+        <pre>fetch(<span class="s">"https://webhook.digital-ai.tech/webhook/evope/chat"</span>, {
+  method: <span class="s">"POST"</span>,
+  headers: { <span class="s">"Content-Type"</span>: <span class="s">"application/json"</span> },
+  body: JSON.stringify({
+    chatInput: <span class="s">"Qual é o app com maior risco de automação?"</span>,
+    IDSessao: sessionId  <span class="c">// mesmo IDSessao da análise inicial</span>
+  })
+});</pre>
+      </div>
+    </section>
+
+    <!-- ── RESPONSE ── -->
+    <section id="response">
+      <h2>Resposta <a class="anchor" href="#response">#</a></h2>
+      <h3>Formato</h3>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">json</span><button class="code-copy" onclick="copyCode(this)">copiar</button></div>
+        <pre>{
+  <span class="n">"output"</span>: <span class="s">"## DIAGNÓSTICO\n**Teams concentra 54% das 47.343h mapeadas**..."</span>
+}</pre>
+      </div>
+
+      <h3>Campos da resposta</h3>
+      <table>
+        <tr><th>Campo</th><th>Tipo</th><th>Descrição</th></tr>
+        <tr><td><code>output</code></td><td><span class="type">string</span></td><td>Texto da resposta da IA em Markdown. Renderizar com marked.js ou similar.</td></tr>
+      </table>
+
+      <h3>Status HTTP</h3>
+      <div class="status-row"><span class="status-code status-200">200</span><span class="status-desc">Resposta gerada com sucesso</span></div>
+      <div class="status-row"><span class="status-code status-4xx">400</span><span class="status-desc">Payload inválido ou dados ausentes</span></div>
+      <div class="status-row"><span class="status-code status-5xx">500</span><span class="status-desc">Erro interno no servidor</span></div>
+      <div class="status-row"><span class="status-code status-5xx">504</span><span class="status-desc">Timeout — análise levou mais de 90s</span></div>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">ℹ</div>
+        <p>O campo <code>output</code> contém Markdown com <strong>**negrito**</strong>, <em>*itálico*</em>, <code>##</code> cabeçalhos e listas. Renderize com uma biblioteca Markdown ou aplique CSS básico para exibição correta.</p>
+      </div>
+    </section>
+
+    <!-- ── PAYLOAD MAPA ── -->
+    <section id="payload-mapa">
+      <h2>Payload — Mapa de Processos <a class="anchor" href="#payload-mapa">#</a></h2>
+      <p>Usado na página <strong>Mapa de Processos</strong>. Os dados já estão em memória no front (carregados na renderização da tela).</p>
+
+      <h3>Estrutura do campo <code>data</code></h3>
+      <table>
+        <tr><th>Subcampo</th><th>Tipo</th><th>Descrição</th></tr>
+        <tr><td><code>data.Nodes</code></td><td><span class="type">array</span></td><td>Lista de aplicativos/funções mapeados (Funcoes.json)</td></tr>
+        <tr><td><code>data.Edges</code></td><td><span class="type">array</span></td><td>Lista de caminhos entre apps (Caminhos.json)</td></tr>
+      </table>
+
+      <h3>Campos de cada item em <code>Nodes</code></h3>
+      <table>
+        <tr><th>Campo</th><th>Tipo</th><th>Descrição</th></tr>
+        <tr><td><code>Aplicativo</code></td><td><span class="type">string</span></td><td>Categoria do app ("Web", "Teams", "Excel")</td></tr>
+        <tr><td><code>Funcionalidade</code></td><td><span class="type">string</span></td><td>Sub-app ou página específica ("Gmail", "meet.google.com")</td></tr>
+        <tr><td><code>Horas</code></td><td><span class="type">string</span></td><td>Horas no período em formato "HH:MM" (ex: "477:53")</td></tr>
+        <tr><td><code>Teclado</code></td><td><span class="type">number</span></td><td>Total de teclas digitadas</td></tr>
+        <tr><td><code>Mouse</code></td><td><span class="type">number</span></td><td>Total de cliques de mouse</td></tr>
+        <tr><td><code>Interacoes</code></td><td><span class="type">number</span></td><td>Total de interações</td></tr>
+        <tr><td><code>Colaboradores</code></td><td><span class="type">string</span></td><td>Nº de colaboradores que usam este app (string)</td></tr>
+        <tr><td><code>Copiar</code></td><td><span class="type">number</span></td><td>Total de operações Ctrl+C</td></tr>
+        <tr><td><code>Colar</code></td><td><span class="type">number</span></td><td>Total de operações Ctrl+V</td></tr>
+        <tr><td><code>Processo</code></td><td><span class="type">number</span></td><td>Indicador de processo (0 ou 1)</td></tr>
+      </table>
+
+      <h3>Campos de cada item em <code>Edges</code> (opcional)</h3>
+      <table>
+        <tr><th>Campo</th><th>Tipo</th><th>Descrição</th></tr>
+        <tr><td><code>Origem</code></td><td><span class="type">string</span></td><td>App de origem do caminho</td></tr>
+        <tr><td><code>Destino</code></td><td><span class="type">string</span></td><td>App de destino do caminho</td></tr>
+        <tr><td><code>Quantidade</code></td><td><span class="type">number</span></td><td>Número de vezes que o caminho foi percorrido</td></tr>
+      </table>
+
+      <h3>Payload completo — Mapa</h3>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">json</span><button class="code-copy" onclick="copyCode(this)">copiar</button></div>
+        <pre>{
+  <span class="n">"PaginaOrigem"</span>: <span class="s">"Mapa"</span>,
+  <span class="n">"UsuarioNome"</span>: <span class="s">"João Silva"</span>,
+  <span class="n">"UsuarioEmail"</span>: <span class="s">"joao@empresa.com.br"</span>,
+  <span class="n">"UsuarioID"</span>: <span class="v">711</span>,
+  <span class="n">"EmpresaID"</span>: <span class="v">80</span>,
+  <span class="n">"GrupoID"</span>: <span class="s">"22889"</span>,
+  <span class="n">"Grupo"</span>: <span class="s">"Master &gt; CSC &gt; HTR Latam"</span>,
+  <span class="n">"DataInicio"</span>: <span class="s">"01/05/2026"</span>,
+  <span class="n">"DataFim"</span>: <span class="s">"31/05/2026"</span>,
+  <span class="n">"IDSessao"</span>: <span class="s">"711-80-22889"</span>,
+  <span class="n">"data"</span>: {
+    <span class="n">"Nodes"</span>: [
+      {
+        <span class="n">"Aplicativo"</span>: <span class="s">"Web"</span>,
+        <span class="n">"Funcionalidade"</span>: <span class="s">"meet.google.com"</span>,
+        <span class="n">"Horas"</span>: <span class="s">"477:53"</span>,
+        <span class="n">"Teclado"</span>: <span class="v">88505</span>,
+        <span class="n">"Mouse"</span>: <span class="v">64657</span>,
+        <span class="n">"Interacoes"</span>: <span class="v">26899</span>,
+        <span class="n">"Colaboradores"</span>: <span class="s">"43"</span>,
+        <span class="n">"Copiar"</span>: <span class="v">766</span>,
+        <span class="n">"Colar"</span>: <span class="v">1143</span>,
+        <span class="n">"Processo"</span>: <span class="v">0</span>
+      }
+      <span class="c">// ... demais apps</span>
+    ],
+    <span class="n">"Edges"</span>: [
+      {
+        <span class="n">"Origem"</span>: <span class="s">"[Teams]-Chat"</span>,
+        <span class="n">"Destino"</span>: <span class="s">"[Web]-portal.evope.com.br"</span>,
+        <span class="n">"Quantidade"</span>: <span class="v">320</span>
+      }
+    ]
+  }
+}</pre>
+      </div>
+    </section>
+
+    <!-- ── PAYLOAD BURNOUT ── -->
+    <section id="payload-burnout">
+      <h2>Payload — Burnout <a class="anchor" href="#payload-burnout">#</a></h2>
+
+      <h3>Campos de cada item em <code>EmployeeList</code></h3>
+      <table>
+        <tr><th>Campo</th><th>Tipo</th><th>Descrição</th></tr>
+        <tr><td><code>Colaborador</code></td><td><span class="type">string</span></td><td>Nome do colaborador</td></tr>
+        <tr><td><code>Grupo</code></td><td><span class="type">string</span></td><td>Grupo ao qual pertence</td></tr>
+        <tr><td><code>Aproveitamento</code></td><td><span class="type">number</span></td><td>% de aproveitamento (pode ser &gt; 100)</td></tr>
+        <tr><td><code>Entretenimento</code></td><td><span class="type">number</span></td><td>% de uso de apps de entretenimento</td></tr>
+        <tr><td><code>TotalHoras</code></td><td><span class="type">number</span></td><td>Total de horas ativas no período</td></tr>
+        <tr><td><code>HorasPrevistas</code></td><td><span class="type">number</span></td><td>Horas previstas/esperadas no período</td></tr>
+        <tr><td><code>DiasPropensaoBurnout</code></td><td><span class="type">number</span></td><td>Dias com risco de burnout calculado</td></tr>
+      </table>
+
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">json — payload Burnout</span><button class="code-copy" onclick="copyCode(this)">copiar</button></div>
+        <pre>{
+  <span class="n">"PaginaOrigem"</span>: <span class="s">"Burnout"</span>,
+  <span class="n">"EmpresaID"</span>: <span class="v">80</span>,
+  <span class="n">"GrupoID"</span>: <span class="s">"22889"</span>,
+  <span class="n">"Grupo"</span>: <span class="s">"Master &gt; CSC &gt; Finanças"</span>,
+  <span class="n">"DataInicio"</span>: <span class="s">"01/05/2026"</span>,
+  <span class="n">"DataFim"</span>: <span class="s">"31/05/2026"</span>,
+  <span class="n">"IDSessao"</span>: <span class="s">"711-80-22889-burnout"</span>,
+  <span class="n">"data"</span>: {
+    <span class="n">"EmployeeList"</span>: [
+      {
+        <span class="n">"Colaborador"</span>: <span class="s">"Roberta Reis"</span>,
+        <span class="n">"Grupo"</span>: <span class="s">"Administrativo / Financeiro"</span>,
+        <span class="n">"Aproveitamento"</span>: <span class="v">111.0</span>,
+        <span class="n">"Entretenimento"</span>: <span class="v">1.0</span>,
+        <span class="n">"TotalHoras"</span>: <span class="v">179.0</span>,
+        <span class="n">"HorasPrevistas"</span>: <span class="v">160.0</span>,
+        <span class="n">"DiasPropensaoBurnout"</span>: <span class="v">2</span>
+      }
+      <span class="c">// ... demais colaboradores</span>
+    ],
+    <span class="n">"BurnoutEmployeeList"</span>: [
+      <span class="c">// subset de EmployeeList onde Aproveitamento >= 100 e Entretenimento &lt; 7</span>
+    ]
+  }
+}</pre>
+      </div>
+    </section>
+
+    <!-- ── PAYLOAD GRUPOS ── -->
+    <section id="payload-grupos">
+      <h2>Payload — Grupos <a class="anchor" href="#payload-grupos">#</a></h2>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">json — payload Grupos</span><button class="code-copy" onclick="copyCode(this)">copiar</button></div>
+        <pre>{
+  <span class="n">"PaginaOrigem"</span>: <span class="s">"Grupos"</span>,
+  <span class="n">"EmpresaID"</span>: <span class="v">80</span>,
+  <span class="n">"GrupoID"</span>: <span class="s">"22889"</span>,
+  <span class="n">"Grupo"</span>: <span class="s">"Master"</span>,
+  <span class="n">"DataInicio"</span>: <span class="s">"01/05/2026"</span>,
+  <span class="n">"DataFim"</span>: <span class="s">"31/05/2026"</span>,
+  <span class="n">"IDSessao"</span>: <span class="s">"711-80-22889-grupos"</span>,
+  <span class="n">"data"</span>: {
+    <span class="n">"GruposDetalhes"</span>: [
+      <span class="c">// Array de grupos com métricas agregadas</span>
+    ],
+    <span class="n">"ColaboradoresBurnout"</span>: [
+      <span class="c">// Colaboradores com Aproveitamento alto + Entretenimento baixo</span>
+    ],
+    <span class="n">"ColaboradoresEntretenimento"</span>: [
+      <span class="c">// Colaboradores com Entretenimento > 15%</span>
+    ]
+  }
+}</pre>
+      </div>
+    </section>
+
+    <!-- ── BUTTON INTEGRATION ── -->
+    <section id="button">
+      <h2>Integração — Botão / Widget <a class="anchor" href="#button">#</a></h2>
+      <p>O padrão mais comum: um botão "Pergunte ao Agente" na tela de relatório que abre o chat flutuante.</p>
+
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">javascript — integração completa</span><button class="code-copy" onclick="copyCode(this)">copiar</button></div>
+        <pre><span class="k">class</span> EvopeAIChat {
+  <span class="k">constructor</span>(config) {
+    <span class="k">this</span>.endpoint = <span class="s">"https://webhook.digital-ai.tech/webhook/evope/chat"</span>;
+    <span class="k">this</span>.sessionId = config.sessionId || <span class="s">`<span class="v">${config.usuarioId}</span>-<span class="v">${config.empresaId}</span>-<span class="v">${config.grupoId}</span>`</span>;
+    <span class="k">this</span>.analysisData = config.analysisData;
+    <span class="k">this</span>.onMessage = config.onMessage || console.log;
+    <span class="k">this</span>.onTyping = config.onTyping || (() => {});
+    <span class="k">this</span>.initialized = <span class="k">false</span>;
+  }
+
+  <span class="c">// Chamado quando usuário abre o chat pela 1ª vez</span>
+  <span class="k">async</span> initialize() {
+    <span class="k">if</span> (<span class="k">this</span>.initialized) <span class="k">return</span>;
+    <span class="k">this</span>.onTyping(<span class="k">true</span>);
+    <span class="k">const</span> res = <span class="k">await</span> <span class="k">this</span>._post(<span class="k">this</span>.analysisData);
+    <span class="k">this</span>.onTyping(<span class="k">false</span>);
+    <span class="k">this</span>.initialized = <span class="k">true</span>;
+    <span class="k">this</span>.onMessage({ role: <span class="s">"assistant"</span>, text: res.output });
+  }
+
+  <span class="c">// Chamado a cada mensagem do usuário</span>
+  <span class="k">async</span> send(userMessage) {
+    <span class="k">this</span>.onTyping(<span class="k">true</span>);
+    <span class="k">const</span> res = <span class="k">await</span> <span class="k">this</span>._post({
+      chatInput: userMessage,
+      IDSessao: <span class="k">this</span>.sessionId
+    });
+    <span class="k">this</span>.onTyping(<span class="k">false</span>);
+    <span class="k">this</span>.onMessage({ role: <span class="s">"assistant"</span>, text: res.output });
+  }
+
+  <span class="k">async</span> _post(payload) {
+    <span class="k">const</span> r = <span class="k">await</span> fetch(<span class="k">this</span>.endpoint, {
+      method: <span class="s">"POST"</span>,
+      headers: { <span class="s">"Content-Type"</span>: <span class="s">"application/json"</span> },
+      body: JSON.stringify(payload)
+    });
+    <span class="k">if</span> (!r.ok) <span class="k">throw new</span> Error(<span class="s">`HTTP <span class="v">${r.status}</span>`</span>);
+    <span class="k">return</span> r.json();
+  }
+}
+
+<span class="c">// ── USO ──────────────────────────────────────────────────</span>
+<span class="k">const</span> chat = <span class="k">new</span> EvopeAIChat({
+  usuarioId: currentUser.id,
+  empresaId: currentCompany.id,
+  grupoId: selectedGroup.id,
+  analysisData: {
+    PaginaOrigem: <span class="s">"Mapa"</span>,
+    UsuarioID: currentUser.id,
+    EmpresaID: currentCompany.id,
+    GrupoID: selectedGroup.id,
+    Grupo: selectedGroup.nome,
+    DataInicio: periodoInicio,   <span class="c">// "01/05/2026"</span>
+    DataFim: periodoFim,         <span class="c">// "31/05/2026"</span>
+    IDSessao: <span class="s">`<span class="v">${currentUser.id}</span>-<span class="v">${currentCompany.id}</span>-<span class="v">${selectedGroup.id}</span>`</span>,
+    data: {
+      Nodes: mapaFuncoesData,    <span class="c">// já em memória</span>
+      Edges: mapaCaminhosData    <span class="c">// já em memória</span>
+    }
+  },
+  onMessage: (msg) => appendChatBubble(msg),
+  onTyping: (show) => showTypingIndicator(show)
+});
+
+<span class="c">// Botão "Pergunte ao Agente"</span>
+document.getElementById(<span class="s">"btn-ai-agent"</span>).addEventListener(<span class="s">"click"</span>, () => {
+  openChatPanel();
+  chat.initialize();  <span class="c">// só analisa na 1ª vez</span>
+});</pre>
+      </div>
+    </section>
+
+    <!-- ── IFRAME ── -->
+    <section id="iframe">
+      <h2>Integração — Embed (iframe) <a class="anchor" href="#iframe">#</a></h2>
+      <p>Use a interface pronta via iframe. Comunicação bidirecional via <code>postMessage</code>.</p>
+
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">html — embed básico</span><button class="code-copy" onclick="copyCode(this)">copiar</button></div>
+        <pre><span class="c">&lt;!-- Embed do chat EVOPE AI --&gt;</span>
+&lt;<span class="p">iframe</span>
+  id=<span class="s">"evope-chat"</span>
+  src=<span class="s">"https://reports.digital-ai.tech/evope/chat.html"</span>
+  width=<span class="s">"420"</span>
+  height=<span class="s">"680"</span>
+  style=<span class="s">"border:none;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.4)"</span>
+&gt;&lt;/<span class="p">iframe</span>&gt;</pre>
+      </div>
+
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">javascript — postMessage API</span><button class="code-copy" onclick="copyCode(this)">copiar</button></div>
+        <pre><span class="k">const</span> chatFrame = document.getElementById(<span class="s">"evope-chat"</span>);
+
+<span class="c">// Enviar análise para o iframe (dispara automaticamente)</span>
+chatFrame.contentWindow.postMessage({
+  type: <span class="s">"evope:startAnalysis"</span>,
+  payload: {
+    sessionId: <span class="s">"711-80-22889"</span>,
+    analysisData: { <span class="c">/* payload completo */</span> }
+  }
+}, <span class="s">"https://reports.digital-ai.tech"</span>);
+
+<span class="c">// Resetar sessão no iframe</span>
+chatFrame.contentWindow.postMessage(
+  { type: <span class="s">"evope:resetSession"</span> },
+  <span class="s">"https://reports.digital-ai.tech"</span>
+);
+
+<span class="c">// Ouvir quando o iframe está pronto</span>
+window.addEventListener(<span class="s">"message"</span>, (event) => {
+  <span class="k">if</span> (event.data.type === <span class="s">"evope:chatReady"</span>) {
+    console.log(<span class="s">"Chat EVOPE pronto!"</span>);
+  }
+});</pre>
+      </div>
+    </section>
+
+    <!-- ── API DIRECT ── -->
+    <section id="api-direct">
+      <h2>Integração — API Direta <a class="anchor" href="#api-direct">#</a></h2>
+      <p>Para quem quer construir o próprio componente de chat usando apenas a API.</p>
+
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">javascript — implementação completa com estado</span><button class="code-copy" onclick="copyCode(this)">copiar</button></div>
+        <pre><span class="c">// Estado global da sessão</span>
+<span class="k">const</span> session = {
+  id: <span class="k">null</span>,
+  initialized: <span class="k">false</span>
+};
+
+<span class="k">async function</span> startAISession(pageData) {
+  <span class="c">// Gerar sessão única</span>
+  session.id = <span class="s">`<span class="v">${pageData.usuarioId}</span>-<span class="v">${pageData.empresaId}</span>-<span class="v">${pageData.grupoId}</span>`</span>;
+
+  showTypingDots();
+
+  <span class="k">try</span> {
+    <span class="k">const</span> response = <span class="k">await</span> fetch(
+      <span class="s">"https://webhook.digital-ai.tech/webhook/evope/chat"</span>,
+      {
+        method: <span class="s">"POST"</span>,
+        headers: { <span class="s">"Content-Type"</span>: <span class="s">"application/json"</span> },
+        body: JSON.stringify(buildPayload(pageData)),
+        signal: AbortSignal.timeout(<span class="v">90000</span>)  <span class="c">// 90s timeout</span>
+      }
+    );
+
+    <span class="k">if</span> (!response.ok) <span class="k">throw new</span> Error(<span class="s">`Erro <span class="v">${response.status}</span>`</span>);
+    <span class="k">const</span> { output } = <span class="k">await</span> response.json();
+
+    hideTypingDots();
+    session.initialized = <span class="k">true</span>;
+    renderAssistantMessage(output);
+
+  } <span class="k">catch</span> (err) {
+    hideTypingDots();
+    showError(err.message);
+  }
+}
+
+<span class="k">async function</span> sendChatMessage(userText) {
+  <span class="k">if</span> (!session.id) <span class="k">return</span>;
+
+  renderUserMessage(userText);
+  showTypingDots();
+
+  <span class="k">try</span> {
+    <span class="k">const</span> response = <span class="k">await</span> fetch(
+      <span class="s">"https://webhook.digital-ai.tech/webhook/evope/chat"</span>,
+      {
+        method: <span class="s">"POST"</span>,
+        headers: { <span class="s">"Content-Type"</span>: <span class="s">"application/json"</span> },
+        body: JSON.stringify({
+          chatInput: userText,
+          IDSessao: session.id
+        }),
+        signal: AbortSignal.timeout(<span class="v">60000</span>)
+      }
+    );
+
+    <span class="k">const</span> { output } = <span class="k">await</span> response.json();
+    hideTypingDots();
+    renderAssistantMessage(output);
+
+  } <span class="k">catch</span> (err) {
+    hideTypingDots();
+    renderAssistantMessage(<span class="s">"⚠️ Falha na comunicação. Tente novamente."</span>);
+  }
+}
+
+<span class="k">function</span> buildPayload(pageData) {
+  <span class="k">return</span> {
+    PaginaOrigem: pageData.pagina,      <span class="c">// "Mapa", "Burnout" ou "Grupos"</span>
+    UsuarioID:   pageData.usuarioId,
+    EmpresaID:   pageData.empresaId,
+    GrupoID:     pageData.grupoId,
+    Grupo:       pageData.grupoNome,
+    DataInicio:  pageData.dataInicio,   <span class="c">// "01/05/2026"</span>
+    DataFim:     pageData.dataFim,
+    IDSessao:    session.id,
+    data:        pageData.data          <span class="c">// { Nodes, Edges } ou { EmployeeList }</span>
+  };
+}
+
+<span class="k">function</span> resetSession() {
+  session.id = <span class="k">null</span>;
+  session.initialized = <span class="k">false</span>;
+  clearChatMessages();
+}</pre>
+      </div>
+    </section>
+
+    <!-- ── ERRORS ── -->
+    <section id="errors">
+      <h2>Tratamento de Erros <a class="anchor" href="#errors">#</a></h2>
+      <table>
+        <tr><th>Cenário</th><th>Causa</th><th>Ação recomendada</th></tr>
+        <tr><td>HTTP 500</td><td>Erro interno no n8n</td><td>Exibir mensagem de erro, botão "Tentar novamente"</td></tr>
+        <tr><td>Timeout (>90s)</td><td>IA demorou mais que o esperado</td><td>Usar <code>AbortSignal.timeout(90000)</code>, retentar uma vez</td></tr>
+        <tr><td><code>output</code> vazio</td><td>Resposta sem conteúdo</td><td>Tratar como erro, exibir fallback</td></tr>
+        <tr><td>Sem memória do contexto</td><td>IDSessao diferente no follow-up</td><td>Garantir que o IDSessao é idêntico em todas as requisições</td></tr>
+        <tr><td>Análise sem dados</td><td>Array <code>Nodes</code> ou <code>EmployeeList</code> vazio</td><td>Validar no front antes de chamar a API</td></tr>
+      </table>
+
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">javascript — tratamento robusto de erros</span><button class="code-copy" onclick="copyCode(this)">copiar</button></div>
+        <pre><span class="k">async function</span> callAgent(payload) {
+  <span class="k">const</span> controller = <span class="k">new</span> AbortController();
+  <span class="k">const</span> timeout = setTimeout(() => controller.abort(), <span class="v">90000</span>);
+
+  <span class="k">try</span> {
+    <span class="k">const</span> res = <span class="k">await</span> fetch(ENDPOINT, {
+      method: <span class="s">"POST"</span>,
+      headers: { <span class="s">"Content-Type"</span>: <span class="s">"application/json"</span> },
+      body: JSON.stringify(payload),
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+
+    <span class="k">if</span> (!res.ok) {
+      <span class="k">throw new</span> Error(<span class="s">`Servidor retornou <span class="v">${res.status}</span>`</span>);
+    }
+
+    <span class="k">let</span> data;
+    <span class="k">try</span> {
+      data = <span class="k">await</span> res.json();
+    } <span class="k">catch</span> {
+      <span class="k">throw new</span> Error(<span class="s">"Resposta inválida do servidor"</span>);
+    }
+
+    <span class="k">if</span> (!data?.output) {
+      <span class="k">throw new</span> Error(<span class="s">"Resposta vazia"</span>);
+    }
+
+    <span class="k">return</span> data.output;
+
+  } <span class="k">catch</span> (err) {
+    clearTimeout(timeout);
+    <span class="k">if</span> (err.name === <span class="s">"AbortError"</span>) {
+      <span class="k">return</span> <span class="s">"⏱ Tempo limite excedido. Tente novamente."</span>;
+    }
+    <span class="k">return</span> <span class="s">`⚠️ <span class="v">${err.message}</span>. Tente novamente.`</span>;
+  }
+}</pre>
+      </div>
+    </section>
+
+    <!-- ── EXAMPLES ── -->
+    <section id="examples">
+      <h2>Exemplos Completos <a class="anchor" href="#examples">#</a></h2>
+
+      <h3>cURL — análise inicial</h3>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">bash</span><button class="code-copy" onclick="copyCode(this)">copiar</button></div>
+        <pre>curl -s -X POST \
+  https://webhook.digital-ai.tech/webhook/evope/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "PaginaOrigem": "Burnout",
+    "EmpresaID": 80,
+    "GrupoID": "22889",
+    "Grupo": "Master > CSC > Finanças",
+    "DataInicio": "01/05/2026",
+    "DataFim": "31/05/2026",
+    "IDSessao": "711-80-22889-burnout",
+    "data": {
+      "EmployeeList": [
+        {
+          "Colaborador": "Roberta Reis",
+          "Grupo": "Financeiro",
+          "Aproveitamento": 111.0,
+          "Entretenimento": 1.0,
+          "TotalHoras": 179.0,
+          "HorasPrevistas": 160.0,
+          "DiasPropensaoBurnout": 2
+        }
+      ],
+      "BurnoutEmployeeList": []
+    }
+  }' | jq '.output'</pre>
+      </div>
+
+      <h3>cURL — follow-up</h3>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">bash</span><button class="code-copy" onclick="copyCode(this)">copiar</button></div>
+        <pre>curl -s -X POST \
+  https://webhook.digital-ai.tech/webhook/evope/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "chatInput": "Quais são os 3 maiores riscos identificados?",
+    "IDSessao": "711-80-22889-burnout"
+  }' | jq '.output'</pre>
+      </div>
+
+      <h3>Python — exemplo completo</h3>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">python</span><button class="code-copy" onclick="copyCode(this)">copiar</button></div>
+        <pre><span class="k">import</span> requests
+
+ENDPOINT = <span class="s">"https://webhook.digital-ai.tech/webhook/evope/chat"</span>
+SESSION_ID = <span class="s">"711-80-22889"</span>
+
+<span class="c"># 1. Análise inicial</span>
+response = requests.post(ENDPOINT, json={
+    <span class="s">"PaginaOrigem"</span>: <span class="s">"Mapa"</span>,
+    <span class="s">"EmpresaID"</span>: <span class="v">80</span>,
+    <span class="s">"GrupoID"</span>: <span class="s">"22889"</span>,
+    <span class="s">"Grupo"</span>: <span class="s">"Master > TI"</span>,
+    <span class="s">"DataInicio"</span>: <span class="s">"01/05/2026"</span>,
+    <span class="s">"DataFim"</span>: <span class="s">"31/05/2026"</span>,
+    <span class="s">"IDSessao"</span>: SESSION_ID,
+    <span class="s">"data"</span>: {
+        <span class="s">"Nodes"</span>: nodes_data,   <span class="c"># lista de apps</span>
+        <span class="s">"Edges"</span>: edges_data    <span class="c"># lista de caminhos</span>
+    }
+}, timeout=<span class="v">90</span>)
+
+print(response.json()[<span class="s">"output"</span>])
+
+<span class="c"># 2. Follow-up</span>
+followup = requests.post(ENDPOINT, json={
+    <span class="s">"chatInput"</span>: <span class="s">"Qual app tem mais horas?"</span>,
+    <span class="s">"IDSessao"</span>: SESSION_ID
+}, timeout=<span class="v">60</span>)
+
+print(followup.json()[<span class="s">"output"</span>])</pre>
+      </div>
+
+      <div class="callout callout-success" style="margin-top:32px">
+        <div class="callout-icon">✓</div>
+        <p>
+          <strong>Pronto para integrar!</strong><br>
+          Interface de demo disponível em <a href="https://reports.digital-ai.tech/evope/chat.html" style="color:var(--y)">reports.digital-ai.tech/evope/chat.html</a>
+        </p>
+      </div>
+    </section>
+
+    <div style="height:80px"></div>
+  </main>
+</div>
+
+<script>
+  // Highlight nav on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.nav-link');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const match = document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+        if (match) match.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-10% 0px -80% 0px' });
+  sections.forEach(s => obs.observe(s));
+
+  // Copy code
+  function copyCode(btn) {
+    const pre = btn.closest('.code-wrap').querySelector('pre');
+    navigator.clipboard.writeText(pre.innerText).then(() => {
+      btn.textContent = 'copiado ✓';
+      setTimeout(() => btn.textContent = 'copiar', 2000);
+    });
+  }
+</script>
+</body>
+</html>
