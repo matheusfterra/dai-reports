@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campanha Dia dos Namorados 2026 | DermaClinic</title>
+  <link rel="stylesheet" href="../../_shared/style.css" />
+  <style>
+    .page-hero {
+      background: linear-gradient(135deg, rgba(251,113,133,.08) 0%, rgba(251,191,36,.05) 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px 18px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #fb7185, #f472b6);
+    }
+    .page-hero-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .page-hero-meta {
+      font-size: 12px;
+      color: var(--text-subtle);
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .tag-andamento {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      padding: 3px 10px;
+      border-radius: 100px;
+      background: rgba(251,113,133,.15);
+      color: #fb7185;
+      vertical-align: middle;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 640px) { .hero-grid { grid-template-columns: repeat(2, 1fr); } }
+    .hero-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--c, var(--brand));
+    }
+    .hero-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; color: var(--text-subtle); margin-bottom: 10px; }
+    .hero-value { font-size: 38px; font-weight: 800; line-height: 1; color: var(--c, var(--text)); margin-bottom: 5px; letter-spacing: -1px; }
+    .hero-sub { font-size: 11px; color: var(--text-subtle); }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    @media (max-width: 640px) { .row2 { grid-template-columns: 1fr; } }
+    .panel { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; }
+    .panel-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--text-subtle); margin-bottom: 16px; display: flex; align-items: center; gap: 6px; }
+    .panel-label-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--c, var(--brand)); flex-shrink: 0; }
+    .funnel-list { display: flex; flex-direction: column; gap: 4px; }
+    .funnel-stage { display: flex; flex-direction: column; gap: 5px; }
+    .funnel-meta { display: flex; justify-content: space-between; align-items: center; }
+    .funnel-name { font-size: 12px; color: var(--text-muted); }
+    .funnel-right { display: flex; align-items: center; gap: 8px; }
+    .funnel-num { font-size: 15px; font-weight: 700; color: var(--text); }
+    .funnel-rate { font-size: 11px; color: var(--text-subtle); background: rgba(255,255,255,.04); padding: 1px 7px; border-radius: 100px; }
+    .funnel-track { height: 30px; background: rgba(255,255,255,.03); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+    .funnel-fill { height: 100%; border-radius: var(--radius-sm); width: 0%; transition: width 1.1s cubic-bezier(.4,0,.2,1); position: relative; }
+    .funnel-fill::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.08) 100%); }
+    .funnel-arrow { text-align: center; font-size: 10px; color: var(--text-subtle); padding: 1px 0; display: flex; align-items: center; gap: 8px; }
+    .funnel-arrow-line { flex: 1; height: 1px; background: var(--border); }
+    .funnel-arrow-text { white-space: nowrap; }
+    .donut-wrap { display: flex; align-items: center; gap: 20px; }
+    .donut-svg { flex-shrink: 0; }
+    .donut-legend { display: flex; flex-direction: column; gap: 14px; flex: 1; }
+    .dl-item { display: flex; align-items: center; gap: 8px; }
+    .dl-swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+    .dl-label { font-size: 13px; color: var(--text-muted); flex: 1; }
+    .dl-num { font-size: 16px; font-weight: 800; color: var(--text); }
+    .dl-pct { font-size: 11px; color: var(--text-subtle); width: 34px; text-align: right; }
+    .donut-seg { stroke-dasharray: 0 326.7; transition: stroke-dasharray 1.2s cubic-bezier(.4,0,.2,1); }
+    .apt-table { width: 100%; border-collapse: collapse; }
+    .apt-table th { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-subtle); text-align: left; padding: 0 12px 10px; border-bottom: 1px solid var(--border); }
+    .apt-table td { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.04); font-size: 13px; color: var(--text-muted); vertical-align: middle; }
+    .apt-table tr:last-child td { border-bottom: none; }
+    .apt-table tr:hover td { background: rgba(255,255,255,.02); }
+    .apt-name { font-weight: 600; color: var(--text); }
+    .apt-badge { display: inline-flex; align-items: center; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; padding: 2px 9px; border-radius: 100px; }
+    .badge-atendido { background: rgba(45,228,169,.15); color: #2de4a9; }
+    .badge-marcado { background: rgba(251,113,133,.15); color: #fb7185; }
+    .badge-pendente { background: rgba(255,255,255,.07); color: var(--text-subtle); }
+    .badge-naoc { background: rgba(251,191,36,.12); color: var(--amber); }
+    .badge-desmarcado { background: rgba(248,113,113,.12); color: var(--ruby); }
+    .section-sep { display: flex; align-items: center; gap: 12px; margin: 20px 0 14px; }
+    .section-sep-line { flex: 1; height: 1px; background: var(--border); }
+    .section-sep-text { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--text-subtle); white-space: nowrap; }
+    .insight { background: rgba(45,228,169,.07); border-left: 3px solid var(--teal); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 10px 14px; font-size: 13px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.5; }
+    .insight strong { color: var(--text); }
+    .insight-warn { background: rgba(251,191,36,.07); border-left: 3px solid var(--amber); }
+    .insight-info { background: rgba(251,113,133,.07); border-left: 3px solid #fb7185; }
+    .conv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+    @media (max-width: 640px) { .conv-grid { grid-template-columns: 1fr; } }
+    .conv-card {
+      background: var(--surface-2);
+      border: 1px solid rgba(45,228,169,.25);
+      border-radius: var(--radius);
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .conv-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--teal);
+    }
+    .conv-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .conv-proc { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+    .conv-meta { display: flex; justify-content: space-between; align-items: center; }
+    .conv-date { font-size: 11px; color: var(--text-subtle); }
+    .conv-val { font-size: 14px; font-weight: 800; color: var(--teal); }
+    .conv-link { font-size: 10px; margin-top: 8px; }
+    .conv-link a { color: #fb7185; text-decoration: none; font-weight: 600; }
+    .conv-link a:hover { text-decoration: underline; }
+    .resp-list { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .resp-row { display: flex; align-items: center; gap: 12px; padding: 11px 16px; border-bottom: 1px solid rgba(255,255,255,.04); font-size: 13px; cursor: pointer; transition: background .15s; text-decoration: none; color: inherit; }
+    .resp-row:last-child { border-bottom: none; }
+    .resp-row:hover { background: rgba(255,255,255,.025); }
+    .roi-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+    @media (max-width: 640px) { .roi-grid { grid-template-columns: 1fr 1fr; } }
+    .roi-hero-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; text-align: center; position: relative; overflow: hidden; }
+    .roi-hero-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--c, var(--brand)); }
+    .roi-hero-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-subtle); margin-bottom: 8px; }
+    .roi-hero-value { font-size: 26px; font-weight: 800; color: var(--c, var(--text)); margin-bottom: 4px; }
+    .roi-hero-sub { font-size: 11px; color: var(--text-subtle); }
+    .roi-big-panel { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 24px; text-align: center; margin-bottom: 12px; position: relative; overflow: hidden; }
+    .roi-big-panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #fb7185, #f472b6); }
+    .roi-big-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--text-subtle); margin-bottom: 10px; }
+    .roi-big-number { font-size: 72px; font-weight: 900; line-height: 1; color: #fb7185; letter-spacing: -2px; }
+    .roi-big-sub { font-size: 14px; color: var(--text-muted); margin-top: 10px; }
+    .roi-bar-panel { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 12px; }
+    .roi-bar-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-subtle); margin-bottom: 12px; }
+    .roi-comparison { display: flex; height: 36px; border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 8px; }
+    .roi-cost-seg { background: rgba(248,113,113,.3); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--ruby); padding: 0 8px; white-space: nowrap; min-width: 40px; }
+    .roi-rev-seg { background: rgba(251,113,133,.3); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fb7185; flex: 1; transition: flex 1.2s ease; }
+    .roi-bar-labels { display: flex; justify-content: space-between; font-size: 11px; }
+    .actions-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+    @media (max-width: 640px) { .actions-row { grid-template-columns: 1fr; } }
+    .action-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+    .action-num { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #fb7185; margin-bottom: 8px; }
+    .action-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .action-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+    .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0 12px; }
+  </style>
+</head>
+<body>
+
+  <div class="gate" id="gate-loading">
+    <div class="gate-icon"></div>
+    <p class="gate-title">Carregando relatório...</p>
+  </div>
+
+  <div class="gate hidden" id="gate-direct">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#5a5f66" stroke-width="1.5">
+      <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+    </svg>
+    <p class="gate-title">Acesso exclusivo via Chat</p>
+    <p class="gate-sub">Esta página está disponível somente no painel chat da DermaClinic.</p>
+  </div>
+
+  <div class="app" id="app">
+    <div class="report-header">
+      <button class="back-btn" onclick="history.back()">← Voltar</button>
+      <span class="report-header-title">Campanha — Dia dos Namorados 2026</span>
+      <span class="report-header-sub">Digital AI · DermaClinic</span>
+    </div>
+
+    <div class="report-content">
+      <div class="report-body">
+
+      <!-- ── PAGE HERO ──────────────────────────── -->
+      <div class="page-hero">
+        <div class="page-hero-title">
+          Dia dos Namorados 2026 ❤️
+          <span class="tag-andamento">Em Andamento</span>
+        </div>
+        <div class="page-hero-meta">
+          <span>📅 Período: 01/06 – 12/06/2026</span>
+          <span>📊 Análise: 10/06/2026</span>
+          <span>💬 Universo: etiqueta dia-namorados · inbox Relacionamento</span>
+          <span>📱 Campanha de Relacionamento WhatsApp</span>
+        </div>
+      </div>
+
+      <!-- ── HERO KPIs ──────────────────────────── -->
+      <div class="hero-grid">
+        <div class="hero-card" style="--c:#fb7185">
+          <div class="hero-label">Contatos Alcançados</div>
+          <div class="hero-value" style="color:#fb7185;font-size:30px">3.828</div>
+          <div class="hero-sub">etiqueta dia-namorados · inbox Relacionamento</div>
+        </div>
+        <div class="hero-card" style="--c:var(--teal)">
+          <div class="hero-label">Atendimentos Confirmados</div>
+          <div class="hero-value" style="color:var(--teal)">3</div>
+          <div class="hero-sub">status Atendido no Feegow ✓</div>
+        </div>
+        <div class="hero-card" style="--c:var(--amber)">
+          <div class="hero-label">Conversões Totais</div>
+          <div class="hero-value" style="color:var(--amber)">7</div>
+          <div class="hero-sub">pacientes únicos · 9 agendamentos</div>
+        </div>
+        <div class="hero-card" style="--c:#c084fc">
+          <div class="hero-label">Receita Confirmada</div>
+          <div class="hero-value" style="color:#c084fc;font-size:28px">R$5.132</div>
+          <div class="hero-sub">+ potencial R$3.020 (marcados)</div>
+        </div>
+      </div>
+
+      <!-- ── FUNIL + STATUS DONUT ────────────────── -->
+      <div class="row2">
+
+        <!-- Funil da Campanha -->
+        <div class="panel" style="--c:#fb7185">
+          <div class="panel-label">
+            <div class="panel-label-dot" style="background:#fb7185"></div>
+            Funil da Campanha — Metodologia de Conversão
+          </div>
+          <div class="funnel-list">
+
+            <div class="funnel-stage">
+              <div class="funnel-meta">
+                <span class="funnel-name">Contatos com etiqueta dia-namorados</span>
+                <div class="funnel-right">
+                  <span class="funnel-num">3.828</span>
+                  <span class="funnel-rate">100%</span>
+                </div>
+              </div>
+              <div class="funnel-track">
+                <div class="funnel-fill" data-w="100" style="background:rgba(251,113,133,.3)"></div>
+              </div>
+            </div>
+
+            <div class="funnel-arrow">
+              <div class="funnel-arrow-line"></div>
+              <span class="funnel-arrow-text">cruzamento por telefone com Feegow</span>
+              <div class="funnel-arrow-line"></div>
+            </div>
+
+            <div class="funnel-stage">
+              <div class="funnel-meta">
+                <span class="funnel-name">Com agendamento após o disparo</span>
+                <div class="funnel-right">
+                  <span class="funnel-num">9</span>
+                  <span class="funnel-rate">0,24%</span>
+                </div>
+              </div>
+              <div class="funnel-track">
+                <div class="funnel-fill" data-w="30" style="background:rgba(251,113,133,.45)"></div>
+              </div>
+            </div>
+
+            <div class="funnel-arrow">
+              <div class="funnel-arrow-line"></div>
+              <span class="funnel-arrow-text">7 pacientes únicos convertidos</span>
+              <div class="funnel-arrow-line"></div>
+            </div>
+
+            <div class="funnel-stage">
+              <div class="funnel-meta">
+                <span class="funnel-name">Atendidos (Feegow · status=Atendido)</span>
+                <div class="funnel-right">
+                  <span class="funnel-num" style="color:var(--teal)">3</span>
+                  <span class="funnel-rate">33,3%</span>
+                </div>
+              </div>
+              <div class="funnel-track">
+                <div class="funnel-fill" data-w="12" style="background:rgba(45,228,169,.4)"></div>
+              </div>
+            </div>
+
+            <div class="funnel-arrow">
+              <div class="funnel-arrow-line"></div>
+              <span class="funnel-arrow-text">6 marcados aguardando confirmação</span>
+              <div class="funnel-arrow-line"></div>
+            </div>
+
+            <div class="funnel-stage">
+              <div class="funnel-meta">
+                <span class="funnel-name">Marcados — aguardando comparecimento</span>
+                <div class="funnel-right">
+                  <span class="funnel-num" style="color:var(--amber)">6</span>
+                  <span class="funnel-rate">66,7%</span>
+                </div>
+              </div>
+              <div class="funnel-track">
+                <div class="funnel-fill" data-w="20" style="background:rgba(251,191,36,.35)"></div>
+              </div>
+            </div>
+
+          </div>
+          <div style="margin-top:12px;font-size:11px;color:var(--text-subtle);line-height:1.6;border-top:1px solid var(--border);padding-top:10px">
+            <strong style="color:var(--text)">Metodologia:</strong> conversão contabilizada apenas quando <code style="background:rgba(255,255,255,.05);padding:1px 5px;border-radius:3px">agendado_em > dispatch_date</code> — agendamentos anteriores ao disparo são excluídos. Fototerapia excluída por decisão de negócio. Análise parcial — campanha aberta até 12/06.
+          </div>
+        </div>
+
+        <!-- Donut Status dos Agendamentos -->
+        <div class="panel" style="--c:var(--teal)">
+          <div class="panel-label">
+            <div class="panel-label-dot" style="background:var(--teal)"></div>
+            Status dos Agendamentos
+            <span style="font-weight:400;color:var(--text-subtle);text-transform:none;letter-spacing:0">(9 conversões)</span>
+          </div>
+          <div class="donut-wrap">
+            <svg class="donut-svg" width="130" height="130" viewBox="0 0 130 130">
+              <circle cx="65" cy="65" r="52" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="20"/>
+              <g transform="rotate(-90, 65, 65)">
+                <!-- Atendido: 3/9 = 33.3% → 326.7 × .333 = 108.8 -->
+                <circle class="donut-seg" cx="65" cy="65" r="52" fill="none" stroke="#2de4a9" stroke-width="20"
+                  data-arr="108.8"/>
+                <!-- Marcado-nc: 6/9 = 66.7% → 217.9, off=-108.8 -->
+                <circle class="donut-seg" cx="65" cy="65" r="52" fill="none" stroke="#fb7185" stroke-width="20"
+                  data-arr="217.9" data-off="-108.8"/>
+              </g>
+              <text x="65" y="59" text-anchor="middle" font-size="22" font-weight="900" fill="#e4e8eb">9</text>
+              <text x="65" y="74" text-anchor="middle" font-size="9" fill="#5a5f66" font-weight="700" letter-spacing="1">AGENDAMENTOS</text>
+            </svg>
+            <div class="donut-legend">
+              <div class="dl-item">
+                <div class="dl-swatch" style="background:#2de4a9"></div>
+                <span class="dl-label">Atendido ✓</span>
+                <span class="dl-num" style="color:var(--teal)">3</span>
+                <span class="dl-pct">33,3%</span>
+              </div>
+              <div class="dl-item">
+                <div class="dl-swatch" style="background:#fb7185"></div>
+                <span class="dl-label">Marcado (aguardando)</span>
+                <span class="dl-num" style="color:#fb7185">6</span>
+                <span class="dl-pct">66,7%</span>
+              </div>
+            </div>
+          </div>
+          <div class="insight" style="margin-top:16px;margin-bottom:0;border-left-color:#fb7185;background:rgba(251,113,133,.07)">
+            <strong>6 agendamentos em aberto</strong> (Jun–Ago/2026) — potencial confirmado de R$3.020 adicional. Maioria para procedimentos estéticos de alto valor (Fotona, Toxina, Consulta).
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── ATENDIDOS CONFIRMADOS ────────────────── -->
+      <div class="section-sep">
+        <div class="section-sep-line"></div>
+        <span class="section-sep-text">Atendimentos Confirmados — Feegow Status: Atendido</span>
+        <div class="section-sep-line"></div>
+      </div>
+
+      <div class="conv-grid">
+
+        <div class="conv-card">
+          <div class="conv-name">Daniela Cristiane Rosa</div>
+          <div class="conv-proc">Toxina Botulínica Global 1/3 Superior</div>
+          <div class="conv-meta">
+            <span class="conv-date">03/06/2026</span>
+            <span class="conv-val">R$3.100</span>
+          </div>
+          <div class="conv-link">
+            <a href="#" class="chatwoot-link" data-conv-id="2920">→ Ver Conversa #2920</a>
+          </div>
+        </div>
+
+        <div class="conv-card">
+          <div class="conv-name">Elisabeth Warmeling</div>
+          <div class="conv-proc">Toxina Botulínica</div>
+          <div class="conv-meta">
+            <span class="conv-date">03/06/2026</span>
+            <span class="conv-val">R$1.746</span>
+          </div>
+          <div class="conv-link">
+            <a href="#" class="chatwoot-link" data-conv-id="3594">→ Ver Conversa #3594</a>
+          </div>
+        </div>
+
+        <div class="conv-card">
+          <div class="conv-name">Naira Leticia Da Silva</div>
+          <div class="conv-proc">Retorno de Botox</div>
+          <div class="conv-meta">
+            <span class="conv-date">09/06/2026</span>
+            <span class="conv-val">R$286</span>
+          </div>
+          <div class="conv-link">
+            <a href="#" class="chatwoot-link" data-conv-id="5613">→ Ver Conversa #5613</a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── LISTA COMPLETA DE CONVERSÕES ────────── -->
+      <div class="section-sep">
+        <div class="section-sep-line"></div>
+        <span class="section-sep-text">Todas as Conversões — 9 Agendamentos · 7 Pacientes Únicos</span>
+        <div class="section-sep-line"></div>
+      </div>
+
+      <div class="panel" style="margin-bottom:12px;padding:0;overflow:hidden">
+        <div style="padding:14px 16px 10px;border-bottom:1px solid var(--border)">
+          <span class="panel-label" style="margin-bottom:0">
+            <div class="panel-label-dot" style="background:#fb7185"></div>
+            Agendamentos após disparo · excluindo Fototerapia · ordenados por data de consulta
+          </span>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="apt-table">
+            <thead>
+              <tr>
+                <th>Paciente</th>
+                <th>Procedimento</th>
+                <th>Consulta</th>
+                <th>Agendado em</th>
+                <th>Valor</th>
+                <th>Status Feegow</th>
+                <th>Conversa</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 03/06 - Atendidos -->
+              <tr style="background:rgba(45,228,169,.06)">
+                <td class="apt-name">Daniela Cristiane Rosa</td>
+                <td>Toxina Botulínica Global 1/3 Superior</td>
+                <td>03/06</td>
+                <td>02/06 · 07:26</td>
+                <td style="font-weight:700;color:var(--teal)">R$3.100</td>
+                <td><span class="apt-badge badge-atendido">Atendido ✓</span></td>
+                <td><a href="#" class="chatwoot-link" data-conv-id="2920" style="font-size:11px;color:#fb7185;text-decoration:none">#2920</a></td>
+              </tr>
+              <tr style="background:rgba(45,228,169,.06)">
+                <td class="apt-name">Elisabeth Warmeling</td>
+                <td>Toxina Botulínica</td>
+                <td>03/06</td>
+                <td>03/06 · 16:18</td>
+                <td style="font-weight:700;color:var(--teal)">R$1.746</td>
+                <td><span class="apt-badge badge-atendido">Atendido ✓</span></td>
+                <td><a href="#" class="chatwoot-link" data-conv-id="3594" style="font-size:11px;color:#fb7185;text-decoration:none">#3594</a></td>
+              </tr>
+              <!-- 09/06 - Atendido -->
+              <tr style="background:rgba(45,228,169,.06)">
+                <td class="apt-name">Naira Leticia Da Silva</td>
+                <td>Retorno de Botox</td>
+                <td>09/06</td>
+                <td>26/05 · 14:59</td>
+                <td style="font-weight:700;color:var(--teal)">R$286</td>
+                <td><span class="apt-badge badge-atendido">Atendido ✓</span></td>
+                <td><a href="#" class="chatwoot-link" data-conv-id="5613" style="font-size:11px;color:#fb7185;text-decoration:none">#5613</a></td>
+              </tr>
+              <!-- 11/06 - Marcado -->
+              <tr>
+                <td class="apt-name">Dani 🍀</td>
+                <td>Fotona Olhos</td>
+                <td>11/06</td>
+                <td>27/05 · 14:57</td>
+                <td style="font-weight:700;color:#fb7185">~R$1.880</td>
+                <td><span class="apt-badge badge-marcado">Marcado</span></td>
+                <td><a href="#" class="chatwoot-link" data-conv-id="1048" style="font-size:11px;color:#fb7185;text-decoration:none">#1048</a></td>
+              </tr>
+              <!-- 23/06 - Marcado -->
+              <tr>
+                <td class="apt-name">Elisabeth Warmeling</td>
+                <td>Retorno de Botox</td>
+                <td>23/06</td>
+                <td>03/06 · 19:24</td>
+                <td style="color:var(--text-subtle)">~R$286</td>
+                <td><span class="apt-badge badge-marcado">Marcado</span></td>
+                <td><a href="#" class="chatwoot-link" data-conv-id="3594" style="font-size:11px;color:#fb7185;text-decoration:none">#3594</a></td>
+              </tr>
+              <!-- 01/07 - Marcado -->
+              <tr>
+                <td class="apt-name">Andreia A. Pescara</td>
+                <td>Consulta Dermatológica</td>
+                <td>01/07</td>
+                <td>22/04 · 09:16</td>
+                <td style="color:var(--text-subtle)">~R$854</td>
+                <td><span class="apt-badge badge-marcado">Marcado</span></td>
+                <td><a href="#" class="chatwoot-link" data-conv-id="1557" style="font-size:11px;color:#fb7185;text-decoration:none">#1557</a></td>
+              </tr>
+              <!-- 08/07 - Marcado -->
+              <tr>
+                <td class="apt-name">Daniela Cristiane Rosa</td>
+                <td>Procedimento Dermatologia</td>
+                <td>08/07</td>
+                <td>03/06 · 17:46</td>
+                <td style="color:var(--text-subtle)">—</td>
+                <td><span class="apt-badge badge-marcado">Marcado</span></td>
+                <td><a href="#" class="chatwoot-link" data-conv-id="2920" style="font-size:11px;color:#fb7185;text-decoration:none">#2920</a></td>
+              </tr>
+              <!-- 16/07 - Marcado -->
+              <tr>
+                <td class="apt-name">Cristiele Bonfá</td>
+                <td>Retorno de Mapeamento</td>
+                <td>16/07</td>
+                <td>15/05 · 12:41</td>
+                <td style="color:var(--text-subtle)">Retorno</td>
+                <td><span class="apt-badge badge-marcado">Marcado</span></td>
+                <td><a href="#" class="chatwoot-link" data-conv-id="2805" style="font-size:11px;color:#fb7185;text-decoration:none">#2805</a></td>
+              </tr>
+              <!-- 04/08 - Marcado -->
+              <tr>
+                <td class="apt-name">Daniel Rufato</td>
+                <td>Retorno de Mapeamento</td>
+                <td>04/08</td>
+                <td>14/05 · 11:49</td>
+                <td style="color:var(--text-subtle)">Retorno</td>
+                <td><span class="apt-badge badge-marcado">Marcado</span></td>
+                <td><a href="#" class="chatwoot-link" data-conv-id="3141" style="font-size:11px;color:#fb7185;text-decoration:none">#3141</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="padding:10px 16px;font-size:11px;color:var(--text-subtle);border-top:1px solid var(--border)">
+          * Critério: <strong style="color:var(--text)">agendado_em &gt; data do disparo (created_at da conversa)</strong>. Fototerapia excluída (proc. 223, 265, 328, 379, 448, 475, 476). Valores com ~ são estimativas baseadas na média histórica do procedimento. Dados extraídos em 10/06/2026.
+        </div>
+      </div>
+
+      <!-- ── ROI ────────────────────────────────── -->
+      <div class="section-sep">
+        <div class="section-sep-line"></div>
+        <span class="section-sep-text">Retorno sobre Investimento</span>
+        <div class="section-sep-line"></div>
+      </div>
+
+      <div class="roi-big-panel">
+        <div class="roi-big-label">ROI Confirmado (Atendimentos Concluídos)</div>
+        <div class="roi-big-number roi-counter" data-target="4488">0%</div>
+        <div class="roi-big-sub">
+          <strong>~R$114</strong> em custo estimado de campanha geraram <strong>R$5.132</strong> de receita confirmada
+        </div>
+      </div>
+
+      <div class="roi-grid">
+        <div class="roi-hero-card" style="--c:var(--ruby)">
+          <div class="roi-hero-label">Custo Estimado</div>
+          <div class="roi-hero-value">~R$114</div>
+          <div class="roi-hero-sub">proporcional ao Dia das Mães (3.828 contatos)</div>
+        </div>
+        <div class="roi-hero-card" style="--c:var(--teal)">
+          <div class="roi-hero-label">Receita Confirmada</div>
+          <div class="roi-hero-value">R$5.132</div>
+          <div class="roi-hero-sub">3 atendidos · 2× Toxina + Retorno Botox</div>
+        </div>
+        <div class="roi-hero-card" style="--c:#fb7185">
+          <div class="roi-hero-label">Receita Potencial</div>
+          <div class="roi-hero-value">~R$3.020</div>
+          <div class="roi-hero-sub">6 marcados · Fotona + Toxina + Consulta + Retornos</div>
+        </div>
+        <div class="roi-hero-card" style="--c:var(--brand)">
+          <div class="roi-hero-label">Break-even</div>
+          <div class="roi-hero-value">1</div>
+          <div class="roi-hero-sub">1 consulta cobriu ~27× o custo total</div>
+        </div>
+      </div>
+
+      <div class="roi-bar-panel">
+        <div class="roi-bar-title">Custo vs Receita — Confirmada + Potencial</div>
+        <div class="roi-comparison">
+          <div class="roi-cost-seg">R$114</div>
+          <div class="roi-rev-seg">R$8.152 potencial</div>
+        </div>
+        <div class="roi-bar-labels">
+          <span style="color:var(--ruby)">Custo: ~R$114 <span style="opacity:.5">(1,4%)</span></span>
+          <span style="color:#fb7185">Potencial total: R$8.152 <span style="opacity:.5">(98,6%)</span></span>
+        </div>
+      </div>
+
+      <div class="insight insight-info" style="margin-bottom:12px">
+        <strong>Taxa de conversão: 0,18%</strong> dos 3.828 contatos alcançados resultou em agendamento (7 pacientes únicos). Benchmark em campanhas de reativação em saúde: 0,1–0,5%. Taxa acima da média do Dia das Mães (0,087% com 8.062 contatos). ROI potencial com todos os marcados confirmados: <strong>7.047%</strong>.
+      </div>
+
+      <!-- ── PRÓXIMAS AÇÕES ──────────────────────── -->
+      <div class="section-sep">
+        <div class="section-sep-line"></div>
+        <span class="section-sep-text">Próximas Ações</span>
+        <div class="section-sep-line"></div>
+      </div>
+
+      <div class="actions-row">
+        <div class="action-card">
+          <div class="action-num">Ação 1 · Esta semana</div>
+          <div class="action-title">Confirmar Fotona Olhos (11/06)</div>
+          <div class="action-desc">Dani 🍀 tem Fotona Olhos marcado para amanhã (~R$1.880). Contatar para confirmar comparecimento e reduzir risco de no-show — maior valor pendente da campanha.</div>
+        </div>
+        <div class="action-card">
+          <div class="action-num">Ação 2 · Fim do Mês</div>
+          <div class="action-title">Atualizar Relatório em 30/06</div>
+          <div class="action-desc">Reprocessar o pipeline após 23/06 para capturar resultado dos marcados de junho (Dani + Elisabeth). Incluir status Feegow atualizado e receita confirmada.</div>
+        </div>
+        <div class="action-card">
+          <div class="action-num">Ação 3 · Estratégico</div>
+          <div class="action-title">Comparar com Dia das Mães</div>
+          <div class="action-desc">Taxa de conversão 2× maior com base menor (0,18% vs 0,087%). Investigar perfil dos 7 convertidos para refinar segmentação de próximas campanhas — focar em pacientes com histórico de procedimentos estéticos ativos.</div>
+        </div>
+      </div>
+
+      <div class="insight insight-warn" style="margin-bottom:0">
+        <strong>Campanha parcial — análise em 10/06/2026.</strong> 6 agendamentos ainda pendentes de confirmação (consultas em Jun–Ago). Resultado definitivo disponível após fechamento do funil. Reprocessar em 30/06 para visão completa.
+      </div>
+
+      <hr class="divider" />
+      <div class="report-footer">
+        Relatório gerado em 10/06/2026 · Digital AI — Inteligência Clínica · Pipeline: Relacionamento → Feegow
+      </div>
+
+      </div><!-- /.report-body -->
+    </div>
+  </div>
+
+  <script src="../../_shared/auth.js"></script>
+
+  <script id="report-bundle">
+    (function() {
+      var BASE_URL = '';
+
+      function buildConvLinks(auth) {
+        var account = (auth && auth.account_id) ? auth.account_id : 4;
+        BASE_URL = 'https://chat.digital-ai.tech/app/accounts/' + account + '/conversations/';
+        document.querySelectorAll('.chatwoot-link[data-conv-id]').forEach(function(el) {
+          var id = el.getAttribute('data-conv-id');
+          el.href = BASE_URL + id;
+          el.target = '_blank';
+          el.rel = 'noopener';
+        });
+      }
+
+      function animateAll() {
+        document.querySelectorAll('.funnel-fill[data-w]').forEach(function(el, i) {
+          setTimeout(function() { el.style.width = el.dataset.w + '%'; }, i * 90);
+        });
+        document.querySelectorAll('.roi-counter[data-target]').forEach(function(el) {
+          var target = parseInt(el.dataset.target);
+          var duration = 2000;
+          setTimeout(function() {
+            var startTime = null;
+            function step(ts) {
+              if (!startTime) startTime = ts;
+              var progress = Math.min((ts - startTime) / duration, 1);
+              var ease = 1 - Math.pow(1 - progress, 3);
+              el.textContent = Math.round(ease * target).toLocaleString('pt-BR') + '%';
+              if (progress < 1) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+          }, 400);
+        });
+        var circ = 326.7;
+        document.querySelectorAll('.donut-seg[data-arr]').forEach(function(el) {
+          var len = parseFloat(el.dataset.arr);
+          var off = parseFloat(el.dataset.off || '0');
+          el.style.setProperty('stroke-dashoffset', off);
+          setTimeout(function() {
+            el.style.setProperty('stroke-dasharray', len + ' ' + (circ - len));
+          }, 250);
+        });
+      }
+
+      window.__reportBundle = { buildConvLinks: buildConvLinks, animateAll: animateAll };
+    })();
+  </script>
+
+  <script id="report-standalone-auth">
+    initChatwootAuth(
+      function onAuth(auth) {
+        document.getElementById('gate-loading').classList.add('hidden');
+        document.getElementById('app').classList.add('visible');
+        window.__reportBundle.buildConvLinks(auth);
+        requestAnimationFrame(function() { setTimeout(window.__reportBundle.animateAll, 120); });
+      },
+      function onTimeout() {
+        document.getElementById('gate-loading').classList.add('hidden');
+        document.getElementById('gate-direct').classList.remove('hidden');
+      }
+    );
+  </script>
+</body>
+</html>
