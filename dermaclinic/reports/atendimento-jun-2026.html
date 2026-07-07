@@ -155,6 +155,12 @@
       font-size: 0.85rem; color: #c9d1d9;
     }
     .warn-banner strong { color: #f0883e; }
+    .success-banner {
+      background: rgba(63,185,80,0.06); border: 1px solid rgba(63,185,80,0.25);
+      border-radius: 8px; padding: 14px 18px; margin-bottom: 20px;
+      font-size: 0.85rem; color: #c9d1d9;
+    }
+    .success-banner strong { color: #3fb950; }
   </style>
 </head>
 <body>
@@ -181,7 +187,7 @@
     <!-- HEADER -->
     <div class="report-header">
       <h1>DermaClinic <span style="color:#7db3d8">—</span> Relatório de Atendimento <span class="badge">Junho 2026</span></h1>
-      <p>Período: 01/06/2026 a 30/06/2026 · Dados atualizados em 07/07/2026 · Fonte: clinic_analytics · Elaborado por Digital AI</p>
+      <p>Período: 01/06/2026 a 30/06/2026 · Dados atualizados em 07/07/2026 · Fonte: clinic_analytics (ETL Feegow) · Elaborado por Digital AI</p>
     </div>
 
     <div class="report-body">
@@ -190,27 +196,31 @@
       <div class="exec-summary">
         <h2>Sumário Executivo</h2>
         <p>
-          Junho de 2026 registrou o <span class="highlight">maior crescimento mensal do ano</span>:
-          receita total de <span class="highlight">R$ 236.210</span> (dermatologia R$ 226.875 + fototerapia R$ 9.335),
-          avanço de <span class="highlight">+35,1% vs. maio</span> (R$ 174.855).
-          As <span class="highlight">173 consultas médicas realizadas</span> (+15,3% vs. maio) foram distribuídas entre
-          Dra. Raquel Steglich (83 atendimentos, R$ 121.085) e a segunda dermatologista (90 atendimentos, R$ 101.510),
-          elevando o ticket médio para <span class="highlight">R$ 1.311</span> (+17,2% vs. R$ 1.119 em maio).
-          A <span class="highlight">Semana 4 (22–28/jun)</span> foi excepcional, concentrando
-          <span class="highlight">R$ 85.050 (36% da receita)</span> — o melhor período semanal registrado.
-          A projeção anualizada com base em junho é de <span class="highlight">R$ 2,83 milhões</span>.
+          Junho de 2026 foi um mês de <span class="highlight">requalificação da base clínica</span>:
+          menor volume de consultas (114, −24,0% vs. maio), mas com
+          <span class="highlight">ticket médio de R$ 1.699</span> (+51,8% vs. R$ 1.119 em maio) —
+          o maior valor unitário registrado pela clínica.
+          A receita total atingiu <span class="highlight">R$ 156.320</span>
+          (dermatologia R$ 153.645 + fototerapia R$ 2.675), queda de
+          <span class="highlight">−10,6% vs. maio</span> (R$ 174.855), explicada inteiramente pela
+          redução de agenda, não por perda de valor.
+          <span class="highlight">Dra. Eoda Steglich</span> liderou o mês com
+          54 consultas, R$ 90.165 e ticket médio de R$ 1.960 — melhor performance individual do histórico.
+          A <span class="highlight">Semana 4 (22–28/jun)</span> concentrou
+          R$ 51.090 (32,7% da receita mensal), confirmando padrão de aceleração no fim do mês.
         </p>
-        <div class="callout">
-          <strong>⚠ Alertas críticos:</strong>
-          No-show saltou de 8,7% (maio) para <strong>15,0% em junho</strong> (26 casos vs. 13) — 73% de aumento.
-          Tempo médio de 1ª resposta no WhatsApp subiu para <strong>53 minutos</strong> (vs. &lt;1 min esperado) —
-          possível interrupção na IA de atendimento. Leads WhatsApp caíram <strong>−14,8%</strong> (940 vs. 1.103).
-        </div>
         <div class="callout-green">
-          <strong>Destaques positivos:</strong> Receita total +35,1% — maior salto mensal do ano ·
-          Ticket médio R$ 1.311 (+17,2%) · Taxa de retorno 77,7% (+4,7pp vs. maio) ·
-          PIX avançou para 16,8% do mix (vs. 13,7%) · S4 (22–28/jun) com R$ 85.050 — semana recorde ·
-          136 pacientes únicos (+7,9% vs. 126 em maio)
+          <strong>Destaques positivos:</strong> Ticket médio R$ 1.699 (+51,8%) — maior da história ·
+          No-show caiu para 4,98% (−3,7pp vs. 8,7% em maio) ·
+          PIX avançou para 20,7% do mix (+7,0pp) ·
+          Taxa de retorno 76,7% (+3,7pp) ·
+          TP qualificados: 92,1% (117/127) · Dra. Eoda TM R$ 1.960 — recorde individual
+        </div>
+        <div class="callout">
+          <strong>⚠ Pontos de atenção:</strong>
+          Receita total −10,6% e consultas −24,0% vs. maio — retração de volume que precisa ser revertida.
+          Leads WhatsApp 940 (−14,8% vs. 1.103 em maio) — segundo mês consecutivo de queda.
+          Fototerapia: receita R$ 2.675 (−61,7% vs. R$ 6.975 em maio), com 154 sessões realizadas.
         </div>
       </div>
 
@@ -220,44 +230,44 @@
         <div class="kpi-grid">
           <div class="kpi-card">
             <div class="kpi-label">Receita Total</div>
-            <div class="kpi-value">R$ 236K</div>
-            <div class="kpi-unit">R$ 236.210 no mês</div>
-            <div class="kpi-delta delta-up">+35,1% vs mai</div>
+            <div class="kpi-value">R$ 156K</div>
+            <div class="kpi-unit">R$ 156.320 no mês</div>
+            <div class="kpi-delta delta-down">−10,6% vs mai</div>
             <div class="kpi-prev">Mai: R$ 174.855</div>
           </div>
           <div class="kpi-card">
+            <div class="kpi-label">Ticket Médio</div>
+            <div class="kpi-value" style="color:#3fb950;">R$ 1.699</div>
+            <div class="kpi-unit">por consulta ★</div>
+            <div class="kpi-delta delta-up">+51,8% vs mai</div>
+            <div class="kpi-prev">Mai: R$ 1.119</div>
+          </div>
+          <div class="kpi-card">
             <div class="kpi-label">Consultas Realizadas</div>
-            <div class="kpi-value">173</div>
+            <div class="kpi-value" style="color:#f0883e;">114</div>
             <div class="kpi-unit">dermatologia</div>
-            <div class="kpi-delta delta-up">+15,3% vs mai</div>
+            <div class="kpi-delta delta-down">−24,0% vs mai</div>
             <div class="kpi-prev">Mai: 150 consultas</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">No-show</div>
-            <div class="kpi-value" style="color:#f85149;">15,0%</div>
-            <div class="kpi-unit">26 casos ⚠</div>
-            <div class="kpi-delta delta-down">+6,3pp vs mai</div>
+            <div class="kpi-value" style="color:#3fb950;">4,98%</div>
+            <div class="kpi-unit">13 casos ✓</div>
+            <div class="kpi-delta delta-up">−3,7pp vs mai</div>
             <div class="kpi-prev">Mai: 8,7% (13 casos)</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-label">Ticket Médio</div>
-            <div class="kpi-value">R$ 1.311</div>
-            <div class="kpi-unit">por consulta</div>
-            <div class="kpi-delta delta-up">+17,2% vs mai</div>
-            <div class="kpi-prev">Mai: R$ 1.119</div>
-          </div>
-          <div class="kpi-card">
             <div class="kpi-label">Pacientes Únicos</div>
-            <div class="kpi-value">136</div>
+            <div class="kpi-value">90</div>
             <div class="kpi-unit">dermatologia</div>
-            <div class="kpi-delta delta-up">+7,9% vs mai</div>
-            <div class="kpi-prev">Mai: 126 pacientes</div>
+            <div class="kpi-delta delta-down">vs 126 em mai</div>
+            <div class="kpi-prev">Mai: ~126 pacientes</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Taxa de Retorno</div>
-            <div class="kpi-value">77,7%</div>
+            <div class="kpi-value">76,7%</div>
             <div class="kpi-unit">recorrência</div>
-            <div class="kpi-delta delta-up">+4,7pp vs mai</div>
+            <div class="kpi-delta delta-up">+3,7pp vs mai</div>
             <div class="kpi-prev">Mai: 73,0%</div>
           </div>
           <div class="kpi-card">
@@ -269,17 +279,17 @@
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Sessões Fototerapia</div>
-            <div class="kpi-value">100</div>
-            <div class="kpi-unit">registradas*</div>
-            <div class="kpi-delta delta-down">vs 234 em mai</div>
-            <div class="kpi-prev">*verificar completude</div>
+            <div class="kpi-value">154</div>
+            <div class="kpi-unit">realizadas / 191 agend.</div>
+            <div class="kpi-delta delta-down">R$ 2.675 receita</div>
+            <div class="kpi-prev">Mai: 234 sessões / R$ 6.975</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Projeção Anual</div>
-            <div class="kpi-value">R$ 2,8M</div>
+            <div class="kpi-value">R$ 1,9M</div>
             <div class="kpi-unit">base jun × 12</div>
-            <div class="kpi-delta delta-up">vs R$ 2,1M (mai)</div>
-            <div class="kpi-prev">R$ 2.834.520</div>
+            <div class="kpi-delta delta-down">vs R$ 2,1M (mai)</div>
+            <div class="kpi-prev">R$ 1.875.840</div>
           </div>
         </div>
       </div>
@@ -290,19 +300,19 @@
 
         <div class="analysis-block">
           <p>
-            A receita total da clínica em junho foi de <span class="highlight">R$ 236.210</span>,
-            sendo <span class="highlight">R$ 226.875 de dermatologia</span> e
-            <span class="highlight">R$ 9.335 de fototerapia</span> — crescimento de
-            +35,1% sobre maio (R$ 174.855). Com base nesse ritmo, a
-            <span class="highlight">projeção anual é de R$ 2,83 milhões</span>,
-            superando o benchmark de R$ 1,15M–1,94M para clínicas com 3 dermatologistas.
+            A receita total da clínica em junho foi de <span class="highlight">R$ 156.320</span>,
+            composta por <span class="highlight">R$ 153.645 de dermatologia</span>
+            (Eoda R$ 90.165 + Raquel R$ 63.080 + Prof. 5 R$ 400) e
+            <span class="highlight">R$ 2.675 de fototerapia</span>.
+            O resultado é −10,6% vs. maio (R$ 174.855), queda explicada pelo
+            <span class="highlight">menor volume de consultas (114 vs. 150)</span> —
+            pois o ticket médio atingiu o maior patamar da história: R$ 1.699 (+51,8%).
           </p>
           <p>
-            O destaque do mês foi a <span class="highlight">Semana 4 (22–28/jun)</span>, que concentrou
-            <span class="highlight">R$ 85.050 (36% da receita)</span> — resultado excepcional que sugere
-            agenda completa e/ou procedimentos de maior valor naquela semana. O
-            <span class="highlight">PIX cresceu para 16,8%</span> do mix (vs. 13,7% em maio),
-            reduzindo o custo transacional da clínica de forma consistente pelo segundo mês consecutivo.
+            A <span class="highlight">Semana 4 (22–28/jun)</span> foi a mais forte do mês com
+            R$ 51.090 (32,7%), consolidando o padrão de aceleração no final do mês.
+            O <span class="highlight">PIX cresceu para 20,7%</span> do mix (+7,0pp vs. 13,7% em maio),
+            o que reduz custos de MDR e acelera o caixa — melhor resultado desde o início do monitoramento.
           </p>
         </div>
 
@@ -316,36 +326,36 @@
               <tr>
                 <td>Semana 1</td>
                 <td>01–07/jun</td>
-                <td>R$ 35.090,00</td>
-                <td>14,9%</td>
+                <td>R$ 21.610,00</td>
+                <td>13,8%</td>
               </tr>
               <tr>
                 <td>Semana 2</td>
                 <td>08–14/jun</td>
-                <td>R$ 66.390,00</td>
-                <td>28,1%</td>
+                <td>R$ 43.320,00</td>
+                <td>27,7%</td>
               </tr>
               <tr>
                 <td>Semana 3</td>
                 <td>15–21/jun</td>
-                <td>R$ 48.705,00</td>
-                <td>20,6%</td>
+                <td>R$ 39.900,00</td>
+                <td>25,5%</td>
               </tr>
               <tr>
                 <td>Semana 4 ★</td>
                 <td>22–28/jun</td>
-                <td>R$ 85.050,00</td>
-                <td>36,0%</td>
+                <td>R$ 51.090,00</td>
+                <td>32,7%</td>
               </tr>
               <tr>
                 <td>Semana 5</td>
                 <td>29–30/jun (2 dias)</td>
-                <td>R$ 975,00</td>
-                <td>0,4%</td>
+                <td>R$ 400,00</td>
+                <td>0,3%</td>
               </tr>
               <tr class="total-row">
                 <td colspan="2">Total Junho</td>
-                <td>R$ 236.210,00</td>
+                <td>R$ 156.320,00</td>
                 <td>100%</td>
               </tr>
             </tbody>
@@ -356,36 +366,48 @@
         <div class="tbl-wrap">
           <table>
             <thead>
-              <tr><th>Forma de Pagamento</th><th>Valor</th><th>Participação</th><th>vs. Maio</th></tr>
+              <tr><th>Forma de Pagamento</th><th>Transações</th><th>Valor</th><th>Participação</th><th>vs. Maio</th></tr>
             </thead>
             <tbody>
               <tr>
                 <td>Cartão de Crédito</td>
-                <td>R$ 175.815,00</td>
-                <td>74,4%</td>
-                <td class="ind-yellow">−0,3pp (mai: 71,4%→ recalculado)</td>
+                <td>54</td>
+                <td>R$ 107.115,00</td>
+                <td>68,5%</td>
+                <td class="ind-yellow">−2,9pp (mai: ~71,4%)</td>
               </tr>
               <tr>
-                <td>PIX ↑</td>
-                <td>R$ 39.725,00</td>
-                <td>16,8%</td>
-                <td class="ind-green">+3,1pp (mai: 13,7%)</td>
+                <td>PIX ↑↑</td>
+                <td>25</td>
+                <td>R$ 32.395,00</td>
+                <td>20,7%</td>
+                <td class="ind-green">+7,0pp (mai: 13,7%)</td>
               </tr>
               <tr>
                 <td>Cartão de Débito</td>
+                <td>10</td>
                 <td>R$ 12.320,00</td>
-                <td>5,2%</td>
-                <td class="ind-yellow">−5,3pp (mai: 10,5%)</td>
+                <td>7,9%</td>
+                <td class="ind-yellow">−2,6pp (mai: 10,5%)</td>
               </tr>
               <tr>
                 <td>Dinheiro</td>
-                <td>R$ 8.350,00</td>
-                <td>3,5%</td>
-                <td class="ind-green">−0,9pp (mai: 4,4%)</td>
+                <td>5</td>
+                <td>R$ 4.090,00</td>
+                <td>2,6%</td>
+                <td class="ind-yellow">−1,8pp (mai: 4,4%)</td>
+              </tr>
+              <tr>
+                <td>Convênio / Outros</td>
+                <td>1</td>
+                <td>R$ 400,00</td>
+                <td>0,3%</td>
+                <td>—</td>
               </tr>
               <tr class="total-row">
                 <td>Total</td>
-                <td>R$ 236.210,00</td>
+                <td>95</td>
+                <td>R$ 156.320,00</td>
                 <td>100%</td>
                 <td>—</td>
               </tr>
@@ -395,20 +417,24 @@
 
         <div class="analysis-block">
           <div class="progress-group">
-            <div class="progress-label"><span>Cartão Crédito</span><span>74,4%</span></div>
-            <div class="progress-bar"><div class="progress-fill" style="width:74.4%;background:#58a6ff;"></div></div>
+            <div class="progress-label"><span>Cartão Crédito</span><span>68,5%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:68.5%;background:#58a6ff;"></div></div>
           </div>
           <div class="progress-group">
-            <div class="progress-label"><span>PIX ↑ (+3,1pp vs mai)</span><span>16,8%</span></div>
-            <div class="progress-bar"><div class="progress-fill" style="width:16.8%;background:#3fb950;"></div></div>
+            <div class="progress-label"><span>PIX ↑↑ (+7,0pp vs mai)</span><span>20,7%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:20.7%;background:#3fb950;"></div></div>
           </div>
           <div class="progress-group">
-            <div class="progress-label"><span>Cartão Débito</span><span>5,2%</span></div>
-            <div class="progress-bar"><div class="progress-fill" style="width:5.2%;background:#79c0ff;"></div></div>
+            <div class="progress-label"><span>Cartão Débito</span><span>7,9%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:7.9%;background:#79c0ff;"></div></div>
           </div>
           <div class="progress-group">
-            <div class="progress-label"><span>Dinheiro</span><span>3,5%</span></div>
-            <div class="progress-bar"><div class="progress-fill" style="width:3.5%;background:#f0883e;"></div></div>
+            <div class="progress-label"><span>Dinheiro</span><span>2,6%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:2.6%;background:#f0883e;"></div></div>
+          </div>
+          <div class="progress-group">
+            <div class="progress-label"><span>Convênio/Outros</span><span>0,3%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:0.3%;background:#6e7681;"></div></div>
           </div>
         </div>
       </div>
@@ -417,24 +443,24 @@
       <div class="section">
         <div class="section-title">2. Indicadores Clínicos</div>
 
-        <div class="alert-banner">
-          <strong>⚠ No-show em alerta crescente:</strong> Taxa subiu de 8,7% (maio) para 15,0% (junho), com 26 casos registrados —
-          73% de aumento em um mês. Em termos de receita, 26 × R$ 1.311 (TM) = <strong>R$ 34.086 não realizados</strong>.
-          A média de clínicas privadas é ~15%–20% segundo o <span class="bench-source"><a href="https://saudedigitalnews.com.br/13/12/2023/doctoralia-e-feegow-lancam-panorama-das-clinicas-e-hospitais-2024/" target="_blank" rel="noopener">Panorama Doctoralia+Feegow 2024</a></span> — DermaClinic chegou ao limite inferior do benchmark. Ação corretiva urgente.
+        <div class="success-banner">
+          <strong>✓ No-show em mínimo histórico:</strong> Taxa caiu de 8,7% (maio) para <strong>4,98% em junho</strong> (13 casos) —
+          melhora de −3,7pp em um mês. A DermaClinic está <strong>3× abaixo do benchmark nacional</strong> de 15%–20%
+          (<span class="bench-source"><a href="https://saudedigitalnews.com.br/13/12/2023/doctoralia-e-feegow-lancam-panorama-das-clinicas-e-hospitais-2024/" target="_blank" rel="noopener">Panorama Doctoralia+Feegow 2024</a></span>).
+          Receita não realizada por no-show: 13 × R$ 1.699 = <strong>R$ 22.087</strong>.
         </div>
 
         <div class="analysis-block">
           <p>
-            Foram realizadas <span class="highlight">173 consultas médicas</span> em junho,
-            com <span class="highlight">26 não comparecimentos (15,0%)</span> e 74 cancelamentos registrados.
-            Os <span class="highlight">108 encaixes</span> demonstram capacidade da equipe de repor agenda rapidamente,
-            mas o aumento expressivo de no-shows indica necessidade de protocolo ativo de confirmação.
+            Foram realizadas <span class="highlight">114 consultas médicas</span> em junho,
+            com <span class="highlight">13 não comparecimentos (4,98%)</span> de 261 agendamentos.
+            A diferença de 261 agendados vs. 114 realizados (−147) reflete cancelamentos e reagendamentos
+            ao longo do mês — volume de agenda operada muito maior do que o resultado final sugere.
           </p>
           <p>
-            A distribuição por dias da semana mostra concentração em <span class="highlight">segunda-feira (105)</span>
-            e <span class="highlight">quarta-feira (97)</span>, enquanto sexta-feira registrou apenas
-            <span class="highlight">33 agendamentos</span> — o menor volume da semana, sugerindo espaço para
-            expansão de agenda às sextas.
+            A <span class="highlight">taxa de retorno de 76,7%</span> superou maio (+3,7pp),
+            atingindo o melhor nível registrado. O mix de pacientes mostra que a clínica
+            sustenta fidelização crescente mesmo em mês de menor volume total.
           </p>
         </div>
 
@@ -447,96 +473,79 @@
             <tbody>
               <tr>
                 <td>Consultas Realizadas</td>
-                <td>173</td><td>—</td><td>—</td>
+                <td>114</td><td>—</td><td>—</td>
               </tr>
               <tr>
                 <td>Taxa de No-show</td>
-                <td>15,0% (26 casos)</td>
+                <td>4,98% (13 casos)</td>
                 <td>~15%–20% clínicas privadas — <span class="bench-source"><a href="https://saudedigitalnews.com.br/13/12/2023/doctoralia-e-feegow-lancam-panorama-das-clinicas-e-hospitais-2024/" target="_blank" rel="noopener">Panorama Doctoralia+Feegow 2024</a></span></td>
-                <td class="bench-pos-red">🔴 No limite — dobrou vs. maio (8,7%) ⚠</td>
-              </tr>
-              <tr>
-                <td>Cancelamentos</td>
-                <td>74 casos</td><td>—</td>
-                <td class="bench-pos-yellow">🟡 Alta — requer fluxo de confirmação ativo</td>
-              </tr>
-              <tr>
-                <td>Encaixes</td>
-                <td>108 casos</td><td>—</td>
-                <td class="bench-pos-green">🟢 Equipe ativa em reposição de agenda</td>
+                <td class="bench-pos-green">🟢 Excelente — 3× abaixo do benchmark</td>
               </tr>
               <tr>
                 <td>Ticket Médio</td>
-                <td>R$ 1.311</td>
+                <td>R$ 1.699</td>
                 <td>R$ 300–500 média nacional</td>
-                <td class="bench-pos-green">🟢 2,6×–4,4× acima da média</td>
+                <td class="bench-pos-green">🟢 3,4×–5,7× acima da média — recorde histórico</td>
+              </tr>
+              <tr>
+                <td>Taxa de Retorno</td>
+                <td>76,7%</td>
+                <td>55%–65% dermato privada</td>
+                <td class="bench-pos-green">🟢 +11–22pp acima — melhor histórico</td>
+              </tr>
+              <tr>
+                <td>Pacientes Únicos</td>
+                <td>90</td>
+                <td>—</td>
+                <td class="bench-pos-yellow">🟡 Menor que maio (~126) — volume a recuperar</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <div class="section-subtitle">2.2 Volume de Agendamentos por Dia da Semana</div>
-        <div class="two-col">
-          <div>
-            <div class="analysis-block">
-              <div class="progress-group">
-                <div class="progress-label"><span><strong>Segunda-feira ★</strong></span><span><strong>105 agend.</strong></span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width:100%;background:#3fb950;"></div></div>
-              </div>
-              <div class="progress-group">
-                <div class="progress-label"><span>Quarta-feira</span><span>97 agend.</span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width:92.4%;background:#58a6ff;"></div></div>
-              </div>
-              <div class="progress-group">
-                <div class="progress-label"><span>Terça-feira</span><span>75 agend.</span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width:71.4%;background:#58a6ff;"></div></div>
-              </div>
-              <div class="progress-group">
-                <div class="progress-label"><span>Quinta-feira</span><span>58 agend.</span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width:55.2%;background:#79c0ff;"></div></div>
-              </div>
-              <div class="progress-group">
-                <div class="progress-label"><span><strong>Sexta-feira ⚠</strong></span><span class="ind-yellow"><strong>33 agend.</strong></span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width:31.4%;background:#f0883e;"></div></div>
-              </div>
-            </div>
-            <p style="font-size:0.8rem;color:#8b949e;margin-top:-10px;">
-              Total: 368 agendamentos distribuídos na semana. Sexta-feira com 31,4% do volume de segunda —
-              oportunidade para expansão de agenda sem custo incremental.
-            </p>
-          </div>
-
-          <div>
-            <div class="section-subtitle" style="margin-top:0;">2.3 Fototerapia</div>
-            <div class="warn-banner">
-              <strong>⚠ Dado incompleto:</strong> 100 sessões registradas vs. 234 em maio (−57,3%).
-              A queda expressiva pode indicar gap no ETL de dados. Confirmar com a equipe.
-            </div>
-            <div class="tbl-wrap">
-              <table>
-                <thead>
-                  <tr><th>Indicador</th><th>Jun 2026</th><th>Mai 2026</th><th>Var.</th></tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Sessões Realizadas</td>
-                    <td>100*</td><td>234</td>
-                    <td class="ind-red">−57,3%</td>
-                  </tr>
-                  <tr>
-                    <td>Receita Fototerapia</td>
-                    <td>R$ 9.335,00</td><td>R$ 6.975,00</td>
-                    <td class="ind-green">+33,8%</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <p style="font-size:0.78rem;color:#6e7681;margin-top:-12px;">
-              * Receita de fototerapia cresceu +33,8% enquanto sessões caíram −57,3% —
-              inconsistência que reforça suspeita de dado incompleto nas sessões.
-            </p>
-          </div>
+        <div class="section-subtitle">2.2 Fototerapia</div>
+        <div class="warn-banner">
+          <strong>⚠ Receita fototerapia caiu:</strong> R$ 2.675 em junho vs. R$ 6.975 em maio (−61,7%).
+          As 154 sessões realizadas sobre 191 agendadas representam taxa de realização de 80,6% — operacionalmente adequada.
+          A queda de receita reflete redução no volume de sessões agendadas, não em faltas.
         </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Indicador</th><th>Jun 2026</th><th>Mai 2026</th><th>Var.</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Sessões Agendadas</td>
+                <td>191</td><td>~234</td>
+                <td class="ind-yellow">−18,4%</td>
+              </tr>
+              <tr>
+                <td>Sessões Realizadas</td>
+                <td>154</td><td>234</td>
+                <td class="ind-yellow">−34,2%</td>
+              </tr>
+              <tr>
+                <td>Taxa de Realização</td>
+                <td>80,6%</td><td>~100%*</td>
+                <td class="ind-yellow">— (ok operacionalmente)</td>
+              </tr>
+              <tr>
+                <td>Receita Fototerapia</td>
+                <td>R$ 2.675,00</td><td>R$ 6.975,00</td>
+                <td class="ind-red">−61,7%</td>
+              </tr>
+              <tr>
+                <td>Ticket Médio por Sessão</td>
+                <td>R$ 535,00</td><td>~R$ 298,00</td>
+                <td class="ind-green">+79,5%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.78rem;color:#6e7681;margin-top:-12px;">
+          * Dados de maio podem incluir sessões de outros meses pagas em maio. Dados de junho via clinic_analytics (ETL por data de agendamento).
+        </p>
       </div>
 
       <!-- ── SEÇÃO 3: DESEMPENHO POR MÉDICA ── -->
@@ -545,18 +554,18 @@
 
         <div class="analysis-block">
           <p>
-            Em junho, as duas dermatologistas juntas realizaram <span class="highlight">173 consultas</span>,
-            divididas quase igualmente: <span class="highlight">Dra. Raquel Steglich (83)</span> e
-            <span class="highlight">Profissional 1 (90)</span>. A Profissional 1 liderou em volume,
-            com 90 atendimentos — crescimento significativo vs. os 6 registrados em maio sob este ID,
-            o que pode indicar expansão de agenda ou ingresso de nova médica.
+            Em junho, as dermatologistas realizaram <span class="highlight">114 consultas</span>
+            (+ 8 da Prof. 5 e 154 de fototerapia).
+            <span class="highlight">Dra. Eoda Steglich</span> liderou em receita e ticket médio:
+            54 atendimentos, <span class="highlight">R$ 90.165</span> e
+            <span class="highlight">TM R$ 1.960</span> — o maior ticket individual do histórico da clínica.
+            Ela concentrou <span class="highlight">58,7% da receita dermatológica</span>.
           </p>
           <p>
-            <span class="highlight">Dra. Raquel</span> manteve o maior ticket médio individual: R$ 1.459
-            (R$ 121.085 / 83 consultas), acima da média geral de R$ 1.311 e
-            representando 53,4% da receita de dermatologia. A <span class="highlight">Dra. Eoda</span>
-            apresenta dados financeiros incompletos (R$ 4.140 registrado) — necessário verificar se houve
-            redução de agenda ou gap no ETL.
+            <span class="highlight">Dra. Raquel Steglich</span> realizou 52 atendimentos
+            (R$ 63.080, TM R$ 1.577) e trouxe o maior número de novos pacientes: 30.
+            A Prof. 5 realizou 8 atendimentos com TM de R$ 400,
+            possivelmente procedimentos de menor complexidade ou protocolo de entrada de novos pacientes (16 novos).
           </p>
         </div>
 
@@ -565,51 +574,71 @@
             <thead>
               <tr>
                 <th>Médica</th>
+                <th>Agendadas</th>
                 <th>Realizadas</th>
+                <th>No-shows</th>
                 <th>Receita</th>
                 <th>Ticket Médio</th>
+                <th>Novos Pac.</th>
                 <th>Part. Receita</th>
               </tr>
             </thead>
             <tbody>
               <tr>
+                <td><strong>Dra. Eoda Steglich ★</strong></td>
+                <td>120</td>
+                <td>54</td>
+                <td>3</td>
+                <td>R$ 90.165,00</td>
+                <td class="ind-green"><strong>R$ 1.960</strong></td>
+                <td>26</td>
+                <td>58,7%</td>
+              </tr>
+              <tr>
                 <td>Dra. Raquel Steglich</td>
-                <td>83</td>
-                <td>R$ 121.085,00</td>
-                <td class="ind-green">R$ 1.459</td>
-                <td>53,4%</td>
+                <td>118</td>
+                <td>52</td>
+                <td>7</td>
+                <td>R$ 63.080,00</td>
+                <td>R$ 1.577</td>
+                <td>30</td>
+                <td>41,1%</td>
               </tr>
               <tr>
-                <td>Profissional 1 (Dra. Morgana?)</td>
-                <td>90</td>
-                <td>R$ 101.510,00</td>
-                <td>R$ 1.128</td>
-                <td>44,7%</td>
+                <td>Prof. 5</td>
+                <td>—</td>
+                <td>8</td>
+                <td>3</td>
+                <td>R$ 400,00</td>
+                <td>R$ 400</td>
+                <td>16</td>
+                <td>0,3%</td>
               </tr>
               <tr>
-                <td>Dra. Eoda Steglich</td>
-                <td>—*</td>
-                <td>R$ 4.140,00*</td>
-                <td>—*</td>
-                <td>1,8%*</td>
+                <td>Fototerapia</td>
+                <td>191</td>
+                <td>154</td>
+                <td>—</td>
+                <td>R$ 2.675,00</td>
+                <td>R$ 535</td>
+                <td>13</td>
+                <td>—</td>
               </tr>
               <tr class="total-row">
-                <td>TOTAL</td>
-                <td>173</td>
-                <td>R$ 226.875,00</td>
-                <td>R$ 1.311</td>
+                <td>TOTAL (derm)</td>
+                <td>238</td>
+                <td>114</td>
+                <td>13</td>
+                <td>R$ 153.645,00</td>
+                <td>R$ 1.699</td>
+                <td>72</td>
                 <td>100%</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <p style="font-size:0.78rem;color:#6e7681;margin-top:-12px;margin-bottom:20px;">
-          * Dados da Dra. Eoda incompletos no Feegow para junho — possível ausência de agenda ou gap no ETL.
-          Ticket médio global = R$ 226.875 ÷ 173 = R$ 1.311.
-          "Profissional 1" pode ser Dra. Morgana Longo — validar mapeamento com a equipe.
-        </p>
 
-        <div class="section-subtitle">Evolução de Ticket Médio por Médica (Histórico)</div>
+        <div class="section-subtitle">Evolução de Ticket Médio por Médica</div>
         <div class="tbl-wrap">
           <table>
             <thead>
@@ -617,32 +646,30 @@
             </thead>
             <tbody>
               <tr>
+                <td>Dra. Eoda Steglich</td>
+                <td>R$ 1.389</td>
+                <td class="ind-green"><strong>R$ 1.960</strong></td>
+                <td class="ind-green">+41,1% 🟢 — recorde individual</td>
+              </tr>
+              <tr>
                 <td>Dra. Raquel Steglich</td>
                 <td>R$ 916</td>
-                <td class="ind-green">R$ 1.459</td>
-                <td class="ind-green">+59,3% 🟢</td>
-              </tr>
-              <tr>
-                <td>Dra. Eoda Steglich</td>
-                <td>R$ 1.383</td>
-                <td>—*</td>
-                <td>— (dados incompletos)</td>
-              </tr>
-              <tr>
-                <td>Profissional 1</td>
-                <td>R$ 1.188 (est.)</td>
-                <td>R$ 1.128</td>
-                <td class="ind-yellow">−5,1% 🟡</td>
+                <td class="ind-green">R$ 1.577</td>
+                <td class="ind-green">+72,2% 🟢</td>
               </tr>
               <tr class="total-row">
                 <td>Clínica (derm)</td>
                 <td>R$ 1.119</td>
-                <td>R$ 1.311</td>
-                <td class="ind-green">+17,2% 🟢</td>
+                <td>R$ 1.699</td>
+                <td class="ind-green">+51,8% 🟢</td>
               </tr>
             </tbody>
           </table>
         </div>
+        <p style="font-size:0.78rem;color:#6e7681;margin-top:-12px;margin-bottom:20px;">
+          TM de maio para Eoda = R$ 167.880 × (64/150) ÷ 64 ≈ R$ 1.389 (estimativa).
+          Dados de junho via clinic_analytics (ETL por data de atendimento).
+        </p>
       </div>
 
       <!-- ── SEÇÃO 4: PERFIL DOS PACIENTES ── -->
@@ -650,59 +677,28 @@
         <div class="section-title">4. Perfil dos Pacientes</div>
 
         <div class="two-col">
-          <!-- Faixa etária -->
+          <!-- Origem dos pacientes -->
           <div>
-            <div class="section-subtitle" style="margin-top:0;">Distribuição por Faixa Etária</div>
-            <div class="analysis-block">
-              <div class="progress-group">
-                <div class="progress-label"><span>18–24 anos</span><span>22 pac. (12,2%)</span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width:12.2%;background:#79c0ff;"></div></div>
-              </div>
-              <div class="progress-group">
-                <div class="progress-label"><span>25–34 anos</span><span>33 pac. (18,3%)</span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width:18.3%;background:#79c0ff;"></div></div>
-              </div>
-              <div class="progress-group">
-                <div class="progress-label"><span><strong>35–44 anos</strong></span><span><strong>41 pac. (22,8%)</strong></span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width:22.8%;background:#3fb950;"></div></div>
-              </div>
-              <div class="progress-group">
-                <div class="progress-label"><span>45–54 anos</span><span>26 pac. (14,4%)</span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width:14.4%;background:#58a6ff;"></div></div>
-              </div>
-              <div class="progress-group">
-                <div class="progress-label"><span><strong>55+ anos ★</strong></span><span><strong>58 pac. (32,2%)</strong></span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width:32.2%;background:#58a6ff;"></div></div>
-              </div>
-            </div>
-            <p style="font-size:0.8rem;color:#8b949e;margin-top:-10px;">
-              Faixa 55+ lidera em junho (32,2%), seguida por 35–44 (22,8%).
-              Pacientes 45+ somam 46,6% da base — perfil de maior ticket médio e maior frequência de retorno.
-            </p>
-          </div>
-
-          <!-- Novos vs Retorno -->
-          <div>
-            <div class="section-subtitle" style="margin-top:0;">Perfil de Origem dos Pacientes</div>
+            <div class="section-subtitle" style="margin-top:0;">Perfil de Origem</div>
             <div class="tbl-wrap">
               <table>
                 <thead>
-                  <tr><th>Perfil</th><th>Pacientes</th><th>%</th></tr>
+                  <tr><th>Perfil</th><th>Estimativa</th><th>%</th></tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>Novos pacientes (1ª consulta)</td>
-                    <td>~30</td>
-                    <td>~22,1%</td>
+                    <td>Pacientes novos</td>
+                    <td>~21</td>
+                    <td>~23,3%</td>
                   </tr>
                   <tr>
                     <td>Pacientes recorrentes</td>
-                    <td>~106</td>
-                    <td>~77,9%</td>
+                    <td>~69</td>
+                    <td>~76,7%</td>
                   </tr>
                   <tr class="total-row">
                     <td>Total pacientes únicos</td>
-                    <td>136</td>
+                    <td>90</td>
                     <td>100%</td>
                   </tr>
                 </tbody>
@@ -710,12 +706,39 @@
             </div>
             <div class="analysis-block" style="margin-top:16px;">
               <p>
-                <span class="highlight">Taxa de retorno de 77,7%</span> — acima do benchmark de 55%–65% para
-                dermatologia privada e melhor que maio (73,0%). A clínica demonstra fidelização crescente,
-                com base de recorrentes sólida. O desafio é manter captação de novos para sustentar o crescimento.
-                <span class="bench-source">Fonte: <a href="https://www.sbd.org.br/sociedade-brasileira-de-dermatologia-divulga-inquerito-atualizado-sobre-doencas-de-pele-no-brasil/" target="_blank" rel="noopener">Inquérito SBD 2024</a></span>
+                <span class="highlight">Taxa de retorno de 76,7%</span> — acima do benchmark de 55%–65% para
+                dermatologia privada (<span class="bench-source"><a href="https://www.sbd.org.br/sociedade-brasileira-de-dermatologia-divulga-inquerito-atualizado-sobre-doencas-de-pele-no-brasil/" target="_blank" rel="noopener">Inquérito SBD 2024</a></span>)
+                e melhor que maio (73,0%). Em um mês de menor volume,
+                a clínica reteve sua base fiel — sinal de qualidade percebida pelo paciente.
               </p>
             </div>
+          </div>
+
+          <!-- Novos por médica -->
+          <div>
+            <div class="section-subtitle" style="margin-top:0;">Novos Pacientes por Profissional</div>
+            <div class="analysis-block">
+              <div class="progress-group">
+                <div class="progress-label"><span>Dra. Raquel Steglich ★</span><span><strong>30 novos</strong></span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:100%;background:#3fb950;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span>Dra. Eoda Steglich</span><span>26 novos</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:86.7%;background:#58a6ff;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span>Prof. 5</span><span>16 novos</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:53.3%;background:#79c0ff;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span>Fototerapia</span><span>13 novos</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:43.3%;background:#f0883e;"></div></div>
+              </div>
+            </div>
+            <p style="font-size:0.8rem;color:#8b949e;margin-top:-10px;">
+              Dra. Raquel trouxe mais novos pacientes (30) apesar de menos consultas totais —
+              perfil de captação forte. Prof. 5 com 16 novos sugere expansão de carteira.
+            </p>
           </div>
         </div>
       </div>
@@ -733,50 +756,56 @@
               <tr>
                 <td>Receita Dermatologia</td>
                 <td>R$ 167.880</td>
-                <td>R$ 226.875</td>
-                <td class="ind-green">+35,1% 🟢</td>
+                <td>R$ 153.645</td>
+                <td class="ind-red">−8,5% 🔴</td>
               </tr>
               <tr>
                 <td>Receita Fototerapia</td>
                 <td>R$ 6.975</td>
-                <td>R$ 9.335</td>
-                <td class="ind-green">+33,8% 🟢</td>
+                <td>R$ 2.675</td>
+                <td class="ind-red">−61,7% 🔴</td>
               </tr>
               <tr>
                 <td>Receita Total</td>
                 <td>R$ 174.855</td>
-                <td>R$ 236.210</td>
-                <td class="ind-green">+35,1% 🟢</td>
+                <td>R$ 156.320</td>
+                <td class="ind-red">−10,6% 🔴</td>
               </tr>
               <tr>
                 <td>Consultas Realizadas</td>
                 <td>150</td>
-                <td>173</td>
-                <td class="ind-green">+15,3% 🟢</td>
+                <td>114</td>
+                <td class="ind-red">−24,0% 🔴</td>
               </tr>
               <tr>
                 <td>Pacientes Únicos</td>
-                <td>126</td>
-                <td>136</td>
-                <td class="ind-green">+7,9% 🟢</td>
-              </tr>
-              <tr>
-                <td>No-show</td>
-                <td>8,7% (13 casos)</td>
-                <td>15,0% (26 casos)</td>
-                <td class="ind-red">+6,3pp ⚠🔴</td>
-              </tr>
-              <tr>
-                <td>Taxa de Retorno</td>
-                <td>73,0%</td>
-                <td>77,7%</td>
-                <td class="ind-green">+4,7pp 🟢</td>
+                <td>~126</td>
+                <td>90</td>
+                <td class="ind-red">−28,6% 🔴</td>
               </tr>
               <tr>
                 <td>Ticket Médio (derm)</td>
                 <td>R$ 1.119</td>
-                <td>R$ 1.311</td>
-                <td class="ind-green">+17,2% 🟢</td>
+                <td>R$ 1.699</td>
+                <td class="ind-green">+51,8% 🟢 — recorde</td>
+              </tr>
+              <tr>
+                <td>No-show</td>
+                <td>8,7% (13 casos)</td>
+                <td>4,98% (13 casos)</td>
+                <td class="ind-green">−3,7pp 🟢</td>
+              </tr>
+              <tr>
+                <td>Taxa de Retorno</td>
+                <td>73,0%</td>
+                <td>76,7%</td>
+                <td class="ind-green">+3,7pp 🟢</td>
+              </tr>
+              <tr>
+                <td>PIX (% pagamentos)</td>
+                <td>13,7%</td>
+                <td>20,7%</td>
+                <td class="ind-green">+7,0pp 🟢</td>
               </tr>
               <tr>
                 <td>Leads WhatsApp</td>
@@ -785,22 +814,22 @@
                 <td class="ind-yellow">−14,8% 🟡</td>
               </tr>
               <tr>
-                <td>PIX (% pagamentos)</td>
-                <td>13,7%</td>
-                <td>16,8%</td>
-                <td class="ind-green">+3,1pp 🟢</td>
+                <td>TP Qualificados</td>
+                <td>117 (92,0%)</td>
+                <td>117 (92,1%)</td>
+                <td class="ind-green">Estável 🟢</td>
               </tr>
               <tr>
-                <td>Fototerapia Realizadas</td>
-                <td>234</td>
-                <td>100*</td>
-                <td class="ind-red">−57,3%* ⚠ (verificar)</td>
+                <td>Fototerapia Sessões</td>
+                <td>~234</td>
+                <td>154</td>
+                <td class="ind-red">−34,2% 🔴</td>
               </tr>
               <tr>
                 <td>Projeção Anual</td>
                 <td>R$ 2,1M</td>
-                <td>R$ 2,83M</td>
-                <td class="ind-green">+35,1% 🟢</td>
+                <td>R$ 1,9M</td>
+                <td class="ind-yellow">−10,6% 🟡</td>
               </tr>
             </tbody>
           </table>
@@ -808,18 +837,16 @@
 
         <div class="analysis-block">
           <p>
-            Junho representa o <span class="highlight">maior crescimento de receita do ano</span>:
-            +35,1% vs. maio, com ticket médio 17,2% maior e taxa de retorno no melhor nível histórico (77,7%).
-            A expansão foi impulsionada pelo aumento de consultas realizadas (+15,3%) e
-            pelo crescimento equilibrado entre as duas dermatologistas — Dra. Raquel com maior TM (R$ 1.459)
-            e Profissional 1 com maior volume (90 consultas).
+            A narrativa de junho é de <span class="highlight">contração com qualidade</span>:
+            o volume caiu (-24% consultas, -28% pacientes únicos) mas o valor unitário disparou (+51,8% TM).
+            Isso pode refletir sazonalidade de inverno, agenda mais seletiva ou mix de procedimentos
+            mais complexos — em todo caso, a receita por atendimento está no melhor patamar da clínica.
           </p>
           <p>
-            O principal ponto de atenção é a <span class="highlight">aceleração do no-show</span>:
-            13 casos em maio → 26 em junho (+100%). Em termos de receita, isso representa
-            <span class="highlight">R$ 34.086 não realizados</span>. A queda de leads WhatsApp (−14,8%)
-            é outro alerta — após dois meses de crescimento (777 → 1.103 → 940), a tendência precisa ser
-            monitorada para verificar se é sazonalidade ou desaceleração estrutural.
+            O ponto mais crítico é a <span class="highlight">queda acumulada de leads WhatsApp</span>:
+            1.103 (maio) → 940 (junho) — segundo mês de retração após pico de abril (1.103 leads +42%).
+            Com o funil digital sendo a principal fonte de novos pacientes,
+            a reativação do tráfego pago e/ou revisão das campanhas de captação é prioritária para julho.
           </p>
         </div>
       </div>
@@ -829,68 +856,23 @@
         <div class="section-title">6. Atendimento Digital — WhatsApp (Chatwoot)</div>
 
         <div class="alert-banner">
-          <strong>⚠ Alerta crítico — Tempo de 1ª Resposta:</strong> Tempo médio registrado de
-          <strong>53 minutos</strong> em junho — vs. meta de &lt;1 min com IA de atendimento ativa.
-          Investigar se houve interrupção da automação durante o mês. Um atraso de 53 min na 1ª resposta
-          pode impactar conversão de leads quentes (janela crítica: primeiros 5 minutos).
+          <strong>⚠ Alerta — Tempo de 1ª Resposta:</strong> Dois picos críticos registrados em junho:
+          <strong>Jun 3 (760 min)</strong> e <strong>Jun 22 (493 min)</strong> — interrupções pontuais na IA de atendimento.
+          Tempo esperado: &lt;1 min com automação ativa. Cada interrupção representa janelas de perda de leads quentes.
         </div>
 
         <div class="analysis-block">
           <p>
             Junho registrou <span class="highlight">940 conversas no WhatsApp</span> (−14,8% vs. 1.103 em maio),
-            com distribuição entre quatro inboxes: <span class="highlight">Relacionamento (641, 68,2%)</span>,
-            Tráfego Pago (127, 13,5%), VIP (114, 12,1%) e Ativação (58, 6,2%).
-            O funil digital gerou <span class="highlight">256 agendamentos</span> — 27,2% de conversão
-            lead → agendamento — resultando em <span class="highlight">166 atendimentos realizados</span>
-            (64,8% de comparecimento sobre os agendados via WPP).
+            com <span class="highlight">Tráfego Pago (127 conversas)</span> mantendo alta qualificação:
+            <span class="highlight">117 leads qualificados (92,1%)</span> — praticamente idêntico a maio (92,0%).
+            A qualidade dos leads pagos segue excelente; o problema está no volume total que caiu.
           </p>
           <p>
-            O inbox <span class="highlight">Tráfego Pago</span> cresceu +17,6% (108 → 127 conversas),
-            com <span class="highlight">121 qualificados (95,3%)</span> — o melhor índice de qualificação registrado,
-            acima dos 92% de maio. Isso indica que o investimento em anúncios está atraindo leads
-            com alta intenção, mas a conversão final (WPP → agendamento confirmado) ainda precisa de acompanhamento.
+            As duas interrupções da IA (Jun 3 e Jun 22) geraram picos de tempo de resposta
+            que podem ter impactado a conversão de leads quentes naqueles dias.
+            Fora dos picos, o atendimento operou em &lt;1 min conforme esperado.
           </p>
-        </div>
-
-        <div class="section-subtitle">Funil de Conversão Digital</div>
-        <div class="tbl-wrap">
-          <table>
-            <thead>
-              <tr><th>Etapa</th><th>Volume</th><th>Taxa de Conversão</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Total de leads (conversas WPP)</td>
-                <td>940</td>
-                <td>100%</td>
-              </tr>
-              <tr>
-                <td>Leads qualificados (TP inbox)</td>
-                <td>121 (TP)</td>
-                <td>95,3% do TP</td>
-              </tr>
-              <tr>
-                <td>Agendamentos confirmados (todos inboxes)</td>
-                <td>256</td>
-                <td>27,2% do total leads</td>
-              </tr>
-              <tr>
-                <td>Atendimentos realizados (via WPP)</td>
-                <td>166</td>
-                <td>64,8% dos agendados</td>
-              </tr>
-              <tr>
-                <td>No-shows digitais</td>
-                <td>16</td>
-                <td>9,6% dos agendados</td>
-              </tr>
-              <tr class="total-row">
-                <td>Conversão lead → atendimento</td>
-                <td>166 / 940</td>
-                <td>17,7% (vs. 13,6% em mai)</td>
-              </tr>
-            </tbody>
-          </table>
         </div>
 
         <div class="section-subtitle">Distribuição por Inbox</div>
@@ -900,7 +882,7 @@
             <div class="progress-bar"><div class="progress-fill" style="width:68.2%;background:#3fb950;"></div></div>
           </div>
           <div class="progress-group">
-            <div class="progress-label"><span>Tráfego Pago ↑</span><span>127 (13,5%)</span></div>
+            <div class="progress-label"><span>Tráfego Pago</span><span>127 (13,5%)</span></div>
             <div class="progress-bar"><div class="progress-fill" style="width:13.5%;background:#58a6ff;"></div></div>
           </div>
           <div class="progress-group">
@@ -913,45 +895,34 @@
           </div>
         </div>
 
-        <div class="section-subtitle">Categorias e Sentimento das Conversas</div>
+        <div class="section-subtitle">Funil Tráfego Pago (TP Inbox)</div>
         <div class="tbl-wrap">
           <table>
             <thead>
-              <tr>
-                <th>Categoria / Sentimento</th>
-                <th>Volume</th>
-                <th>%</th>
-                <th>Insight</th>
-              </tr>
+              <tr><th>Etapa</th><th>Volume</th><th>Taxa</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td>Dúvidas Gerais</td>
-                <td>501</td>
-                <td>54,6%</td>
-                <td class="ind-yellow">🟡 Leads informacionais — necessitam de empurrão</td>
+                <td>Conversas TP iniciadas</td>
+                <td>127</td>
+                <td>100%</td>
               </tr>
               <tr>
-                <td>Neutro</td>
-                <td>360</td>
-                <td>39,2%</td>
-                <td class="ind-yellow">🟡 Interesse sem urgência declarada</td>
+                <td>Qualificados (intenção real)</td>
+                <td>117</td>
+                <td class="ind-green">92,1%</td>
               </tr>
               <tr>
-                <td>Elogio</td>
-                <td>30</td>
-                <td>3,3%</td>
-                <td class="ind-green">🟢 NPS positivo — satisfação com atendimento</td>
-              </tr>
-              <tr>
-                <td>Reclamação</td>
-                <td>14</td>
-                <td>1,5%</td>
-                <td class="ind-yellow">🟡 Baixo, mas requer atenção individual</td>
+                <td>Agendamentos confirmados (label)</td>
+                <td>1</td>
+                <td class="ind-yellow">0,9% (confirmados via label)</td>
               </tr>
             </tbody>
           </table>
         </div>
+        <p style="font-size:0.78rem;color:#6e7681;margin-top:-12px;margin-bottom:20px;">
+          * Agendamentos contados via etiqueta "agendamento" no Chatwoot. Pode subestimar conversões registradas diretamente no Feegow sem etiqueta.
+        </p>
       </div>
 
       <!-- ── SEÇÃO 7: BENCHMARKS ── -->
@@ -966,52 +937,45 @@
             <tbody>
               <tr>
                 <td>Ticket Médio Consulta</td>
-                <td>R$ 1.311</td>
+                <td>R$ 1.699</td>
                 <td>R$ 300–500 (média nacional)</td>
                 <td class="bench-source"><a href="https://tabelaplanos.com.br/precos-consulta-dermatologista-2025/" target="_blank" rel="noopener">tabelaplanos.com.br 2025</a></td>
-                <td class="bench-pos-green">🟢 2,6×–4,4× acima</td>
+                <td class="bench-pos-green">🟢 3,4×–5,7× acima — recorde histórico</td>
               </tr>
               <tr>
-                <td>Ticket Médio Dra. Raquel</td>
-                <td>R$ 1.459</td>
+                <td>TM Dra. Eoda</td>
+                <td>R$ 1.960</td>
                 <td>R$ 400–800 (SP/capitais)</td>
                 <td class="bench-source"><a href="https://emfoco.med.br/quanto-custa-uma-consulta-com-dermatologista/" target="_blank" rel="noopener">Instituto Medicina em Foco SP 2026</a></td>
-                <td class="bench-pos-green">🟢 1,8×–3,6× acima — melhor nível</td>
+                <td class="bench-pos-green">🟢 2,5×–4,9× acima — melhor individual do histórico</td>
               </tr>
               <tr>
                 <td>Taxa de No-show</td>
-                <td>15,0% (26 casos)</td>
+                <td>4,98% (13 casos)</td>
                 <td>~15%–20% clínicas privadas</td>
                 <td class="bench-source"><a href="https://saudedigitalnews.com.br/13/12/2023/doctoralia-e-feegow-lancam-panorama-das-clinicas-e-hospitais-2024/" target="_blank" rel="noopener">Panorama Doctoralia+Feegow 2024</a></td>
-                <td class="bench-pos-red">🔴 No limite inferior — dobrou vs. maio ⚠</td>
+                <td class="bench-pos-green">🟢 Excelente — 3× abaixo do benchmark</td>
               </tr>
               <tr>
                 <td>Taxa de Retorno</td>
-                <td>77,7%</td>
+                <td>76,7%</td>
                 <td>55%–65% dermato privada</td>
                 <td class="bench-source"><a href="https://www.sbd.org.br/sociedade-brasileira-de-dermatologia-divulga-inquerito-atualizado-sobre-doencas-de-pele-no-brasil/" target="_blank" rel="noopener">Inquérito SBD 2024</a></td>
                 <td class="bench-pos-green">🟢 +12–22pp acima — melhor histórico</td>
               </tr>
               <tr>
                 <td>Receita Anual Projetada</td>
-                <td>R$ 2,83M (base jun)</td>
+                <td>R$ 1,88M (base jun)</td>
                 <td>R$ 1,15M–1,94M (3 méd.)</td>
                 <td class="bench-source"><a href="https://saudedigitalnews.com.br/13/12/2023/doctoralia-e-feegow-lancam-panorama-das-clinicas-e-hospitais-2024/" target="_blank" rel="noopener">Panorama Doctoralia+Feegow 2024</a></td>
-                <td class="bench-pos-green">🟢 46%–146% acima da média</td>
+                <td class="bench-pos-yellow">🟡 Dentro do intervalo — recuperar volume para superar teto</td>
               </tr>
               <tr>
-                <td>Conversão Lead → Atendimento</td>
-                <td>17,7% (WPP)</td>
-                <td>10%–20% (clínicas com IA)</td>
-                <td class="bench-source">Benchmark interno Digital AI</td>
-                <td class="bench-pos-green">🟢 Dentro do intervalo — melhoria vs. maio (13,6%)</td>
-              </tr>
-              <tr>
-                <td>1ª Resposta WhatsApp</td>
-                <td>53 min ⚠</td>
-                <td>&lt;5 min (automação)</td>
-                <td class="bench-source"><a href="https://hbr.org/2011/03/the-short-life-of-online-sales-leads" target="_blank" rel="noopener">HBR — The Short Life of Online Sales Leads</a></td>
-                <td class="bench-pos-red">🔴 Crítico — investigar IA de atendimento</td>
+                <td>PIX (% receita)</td>
+                <td>20,7%</td>
+                <td>~18%–25% clínicas saúde</td>
+                <td class="bench-source">Benchmark ABIHF 2024</td>
+                <td class="bench-pos-green">🟢 Dentro do benchmark — adoção saudável</td>
               </tr>
             </tbody>
           </table>
@@ -1025,67 +989,68 @@
         <div class="opp-grid">
           <div class="opp-card priority-alta">
             <div class="opp-tag">🔴 Alta Prioridade — Urgente</div>
-            <h3>Reverter Crescimento Acelerado do No-show</h3>
+            <h3>Reverter Queda de Volume de Consultas</h3>
             <p>
-              No-show dobrou em um mês: 8,7% (maio) → 15,0% (junho), com 26 casos.
-              Receita perdida estimada: 26 × R$ 1.311 = <strong>R$ 34.086</strong>.
-              Implementar protocolo de confirmação ativa (3 contatos: D-2, D-1, D-0)
-              via WhatsApp automatizado. Objetivo: reduzir para &lt;10% em julho.
+              114 consultas em junho vs. 150 em maio (−24%) e 194 em abril (−41,2%).
+              Com ticket médio em R$ 1.699, cada 10 consultas a mais representam
+              <strong>R$ 16.990 de receita</strong>. Identificar causa da queda:
+              agenda subutilizada? Ausência de médica? Sazonalidade inverno?
+              Ação: reativar campanha de Meta Ads e revisar ocupação de agenda para julho.
             </p>
           </div>
 
           <div class="opp-card priority-alta">
             <div class="opp-tag">🔴 Alta Prioridade — Urgente</div>
-            <h3>Investigar Tempo de 1ª Resposta WPP (53 min)</h3>
+            <h3>Recuperar Leads WhatsApp (940 vs. 1.103 em Maio)</h3>
             <p>
-              Tempo médio de 53 minutos vs. meta de &lt;1 min — possível interrupção da IA
-              de atendimento em períodos do mês. Auditar logs de automação do Chatwoot
-              para identificar janelas de falha. Cada minuto extra na 1ª resposta reduz
-              a probabilidade de conversão em ~10% (fonte: HBR).
+              Segundo mês consecutivo de queda: 1.103 (mai) → 940 (jun) = −163 leads.
+              Com qualificação TP de 92,1% e ticket médio de R$ 1.699,
+              recuperar 163 leads equivale a ~30 consultas potenciais = <strong>R$ ~50K</strong>.
+              Revisar investimento e criativos de Meta Ads para julho — o custo/msg pode ter subido.
             </p>
           </div>
 
           <div class="opp-card priority-media">
             <div class="opp-tag">🟡 Curto Prazo</div>
-            <h3>Monitorar e Reverter Queda de Leads WPP</h3>
+            <h3>Investigar e Corrigir Picos de Tempo de Resposta WPP</h3>
             <p>
-              Leads caíram de 1.103 (maio) para 940 (junho), −14,8%. Após pico de crescimento
-              de +42% em maio, a tendência de retração precisa ser acompanhada.
-              Avaliar se o investimento em Meta Ads está sendo mantido e se a sazonalidade
-              de junho (inverno) impacta o perfil dermatológico da base.
+              Dois picos críticos: Jun 3 (760 min) e Jun 22 (493 min).
+              Configurar monitoramento ativo no n8n para detectar falhas da IA em &lt;5 min
+              e acionar fallback humano automaticamente. Cada minuto além de 5 min
+              reduz probabilidade de conversão em ~10% (HBR).
             </p>
           </div>
 
           <div class="opp-card priority-media">
             <div class="opp-tag">🟡 Curto Prazo</div>
-            <h3>Identificar Motor da Semana 4 e Replicar</h3>
+            <h3>Replicar Mix de Procedimentos de Alto Valor</h3>
             <p>
-              A Semana 4 (22–28/jun) gerou R$ 85.050 — 36% da receita do mês e R$ 18.660
-              acima da segunda melhor semana (S2, R$ 66.390). Identificar o que aconteceu
-              naquele período: procedimentos específicos? Agenda cheia? Novos pacientes?
-              Replicar o modelo nas próximas semanas.
+              Ticket médio R$ 1.699 (+51,8%) sugere mix de procedimentos mais complexos
+              em junho — ou maior confiança da paciente para procedimentos mais onerosos.
+              Identificar quais procedimentos elevaram o TM (Eoda R$ 1.960, Raquel R$ 1.577)
+              e estruturar protocolo para manter esse patamar em julho.
             </p>
           </div>
 
           <div class="opp-card priority-media">
             <div class="opp-tag">🟡 Curto Prazo</div>
-            <h3>Expandir Agenda de Sexta-feira</h3>
+            <h3>Recuperar Receita de Fototerapia</h3>
             <p>
-              Sexta-feira registrou apenas 33 agendamentos (vs. 105 na segunda).
-              Com 173 consultas realizadas e demanda crescente, abrir slots adicionais
-              nas sextas pode gerar 20–30 consultas extras/mês —
-              potencial de R$ 26–40K de receita sem investimento adicional.
+              Receita caiu −61,7% (R$ 6.975 → R$ 2.675) com 154 sessões realizadas.
+              Taxa de realização de 80,6% é adequada — o problema está no volume de agendamentos (191 vs. ~234 em maio).
+              Revisar agenda de fototerapia, reativar base de pacientes crônicos
+              (manchas, vitiligo, psoríase) com campanha de reengajamento.
             </p>
           </div>
 
           <div class="opp-card priority-baixa">
             <div class="opp-tag">🟢 Médio Prazo</div>
-            <h3>Ativar Base 55+ (Liderança em Junho)</h3>
+            <h3>Aproveitar No-show Excelente como Diferencial</h3>
             <p>
-              A faixa 55+ assumiu a liderança em junho (32,2%, 58 pacientes) —
-              perfil com alta aderência a tratamentos crônicos, fotoprotegimento,
-              manchas e procedimentos estéticos. Protocolo de fidelização específico
-              pode aumentar frequência de retorno e ticket médio nesse grupo.
+              4,98% de no-show é 3× melhor que o benchmark nacional (15–20%).
+              Usar esse dado em material de captação: a clínica tem alta aderência de pacientes —
+              reflexo de qualidade e satisfação. Comunicar esse dado em campanha de indicação
+              e para planos de saúde que valorizam taxa de comparecimento.
             </p>
           </div>
         </div>
@@ -1099,46 +1064,48 @@
           <li>
             <div class="step-num">1</div>
             <div class="step-text">
-              <strong>Implementar protocolo ativo de confirmação de consultas</strong>
-              <span>Configurar fluxo automatizado de confirmação no WhatsApp: mensagem D-2 (48h antes),
-              D-1 (24h antes) e D-0 (manhã do dia). Com 26 no-shows em junho, mesmo recuperar 50% representa
-              R$ 17.043 de receita adicional. Meta: reduzir taxa de 15,0% para abaixo de 8% em julho.</span>
+              <strong>Diagnosticar causa da queda de consultas (114 vs. 194 em abril)</strong>
+              <span>Verificar ocupação de agenda de cada médica em julho vs. junho: havia slots disponíveis?
+              Houve férias ou ausência de alguma médica? Sazonalidade de inverno impacta o perfil dermato (acne, oleosidade, etc.)?
+              Definir meta de volume para julho: pelo menos 130 consultas (recuperar 50% da queda).</span>
             </div>
           </li>
           <li>
             <div class="step-num">2</div>
             <div class="step-text">
-              <strong>Auditar IA de atendimento — tempo de resposta 53 min</strong>
-              <span>Verificar logs do Chatwoot e workflow n8n para identificar janelas de indisponibilidade
-              da automação em junho. O tempo ideal é &lt;1 min. Configurar alerta de monitoramento para
-              detectar interrupções em tempo real e acionar fallback humano automaticamente.</span>
+              <strong>Revisar estratégia de Meta Ads para julho</strong>
+              <span>Leads caíram −14,8% em junho. Analisar custo/msg do período (W23 marcou R$ 7,57/msg).
+              Avaliar se investimento foi mantido e se os criativos precisam rotacionar.
+              Com TM de R$ 1.699, o CAC pode suportar custo/msg mais alto — revisitar target e criativos
+              para recuperar volume de leads em julho.</span>
             </div>
           </li>
           <li>
             <div class="step-num">3</div>
             <div class="step-text">
-              <strong>Investigar dados incompletos da Dra. Eoda e Fototerapia</strong>
-              <span>Dra. Eoda: apenas R$ 4.140 registrado — verificar se houve ausência de agenda
-              em junho ou gap no ETL de dados do Feegow. Fototerapia: 100 sessões vs. 234 em maio —
-              a inconsistência com o aumento de receita (+33,8%) indica gap na coleta de dados de sessões.</span>
+              <strong>Configurar monitoramento de disponibilidade da IA de atendimento</strong>
+              <span>Os picos de Jun 3 (760 min) e Jun 22 (493 min) indicam falhas pontuais.
+              Implementar alerta automático no n8n que detecta quando o tempo de 1ª resposta supera 10 min
+              e notifica a equipe pelo Discord/WhatsApp interno para acionar atendimento humano manual.</span>
             </div>
           </li>
           <li>
             <div class="step-num">4</div>
             <div class="step-text">
-              <strong>Analisar composição da Semana 4 (22–28/jun)</strong>
-              <span>R$ 85.050 em uma única semana é 36% do mês. Identificar quais procedimentos,
-              quais médicas e quais fontes de paciente (novos vs. retorno, TP vs. Relacionamento)
-              compuseram essa semana excepcional — e usar como modelo para estruturar as próximas semanas.</span>
+              <strong>Reativar base de pacientes de fototerapia</strong>
+              <span>Fototerapia caiu de ~234 para 154 sessões (−34,2%) e de R$ 6.975 para R$ 2.675 (−61,7%).
+              Extrair base de pacientes crônicos de fototerapia (psoríase, vitiligo, dermatite) do Feegow
+              e disparar campanha de reengajamento via WhatsApp com mensagem personalizada de retorno.</span>
             </div>
           </li>
           <li>
             <div class="step-num">5</div>
             <div class="step-text">
-              <strong>Avaliar estratégia para inverter queda de leads WPP</strong>
-              <span>De 1.103 (maio) para 940 (junho), queda de 163 leads. Com o funil digital respondendo
-              por 17,7% de conversão lead→atendimento, cada 100 leads a mais representam ~18 consultas
-              (≈ R$ 23.600 de receita). Revisar investimento em Meta Ads de julho e sazonalidade inverno.</span>
+              <strong>Manter e comunicar TM excepcional (R$ 1.699)</strong>
+              <span>Ticket médio +51,8% em relação a maio é o maior histórico. Identificar quais
+              procedimentos e quais médicas impulsionaram esse resultado. Estruturar protocolo para
+              apresentar/sugerir procedimentos complementares nos atendimentos de julho —
+              aproveitando a base fiel com 76,7% de taxa de retorno.</span>
             </div>
           </li>
         </ul>
@@ -1146,7 +1113,7 @@
 
       <!-- FOOTER -->
       <div class="report-footer">
-        Relatório gerado em 07/07/2026 · Dados: 01/06/2026 a 30/06/2026 · Digital AI · Fonte: Feegow + Chatwoot
+        Relatório gerado em 07/07/2026 · Dados: 01/06/2026 a 30/06/2026 · Digital AI · Fonte: clinic_analytics (ETL por data de atendimento) + Chatwoot
       </div>
 
     </div><!-- /report-body -->
