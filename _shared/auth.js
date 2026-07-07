@@ -52,7 +52,13 @@ function initChatwootAuth(onAuthOrOptions, onTimeout) {
       var appEl     = opts.gateApp    && document.getElementById(opts.gateApp);
       if (loadingEl) loadingEl.classList.add('hidden');
       if (appEl)     appEl.classList.add('visible');
-      if (typeof opts.onReady === 'function') opts.onReady(auth);
+      // Duplo rAF: aguarda browser recalcular layout + pintar o #app antes
+      // de inicializar qualquer Chart.js (canvas precisa de dimensões > 0)
+      if (typeof opts.onReady === 'function') {
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() { opts.onReady(auth); });
+        });
+      }
     };
 
     onTimeout_fn = function() {
