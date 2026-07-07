@@ -1011,7 +1011,12 @@
     function initWeeklyChart() {
       var canvas = document.getElementById('weeklyChart');
       if (!canvas) return;
-      new Chart(canvas.getContext('2d'), {
+      // Garante que o container tem altura mínima antes do Chart.js medir
+      var wrap = canvas.parentElement;
+      if (wrap) wrap.style.minHeight = '320px';
+      // Força dimensões explícitas no canvas para Chart.js não calcular 0
+      if (!canvas.getAttribute('height')) canvas.setAttribute('height', '280');
+      var chart = new Chart(canvas.getContext('2d'), {
         type: 'bar',
         data: {
           labels: ['S1 (01–07/jun)', 'S2 (08–14/jun)', 'S3 (15–21/jun)', 'S4 (22–28/jun)', 'S5 (29–30/jun)'],
@@ -1059,6 +1064,8 @@
           }
         }
       });
+      // Força recálculo de dimensões após instanciação em containers flex/hidden
+      setTimeout(function() { chart.resize(); }, 50);
     }
 
     // Auth — onReady garante que #app está visível antes de renderizar o gráfico

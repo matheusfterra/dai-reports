@@ -1282,121 +1282,136 @@
 </footer>
 
 <!-- ═══════════════ CHARTS ═══════════════ -->
-<script>
-  // Configuração global Chart.js
-  Chart.defaults.color = '#94A3B8';
-  Chart.defaults.borderColor = '#334155';
-  Chart.defaults.font.family = "'Inter', sans-serif";
-
-  const DAYS = ['07/04', '08/04', '09/04', '10/04'];
-
-  // Chart 1 — Investimento Diário
-  new Chart(document.getElementById('chartSpend'), {
-    type: 'bar',
-    data: {
-      labels: DAYS,
-      datasets: [{
-        label: 'Investimento (R$)',
-        data: [260.43, 42.50, 37.72, 352.63],
-        backgroundColor: [
-          'rgba(245,158,11,0.55)',   // 07 — acumulado (amber)
-          'rgba(99,102,241,0.65)',
-          'rgba(99,102,241,0.65)',
-          'rgba(99,102,241,0.85)',
-        ],
-        borderColor: [
-          '#F59E0B',
-          '#6366F1',
-          '#6366F1',
-          '#818cf8',
-        ],
-        borderWidth: 1.5,
-        borderRadius: 6,
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: ctx => ' R$ ' + ctx.parsed.y.toFixed(2),
-            afterLabel: ctx => ctx.dataIndex === 0 ? '  (acumulado desde 01/04)' : ''
-          }
-        }
-      },
-      scales: {
-        x: { grid: { color: 'rgba(51,65,85,0.4)' } },
-        y: {
-          grid: { color: 'rgba(51,65,85,0.4)' },
-          ticks: { callback: v => 'R$' + v }
-        }
-      }
-    }
-  });
-
-  // Chart 2 — Mensagens e Conversas
-  new Chart(document.getElementById('chartMsgs'), {
-    type: 'line',
-    data: {
-      labels: DAYS,
-      datasets: [
-        {
-          label: 'Mensagens',
-          data: [35, 6, 5, 54],
-          borderColor: '#6366F1',
-          backgroundColor: 'rgba(99,102,241,0.12)',
-          borderWidth: 2.5,
-          pointRadius: 5,
-          pointBackgroundColor: '#6366F1',
-          tension: 0.3,
-          fill: true,
-        },
-        {
-          label: 'Conversas',
-          data: [31, 5, 6, 51],
-          borderColor: '#10B981',
-          backgroundColor: 'rgba(16,185,129,0.08)',
-          borderWidth: 2,
-          pointRadius: 4,
-          pointBackgroundColor: '#10B981',
-          tension: 0.3,
-          fill: false,
-          borderDash: [4, 3],
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      plugins: {
-        legend: {
-          display: true,
-          labels: { usePointStyle: true, padding: 16, font: { size: 11 } }
-        }
-      },
-      scales: {
-        x: { grid: { color: 'rgba(51,65,85,0.4)' } },
-        y: {
-          grid: { color: 'rgba(51,65,85,0.4)' },
-          ticks: { stepSize: 10 }
-        }
-      }
-    }
-  });
-</script>
-
       </div><!-- /.report-body -->
     </div><!-- /.report-content -->
   </div><!-- /.app -->
 
   <script src="../../_shared/auth.js"></script>
   <script>
+    function initCharts() {
+      // Configuração global Chart.js
+      Chart.defaults.color = '#94A3B8';
+      Chart.defaults.borderColor = '#334155';
+      Chart.defaults.font.family = "'Inter', sans-serif";
+
+      var DAYS = ['07/04', '08/04', '09/04', '10/04'];
+
+      // Garante min-height nos containers antes de instanciar
+      var wraps = document.querySelectorAll('.chart-wrap');
+      for (var i = 0; i < wraps.length; i++) { wraps[i].style.minHeight = '300px'; }
+
+      // Chart 1 — Investimento Diário
+      var c1 = document.getElementById('chartSpend');
+      if (c1 && !c1.getAttribute('height')) c1.setAttribute('height', '260');
+      var chart1 = new Chart(c1, {
+        type: 'bar',
+        data: {
+          labels: DAYS,
+          datasets: [{
+            label: 'Investimento (R$)',
+            data: [260.43, 42.50, 37.72, 352.63],
+            backgroundColor: [
+              'rgba(245,158,11,0.55)',
+              'rgba(99,102,241,0.65)',
+              'rgba(99,102,241,0.65)',
+              'rgba(99,102,241,0.85)',
+            ],
+            borderColor: [
+              '#F59E0B',
+              '#6366F1',
+              '#6366F1',
+              '#818cf8',
+            ],
+            borderWidth: 1.5,
+            borderRadius: 6,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(ctx) { return ' R$ ' + ctx.parsed.y.toFixed(2); },
+                afterLabel: function(ctx) { return ctx.dataIndex === 0 ? '  (acumulado desde 01/04)' : ''; }
+              }
+            }
+          },
+          scales: {
+            x: { grid: { color: 'rgba(51,65,85,0.4)' } },
+            y: {
+              grid: { color: 'rgba(51,65,85,0.4)' },
+              ticks: { callback: function(v) { return 'R$' + v; } }
+            }
+          }
+        }
+      });
+
+      // Chart 2 — Mensagens e Conversas
+      var c2 = document.getElementById('chartMsgs');
+      if (c2 && !c2.getAttribute('height')) c2.setAttribute('height', '260');
+      var chart2 = new Chart(c2, {
+        type: 'line',
+        data: {
+          labels: DAYS,
+          datasets: [
+            {
+              label: 'Mensagens',
+              data: [35, 6, 5, 54],
+              borderColor: '#6366F1',
+              backgroundColor: 'rgba(99,102,241,0.12)',
+              borderWidth: 2.5,
+              pointRadius: 5,
+              pointBackgroundColor: '#6366F1',
+              tension: 0.3,
+              fill: true,
+            },
+            {
+              label: 'Conversas',
+              data: [31, 5, 6, 51],
+              borderColor: '#10B981',
+              backgroundColor: 'rgba(16,185,129,0.08)',
+              borderWidth: 2,
+              pointRadius: 4,
+              pointBackgroundColor: '#10B981',
+              tension: 0.3,
+              fill: false,
+              borderDash: [4, 3],
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: {
+              display: true,
+              labels: { usePointStyle: true, padding: 16, font: { size: 11 } }
+            }
+          },
+          scales: {
+            x: { grid: { color: 'rgba(51,65,85,0.4)' } },
+            y: {
+              grid: { color: 'rgba(51,65,85,0.4)' },
+              ticks: { stepSize: 10 }
+            }
+          }
+        }
+      });
+
+      // Força recálculo de dimensões após instanciação
+      setTimeout(function() { chart1.resize(); chart2.resize(); }, 50);
+    }
+
     initChatwootAuth(
       function onAuth() {
         document.getElementById('gate-loading').classList.add('hidden');
         document.getElementById('app').classList.add('visible');
+        // Inicializa charts APÓS #app estar visível
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() { initCharts(); });
+        });
       },
       function onTimeout() {
         document.getElementById('gate-loading').classList.add('hidden');
