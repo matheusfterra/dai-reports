@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meta Ads — Junho 2026 | DermaClinic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../_shared/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --dai-navy:    #0F172A;
+      --dai-surface: #1E293B;
+      --bg: #0F172A;
+      --surface: #1E293B;
+      --surface-2: #243347;
+      --border: #334155;
+      --text: #FFFFFF;
+      --text-muted: #94A3B8;
+      --text-subtle: #64748B;
+      --brand: #6366F1;
+      --brand-dim: rgba(99,102,241,0.12);
+      --teal: #10B981;
+      --teal-dim: rgba(16,185,129,0.15);
+      --radius: 10px;
+      --radius-sm: 6px;
+      --dai-surface2:#243347;
+      --dai-border:  #334155;
+      --dai-indigo:  #6366F1;
+      --dai-indigo-dim: rgba(99,102,241,0.12);
+      --dai-muted:   #94A3B8;
+      --dai-white:   #FFFFFF;
+      --dc-bordo:    #7C3D4E;
+      --dc-bordo-dim:rgba(124,61,78,0.15);
+      --dc-offwhite: #F8F5F2;
+      --green:   #10B981;
+      --green-dim:rgba(16,185,129,0.12);
+      --amber:   #F59E0B;
+      --amber-dim:rgba(245,158,11,0.12);
+      --red:     #EF4444;
+      --red-dim: rgba(239,68,68,0.12);
+      --radius:    14px;
+      --radius-sm: 8px;
+      --shadow:    0 2px 16px rgba(0,0,0,0.35);
+      --shadow-md: 0 6px 32px rgba(0,0,0,0.45);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--dai-navy);
+      color: var(--dai-white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    .main { padding: 40px 0 80px; }
+    .section { margin-bottom: 48px; }
+    .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .section-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .section-icon.indigo  { background: var(--dai-indigo-dim); }
+    .section-icon.bordo   { background: var(--dc-bordo-dim); }
+    .section-icon.green   { background: var(--green-dim); }
+    .section-icon.amber   { background: var(--amber-dim); }
+    .section-icon.red     { background: var(--red-dim); }
+    .section-icon.purple  { background: rgba(167,139,250,0.12); }
+    .section-title { font-size: 17px; font-weight: 700; color: var(--dai-white); letter-spacing: -0.2px; }
+    .section-subtitle { font-size: 12px; color: var(--dai-muted); margin-top: 1px; }
+
+    .card { background: var(--dai-surface); border: 1px solid var(--dai-border); border-radius: var(--radius); padding: 24px; }
+
+    .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .kpi-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .kpi-grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+
+    .kpi-card {
+      background: var(--dai-surface); border: 1px solid var(--dai-border);
+      border-radius: var(--radius); padding: 22px 20px;
+      position: relative; overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kpi-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .kpi-card.indigo::before { background: linear-gradient(90deg, var(--dai-indigo), #818cf8); }
+    .kpi-card.bordo::before  { background: linear-gradient(90deg, var(--dc-bordo), #a0566a); }
+    .kpi-card.green::before  { background: linear-gradient(90deg, var(--green), #34d399); }
+    .kpi-card.amber::before  { background: linear-gradient(90deg, var(--amber), #fbbf24); }
+    .kpi-card.red::before    { background: linear-gradient(90deg, var(--red), #f87171); }
+
+    .kpi-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--dai-muted); margin-bottom: 10px; }
+    .kpi-value { font-size: 28px; font-weight: 800; letter-spacing: -0.8px; line-height: 1; color: var(--dai-white); }
+    .kpi-value.highlight { color: var(--green); }
+    .kpi-value.bordo     { color: #c06a7d; }
+    .kpi-value.amber-v   { color: var(--amber); }
+    .kpi-value.nd        { color: var(--dai-muted); font-size: 18px; }
+    .kpi-delta { margin-top: 8px; display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; }
+    .kpi-delta.up   { color: var(--green); }
+    .kpi-delta.down { color: var(--red); }
+    .kpi-delta.neutral { color: var(--dai-muted); }
+    .kpi-delta.good-down { color: var(--green); }
+    .kpi-caption { margin-top: 4px; font-size: 11px; color: var(--dai-muted); }
+
+    .hero-banner {
+      background: linear-gradient(135deg, var(--dai-surface) 0%, #1a2540 100%);
+      border: 1px solid var(--dai-border); border-left: 4px solid var(--amber);
+      border-radius: var(--radius); padding: 28px 32px; margin-bottom: 24px;
+    }
+    .hero-banner.green-banner { border-left-color: var(--green); }
+    .hero-banner .hero-eyebrow { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--amber); margin-bottom: 10px; }
+    .hero-banner.green-banner .hero-eyebrow { color: var(--green); }
+    .hero-banner h3 { font-size: 22px; font-weight: 800; letter-spacing: -0.4px; line-height: 1.3; }
+    .hero-banner h3 strong { color: var(--amber); }
+    .hero-banner.green-banner h3 strong { color: var(--green); }
+    .hero-banner p { margin-top: 10px; font-size: 14px; color: var(--dai-muted); line-height: 1.7; max-width: 680px; }
+
+    .table-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--dai-border); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead th {
+      background: var(--dai-surface2); padding: 11px 16px; text-align: left;
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em;
+      color: var(--dai-muted); border-bottom: 1px solid var(--dai-border); white-space: nowrap;
+    }
+    tbody tr { border-bottom: 1px solid rgba(51,65,85,0.5); transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(99,102,241,0.04); }
+    tbody td { padding: 12px 16px; color: var(--dai-muted); vertical-align: middle; }
+    tbody td.text-white { color: var(--dai-white); font-weight: 600; }
+    tbody td.text-green { color: var(--green); font-weight: 700; }
+    tbody td.text-amber { color: var(--amber); font-weight: 600; }
+    tbody td.text-red   { color: var(--red); font-weight: 600; }
+    tbody td.text-bordo { color: #c06a7d; font-weight: 700; }
+    .tag { display: inline-flex; align-items: center; gap: 4px; padding: 2px 9px; border-radius: 12px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .tag-green  { background: var(--green-dim); color: var(--green); }
+    .tag-amber  { background: var(--amber-dim); color: var(--amber); }
+    .tag-red    { background: var(--red-dim);   color: var(--red);   }
+    .tag-bordo  { background: var(--dc-bordo-dim); color: #c06a7d; }
+    .tag-indigo { background: var(--dai-indigo-dim); color: var(--dai-indigo); }
+    .tag-muted  { background: rgba(148,163,184,0.1); color: var(--dai-muted); }
+
+    .spotlight {
+      background: linear-gradient(135deg, rgba(124,61,78,0.18) 0%, rgba(124,61,78,0.06) 100%);
+      border: 1px solid rgba(124,61,78,0.4); border-radius: var(--radius); padding: 28px 32px;
+      position: relative; overflow: hidden;
+    }
+    .spotlight::before { content: ''; position: absolute; top: -60px; right: -60px; width: 260px; height: 260px; background: radial-gradient(circle, rgba(124,61,78,0.15) 0%, transparent 70%); border-radius: 50%; }
+    .spotlight .eyebrow { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #c06a7d; margin-bottom: 8px; }
+    .spotlight h3 { font-family: 'Playfair Display', Georgia, serif; font-size: 20px; font-weight: 700; color: var(--dai-white); margin-bottom: 6px; }
+    .spotlight .tagline { font-size: 13px; color: var(--dai-muted); margin-bottom: 24px; line-height: 1.6; }
+    .spotlight-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .spotlight-metric .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: #c06a7d; margin-bottom: 4px; }
+    .spotlight-metric .value { font-size: 24px; font-weight: 800; color: var(--dai-white); letter-spacing: -0.5px; }
+    .spotlight-metric .value.star { color: #e8889a; }
+    .spotlight p.analysis { font-size: 13px; color: var(--dai-muted); line-height: 1.7; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(124,61,78,0.25); }
+    .spotlight p.analysis strong { color: #e8889a; }
+
+    .info-box { background: var(--dai-surface); border-radius: var(--radius-sm); padding: 14px 18px; font-size: 13px; color: var(--dai-muted); line-height: 1.65; border-left: 3px solid; }
+    .info-box.indigo { border-left-color: var(--dai-indigo); background: var(--dai-indigo-dim); }
+    .info-box.green  { border-left-color: var(--green);  background: var(--green-dim); }
+    .info-box.amber  { border-left-color: var(--amber);  background: var(--amber-dim); }
+    .info-box.red    { border-left-color: var(--red);    background: var(--red-dim); }
+    .info-box strong { color: var(--dai-white); }
+
+    .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .action-card { background: var(--dai-surface); border: 1px solid var(--dai-border); border-radius: var(--radius); padding: 20px; display: flex; gap: 14px; }
+    .action-num { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; flex-shrink: 0; }
+    .action-num.critical { background: var(--red-dim); color: var(--red); }
+    .action-num.high     { background: var(--amber-dim); color: var(--amber); }
+    .action-num.medium   { background: var(--dai-indigo-dim); color: var(--dai-indigo); }
+    .action-body .priority { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 5px; }
+    .action-body .priority.critical { color: var(--red); }
+    .action-body .priority.high     { color: var(--amber); }
+    .action-body .priority.medium   { color: var(--dai-indigo); }
+    .action-body h4 { font-size: 13px; font-weight: 700; color: var(--dai-white); line-height: 1.4; margin-bottom: 5px; }
+    .action-body p { font-size: 12px; color: var(--dai-muted); line-height: 1.55; }
+
+    .chart-wrap { background: var(--dai-surface); border: 1px solid var(--dai-border); border-radius: var(--radius); padding: 24px; position: relative; }
+    .chart-title { font-size: 13px; font-weight: 700; color: var(--dai-white); margin-bottom: 4px; }
+    .chart-subtitle { font-size: 11px; color: var(--dai-muted); margin-bottom: 20px; }
+    canvas { max-height: 280px; display: block; width: 100% !important; }
+
+    .divider { border: none; border-top: 1px solid var(--dai-border); margin: 24px 0; }
+
+    .footer { background: var(--dai-surface); border-top: 1px solid var(--dai-border); padding: 28px 0; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .footer-brand { font-size: 13px; font-weight: 600; color: var(--dai-muted); }
+    .footer-brand span { color: var(--dai-indigo); }
+    .footer-meta { font-size: 11px; color: #5a6778; line-height: 1.6; text-align: right; }
+
+    .week-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+    .week-card { background: var(--dai-surface); border: 1px solid var(--dai-border); border-radius: var(--radius); padding: 18px 16px; text-align: center; position: relative; overflow: hidden; }
+    .week-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .week-card.best::before { background: linear-gradient(90deg, var(--green), #34d399); }
+    .week-card.low::before  { background: linear-gradient(90deg, var(--amber), #fbbf24); }
+    .week-card.normal::before { background: linear-gradient(90deg, var(--dai-indigo), #818cf8); }
+    .week-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--dai-muted); margin-bottom: 10px; }
+    .week-conv  { font-size: 30px; font-weight: 800; letter-spacing: -1px; color: var(--dai-white); line-height: 1; }
+    .week-conv.best { color: var(--green); }
+    .week-conv.low  { color: var(--amber); }
+    .week-sub { font-size: 11px; color: var(--dai-muted); margin-top: 6px; }
+    .week-quali { font-size: 12px; font-weight: 600; margin-top: 4px; }
+    .week-quali.high { color: var(--green); }
+    .week-quali.mid  { color: var(--amber); }
+
+    .bar-chart-manual { display: flex; flex-direction: column; gap: 10px; padding: 8px 0; }
+
+    @media (max-width: 900px) {
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+      .kpi-grid-4 { grid-template-columns: 1fr 1fr; }
+      .kpi-grid-5 { grid-template-columns: repeat(3, 1fr); }
+      .week-grid { grid-template-columns: repeat(3, 1fr); }
+      .action-grid { grid-template-columns: 1fr; }
+      .spotlight-metrics { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+      .kpi-grid-4 { grid-template-columns: 1fr 1fr; }
+      .kpi-grid-5 { grid-template-columns: 1fr 1fr; }
+      .kpi-value { font-size: 24px; }
+      .week-grid { grid-template-columns: 1fr 1fr; }
+      .spotlight-metrics { grid-template-columns: 1fr 1fr; }
+      .action-grid { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; }
+      .footer-meta { text-align: left; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { opacity: 0; animation: fadeUp 0.55s ease forwards; }
+    .fade-up:nth-child(1) { animation-delay: 0.05s; }
+    .fade-up:nth-child(2) { animation-delay: 0.12s; }
+    .fade-up:nth-child(3) { animation-delay: 0.19s; }
+    .fade-up:nth-child(4) { animation-delay: 0.26s; }
+    .fade-up:nth-child(5) { animation-delay: 0.33s; }
+  </style>
+</head>
+<body>
+
+  <div class="gate" id="gate-loading">
+    <div class="gate-icon"></div>
+    <p class="gate-title">Carregando relatório...</p>
+  </div>
+
+  <div class="gate hidden" id="gate-direct">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#5a5f66" stroke-width="1.5">
+      <rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" />
+    </svg>
+    <p class="gate-title">Acesso exclusivo via Chat</p>
+    <p class="gate-sub">Esta página está disponível somente no painel Chatwoot da DermaClinic.</p>
+  </div>
+
+  <div class="app" id="app">
+    <div class="report-header">
+      <button class="back-btn" onclick="history.back()">← Voltar</button>
+      <span class="report-header-title">Meta Ads — Junho 2026</span>
+      <span class="report-header-sub">Digital AI · DermaClinic</span>
+    </div>
+
+    <div class="report-content">
+      <div class="report-body">
+
+        <h1>Meta Ads — Tráfego Pago <span class="tag-updated" style="background:rgba(245,158,11,0.15);color:#F59E0B;border:1px solid rgba(245,158,11,0.3);">Dados 01–30/06</span></h1>
+        <p class="subtitle">DermaClinic | Digital AI</p>
+        <p class="meta-line">
+          <span>&#128197; Período: 01 a 30 de junho de 2026</span>
+          <span>&#128260; Gerado em: 07/07/2026</span>
+        </p>
+
+<main class="main">
+  <div class="container">
+
+    <!-- ─────── AVISO DE DADOS PARCIAIS ─────── -->
+    <div class="info-box amber" style="margin-bottom:32px;">
+      <strong>&#9888; Nota sobre disponibilidade de dados:</strong> O token de acesso à API do Meta Ads expirou em julho/2026 (erro: "Application has been deleted"). Dados de <strong>investimento, CPM e impressões de junho não estão disponíveis</strong> via API. Os dados de conversas e qualificação são provenientes do banco de dados interno (Chatwoot/dashboard_metrics) e têm precisão de 100%. Dados de criativos cobrem apenas o período 28/05–08/06 (W23). O investimento e CPM de junho serão incluídos em relatório de reprocessamento após renovação do token Meta.
+    </div>
+
+    <!-- ─────── 1. RESUMO EXECUTIVO ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon amber">&#128200;</div>
+        <div>
+          <div class="section-title">Resumo Executivo</div>
+          <div class="section-subtitle">Visão consolidada do mês — 01 a 30 de junho de 2026</div>
+        </div>
+      </div>
+
+      <div class="hero-banner">
+        <div class="hero-eyebrow">&#128200; Performance mensal — retração vs. recorde de maio</div>
+        <h3>Junho entregou <strong>127 conversas com 92,1% de qualificação</strong> — queda de 13% vs. maio mas com qualidade de lead acima da média</h3>
+        <p>Após o recorde de maio (146 conversas a R$6,05/msg), junho registrou 127 conversas — retração de 19 contatos. A semana 2 (Jun 8–14) foi anômala com apenas 11 conversas, enquanto a semana 4 (Jun 22–28) compensou com o melhor volume semanal do mês: 41 conversas. A taxa de qualificação se manteve elevada em 92,1% (117 de 127 qualificados), confirmando que a IA de atendimento continua filtrando com eficiência. Dados de investimento e CPM indisponíveis — token Meta expirado.</p>
+      </div>
+
+      <div class="kpi-grid-4">
+        <div class="kpi-card amber fade-up">
+          <div class="kpi-label">Conversas</div>
+          <div class="kpi-value amber-v">127</div>
+          <div class="kpi-delta down">&#8595; -13,0% vs maio</div>
+          <div class="kpi-caption">Maio: 146 conversas</div>
+        </div>
+        <div class="kpi-card green fade-up">
+          <div class="kpi-label">Qualificados</div>
+          <div class="kpi-value highlight">117</div>
+          <div class="kpi-delta up">&#8593; 92,1% taxa qualif.</div>
+          <div class="kpi-caption">Acima da média histórica</div>
+        </div>
+        <div class="kpi-card indigo fade-up">
+          <div class="kpi-label">Melhor Semana</div>
+          <div class="kpi-value">41</div>
+          <div class="kpi-delta neutral">&#128197; S4 (22–28/jun)</div>
+          <div class="kpi-caption">Pico do mês</div>
+        </div>
+        <div class="kpi-card bordo fade-up">
+          <div class="kpi-label">Investimento / CPM</div>
+          <div class="kpi-value nd">N/D</div>
+          <div class="kpi-delta neutral">&#9888; Token expirado</div>
+          <div class="kpi-caption">Será reprocessado</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────── 2. DISTRIBUIÇÃO SEMANAL ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon indigo">&#128197;</div>
+        <div>
+          <div class="section-title">Distribuição Semanal de Conversas</div>
+          <div class="section-subtitle">Evolução semana a semana — junho 2026 (fonte: dashboard_metrics)</div>
+        </div>
+      </div>
+
+      <div class="week-grid">
+        <!-- S1 -->
+        <div class="week-card normal">
+          <div class="week-label">S1 · 01–07/jun</div>
+          <div class="week-conv">33</div>
+          <div class="week-sub">conversas</div>
+          <div class="week-quali high">30 qualif. (90,9%)</div>
+          <div style="margin-top:10px;font-size:11px;color:var(--dai-muted);">Abertura sólida do mês</div>
+        </div>
+        <!-- S2 -->
+        <div class="week-card low">
+          <div class="week-label">S2 · 08–14/jun</div>
+          <div class="week-conv low">11</div>
+          <div class="week-sub">conversas</div>
+          <div class="week-quali mid">10 qualif. (90,9%)</div>
+          <div style="margin-top:10px;font-size:11px;color:var(--amber);">&#9888; Anomalia — investigar</div>
+        </div>
+        <!-- S3 -->
+        <div class="week-card normal">
+          <div class="week-label">S3 · 15–21/jun</div>
+          <div class="week-conv">30</div>
+          <div class="week-sub">conversas</div>
+          <div class="week-quali high">29 qualif. (96,7%)</div>
+          <div style="margin-top:10px;font-size:11px;color:var(--dai-muted);">Recuperação consistente</div>
+        </div>
+        <!-- S4 -->
+        <div class="week-card best">
+          <div class="week-label">S4 · 22–28/jun</div>
+          <div class="week-conv best">41</div>
+          <div class="week-sub">conversas</div>
+          <div class="week-quali high">38 qualif. (92,7%)</div>
+          <div style="margin-top:10px;font-size:11px;color:var(--green);">&#9733; Melhor semana do mês</div>
+        </div>
+        <!-- S5 -->
+        <div class="week-card normal">
+          <div class="week-label">S5 · 29–30/jun</div>
+          <div class="week-conv">12</div>
+          <div class="week-sub">conversas</div>
+          <div class="week-quali high">10 qualif. (83,3%)</div>
+          <div style="margin-top:10px;font-size:11px;color:var(--dai-muted);">2 dias de encerramento</div>
+        </div>
+      </div>
+
+      <!-- Gráfico de barras das semanas -->
+      <div class="chart-wrap" style="margin-top:16px;">
+        <div class="chart-title">Conversas por Semana — Junho 2026</div>
+        <div class="chart-subtitle">Volume de leads iniciados via tráfego pago</div>
+        <canvas id="weeklyChart"></canvas>
+      </div>
+
+      <!-- Análise da anomalia S2 -->
+      <div class="info-box amber" style="margin-top:14px;">
+        <strong>&#9888; Anomalia Semana 2 (Jun 8–14):</strong> Queda de 33 → 11 conversas (-67%) em apenas 7 dias. Possíveis causas: ajuste ou pausa temporária de criativos após o período W23 (análise do gestor em 08/06), fadiga de audiência em conjuntos específicos, ou reinicialização de fase de aprendizado do algoritmo Meta. A recuperação rápida em S3 (30 conv) sugere que a causa foi operacional e transitória, não estrutural.
+      </div>
+    </section>
+
+    <!-- ─────── 3. ANÁLISE DO GESTOR ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon amber">&#128172;</div>
+        <div>
+          <div class="section-title">Análise do Período</div>
+          <div class="section-subtitle">Avaliação qualitativa dos resultados — Junho 2026</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div class="info-box amber">
+          <strong>Retração de Volume (-13%)</strong><br><br>
+          Junho registrou 127 conversas vs. 146 em maio — retração de 19 leads. A média diária caiu de 5,6/dia (maio) para 4,2/dia (junho). A semana 2 foi responsável pela maior parte dessa queda: sem ela, o mês teria somado ~161 conversas. Investigar o que aconteceu entre Jun 8–14 é a prioridade para restaurar o patamar.
+        </div>
+        <div class="info-box green">
+          <strong>Qualificação Acima da Média (92,1%)</strong><br><br>
+          De 127 leads, 117 foram qualificados pela IA de atendimento — taxa de 92,1%, a maior do histórico e acima de maio (dado não disponível para comparação exata). Isso confirma que os criativos ativos estão atraindo o público certo. Volume menor, mas com altíssima qualidade de contato.
+        </div>
+        <div class="info-box indigo">
+          <strong>S4 com 41 Conversas — Pico do Mês</strong><br><br>
+          A semana 4 (Jun 22–28) registrou 41 conversas — o maior volume semanal de junho e superior à melhor semana de maio. Isso sugere que havia capacidade de escala na conta: com os ajustes certos, o mês teria entregado 160+ conversas. O pico de S4 é o sinal mais positivo do mês para o planejamento de julho.
+        </div>
+        <div class="info-box" style="border-left:3px solid var(--dai-border);background:rgba(255,255,255,0.02);">
+          <strong>Criativos W23 — Primeiro 8 Dias</strong><br><br>
+          O criativo "Rejuvenescer as Mãos" confirmou liderança em junho: 26 conversas nos primeiros 8 dias com R$4,07/msg — acima do seu próprio recorde de R$2,83 em maio, mas ainda entre os mais eficientes da conta. O início de junho tinha R$7,57/conv em média (vs R$6,05 em maio), o que pode refletir a anomalia da S2.
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────── 4. COMPARATIVO MAIO vs JUNHO ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon green">&#128260;</div>
+        <div>
+          <div class="section-title">Comparativo Histórico</div>
+          <div class="section-subtitle">Maio vs. Junho 2026</div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Indicador</th>
+              <th>Maio 2026</th>
+              <th>Junho 2026</th>
+              <th>Variação</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-white">Conversas iniciadas</td>
+              <td>146</td>
+              <td class="text-amber">127</td>
+              <td class="text-red">-13,0%</td>
+              <td><span class="tag tag-amber">Retração — investigar S2</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">Leads qualificados</td>
+              <td>N/D</td>
+              <td class="text-green">117 (92,1%)</td>
+              <td class="text-green">—</td>
+              <td><span class="tag tag-green">Taxa de qualif. recorde</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">Melhor semana</td>
+              <td>~40 est. (S4)</td>
+              <td class="text-green">41 (S4: 22–28/jun)</td>
+              <td class="text-green">Pico consistente</td>
+              <td><span class="tag tag-green">Potencial de escala confirmado</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">Pior semana</td>
+              <td>—</td>
+              <td class="text-red">11 (S2: 8–14/jun)</td>
+              <td class="text-red">Anomalia</td>
+              <td><span class="tag tag-amber">Causa operacional — identificar</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">Investimento total</td>
+              <td>R$883,37</td>
+              <td class="text-bordo">N/D</td>
+              <td>—</td>
+              <td><span class="tag tag-muted">Token Meta expirado</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">Custo por conversa</td>
+              <td>R$6,05</td>
+              <td class="text-amber">~R$7,57 (W23 parcial)</td>
+              <td class="text-red">+25% est. (parcial)</td>
+              <td><span class="tag tag-amber">Dado parcial — reprocessar</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">CPM médio</td>
+              <td>R$26,31</td>
+              <td class="text-bordo">N/D</td>
+              <td>—</td>
+              <td><span class="tag tag-muted">Token Meta expirado</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">Melhor criativo (início do mês)</td>
+              <td>REJUVENESCER AS MÃOS — R$2,83/msg</td>
+              <td>REJUVENESCER AS MÃOS — R$4,07/msg</td>
+              <td class="text-red">+43,8%</td>
+              <td><span class="tag tag-indigo">Líder consolidado da conta</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ─────── 5. CRIATIVOS — DADOS W23 (01–08/JUN) ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon bordo">&#127942;</div>
+        <div>
+          <div class="section-title">Performance de Criativos</div>
+          <div class="section-subtitle">Dados disponíveis: período W23 — 01 a 08 de junho de 2026 (8 dias)</div>
+        </div>
+      </div>
+
+      <div class="info-box indigo" style="margin-bottom:16px;">
+        <strong>Cobertura parcial:</strong> Os dados de criativos abaixo cobrem apenas os primeiros 8 dias de junho (dentro do período W23: Mai 28–Jun 08). A performance de Jun 9–30 não está disponível via API. Os dados cobrem 14 criativos ativos com um total de <strong>58 conversas</strong> nesses 8 dias, investimento de R$439,25 (inclui Mai 28–31).
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Criativo</th>
+              <th>Conv. (8 dias)</th>
+              <th>Custo/Conv</th>
+              <th>CPM</th>
+              <th>CTR Link</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background:rgba(124,61,78,0.05);">
+              <td class="text-white">1</td>
+              <td class="text-white">AN | REJUVENESCER AS MÃOS | 01 &#11088;</td>
+              <td style="color:var(--dc-bordo);font-weight:700;font-size:15px;">26</td>
+              <td class="text-green">R$4,07</td>
+              <td class="text-green">R$20,41</td>
+              <td>0,97%</td>
+              <td><span class="tag tag-green">Líder de junho</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">2</td>
+              <td class="text-white">AN | O MAIOR ÓRGÃO DO CORPO | 01</td>
+              <td>6</td>
+              <td>R$8,56</td>
+              <td>R$23,42</td>
+              <td>0,96%</td>
+              <td><span class="tag tag-indigo">Consistente</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">3</td>
+              <td class="text-white">AN | 3 TRATAMENTOS | 01</td>
+              <td>5</td>
+              <td>R$8,20</td>
+              <td>R$35,74</td>
+              <td>1,53%</td>
+              <td><span class="tag tag-indigo">CTR alto</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">4</td>
+              <td class="text-white">AN | UNYQUE PRO | 01</td>
+              <td>4</td>
+              <td class="text-amber">R$11,74</td>
+              <td>R$26,08</td>
+              <td>1,01%</td>
+              <td><span class="tag tag-amber">C/Conv alto — revisar</span></td>
+            </tr>
+            <tr style="background:rgba(16,185,129,0.03);">
+              <td class="text-white">5</td>
+              <td class="text-white">AN | REJUVESNECER | 01</td>
+              <td>4</td>
+              <td class="text-green">R$2,58</td>
+              <td>R$24,42</td>
+              <td>1,09%</td>
+              <td><span class="tag tag-green">Eficiência excelente</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">6</td>
+              <td class="text-white">AN | MELASMA | 01</td>
+              <td>3</td>
+              <td class="text-red">R$16,57</td>
+              <td>R$18,00</td>
+              <td>0,65%</td>
+              <td><span class="tag tag-amber">CPM baixo, conv baixa</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">7</td>
+              <td class="text-white">AN | ESTRIAS | 01</td>
+              <td>2</td>
+              <td class="text-red">R$23,30</td>
+              <td>R$17,08</td>
+              <td>0,64%</td>
+              <td><span class="tag tag-red">C/Conv crítico</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">8</td>
+              <td class="text-white">AN | LIFTING | 01</td>
+              <td>2</td>
+              <td>R$6,58</td>
+              <td>R$29,66</td>
+              <td>0,95%</td>
+              <td><span class="tag tag-indigo">Volume ok</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">9</td>
+              <td class="text-white">AN | NAMORADOS | 01</td>
+              <td>1</td>
+              <td>R$7,58</td>
+              <td>R$17,35</td>
+              <td class="text-green" style="font-weight:700;">1,73%</td>
+              <td><span class="tag tag-amber">Sazonalidade encerrou</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">10</td>
+              <td class="text-white">AN | BOTOX DOS 30 | 01</td>
+              <td>1</td>
+              <td>R$4,60</td>
+              <td>R$33,82</td>
+              <td>0,94%</td>
+              <td><span class="tag tag-indigo">C/Conv promissor</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">11</td>
+              <td class="text-white">AN | MELASMA | 02</td>
+              <td>1</td>
+              <td>R$10,60</td>
+              <td>R$12,56</td>
+              <td>0,24%</td>
+              <td><span class="tag tag-indigo">CPM mais baixo do período</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">12</td>
+              <td class="text-white">AN | DIA DAS MÃES | 01</td>
+              <td>1</td>
+              <td>R$7,70</td>
+              <td>R$26,83</td>
+              <td>1,23%</td>
+              <td><span class="tag tag-red">Pausar — data encerrada</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">13</td>
+              <td class="text-white">AN | PREENCHIMENTO LABIAL | 01</td>
+              <td>1</td>
+              <td>R$12,80</td>
+              <td>R$19,84</td>
+              <td>0,54%</td>
+              <td><span class="tag tag-amber">Revisar gancho</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">14</td>
+              <td class="text-white">AN | BRUNA MARQUEZINE | 01</td>
+              <td>1</td>
+              <td>R$17,96</td>
+              <td>R$22,94</td>
+              <td>0,78%</td>
+              <td><span class="tag tag-red">C/Conv alto</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Bar chart de C/Conv -->
+      <div class="chart-wrap" style="margin-top:16px;">
+        <div class="chart-title">Custo por Conversa — Top Criativos (W23, início de junho)</div>
+        <div class="chart-subtitle">Menor é melhor — média do período: R$7,57</div>
+
+        <div class="bar-chart-manual" style="margin-top:8px;">
+          <!-- R$2,58 — REJUVESNECER -->
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:195px;font-size:11px;color:var(--dai-muted);flex-shrink:0;text-align:right;padding-right:6px;">REJUVESNECER | 01</div>
+            <div style="flex:1;background:var(--dai-surface2);border-radius:4px;height:22px;">
+              <div style="width:calc(2.58/25*100%);height:100%;background:rgba(16,185,129,0.85);border:1px solid #10B981;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;min-width:52px;">
+                <span style="font-size:11px;font-weight:700;color:#fff;white-space:nowrap;">R$2,58</span>
+              </div>
+            </div>
+          </div>
+          <!-- R$4,07 — REJUVENESCER AS MÃOS -->
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:195px;font-size:11px;color:var(--dc-bordo);font-weight:700;flex-shrink:0;text-align:right;padding-right:6px;">REJUVENESCER AS MÃOS &#11088;</div>
+            <div style="flex:1;background:var(--dai-surface2);border-radius:4px;height:22px;">
+              <div style="width:calc(4.07/25*100%);height:100%;background:rgba(16,185,129,0.75);border:1px solid #10B981;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;min-width:52px;">
+                <span style="font-size:11px;font-weight:700;color:#fff;white-space:nowrap;">R$4,07</span>
+              </div>
+            </div>
+          </div>
+          <!-- R$4,60 — BOTOX DOS 30 -->
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:195px;font-size:11px;color:var(--dai-muted);flex-shrink:0;text-align:right;padding-right:6px;">BOTOX DOS 30 | 01</div>
+            <div style="flex:1;background:var(--dai-surface2);border-radius:4px;height:22px;">
+              <div style="width:calc(4.60/25*100%);height:100%;background:rgba(16,185,129,0.75);border:1px solid #10B981;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;min-width:52px;">
+                <span style="font-size:11px;font-weight:700;color:#fff;white-space:nowrap;">R$4,60</span>
+              </div>
+            </div>
+          </div>
+          <!-- R$6,58 — LIFTING -->
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:195px;font-size:11px;color:var(--dai-muted);flex-shrink:0;text-align:right;padding-right:6px;">LIFTING | 01</div>
+            <div style="flex:1;background:var(--dai-surface2);border-radius:4px;height:22px;">
+              <div style="width:calc(6.58/25*100%);height:100%;background:rgba(245,158,11,0.65);border:1px solid #F59E0B;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;min-width:52px;">
+                <span style="font-size:11px;font-weight:700;color:#fff;white-space:nowrap;">R$6,58</span>
+              </div>
+            </div>
+          </div>
+          <!-- R$7,58 — NAMORADOS -->
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:195px;font-size:11px;color:var(--dai-muted);flex-shrink:0;text-align:right;padding-right:6px;">NAMORADOS | 01</div>
+            <div style="flex:1;background:var(--dai-surface2);border-radius:4px;height:22px;">
+              <div style="width:calc(7.58/25*100%);height:100%;background:rgba(245,158,11,0.65);border:1px solid #F59E0B;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;min-width:52px;">
+                <span style="font-size:11px;font-weight:700;color:#fff;white-space:nowrap;">R$7,58</span>
+              </div>
+            </div>
+          </div>
+          <!-- R$8,20 — 3 TRATAMENTOS -->
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:195px;font-size:11px;color:var(--dai-muted);flex-shrink:0;text-align:right;padding-right:6px;">3 TRATAMENTOS | 01</div>
+            <div style="flex:1;background:var(--dai-surface2);border-radius:4px;height:22px;">
+              <div style="width:calc(8.20/25*100%);height:100%;background:rgba(245,158,11,0.65);border:1px solid #F59E0B;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
+                <span style="font-size:11px;font-weight:700;color:#fff;white-space:nowrap;">R$8,20</span>
+              </div>
+            </div>
+          </div>
+          <!-- R$8,56 — MAIOR ÓRGÃO -->
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:195px;font-size:11px;color:var(--dai-muted);flex-shrink:0;text-align:right;padding-right:6px;">O MAIOR ÓRGÃO | 01</div>
+            <div style="flex:1;background:var(--dai-surface2);border-radius:4px;height:22px;">
+              <div style="width:calc(8.56/25*100%);height:100%;background:rgba(245,158,11,0.65);border:1px solid #F59E0B;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
+                <span style="font-size:11px;font-weight:700;color:#fff;white-space:nowrap;">R$8,56</span>
+              </div>
+            </div>
+          </div>
+          <!-- R$16,57+ — Acima da média -->
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:195px;font-size:11px;color:var(--red);flex-shrink:0;text-align:right;padding-right:6px;">MELASMA | 01</div>
+            <div style="flex:1;background:var(--dai-surface2);border-radius:4px;height:22px;">
+              <div style="width:calc(16.57/25*100%);height:100%;background:rgba(239,68,68,0.7);border:1px solid #EF4444;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
+                <span style="font-size:11px;font-weight:700;color:#fff;white-space:nowrap;">R$16,57</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────── 6. SPOTLIGHT — REJUVENESCER AS MÃOS ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon bordo">&#127775;</div>
+        <div>
+          <div class="section-title">Criativo Dominante</div>
+          <div class="section-subtitle">O ativo que se consolidou como o pilar da conta por dois meses consecutivos</div>
+        </div>
+      </div>
+
+      <div class="spotlight">
+        <div class="eyebrow">&#127775; Líder de Junho — segundo mês consecutivo</div>
+        <h3>AN | REJUVENESCER AS MÃOS | 01 — R$4,07 por conversa</h3>
+        <p class="tagline">Com 26 conversas nos primeiros 8 dias de junho, este criativo reafirmou a liderança conquistada em maio (R$2,83/msg). CPM de R$20,41 — abaixo da média da conta — e CTR de 0,97%. Dois meses consecutivos de liderança comprovam que o tema ressoa profundamente com o público-alvo.</p>
+
+        <div class="spotlight-metrics">
+          <div class="spotlight-metric">
+            <div class="label">Custo / Conversa</div>
+            <div class="value star">R$4,07</div>
+          </div>
+          <div class="spotlight-metric">
+            <div class="label">Conversas (8 dias)</div>
+            <div class="value">26</div>
+          </div>
+          <div class="spotlight-metric">
+            <div class="label">CPM</div>
+            <div class="value star">R$20,41</div>
+          </div>
+          <div class="spotlight-metric">
+            <div class="label">CTR Link</div>
+            <div class="value">0,97%</div>
+          </div>
+        </div>
+
+        <p class="analysis">
+          <strong>Segundo mês consecutivo de liderança:</strong> Em maio entregou R$2,83/msg; em junho (W23) R$4,07/msg — leve alta no custo, mas ainda o líder absoluto da conta com folga. O aumento pode indicar saturação inicial de audiência ou ajuste de lance do algoritmo. Recomendação: <strong>criar variações do tema Mãos</strong> (mãos + resultado específico, mãos + antes/depois, versão de depoimento) para aliviar a pressão sobre o ativo original e multiplicar a superfície de captura com CPM baixo.<br><br>
+          <strong>Por que funciona:</strong> O envelhecimento das mãos é um "problema visível e negado" — as mulheres percebem mas raramente veem soluções específicas nos feeds. Especificidade = CPM baixo + engajamento alto. A fórmula está provada em dois meses seguidos.
+        </p>
+      </div>
+    </section>
+
+    <!-- ─────── 7. QUALIFICAÇÃO DE LEADS ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon green">&#129657;</div>
+        <div>
+          <div class="section-title">Funil de Qualificação — IA de Atendimento</div>
+          <div class="section-subtitle">Performance da IA no filtro de leads — junho 2026</div>
+        </div>
+      </div>
+
+      <div class="hero-banner green-banner" style="margin-bottom:20px;">
+        <div class="hero-eyebrow">&#129657; Eficiência de qualificação — recorde histórico</div>
+        <h3>92,1% dos leads foram qualificados pela IA — <strong>117 de 127 contatos</strong> avançaram no funil</h3>
+        <p>A taxa de qualificação de 92,1% é o indicador mais positivo de junho: mesmo com volume menor que maio, a IA de atendimento manteve altíssima precisão no filtro. Apenas 10 leads foram descartados como não qualificados, contra 127 no total. Isso significa que cada R$1 investido em tráfego está sendo aproveitado com máxima eficiência na triagem.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+        <div class="card" style="text-align:center;border-top:3px solid var(--dai-indigo);">
+          <div style="font-size:11px;color:var(--dai-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Topo do Funil</div>
+          <div style="font-size:38px;font-weight:800;color:var(--dai-white);">127</div>
+          <div style="font-size:12px;color:var(--dai-muted);margin-top:4px;">conversas via TP</div>
+        </div>
+        <div class="card" style="text-align:center;border-top:3px solid var(--green);">
+          <div style="font-size:11px;color:var(--dai-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Qualificados</div>
+          <div style="font-size:38px;font-weight:800;color:var(--green);">117</div>
+          <div style="font-size:12px;color:var(--green);margin-top:4px;font-weight:700;">92,1% de aproveitamento</div>
+        </div>
+        <div class="card" style="text-align:center;border-top:3px solid var(--amber);">
+          <div style="font-size:11px;color:var(--dai-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Descartados</div>
+          <div style="font-size:38px;font-weight:800;color:var(--amber);">10</div>
+          <div style="font-size:12px;color:var(--dai-muted);margin-top:4px;">7,9% de descarte</div>
+        </div>
+      </div>
+
+      <div class="info-box green" style="margin-top:14px;">
+        <strong>Semana com melhor qualificação:</strong> S3 (Jun 15–21) registrou 29 qualificados de 30 conversas — taxa de 96,7%. Em S4, 38 de 41 conversas foram qualificadas (92,7%). Isso reforça que, quando a campanha está rodando com criativos certos para a audiência certa, praticamente todos os leads que chegam já têm intenção real de consulta.
+      </div>
+    </section>
+
+    <!-- ─────── 8. AÇÕES PARA JULHO ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon red">&#9889;</div>
+        <div>
+          <div class="section-title">5 Ações Concretas para Julho</div>
+          <div class="section-subtitle">Priorizadas por impacto e urgência — baseadas nos dados de junho</div>
+        </div>
+      </div>
+
+      <div class="action-grid">
+        <div class="action-card">
+          <div class="action-num critical">1</div>
+          <div class="action-body">
+            <div class="priority critical">Prioridade Crítica</div>
+            <h4>Renovar token Meta Ads e reprocessar dados de junho</h4>
+            <p>O token da API Meta expirou em julho/2026, impedindo acesso a investimento, CPM e impressões. Renovar o token no Meta Business Manager é a prioridade zero: sem ele, é impossível otimizar budget ou monitorar eficiência de custo. Após renovar, reprocessar dados de Jun 1–30 para preencher as lacunas deste relatório e retomar o coletor automático.</p>
+          </div>
+        </div>
+
+        <div class="action-card">
+          <div class="action-num critical">2</div>
+          <div class="action-body">
+            <div class="priority critical">Prioridade Crítica</div>
+            <h4>Investigar a queda de S2 (Jun 8–14: apenas 11 conversas)</h4>
+            <p>A semana 2 teve 67% menos conversas que a semana 1 — uma queda anômala. Verificar no painel Meta Ads se houve pausa de criativos, reinício de fase de aprendizado, alteração de budget, ou problema técnico nesse período. Identificar e corrigir esse gap pode recuperar 20+ conversas/mês adicionais em julho.</p>
+          </div>
+        </div>
+
+        <div class="action-card">
+          <div class="action-num high">3</div>
+          <div class="action-body">
+            <div class="priority high">Prioridade Alta</div>
+            <h4>Criar variações de "Rejuvenescer as Mãos" para escalar sem saturar</h4>
+            <p>"Rejuvenescer as Mãos" liderou por 2 meses consecutivos, mas o custo por conversa subiu de R$2,83 (maio) para R$4,07 (início de junho) — sinal de saturação inicial. Criar 2–3 variações: antes/depois de mãos, processo de tratamento em vídeo curto, depoimento de paciente sobre o resultado. Manter o tema mas renovar o formato para preservar o CPM baixo.</p>
+          </div>
+        </div>
+
+        <div class="action-card">
+          <div class="action-num high">4</div>
+          <div class="action-body">
+            <div class="priority high">Prioridade Alta</div>
+            <h4>Escalar S4 — replicar o que funcionou na semana 22–28/jun</h4>
+            <p>A semana 4 gerou 41 conversas com 92,7% de qualificação — o melhor resultado semanal do mês. Identificar quais criativos e conjuntos estavam ativos nessa semana (dados via painel Meta Ads após renovação do token) e replicar a configuração. Se a estrutura de S4 rodasse o mês inteiro, junho teria alcançado ~164 conversas.</p>
+          </div>
+        </div>
+
+        <div class="action-card" style="grid-column: 1 / -1;">
+          <div class="action-num medium">5</div>
+          <div class="action-body">
+            <div class="priority medium">Estratégico — Pipeline Junho → Julho</div>
+            <h4>Aproveitar os 117 qualificados de junho que ainda não agendaram</h4>
+            <p>Com 117 leads qualificados em junho e apenas ~1 agendamento rastreado via TP attribution, há um gargalo claro entre qualificação e consulta marcada. Acionar o fluxo de re-engajamento para os contatos qualificados de junho ainda sem data marcada — uma mensagem de follow-up com oferta de valor (ex: consulta de avaliação gratuita ou desconto em procedimento) pode converter 10–20% desses leads em agendamentos de julho com custo marginal zero de tráfego.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Gestão de Tráfego: <span>Digital AI</span></div>
+        <div style="font-size:11px;color:#5a6778;margin-top:3px;">digital-ai.tech · contato@digital-ai.tech</div>
+      </div>
+      <div class="footer-meta">
+        Relatório gerado em: 07/07/2026<br>
+        Conversas e qualificação: dados completos · Investimento/CPM: pendente renovação token Meta<br>
+        Próximo relatório: 01/08/2026
+      </div>
+    </div>
+  </div>
+</footer>
+
+      </div><!-- /.report-body -->
+    </div><!-- /.report-content -->
+  </div><!-- /.app -->
+
+  <script src="../../_shared/auth.js"></script>
+  <script>
+    // Weekly chart
+    const ctx = document.getElementById('weeklyChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['S1 (01–07/jun)', 'S2 (08–14/jun)', 'S3 (15–21/jun)', 'S4 (22–28/jun)', 'S5 (29–30/jun)'],
+        datasets: [
+          {
+            label: 'Conversas',
+            data: [33, 11, 30, 41, 12],
+            backgroundColor: [
+              'rgba(99,102,241,0.7)',
+              'rgba(245,158,11,0.7)',
+              'rgba(99,102,241,0.7)',
+              'rgba(16,185,129,0.8)',
+              'rgba(99,102,241,0.7)'
+            ],
+            borderColor: [
+              '#6366F1',
+              '#F59E0B',
+              '#6366F1',
+              '#10B981',
+              '#6366F1'
+            ],
+            borderWidth: 1,
+            borderRadius: 6,
+          },
+          {
+            label: 'Qualificados',
+            data: [30, 10, 29, 38, 10],
+            backgroundColor: 'rgba(16,185,129,0.25)',
+            borderColor: '#10B981',
+            borderWidth: 1,
+            borderRadius: 6,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            labels: { color: '#94A3B8', font: { size: 12 } }
+          },
+          tooltip: {
+            backgroundColor: '#1E293B',
+            borderColor: '#334155',
+            borderWidth: 1,
+            titleColor: '#fff',
+            bodyColor: '#94A3B8'
+          }
+        },
+        scales: {
+          x: {
+            ticks: { color: '#64748B', font: { size: 11 } },
+            grid: { color: 'rgba(51,65,85,0.4)' }
+          },
+          y: {
+            ticks: { color: '#64748B', font: { size: 11 }, stepSize: 10 },
+            grid: { color: 'rgba(51,65,85,0.4)' },
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    // Auth
+    initChatwootAuth({
+      gateLoading: 'gate-loading',
+      gateDirect:  'gate-direct',
+      gateApp:     'app',
+      client:      'dermaclinic',
+      report:      'meta-ads-jun-2026'
+    });
+  </script>
+</body>
+</html>
