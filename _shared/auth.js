@@ -2,6 +2,10 @@
  * Chatwoot Dashboard App Auth
  * Implementa o mesmo mecanismo do useChatwoot hook (React)
  * Envia fetch-info ao parent e aguarda appContext.
+ *
+ * Suporta duas APIs:
+ *   1. Callback API (nova): initChatwootAuth(onAuth, onTimeout)
+ *   2. Options object API (legada): initChatwootAuth({ gateLoading, gateDirect, gateApp, onReady })
  */
 
 const ALLOWED_ORIGINS = [
@@ -25,36 +29,71 @@ function applyTheme(darkMode) {
 
 /**
  * Inicializa a autenticação Chatwoot.
- * @param {Function} onAuth - chamado com { accessToken, accountId, chatwootUrl, darkMode } ao autenticar
- * @param {Function} onTimeout - chamado após 8s sem resposta (acesso direto, não em iframe)
+ *
+ * @param {Function|Object} onAuthOrOptions
+ *   - Function: chamado com { accessToken, accountId, chatwootUrl, darkMode } ao autenticar
+ *   - Object: { gateLoading, gateDirect, gateApp, client, report, onReady }
+ * @param {Function} [onTimeout] - chamado após 8s sem resposta (acesso direto, não em iframe)
+ *   Ignorado se onAuthOrOptions for um objeto (a API de objeto gerencia o DOM automaticamente)
  */
-function initChatwootAuth(onAuth, onTimeout) {
-  let authenticated = false;
-  let timeoutId = null;
+function initChatwootAuth(onAuthOrOptions, onTimeout) {
+  let onAuth, onTimeout_fn;
+
+  if (typeof onAuthOrOptions === 'function') {
+    // Nova API: initChatwootAuth(onAuth, onTimeout)
+    onAuth = onAuthOrOptions;
+    onTimeout_fn = onTimeout;
+  } else if (onAuthOrOptions && typeof onAuthOrOptions === 'object') {
+    // API legada: initChatwootAuth({ gateLoading, gateDirect, gateApp, onReady })
+    const opts = onAuthOrOptions;
+
+    onAuth = function(auth) {
+      var loadingEl = opts.gateLoading && document.getElementById(opts.gateLoading);
+      var appEl     = opts.gateApp    && document.getElementById(opts.gateApp);
+      if (loadingEl) loadingEl.classList.add('hidden');
+      if (appEl)     appEl.classList.add('visible');
+      if (typeof opts.onReady === 'function') opts.onReady(auth);
+    };
+
+    onTimeout_fn = function() {
+      var loadingEl = opts.gateLoading && document.getElementById(opts.gateLoading);
+      var directEl  = opts.gateDirect  && document.getElementById(opts.gateDirect);
+      if (loadingEl) loadingEl.classList.add('hidden');
+      if (directEl)  directEl.classList.remove('hidden');
+    };
+  }
+
+  var authenticated = false;
+  var timeoutId = null;
 
   function handleMessage(event) {
     if (!isAllowedOrigin(event.origin)) return;
 
     try {
-      const message = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+      var message = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
 
       if (message.event === 'appContext' && message.data) {
-        const { userAccessToken, agentBotAccessToken, accountId, chatwootUrl, darkMode } = message.data;
-        const accessToken = userAccessToken || agentBotAccessToken;
+        var data = message.data;
+        var accessToken = data.userAccessToken || data.agentBotAccessToken;
 
-        if (!accessToken || !accountId || !chatwootUrl) return;
+        if (!accessToken || !data.accountId || !data.chatwootUrl) return;
 
         clearTimeout(timeoutId);
         authenticated = true;
-        applyTheme(darkMode === true);
+        applyTheme(data.darkMode === true);
 
-        window.__chatwootAuth = { accessToken, accountId, chatwootUrl, darkMode: darkMode === true };
+        window.__chatwootAuth = {
+          accessToken:  accessToken,
+          accountId:    data.accountId,
+          chatwootUrl:  data.chatwootUrl,
+          darkMode:     data.darkMode === true,
+        };
         window.removeEventListener('message', handleMessage);
 
-        onAuth(window.__chatwootAuth);
+        if (typeof onAuth === 'function') onAuth(window.__chatwootAuth);
       }
-    } catch {
-      // ignore non-JSON
+    } catch (e) {
+      // ignore parsing errors
     }
   }
 
@@ -62,10 +101,10 @@ function initChatwootAuth(onAuth, onTimeout) {
   window.parent.postMessage('chatwoot-dashboard-app:fetch-info', '*');
 
   // Timeout: se não receber auth em 8s, provavelmente acesso direto
-  timeoutId = setTimeout(() => {
+  timeoutId = setTimeout(function() {
     if (!authenticated) {
       window.removeEventListener('message', handleMessage);
-      if (onTimeout) onTimeout();
+      if (typeof onTimeout_fn === 'function') onTimeout_fn();
     }
   }, 8000);
 }
@@ -80,8 +119,6 @@ window.initChatwootAuth = initChatwootAuth;
  * @param {Function} callback - chamado com (authorized: boolean, email: string|null)
  */
 function checkChatwootPermission(auth, allowedEmails, callback) {
-  // Usa o proxy Nginx do chat-kanban (CORS habilitado para reports.digital-ai.tech)
-  // Mesmo mecanismo do funil — sem n8n, sem preflight problem
   fetch('https://chat-kanban.digital-ai.tech/proxy/chat-cors/api/v1/profile', {
     headers: { 'api_access_token': auth.accessToken },
   })
@@ -95,7 +132,6 @@ function checkChatwootPermission(auth, allowedEmails, callback) {
       callback(normalized.includes(email), email || null);
     })
     .catch(function() {
-      // Fail-closed: erro = acesso negado
       callback(false, null);
     });
 }
