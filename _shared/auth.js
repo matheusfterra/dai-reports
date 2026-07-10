@@ -51,9 +51,13 @@ function initChatwootAuth(onAuthOrOptions, onTimeout) {
       var loadingEl = opts.gateLoading && document.getElementById(opts.gateLoading);
       var appEl     = opts.gateApp    && document.getElementById(opts.gateApp);
       if (loadingEl) loadingEl.classList.add('hidden');
-      if (appEl)     appEl.classList.add('visible');
-      // Duplo rAF: aguarda browser recalcular layout + pintar o #app antes
-      // de inicializar qualquer Chart.js (canvas precisa de dimensões > 0)
+      if (appEl) {
+        appEl.classList.add('visible');
+        // Força reflow síncrono: garante que canvas.offsetWidth > 0
+        // antes do duplo rAF em iframes cross-origin (Chatwoot).
+        void appEl.offsetHeight;
+      }
+      // Duplo rAF: aguarda browser pintar o #app antes de inicializar Chart.js
       if (typeof opts.onReady === 'function') {
         requestAnimationFrame(function() {
           requestAnimationFrame(function() { opts.onReady(auth); });

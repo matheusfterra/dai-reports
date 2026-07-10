@@ -1013,14 +1013,12 @@
       if (!canvas) return;
       var wrap = canvas.parentElement;
       if (wrap) wrap.style.minHeight = '320px';
-      if (!canvas.getAttribute('height')) canvas.setAttribute('height', '280');
-      // Em iframes, o layout pode não estar estável após o duplo rAF do auth.
-      // Aguarda um frame extra para garantir offsetWidth > 0 antes do Chart.js medir.
-      if (canvas.offsetWidth === 0) {
-        setTimeout(initWeeklyChart, 80);
-        return;
-      }
-      var chart = new Chart(canvas.getContext('2d'), {
+      canvas.setAttribute('height', '280');
+
+      function doRender() {
+        if (canvas._rendered) return;
+        canvas._rendered = true;
+        var chart = new Chart(canvas.getContext('2d'), {
         type: 'bar',
         data: {
           labels: ['S1 (01–07/jun)', 'S2 (08–14/jun)', 'S3 (15–21/jun)', 'S4 (22–28/jun)', 'S5 (29–30/jun)'],
@@ -1068,7 +1066,27 @@
           }
         }
       });
-      setTimeout(function() { chart.resize(); }, 50);
+        setTimeout(function() { chart.resize(); }, 50);
+      } // end doRender
+
+      // Se canvas já tem largura, renderiza agora
+      if (canvas.offsetWidth > 0) { doRender(); return; }
+
+      // Fallback: ResizeObserver (modern) ou polling (legacy)
+      if (window.ResizeObserver) {
+        var ro = new ResizeObserver(function() {
+          if (canvas.offsetWidth > 0) { ro.disconnect(); doRender(); }
+        });
+        ro.observe(canvas);
+        // Safety: se RO nunca disparar, forçar após 1s
+        setTimeout(function() { if (!canvas._rendered) { ro.disconnect(); doRender(); } }, 1000);
+      } else {
+        var attempts = 0;
+        (function poll() {
+          if (canvas.offsetWidth > 0 || attempts++ > 15) { doRender(); return; }
+          setTimeout(poll, 100);
+        })();
+      }
     }
 
     // Auth — onReady garante que #app está visível antes de renderizar o gráfico
