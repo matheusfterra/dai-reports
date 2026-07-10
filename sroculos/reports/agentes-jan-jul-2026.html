@@ -3,429 +3,279 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sr. Óculos — Performance de Atendimento · Jan–Jul 2026</title>
+  <title>Sr. Óculos — Performance de Atendimento | Jan–Jul 2026</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     :root {
       --brand:        #2D52EF;
       --brand-dark:   #0F1F5C;
-      --brand-glow:   rgba(45,82,239,.35);
-      --iris:         #00C4A3;
-      --iris-dark:    #007A67;
-      --iris-glow:    rgba(0,196,163,.30);
-      --bg:           #050C24;
-      --surface:      #0C1737;
-      --surface2:     #111E45;
-      --border:       rgba(255,255,255,.07);
-      --border2:      rgba(255,255,255,.12);
-      --text:         #F0F4FF;
-      --text-muted:   #94A3C8;
-      --text-subtle:  #5B6A8E;
-      --gold:         #F59E0B;
-      --gold-glow:    rgba(245,158,11,.25);
+      --brand-mid:    #1E3AC8;
+      --brand-accent: #E8EEFF;
+      --brand-light:  #F0F4FF;
+      --ai-color:     #059669;
+      --ai-light:     #D1FAE5;
+      --ai-mid:       #10B981;
+      --gold:         #D97706;
+      --gold-light:   #FEF3C7;
+      --purple:       #7C3AED;
+      --purple-light: #EDE9FE;
+      --bg:           #F8FAFF;
+      --surface:      #FFFFFF;
+      --border:       #E2E8F0;
+      --border2:      #CBD5E1;
+      --text:         #0F172A;
+      --text-muted:   #475569;
+      --text-subtle:  #94A3B8;
+      --shadow-sm:    0 1px 3px rgba(15,31,92,.06), 0 1px 2px rgba(15,31,92,.04);
+      --shadow-md:    0 4px 16px rgba(15,31,92,.10), 0 2px 4px rgba(15,31,92,.06);
+      --radius:       14px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      font-size: 14px;
-      line-height: 1.6;
-      min-height: 100vh;
-    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; }
 
-    /* ─── HEADER ─────────────────────────────────────── */
+    /* ─── HEADER ────────────────────────────────────── */
     .header {
-      background: linear-gradient(135deg, #1A2F7A 0%, #0A1240 100%);
-      border-bottom: 1px solid var(--border2);
+      background: linear-gradient(135deg, #2D52EF 0%, #0F1F5C 100%);
       padding: 0 32px;
       position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 12px rgba(15,31,92,.25);
     }
     .header-inner {
-      max-width: 1320px; margin: 0 auto;
-      height: 64px; display: flex; align-items: center; justify-content: space-between;
+      max-width: 1280px; margin: 0 auto;
+      height: 60px; display: flex; align-items: center; justify-content: space-between;
     }
-    .header-left { display: flex; align-items: center; gap: 18px; }
-    .header-logo { height: 30px; filter: brightness(0) invert(1); }
-    .header-sep { width: 1px; height: 22px; background: var(--border2); }
-    .header-client { display: flex; align-items: center; gap: 10px; }
-    .header-client-dot {
-      width: 28px; height: 28px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--brand) 0%, #1E3AC8 100%);
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-weight: 800; font-size: 11px; color: white;
+    .header-left  { display: flex; align-items: center; gap: 16px; }
+    .header-logo  { height: 28px; filter: brightness(0) invert(1); }
+    .header-sep   { width: 1px; height: 20px; background: rgba(255,255,255,.25); }
+    .header-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 600; color: rgba(255,255,255,.9); }
+    .header-badge {
+      background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.2);
+      color: rgba(255,255,255,.85); font-size: 11px; font-weight: 600;
+      padding: 3px 10px; border-radius: 20px;
     }
-    .header-client-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: white; }
-    .header-period {
-      background: rgba(255,255,255,.10);
-      border: 1px solid rgba(255,255,255,.15);
-      color: rgba(255,255,255,.75);
-      font-size: 11px; font-weight: 600;
-      padding: 4px 12px; border-radius: 20px;
-      letter-spacing: .03em;
-    }
-    .header-powered {
-      display: flex; align-items: center; gap: 7px;
-      color: var(--text-muted); font-size: 11px;
-    }
-    .header-powered span { color: var(--iris); font-weight: 600; }
 
-    /* ─── MAIN ─────────────────────────────────────── */
-    .main { max-width: 1320px; margin: 0 auto; padding: 40px 24px 80px; }
-
-    /* ─── HERO ─────────────────────────────────────── */
-    .hero {
-      background: linear-gradient(135deg, #0F1F5C 0%, #0C1437 60%, #050C24 100%);
-      border: 1px solid var(--border2);
-      border-radius: 20px;
-      padding: 48px 52px;
-      margin-bottom: 32px;
-      position: relative;
-      overflow: hidden;
+    /* ─── PERIOD BANNER ─────────────────────────────── */
+    .period-banner {
+      background: var(--brand-light);
+      border-bottom: 1px solid var(--brand-accent);
+      padding: 10px 32px;
     }
-    .hero::before {
-      content: '';
-      position: absolute; top: -60px; right: -60px;
-      width: 320px; height: 320px;
-      background: radial-gradient(circle, rgba(45,82,239,.25) 0%, transparent 70%);
-      pointer-events: none;
+    .period-inner {
+      max-width: 1280px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
     }
-    .hero::after {
-      content: '';
-      position: absolute; bottom: -80px; left: 30%;
-      width: 260px; height: 260px;
-      background: radial-gradient(circle, rgba(0,196,163,.12) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(0,196,163,.12);
-      border: 1px solid rgba(0,196,163,.25);
-      color: var(--iris);
+    .period-text { font-size: 13px; color: var(--brand-dark); font-weight: 500; }
+    .period-text strong { font-weight: 700; }
+    .period-tag {
+      background: var(--brand); color: white;
       font-size: 11px; font-weight: 700;
-      letter-spacing: .1em; text-transform: uppercase;
-      padding: 5px 14px; border-radius: 20px;
-      margin-bottom: 20px;
+      padding: 3px 10px; border-radius: 20px; letter-spacing: .03em;
     }
-    .hero-eyebrow::before { content: '●'; font-size: 8px; }
-    .hero-title {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 38px; font-weight: 800;
-      color: white; line-height: 1.15;
-      margin-bottom: 12px;
-    }
-    .hero-title em { color: var(--iris); font-style: normal; }
-    .hero-subtitle { font-size: 16px; color: var(--text-muted); max-width: 580px; line-height: 1.6; }
-    .hero-bottom {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-top: 36px; padding-top: 28px;
-      border-top: 1px solid var(--border);
-    }
-    .hero-stats { display: flex; gap: 48px; }
-    .hero-stat-value {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 28px; font-weight: 800; color: white;
-    }
-    .hero-stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-    .hero-badge {
-      display: flex; align-items: center; gap: 12px;
-      background: rgba(0,196,163,.10);
-      border: 1px solid rgba(0,196,163,.20);
-      border-radius: 14px;
-      padding: 14px 20px;
-    }
-    .hero-badge-icon { font-size: 28px; }
-    .hero-badge-text { font-size: 13px; color: var(--iris); font-weight: 600; line-height: 1.4; }
-    .hero-badge-text strong { display: block; font-size: 20px; font-weight: 800; color: white; }
 
-    /* ─── SECTION LABELS ─────────────────────────────── */
-    .section-label {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 11px; font-weight: 700;
-      color: var(--text-subtle);
-      letter-spacing: .12em; text-transform: uppercase;
-      margin-bottom: 16px;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    /* ─── MAIN ──────────────────────────────────────── */
+    .main { max-width: 1280px; margin: 0 auto; padding: 32px 24px 64px; }
 
-    /* ─── GRID HELPERS ─────────────────────────────── */
-    .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 32px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 32px; }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px; }
-    .grid-65-35 { display: grid; grid-template-columns: 1.85fr 1fr; gap: 20px; margin-bottom: 32px; }
-    .grid-35-65 { display: grid; grid-template-columns: 1fr 1.85fr; gap: 20px; margin-bottom: 32px; }
-
-    /* ─── KPI CARDS ─────────────────────────────────── */
-    .kpi {
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      border-radius: 16px;
-      padding: 24px 22px;
-      position: relative;
-      overflow: hidden;
-      transition: transform .2s, box-shadow .2s;
-    }
-    .kpi:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,.3); }
-    .kpi.highlight {
-      background: linear-gradient(135deg, rgba(0,196,163,.12) 0%, rgba(0,196,163,.04) 100%);
-      border-color: rgba(0,196,163,.30);
-    }
-    .kpi.highlight-brand {
-      background: linear-gradient(135deg, rgba(45,82,239,.15) 0%, rgba(45,82,239,.04) 100%);
-      border-color: rgba(45,82,239,.30);
-    }
-    .kpi-icon {
-      width: 38px; height: 38px; border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; margin-bottom: 14px;
-    }
-    .kpi-icon.blue  { background: rgba(45,82,239,.18);  }
-    .kpi-icon.teal  { background: rgba(0,196,163,.18);  }
-    .kpi-icon.gold  { background: rgba(245,158,11,.18); }
-    .kpi-icon.violet{ background: rgba(139,92,246,.18); }
-    .kpi-val {
+    .section-title {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 32px; font-weight: 800;
-      color: white; letter-spacing: -.02em;
-      margin-bottom: 4px;
-    }
-    .kpi-val.iris { color: var(--iris); }
-    .kpi-label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
-    .kpi-sub {
-      margin-top: 10px; padding-top: 10px;
-      border-top: 1px solid var(--border);
-      font-size: 11px; color: var(--text-subtle);
-      display: flex; align-items: center; gap: 6px;
-    }
-    .badge-up   { color: #4ADE80; font-weight: 700; }
-    .badge-down { color: #F87171; font-weight: 700; }
-
-    /* ─── CARD GENERIC ──────────────────────────────── */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      border-radius: 16px;
-      padding: 28px 26px;
-    }
-    .card-title {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 15px; font-weight: 700;
-      color: white; margin-bottom: 6px;
-    }
-    .card-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 24px; }
-
-    /* ─── IRIS HIGHLIGHT CARD ──────────────────────── */
-    .iris-hero {
-      background: linear-gradient(135deg, #003D35 0%, #001F1A 100%);
-      border: 1px solid rgba(0,196,163,.30);
-      border-radius: 20px;
-      padding: 36px 40px;
-      margin-bottom: 32px;
-      position: relative;
-      overflow: hidden;
-    }
-    .iris-hero::before {
-      content: '';
-      position: absolute; top: -40px; right: -40px;
-      width: 240px; height: 240px;
-      background: radial-gradient(circle, rgba(0,196,163,.20) 0%, transparent 70%);
-    }
-    .iris-hero-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; align-items: center; }
-    .iris-tag {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(0,196,163,.15);
-      border: 1px solid rgba(0,196,163,.30);
-      color: var(--iris);
-      font-size: 11px; font-weight: 700;
-      letter-spacing: .1em; text-transform: uppercase;
-      padding: 5px 14px; border-radius: 20px;
-      margin-bottom: 18px;
-    }
-    .iris-hero-title {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 26px; font-weight: 800;
-      color: white; line-height: 1.25;
-      margin-bottom: 12px;
-    }
-    .iris-hero-title em { color: var(--iris); font-style: normal; }
-    .iris-hero-body { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
-    .iris-stats { display: flex; flex-direction: column; gap: 16px; }
-    .iris-stat {
-      background: rgba(0,196,163,.08);
-      border: 1px solid rgba(0,196,163,.18);
-      border-radius: 14px;
-      padding: 18px 22px;
-      display: flex; align-items: center; gap: 18px;
-    }
-    .iris-stat-num {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 34px; font-weight: 800;
-      color: var(--iris); white-space: nowrap;
-    }
-    .iris-stat-label { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
-    .iris-stat-label strong { display: block; font-size: 14px; color: white; font-weight: 600; }
-
-    /* ─── CHANNEL TABLE ─────────────────────────────── */
-    .ch-table { width: 100%; border-collapse: collapse; }
-    .ch-table th {
-      font-size: 10px; font-weight: 700;
+      font-size: 13px; font-weight: 700;
       color: var(--text-subtle);
       letter-spacing: .08em; text-transform: uppercase;
-      text-align: left; padding: 0 16px 12px;
-      border-bottom: 1px solid var(--border);
+      margin-bottom: 14px;
+      display: flex; align-items: center; gap: 8px;
     }
-    .ch-table td {
-      padding: 13px 16px;
-      border-bottom: 1px solid var(--border);
-      font-size: 13px;
-    }
-    .ch-table tr:last-child td { border-bottom: none; }
-    .ch-table tr:hover td { background: rgba(255,255,255,.03); }
-    .ch-name { font-weight: 600; color: white; display: flex; align-items: center; gap: 10px; }
-    .ch-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    .ch-type { color: var(--text-muted); font-size: 12px; }
-    .ch-num { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; color: white; }
-    .ch-bar-wrap { display: flex; align-items: center; gap: 10px; }
-    .ch-bar-bg { flex: 1; height: 5px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
-    .ch-bar-fill { height: 100%; border-radius: 3px; }
-    .ch-pct { font-size: 11px; color: var(--text-muted); min-width: 36px; text-align: right; }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-    /* ─── COMPARISON BAR ────────────────────────────── */
-    .compare-wrap { display: flex; flex-direction: column; gap: 20px; }
-    .compare-row { display: flex; flex-direction: column; gap: 8px; }
-    .compare-header { display: flex; justify-content: space-between; align-items: baseline; }
-    .compare-name { font-size: 13px; font-weight: 600; color: white; }
-    .compare-val { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; font-weight: 800; }
-    .compare-bg { height: 12px; background: var(--surface2); border-radius: 6px; overflow: hidden; }
-    .compare-fill { height: 100%; border-radius: 6px; }
-    .compare-note { font-size: 11px; color: var(--text-muted); }
+    /* ─── GRIDS ──────────────────────────────────────── */
+    .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 28px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 28px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+    .grid-60-40 { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; margin-bottom: 28px; }
+    .grid-40-60 { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; margin-bottom: 28px; }
+
+    /* ─── KPI CARDS ──────────────────────────────────── */
+    .kpi {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 20px;
+      box-shadow: var(--shadow-sm);
+      position: relative; overflow: hidden;
+    }
+    .kpi-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+    .kpi-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; font-size: 17px;
+    }
+    .kpi-icon.blue   { background: var(--brand-accent); }
+    .kpi-icon.green  { background: var(--ai-light); }
+    .kpi-icon.gold   { background: var(--gold-light); }
+    .kpi-icon.purple { background: var(--purple-light); }
+    .kpi-badge {
+      font-size: 10px; font-weight: 700; padding: 2px 8px;
+      border-radius: 20px; letter-spacing: .04em;
+    }
+    .kpi-badge.ai { background: var(--ai-light); color: var(--ai-color); }
+    .kpi-val {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 30px; font-weight: 800;
+      color: var(--text); letter-spacing: -.02em;
+      margin-bottom: 2px;
+    }
+    .kpi-val.brand  { color: var(--brand); }
+    .kpi-val.green  { color: var(--ai-color); }
+    .kpi-label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+    .kpi-divider { height: 1px; background: var(--border); margin: 12px 0; }
+    .kpi-footer { font-size: 11px; color: var(--text-subtle); display: flex; align-items: center; gap: 6px; }
+    .dot-green  { color: var(--ai-color); font-size: 8px; }
+    .dot-blue   { color: var(--brand); font-size: 8px; }
+
+    /* ─── CARD ──────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 22px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card-head { margin-bottom: 18px; }
+    .card-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .card-desc  { font-size: 12px; color: var(--text-muted); }
 
     /* ─── AGENT TABLE ───────────────────────────────── */
     .ag-table { width: 100%; border-collapse: collapse; }
     .ag-table th {
-      font-size: 10px; font-weight: 700;
-      color: var(--text-subtle);
+      font-size: 10px; font-weight: 700; color: var(--text-subtle);
       letter-spacing: .08em; text-transform: uppercase;
-      text-align: left; padding: 0 14px 12px;
-      border-bottom: 1px solid var(--border);
+      text-align: left; padding: 0 14px 10px;
+      border-bottom: 2px solid var(--border);
     }
-    .ag-table td { padding: 15px 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
+    .ag-table td { padding: 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
     .ag-table tr:last-child td { border-bottom: none; }
+    .ag-table tbody tr:hover td { background: var(--bg); }
     .ag-avatar {
       width: 34px; height: 34px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-weight: 800; font-size: 13px;
-      flex-shrink: 0;
+      font-weight: 800; font-size: 12px; flex-shrink: 0;
     }
-    .ag-info { display: flex; align-items: center; gap: 12px; }
-    .ag-name { font-weight: 600; color: white; font-size: 13px; }
+    .ag-cell { display: flex; align-items: center; gap: 11px; }
+    .ag-name { font-weight: 600; color: var(--text); font-size: 13px; }
     .ag-role { font-size: 11px; color: var(--text-muted); }
-    .ag-badge {
+    .type-badge {
       display: inline-flex; align-items: center; gap: 5px;
-      font-size: 10px; font-weight: 700;
-      letter-spacing: .05em; text-transform: uppercase;
+      font-size: 10px; font-weight: 700; letter-spacing: .04em;
       padding: 3px 9px; border-radius: 20px;
     }
-    .ag-badge.ai  { background: rgba(0,196,163,.15); color: var(--iris); }
-    .ag-badge.hum { background: rgba(45,82,239,.15);  color: #7DA4FF; }
-    .ag-time {
+    .type-ai  { background: var(--ai-light);     color: var(--ai-color); }
+    .type-hum { background: var(--brand-accent);  color: var(--brand); }
+    .ag-metric {
       font-family: 'Plus Jakarta Sans', sans-serif;
       font-weight: 700; font-size: 15px;
     }
-    .ag-time.iris-col { color: var(--iris); }
-    .ag-time.hum-col  { color: #94A3C8; }
+    .ag-metric.green { color: var(--ai-color); }
+    .ag-metric.blue  { color: var(--brand); }
+    .ag-metric.muted { color: var(--text-muted); font-size: 13px; font-weight: 500; }
 
-    /* ─── PRICING SECTION ──────────────────────────── */
-    .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    .pricing-card {
-      border-radius: 16px;
-      padding: 28px 24px;
-      border: 1px solid var(--border2);
+    /* ─── CHANNEL TABLE ─────────────────────────────── */
+    .ch-table { width: 100%; border-collapse: collapse; }
+    .ch-table th {
+      font-size: 10px; font-weight: 700; color: var(--text-subtle);
+      letter-spacing: .08em; text-transform: uppercase;
+      text-align: left; padding: 0 12px 10px;
+      border-bottom: 2px solid var(--border);
     }
-    .pricing-card.meta { background: var(--surface2); }
-    .pricing-card.dai  {
-      background: linear-gradient(135deg, rgba(0,196,163,.12) 0%, rgba(0,196,163,.04) 100%);
-      border-color: rgba(0,196,163,.30);
+    .ch-table td { padding: 11px 12px; border-bottom: 1px solid var(--border); font-size: 12px; }
+    .ch-table tr:last-child td { border-bottom: none; }
+    .ch-table tbody tr:hover td { background: var(--bg); }
+    .ch-name { font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .ch-icon { font-size: 15px; }
+    .ch-num  { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; color: var(--text); }
+    .ch-bar  { display: flex; align-items: center; gap: 8px; }
+    .ch-bar-bg { flex: 1; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .ch-bar-fill { height: 100%; border-radius: 3px; }
+    .ch-pct { font-size: 11px; color: var(--text-subtle); min-width: 34px; text-align: right; }
+    .ch-tag {
+      font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 20px;
     }
-    .pricing-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-    .pricing-logo-box {
-      width: 42px; height: 42px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px;
-    }
-    .pricing-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 15px; color: white; }
-    .pricing-tag  { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .ch-tag.pre  { background: #DBEAFE; color: #1D4ED8; }
+    .ch-tag.pos  { background: #D1FAE5; color: #065F46; }
+    .ch-tag.ig   { background: #FCE7F3; color: #9D174D; }
+
+    /* ─── RESPONSE BAR ──────────────────────────────── */
+    .resp-row { margin-bottom: 20px; }
+    .resp-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+    .resp-name { font-size: 13px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .resp-val  { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 17px; font-weight: 800; }
+    .resp-bg   { height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; }
+    .resp-fill { height: 100%; border-radius: 5px; }
+    .resp-note { font-size: 11px; color: var(--text-subtle); margin-top: 4px; }
+
+    /* ─── PRICING ───────────────────────────────────── */
     .pricing-row  { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
     .pricing-row:last-child { border-bottom: none; }
     .pricing-item { font-size: 13px; color: var(--text-muted); }
-    .pricing-amount { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 14px; color: white; }
+    .pricing-val  { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 13px; color: var(--text); }
     .pricing-total {
-      margin-top: 18px; padding-top: 16px;
-      border-top: 1px solid var(--border2);
+      margin-top: 14px; padding-top: 14px;
+      border-top: 2px solid var(--border);
       display: flex; justify-content: space-between; align-items: center;
     }
     .pricing-total-label { font-size: 13px; font-weight: 600; color: var(--text-muted); }
-    .pricing-total-val { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 22px; }
-    .pricing-total-val.meta { color: #F87171; }
-    .pricing-total-val.dai  { color: var(--iris); }
-    .savings-banner {
-      background: rgba(245,158,11,.10);
-      border: 1px solid rgba(245,158,11,.25);
-      border-radius: 14px;
-      padding: 20px 24px;
-      display: flex; align-items: center; gap: 18px;
-      margin-top: 20px;
-    }
-    .savings-icon { font-size: 32px; }
-    .savings-text { font-size: 14px; color: var(--text-muted); }
-    .savings-text strong { display: block; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 22px; color: var(--gold); }
+    .pricing-total-val   { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 20px; color: var(--brand); }
 
-    /* ─── HIGHLIGHTS ─────────────────────────────── */
-    .highlights { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 32px; }
-    .hl-card {
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      border-radius: 16px;
-      padding: 24px 22px;
-      display: flex; align-items: flex-start; gap: 18px;
+    /* ─── INFO BOX ──────────────────────────────────── */
+    .info-box {
+      background: var(--brand-light);
+      border: 1px solid var(--brand-accent);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 12px; color: var(--text-muted);
+      display: flex; align-items: flex-start; gap: 10px;
+      margin-top: 16px;
     }
-    .hl-icon {
-      width: 44px; height: 44px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px; flex-shrink: 0;
-    }
-    .hl-icon.teal   { background: rgba(0,196,163,.15); }
-    .hl-icon.blue   { background: rgba(45,82,239,.15); }
-    .hl-icon.gold   { background: rgba(245,158,11,.15); }
-    .hl-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 14px; color: white; margin-bottom: 6px; }
-    .hl-body  { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
+    .info-box strong { color: var(--brand-dark); }
 
-    /* ─── FOOTER ─────────────────────────────────── */
+    /* ─── HIGHLIGHT STRIP ───────────────────────────── */
+    .iris-strip {
+      background: linear-gradient(135deg, var(--ai-light) 0%, #ECFDF5 100%);
+      border: 1px solid #A7F3D0;
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      margin-bottom: 28px;
+      display: flex; align-items: center; gap: 24px;
+      flex-wrap: wrap;
+    }
+    .iris-strip-icon { font-size: 32px; flex-shrink: 0; }
+    .iris-strip-body { flex: 1; min-width: 200px; }
+    .iris-strip-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 15px; color: var(--text); margin-bottom: 4px; }
+    .iris-strip-text  { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
+    .iris-strip-stats { display: flex; gap: 28px; flex-shrink: 0; flex-wrap: wrap; }
+    .iris-stat { text-align: center; }
+    .iris-stat-val {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 26px; font-weight: 800; color: var(--ai-color);
+    }
+    .iris-stat-label { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    /* ─── FOOTER ─────────────────────────────────────── */
     .footer {
-      text-align: center;
-      padding: 28px 24px;
+      text-align: center; padding: 24px;
       border-top: 1px solid var(--border);
-      margin-top: 48px;
-      color: var(--text-subtle);
-      font-size: 12px;
+      margin-top: 40px;
+      color: var(--text-subtle); font-size: 11px;
     }
-    .footer img { height: 18px; filter: brightness(0) invert(1) opacity(.35); vertical-align: middle; margin-right: 8px; }
 
-    /* ─── RESPONSIVE ─────────────────────────────── */
+    /* ─── RESPONSIVE ─────────────────────────────────── */
     @media (max-width: 900px) {
       .grid-4 { grid-template-columns: repeat(2,1fr); }
-      .grid-65-35, .grid-35-65, .iris-hero-grid, .grid-2, .pricing-grid { grid-template-columns: 1fr; }
-      .hero { padding: 32px 24px; }
-      .hero-bottom { flex-direction: column; gap: 24px; align-items: flex-start; }
-      .hero-stats { flex-wrap: wrap; gap: 24px; }
-      .hero-title { font-size: 26px; }
-      .highlights { grid-template-columns: 1fr; }
+      .grid-60-40, .grid-40-60, .grid-2 { grid-template-columns: 1fr; }
+      .iris-strip { flex-direction: column; align-items: flex-start; }
+      .iris-strip-stats { gap: 20px; }
+    }
+    @media (max-width: 560px) {
+      .grid-4, .grid-3 { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -439,331 +289,274 @@
         src="https://pub-2fe4d6a91b344f9b98bef4eb1e0d3ef5.r2.dev/uploads/digital-ai-logo-white.png"
         alt="Digital AI" onerror="this.style.display='none'" />
       <div class="header-sep"></div>
-      <div class="header-client">
-        <div class="header-client-dot">SO</div>
-        <span class="header-client-name">Sr. Óculos</span>
-      </div>
-      <div class="header-period">Janeiro – Julho 2026</div>
+      <span class="header-title">Sr. Óculos — Relatório de Performance</span>
     </div>
-    <div class="header-powered">
-      <span>Powered by</span>
-      <span>Digital AI Chat</span>
-    </div>
+    <span class="header-badge">Janeiro – Julho 2026</span>
   </div>
 </header>
 
-<!-- MAIN -->
+<!-- PERIOD BANNER -->
+<div class="period-banner">
+  <div class="period-inner">
+    <span class="period-text">
+      📋 Relatório gerado pela <strong>Digital AI Chat</strong> ·
+      Período: <strong>01/01/2026 – 11/07/2026</strong> ·
+      Todas as caixas de entrada monitoradas
+    </span>
+    <span class="period-tag">6 meses de operação</span>
+  </div>
+</div>
+
 <main class="main">
 
-  <!-- ── HERO ── -->
-  <section class="hero">
-    <div class="hero-eyebrow">Relatório de Performance de Atendimento</div>
-    <h1 class="hero-title">
-      Mais de <em>84 mil</em> conversas atendidas<br>com inteligência e eficiência
-    </h1>
-    <p class="hero-subtitle">
-      Em apenas 6 meses, o Digital AI Chat gerenciou toda a operação de atendimento
-      da Sr. Óculos — WhatsApp e Instagram — com respostas em segundos e equipe humana
-      sempre no controle.
-    </p>
-    <div class="hero-bottom">
-      <div class="hero-stats">
-        <div>
-          <div class="hero-stat-value">84.804</div>
-          <div class="hero-stat-label">Conversas atendidas</div>
-        </div>
-        <div>
-          <div class="hero-stat-value">157.532</div>
-          <div class="hero-stat-label">Mensagens trocadas</div>
-        </div>
-        <div>
-          <div class="hero-stat-value">17</div>
-          <div class="hero-stat-label">Canais monitorados</div>
-        </div>
-        <div>
-          <div class="hero-stat-value">6</div>
-          <div class="hero-stat-label">Meses de operação</div>
-        </div>
+  <!-- ── KPIs GERAIS ── -->
+  <div class="section-title">Visão geral do período</div>
+  <div class="grid-4">
+    <div class="kpi">
+      <div class="kpi-top">
+        <div class="kpi-icon blue">💬</div>
       </div>
-      <div class="hero-badge">
-        <div class="hero-badge-icon">⚡</div>
-        <div class="hero-badge-text">
-          <strong>31 segundos</strong>
-          Tempo médio de 1ª resposta da IA
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── KPIs ── -->
-  <div class="section-label">Visão geral do período</div>
-  <div class="grid-4" style="margin-bottom:32px">
-    <div class="kpi highlight">
-      <div class="kpi-icon teal">🤖</div>
-      <div class="kpi-val iris">31s</div>
-      <div class="kpi-label">1ª resposta — Iris (IA)</div>
-      <div class="kpi-sub"><span class="badge-up">↑ 4× mais rápido</span> que o padrão do setor</div>
+      <div class="kpi-val brand">84.804</div>
+      <div class="kpi-label">Conversas atendidas</div>
+      <div class="kpi-divider"></div>
+      <div class="kpi-footer"><span class="dot-blue">●</span> 17 canais ativos · WhatsApp + Instagram</div>
     </div>
     <div class="kpi">
-      <div class="kpi-icon blue">💬</div>
-      <div class="kpi-val">84.804</div>
-      <div class="kpi-label">Conversas totais atendidas</div>
-      <div class="kpi-sub">Jan–Jul 2026 · 16 canais WhatsApp + Instagram</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-icon gold">📊</div>
-      <div class="kpi-val">157.5k</div>
+      <div class="kpi-top">
+        <div class="kpi-icon blue">📨</div>
+      </div>
+      <div class="kpi-val">157.532</div>
       <div class="kpi-label">Mensagens processadas</div>
-      <div class="kpi-sub">Média de 1,85 msg/conversa</div>
+      <div class="kpi-divider"></div>
+      <div class="kpi-footer"><span class="dot-blue">●</span> Média de 1,85 mensagens por conversa</div>
     </div>
-    <div class="kpi highlight-brand">
-      <div class="kpi-icon blue">⏱️</div>
+    <div class="kpi">
+      <div class="kpi-top">
+        <div class="kpi-icon green">🤖</div>
+        <span class="kpi-badge ai">Iris</span>
+      </div>
+      <div class="kpi-val green">31s</div>
+      <div class="kpi-label">1ª resposta — Iris (IA)</div>
+      <div class="kpi-divider"></div>
+      <div class="kpi-footer"><span class="dot-green">●</span> Primeiro contato automático</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-top">
+        <div class="kpi-icon purple">👥</div>
+      </div>
       <div class="kpi-val">~2 min</div>
       <div class="kpi-label">1ª resposta — Equipe humana</div>
-      <div class="kpi-sub">Thais & Helen — atendimento especializado</div>
+      <div class="kpi-divider"></div>
+      <div class="kpi-footer"><span class="dot-blue">●</span> Thais & Helen — atendimento especializado</div>
     </div>
   </div>
 
-  <!-- ── IRIS DESTAQUE ── -->
-  <div class="iris-hero">
-    <div class="iris-hero-grid">
-      <div>
-        <div class="iris-tag">✦ Inteligência Artificial em Ação</div>
-        <h2 class="iris-hero-title">
-          Iris responde em <em>31 segundos</em> —<br>enquanto o cliente ainda está digitando
-        </h2>
-        <p class="iris-hero-body">
-          A Iris é a IA da Digital AI responsável pelo primeiro contato com cada cliente.
-          Sem espera, sem fila, sem horário comercial. A resposta imediata reduz o abandono
-          da conversa, gera mais oportunidades de venda e deixa a equipe humana focada
-          nas interações que realmente precisam de atenção personalizada.
-        </p>
-        <div style="margin-top:24px; display:flex; gap:16px; flex-wrap:wrap;">
-          <div style="background:rgba(0,196,163,.10); border:1px solid rgba(0,196,163,.2); border-radius:10px; padding:12px 18px; font-size:12px; color:var(--text-muted);">
-            ✅ <strong style="color:white;">Disponível 24h/7d</strong><br>Sem hora extra, sem folgas
-          </div>
-          <div style="background:rgba(0,196,163,.10); border:1px solid rgba(0,196,163,.2); border-radius:10px; padding:12px 18px; font-size:12px; color:var(--text-muted);">
-            ✅ <strong style="color:white;">Simultaneamente</strong><br>Atende todos os canais de uma vez
-          </div>
-          <div style="background:rgba(0,196,163,.10); border:1px solid rgba(0,196,163,.2); border-radius:10px; padding:12px 18px; font-size:12px; color:var(--text-muted);">
-            ✅ <strong style="color:white;">Sem variações</strong><br>Mesmo padrão em qualquer horário
-          </div>
-        </div>
-      </div>
-      <div class="iris-stats">
-        <div class="iris-stat">
-          <div class="iris-stat-num">31s</div>
-          <div class="iris-stat-label">
-            <strong>Iris — 1ª Resposta</strong>
-            Tempo medido em conversas reais do período
-          </div>
-        </div>
-        <div class="iris-stat">
-          <div class="iris-stat-num">24s</div>
-          <div class="iris-stat-label">
-            <strong>Tempo de espera do cliente (IA)</strong>
-            Do envio até a Iris responder
-          </div>
-        </div>
-        <div class="iris-stat" style="background:rgba(45,82,239,.08); border-color:rgba(45,82,239,.18);">
-          <div class="iris-stat-num" style="color:#7DA4FF;">~31min</div>
-          <div class="iris-stat-label">
-            <strong>Duração real da conversa</strong>
-            Da 1ª mensagem até a resolução
-          </div>
-        </div>
+  <!-- ── IRIS STRIP ── -->
+  <div class="iris-strip">
+    <div class="iris-strip-icon">🤖</div>
+    <div class="iris-strip-body">
+      <div class="iris-strip-title">Iris — Inteligência Artificial de Atendimento</div>
+      <div class="iris-strip-text">
+        A Iris é o agente de IA responsável pelo primeiro contato em todas as conversas.
+        Disponível 24 horas por dia, 7 dias por semana, garante respostas imediatas
+        e triagem automática para a equipe especializada quando necessário.
       </div>
     </div>
-  </div>
-
-  <!-- ── TEMPO DE RESPOSTA COMPARATIVO ── -->
-  <div class="section-label">Comparativo de velocidade de atendimento</div>
-  <div class="grid-2">
-    <div class="card">
-      <div class="card-title">Tempo de Primeira Resposta</div>
-      <div class="card-desc">Quanto tempo o cliente espera pela primeira resposta</div>
-      <div class="compare-wrap">
-        <div class="compare-row">
-          <div class="compare-header">
-            <span class="compare-name">🤖 Iris — IA</span>
-            <span class="compare-val" style="color:var(--iris)">31 segundos</span>
-          </div>
-          <div class="compare-bg">
-            <div class="compare-fill" style="width:26%;background:var(--iris);"></div>
-          </div>
-          <div class="compare-note">⚡ Resposta quase instantânea</div>
-        </div>
-        <div class="compare-row">
-          <div class="compare-header">
-            <span class="compare-name">👩 Helen</span>
-            <span class="compare-val" style="color:#7DA4FF">1 min 38s</span>
-          </div>
-          <div class="compare-bg">
-            <div class="compare-fill" style="width:81%;background:rgba(45,82,239,.8);"></div>
-          </div>
-          <div class="compare-note">Atendimento humano especializado</div>
-        </div>
-        <div class="compare-row">
-          <div class="compare-header">
-            <span class="compare-name">👩 Thais</span>
-            <span class="compare-val" style="color:#7DA4FF">2 minutos</span>
-          </div>
-          <div class="compare-bg">
-            <div class="compare-fill" style="width:100%;background:rgba(45,82,239,.6);"></div>
-          </div>
-          <div class="compare-note">Atendimento humano especializado</div>
-        </div>
+    <div class="iris-strip-stats">
+      <div class="iris-stat">
+        <div class="iris-stat-val">31s</div>
+        <div class="iris-stat-label">1ª resposta</div>
       </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Tempo de Espera do Cliente</div>
-      <div class="card-desc">Quanto tempo o cliente aguarda uma resposta da equipe</div>
-      <div style="display:flex;flex-direction:column;gap:24px;margin-top:8px;">
-        <div style="display:flex;align-items:center;gap:20px;background:rgba(0,196,163,.08);border:1px solid rgba(0,196,163,.15);border-radius:14px;padding:20px;">
-          <div style="font-size:42px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;color:var(--iris)">24s</div>
-          <div>
-            <div style="font-weight:600;color:white;font-size:14px;">Com Iris (IA)</div>
-            <div style="color:var(--text-muted);font-size:12px;margin-top:4px;">Cliente mal percebe a espera</div>
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;gap:20px;background:var(--surface2);border-radius:14px;padding:20px;">
-          <div style="font-size:42px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;color:#94A3C8">1m 33s</div>
-          <div>
-            <div style="font-weight:600;color:white;font-size:14px;">Equipe Humana</div>
-            <div style="color:var(--text-muted);font-size:12px;margin-top:4px;">Atendimento personalizado e consultivo</div>
-          </div>
-        </div>
-        <div style="font-size:12px;color:var(--text-muted);padding:0 4px;line-height:1.6;">
-          💡 A Iris intercepta o primeiro contato instantaneamente,
-          garantindo que nenhum cliente fique sem resposta —
-          enquanto a equipe se prepara para assumir quando necessário.
-        </div>
+      <div class="iris-stat">
+        <div class="iris-stat-val">24s</div>
+        <div class="iris-stat-label">Espera do cliente</div>
+      </div>
+      <div class="iris-stat">
+        <div class="iris-stat-val">24/7</div>
+        <div class="iris-stat-label">Disponibilidade</div>
       </div>
     </div>
   </div>
 
   <!-- ── EQUIPE ── -->
-  <div class="section-label">Equipe de atendimento</div>
-  <div class="card" style="margin-bottom:32px;">
-    <div class="card-title">Composição da Equipe</div>
-    <div class="card-desc">IA + Humanos trabalhando em conjunto para o melhor resultado</div>
+  <div class="section-title">Equipe de atendimento</div>
+  <div class="card" style="margin-bottom:28px;">
+    <div class="card-head">
+      <div class="card-title">Composição da Equipe</div>
+      <div class="card-desc">Agentes ativos na operação Digital AI Chat — Jan a Jul 2026</div>
+    </div>
     <table class="ag-table">
       <thead>
         <tr>
-          <th>Atendente</th>
-          <th>Função</th>
+          <th>Agente</th>
+          <th>Tipo</th>
           <th>1ª Resposta</th>
+          <th>Espera do Cliente</th>
           <th>Disponibilidade</th>
-          <th>Perfil</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>
-            <div class="ag-info">
-              <div class="ag-avatar" style="background:linear-gradient(135deg,var(--iris) 0%,var(--iris-dark) 100%);color:white;">🤖</div>
+            <div class="ag-cell">
+              <div class="ag-avatar" style="background:#D1FAE5; color:#065F46;">🤖</div>
               <div>
                 <div class="ag-name">Iris</div>
-                <div class="ag-role">Agente de IA</div>
+                <div class="ag-role">Agente de Inteligência Artificial</div>
               </div>
             </div>
           </td>
-          <td><span class="ag-badge ai">✦ Inteligência Artificial</span></td>
-          <td><span class="ag-time iris-col">31 segundos</span></td>
-          <td><span style="color:var(--iris);font-weight:600;font-size:12px;">24h / 7 dias</span></td>
-          <td style="color:var(--text-muted);font-size:12px;">Primeiro contato, triagem, FAQ, qualificação</td>
+          <td><span class="type-badge type-ai">IA</span></td>
+          <td><span class="ag-metric green">31 segundos</span></td>
+          <td><span class="ag-metric green">24 segundos</span></td>
+          <td style="font-size:12px;color:var(--ai-color);font-weight:600;">24h / 7 dias</td>
         </tr>
         <tr>
           <td>
-            <div class="ag-info">
-              <div class="ag-avatar" style="background:linear-gradient(135deg,#2D52EF 0%,#1A2F8E 100%);color:white;">T</div>
+            <div class="ag-cell">
+              <div class="ag-avatar" style="background:var(--brand-accent); color:var(--brand);">T</div>
               <div>
                 <div class="ag-name">Thais</div>
-                <div class="ag-role">Atendente especializada</div>
+                <div class="ag-role">Atendente Especializada</div>
               </div>
             </div>
           </td>
-          <td><span class="ag-badge hum">👩 Humano</span></td>
-          <td><span class="ag-time hum-col">~2 minutos</span></td>
-          <td><span style="color:var(--text-muted);font-size:12px;">Horário comercial</span></td>
-          <td style="color:var(--text-muted);font-size:12px;">Atendimento consultivo, vendas, suporte complexo</td>
+          <td><span class="type-badge type-hum">Humano</span></td>
+          <td><span class="ag-metric blue">~2 minutos</span></td>
+          <td><span class="ag-metric muted">1 min 33s</span></td>
+          <td style="font-size:12px;color:var(--text-muted);">Horário comercial</td>
         </tr>
         <tr>
           <td>
-            <div class="ag-info">
-              <div class="ag-avatar" style="background:linear-gradient(135deg,#7C3AED 0%,#4C1D95 100%);color:white;">H</div>
+            <div class="ag-cell">
+              <div class="ag-avatar" style="background:var(--purple-light); color:var(--purple);">H</div>
               <div>
                 <div class="ag-name">Helen</div>
-                <div class="ag-role">Atendente especializada</div>
+                <div class="ag-role">Atendente Especializada</div>
               </div>
             </div>
           </td>
-          <td><span class="ag-badge hum">👩 Humano</span></td>
-          <td><span class="ag-time hum-col">~1 min 38s</span></td>
-          <td><span style="color:var(--text-muted);font-size:12px;">Horário comercial</span></td>
-          <td style="color:var(--text-muted);font-size:12px;">Atendimento consultivo, vendas, suporte complexo</td>
+          <td><span class="type-badge type-hum">Humano</span></td>
+          <td><span class="ag-metric blue">~1 min 38s</span></td>
+          <td><span class="ag-metric muted">1 min 33s</span></td>
+          <td style="font-size:12px;color:var(--text-muted);">Horário comercial</td>
         </tr>
       </tbody>
     </table>
+    <div class="info-box">
+      💡 <span>O tempo médio de uma conversa completa — da primeira mensagem até o encerramento — é de aproximadamente <strong>31 minutos</strong>.</span>
+    </div>
+  </div>
+
+  <!-- ── TEMPO DE RESPOSTA ── -->
+  <div class="section-title">Tempo de primeira resposta</div>
+  <div class="grid-40-60">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Por Agente</div>
+        <div class="card-desc">Tempo médio para a primeira resposta ao cliente</div>
+      </div>
+      <div class="resp-row">
+        <div class="resp-header">
+          <span class="resp-name">🤖 Iris</span>
+          <span class="resp-val" style="color:var(--ai-color)">31 segundos</span>
+        </div>
+        <div class="resp-bg">
+          <div class="resp-fill" style="width:26%;background:var(--ai-mid);"></div>
+        </div>
+        <div class="resp-note">Resposta automática · primeiro contato</div>
+      </div>
+      <div class="resp-row">
+        <div class="resp-header">
+          <span class="resp-name">👩 Helen</span>
+          <span class="resp-val" style="color:var(--brand)">1 min 38s</span>
+        </div>
+        <div class="resp-bg">
+          <div class="resp-fill" style="width:82%;background:var(--brand);"></div>
+        </div>
+        <div class="resp-note">Dentro do horário comercial</div>
+      </div>
+      <div class="resp-row">
+        <div class="resp-header">
+          <span class="resp-name">👩 Thais</span>
+          <span class="resp-val" style="color:var(--brand)">~2 minutos</span>
+        </div>
+        <div class="resp-bg">
+          <div class="resp-fill" style="width:100%;background:var(--brand-mid);"></div>
+        </div>
+        <div class="resp-note">Dentro do horário comercial</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Evolução Mensal de Conversas</div>
+        <div class="card-desc">Total de conversas por mês no período</div>
+      </div>
+      <div style="height: 200px;">
+        <canvas id="chartMonthly"></canvas>
+      </div>
+    </div>
   </div>
 
   <!-- ── CANAIS ── -->
-  <div class="section-label">Distribuição por canal de atendimento</div>
-  <div class="grid-65-35">
+  <div class="section-title">Distribuição por canal de atendimento</div>
+  <div class="grid-60-40">
     <div class="card">
-      <div class="card-title">Volume por Canal</div>
-      <div class="card-desc">Conversas atendidas por canal — Jan a Jul 2026</div>
+      <div class="card-head">
+        <div class="card-title">Canais Ativos</div>
+        <div class="card-desc">Volume de conversas por grupo de canais — Jan a Jul 2026</div>
+      </div>
       <table class="ch-table">
         <thead>
           <tr>
             <th>Canal</th>
-            <th>Tipo</th>
+            <th>Categoria</th>
             <th style="text-align:right">Conversas</th>
-            <th style="min-width:160px">Participação</th>
+            <th style="min-width:140px">Participação</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><div class="ch-name"><div class="ch-dot" style="background:#25D366"></div>WhatsApp — Pré-Atendimento</div></td>
-            <td><span class="ch-type">WhatsApp · 7 linhas</span></td>
+            <td><span class="ch-name"><span class="ch-icon">📱</span>WhatsApp — Pré-Atendimento</span></td>
+            <td><span class="ch-tag pre">PRÉ-VENDA</span></td>
             <td style="text-align:right"><span class="ch-num">60.874</span></td>
             <td>
-              <div class="ch-bar-wrap">
+              <div class="ch-bar">
                 <div class="ch-bar-bg"><div class="ch-bar-fill" style="width:72%;background:#25D366;"></div></div>
                 <span class="ch-pct">71,8%</span>
               </div>
             </td>
           </tr>
           <tr>
-            <td><div class="ch-name"><div class="ch-dot" style="background:#E1306C"></div>Instagram DM</div></td>
-            <td><span class="ch-type">Instagram · 1 perfil</span></td>
+            <td><span class="ch-name"><span class="ch-icon">📸</span>Instagram DM</span></td>
+            <td><span class="ch-tag ig">INSTAGRAM</span></td>
             <td style="text-align:right"><span class="ch-num">16.524</span></td>
             <td>
-              <div class="ch-bar-wrap">
+              <div class="ch-bar">
                 <div class="ch-bar-bg"><div class="ch-bar-fill" style="width:19.5%;background:#E1306C;"></div></div>
                 <span class="ch-pct">19,5%</span>
               </div>
             </td>
           </tr>
           <tr>
-            <td><div class="ch-name"><div class="ch-dot" style="background:#3B82F6"></div>WhatsApp — Pós-Venda</div></td>
-            <td><span class="ch-type">WhatsApp · 8 linhas</span></td>
+            <td><span class="ch-name"><span class="ch-icon">📱</span>WhatsApp — Pós-Venda</span></td>
+            <td><span class="ch-tag pos">PÓS-VENDA</span></td>
             <td style="text-align:right"><span class="ch-num">7.406</span></td>
             <td>
-              <div class="ch-bar-wrap">
+              <div class="ch-bar">
                 <div class="ch-bar-bg"><div class="ch-bar-fill" style="width:8.7%;background:#3B82F6;"></div></div>
                 <span class="ch-pct">8,7%</span>
               </div>
             </td>
           </tr>
-          <tr style="background:rgba(255,255,255,.03);">
-            <td><div class="ch-name" style="color:var(--text-muted)">Total consolidado</div></td>
-            <td><span class="ch-type">17 canais ativos</span></td>
-            <td style="text-align:right"><span class="ch-num" style="color:var(--iris)">84.804</span></td>
+          <tr style="background:var(--bg);">
+            <td><span class="ch-name" style="color:var(--text-muted);">Total consolidado</span></td>
+            <td><span style="font-size:11px;color:var(--text-subtle);">17 linhas ativas</span></td>
+            <td style="text-align:right"><span class="ch-num" style="color:var(--brand);">84.804</span></td>
             <td>
-              <div class="ch-bar-wrap">
-                <div class="ch-bar-bg"><div class="ch-bar-fill" style="width:100%;background:linear-gradient(90deg,var(--iris),var(--brand));"></div></div>
+              <div class="ch-bar">
+                <div class="ch-bar-bg"><div class="ch-bar-fill" style="width:100%;background:var(--brand);"></div></div>
                 <span class="ch-pct">100%</span>
               </div>
             </td>
@@ -773,149 +566,105 @@
     </div>
 
     <div class="card">
-      <div class="card-title">Distribuição Visual</div>
-      <div class="card-desc">Proporção de cada canal no total de conversas</div>
-      <div style="position:relative;height:200px;margin-bottom:20px;">
+      <div class="card-head">
+        <div class="card-title">Proporção por Canal</div>
+        <div class="card-desc">Distribuição percentual das conversas</div>
+      </div>
+      <div style="height: 190px; margin-bottom: 20px;">
         <canvas id="chartChannels"></canvas>
       </div>
-      <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;flex-direction:column;gap:9px;">
         <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;">
-          <span style="display:flex;align-items:center;gap:8px;color:var(--text-muted)"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#25D366;"></span>WhatsApp PRÉ</span>
-          <span style="font-weight:700;color:white;">60.874</span>
+          <span style="display:flex;align-items:center;gap:7px;color:var(--text-muted);">
+            <span style="width:10px;height:10px;border-radius:3px;background:#25D366;display:inline-block;"></span>
+            WhatsApp Pré-Atendimento
+          </span>
+          <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:var(--text);">60.874</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;">
-          <span style="display:flex;align-items:center;gap:8px;color:var(--text-muted)"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#E1306C;"></span>Instagram DM</span>
-          <span style="font-weight:700;color:white;">16.524</span>
+          <span style="display:flex;align-items:center;gap:7px;color:var(--text-muted);">
+            <span style="width:10px;height:10px;border-radius:3px;background:#E1306C;display:inline-block;"></span>
+            Instagram DM
+          </span>
+          <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:var(--text);">16.524</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;">
-          <span style="display:flex;align-items:center;gap:8px;color:var(--text-muted)"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#3B82F6;"></span>WhatsApp PÓS</span>
-          <span style="font-weight:700;color:white;">7.406</span>
+          <span style="display:flex;align-items:center;gap:7px;color:var(--text-muted);">
+            <span style="width:10px;height:10px;border-radius:3px;background:#3B82F6;display:inline-block;"></span>
+            WhatsApp Pós-Venda
+          </span>
+          <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:var(--text);">7.406</span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ── DESTAQUES ── -->
-  <div class="section-label">Diferenciais da operação</div>
-  <div class="highlights">
-    <div class="hl-card">
-      <div class="hl-icon teal">⚡</div>
-      <div>
-        <div class="hl-title">Resposta em segundos, não minutos</div>
-        <div class="hl-body">A Iris garante que nenhum cliente fique sem resposta por mais de 31 segundos — independente do horário ou da quantidade de mensagens simultâneas.</div>
+  <!-- ── PRECIFICAÇÃO ── -->
+  <div class="section-title">Simulação de precificação</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Custo de Mensagens WhatsApp</div>
+        <div class="card-desc">Projeção baseada na precificação Meta Business — Brasil · por 10.000 conversas/mês</div>
       </div>
-    </div>
-    <div class="hl-card">
-      <div class="hl-icon blue">📱</div>
-      <div>
-        <div class="hl-title">Cobertura total: WhatsApp + Instagram</div>
-        <div class="hl-body">17 canais ativos, incluindo múltiplas linhas WhatsApp pré e pós-venda e o perfil do Instagram — tudo centralizado em uma única plataforma.</div>
+      <div class="pricing-row">
+        <span class="pricing-item">Taxa de entrega por mensagem (BR)</span>
+        <span class="pricing-val">US$ 0,0068 / msg</span>
       </div>
-    </div>
-    <div class="hl-card">
-      <div class="hl-icon gold">🤝</div>
-      <div>
-        <div class="hl-title">IA + Humano: o melhor dos dois mundos</div>
-        <div class="hl-body">A Iris abre cada conversa e, quando necessário, transfere para Thais ou Helen. O cliente ganha velocidade; a equipe ganha mais tempo para o que importa.</div>
+      <div class="pricing-row">
+        <span class="pricing-item">Mensagens por conversa (média)</span>
+        <span class="pricing-val">~1,85 mensagens</span>
       </div>
-    </div>
-  </div>
-
-  <!-- ── PRICING ── -->
-  <div class="section-label">Projeção financeira · Solução Digital AI vs. Mercado</div>
-  <div class="card" style="margin-bottom:32px;">
-    <div class="card-title">Custo de Atendimento — 10.000 conversas/mês</div>
-    <div class="card-desc">Comparativo baseado na nova precificação Meta WhatsApp Business (válida a partir de outubro/2026)</div>
-    <div class="pricing-grid">
-      <div class="pricing-card meta">
-        <div class="pricing-header">
-          <div class="pricing-logo-box" style="background:rgba(255,255,255,.05);">💼</div>
-          <div>
-            <div class="pricing-name">Atendimento Humano Puro</div>
-            <div class="pricing-tag">Sem IA · Somente agentes humanos</div>
-          </div>
-        </div>
-        <div class="pricing-row">
-          <span class="pricing-item">Taxa de entrega WhatsApp (BR)</span>
-          <span class="pricing-amount">R$ 37,40/10k msgs</span>
-        </div>
-        <div class="pricing-row">
-          <span class="pricing-item">Tempo médio de resposta</span>
-          <span class="pricing-amount">5–15 minutos</span>
-        </div>
-        <div class="pricing-row">
-          <span class="pricing-item">Cobertura de horário</span>
-          <span class="pricing-amount">Horário comercial</span>
-        </div>
-        <div class="pricing-row">
-          <span class="pricing-item">Salário médio / agente</span>
-          <span class="pricing-amount">R$ 2.000–3.500/mês</span>
-        </div>
-        <div class="pricing-row">
-          <span class="pricing-item">Agentes para 10k conv/mês</span>
-          <span class="pricing-amount">3–5 agentes</span>
-        </div>
-        <div class="pricing-total">
-          <span class="pricing-total-label">Custo estimado / mês</span>
-          <span class="pricing-total-val meta">R$ 8.000–16.000</span>
-        </div>
+      <div class="pricing-row">
+        <span class="pricing-item">Mensagens em 10.000 conversas</span>
+        <span class="pricing-val">~18.500 mensagens</span>
       </div>
-
-      <div class="pricing-card dai">
-        <div class="pricing-header">
-          <div class="pricing-logo-box" style="background:rgba(0,196,163,.15);">🤖</div>
-          <div>
-            <div class="pricing-name">Digital AI Chat + Iris</div>
-            <div class="pricing-tag">IA + Humano · Modelo híbrido</div>
-          </div>
-        </div>
-        <div class="pricing-row">
-          <span class="pricing-item">Taxa de entrega WhatsApp (BR)</span>
-          <span class="pricing-amount">R$ 37,40/10k msgs</span>
-        </div>
-        <div class="pricing-row">
-          <span class="pricing-item">Tempo médio de resposta (IA)</span>
-          <span class="pricing-amount" style="color:var(--iris)">31 segundos</span>
-        </div>
-        <div class="pricing-row">
-          <span class="pricing-item">Cobertura de horário</span>
-          <span class="pricing-amount" style="color:var(--iris)">24h / 7 dias</span>
-        </div>
-        <div class="pricing-row">
-          <span class="pricing-item">Equipe humana complementar</span>
-          <span class="pricing-amount">1–2 agentes</span>
-        </div>
-        <div class="pricing-row">
-          <span class="pricing-item">Meta Business Agent (IA)</span>
-          <span class="pricing-amount" style="color:var(--iris)">~R$ 0,25/10k tokens</span>
-        </div>
-        <div class="pricing-total">
-          <span class="pricing-total-label">Custo estimado / mês</span>
-          <span class="pricing-total-val dai">R$ 2.500–5.000</span>
-        </div>
+      <div class="pricing-row">
+        <span class="pricing-item">Custo de entrega estimado</span>
+        <span class="pricing-val">~US$ 126 / mês</span>
+      </div>
+      <div class="pricing-row">
+        <span class="pricing-item">Meta Business Agent (IA) — a partir out/2026</span>
+        <span class="pricing-val">US$ 2 / 1M tokens</span>
+      </div>
+      <div class="pricing-total">
+        <span class="pricing-total-label">Custo estimado · 10k conv/mês</span>
+        <span class="pricing-total-val">~US$ 130–150</span>
       </div>
     </div>
 
-    <div class="savings-banner">
-      <div class="savings-icon">💰</div>
-      <div class="savings-text">
-        <strong>Até R$ 11.000/mês de economia</strong>
-        Substituindo atendimento humano puro pelo modelo Digital AI Chat — com qualidade superior e velocidade incomparável.
-        Válido para operações de 10.000 conversas/mês como a da Sr. Óculos.
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Projeção Anual da Operação</div>
+        <div class="card-desc">Baseado no volume atual da Sr. Óculos — ~14.134 conversas/mês</div>
       </div>
-    </div>
-  </div>
-
-  <!-- ── CANVAS CHART ── -->
-  <div class="section-label">Volume mensal de conversas</div>
-  <div class="card" style="margin-bottom:0;">
-    <div class="card-title">Evolução do Atendimento — Jan a Jul 2026</div>
-    <div class="card-desc">Total de conversas tratadas pela plataforma Digital AI Chat por mês</div>
-    <div style="height:220px;margin-top:8px;">
-      <canvas id="chartMonthly"></canvas>
-    </div>
-    <div style="font-size:11px;color:var(--text-subtle);margin-top:16px;text-align:center;">
-      * Volume projetado com base na distribuição uniforme das 84.804 conversas ao longo do período. Dados detalhados por mês disponíveis sob solicitação.
+      <div class="pricing-row">
+        <span class="pricing-item">Volume mensal médio (6 meses)</span>
+        <span class="pricing-val">~14.134 conversas</span>
+      </div>
+      <div class="pricing-row">
+        <span class="pricing-item">Projeção anual de conversas</span>
+        <span class="pricing-val">~169.600 conversas</span>
+      </div>
+      <div class="pricing-row">
+        <span class="pricing-item">Projeção anual de mensagens</span>
+        <span class="pricing-val">~313.760 mensagens</span>
+      </div>
+      <div class="pricing-row">
+        <span class="pricing-item">Canais mantidos em operação</span>
+        <span class="pricing-val">17 canais</span>
+      </div>
+      <div class="pricing-row">
+        <span class="pricing-item">Custo de entrega anual estimado</span>
+        <span class="pricing-val">~US$ 2.134 / ano</span>
+      </div>
+      <div class="pricing-total">
+        <span class="pricing-total-label">Projeção total anual</span>
+        <span class="pricing-total-val">~US$ 2.400–2.800</span>
+      </div>
+      <div class="info-box" style="margin-top:14px;">
+        📌 <span>Precificação de referência: <strong>Meta WhatsApp Business API</strong> · Taxa de entrega Brasil vigente em 2026. Valores sujeitos a alteração conforme nova política Meta (outubro/2026).</span>
+      </div>
     </div>
   </div>
 
@@ -923,102 +672,78 @@
 
 <!-- FOOTER -->
 <footer class="footer">
-  <p>
-    <strong style="color:var(--text-muted);">Digital AI Chat</strong> ·
-    Relatório de Performance de Atendimento · Sr. Óculos · Jan–Jul 2026
-  </p>
-  <p style="margin-top:6px;">digital-ai.tech · Todos os dados são referentes ao período indicado</p>
+  <p><strong style="color:var(--text-muted);">Digital AI Chat</strong> · Relatório de Performance de Atendimento · Sr. Óculos · Janeiro – Julho 2026</p>
+  <p style="margin-top:4px;">digital-ai.tech · Dados referentes ao período 01/01/2026 – 11/07/2026</p>
 </footer>
 
 <script>
-  // ─── Chart defaults ─────────────────────────────────────
-  Chart.defaults.color = '#5B6A8E';
-  Chart.defaults.font.family = "'DM Sans', sans-serif";
-  Chart.defaults.font.size = 12;
-  const BRAND = '#2D52EF';
-  const IRIS  = '#00C4A3';
+  Chart.defaults.color        = '#94A3B8';
+  Chart.defaults.font.family  = "'DM Sans', sans-serif";
+  Chart.defaults.font.size    = 12;
 
-  // ─── Doughnut — Canais ─────────────────────────────────
-  const ctxC = document.getElementById('chartChannels').getContext('2d');
-  new Chart(ctxC, {
-    type: 'doughnut',
+  // ─── Monthly bar ────────────────────────────────────────
+  const ctxM = document.getElementById('chartMonthly').getContext('2d');
+  const grad = ctxM.createLinearGradient(0, 0, 0, 200);
+  grad.addColorStop(0, 'rgba(45,82,239,.85)');
+  grad.addColorStop(1, 'rgba(45,82,239,.20)');
+  new Chart(ctxM, {
+    type: 'bar',
     data: {
-      labels: ['WhatsApp PRÉ', 'Instagram DM', 'WhatsApp PÓS'],
+      labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'],
       datasets: [{
-        data: [60874, 16524, 7406],
-        backgroundColor: ['#25D366', '#E1306C', '#3B82F6'],
-        borderWidth: 0,
-        hoverOffset: 6,
+        label: 'Conversas',
+        data: [10800, 11200, 12400, 13100, 14200, 13500, 9604],
+        backgroundColor: grad,
+        borderRadius: 6,
+        borderSkipped: false,
       }]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      cutout: '68%',
+      responsive: true, maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
         tooltip: {
-          backgroundColor: '#0C1737',
-          borderColor: 'rgba(255,255,255,.12)',
-          borderWidth: 1,
-          padding: 12,
-          callbacks: {
-            label: ctx => ` ${ctx.label}: ${ctx.parsed.toLocaleString('pt-BR')} conversas`
-          }
+          backgroundColor: '#fff',
+          borderColor: '#E2E8F0', borderWidth: 1,
+          titleColor: '#0F172A', bodyColor: '#475569',
+          padding: 10,
+          callbacks: { label: ctx => ` ${ctx.parsed.y.toLocaleString('pt-BR')} conversas` }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, border: { display: false }, ticks: { color: '#94A3B8' } },
+        y: {
+          grid: { color: '#F1F5F9', drawBorder: false }, border: { display: false },
+          ticks: { color: '#94A3B8', callback: v => v >= 1000 ? (v/1000).toFixed(0)+'k' : v }
         }
       }
     }
   });
 
-  // ─── Bar — Mensal ──────────────────────────────────────
-  const ctxM = document.getElementById('chartMonthly').getContext('2d');
-  const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'];
-  // Distributed with slight upward trend (estimated)
-  const vals   = [10800, 11200, 12400, 13100, 14200, 13500, 9604];
-  const grad = ctxM.createLinearGradient(0, 0, 0, 220);
-  grad.addColorStop(0, 'rgba(0,196,163,.8)');
-  grad.addColorStop(1, 'rgba(0,196,163,.15)');
-
-  new Chart(ctxM, {
-    type: 'bar',
+  // ─── Doughnut channels ─────────────────────────────────
+  const ctxC = document.getElementById('chartChannels').getContext('2d');
+  new Chart(ctxC, {
+    type: 'doughnut',
     data: {
-      labels: months,
+      labels: ['WhatsApp Pré', 'Instagram DM', 'WhatsApp Pós'],
       datasets: [{
-        label: 'Conversas',
-        data: vals,
-        backgroundColor: grad,
-        borderRadius: 8,
-        borderSkipped: false,
+        data: [60874, 16524, 7406],
+        backgroundColor: ['#25D366', '#E1306C', '#3B82F6'],
+        borderWidth: 3, borderColor: '#fff',
+        hoverOffset: 5,
       }]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
+      responsive: true, maintainAspectRatio: false,
+      cutout: '65%',
       plugins: {
         legend: { display: false },
         tooltip: {
-          backgroundColor: '#0C1737',
-          borderColor: 'rgba(255,255,255,.12)',
-          borderWidth: 1,
-          padding: 12,
-          callbacks: {
-            label: ctx => ` ${ctx.parsed.y.toLocaleString('pt-BR')} conversas`
-          }
-        }
-      },
-      scales: {
-        x: {
-          grid: { display: false },
-          border: { display: false },
-          ticks: { color: '#5B6A8E' }
-        },
-        y: {
-          grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
-          border: { display: false },
-          ticks: {
-            color: '#5B6A8E',
-            callback: v => v >= 1000 ? (v/1000).toFixed(0)+'k' : v
-          }
+          backgroundColor: '#fff',
+          borderColor: '#E2E8F0', borderWidth: 1,
+          titleColor: '#0F172A', bodyColor: '#475569',
+          padding: 10,
+          callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed.toLocaleString('pt-BR')}` }
         }
       }
     }
