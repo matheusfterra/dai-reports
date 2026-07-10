@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sr. Óculos — Desempenho de Agentes | Jan–Jul 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --brand-primary:   #2D52EF;
+      --brand-secondary: #3B2FC9;
+      --brand-dark:      #0F1F5C;
+      --brand-accent:    #E8EEFF;
+      --brand-light:     #E8ECFD;
+      --ai-color:        #7C3AED;
+      --ai-light:        #EDE9FE;
+      --success:         #059669;
+      --success-light:   #D1FAE5;
+      --warning:         #D97706;
+      --warning-light:   #FEF3C7;
+      --danger:          #DC2626;
+      --danger-light:    #FEE2E2;
+      --neutral:         #64748B;
+      --bg:              #F8FAFF;
+      --surface:         #FFFFFF;
+      --border:          #E2E8F0;
+      --text:            #0F172A;
+      --text-muted:      #64748B;
+      --text-subtle:     #94A3B8;
+      --font-heading:    'Plus Jakarta Sans', sans-serif;
+      --font-body:       'DM Sans', sans-serif;
+      --radius-sm:  4px;
+      --radius-md:  8px;
+      --radius-lg:  12px;
+      --radius-xl:  16px;
+      --shadow-sm:  0 1px 3px rgba(15,31,92,.06), 0 1px 2px rgba(15,31,92,.04);
+      --shadow-md:  0 4px 12px rgba(15,31,92,.10), 0 2px 4px rgba(15,31,92,.06);
+      --shadow-lg:  0 8px 24px rgba(15,31,92,.12), 0 4px 8px rgba(15,31,92,.08);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ─── HEADER ─── */
+    .header {
+      background: linear-gradient(135deg, #2D52EF 0%, #0F1F5C 100%);
+      padding: 0 32px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(15,31,92,.25);
+    }
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-left { display: flex; align-items: center; gap: 16px; }
+    .header-logo { height: 28px; }
+    .header-divider {
+      width: 1px;
+      height: 20px;
+      background: rgba(255,255,255,.25);
+    }
+    .header-title {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255,255,255,.9);
+      letter-spacing: .01em;
+    }
+    .header-badge {
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.2);
+      color: rgba(255,255,255,.85);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: .02em;
+    }
+
+    /* ─── MAIN ─── */
+    .main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+
+    /* ─── SECTION TITLE ─── */
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ─── PERIOD BANNER ─── */
+    .period-banner {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 20px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-sm);
+    }
+    .period-label {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    .period-value {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--brand-dark);
+    }
+    .period-meta { display: flex; gap: 24px; }
+    .period-meta-item { text-align: right; }
+    .period-meta-label { font-size: 11px; color: var(--text-subtle); margin-bottom: 2px; }
+    .period-meta-value { font-family: var(--font-heading); font-size: 14px; font-weight: 700; color: var(--text-muted); }
+
+    /* ─── KPI GRID ─── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 900px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 500px) { .kpi-grid { grid-template-columns: 1fr; } }
+
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 22px 24px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .kpi-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary));
+    }
+    .kpi-card.ai::before { background: linear-gradient(90deg, var(--ai-color), #A855F7); }
+    .kpi-card.success::before { background: linear-gradient(90deg, var(--success), #34D399); }
+    .kpi-card.warning::before { background: linear-gradient(90deg, var(--warning), #FBBF24); }
+
+    .kpi-icon {
+      width: 36px; height: 36px;
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      margin-bottom: 14px;
+      background: var(--brand-accent);
+    }
+    .kpi-card.ai .kpi-icon { background: var(--ai-light); }
+    .kpi-card.success .kpi-icon { background: var(--success-light); }
+    .kpi-card.warning .kpi-icon { background: var(--warning-light); }
+
+    .kpi-value {
+      font-family: var(--font-heading);
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--brand-dark);
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+    .kpi-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .kpi-sub {
+      font-size: 11px;
+      color: var(--text-subtle);
+      margin-top: 6px;
+    }
+
+    /* ─── CHARTS GRID ─── */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 900px) { .charts-grid { grid-template-columns: 1fr; } }
+
+    .chart-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .chart-title {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .chart-sub {
+      font-size: 12px;
+      color: var(--text-subtle);
+      margin-bottom: 20px;
+    }
+    .chart-wrap {
+      position: relative;
+      height: 220px;
+    }
+
+    /* ─── AGENT TABLE ─── */
+    .table-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+    .table-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .table-header-title {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .table-header-sub {
+      font-size: 12px;
+      color: var(--text-subtle);
+      margin-top: 2px;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .data-table th {
+      padding: 10px 20px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-subtle);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table td {
+      padding: 14px 20px;
+      font-size: 13px;
+      color: var(--text);
+      border-bottom: 1px solid #F1F5F9;
+      vertical-align: middle;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover td { background: #FAFBFF; }
+
+    .agent-info { display: flex; align-items: center; gap: 10px; }
+    .agent-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: var(--font-heading);
+      flex-shrink: 0;
+    }
+    .avatar-thais { background: #DBEAFE; color: #1D4ED8; }
+    .avatar-helen { background: #FCE7F3; color: #9D174D; }
+    .avatar-matheus { background: #D1FAE5; color: #065F46; }
+    .avatar-ai { background: var(--ai-light); color: var(--ai-color); }
+
+    .agent-name { font-weight: 600; font-size: 13px; color: var(--text); }
+    .agent-type { font-size: 11px; color: var(--text-subtle); }
+
+    .ai-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: var(--ai-light);
+      color: var(--ai-color);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+      letter-spacing: .04em;
+    }
+
+    .metric-value { font-weight: 600; }
+    .metric-sub { font-size: 11px; color: var(--text-subtle); }
+
+    .bar-cell { width: 160px; }
+    .bar-wrap {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .bar-track {
+      flex: 1; height: 5px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary));
+      transition: width .4s ease;
+    }
+    .bar-ai { background: linear-gradient(90deg, var(--ai-color), #A855F7); }
+    .bar-label { font-size: 12px; font-weight: 600; color: var(--text-muted); min-width: 36px; text-align: right; }
+
+    /* ─── SPEED HIGHLIGHT ─── */
+    .speed-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: var(--success-light);
+      color: var(--success);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+
+    /* ─── PRICING SECTION ─── */
+    .pricing-section {
+      margin-bottom: 28px;
+    }
+
+    .pricing-header {
+      background: linear-gradient(135deg, #2D52EF 0%, #0F1F5C 100%);
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      padding: 24px 28px;
+      color: white;
+    }
+    .pricing-header-title {
+      font-family: var(--font-heading);
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .pricing-header-sub { font-size: 13px; opacity: .8; }
+
+    .pricing-note {
+      background: #FEF9C3;
+      border-left: 3px solid #EAB308;
+      padding: 12px 16px;
+      font-size: 12px;
+      color: #713F12;
+      line-height: 1.5;
+    }
+
+    .scenarios-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0;
+    }
+    @media (max-width: 700px) { .scenarios-grid { grid-template-columns: 1fr; } }
+
+    .scenario-card {
+      padding: 28px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .scenario-card:first-child { border-radius: 0 0 0 var(--radius-xl); border-right: none; }
+    .scenario-card:last-child { border-radius: 0 0 var(--radius-xl) 0; background: #FAFBFF; }
+
+    .scenario-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-subtle);
+      margin-bottom: 6px;
+    }
+    .scenario-name {
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .scenario-card.highlight .scenario-name { color: var(--ai-color); }
+
+    .pricing-table-mini {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    .pricing-table-mini th {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-subtle);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 6px 0;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .pricing-table-mini td {
+      padding: 8px 0;
+      font-size: 12px;
+      color: var(--text);
+      border-bottom: 1px solid #F1F5F9;
+    }
+    .pricing-table-mini td:last-child { text-align: right; font-weight: 600; }
+    .pricing-table-mini tr:last-child td { border-bottom: none; }
+
+    .total-row td { font-weight: 700 !important; font-size: 14px !important; color: var(--text) !important; }
+    .total-row td:last-child { color: var(--brand-primary) !important; font-size: 16px !important; }
+
+    .scenario-card.highlight .total-row td:last-child { color: var(--ai-color) !important; }
+
+    .saving-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--success-light);
+      color: var(--success);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 14px;
+      border-radius: var(--radius-md);
+    }
+
+    .pricing-note-card {
+      font-size: 11px;
+      color: var(--text-subtle);
+      margin-top: 12px;
+      line-height: 1.6;
+    }
+
+    /* ─── INSIGHT CARDS ─── */
+    .insights-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 800px) { .insights-grid { grid-template-columns: 1fr; } }
+
+    .insight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .insight-emoji { font-size: 22px; margin-bottom: 10px; }
+    .insight-title {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .insight-text { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+
+    /* ─── FOOTER ─── */
+    .footer {
+      text-align: center;
+      padding: 32px;
+      color: var(--text-subtle);
+      font-size: 11px;
+      border-top: 1px solid var(--border);
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-left">
+      <img src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-negative.svg"
+           alt="Digital AI" class="header-logo" />
+      <div class="header-divider"></div>
+      <span class="header-title">Sr. Óculos — Desempenho de Agentes</span>
+    </div>
+    <span class="header-badge">Jan – Jul 2026</span>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- PERIOD BANNER -->
+  <div class="period-banner">
+    <div>
+      <div class="period-label">Período analisado</div>
+      <div class="period-value">01 Jan 2026 — 11 Jul 2026</div>
+    </div>
+    <div class="period-meta">
+      <div class="period-meta-item">
+        <div class="period-meta-label">Dias cobertos</div>
+        <div class="period-meta-value">192 dias</div>
+      </div>
+      <div class="period-meta-item">
+        <div class="period-meta-label">Meses completos</div>
+        <div class="period-meta-value">6,4 meses</div>
+      </div>
+      <div class="period-meta-item">
+        <div class="period-meta-label">Fonte</div>
+        <div class="period-meta-value">Chatwoot — Relatório de Agentes</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="section-title">Visão Geral do Período</div>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon">💬</div>
+      <div class="kpi-value">40.052</div>
+      <div class="kpi-label">Conversas atribuídas</div>
+      <div class="kpi-sub">Total no período · ~209/dia</div>
+    </div>
+    <div class="kpi-card success">
+      <div class="kpi-icon">✅</div>
+      <div class="kpi-value">74.820</div>
+      <div class="kpi-label">Resoluções totais</div>
+      <div class="kpi-sub">Inclui cross-atribuições</div>
+    </div>
+    <div class="kpi-card ai">
+      <div class="kpi-icon">🤖</div>
+      <div class="kpi-value">1,68%</div>
+      <div class="kpi-label">Conversas geridas pela IA</div>
+      <div class="kpi-sub">673 conv · Digital AI DEV</div>
+    </div>
+    <div class="kpi-card warning">
+      <div class="kpi-icon">⚡</div>
+      <div class="kpi-value">11 min</div>
+      <div class="kpi-label">1ª resposta da IA</div>
+      <div class="kpi-sub">vs. ~2h 27 min (humanos)</div>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW -->
+  <div class="section-title">Volumetria</div>
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title">Volume de Conversas por Mês</div>
+      <div class="chart-sub">Estimativa proporcional baseada no total do período (192 dias)</div>
+      <div class="chart-wrap">
+        <canvas id="volumeChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Distribuição por Agente</div>
+      <div class="chart-sub">Conversas atribuídas no período</div>
+      <div class="chart-wrap">
+        <canvas id="distChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- AGENT TABLE -->
+  <div class="section-title">Performance por Agente</div>
+  <div class="table-card">
+    <div class="table-header">
+      <div class="table-header-title">Relatório Completo de Agentes</div>
+      <div class="table-header-sub">Período: 01 jan – 11 jul 2026 · Exportado em 10/07/2026</div>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Agente</th>
+          <th>Conversas</th>
+          <th>Resoluções</th>
+          <th>1ª Resposta</th>
+          <th>Resolução Média</th>
+          <th>Espera do Cliente</th>
+          <th class="bar-cell">Volume</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="agent-info">
+              <div class="agent-avatar avatar-thais">TH</div>
+              <div>
+                <div class="agent-name">Thais</div>
+                <div class="agent-type">Atendimento Humano</div>
+              </div>
+            </div>
+          </td>
+          <td><div class="metric-value">25.731</div><div class="metric-sub">~134/dia</div></td>
+          <td><div class="metric-value">42.678</div></td>
+          <td><div class="metric-value">2h 27min</div></td>
+          <td><div class="metric-value">3d 16h</div></td>
+          <td><div class="metric-value">30min 53s</div></td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar-track"><div class="bar-fill" style="width:64.2%"></div></div>
+              <div class="bar-label">64,2%</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="agent-info">
+              <div class="agent-avatar avatar-helen">HE</div>
+              <div>
+                <div class="agent-name">Helen</div>
+                <div class="agent-type">Atendimento Humano</div>
+              </div>
+            </div>
+          </td>
+          <td><div class="metric-value">13.375</div><div class="metric-sub">~70/dia</div></td>
+          <td><div class="metric-value">30.991</div></td>
+          <td><div class="metric-value">2h 20min</div></td>
+          <td><div class="metric-value">4d 19h</div></td>
+          <td><div class="metric-value">26min 20s</div></td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar-track"><div class="bar-fill" style="width:33.4%"></div></div>
+              <div class="bar-label">33,4%</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="agent-info">
+              <div class="agent-avatar avatar-matheus">MT</div>
+              <div>
+                <div class="agent-name">Matheus Terra</div>
+                <div class="agent-type">Atendimento Humano</div>
+              </div>
+            </div>
+          </td>
+          <td><div class="metric-value">273</div><div class="metric-sub">~1,4/dia</div></td>
+          <td><div class="metric-value">309</div></td>
+          <td><div class="metric-value">18h 45min</div></td>
+          <td><div class="metric-value">7h 50min</div></td>
+          <td><div class="metric-value">17min 32s</div></td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar-track"><div class="bar-fill" style="width:0.7%"></div></div>
+              <div class="bar-label">0,7%</div>
+            </div>
+          </td>
+        </tr>
+        <tr style="background:#FAFBFF;">
+          <td>
+            <div class="agent-info">
+              <div class="agent-avatar avatar-ai">🤖</div>
+              <div>
+                <div class="agent-name">Digital AI DEV <span class="ai-badge">✦ IA</span></div>
+                <div class="agent-type">Agente de Inteligência Artificial</div>
+              </div>
+            </div>
+          </td>
+          <td><div class="metric-value">673</div><div class="metric-sub">~3,5/dia</div></td>
+          <td><div class="metric-value">842</div></td>
+          <td>
+            <div class="metric-value">11min 12s</div>
+            <div><span class="speed-badge">⚡ 13× mais rápido</span></div>
+          </td>
+          <td><div class="metric-value">11h 40min</div></td>
+          <td><div class="metric-value">38min 06s</div></td>
+          <td class="bar-cell">
+            <div class="bar-wrap">
+              <div class="bar-track"><div class="bar-fill bar-ai" style="width:1.68%"></div></div>
+              <div class="bar-label">1,68%</div>
+            </div>
+          </td>
+        </tr>
+        <tr style="background:#F8FAFF; font-weight:700;">
+          <td><strong>TOTAL</strong></td>
+          <td><strong>40.052</strong></td>
+          <td><strong>74.820</strong></td>
+          <td colspan="3" style="color:var(--text-subtle); font-size:12px; font-weight:400;">— médias ponderadas por volume —</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- RESPONSE TIME CHART -->
+  <div class="section-title">Tempo de Resposta</div>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:28px;">
+    <div class="chart-card">
+      <div class="chart-title">Tempo Médio de 1ª Resposta (minutos)</div>
+      <div class="chart-sub">IA: 11min · Thais: 147min · Helen: 140min · Matheus: 1.125min</div>
+      <div class="chart-wrap">
+        <canvas id="responseChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Tempo Médio de Resolução (horas)</div>
+      <div class="chart-sub">IA: 11,7h · Matheus: 7,8h · Thais: 88h · Helen: 115h</div>
+      <div class="chart-wrap">
+        <canvas id="resolutionChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSIGHTS -->
+  <div class="section-title">Insights Principais</div>
+  <div class="insights-grid">
+    <div class="insight-card">
+      <div class="insight-emoji">⚡</div>
+      <div class="insight-title">IA é 13× mais rápida no atendimento</div>
+      <div class="insight-text">A IA responde em <strong>11 min</strong> vs. a média humana de <strong>~2h 24min</strong>. Para conversas resolvidas, o tempo é de 11h contra 3–5 dias dos agentes humanos.</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-emoji">📈</div>
+      <div class="insight-title">Potencial de expansão da IA</div>
+      <div class="insight-text">A IA trata apenas <strong>1,68%</strong> das conversas. Ampliar sua cobertura para 10–20% pode reduzir tempo de espera global e aliviar carga de Thais e Helen.</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-emoji">🏆</div>
+      <div class="insight-title">Thais lidera em volume absoluto</div>
+      <div class="insight-text">Com <strong>25.731 conversas</strong> (64,2%), Thais é o principal pilar do atendimento. Helen cobre outros 33,4%. Juntas respondem por 97,7% do volume humano.</div>
+    </div>
+  </div>
+
+  <!-- PRICING SECTION -->
+  <div class="section-title">Simulação de Precificação WhatsApp API (Meta)</div>
+  <div class="pricing-section">
+    <div class="pricing-header">
+      <div class="pricing-header-title">💰 Nova Precificação Meta — Impacto no Sr. Óculos</div>
+      <div class="pricing-header-sub">A partir de outubro/2026, todas as mensagens de atendimento passam a ser cobradas. Simulação baseada no volume atual projetado para 12 meses.</div>
+    </div>
+    <div class="pricing-note">
+      ⚠️ <strong>Premissas da simulação:</strong> Média de <strong>8 mensagens por conversa</strong> · Brasil: <strong>$0,0068/mensagem</strong> (service messages) · Meta Business Agent: <strong>$0,045/conversa</strong> (~4–5¢ tudo incluso, IA + entrega) · Volume projetado: <strong>6.288 conversas/mês</strong> (média do período) · USD/BRL: R$5,60 (referência).
+    </div>
+    <div class="scenarios-grid">
+      <div class="scenario-card">
+        <div class="scenario-label">Cenário Atual</div>
+        <div class="scenario-name">Solução Própria + Service Messages</div>
+        <table class="pricing-table-mini">
+          <thead>
+            <tr><th>Item</th><th>Cálculo</th><th>$/mês</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Entrega WhatsApp (service msg)</td>
+              <td>50.304 msgs × $0,0068</td>
+              <td>$341,07</td>
+            </tr>
+            <tr>
+              <td>Infra IA (estimado)</td>
+              <td>~106 conv/mês × $0,10</td>
+              <td>~$10,60</td>
+            </tr>
+            <tr>
+              <td>Atendimento humano</td>
+              <td>Incluso (custo de pessoal fixo)</td>
+              <td>—</td>
+            </tr>
+            <tr class="total-row">
+              <td colspan="2"><strong>Total mensal (API)</strong></td>
+              <td><strong>~$351/mês</strong></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="pricing-note-card">
+          Antes de out/2026: mensagens gratuitas → custo atual ≈ $0.<br>
+          Após out/2026: cobrança por entrega de cada mensagem enviada no atendimento.
+        </div>
+      </div>
+      <div class="scenario-card highlight">
+        <div class="scenario-label">Cenário Alternativo</div>
+        <div class="scenario-name">Meta Business Agent (substituição total)</div>
+        <table class="pricing-table-mini">
+          <thead>
+            <tr><th>Item</th><th>Cálculo</th><th>$/mês</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Meta Business Agent (todas as conv. IA)</td>
+              <td>6.288 conv × $0,045</td>
+              <td>$282,96</td>
+            </tr>
+            <tr>
+              <td>Entrega service msg (humanos)</td>
+              <td>Agentes humanos ainda geram service msgs</td>
+              <td>~$270*</td>
+            </tr>
+            <tr>
+              <td>Infra IA própria</td>
+              <td>Eliminada (Meta substitui)</td>
+              <td>$0</td>
+            </tr>
+            <tr class="total-row">
+              <td colspan="2"><strong>Total mensal (API)</strong></td>
+              <td><strong>~$283/mês</strong></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top:14px;">
+          <span class="saving-badge">📉 Economia potencial: ~$68/mês (~19%)</span>
+        </div>
+        <div class="pricing-note-card">
+          *Se Meta Business Agent substituir 100% das conversas (incluindo humanas), custo seria apenas ~$283/mês. Cenário hipotético de adoção total.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANNUAL PROJECTION -->
+  <div class="section-title">Projeção Anual</div>
+  <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; margin-bottom:28px;">
+    <div class="kpi-card">
+      <div class="kpi-icon">📆</div>
+      <div class="kpi-value">~75.4k</div>
+      <div class="kpi-label">Conversas/ano (projeção)</div>
+      <div class="kpi-sub">Base: 6.288/mês × 12</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">💬</div>
+      <div class="kpi-value">~603k</div>
+      <div class="kpi-label">Mensagens/ano estimadas</div>
+      <div class="kpi-sub">8 msgs/conversa (estimado)</div>
+    </div>
+    <div class="kpi-card warning">
+      <div class="kpi-icon">💸</div>
+      <div class="kpi-value">~$4.212</div>
+      <div class="kpi-label">Custo API anual — atual</div>
+      <div class="kpi-sub">Projeção após out/2026</div>
+    </div>
+    <div class="kpi-card ai">
+      <div class="kpi-icon">🚀</div>
+      <div class="kpi-value">~$3.396</div>
+      <div class="kpi-label">Custo API anual — Meta Agent</div>
+      <div class="kpi-sub">Economia de ~$816/ano</div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  Gerado automaticamente por Digital AI · Dados: Chatwoot Agent Report · Período: Jan–Jul 2026<br>
+  Precificação baseada na documentação oficial Meta Business Messaging (consultada em 10/07/2026) · reports.digital-ai.tech
+</footer>
+
+<script>
+  const BRAND   = '#2D52EF';
+  const DARK    = '#0F1F5C';
+  const AI      = '#7C3AED';
+  const SUCCESS = '#059669';
+  const WARN    = '#D97706';
+  const MUTED   = '#94A3B8';
+
+  Chart.defaults.font.family = "'DM Sans', sans-serif";
+  Chart.defaults.color = '#64748B';
+
+  // ── 1. VOLUME MENSAL ──
+  new Chart(document.getElementById('volumeChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul*'],
+      datasets: [{
+        label: 'Conversas',
+        data: [6468, 5840, 6468, 6258, 6468, 6258, 2292],
+        backgroundColor: [
+          BRAND, BRAND, BRAND, BRAND, BRAND, BRAND,
+          'rgba(45,82,239,.45)'
+        ],
+        borderRadius: 6,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` ${ctx.parsed.y.toLocaleString('pt-BR')} conversas`
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: { color: '#F1F5F9' },
+          ticks: { callback: v => v >= 1000 ? (v/1000).toFixed(1)+'k' : v }
+        },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  // ── 2. DISTRIBUIÇÃO PIE ──
+  new Chart(document.getElementById('distChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Thais', 'Helen', 'Matheus Terra', 'Digital AI DEV'],
+      datasets: [{
+        data: [25731, 13375, 273, 673],
+        backgroundColor: [BRAND, '#EC4899', SUCCESS, AI],
+        borderWidth: 2,
+        borderColor: '#fff',
+        hoverOffset: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      cutout: '65%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { padding: 12, font: { size: 11 }, boxWidth: 10, usePointStyle: true }
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` ${ctx.label}: ${ctx.parsed.toLocaleString('pt-BR')} (${((ctx.parsed/40052)*100).toFixed(1)}%)`
+          }
+        }
+      }
+    }
+  });
+
+  // ── 3. RESPONSE TIME BAR ──
+  new Chart(document.getElementById('responseChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Digital AI DEV', 'Helen', 'Thais', 'Matheus Terra'],
+      datasets: [{
+        label: 'Minutos',
+        data: [11.2, 140, 147, 1125],
+        backgroundColor: [AI, BRAND, BRAND, MUTED],
+        borderRadius: 6,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              const v = ctx.parsed.x;
+              if (v < 60) return ` ${v} min`;
+              const h = Math.floor(v/60), m = Math.round(v%60);
+              return ` ${h}h ${m}min`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          grid: { color: '#F1F5F9' },
+          ticks: {
+            callback: v => {
+              if (v < 60) return v+'min';
+              return (v/60).toFixed(0)+'h';
+            }
+          }
+        },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+
+  // ── 4. RESOLUTION TIME BAR ──
+  new Chart(document.getElementById('resolutionChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Matheus Terra', 'Digital AI DEV', 'Thais', 'Helen'],
+      datasets: [{
+        label: 'Horas',
+        data: [7.83, 11.67, 88, 115],
+        backgroundColor: [MUTED, AI, BRAND, '#EC4899'],
+        borderRadius: 6,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              const v = ctx.parsed.x;
+              if (v < 24) return ` ${v.toFixed(1)}h`;
+              const d = Math.floor(v/24), h = Math.round(v%24);
+              return ` ${d}d ${h}h`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          grid: { color: '#F1F5F9' },
+          ticks: {
+            callback: v => {
+              if (v < 24) return v+'h';
+              return (v/24).toFixed(0)+'d';
+            }
+          }
+        },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+</script>
+</body>
+</html>
