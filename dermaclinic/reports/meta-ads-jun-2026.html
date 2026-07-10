@@ -184,7 +184,7 @@
     .chart-wrap { background: var(--dai-surface); border: 1px solid var(--dai-border); border-radius: var(--radius); padding: 24px; position: relative; }
     .chart-title { font-size: 13px; font-weight: 700; color: var(--dai-white); margin-bottom: 4px; }
     .chart-subtitle { font-size: 11px; color: var(--dai-muted); margin-bottom: 20px; }
-    canvas { max-height: 280px; display: block; width: 100% !important; }
+    canvas { display: block; max-height: 280px; }
 
     .divider { border: none; border-top: 1px solid var(--dai-border); margin: 24px 0; }
 
@@ -1012,79 +1012,81 @@
       var canvas = document.getElementById('weeklyChart');
       if (!canvas) return;
       var wrap = canvas.parentElement;
-      if (wrap) wrap.style.minHeight = '320px';
-      canvas.setAttribute('height', '280');
 
       function doRender() {
         if (canvas._rendered) return;
         canvas._rendered = true;
-        var chart = new Chart(canvas.getContext('2d'), {
-        type: 'bar',
-        data: {
-          labels: ['S1 (01–07/jun)', 'S2 (08–14/jun)', 'S3 (15–21/jun)', 'S4 (22–28/jun)', 'S5 (29–30/jun)'],
-          datasets: [
-            {
-              label: 'Conversas',
-              data: [33, 11, 30, 41, 12],
-              backgroundColor: [
-                'rgba(99,102,241,0.7)',
-                'rgba(245,158,11,0.7)',
-                'rgba(99,102,241,0.7)',
-                'rgba(16,185,129,0.8)',
-                'rgba(99,102,241,0.7)'
-              ],
-              borderColor: ['#6366F1','#F59E0B','#6366F1','#10B981','#6366F1'],
-              borderWidth: 1,
-              borderRadius: 6,
-            },
-            {
-              label: 'Qualificados',
-              data: [30, 10, 29, 38, 10],
-              backgroundColor: 'rgba(16,185,129,0.25)',
-              borderColor: '#10B981',
-              borderWidth: 1,
-              borderRadius: 6,
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: true,
-          plugins: {
-            legend: { labels: { color: '#94A3B8', font: { size: 12 } } },
-            tooltip: {
-              backgroundColor: '#1E293B',
-              borderColor: '#334155',
-              borderWidth: 1,
-              titleColor: '#fff',
-              bodyColor: '#94A3B8'
-            }
+
+        // Dimensoes explicitas: bypassa responsive detection do Chart.js
+        var w = (wrap ? (wrap.clientWidth || wrap.offsetWidth) : 0) || 600;
+        w = Math.max(w - 48, 200); // 48px = padding interno do .chart-wrap (24px cada lado)
+        canvas.style.width  = w + 'px';
+        canvas.style.height = '280px';
+        canvas.width  = w;
+        canvas.height = 280;
+
+        new Chart(canvas.getContext('2d'), {
+          type: 'bar',
+          data: {
+            labels: ['S1 (01–07/jun)', 'S2 (08–14/jun)', 'S3 (15–21/jun)', 'S4 (22–28/jun)', 'S5 (29–30/jun)'],
+            datasets: [
+              {
+                label: 'Conversas',
+                data: [33, 11, 30, 41, 12],
+                backgroundColor: ['rgba(99,102,241,0.7)','rgba(245,158,11,0.7)','rgba(99,102,241,0.7)','rgba(16,185,129,0.8)','rgba(99,102,241,0.7)'],
+                borderColor: ['#6366F1','#F59E0B','#6366F1','#10B981','#6366F1'],
+                borderWidth: 1,
+                borderRadius: 6
+              },
+              {
+                label: 'Qualificados',
+                data: [30, 10, 29, 38, 10],
+                backgroundColor: 'rgba(16,185,129,0.25)',
+                borderColor: '#10B981',
+                borderWidth: 1,
+                borderRadius: 6
+              }
+            ]
           },
-          scales: {
-            x: { ticks: { color: '#64748B', font: { size: 11 } }, grid: { color: 'rgba(51,65,85,0.4)' } },
-            y: { ticks: { color: '#64748B', font: { size: 11 }, stepSize: 10 }, grid: { color: 'rgba(51,65,85,0.4)' }, beginAtZero: true }
+          options: {
+            responsive: false,
+            plugins: {
+              legend: { labels: { color: '#94A3B8', font: { size: 12 } } },
+              tooltip: {
+                backgroundColor: '#1E293B',
+                borderColor: '#334155',
+                borderWidth: 1,
+                titleColor: '#fff',
+                bodyColor: '#94A3B8'
+              }
+            },
+            scales: {
+              x: { ticks: { color: '#64748B', font: { size: 11 } }, grid: { color: 'rgba(51,65,85,0.4)' } },
+              y: { ticks: { color: '#64748B', font: { size: 11 }, stepSize: 10 }, grid: { color: 'rgba(51,65,85,0.4)' }, beginAtZero: true }
+            }
           }
-        }
-      });
-        setTimeout(function() { chart.resize(); }, 50);
-      } // end doRender
+        });
+      }
 
-      // Se canvas já tem largura, renderiza agora
-      if (canvas.offsetWidth > 0) { doRender(); return; }
+      // Com reflow forcado em auth.js (void appEl.offsetHeight), o wrap ja
+      // deve ter clientWidth > 0 aqui. Mas mantemos fallback por seguranca.
+      if ((wrap && wrap.clientWidth > 0) || canvas.offsetWidth > 0) {
+        doRender();
+        return;
+      }
 
-      // Fallback: ResizeObserver (modern) ou polling (legacy)
+      // Fallback ResizeObserver
       if (window.ResizeObserver) {
         var ro = new ResizeObserver(function() {
-          if (canvas.offsetWidth > 0) { ro.disconnect(); doRender(); }
+          if (wrap && wrap.clientWidth > 0) { ro.disconnect(); doRender(); }
         });
-        ro.observe(canvas);
-        // Safety: se RO nunca disparar, forçar após 1s
-        setTimeout(function() { if (!canvas._rendered) { ro.disconnect(); doRender(); } }, 1000);
+        ro.observe(wrap || canvas);
+        setTimeout(function() { if (!canvas._rendered) { ro.disconnect(); doRender(); } }, 1200);
       } else {
         var attempts = 0;
         (function poll() {
-          if (canvas.offsetWidth > 0 || attempts++ > 15) { doRender(); return; }
-          setTimeout(poll, 100);
+          if ((wrap && wrap.clientWidth > 0) || attempts++ > 20) { doRender(); return; }
+          setTimeout(poll, 80);
         })();
       }
     }
