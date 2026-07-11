@@ -1,0 +1,3845 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PCM ENGIE Brasil — UHE Miranda &amp; UHE Jaguará</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* === ENGIE GREEN THEME === */
+:root {
+  --primary: #00A651;
+  --primary-dark: #007A3D;
+  --primary-light: #00C860;
+  --primary-muted: rgba(0,166,81,.15);
+  --primary-border: rgba(0,166,81,.30);
+
+  --bg: #0d0f0e;
+  --bg-2: #141714;
+  --bg-3: #1a1e1a;
+  --bg-4: #1f2420;
+  --surface: #1e2320;
+  --surface-2: #252b26;
+  --surface-3: #2c342d;
+
+  --border: rgba(255,255,255,.07);
+  --border-2: rgba(255,255,255,.12);
+
+  --text: #e8ede9;
+  --text-2: #b8c2b9;
+  --text-3: #7a8a7b;
+  --text-4: #4a5a4b;
+
+  --sidebar-w: 280px;
+  --header-h: 56px;
+
+  --green: #00A651;
+  --yellow: #F4C542;
+  --red: #E05252;
+  --blue: #4A90D9;
+  --orange: #E08A2F;
+  --purple: #9B6FD0;
+  --teal: #2BC4A8;
+
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --shadow: 0 1px 3px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.3);
+  --shadow-lg: 0 4px 24px rgba(0,0,0,.5);
+
+  --font-sans: 'Plus Jakarta Sans', 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 15px; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* === LAYOUT === */
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* === SIDEBAR === */
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  background: var(--bg-2);
+  border-right: 1px solid var(--border);
+  position: fixed;
+  top: 0; left: 0;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface-3) transparent;
+  z-index: 100;
+}
+
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 2px; }
+
+.sidebar-logo {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-mark {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 13px;
+  color: #fff;
+  letter-spacing: -0.5px;
+  flex-shrink: 0;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+}
+
+.logo-sub {
+  font-size: 10px;
+  color: var(--text-3);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-top: 1px;
+}
+
+.sidebar-search {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-search input {
+  width: 100%;
+  padding: 7px 12px;
+  background: var(--bg-3);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 12px;
+  font-family: var(--font-sans);
+  outline: none;
+  transition: border-color .2s;
+}
+
+.sidebar-search input::placeholder { color: var(--text-4); }
+.sidebar-search input:focus { border-color: var(--primary-border); }
+
+.nav-section {
+  padding: 20px 0 8px;
+}
+
+.nav-section-title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-4);
+  padding: 0 20px 8px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 20px;
+  font-size: 13px;
+  color: var(--text-3);
+  text-decoration: none;
+  transition: background .15s, color .15s;
+  border-left: 2px solid transparent;
+  line-height: 1.4;
+}
+
+.nav-link:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.nav-link.active {
+  background: rgba(0,166,81,.12);
+  color: var(--primary);
+  border-left-color: var(--primary);
+  font-weight: 600;
+}
+
+.nav-link .dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--text-4);
+  flex-shrink: 0;
+  transition: background .15s;
+}
+
+.nav-link:hover .dot, .nav-link.active .dot {
+  background: var(--primary);
+}
+
+.nav-badge {
+  margin-left: auto;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
+}
+
+.badge-green { background: rgba(0,166,81,.2); color: var(--green); }
+.badge-yellow { background: rgba(244,197,66,.2); color: var(--yellow); }
+.badge-red { background: rgba(224,82,82,.2); color: var(--red); }
+.badge-blue { background: rgba(74,144,217,.2); color: var(--blue); }
+
+/* === CONTENT === */
+.content {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  min-width: 0;
+}
+
+.content-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 48px 96px;
+}
+
+/* === HERO === */
+.hero {
+  background: linear-gradient(135deg, var(--bg-3) 0%, var(--surface) 50%, rgba(0,166,81,.08) 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 48px;
+  margin-bottom: 48px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 240px; height: 240px;
+  background: radial-gradient(circle, rgba(0,166,81,.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--primary);
+  margin-bottom: 12px;
+}
+
+.hero h1 {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.2;
+  margin-bottom: 16px;
+  letter-spacing: -0.8px;
+}
+
+.hero h1 span { color: var(--primary); }
+
+.hero-desc {
+  font-size: 15px;
+  color: var(--text-2);
+  max-width: 600px;
+  margin-bottom: 28px;
+  line-height: 1.7;
+}
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.meta-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-2);
+  border-radius: 20px;
+  font-size: 12px;
+  color: var(--text-2);
+  font-weight: 500;
+}
+
+.meta-pill .dot { width: 6px; height: 6px; border-radius: 50%; }
+
+/* === SECTION HEADERS === */
+.section-anchor {
+  scroll-margin-top: 24px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-number {
+  width: 36px;
+  height: 36px;
+  background: var(--primary-muted);
+  border: 1px solid var(--primary-border);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.section-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
+
+h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 32px 0 14px;
+  letter-spacing: -0.2px;
+}
+
+h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-2);
+  margin: 24px 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+p {
+  color: var(--text-2);
+  margin-bottom: 14px;
+  font-size: 14.5px;
+  line-height: 1.75;
+}
+
+/* === KPI GRID === */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+  gap: 14px;
+  margin: 24px 0;
+}
+
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 18px;
+  transition: border-color .2s, transform .15s;
+}
+
+.kpi-card:hover {
+  border-color: var(--primary-border);
+  transform: translateY(-1px);
+}
+
+.kpi-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-3);
+  margin-bottom: 8px;
+}
+
+.kpi-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.kpi-value.green { color: var(--green); }
+.kpi-value.yellow { color: var(--yellow); }
+.kpi-value.blue { color: var(--blue); }
+.kpi-value.red { color: var(--red); }
+.kpi-value.orange { color: var(--orange); }
+.kpi-value.purple { color: var(--purple); }
+
+.kpi-sub {
+  font-size: 11.5px;
+  color: var(--text-3);
+}
+
+/* === TABLES === */
+.tbl-wrap {
+  overflow-x: auto;
+  margin: 20px 0;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+thead tr {
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border-2);
+}
+
+thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background .1s;
+}
+
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--surface); }
+
+tbody td {
+  padding: 11px 16px;
+  color: var(--text-2);
+  vertical-align: top;
+  line-height: 1.5;
+}
+
+tbody td strong { color: var(--text); font-weight: 600; }
+tbody td code { font-size: 12px; }
+
+/* === CALLOUTS === */
+.callout {
+  display: flex;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: var(--radius-lg);
+  margin: 20px 0;
+  border: 1px solid;
+}
+
+.callout-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.callout-body { flex: 1; min-width: 0; }
+
+.callout-title {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+
+.callout-text {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-2);
+  margin: 0;
+}
+
+.callout.info { background: rgba(74,144,217,.08); border-color: rgba(74,144,217,.25); }
+.callout.warning { background: rgba(244,197,66,.08); border-color: rgba(244,197,66,.25); }
+.callout.danger { background: rgba(224,82,82,.08); border-color: rgba(224,82,82,.25); }
+.callout.success { background: rgba(0,166,81,.08); border-color: rgba(0,166,81,.25); }
+.callout.tip { background: rgba(155,111,208,.08); border-color: rgba(155,111,208,.25); }
+
+.callout.info .callout-icon { color: var(--blue); }
+.callout.warning .callout-icon { color: var(--yellow); }
+.callout.danger .callout-icon { color: var(--red); }
+.callout.success .callout-icon { color: var(--green); }
+.callout.tip .callout-icon { color: var(--purple); }
+
+/* === CODE === */
+.code-wrap {
+  position: relative;
+  margin: 20px 0;
+}
+
+.code-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-3);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  padding: 5px 12px;
+  border-radius: var(--radius) var(--radius) 0 0;
+  margin-bottom: -1px;
+}
+
+pre {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0 var(--radius) var(--radius) var(--radius);
+  padding: 18px 20px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--text-2);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  background: var(--surface-2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--primary-light);
+  border: 1px solid var(--border);
+}
+
+/* === FLOWCHART SVG === */
+.flowchart-container {
+  margin: 28px 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 28px;
+  overflow-x: auto;
+}
+
+.flowchart-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-3);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.flowchart-title::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  background: var(--primary);
+  border-radius: 3px;
+  display: block;
+}
+
+.fc-svg {
+  width: 100%;
+  min-width: 520px;
+}
+
+/* === TWO-COL GRID === */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+  margin: 20px 0;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+
+.card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.card-body {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+
+/* === SPEC ITEM === */
+.spec-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13.5px;
+  gap: 20px;
+}
+
+.spec-row:last-child { border-bottom: none; }
+
+.spec-key {
+  color: var(--text-3);
+  font-weight: 500;
+  flex-shrink: 0;
+  max-width: 200px;
+}
+
+.spec-val {
+  color: var(--text);
+  font-weight: 600;
+  text-align: right;
+}
+
+/* === PLANT COMPARE === */
+.plant-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.plant-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.plant-header {
+  background: var(--surface-2);
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.plant-badge {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.plant-header h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.plant-header span {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.plant-body { padding: 16px 18px; }
+
+/* === SECTION SEPARATOR === */
+.section-sep {
+  height: 48px;
+}
+
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 36px 0;
+}
+
+/* === TAG CHIPS === */
+.tag-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.tag {
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid;
+}
+
+.tag-green { background: rgba(0,166,81,.1); border-color: rgba(0,166,81,.3); color: var(--green); }
+.tag-blue { background: rgba(74,144,217,.1); border-color: rgba(74,144,217,.3); color: var(--blue); }
+.tag-yellow { background: rgba(244,197,66,.1); border-color: rgba(244,197,66,.3); color: var(--yellow); }
+.tag-red { background: rgba(224,82,82,.1); border-color: rgba(224,82,82,.3); color: var(--red); }
+.tag-orange { background: rgba(224,138,47,.1); border-color: rgba(224,138,47,.3); color: var(--orange); }
+.tag-purple { background: rgba(155,111,208,.1); border-color: rgba(155,111,208,.3); color: var(--purple); }
+
+/* === PHASE CARDS === */
+.phase-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.phase-item {
+  display: flex;
+  gap: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+}
+
+.phase-num {
+  width: 32px;
+  height: 32px;
+  background: var(--primary-muted);
+  border: 1px solid var(--primary-border);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.phase-body { flex: 1; min-width: 0; }
+
+.phase-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.phase-desc {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* === TIMELINE === */
+.timeline {
+  position: relative;
+  padding-left: 24px;
+  margin: 20px 0;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+  border-radius: 1px;
+}
+
+.tl-item {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  background: var(--primary);
+  border-radius: 50%;
+  border: 2px solid var(--bg-2);
+}
+
+.tl-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.tl-body {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+
+/* === INLINE LISTS === */
+ul {
+  padding-left: 20px;
+  margin: 12px 0;
+}
+
+ul li {
+  color: var(--text-2);
+  font-size: 14px;
+  line-height: 1.65;
+  margin-bottom: 5px;
+}
+
+ul li strong { color: var(--text); }
+
+ol {
+  padding-left: 22px;
+  margin: 12px 0;
+}
+
+ol li {
+  color: var(--text-2);
+  font-size: 14px;
+  line-height: 1.65;
+  margin-bottom: 6px;
+}
+
+/* === PROGRESS BAR === */
+.progress-bar {
+  height: 6px;
+  background: var(--surface-3);
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 6px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+}
+
+/* === STATUS DOT === */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 12px;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status.active { background: rgba(0,166,81,.12); color: var(--green); }
+.status.active .status-dot { background: var(--green); }
+.status.warning { background: rgba(244,197,66,.12); color: var(--yellow); }
+.status.warning .status-dot { background: var(--yellow); }
+.status.critical { background: rgba(224,82,82,.12); color: var(--red); }
+.status.critical .status-dot { background: var(--red); }
+.status.info { background: rgba(74,144,217,.12); color: var(--blue); }
+.status.info .status-dot { background: var(--blue); }
+
+/* === RESPONSIVE === */
+@media (max-width: 1024px) {
+  .sidebar { transform: translateX(-100%); }
+  .content { margin-left: 0; }
+  .grid-2, .grid-3, .plant-compare { grid-template-columns: 1fr; }
+  .content-inner { padding: 24px 20px 64px; }
+  .hero { padding: 28px 24px; }
+  .hero h1 { font-size: 26px; }
+}
+
+/* === FORMULA BOX === */
+.formula-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--primary);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.8;
+}
+
+.formula-box strong { color: var(--primary-light); }
+
+/* === RACI TABLE === */
+.raci-r { color: #E05252; font-weight: 800; }
+.raci-a { color: #F4C542; font-weight: 800; }
+.raci-c { color: #4A90D9; font-weight: 800; }
+.raci-i { color: #7a8a7b; font-weight: 600; }
+
+/* === SCROLLSPY ACTIVE TRACKING === */
+.nav-link { cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<!-- ============================
+     SIDEBAR
+     ============================ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">E</div>
+    <div class="logo-text">
+      <span class="logo-name">ENGIE</span>
+      <span class="logo-sub">PCM Documentation</span>
+    </div>
+  </div>
+
+  <div class="sidebar-search">
+    <input type="text" placeholder="Buscar na documentação…" id="searchInput">
+  </div>
+
+  <nav>
+    <div class="nav-section">
+      <div class="nav-section-title">Visão Geral</div>
+      <a href="#overview" class="nav-link active"><span class="dot"></span>Introdução ao PCM</a>
+      <a href="#plants" class="nav-link"><span class="dot"></span>UHE Miranda &amp; Jaguará</a>
+      <a href="#context-brazil" class="nav-link"><span class="dot"></span>Contexto ENGIE Brasil</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Estrutura PCM</div>
+      <a href="#team-structure" class="nav-link"><span class="dot"></span>Estrutura da Equipe</a>
+      <a href="#os-cycle" class="nav-link"><span class="dot"></span>Ciclo de OS <span class="nav-badge badge-green">Fluxograma</span></a>
+      <a href="#weekly-cycle" class="nav-link"><span class="dot"></span>Ciclo Semanal <span class="nav-badge badge-blue">Fluxograma</span></a>
+      <a href="#kpis" class="nav-link"><span class="dot"></span>KPIs e Métricas</a>
+      <a href="#cmms" class="nav-link"><span class="dot"></span>Comparativo CMMS</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Manutenção Técnica</div>
+      <a href="#maintenance-types" class="nav-link"><span class="dot"></span>Tipos de Manutenção</a>
+      <a href="#preventive" class="nav-link"><span class="dot"></span>Manutenção Preventiva</a>
+      <a href="#predictive" class="nav-link"><span class="dot"></span>Manutenção Preditiva</a>
+      <a href="#rcm-fmea" class="nav-link"><span class="dot"></span>RCM &amp; FMEA/FMECA</a>
+      <a href="#overhaul" class="nav-link"><span class="dot"></span>Major Overhaul</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Equipamentos Críticos</div>
+      <a href="#turbines" class="nav-link"><span class="dot"></span>Turbinas Francis</a>
+      <a href="#generators" class="nav-link"><span class="dot"></span>Geradores Síncronos</a>
+      <a href="#transformers" class="nav-link"><span class="dot"></span>Transformadores</a>
+      <a href="#dga" class="nav-link"><span class="dot"></span>DGA — Análise de Gases <span class="nav-badge badge-yellow">Fluxograma</span></a>
+      <a href="#protection" class="nav-link"><span class="dot"></span>Sistema de Proteção</a>
+      <a href="#governor" class="nav-link"><span class="dot"></span>Regulador de Velocidade</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Tecnologia &amp; Monitoramento</div>
+      <a href="#cbm" class="nav-link"><span class="dot"></span>Manutenção Baseada em Condição</a>
+      <a href="#vibration" class="nav-link"><span class="dot"></span>Análise de Vibração</a>
+      <a href="#thermography" class="nav-link"><span class="dot"></span>Termografia</a>
+      <a href="#iiot" class="nav-link"><span class="dot"></span>IIoT &amp; Industria 4.0</a>
+      <a href="#digital-twin" class="nav-link"><span class="dot"></span>Gêmeos Digitais</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Funções PCM</div>
+      <a href="#organograma" class="nav-link"><span class="dot"></span>Organograma <span class="nav-badge badge-green">Fluxograma</span></a>
+      <a href="#coordinator" class="nav-link"><span class="dot"></span>Coordenador PCM</a>
+      <a href="#planner-mec" class="nav-link"><span class="dot"></span>Planejador Mecânico</a>
+      <a href="#planner-ele" class="nav-link"><span class="dot"></span>Planejador Elétrico</a>
+      <a href="#scheduler" class="nav-link"><span class="dot"></span>Programador</a>
+      <a href="#team-leads" class="nav-link"><span class="dot"></span>Chefes de Equipe</a>
+      <a href="#raci" class="nav-link"><span class="dot"></span>Matriz RACI</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Normas &amp; Regulamentações</div>
+      <a href="#aneel-ons" class="nav-link"><span class="dot"></span>ANEEL / ONS</a>
+      <a href="#nr-safety" class="nav-link"><span class="dot"></span>NRs de Segurança</a>
+      <a href="#standards" class="nav-link"><span class="dot"></span>Normas IEC / ABNT / IEEE</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Implementação</div>
+      <a href="#roadmap" class="nav-link"><span class="dot"></span>Roadmap 90 Dias</a>
+      <a href="#critical-situations" class="nav-link"><span class="dot"></span>Situações Críticas</a>
+      <a href="#spare-parts" class="nav-link"><span class="dot"></span>Gestão de Sobressalentes</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- ============================
+     MAIN CONTENT
+     ============================ -->
+<main class="content">
+<div class="content-inner">
+
+<!-- ======================= HERO ======================= -->
+<div class="hero">
+  <div class="hero-eyebrow">Planejamento e Controle de Manutenção</div>
+  <h1><span>PCM ENGIE Brasil</span><br>UHE Miranda &amp; UHE Jaguará</h1>
+  <p class="hero-desc">
+    Documentação completa do sistema de PCM para as usinas hidrelétricas UHE Miranda (408 MW) e UHE Jaguará (424 MW) — cobrindo estrutura de equipe, ciclos operacionais, manutenção técnica, equipamentos críticos, tecnologias de monitoramento e conformidade regulatória.
+  </p>
+  <div class="hero-meta">
+    <div class="meta-pill"><span class="dot" style="background:var(--green)"></span> 832 MW capacidade total</div>
+    <div class="meta-pill"><span class="dot" style="background:var(--blue)"></span> 7 Unidades Geradoras</div>
+    <div class="meta-pill"><span class="dot" style="background:var(--yellow)"></span> Turbinas Francis</div>
+    <div class="meta-pill"><span class="dot" style="background:var(--purple)"></span> ENGIE Brasil S.A.</div>
+    <div class="meta-pill"><span class="dot" style="background:var(--orange)"></span> Versão 1.0 — 2026</div>
+  </div>
+</div>
+
+<!-- ======================= 1. OVERVIEW ======================= -->
+<section id="overview" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">01</div>
+    <h2>Introdução ao PCM</h2>
+  </div>
+
+  <p>
+    O <strong>Planejamento e Controle de Manutenção (PCM)</strong> é o sistema de gestão que garante que toda atividade de manutenção seja executada de forma planejada, segura e rastreável — minimizando indisponibilidades forçadas, controlando custos e assegurando conformidade regulatória com ANEEL e ONS.
+  </p>
+
+  <p>
+    Nas usinas hidrelétricas da ENGIE Brasil, o PCM não é apenas uma ferramenta administrativa: é o sistema central que conecta planejamento técnico, operação, suprimentos, segurança e resultado financeiro. Uma hora de indisponibilidade forçada em Jaguará representa aproximadamente <strong>R$ 140.000</strong> em geração não realizada.
+  </p>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Capacidade Miranda</div>
+      <div class="kpi-value green">408 MW</div>
+      <div class="kpi-sub">3 turbinas Francis</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Capacidade Jaguará</div>
+      <div class="kpi-value green">424 MW</div>
+      <div class="kpi-sub">4 turbinas Francis</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total Geração</div>
+      <div class="kpi-value blue">832 MW</div>
+      <div class="kpi-sub">7 unidades geradoras</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Disponibilidade Meta</div>
+      <div class="kpi-value green">98,5%</div>
+      <div class="kpi-sub">TEIF ≤ 1,5%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">ENGIE Brasil</div>
+      <div class="kpi-value blue">11.266 MW</div>
+      <div class="kpi-sub">145 plantas / B3: EGIE3</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Idade Jaguará</div>
+      <div class="kpi-value yellow">~55 anos</div>
+      <div class="kpi-sub">Comissionada em 1971</div>
+    </div>
+  </div>
+
+  <div class="callout success">
+    <span class="callout-icon">⚡</span>
+    <div class="callout-body">
+      <div class="callout-title">Meta ENGIE Brasil — Disponibilidade 99,5%</div>
+      <p class="callout-text">A ENGIE Brasil registra disponibilidade média de 99,5% em suas usinas hidrelétricas, resultado de programas de manutenção preditiva e gestão proativa. O PCM estruturado é o principal habilitador deste resultado.</p>
+    </div>
+  </div>
+
+  <h3>Pilares do PCM Hidrelétrico</h3>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title">🔧 Planejamento</div>
+      <div class="card-body">Definição de planos de manutenção preventiva e preditiva baseados em criticidade dos equipamentos (RCM).</div>
+    </div>
+    <div class="card">
+      <div class="card-title">📋 Programação</div>
+      <div class="card-body">Emissão semanal de Ordens de Serviço com materiais, ferramental, HH e requisitos de segurança completos.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 Controle</div>
+      <div class="card-body">Medição contínua de KPIs (TEIF, TEIP, MTBF, CP), backlog e cumprimento do plano para decisões gerenciais.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 2. PLANTS ======================= -->
+<section id="plants" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">02</div>
+    <h2>UHE Miranda &amp; UHE Jaguará</h2>
+  </div>
+
+  <p>As duas usinas apresentam características técnicas e desafios de manutenção distintos, exigindo abordagens complementares no PCM.</p>
+
+  <div class="plant-compare">
+    <div class="plant-card">
+      <div class="plant-header">
+        <span class="plant-badge" style="background:var(--green)"></span>
+        <h3>UHE Miranda</h3>
+        <span>408 MW</span>
+      </div>
+      <div class="plant-body">
+        <div class="spec-row"><span class="spec-key">Rio</span><span class="spec-val">Rio Araguari (MG)</span></div>
+        <div class="spec-row"><span class="spec-key">Comissionamento</span><span class="spec-val">1998</span></div>
+        <div class="spec-row"><span class="spec-key">Unidades Geradoras</span><span class="spec-val">3 × Francis</span></div>
+        <div class="spec-row"><span class="spec-key">Potência por UG</span><span class="spec-val">136 MW</span></div>
+        <div class="spec-row"><span class="spec-key">Idade aproximada</span><span class="spec-val">~28 anos</span></div>
+        <div class="spec-row"><span class="spec-key">Status equipamentos</span><span class="spec-val"><span class="status active"><span class="status-dot"></span>Bom estado geral</span></span></div>
+      </div>
+    </div>
+
+    <div class="plant-card">
+      <div class="plant-header">
+        <span class="plant-badge" style="background:var(--blue)"></span>
+        <h3>UHE Jaguará</h3>
+        <span>424 MW</span>
+      </div>
+      <div class="plant-body">
+        <div class="spec-row"><span class="spec-key">Rio</span><span class="spec-val">Rio Grande (MG/SP)</span></div>
+        <div class="spec-row"><span class="spec-key">Comissionamento</span><span class="spec-val">1971</span></div>
+        <div class="spec-row"><span class="spec-key">Unidades Geradoras</span><span class="spec-val">4 × Francis</span></div>
+        <div class="spec-row"><span class="spec-key">Potência por UG</span><span class="spec-val">106 MW</span></div>
+        <div class="spec-row"><span class="spec-key">Idade aproximada</span><span class="spec-val">~55 anos</span></div>
+        <div class="spec-row"><span class="spec-key">Status equipamentos</span><span class="spec-val"><span class="status warning"><span class="status-dot"></span>Frota envelhecida</span></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Característica</th>
+          <th>UHE Miranda</th>
+          <th>UHE Jaguará</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Desafio principal</strong></td>
+          <td>Manter programa preventivo rigoroso para frota em meia-vida</td>
+          <td>Gerir degradação acelerada de frota com 50+ anos</td>
+        </tr>
+        <tr>
+          <td><strong>Prioridade preditiva</strong></td>
+          <td>Vibração, análise de óleo, DGA transformadores</td>
+          <td>DGA intensificado, análise isolamento, vida útil de metais</td>
+        </tr>
+        <tr>
+          <td><strong>Overhaul</strong></td>
+          <td>Ciclo 8-10 anos</td>
+          <td>Ciclo 6-8 anos (maior desgaste)</td>
+        </tr>
+        <tr>
+          <td><strong>Risco principal</strong></td>
+          <td>Cavitação em runners (zona de operação Araguari)</td>
+          <td>Falhas de isolamento, desgaste acelerado de escoras</td>
+        </tr>
+        <tr>
+          <td><strong>Equipe execução</strong></td>
+          <td>4 mecânicos + 4 elétricos + 2 chefes + 1 volante</td>
+          <td>5 mecânicos + 5 elétricos + 2 chefes + 1 volante</td>
+        </tr>
+        <tr>
+          <td><strong>Janela de paradas</strong></td>
+          <td>Julho–Setembro (período seco)</td>
+          <td>Julho–Setembro (período seco)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout warning">
+    <span class="callout-icon">⚠️</span>
+    <div class="callout-body">
+      <div class="callout-title">Jaguará — Frota com 55 Anos Exige PCM Reforçado</div>
+      <p class="callout-text">Equipamentos instalados em 1971 operam em condição de desgaste avançado. O PCM deve ser especialmente rigoroso com manutenção preditiva intensificada, rastreabilidade de condição e planejamento de overhaul com antecedência mínima de 6 meses.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 3. CONTEXT BRAZIL ======================= -->
+<section id="context-brazil" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">03</div>
+    <h2>Contexto ENGIE Brasil</h2>
+  </div>
+
+  <p>
+    A <strong>ENGIE Brasil S.A.</strong> (antiga Tractebel Energia) é listada na B3 sob o código EGIE3 e é a maior geradora privada de energia do Brasil. Em março de 2026, opera 145 plantas com 11.266 MW de capacidade instalada.
+  </p>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Capacidade total BR</div>
+      <div class="kpi-value green">11.266 MW</div>
+      <div class="kpi-sub">Mar/2026</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Hidro Brasil 2025</div>
+      <div class="kpi-value blue">~110 GW</div>
+      <div class="kpi-sub">Matriz energética</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Disponibilidade</div>
+      <div class="kpi-value green">99,5%</div>
+      <div class="kpi-sub">Usinas hidro ENGIE</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">UHE Jirau</div>
+      <div class="kpi-value blue">3.750 MW</div>
+      <div class="kpi-sub">Maior usina ENGIE BR</div>
+    </div>
+  </div>
+
+  <h3>Principais Usinas ENGIE Brasil</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Usina</th><th>Capacidade</th><th>Rio</th><th>Estado</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>UHE Jirau</strong></td><td>3.750 MW</td><td>Rio Madeira</td><td>RO</td></tr>
+        <tr><td><strong>UHE Peixe Angical</strong></td><td>452 MW</td><td>Rio Tocantins</td><td>TO</td></tr>
+        <tr><td><strong>UHE Cana Brava</strong></td><td>450 MW</td><td>Rio Paranaíba</td><td>GO/MG</td></tr>
+        <tr><td><strong>UHE Jaguará</strong></td><td>424 MW</td><td>Rio Grande</td><td>MG/SP</td></tr>
+        <tr><td><strong>UHE Miranda</strong></td><td>408 MW</td><td>Rio Araguari</td><td>MG</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Agentes Regulatórios</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">ANEEL</div>
+      <div class="card-body">Agência Nacional de Energia Elétrica. Define indicadores de desempenho (TEIF, TEIP), aprova tarifas e aplica penalidades por descumprimento de disponibilidade contratual via CCEAR.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">ONS</div>
+      <div class="card-body">Operador Nacional do Sistema. Coordena o despacho via Merit Order, define programações de geração e exige notificação com 10 dias de antecedência para paradas programadas (Submódulo 6.3).</div>
+    </div>
+    <div class="card">
+      <div class="card-title">CCEE</div>
+      <div class="card-body">Câmara de Comercialização de Energia Elétrica. Opera o mercado spot (PLD), contabiliza energia e apura penalidades por descumprimento de contratos de longo prazo (CCEAR).</div>
+    </div>
+    <div class="card">
+      <div class="card-title">ANA / IBAMA</div>
+      <div class="card-body">Agência Nacional de Águas (segurança de barragem — Lei 12.334/2010) e licenciamento ambiental. Exigem PSB (Plano de Segurança de Barragem) e monitoramento de piezômetros/drenos.</div>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <span class="callout-icon">📋</span>
+    <div class="callout-body">
+      <div class="callout-title">FID = TEIF + TEIP (RN ANEEL 1.059/2023)</div>
+      <p class="callout-text">O Fator de Indisponibilidade Declarada (FID) é calculado como rolling médio dos últimos 60 meses. Ultrapassar o FID contratual resulta em penalidades financeiras no CCEAR e possível descredenciamento como agente de geração no SIN.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 4. TEAM STRUCTURE ======================= -->
+<section id="team-structure" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">04</div>
+    <h2>Estrutura da Equipe PCM</h2>
+  </div>
+
+  <p>
+    O diagnóstico inicial revelou que a equipe atual é composta apenas por funções de <strong>execução</strong>, sem camada de planejamento. A ausência de planejadores resulta em manutenção predominantemente reativa, sem KPIs, sem controle de backlog e sem programação formal.
+  </p>
+
+  <h3>Situação Atual (Apenas Execução)</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Função</th><th>Miranda</th><th>Jaguará</th><th>Total</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Eletricistas</strong></td><td>4</td><td>5</td><td>9 + 1 volante = 10</td></tr>
+        <tr><td><strong>Mecânicos</strong></td><td>4</td><td>5</td><td>9 + 1 volante = 10</td></tr>
+        <tr><td><strong>Chefe Elétrica</strong></td><td>1</td><td>1</td><td>2</td></tr>
+        <tr><td><strong>Chefe Mecânica</strong></td><td>1</td><td>1</td><td>2</td></tr>
+        <tr><td colspan="3"><strong>Total execução</strong></td><td><strong>24</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout danger">
+    <span class="callout-icon">🚨</span>
+    <div class="callout-body">
+      <div class="callout-title">GAPs Identificados — Sem Estrutura de Planejamento</div>
+      <p class="callout-text">Manutenção predominantemente reativa · Sem KPIs formais (TEIF, MTBF não medidos) · Backlog não quantificado · Sem planos preventivos documentados · Sobressalentes gerenciados informalmente · Sem programação semanal formal.</p>
+    </div>
+  </div>
+
+  <h3>Estrutura Proposta PCM</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Cargo</th><th>Qtd</th><th>Fase</th><th>Principais Responsabilidades</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Coordenador PCM</strong></td>
+          <td>1</td>
+          <td><span class="status active"><span class="status-dot"></span>Fase 1</span></td>
+          <td>Gestão do sistema PCM, KPIs, interface com Gerência e ONS/ANEEL</td>
+        </tr>
+        <tr>
+          <td><strong>Planejador Mecânico</strong></td>
+          <td>1</td>
+          <td><span class="status active"><span class="status-dot"></span>Fase 1</span></td>
+          <td>Elaboração de OS mecânicas, planos preventivos, gestão de materiais mecânicos</td>
+        </tr>
+        <tr>
+          <td><strong>Planejador Elétrico</strong></td>
+          <td>1</td>
+          <td><span class="status active"><span class="status-dot"></span>Fase 1</span></td>
+          <td>Elaboração de OS elétricas, ensaios, planos preditivos, DGA</td>
+        </tr>
+        <tr>
+          <td><strong>Programador</strong></td>
+          <td>1</td>
+          <td><span class="status active"><span class="status-dot"></span>Fase 1</span></td>
+          <td>Programação semanal, CMMS, controle de backlog, relatórios de CP</td>
+        </tr>
+        <tr>
+          <td><strong>Analista de Confiabilidade</strong></td>
+          <td>1</td>
+          <td><span class="status warning"><span class="status-dot"></span>Fase 2</span></td>
+          <td>RCM, FMEA, análise de falhas, preditiva avançada, Digital Twins</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout tip">
+    <span class="callout-icon">📊</span>
+    <div class="callout-body">
+      <div class="callout-title">Benchmark — Razão Planejador:Executores</div>
+      <p class="callout-text"><strong>Planta madura:</strong> 1 planejador para 20-30 executores. <strong>Implantação de PCM:</strong> 1 para 10-15. Com 24 executores, a proposta de 3 planejadores + 1 programador para Fase 1 é adequada ao estágio inicial e carga esperada.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 5. OS CYCLE ======================= -->
+<section id="os-cycle" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">05</div>
+    <h2>Ciclo de Ordens de Serviço</h2>
+  </div>
+
+  <p>
+    A Ordem de Serviço (OS) é o documento central do PCM — toda manutenção executada deve ter uma OS aprovada antes do início. O ciclo de 7 etapas garante rastreabilidade completa da demanda à conclusão.
+  </p>
+
+  <div class="flowchart-container">
+    <div class="flowchart-title">Ciclo Completo de OS — 7 Etapas</div>
+    <svg viewBox="0 0 760 180" class="fc-svg" xmlns="http://www.w3.org/2000/svg">
+      <!-- Node 1 -->
+      <rect x="10" y="60" width="95" height="60" rx="8" fill="#1e2320" stroke="#00A651" stroke-width="1.5"/>
+      <text x="57" y="83" text-anchor="middle" fill="#00A651" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">IDENTIFICAÇÃO</text>
+      <text x="57" y="96" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Solicitação /</text>
+      <text x="57" y="108" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Inspeção / Plano</text>
+
+      <!-- Arrow -->
+      <path d="M105 90 L120 90" stroke="#00A651" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+
+      <!-- Node 2 -->
+      <rect x="120" y="60" width="95" height="60" rx="8" fill="#1e2320" stroke="#4A90D9" stroke-width="1.5"/>
+      <text x="167" y="83" text-anchor="middle" fill="#4A90D9" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">PLANEJAMENTO</text>
+      <text x="167" y="96" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Escopo · Mat</text>
+      <text x="167" y="108" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">HH · Segurança</text>
+
+      <!-- Arrow -->
+      <path d="M215 90 L230 90" stroke="#4A90D9" stroke-width="1.5" fill="none" marker-end="url(#arr2)"/>
+
+      <!-- Node 3 -->
+      <rect x="230" y="60" width="95" height="60" rx="8" fill="#1e2320" stroke="#F4C542" stroke-width="1.5"/>
+      <text x="277" y="83" text-anchor="middle" fill="#F4C542" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">APROVAÇÃO</text>
+      <text x="277" y="96" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Coordenador</text>
+      <text x="277" y="108" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">PCM aprova</text>
+
+      <!-- Arrow -->
+      <path d="M325 90 L340 90" stroke="#F4C542" stroke-width="1.5" fill="none" marker-end="url(#arr3)"/>
+
+      <!-- Node 4 -->
+      <rect x="340" y="60" width="95" height="60" rx="8" fill="#1e2320" stroke="#9B6FD0" stroke-width="1.5"/>
+      <text x="387" y="83" text-anchor="middle" fill="#9B6FD0" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">PROGRAMAÇÃO</text>
+      <text x="387" y="96" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Agenda semanal</text>
+      <text x="387" y="108" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Recursos alocados</text>
+
+      <!-- Arrow -->
+      <path d="M435 90 L450 90" stroke="#9B6FD0" stroke-width="1.5" fill="none" marker-end="url(#arr4)"/>
+
+      <!-- Node 5 -->
+      <rect x="450" y="60" width="95" height="60" rx="8" fill="#1e2320" stroke="#E08A2F" stroke-width="1.5"/>
+      <text x="497" y="83" text-anchor="middle" fill="#E08A2F" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">EXECUÇÃO</text>
+      <text x="497" y="96" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Equipe campo</text>
+      <text x="497" y="108" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">LOTO · NR-10</text>
+
+      <!-- Arrow -->
+      <path d="M545 90 L560 90" stroke="#E08A2F" stroke-width="1.5" fill="none" marker-end="url(#arr5)"/>
+
+      <!-- Node 6 -->
+      <rect x="560" y="60" width="95" height="60" rx="8" fill="#1e2320" stroke="#2BC4A8" stroke-width="1.5"/>
+      <text x="607" y="83" text-anchor="middle" fill="#2BC4A8" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">ENCERRAMENTO</text>
+      <text x="607" y="96" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Chefe Equipe</text>
+      <text x="607" y="108" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">registra HH real</text>
+
+      <!-- Arrow -->
+      <path d="M655 90 L670 90" stroke="#2BC4A8" stroke-width="1.5" fill="none" marker-end="url(#arr6)"/>
+
+      <!-- Node 7 -->
+      <rect x="670" y="60" width="90" height="60" rx="8" fill="#252b26" stroke="#00A651" stroke-width="2"/>
+      <text x="715" y="83" text-anchor="middle" fill="#00A651" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">ANÁLISE</text>
+      <text x="715" y="96" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Coordenador</text>
+      <text x="715" y="108" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">KPIs · CMMS</text>
+
+      <!-- Labels -->
+      <text x="57" y="145" text-anchor="middle" fill="#4a5a4b" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Operação / Plano</text>
+      <text x="167" y="145" text-anchor="middle" fill="#4a5a4b" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Planejador</text>
+      <text x="277" y="145" text-anchor="middle" fill="#4a5a4b" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Coordenador</text>
+      <text x="387" y="145" text-anchor="middle" fill="#4a5a4b" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Programador</text>
+      <text x="497" y="145" text-anchor="middle" fill="#4a5a4b" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Equipe Campo</text>
+      <text x="607" y="145" text-anchor="middle" fill="#4a5a4b" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Chefe Equipe</text>
+      <text x="715" y="145" text-anchor="middle" fill="#4a5a4b" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Coordenador PCM</text>
+
+      <defs>
+        <marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#00A651"/>
+        </marker>
+        <marker id="arr2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#4A90D9"/>
+        </marker>
+        <marker id="arr3" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#F4C542"/>
+        </marker>
+        <marker id="arr4" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#9B6FD0"/>
+        </marker>
+        <marker id="arr5" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#E08A2F"/>
+        </marker>
+        <marker id="arr6" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#2BC4A8"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+
+  <h3>Tipos de Ordem de Serviço</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Tipo</th><th>Sigla</th><th>Descrição</th><th>Prioridade Típica</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Ordem de Manutenção Preventiva</strong></td><td><code>OMP</code></td><td>Originada do plano de manutenção preventiva, emitida com antecedência</td><td>P3–P4</td></tr>
+        <tr><td><strong>Ordem de Manutenção Preditiva</strong></td><td><code>OPD</code></td><td>Originada de laudo preditivo (DGA, vibração, termografia)</td><td>P2–P3</td></tr>
+        <tr><td><strong>Ordem de Manutenção Corretiva</strong></td><td><code>OMC</code></td><td>Falha já ocorrida — equipamento fora de operação ou degradado</td><td>P1–P2</td></tr>
+        <tr><td><strong>Ordem de Serviço de Inspeção</strong></td><td><code>OSI</code></td><td>Inspeção de rotina para coleta de dados de condição</td><td>P4–P5</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Tabela de Prioridades</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Prioridade</th><th>Denominação</th><th>Prazo Máximo</th><th>Critério</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="status critical"><span class="status-dot"></span>P1</span></td><td><strong>Emergência</strong></td><td>Imediato</td><td>Risco à segurança humana ou indisponibilidade forçada em andamento</td></tr>
+        <tr><td><span class="status warning"><span class="status-dot"></span>P2</span></td><td><strong>Urgente</strong></td><td>24 horas</td><td>Equipamento degradado, falha iminente ou impacto à geração</td></tr>
+        <tr><td><span class="status info"><span class="status-dot"></span>P3</span></td><td><strong>Alta</strong></td><td>Esta semana</td><td>Impacto à operação se não executado; sobressalente disponível</td></tr>
+        <tr><td><span class="status active"><span class="status-dot"></span>P4</span></td><td><strong>Normal</strong></td><td>Dentro de 30 dias</td><td>Preventiva planejada, inspeção de rotina</td></tr>
+        <tr><td><td><span class="status"><span class="status-dot" style="background:var(--text-4)"></span>P5</span></td><td><strong>Baixa</strong></td><td>Dentro de 90 dias</td><td>Melhorias, conforto, padronização</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 6. WEEKLY CYCLE ======================= -->
+<section id="weekly-cycle" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">06</div>
+    <h2>Ciclo Semanal PCM</h2>
+  </div>
+
+  <p>
+    O ciclo semanal é o ritmo cardíaco do PCM. Cada dia tem um propósito definido, com a <strong>quinta-feira às 14h</strong> como pivô — reunião de programação que define o que será executado na semana seguinte.
+  </p>
+
+  <div class="flowchart-container">
+    <div class="flowchart-title">Ciclo Semanal — Segunda a Sexta</div>
+    <svg viewBox="0 0 760 220" class="fc-svg" xmlns="http://www.w3.org/2000/svg">
+      <!-- Monday -->
+      <rect x="10" y="20" width="130" height="180" rx="10" fill="#1a1e1a" stroke="#00A651" stroke-width="1.5"/>
+      <rect x="10" y="20" width="130" height="32" rx="10" fill="#00A651"/>
+      <rect x="10" y="40" width="130" height="12" rx="0" fill="#00A651"/>
+      <text x="75" y="41" text-anchor="middle" fill="white" font-size="11" font-weight="800" font-family="Plus Jakarta Sans,sans-serif">SEGUNDA</text>
+      <text x="75" y="72" text-anchor="middle" fill="#00A651" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">REVISÃO</text>
+      <text x="75" y="88" text-anchor="middle" fill="#b8c2b9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">• CP semana anterior</text>
+      <text x="75" y="102" text-anchor="middle" fill="#b8c2b9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">• OS não executadas</text>
+      <text x="75" y="116" text-anchor="middle" fill="#b8c2b9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">• Análise desvios</text>
+      <text x="75" y="130" text-anchor="middle" fill="#b8c2b9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">• Reprogramação</text>
+      <text x="75" y="154" text-anchor="middle" fill="#4a5a4b" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Programador + Coord</text>
+
+      <!-- Arrow -->
+      <path d="M140 110 L155 110" stroke="#00A651" stroke-width="1.5" fill="none" marker-end="url(#arrw1)"/>
+
+      <!-- Tuesday -->
+      <rect x="155" y="20" width="120" height="180" rx="10" fill="#1a1e1a" stroke="#4A90D9" stroke-width="1.5"/>
+      <rect x="155" y="20" width="120" height="32" rx="10" fill="#4A90D9"/>
+      <rect x="155" y="40" width="120" height="12" rx="0" fill="#4A90D9"/>
+      <text x="215" y="41" text-anchor="middle" fill="white" font-size="11" font-weight="800" font-family="Plus Jakarta Sans,sans-serif">TERÇA</text>
+      <text x="215" y="72" text-anchor="middle" fill="#4A90D9" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">BACKLOG</text>
+      <text x="215" y="88" text-anchor="middle" fill="#b8c2b9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">• Triagem de novas</text>
+      <text x="215" y="102" text-anchor="middle" fill="#b8c2b9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">  solicitações</text>
+      <text x="215" y="116" text-anchor="middle" fill="#b8c2b9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">• Priorização P1-P5</text>
+      <text x="215" y="130" text-anchor="middle" fill="#b8c2b9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">• Planejadores</text>
+      <text x="215" y="144" text-anchor="middle" fill="#b8c2b9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">  elaboram OS</text>
+      <text x="215" y="162" text-anchor="middle" fill="#4a5a4b" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Planejadores</text>
+
+      <!-- Arrow -->
+      <path d="M275 110 L290 110" stroke="#4A90D9" stroke-width="1.5" fill="none" marker-end="url(#arrw2)"/>
+
+      <!-- Wednesday -->
+      <rect x="290" y="20" width="120" height="180" rx="10" fill="#1a1e1a" stroke="#F4C542" stroke-width="1.5"/>
+      <rect x="290" y="20" width="120" height="32" rx="10" fill="#F4C542"/>
+      <rect x="290" y="40" width="120" height="12" rx="0" fill="#F4C542"/>
+      <text x="350" y="41" text-anchor="middle" fill="#0d0f0e" font-size="11" font-weight="800" font-family="Plus Jakarta Sans,sans-serif">QUARTA</text>
+      <text x="350" y="72" text-anchor="middle" fill="#F4C542" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">PREPARAÇÃO</text>
+      <text x="350" y="88" text-anchor="middle" fill="#b8c2b9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">• Verificar materiais</text>
+      <text x="350" y="102" text-anchor="middle" fill="#b8c2b9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">• Confirmar janelas</text>
+      <text x="350" y="116" text-anchor="middle" fill="#b8c2b9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">  com Operação</text>
+      <text x="350" y="130" text-anchor="middle" fill="#b8c2b9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">• Pre-job briefing</text>
+      <text x="350" y="144" text-anchor="middle" fill="#b8c2b9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">• Montar pacotes</text>
+      <text x="350" y="162" text-anchor="middle" fill="#4a5a4b" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Programador</text>
+
+      <!-- Arrow -->
+      <path d="M410 110 L425 110" stroke="#F4C542" stroke-width="1.5" fill="none" marker-end="url(#arrw3)"/>
+
+      <!-- Thursday -->
+      <rect x="425" y="10" width="130" height="200" rx="10" fill="#252b26" stroke="#00A651" stroke-width="2.5"/>
+      <rect x="425" y="10" width="130" height="36" rx="10" fill="linear-gradient(135deg, #007A3D, #00A651)"/>
+      <rect x="425" y="10" width="130" height="36" rx="10" fill="#007A3D"/>
+      <rect x="425" y="34" width="130" height="12" rx="0" fill="#007A3D"/>
+      <text x="490" y="32" text-anchor="middle" fill="white" font-size="11" font-weight="800" font-family="Plus Jakarta Sans,sans-serif">QUINTA — 14h</text>
+      <text x="490" y="70" text-anchor="middle" fill="#00C860" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">REUNIÃO SEMANAL</text>
+      <text x="490" y="86" text-anchor="middle" fill="#e8ede9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">• Coord + Planej</text>
+      <text x="490" y="100" text-anchor="middle" fill="#e8ede9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">• Chefes de Equipe</text>
+      <text x="490" y="114" text-anchor="middle" fill="#e8ede9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">• Supervisor Oper.</text>
+      <text x="490" y="128" text-anchor="middle" fill="#e8ede9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">• Revisão backlog</text>
+      <text x="490" y="142" text-anchor="middle" fill="#e8ede9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">• Aprovação prog.</text>
+      <text x="490" y="156" text-anchor="middle" fill="#e8ede9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">• KPIs da semana</text>
+      <text x="490" y="176" text-anchor="middle" fill="#00A651" font-size="8" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">PIVÔ DO CICLO</text>
+
+      <!-- Arrow -->
+      <path d="M555 110 L570 110" stroke="#00A651" stroke-width="1.5" fill="none" marker-end="url(#arrw4)"/>
+
+      <!-- Friday -->
+      <rect x="570" y="20" width="120" height="180" rx="10" fill="#1a1e1a" stroke="#9B6FD0" stroke-width="1.5"/>
+      <rect x="570" y="20" width="120" height="32" rx="10" fill="#9B6FD0"/>
+      <rect x="570" y="40" width="120" height="12" rx="0" fill="#9B6FD0"/>
+      <text x="630" y="41" text-anchor="middle" fill="white" font-size="11" font-weight="800" font-family="Plus Jakarta Sans,sans-serif">SEXTA</text>
+      <text x="630" y="72" text-anchor="middle" fill="#9B6FD0" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">EMISSÃO</text>
+      <text x="630" y="88" text-anchor="middle" fill="#b8c2b9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">• Programação</text>
+      <text x="630" y="102" text-anchor="middle" fill="#b8c2b9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">  semana seguinte</text>
+      <text x="630" y="116" text-anchor="middle" fill="#b8c2b9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">• OS emitidas no</text>
+      <text x="630" y="130" text-anchor="middle" fill="#b8c2b9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">  CMMS</text>
+      <text x="630" y="144" text-anchor="middle" fill="#b8c2b9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">• Notif. Chefes</text>
+      <text x="630" y="158" text-anchor="middle" fill="#b8c2b9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">  de Equipe</text>
+      <text x="630" y="172" text-anchor="middle" fill="#4a5a4b" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Programador</text>
+
+      <defs>
+        <marker id="arrw1" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00A651"/></marker>
+        <marker id="arrw2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#4A90D9"/></marker>
+        <marker id="arrw3" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#F4C542"/></marker>
+        <marker id="arrw4" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00A651"/></marker>
+      </defs>
+    </svg>
+  </div>
+
+  <div class="callout success">
+    <span class="callout-icon">🎯</span>
+    <div class="callout-body">
+      <div class="callout-title">Regra de Ouro: CP &gt; 85% é sinal de PCM Maduro</div>
+      <p class="callout-text">O Cumprimento do Plano (CP) mede quantas OS programadas foram efetivamente executadas. Meta conservadora para início de PCM: CP ≥ 80%. Meta para PCM maduro (ano 2+): CP ≥ 90%. Desvio abaixo de 70% por 2 semanas consecutivas exige análise de causa-raiz imediata.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 7. KPIs ======================= -->
+<section id="kpis" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">07</div>
+    <h2>KPIs e Métricas</h2>
+  </div>
+
+  <p>Os KPIs do PCM hidrelétrico se organizam em três camadas: <strong>regulatórios</strong> (ANEEL/ONS), <strong>de confiabilidade</strong> (MTBF/MTTR) e <strong>de desempenho do PCM</strong> (CP, Backlog).</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>KPI</th><th>Fórmula</th><th>Meta Ano 1</th><th>Meta Ano 2+</th><th>Fonte</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>TEIF</strong></td>
+          <td><code>HIF / HPO × 100</code></td>
+          <td>≤ 2,0%</td>
+          <td>≤ 1,5%</td>
+          <td>ANEEL RN 1.059/2023</td>
+        </tr>
+        <tr>
+          <td><strong>TEIP</strong></td>
+          <td><code>HIP / HPO × 100</code></td>
+          <td>≤ 4,0%</td>
+          <td>≤ 3,0%</td>
+          <td>ANEEL RN 1.059/2023</td>
+        </tr>
+        <tr>
+          <td><strong>Disponibilidade</strong></td>
+          <td><code>(HPO - HIF) / HPO × 100</code></td>
+          <td>≥ 97,5%</td>
+          <td>≥ 98,5%</td>
+          <td>Contrato CCEAR</td>
+        </tr>
+        <tr>
+          <td><strong>MTBF</strong></td>
+          <td><code>∑ tempo entre falhas / N° falhas</code></td>
+          <td>≥ 2.000 h</td>
+          <td>≥ 4.000 h</td>
+          <td>CMMS (interno)</td>
+        </tr>
+        <tr>
+          <td><strong>MTTR</strong></td>
+          <td><code>∑ tempo de reparo / N° reparos</code></td>
+          <td>≤ 12 h</td>
+          <td>≤ 8 h</td>
+          <td>CMMS (interno)</td>
+        </tr>
+        <tr>
+          <td><strong>CP (Cumprimento do Plano)</strong></td>
+          <td><code>OS executadas / OS programadas × 100</code></td>
+          <td>≥ 80%</td>
+          <td>≥ 90%</td>
+          <td>Programador (semanal)</td>
+        </tr>
+        <tr>
+          <td><strong>Backlog</strong></td>
+          <td><code>HH OS pendentes / HH disponível semana</code></td>
+          <td>≤ 4 semanas</td>
+          <td>≤ 2 semanas</td>
+          <td>CMMS (semanal)</td>
+        </tr>
+        <tr>
+          <td><strong>%PM</strong></td>
+          <td><code>HH preventivo / HH total manutenção × 100</code></td>
+          <td>≥ 60%</td>
+          <td>≥ 75%</td>
+          <td>CMMS (mensal)</td>
+        </tr>
+        <tr>
+          <td><strong>Retrabalho</strong></td>
+          <td><code>OS retrabalho / OS totais × 100</code></td>
+          <td>≤ 8%</td>
+          <td>≤ 5%</td>
+          <td>CMMS (mensal)</td>
+        </tr>
+        <tr>
+          <td><strong>OEE</strong></td>
+          <td><code>Disp × Desempenho × Qualidade</code></td>
+          <td>≥ 85%</td>
+          <td>≥ 90%</td>
+          <td>PI Historian</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Semáforo de Backlog</h3>
+  <div class="kpi-grid">
+    <div class="kpi-card" style="border-color: rgba(0,166,81,.4);">
+      <div class="kpi-label">Excelente</div>
+      <div class="kpi-value green">≤ 2 sem</div>
+      <div class="kpi-sub">PCM sob controle total</div>
+      <div class="progress-bar" style="margin-top:10px;"><div class="progress-fill" style="width:25%"></div></div>
+    </div>
+    <div class="kpi-card" style="border-color: rgba(74,144,217,.4);">
+      <div class="kpi-label">Adequado</div>
+      <div class="kpi-value blue">2–4 sem</div>
+      <div class="kpi-sub">Operação normal</div>
+      <div class="progress-bar" style="margin-top:10px;"><div class="progress-fill" style="width:50%; background: linear-gradient(90deg,#4A90D9,#6AAEF0)"></div></div>
+    </div>
+    <div class="kpi-card" style="border-color: rgba(244,197,66,.4);">
+      <div class="kpi-label">Atenção</div>
+      <div class="kpi-value yellow">4–6 sem</div>
+      <div class="kpi-sub">Ação corretiva necessária</div>
+      <div class="progress-bar" style="margin-top:10px;"><div class="progress-fill" style="width:75%; background: linear-gradient(90deg,#F4C542,#F7D66B)"></div></div>
+    </div>
+    <div class="kpi-card" style="border-color: rgba(224,82,82,.4);">
+      <div class="kpi-label">Crítico</div>
+      <div class="kpi-value red">&gt; 6 sem</div>
+      <div class="kpi-sub">Escalar para Gerência</div>
+      <div class="progress-bar" style="margin-top:10px;"><div class="progress-fill" style="width:100%; background: linear-gradient(90deg,#E05252,#E87878)"></div></div>
+    </div>
+  </div>
+
+  <div class="formula-box">
+    <strong>Backlog (semanas)</strong> = Σ HH de todas OS pendentes / HH disponível por semana<br>
+    <strong>TEIF</strong> = Horas de Indisponibilidade Forçada / Horas Período de Observação × 100<br>
+    <strong>MTBF</strong> = (Tempo total de operação − Tempo de parada) / Nº de falhas<br>
+    <strong>CP</strong> = OS executadas no prazo / OS programadas × 100
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 8. CMMS ======================= -->
+<section id="cmms" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">08</div>
+    <h2>Comparativo CMMS</h2>
+  </div>
+
+  <p>A escolha do <strong>CMMS (Computerized Maintenance Management System)</strong> é decisão estratégica que impacta todo o ciclo de vida do PCM. Para usinas ENGIE, os critérios principais são integração com SAP ERP, capacidade de análise de confiabilidade e robustez para ambiente industrial crítico.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Critério</th><th>SAP PM</th><th>ENGEMAN</th><th>Fracttal</th><th>IBM Maximo</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Integração SAP ERP</strong></td>
+          <td><span class="tag tag-green">Nativa</span></td>
+          <td><span class="tag tag-yellow">Via API</span></td>
+          <td><span class="tag tag-yellow">Via API</span></td>
+          <td><span class="tag tag-orange">Limitada</span></td>
+        </tr>
+        <tr>
+          <td><strong>Custo implantação</strong></td>
+          <td>Alto (R$ 500K+)</td>
+          <td>Médio (R$ 150-300K)</td>
+          <td>Baixo (SaaS)</td>
+          <td>Alto (R$ 400K+)</td>
+        </tr>
+        <tr>
+          <td><strong>Análise confiabilidade</strong></td>
+          <td><span class="tag tag-green">Avançada</span></td>
+          <td><span class="tag tag-blue">Básica</span></td>
+          <td><span class="tag tag-blue">Básica</span></td>
+          <td><span class="tag tag-green">Avançada</span></td>
+        </tr>
+        <tr>
+          <td><strong>Adoção no setor elétrico BR</strong></td>
+          <td>Alta (EletroNuclear, CEMIG)</td>
+          <td>Alta (PMEs)</td>
+          <td>Crescente</td>
+          <td>Média</td>
+        </tr>
+        <tr>
+          <td><strong>Treinamento equipe</strong></td>
+          <td>Longo (3-6 meses)</td>
+          <td>Médio (1-2 meses)</td>
+          <td>Curto (&lt; 1 mês)</td>
+          <td>Longo (3-6 meses)</td>
+        </tr>
+        <tr>
+          <td><strong>Suporte Brasil</strong></td>
+          <td><span class="tag tag-green">Excelente</span></td>
+          <td><span class="tag tag-green">Excelente</span></td>
+          <td><span class="tag tag-blue">Bom</span></td>
+          <td><span class="tag tag-yellow">Limitado</span></td>
+        </tr>
+        <tr>
+          <td><strong>Recomendação para ENGIE</strong></td>
+          <td><span class="tag tag-green">1ª opção</span></td>
+          <td><span class="tag tag-blue">Transição</span></td>
+          <td><span class="tag tag-yellow">MVP inicial</span></td>
+          <td><span class="tag tag-orange">Não recomendado</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout tip">
+    <span class="callout-icon">💡</span>
+    <div class="callout-body">
+      <div class="callout-title">Estratégia Recomendada — Fracttal → SAP PM</div>
+      <p class="callout-text">Para implantação rápida (primeiros 90 dias), iniciar com <strong>Fracttal</strong> ou planilha Excel estruturada para validar o processo. Após 6-12 meses de PCM rodando, migrar para <strong>SAP PM</strong> aproveitando a infraestrutura SAP ERP já existente na ENGIE Brasil.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 9. MAINTENANCE TYPES ======================= -->
+<section id="maintenance-types" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">09</div>
+    <h2>Tipos de Manutenção</h2>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">🔄 Manutenção Preventiva</div>
+      <div class="card-body">Executada em intervalos fixos de tempo ou uso, independente da condição do equipamento. Base do plano anual (PMA). Exemplos: troca de óleo a cada 2.000 h, inspeção de escovas a cada 30 dias.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">📡 Manutenção Preditiva</div>
+      <div class="card-body">Baseada no monitoramento de parâmetros de condição (vibração, temperatura, DGA, análise de óleo). Permite intervir só quando necessário, maximizando disponibilidade e reduzindo intervenções desnecessárias.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">🚨 Manutenção Corretiva</div>
+      <div class="card-body">Realizada após a falha. <strong>Corretiva Planejada:</strong> falha detectada por preditiva, reparo agendado. <strong>Corretiva Emergencial:</strong> falha inesperada, ação imediata. Meta: corretiva &lt; 25% do total.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔍 Manutenção Detectiva</div>
+      <div class="card-body">Testa sistemas de proteção e intertravamento para verificar se estão operacionais. Essencial para relés de proteção, sistemas de trip, alarmes de alta temperatura e proteções de barragem.</div>
+    </div>
+  </div>
+
+  <h3>Periodicidades Preventivas — Turbinas e Geradores</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Intervalo</th><th>Atividade Mecânica</th><th>Atividade Elétrica</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Diária</strong></td>
+          <td>Verificação de nível de óleo nos mancais, inspeção visual de vedações</td>
+          <td>Leitura de temperatura de escovas e anéis coletores, alarmes</td>
+        </tr>
+        <tr>
+          <td><strong>Semanal</strong></td>
+          <td>Verificação de vibração (ronda sensitiva), nível reservatório HPU</td>
+          <td>Medição de corrente de excitação, verificação de alarmes ativos</td>
+        </tr>
+        <tr>
+          <td><strong>Mensal</strong></td>
+          <td>Análise de óleo de mancais (viscosidade, acidez), inspeção de acoplamentos</td>
+          <td>Inspeção visual de escovas (medir desgaste), termografia de cubículos</td>
+        </tr>
+        <tr>
+          <td><strong>Semestral</strong></td>
+          <td>Alinhamento de eixo, verificação de labirintos, análise de óleo completa</td>
+          <td>Medição de IR/IP estator, ensaio de capacidade das baterias de CC</td>
+        </tr>
+        <tr>
+          <td><strong>Anual</strong></td>
+          <td>Inspeção geral com UG parada, medições de folgas de mancal, teste HPU</td>
+          <td>DGA transformadores, Tan δ, medição de resistência de aterramento</td>
+        </tr>
+        <tr>
+          <td><strong>4-6 anos</strong></td>
+          <td>Inspeção de runner (cavitação), desmontagem de mancal de escora</td>
+          <td>Ensaios de descarga parcial (PD), revisão do sistema de excitação</td>
+        </tr>
+        <tr>
+          <td><strong>8-12 anos</strong></td>
+          <td>Major Overhaul — desmontagem completa de UG, reparo/substituição de runner</td>
+          <td>Revisão completa do gerador, rebobinamento se necessário, substituição de tiristores</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 10. PREVENTIVE ======================= -->
+<section id="preventive" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">10</div>
+    <h2>Manutenção Preventiva</h2>
+  </div>
+
+  <p>O <strong>Plano de Manutenção Anual (PMA)</strong> é o documento central da manutenção preventiva. Estruturado em 5 seções, deve ser elaborado até novembro para o ano seguinte e aprovado pelo Gerente da Usina.</p>
+
+  <h3>Estrutura do PMA</h3>
+  <div class="phase-list">
+    <div class="phase-item">
+      <div class="phase-num">1</div>
+      <div class="phase-body">
+        <div class="phase-title">Inventário de TAGs Críticos</div>
+        <p class="phase-desc">Lista completa de equipamentos com classificação de criticidade (A, B, C) baseada em análise RCM. Equipamentos classe A (impacto direto na geração) recebem frequência maior.</p>
+      </div>
+    </div>
+    <div class="phase-item">
+      <div class="phase-num">2</div>
+      <div class="phase-body">
+        <div class="phase-title">Calendário de Preventivas</div>
+        <p class="phase-desc">Cronograma visual por TAG e mês, considerando janelas operacionais (período seco: jul-set), disponibilidade de equipe e necessidade de aprovação prévia do ONS.</p>
+      </div>
+    </div>
+    <div class="phase-item">
+      <div class="phase-num">3</div>
+      <div class="phase-body">
+        <div class="phase-title">Recursos Necessários</div>
+        <p class="phase-desc">Estimativa de HH por disciplina (mecânica / elétrica), materiais de consumo (óleos, vedações, eletrodos), ferramental especial e necessidade de serviços contratados.</p>
+      </div>
+    </div>
+    <div class="phase-item">
+      <div class="phase-num">4</div>
+      <div class="phase-body">
+        <div class="phase-title">Paradas Programadas</div>
+        <p class="phase-desc">Escopo detalhado de cada parada de UG, com datas previstas, pré-aprovação do ONS (Submódulo 6.3 — 10 dias de antecedência), caminho crítico e plano de contingência.</p>
+      </div>
+    </div>
+    <div class="phase-item">
+      <div class="phase-num">5</div>
+      <div class="phase-body">
+        <div class="phase-title">Plano de Sobressalentes</div>
+        <p class="phase-desc">Necessidade de sobressalentes para o ano (classificados por ABC), lead time de aquisição, estoque mínimo por TAG crítico e fornecedores qualificados.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 11. PREDICTIVE ======================= -->
+<section id="predictive" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">11</div>
+    <h2>Manutenção Preditiva</h2>
+  </div>
+
+  <p>A manutenção preditiva nas usinas da ENGIE combina múltiplas técnicas de monitoramento de condição que, integradas, fornecem diagnóstico precoce de falhas antes que causem indisponibilidade.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Técnica</th><th>Equipamento Alvo</th><th>Parâmetro Medido</th><th>Frequência</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Análise de Vibração</strong></td>
+          <td>Turbina, mancais, eixo</td>
+          <td>Deslocamento (µm), velocidade (mm/s RMS), aceleração (g)</td>
+          <td>Online contínuo + semanal</td>
+        </tr>
+        <tr>
+          <td><strong>DGA — Análise de Gases</strong></td>
+          <td>Transformadores de força</td>
+          <td>H₂, CH₄, C₂H₂, C₂H₄, C₂H₆, CO, CO₂ (ppm)</td>
+          <td>Trimestral + alerta online</td>
+        </tr>
+        <tr>
+          <td><strong>Análise de Óleo</strong></td>
+          <td>Mancais, regulador de velocidade</td>
+          <td>Viscosidade, acidez, contaminação particulada (ISO 4406)</td>
+          <td>Semestral + após anomalia</td>
+        </tr>
+        <tr>
+          <td><strong>Termografia IR</strong></td>
+          <td>Cubículos elétricos, conexões, rolamentos</td>
+          <td>ΔT em relação ao ambiente ou componente par</td>
+          <td>Semestral (anual mínimo)</td>
+        </tr>
+        <tr>
+          <td><strong>Ultrassom</strong></td>
+          <td>Vedações, válvulas, rolamentos</td>
+          <td>Emissão acústica em 40 kHz</td>
+          <td>Mensal a semestral</td>
+        </tr>
+        <tr>
+          <td><strong>MCSA — Assinatura Motor</strong></td>
+          <td>Motores de acionamento (bombas HPU)</td>
+          <td>Espectro de corrente (FFT)</td>
+          <td>Semestral</td>
+        </tr>
+        <tr>
+          <td><strong>Ensaios Elétricos</strong></td>
+          <td>Gerador, transformadores</td>
+          <td>IR, IP, Tan δ, PD (nC), Hipot (kV)</td>
+          <td>Anual a cada 4 anos</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Severidade de Termografia</h3>
+  <div class="kpi-grid">
+    <div class="kpi-card" style="border-color: rgba(0,166,81,.4);">
+      <div class="kpi-label">Normal</div>
+      <div class="kpi-value green">&lt; 5°C</div>
+      <div class="kpi-sub">Sem ação necessária</div>
+    </div>
+    <div class="kpi-card" style="border-color: rgba(74,144,217,.4);">
+      <div class="kpi-label">Monitorar</div>
+      <div class="kpi-value blue">5–15°C</div>
+      <div class="kpi-sub">Reinspecionar em 6 meses</div>
+    </div>
+    <div class="kpi-card" style="border-color: rgba(244,197,66,.4);">
+      <div class="kpi-label">Moderado</div>
+      <div class="kpi-value yellow">15–40°C</div>
+      <div class="kpi-sub">Programar reparo P3</div>
+    </div>
+    <div class="kpi-card" style="border-color: rgba(224,82,82,.4);">
+      <div class="kpi-label">Crítico</div>
+      <div class="kpi-value red">&gt; 40°C</div>
+      <div class="kpi-sub">Ação imediata P1/P2</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 12. RCM FMEA ======================= -->
+<section id="rcm-fmea" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">12</div>
+    <h2>RCM &amp; FMEA/FMECA</h2>
+  </div>
+
+  <p>
+    O <strong>RCM (Reliability Centered Maintenance)</strong> é a metodologia que define qual tipo de manutenção — preventiva, preditiva, corretiva ou nenhuma — é mais adequada para cada modo de falha de cada equipamento.
+  </p>
+
+  <h3>As 7 Perguntas do RCM</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>#</th><th>Pergunta</th><th>Resultado</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Quais são as funções e padrões de desempenho do ativo?</td><td>Especificação funcional</td></tr>
+        <tr><td>2</td><td>De que forma ele falha em cumprir suas funções?</td><td>Falhas funcionais</td></tr>
+        <tr><td>3</td><td>O que causa cada falha funcional?</td><td>Modos de falha</td></tr>
+        <tr><td>4</td><td>O que acontece quando ocorre cada falha?</td><td>Efeitos da falha</td></tr>
+        <tr><td>5</td><td>De que forma cada falha importa?</td><td>Consequências da falha</td></tr>
+        <tr><td>6</td><td>O que pode ser feito para predizer ou prevenir cada falha?</td><td>Tarefa de manutenção proativa</td></tr>
+        <tr><td>7</td><td>O que deve ser feito se não houver tarefa proativa adequada?</td><td>Ação padrão (substituição, redesign)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Exemplo FMEA — Turbina Francis (Runner)</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Modo de Falha</th><th>Efeito</th><th>S</th><th>O</th><th>D</th><th>RPN</th><th>Ação</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Cavitação em pás</strong></td>
+          <td>Vibração excessiva, redução de rendimento, danos estruturais</td>
+          <td>8</td><td>5</td><td>4</td>
+          <td><span style="color:var(--red);font-weight:700">160</span></td>
+          <td>Inspeção visual anual + análise vibração online</td>
+        </tr>
+        <tr>
+          <td><strong>Desgaste de labirintos</strong></td>
+          <td>Aumento de vazamento, queda de eficiência</td>
+          <td>5</td><td>6</td><td>5</td>
+          <td><span style="color:var(--yellow);font-weight:700">150</span></td>
+          <td>Medição de folga semestral</td>
+        </tr>
+        <tr>
+          <td><strong>Trinca em pá</strong></td>
+          <td>Falha catastrófica, indisponibilidade forçada longa</td>
+          <td>10</td><td>2</td><td>3</td>
+          <td><span style="color:var(--orange);font-weight:700">60</span></td>
+          <td>Inspeção END (LP/MT) no overhaul</td>
+        </tr>
+        <tr>
+          <td><strong>Falha de vedação eixo</strong></td>
+          <td>Vazamento de água, contaminação de óleo</td>
+          <td>6</td><td>4</td><td>5</td>
+          <td><span style="color:var(--yellow);font-weight:700">120</span></td>
+          <td>Verificação visual semanal + análise de óleo semestral</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:12px;color:var(--text-3);margin-top:-10px;">S = Severidade (1-10) | O = Ocorrência (1-10) | D = Detectabilidade (1-10) | RPN = S × O × D | RPN &gt; 100: prioridade alta</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 13. OVERHAUL ======================= -->
+<section id="overhaul" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">13</div>
+    <h2>Major Overhaul</h2>
+  </div>
+
+  <p>
+    O <strong>Major Overhaul</strong> (Revisão Geral) é a parada de maior escopo no ciclo de vida de uma UG — envolvendo desmontagem completa da turbina e gerador, ensaios extensivos e substituição/reparo de componentes com desgaste avançado. Para Miranda: ciclo de 8-10 anos. Para Jaguará: 6-8 anos.
+  </p>
+
+  <h3>6 Fases do Planejamento de Overhaul</h3>
+  <div class="phase-list">
+    <div class="phase-item">
+      <div class="phase-num">1</div>
+      <div class="phase-body">
+        <div class="phase-title">Fase 1 — Diagnóstico (6-12 meses antes)</div>
+        <p class="phase-desc">Revisão do histórico de manutenção, análise de ensaios preditivos anteriores, entrevista com equipe de campo, definição dos equipamentos a serem substituídos vs. reparados. Identificação de insumos de longo prazo de aquisição.</p>
+      </div>
+    </div>
+    <div class="phase-item">
+      <div class="phase-num">2</div>
+      <div class="phase-body">
+        <div class="phase-title">Fase 2 — Definição de Escopo (4-6 meses antes)</div>
+        <p class="phase-desc">Elaboração do escopo técnico detalhado: lista de TAGs, trabalhos por TAG, especificações de materiais e serviços contratados, estimativa de HH e duração (caminho crítico).</p>
+      </div>
+    </div>
+    <div class="phase-item">
+      <div class="phase-num">3</div>
+      <div class="phase-body">
+        <div class="phase-title">Fase 3 — Contratação e Suprimentos (3-4 meses antes)</div>
+        <p class="phase-desc">Processo licitatório para serviços especializados (Voith, Andritz, GE Vernova), aquisição de sobressalentes críticos, contratação de empresa de END (ensaios não-destrutivos).</p>
+      </div>
+    </div>
+    <div class="phase-item">
+      <div class="phase-num">4</div>
+      <div class="phase-body">
+        <div class="phase-title">Fase 4 — Execução (durante a parada)</div>
+        <p class="phase-desc">Desmontagem sequencial, inspeções visuais e END em todos os componentes, execução de reparos (soldagem, usinagem, reparo por HVOF/Belzona para cavitação), remontagem e alinhamento.</p>
+      </div>
+    </div>
+    <div class="phase-item">
+      <div class="phase-num">5</div>
+      <div class="phase-body">
+        <div class="phase-title">Fase 5 — Comissionamento</div>
+        <p class="phase-desc">Ensaios pós-montagem (IR, Hipot, balanceamento), testes em vazio (elevação de velocidade gradual), testes em carga gradual, medição de curvas de desempenho e aprovação pelo Engenheiro Responsável.</p>
+      </div>
+    </div>
+    <div class="phase-item">
+      <div class="phase-num">6</div>
+      <div class="phase-body">
+        <div class="phase-title">Fase 6 — Documentação e Lições Aprendidas</div>
+        <p class="phase-desc">Atualização do histórico no CMMS, registro de todos os achados (fotos, medições, laudos de END), cálculo de custo real vs. orçado, relatório de lições aprendidas para o próximo overhaul.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Técnicas de Reparo de Cavitação</h3>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title">MIG/MAG Inox</div>
+      <div class="card-body">Soldagem com arame ER309L ou ER316L. Padrão para cavitação moderada em CA6NM. Requer pré-aquecimento a 150°C e pós-tratamento (PWHT).</div>
+    </div>
+    <div class="card">
+      <div class="card-title">HVOF (Thermal Spray)</div>
+      <div class="card-body">High-Velocity Oxy-Fuel com WC-CoCr. Para superfícies com cavitação severa onde soldagem seria inviável. Dureza HV 1.000+.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Belzona (Composto Epóxi)</div>
+      <div class="card-body">Belzona 1311 ou equivalente. Reparo temporário de pequenas cavidades. Fácil aplicação em campo, cura a temperatura ambiente. Não substitui soldagem para danos profundos.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 14. TURBINES ======================= -->
+<section id="turbines" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">14</div>
+    <h2>Turbinas Francis</h2>
+  </div>
+
+  <p>
+    Ambas as usinas utilizam turbinas do tipo <strong>Francis</strong> — as mais comuns em hidrelétricas de média a alta queda (10–700 m). São turbinas de reação que convertem energia hidráulica em trabalho mecânico pelo escoamento radial-axial através das pás do runner.
+  </p>
+
+  <h3>Componentes Críticos e Modos de Falha</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Componente</th><th>Material</th><th>Falha Típica</th><th>Técnica Preditiva</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Runner (rotor)</strong></td>
+          <td>Aço CA6NM (13Cr-4Ni)</td>
+          <td>Cavitação, erosão, trincas de fadiga</td>
+          <td>Vibração online, END visual + LP/MT no overhaul</td>
+        </tr>
+        <tr>
+          <td><strong>Palhetas diretoras</strong></td>
+          <td>Aço inox fundido</td>
+          <td>Desgaste de vedação, erosão</td>
+          <td>Medição de abertura, inspeção de gap anual</td>
+        </tr>
+        <tr>
+          <td><strong>Mancal de escora</strong></td>
+          <td>Metal patente (Babbitt)</td>
+          <td>Sobreaquecimento, desgaste acelerado</td>
+          <td>Temperatura online, análise de óleo semestral</td>
+        </tr>
+        <tr>
+          <td><strong>Mancal-guia turbina</strong></td>
+          <td>Bronze / Babbitt</td>
+          <td>Desgaste radial, vibração excessiva</td>
+          <td>Vibração online, medição de folga anual</td>
+        </tr>
+        <tr>
+          <td><strong>Labirintos</strong></td>
+          <td>Bronze ou inox</td>
+          <td>Desgaste, aumento de vazamento axial</td>
+          <td>Medição de folga semestral</td>
+        </tr>
+        <tr>
+          <td><strong>Vedação de eixo</strong></td>
+          <td>PTFE / borracha</td>
+          <td>Vazamento, contaminação de óleo</td>
+          <td>Inspeção visual semanal</td>
+        </tr>
+        <tr>
+          <td><strong>Caixa espiral</strong></td>
+          <td>Aço carbono soldado</td>
+          <td>Erosão interna, trincas em solda</td>
+          <td>Inspeção visual + espessometria no overhaul</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout warning">
+    <span class="callout-icon">⚠️</span>
+    <div class="callout-body">
+      <div class="callout-title">Cavitação — Principal Ameaça ao Runner</div>
+      <p class="callout-text">A cavitação ocorre quando a pressão local cai abaixo da pressão de vapor da água, formando bolhas que implodem ao atingir zonas de maior pressão. A operação fora do ponto de eficiência máxima (desvio &gt; 15% da carga nominal) acelera a cavitação dramaticamente no Rio Araguari (Miranda) e Rio Grande (Jaguará).</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 15. GENERATORS ======================= -->
+<section id="generators" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">15</div>
+    <h2>Geradores Síncronos</h2>
+  </div>
+
+  <p>Os geradores de Miranda e Jaguará são <strong>geradores síncronos de eixo vertical</strong>, diretamente acoplados às turbinas Francis. A manutenção elétrica do gerador é a mais crítica em termos de custo de reparo e tempo de imobilização em caso de falha grave.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Estator — Enrolamento de Armadura</div>
+      <div class="card-body">Núcleo laminado de silício + enrolamento de cobre isolado com sistema de impregnação global (VPI — Vacuum Pressure Impregnation). Falha catastrófica (curto-circuito entre espiras ou terra) exige rebobinamento completo: custo R$ 3-8M, prazo 6-12 meses.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Rotor — Polo Saliente</div>
+      <div class="card-body">Polos de aço laminado com enrolamento de campo (cobre). Falha típica: curto entre espiras (detectável por RSO — Recurrent Surge Oscillograph). Isolamento avaliado por IR, PI e Tan δ.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Escovas &amp; Anéis Coletores</div>
+      <div class="card-body">Escovas de carvão grafitado: desgaste médio 25 mm/mês. Mínimo de vida residual: 15-20% do comprimento original. Inspeção mensal, troca preventiva a cada 3-6 meses dependendo da operação.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Excitação Estática (Tiristores)</div>
+      <div class="card-body">Pontes de tiristores SCR controladas pelo AVR (Automatic Voltage Regulator). Falha de tiristor: indisponibilidade imediata. Verificar temperatura dos dissipadores com termografia semestral.</div>
+    </div>
+  </div>
+
+  <h3>Ensaios Elétricos do Gerador</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Ensaio</th><th>Sigla</th><th>O que avalia</th><th>Frequência</th><th>Limites típicos</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Resistência de Isolamento</strong></td><td>IR</td><td>Qualidade geral do isolamento</td><td>Anual</td><td>≥ 10 MΩ por kV de tensão nominal</td></tr>
+        <tr><td><strong>Índice de Polarização</strong></td><td>IP</td><td>Umidade/contaminação no isolamento</td><td>Anual</td><td>IP ≥ 2,0 (bom); ≥ 4,0 (excelente)</td></tr>
+        <tr><td><strong>Fator de Dissipação</strong></td><td>Tan δ</td><td>Degradação dielétrica</td><td>A cada 2 anos</td><td>Tan δ &lt; 0,01 a 1 kV (acompanhar tendência)</td></tr>
+        <tr><td><strong>Descarga Parcial</strong></td><td>PD</td><td>Voids, delaminação no isolamento</td><td>A cada 2-4 anos</td><td>NQS &lt; 100 pC (atenção &gt; 500 pC)</td></tr>
+        <tr><td><strong>Hipot</strong></td><td>—</td><td>Rigidez dielétrica</td><td>Após rebobinamento</td><td>2×Un + 1.000 V por 1 minuto</td></tr>
+        <tr><td><strong>RSO (Polo)</strong></td><td>RSO</td><td>Curto entre espiras no rotor</td><td>A cada 2 anos</td><td>Comparação entre polos ≤ 5% assimetria</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 16. TRANSFORMERS ======================= -->
+<section id="transformers" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">16</div>
+    <h2>Transformadores de Força</h2>
+  </div>
+
+  <p>
+    Os transformadores elevadores (gerador → barra de transmissão) são os equipamentos de maior valor unitário da usina (R$ 8-20M cada) e com maior lead time de substituição (18-36 meses). A manutenção preditiva intensiva, especialmente o <strong>DGA</strong>, é a principal ferramenta para evitar falhas catastróficas.
+  </p>
+
+  <h3>Gases DGA e Diagnóstico</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Gás</th><th>Fórmula</th><th>Modo de Falha Indicado</th><th>Limite de Atenção (IEC C57.104)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Hidrogênio</strong></td><td>H₂</td><td>Descarga parcial (corona), superaquecimento</td><td>&gt; 100 ppm</td></tr>
+        <tr><td><strong>Metano</strong></td><td>CH₄</td><td>Superaquecimento moderado do óleo (&lt; 300°C)</td><td>&gt; 120 ppm</td></tr>
+        <tr><td><strong>Acetileno</strong></td><td>C₂H₂</td><td><strong>Arco elétrico — CRÍTICO</strong></td><td>&gt; 5 ppm</td></tr>
+        <tr><td><strong>Etileno</strong></td><td>C₂H₄</td><td>Superaquecimento severo do óleo (&gt; 500°C)</td><td>&gt; 50 ppm</td></tr>
+        <tr><td><strong>Etano</strong></td><td>C₂H₆</td><td>Superaquecimento do óleo (300-500°C)</td><td>&gt; 65 ppm</td></tr>
+        <tr><td><strong>Monóxido de carbono</strong></td><td>CO</td><td>Degradação de papel isolante</td><td>&gt; 1.000 ppm</td></tr>
+        <tr><td><strong>Dióxido de carbono</strong></td><td>CO₂</td><td>Degradação de papel isolante (acelerada)</td><td>&gt; 10.000 ppm</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout danger">
+    <span class="callout-icon">🔴</span>
+    <div class="callout-body">
+      <div class="callout-title">Acetileno &gt; 5 ppm — Ação Imediata Obrigatória</div>
+      <p class="callout-text">A presença de C₂H₂ indica arco elétrico interno (temperatura &gt; 700°C). Mesmo pequenas concentrações (5-10 ppm) exigem coleta adicional em 7 dias para confirmar tendência e avaliação pelo Triângulo de Duval. Acima de 20 ppm: desligar imediatamente e acionar fabricante.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 17. DGA ======================= -->
+<section id="dga" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">17</div>
+    <h2>DGA — Análise de Gases Dissolvidos</h2>
+  </div>
+
+  <p>
+    O <strong>Triângulo de Duval</strong> é o método mais confiável para diagnóstico DGA, utilizando as concentrações relativas de CH₄, C₂H₄ e C₂H₂ para classificar a falha em 7 zonas.
+  </p>
+
+  <div class="flowchart-container">
+    <div class="flowchart-title">Fluxo de Diagnóstico DGA — Transformadores ENGIE</div>
+    <svg viewBox="0 0 760 320" class="fc-svg" xmlns="http://www.w3.org/2000/svg">
+      <!-- Start -->
+      <ellipse cx="100" cy="30" rx="80" ry="22" fill="#1e2320" stroke="#00A651" stroke-width="1.5"/>
+      <text x="100" y="35" text-anchor="middle" fill="#00A651" font-size="10" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">COLETA DGA TRIMESTRAL</text>
+
+      <!-- Arrow down -->
+      <path d="M100 52 L100 72" stroke="#00A651" stroke-width="1.5" fill="none" marker-end="url(#dgaArr)"/>
+
+      <!-- Decision 1 -->
+      <polygon points="100,72 190,102 100,132 10,102" fill="#1e2320" stroke="#F4C542" stroke-width="1.5"/>
+      <text x="100" y="99" text-anchor="middle" fill="#F4C542" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">Algum gás &gt;</text>
+      <text x="100" y="112" text-anchor="middle" fill="#F4C542" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">limite IEC?</text>
+
+      <!-- NO branch (right) -->
+      <path d="M190 102 L260 102" stroke="#00A651" stroke-width="1.5" fill="none" marker-end="url(#dgaArr2)"/>
+      <text x="220" y="96" text-anchor="middle" fill="#00A651" font-size="9" font-family="Plus Jakarta Sans,sans-serif">NÃO</text>
+      <rect x="260" y="82" width="100" height="40" rx="6" fill="#1e2320" stroke="#00A651" stroke-width="1.5"/>
+      <text x="310" y="100" text-anchor="middle" fill="#00A651" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">NORMAL</text>
+      <text x="310" y="113" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Próx. coleta em 3 meses</text>
+
+      <!-- YES branch (down) -->
+      <path d="M100 132 L100 162" stroke="#E05252" stroke-width="1.5" fill="none" marker-end="url(#dgaArr3)"/>
+      <text x="112" y="150" fill="#E05252" font-size="9" font-family="Plus Jakarta Sans,sans-serif">SIM</text>
+
+      <!-- Decision 2 -->
+      <polygon points="100,162 200,192 100,222 0,192" fill="#1e2320" stroke="#E05252" stroke-width="1.5"/>
+      <text x="100" y="189" text-anchor="middle" fill="#E05252" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">C₂H₂ presente</text>
+      <text x="100" y="202" text-anchor="middle" fill="#E05252" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">(&gt; 5 ppm)?</text>
+
+      <!-- YES C2H2 -->
+      <path d="M200 192 L280 192" stroke="#E05252" stroke-width="1.5" fill="none" marker-end="url(#dgaArr4)"/>
+      <text x="235" y="186" text-anchor="middle" fill="#E05252" font-size="9" font-family="Plus Jakarta Sans,sans-serif">SIM</text>
+      <rect x="280" y="166" width="120" height="52" rx="6" fill="#1a1010" stroke="#E05252" stroke-width="2"/>
+      <text x="340" y="186" text-anchor="middle" fill="#E05252" font-size="10" font-weight="800" font-family="Plus Jakarta Sans,sans-serif">ARCO ELÉTRICO</text>
+      <text x="340" y="199" text-anchor="middle" fill="#e8ede9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">Coleta em 7 dias</text>
+      <text x="340" y="212" text-anchor="middle" fill="#e8ede9" font-size="8.5" font-family="Plus Jakarta Sans,sans-serif">Comunicar Gerência</text>
+
+      <!-- NO C2H2 (down) -->
+      <path d="M100 222 L100 252" stroke="#F4C542" stroke-width="1.5" fill="none" marker-end="url(#dgaArr5)"/>
+      <text x="112" y="240" fill="#00A651" font-size="9" font-family="Plus Jakarta Sans,sans-serif">NÃO</text>
+
+      <!-- Duval Triangle -->
+      <rect x="20" y="252" width="160" height="50" rx="6" fill="#1e2320" stroke="#F4C542" stroke-width="1.5"/>
+      <text x="100" y="272" text-anchor="middle" fill="#F4C542" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">TRIÂNGULO DE DUVAL</text>
+      <text x="100" y="285" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Plotar CH₄/C₂H₄/C₂H₂</text>
+      <text x="100" y="296" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">→ 7 zonas de diagnóstico</text>
+
+      <!-- Arrow to actions -->
+      <path d="M180 277 L250 277" stroke="#F4C542" stroke-width="1.5" fill="none" marker-end="url(#dgaArr6)"/>
+
+      <!-- Action box -->
+      <rect x="250" y="245" width="200" height="72" rx="6" fill="#1e2320" stroke="#4A90D9" stroke-width="1.5"/>
+      <text x="350" y="265" text-anchor="middle" fill="#4A90D9" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">AÇÕES POR ZONA</text>
+      <text x="350" y="279" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">PD: Intensif. monit. online</text>
+      <text x="350" y="291" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">T1/T2: Prog. deslig. 30d</text>
+      <text x="350" y="303" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">T3: Verificar tap changer</text>
+
+      <!-- Arrow to gases check on right -->
+      <path d="M450 277 L560 277" stroke="#4A90D9" stroke-width="1.5" fill="none" marker-end="url(#dgaArr7)"/>
+
+      <rect x="560" y="252" width="180" height="52" rx="6" fill="#1e2320" stroke="#9B6FD0" stroke-width="1.5"/>
+      <text x="650" y="272" text-anchor="middle" fill="#9B6FD0" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">TAXA DE CRESCIMENTO</text>
+      <text x="650" y="285" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">&gt; 0,1 ppm/dia = CRÍTICO</text>
+      <text x="650" y="297" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Retirar de serviço se ↑</text>
+
+      <defs>
+        <marker id="dgaArr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00A651"/></marker>
+        <marker id="dgaArr2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00A651"/></marker>
+        <marker id="dgaArr3" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#E05252"/></marker>
+        <marker id="dgaArr4" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#E05252"/></marker>
+        <marker id="dgaArr5" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#F4C542"/></marker>
+        <marker id="dgaArr6" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#F4C542"/></marker>
+        <marker id="dgaArr7" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#4A90D9"/></marker>
+      </defs>
+    </svg>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 18. PROTECTION ======================= -->
+<section id="protection" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">18</div>
+    <h2>Sistema de Proteção</h2>
+  </div>
+
+  <p>As funções de proteção seguem o padrão <strong>IEEE C37.102</strong> para geradores síncronos. Cada função de proteção tem número normalizado e deve ser testada periodicamente pela equipe elétrica (manutenção detectiva).</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Nº IEEE</th><th>Função</th><th>Proteção Contra</th><th>Ação</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>87G</strong></td><td>Diferencial de gerador</td><td>Curto-circuito no estator</td><td>Trip instantâneo</td></tr>
+        <tr><td><strong>51V</strong></td><td>Sobrecorrente dependente de tensão</td><td>Sobrecarga do gerador</td><td>Trip temporizado</td></tr>
+        <tr><td><strong>40</strong></td><td>Perda de excitação</td><td>Falha do AVR / excitação</td><td>Trip temporizado</td></tr>
+        <tr><td><strong>24</strong></td><td>Sobrefluxo (V/Hz)</td><td>Saturação do núcleo magnético</td><td>Alarme + trip</td></tr>
+        <tr><td><strong>27</strong></td><td>Mínima tensão</td><td>Afundamento de tensão no barramento</td><td>Alarme + trip</td></tr>
+        <tr><td><strong>59</strong></td><td>Sobretensão</td><td>Falha de regulação de tensão</td><td>Trip temporizado</td></tr>
+        <tr><td><strong>81</strong></td><td>Subfrequência/sobrefrenquência</td><td>Desvio de frequência do SIN</td><td>Alarme + trip</td></tr>
+        <tr><td><strong>78</strong></td><td>Proteção de vetor / perda de passo</td><td>Perda de sincronismo</td><td>Trip instantâneo</td></tr>
+        <tr><td><strong>46</strong></td><td>Desequilíbrio de corrente</td><td>Correntes de sequência negativa</td><td>Alarme + trip</td></tr>
+        <tr><td><strong>32</strong></td><td>Potência reversa</td><td>Motorização do gerador</td><td>Trip temporizado</td></tr>
+        <tr><td><strong>64F</strong></td><td>Falha de terra no campo</td><td>Curto-circuito à terra no rotor</td><td>Alarme (1ª falha) / Trip (2ª falha)</td></tr>
+        <tr><td><strong>49</strong></td><td>Sobretemperatura do enrolamento</td><td>Sobrecarga térmica do estator</td><td>Alarme + trip</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 19. GOVERNOR ======================= -->
+<section id="governor" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">19</div>
+    <h2>Regulador de Velocidade (Governor)</h2>
+  </div>
+
+  <p>
+    O <strong>regulador de velocidade</strong> (governor) controla a abertura das palhetas diretoras da turbina para manter a velocidade de rotação constante (e a frequência do gerador em 60 Hz), respondendo às variações de carga do SIN.
+  </p>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">HPU — Unidade de Potência Hidráulica</div>
+      <div class="card-body">Bomba de alta pressão (≥ 120 bar), acumulador hidráulico, reservatório de óleo (≈ 500L para UG de 100+ MW), filtros de alta pressão. Principal ponto de manutenção: qualidade do óleo e vedações dos servo-motores.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Servo-motor de Abertura</div>
+      <div class="card-body">Atuador hidráulico que move o anel de distribuição (e consequentemente todas as palhetas diretoras simultaneamente). Válvula proporcional eletro-hidráulica comandada pelo PLC digital. Verificar: curso, velocidade de resposta e histerese.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">PLC Digital (Controlador)</div>
+      <div class="card-body">Controlador PID digital com lógica de regulação de velocidade (droop 4-6%), sincronização com a rede e limitações de taxa de variação de carga. Backup por regulador analógico de emergência.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Encoder de Posição</div>
+      <div class="card-body">Mede a abertura real das palhetas (0-100%). Falha no encoder gera comportamento oscilatório do governor. Verificação mensal de limpeza e calibração semestral.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 20. CBM ======================= -->
+<section id="cbm" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">20</div>
+    <h2>Manutenção Baseada em Condição (CbM)</h2>
+  </div>
+
+  <p>A hierarquia de estratégias de manutenção evolui de reativa para preditiva. O objetivo do PCM ENGIE é alcançar o nível 3 (CbM) em 18 meses e iniciar o nível 4 (Preditivo com AI/ML) em 36 meses.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Nível</th><th>Estratégia</th><th>Característica</th><th>Custo Manutenção</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>Run-to-Failure</strong></td>
+          <td>Opera até falhar. Sem intervenção planejada.</td>
+          <td>Baixo (até a falha)</td>
+          <td><span class="status critical"><span class="status-dot"></span>A evitar</span></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>Preventiva (TBM)</strong></td>
+          <td>Intervalos fixos de tempo. Pode gerar over/under-maintenance.</td>
+          <td>Médio</td>
+          <td><span class="status active"><span class="status-dot"></span>Fase 1</span></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>CbM — Baseada em Condição</strong></td>
+          <td>Monitoramento contínuo. Intervém quando condição degradar.</td>
+          <td>Médio-baixo</td>
+          <td><span class="status info"><span class="status-dot"></span>Meta 18 meses</span></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>Preditiva (AI/ML)</strong></td>
+          <td>Modelos de ML antecipam falhas com dias/semanas de antecedência.</td>
+          <td>Baixo</td>
+          <td><span class="status warning"><span class="status-dot"></span>Meta 36 meses</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Plataformas de Monitoramento Online</h3>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title">Bently Nevada</div>
+      <div class="card-body">Sistema de monitoramento de vibração online. Sensores de proximidade (eddy current) para eixo. Padrão em grandes usinas hidrelétricas.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">PI Historian / AVEVA</div>
+      <div class="card-body">Banco de dados de séries temporais para armazenar todas as variáveis de processo. Base para análise de tendências e Digital Twins.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">GE Vernova APM</div>
+      <div class="card-body">Asset Performance Management com módulos de RCM, análise de falhas e integração com sensores IoT. Usado em plantas GE Vernova.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 21. VIBRATION ======================= -->
+<section id="vibration" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">21</div>
+    <h2>Análise de Vibração</h2>
+  </div>
+
+  <p>
+    A análise de vibração é a técnica preditiva mais importante para turbinas e geradores hidráulicos — permite detectar desbalanceamento, desalinhamento, cavitação e falhas de mancal antes que causem danos irreversíveis.
+  </p>
+
+  <h3>Zonas ISO 20816 — Avaliação de Severidade</h3>
+  <div class="kpi-grid">
+    <div class="kpi-card" style="border-color: rgba(0,166,81,.4);">
+      <div class="kpi-label">Zona A — Verde</div>
+      <div class="kpi-value green">Ótimo</div>
+      <div class="kpi-sub">Operação contínua sem restrição</div>
+    </div>
+    <div class="kpi-card" style="border-color: rgba(244,197,66,.4);">
+      <div class="kpi-label">Zona B — Amarelo</div>
+      <div class="kpi-value yellow">Aceitável</div>
+      <div class="kpi-sub">Monitoramento intensificado</div>
+    </div>
+    <div class="kpi-card" style="border-color: rgba(224,138,47,.4);">
+      <div class="kpi-label">Zona C — Laranja</div>
+      <div class="kpi-value orange">Atenção</div>
+      <div class="kpi-sub">Operação por prazo limitado; programar manutenção</div>
+    </div>
+    <div class="kpi-card" style="border-color: rgba(224,82,82,.4);">
+      <div class="kpi-label">Zona D — Vermelho</div>
+      <div class="kpi-value red">Crítico</div>
+      <div class="kpi-sub">Parar imediatamente — risco de dano</div>
+    </div>
+  </div>
+
+  <h3>Diagnóstico por Padrão de Frequência (FFT)</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Frequência dominante</th><th>Diagnóstico provável</th><th>Componente afetado</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>1X</code> (1× frequência de rotação)</td><td><strong>Desbalanceamento</strong></td><td>Rotor, runner, acoplamento</td></tr>
+        <tr><td><code>2X</code> (2× frequência de rotação)</td><td><strong>Desalinhamento</strong></td><td>Acoplamento, eixo</td></tr>
+        <tr><td><code>0,43–0,49X</code> (sub-harmônica)</td><td><strong>Oil Whirl (mancal)</strong></td><td>Mancal de deslizamento</td></tr>
+        <tr><td><code>0,5X</code> (sub-harmônica)</td><td><strong>Oil Whip / Rotor Rub</strong></td><td>Mancal, labirinto</td></tr>
+        <tr><td>Subharmônicas + ruído</td><td><strong>Cavitação</strong></td><td>Runner, câmara espiral</td></tr>
+        <tr><td>Harmônicas de pás (Nº pás × rpm)</td><td><strong>Desgaste de palhetas</strong></td><td>Palhetas diretoras</td></tr>
+        <tr><td>Alta frequência impulsiva</td><td><strong>Defeito de rolamento</strong></td><td>Rolamento (se aplicável)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 22. THERMOGRAPHY ======================= -->
+<section id="thermography" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">22</div>
+    <h2>Termografia Infravermelha</h2>
+  </div>
+
+  <p>
+    A termografia infravermelha identifica anomalias térmicas em equipamentos elétricos e mecânicos sob carga. É técnica não-intrusiva que pode ser executada com o equipamento em operação, sem necessidade de desligamento.
+  </p>
+
+  <h3>Equipamentos Prioritários para Termografia</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Elétrico</div>
+      <div class="card-body">
+        <ul>
+          <li>Disjuntores de alta tensão (conexões, contatos)</li>
+          <li>Transformadores (ponteiras, buchas, radiadores)</li>
+          <li>Painéis de CC e CA (conexões, disjuntores)</li>
+          <li>Pontes de tiristores de excitação</li>
+          <li>Anéis coletores e escovas do gerador</li>
+          <li>Cabos e conexões de alta corrente</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Mecânico</div>
+      <div class="card-body">
+        <ul>
+          <li>Mancais de escora e guia (temperatura de filme de óleo)</li>
+          <li>Acoplamentos (alinhamento)</li>
+          <li>Rolamentos de motores de acionamento</li>
+          <li>Válvulas e flanges da HPU</li>
+          <li>Selo mecânico de eixo</li>
+          <li>Motores de ventilação do gerador</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <span class="callout-icon">📸</span>
+    <div class="callout-body">
+      <div class="callout-title">Boas Práticas de Termografia em Ambiente Hidrelétrico</div>
+      <p class="callout-text">Executar com carga mínima de 75% da nominal (anomalias se manifestam sob carga). Registrar temperatura ambiente no momento da inspeção. Comparar sempre com imagem padrão (baseline) ou componente par. Laudos gerados em software dedicado (FLIR Tools, ThermaCAM).</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 23. IIoT ======================= -->
+<section id="iiot" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">23</div>
+    <h2>IIoT &amp; Indústria 4.0</h2>
+  </div>
+
+  <p>
+    A arquitetura IIoT (Industrial Internet of Things) para manutenção hidrelétrica conecta sensores de campo ao PI Historian e plataformas analíticas para suporte à decisão em tempo real.
+  </p>
+
+  <h3>Arquitetura IIoT — 5 Camadas</h3>
+  <div class="phase-list">
+    <div class="phase-item">
+      <div class="phase-num">1</div>
+      <div class="phase-body">
+        <div class="phase-title">Sensores e Transdutores</div>
+        <p class="phase-desc">Acelerômetros piezelétricos, sondas de proximidade eddy current, RTDs, TCs, IEDs de proteção, analisadores de óleo online (DGA contínuo tipo Kelman).</p>
+      </div>
+    </div>
+    <div class="phase-item">
+      <div class="phase-num">2</div>
+      <div class="phase-body">
+        <div class="phase-title">Edge Computing</div>
+        <p class="phase-desc">Concentradores locais que executam pré-processamento, FFT em tempo real e compressão de dados antes de enviar à rede industrial. Reduz latência e banda necessária.</p>
+      </div>
+    </div>
+    <div class="phase-item">
+      <div class="phase-num">3</div>
+      <div class="phase-body">
+        <div class="phase-title">Rede Industrial</div>
+        <p class="phase-desc">Protocolos: Modbus RTU/TCP (legado), DNP3 (SCADA), IEC 61850 (proteção), OPC-UA (interoperabilidade), MQTT (IoT). Segmentação por VLAN com firewall industrial.</p>
+      </div>
+    </div>
+    <div class="phase-item">
+      <div class="phase-num">4</div>
+      <div class="phase-body">
+        <div class="phase-title">PI Historian / Data Lake</div>
+        <p class="phase-desc">AVEVA PI armazena séries temporais de todos os sensores com compressão inteligente (exc/deviation). Base para análise de tendências, correlação e alimentação de modelos ML.</p>
+      </div>
+    </div>
+    <div class="phase-item">
+      <div class="phase-num">5</div>
+      <div class="phase-body">
+        <div class="phase-title">Analytics &amp; Dashboards</div>
+        <p class="phase-desc">Power BI para dashboards de KPIs em tempo real. Plataformas APM (GE Vernova, AVEVA) para alertas preditivos. Modelos ML (Isolation Forest, LSTM) para detecção de anomalias.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Algoritmos ML para Manutenção Preditiva</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Algoritmo</th><th>Aplicação</th><th>Dados de Entrada</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Isolation Forest</strong></td><td>Detecção de anomalias sem labels (unsupervised)</td><td>Vibração, temperatura, corrente</td></tr>
+        <tr><td><strong>One-Class SVM</strong></td><td>Classificação de condição normal vs. anormal</td><td>Espectro FFT, temperatura</td></tr>
+        <tr><td><strong>Autoencoder (DL)</strong></td><td>Reconhecimento de padrão normal; anomalia = alto erro de reconstrução</td><td>Séries temporais multivariadas</td></tr>
+        <tr><td><strong>LSTM</strong></td><td>Previsão de Remaining Useful Life (RUL)</td><td>Histórico de vibração + temperatura</td></tr>
+        <tr><td><strong>XGBoost</strong></td><td>Classificação de tipo de falha (supervisionado)</td><td>Features extraídas do sinal + histórico CMMS</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 24. DIGITAL TWIN ======================= -->
+<section id="digital-twin" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">24</div>
+    <h2>Gêmeos Digitais</h2>
+  </div>
+
+  <p>
+    O <strong>Gêmeo Digital (Digital Twin)</strong> é uma representação virtual de alta fidelidade de um ativo físico, sincronizada com dados reais em tempo real. Para hidrelétricas, o DT pode simular comportamentos hidrodinâmicos, eletromagnéticos e mecânicos.
+  </p>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title">Nível 1 — Simulação Estática</div>
+      <div class="card-body">Modelo CAD/CAE do equipamento. Permite análise de tensão, fadiga e projeto de modificações sem risco à máquina real. Usado para dimensionamento de reparos.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Nível 2 — Monitoramento Contínuo</div>
+      <div class="card-body">Modelo sincronizado com sensores em tempo real via PI Historian. Detecta desvios do comportamento esperado. Plataformas: AVEVA, GE Vernova APM, Siemens MindSphere.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Nível 3 — Preditivo e Prescritivo</div>
+      <div class="card-body">Modelo alimenta algoritmos ML para prever falhas futuras e prescrever ações de manutenção. Estima RUL (Remaining Useful Life) e otimiza janelas de manutenção.</div>
+    </div>
+  </div>
+
+  <h3>Aplicações para UHE Miranda e Jaguará</h3>
+  <ul>
+    <li><strong>DT Turbina:</strong> Simulação hidrodinâmica CFD (Computational Fluid Dynamics) para otimizar ponto de operação e reduzir cavitação</li>
+    <li><strong>DT Gerador:</strong> Modelo eletromagnético para monitoramento de assimetrias de campo e previsão de degradação de isolamento</li>
+    <li><strong>DT Transformador:</strong> Modelo térmico acoplado a DGA online para previsão de vida útil e otimização de carregamento</li>
+    <li><strong>DT Barragem:</strong> Modelo geomecânico integrado com piezômetros e drenos para monitoramento de segurança da barragem (Lei 12.334/2010)</li>
+  </ul>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 25. ORGANOGRAMA ======================= -->
+<section id="organograma" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">25</div>
+    <h2>Organograma PCM</h2>
+  </div>
+
+  <div class="flowchart-container">
+    <div class="flowchart-title">Organograma — Estrutura PCM Proposta ENGIE Miranda &amp; Jaguará</div>
+    <svg viewBox="0 0 760 360" class="fc-svg" xmlns="http://www.w3.org/2000/svg">
+      <!-- Root: Gerente Usina -->
+      <rect x="280" y="10" width="200" height="44" rx="8" fill="#007A3D" stroke="#00C860" stroke-width="2"/>
+      <text x="380" y="29" text-anchor="middle" fill="white" font-size="10" font-weight="800" font-family="Plus Jakarta Sans,sans-serif">GERENTE DA USINA</text>
+      <text x="380" y="44" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Miranda + Jaguará</text>
+
+      <!-- Line down -->
+      <path d="M380 54 L380 80" stroke="#00A651" stroke-width="1.5" fill="none"/>
+
+      <!-- Coordinator PCM -->
+      <rect x="270" y="80" width="220" height="44" rx="8" fill="#1e2320" stroke="#00A651" stroke-width="2"/>
+      <text x="380" y="98" text-anchor="middle" fill="#00A651" font-size="10" font-weight="800" font-family="Plus Jakarta Sans,sans-serif">COORDENADOR PCM</text>
+      <text x="380" y="113" text-anchor="middle" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Ambas as usinas | Fase 1</text>
+
+      <!-- Lines to children -->
+      <path d="M380 124 L380 150" stroke="#00A651" stroke-width="1" fill="none"/>
+      <path d="M100 150 L660 150" stroke="#00A651" stroke-width="1" fill="none"/>
+      <path d="M100 150 L100 170" stroke="#4A90D9" stroke-width="1" fill="none"/>
+      <path d="M270 150 L270 170" stroke="#4A90D9" stroke-width="1" fill="none"/>
+      <path d="M490 150 L490 170" stroke="#F4C542" stroke-width="1" fill="none"/>
+      <path d="M660 150 L660 170" stroke="#9B6FD0" stroke-width="1" fill="none"/>
+
+      <!-- Planejador Mec -->
+      <rect x="30" y="170" width="140" height="44" rx="8" fill="#1e2320" stroke="#4A90D9" stroke-width="1.5"/>
+      <text x="100" y="188" text-anchor="middle" fill="#4A90D9" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">PLANEJADOR</text>
+      <text x="100" y="201" text-anchor="middle" fill="#4A90D9" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">MECÂNICO</text>
+      <text x="100" y="212" text-anchor="middle" fill="#b8c2b9" font-size="7.5" font-family="Plus Jakarta Sans,sans-serif">Miranda + Jaguará</text>
+
+      <!-- Planejador Ele -->
+      <rect x="200" y="170" width="140" height="44" rx="8" fill="#1e2320" stroke="#4A90D9" stroke-width="1.5"/>
+      <text x="270" y="188" text-anchor="middle" fill="#4A90D9" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">PLANEJADOR</text>
+      <text x="270" y="201" text-anchor="middle" fill="#4A90D9" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">ELÉTRICO</text>
+      <text x="270" y="212" text-anchor="middle" fill="#b8c2b9" font-size="7.5" font-family="Plus Jakarta Sans,sans-serif">Miranda + Jaguará</text>
+
+      <!-- Programador -->
+      <rect x="420" y="170" width="140" height="44" rx="8" fill="#1e2320" stroke="#F4C542" stroke-width="1.5"/>
+      <text x="490" y="193" text-anchor="middle" fill="#F4C542" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">PROGRAMADOR</text>
+      <text x="490" y="207" text-anchor="middle" fill="#b8c2b9" font-size="7.5" font-family="Plus Jakarta Sans,sans-serif">CMMS + Agenda Semanal</text>
+
+      <!-- Analista Confiabilidade -->
+      <rect x="585" y="170" width="155" height="44" rx="8" fill="#1a1a20" stroke="#9B6FD0" stroke-width="1.5" stroke-dasharray="4 2"/>
+      <text x="662" y="188" text-anchor="middle" fill="#9B6FD0" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">ANALISTA</text>
+      <text x="662" y="201" text-anchor="middle" fill="#9B6FD0" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">CONFIABILIDADE</text>
+      <text x="662" y="212" text-anchor="middle" fill="#9B6FD0" font-size="7.5" font-family="Plus Jakarta Sans,sans-serif">Fase 2 (futura)</text>
+
+      <!-- Lines to execution -->
+      <path d="M100 214 L100 240" stroke="#4A5a4b" stroke-width="1" fill="none"/>
+      <path d="M60 240 L400 240" stroke="#4A5a4b" stroke-width="1" fill="none"/>
+      <path d="M60 240 L60 260" stroke="#4A5a4b" stroke-width="1" fill="none"/>
+      <path d="M140 240 L140 260" stroke="#4A5a4b" stroke-width="1" fill="none"/>
+      <path d="M250 240 L250 260" stroke="#4A5a4b" stroke-width="1" fill="none"/>
+      <path d="M340 240 L340 260" stroke="#4A5a4b" stroke-width="1" fill="none"/>
+
+      <!-- Miranda mec -->
+      <rect x="10" y="260" width="100" height="50" rx="6" fill="#141714" stroke="#4a5a4b" stroke-width="1"/>
+      <text x="60" y="278" text-anchor="middle" fill="#7a8a7b" font-size="8.5" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">MIRANDA</text>
+      <text x="60" y="291" text-anchor="middle" fill="#7a8a7b" font-size="8" font-family="Plus Jakarta Sans,sans-serif">4 Mecânicos</text>
+      <text x="60" y="303" text-anchor="middle" fill="#7a8a7b" font-size="8" font-family="Plus Jakarta Sans,sans-serif">+ 1 Chefe</text>
+
+      <!-- Miranda ele -->
+      <rect x="118" y="260" width="100" height="50" rx="6" fill="#141714" stroke="#4a5a4b" stroke-width="1"/>
+      <text x="168" y="278" text-anchor="middle" fill="#7a8a7b" font-size="8.5" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">MIRANDA</text>
+      <text x="168" y="291" text-anchor="middle" fill="#7a8a7b" font-size="8" font-family="Plus Jakarta Sans,sans-serif">4 Elétricos</text>
+      <text x="168" y="303" text-anchor="middle" fill="#7a8a7b" font-size="8" font-family="Plus Jakarta Sans,sans-serif">+ 1 Chefe</text>
+
+      <!-- Jaguará mec -->
+      <rect x="200" y="260" width="100" height="50" rx="6" fill="#141714" stroke="#4a5a4b" stroke-width="1"/>
+      <text x="250" y="278" text-anchor="middle" fill="#7a8a7b" font-size="8.5" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">JAGUARÁ</text>
+      <text x="250" y="291" text-anchor="middle" fill="#7a8a7b" font-size="8" font-family="Plus Jakarta Sans,sans-serif">5 Mecânicos</text>
+      <text x="250" y="303" text-anchor="middle" fill="#7a8a7b" font-size="8" font-family="Plus Jakarta Sans,sans-serif">+ 1 Chefe</text>
+
+      <!-- Jaguará ele -->
+      <rect x="308" y="260" width="100" height="50" rx="6" fill="#141714" stroke="#4a5a4b" stroke-width="1"/>
+      <text x="358" y="278" text-anchor="middle" fill="#7a8a7b" font-size="8.5" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">JAGUARÁ</text>
+      <text x="358" y="291" text-anchor="middle" fill="#7a8a7b" font-size="8" font-family="Plus Jakarta Sans,sans-serif">5 Elétricos</text>
+      <text x="358" y="303" text-anchor="middle" fill="#7a8a7b" font-size="8" font-family="Plus Jakarta Sans,sans-serif">+ 1 Chefe</text>
+
+      <!-- Legend -->
+      <rect x="440" y="260" width="300" height="80" rx="8" fill="#141714" stroke="#2c342d" stroke-width="1"/>
+      <text x="590" y="280" text-anchor="middle" fill="#4a5a4b" font-size="9" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">LEGENDA</text>
+      <rect x="452" y="292" width="10" height="8" rx="2" fill="#007A3D"/>
+      <text x="468" y="300" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Gestão / Hierarquia</text>
+      <rect x="452" y="306" width="10" height="8" rx="2" fill="#1e2320" stroke="#00A651" stroke-width="1.5"/>
+      <text x="468" y="314" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">PCM (Planejamento)</text>
+      <rect x="570" y="292" width="10" height="8" rx="2" fill="#1a1a20" stroke="#9B6FD0" stroke-width="1.5"/>
+      <text x="586" y="300" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Fase 2 (futura)</text>
+      <rect x="570" y="306" width="10" height="8" rx="2" fill="#141714" stroke="#4a5a4b" stroke-width="1"/>
+      <text x="586" y="314" fill="#b8c2b9" font-size="8" font-family="Plus Jakarta Sans,sans-serif">Execução (24 pessoas)</text>
+    </svg>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 26. COORDINATOR ======================= -->
+<section id="coordinator" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">26</div>
+    <h2>Coordenador PCM</h2>
+  </div>
+
+  <p>
+    O Coordenador PCM é o <strong>dono do processo</strong> — responsável pelo funcionamento do sistema completo, garantindo que o ciclo de planejamento→programação→execução→análise funcione sem interrupção. É o principal interlocutor entre manutenção, operação, gerência e órgãos regulatórios.
+  </p>
+
+  <h3>Perfil Técnico</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Requisitos Obrigatórios</div>
+      <div class="card-body">
+        <ul>
+          <li>Engenheiro Elétrico ou Mecânico (preferencialmente)</li>
+          <li>Mínimo 5 anos em manutenção de usinas hidrelétricas</li>
+          <li>SAP PM ou CMMS equivalente</li>
+          <li>Conhecimento de TEIF/TEIP e regulatório ANEEL/ONS</li>
+          <li>NR-10 SEP (habilitado para alta tensão)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Requisitos Desejáveis</div>
+      <div class="card-body">
+        <ul>
+          <li>Certificação ISO 55001 (Gestão de Ativos)</li>
+          <li>Formação em RCM (Reliability Centered Maintenance)</li>
+          <li>Experiência com FMEA/FMECA</li>
+          <li>Inglês técnico (leitura de manuais fabricantes)</li>
+          <li>Experiência com PI Historian / SCADA</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <h3>Rotina Diária — Coordenador PCM</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Horário</th><th>Atividade</th><th>Duração</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>07:00</td><td>Leitura de e-mails/notificações SCADA — verificar se houve eventos noturnos</td><td>15 min</td></tr>
+        <tr><td>07:15</td><td>Alinhamento com Supervisores de Operação (presencial ou por rádio)</td><td>15 min</td></tr>
+        <tr><td>07:30</td><td>Revisão do Programador — OS do dia: tudo em ordem? Material separado?</td><td>30 min</td></tr>
+        <tr><td>08:00</td><td>Acompanhamento das OS em campo (visita física ou por rádio com Chefes de Equipe)</td><td>2 h</td></tr>
+        <tr><td>10:00</td><td>Aprovação de OS novas elaboradas pelos Planejadores</td><td>1 h</td></tr>
+        <tr><td>11:00</td><td>Análise de KPIs (CMMS/Power BI) — atualização do painel semanal</td><td>1 h</td></tr>
+        <tr><td>13:00</td><td>Reuniões diversas (Operação, Compras, Engenharia)</td><td>1 h</td></tr>
+        <tr><td>14:00</td><td>Quinta-feira: Reunião Semanal de Programação | outros dias: trabalho técnico</td><td>2 h</td></tr>
+        <tr><td>16:00</td><td>Encerramento de OS concluídas, verificação de pendências, relatório de ocorrências</td><td>1 h</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>O que o Coordenador NÃO Faz</h3>
+  <div class="callout warning">
+    <span class="callout-icon">🚫</span>
+    <div class="callout-body">
+      <div class="callout-title">Separação Clara de Funções</div>
+      <p class="callout-text">O Coordenador PCM <strong>não executa</strong> manutenção diretamente no campo. Não é o eletricista de plantão nem o mecânico de emergência. Não elabora as OS de detalhe (função dos Planejadores). Não faz pedido de compra diretamente (função do Programador/Almoxarifado). Sua função é <em>gerir o sistema</em>, não a atividade individual.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 27. PLANNER MEC ======================= -->
+<section id="planner-mec" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">27</div>
+    <h2>Planejador Mecânico</h2>
+  </div>
+
+  <p>
+    O Planejador Mecânico transforma necessidades de manutenção em <strong>pacotes de trabalho completos, executáveis e seguros</strong>. O resultado do seu trabalho é uma equipe de campo que nunca precisa improvisar.
+  </p>
+
+  <h3>Missão Central</h3>
+  <div class="callout success">
+    <span class="callout-icon">🎯</span>
+    <div class="callout-body">
+      <div class="callout-title">Princípio do Planejador Mecânico</div>
+      <p class="callout-text">"O papel aceita qualquer coisa — o campo tem realidade." Antes de planejar OS de alta complexidade (HH &gt; 16h ou equipamento desconhecido), <strong>visitar o local fisicamente</strong>. Validar com o Chefe de Equipe antes de liberar. Escopos incompletos geram paradas por falta de material.</p>
+    </div>
+  </div>
+
+  <h3>Responsabilidades Primárias</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>#</th><th>Responsabilidade</th><th>Entregável</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Elaborar OS de manutenção mecânica (preventiva e corretiva)</td><td>OS com escopo, HH, material, segurança</td></tr>
+        <tr><td>2</td><td>Manter o banco de planos preventivos atualizado</td><td>Planos por TAG crítico no CMMS</td></tr>
+        <tr><td>3</td><td>Definir lista de materiais e sobressalentes por OS</td><td>Lista de materiais com codificação</td></tr>
+        <tr><td>4</td><td>Realizar visita técnica (field-walk) antes de planejar OS complexas</td><td>Registro fotográfico + notas de campo</td></tr>
+        <tr><td>5</td><td>Apoiar planejamento de paradas e overhauls (escopo mecânico)</td><td>WBS do overhaul — parte mecânica</td></tr>
+        <tr><td>6</td><td>Interpretar laudos de análise de óleo e vibração</td><td>Recomendação técnica de ação</td></tr>
+        <tr><td>7</td><td>Manter histórico técnico dos equipamentos mecânicos</td><td>Cadastro atualizado no CMMS</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Perfil Técnico Ideal</h3>
+  <ul>
+    <li>Técnico em Mecânica (mínimo) ou Engenheiro Mecânico</li>
+    <li>Mínimo 3 anos em manutenção de equipamentos rotativos de grande porte</li>
+    <li>Conhecimento obrigatório: turbinas Francis, mancais de deslizamento (Babbitt), sistemas hidráulicos de alta pressão, análise de óleo</li>
+    <li>Certificações recomendadas: Lubrificação Industrial (ABRAMAN/SKF), NR-33 (espaço confinado — câmara espiral)</li>
+  </ul>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 28. PLANNER ELE ======================= -->
+<section id="planner-ele" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">28</div>
+    <h2>Planejador Elétrico</h2>
+  </div>
+
+  <p>
+    O Planejador Elétrico é responsável por todo o planejamento de manutenção da disciplina elétrica — geradores, transformadores, sistemas de proteção, excitação, painéis de CC/CA e iluminação industrial.
+  </p>
+
+  <h3>Perfil Técnico Ideal</h3>
+  <ul>
+    <li>Técnico em Eletrotécnica (mínimo) ou Engenheiro Elétrico</li>
+    <li>Mínimo 3 anos em manutenção elétrica de geradores síncronos ou transformadores de potência</li>
+    <li>NR-10 SEP obrigatório (habilitação para Sistema Elétrico de Potência)</li>
+    <li>Capacidade de interpretar diagramas de proteção (relés IEEE) e esquemas de CC/CA</li>
+    <li>Conhecimento de ensaios elétricos: IR, IP, Tan δ, PD, Hipot</li>
+    <li>Conhecimento de DGA: interpretação do Triângulo de Duval, limites IEC C57.104</li>
+  </ul>
+
+  <h3>Responsabilidades Específicas</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Ensaios e Laudos</div>
+      <div class="card-body">Planejar e coordenar ensaios elétricos periódicos (IR/IP, Tan δ, PD, RSO). Interpretar laudos de DGA dos transformadores. Emitir recomendação técnica baseada em tendência de dados históricos.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Proteção e Segurança</div>
+      <div class="card-body">Planejar testes de relés de proteção (manutenção detectiva). Garantir que todas as OS elétricas têm PT (Permissão de Trabalho) com LOTO definido conforme NR-10 SEP. Aprovar isolamento elétrico antes da execução.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Escovas e Excitação</div>
+      <div class="card-body">Controle rigoroso do desgaste de escovas (registro mensal de comprimento residual). Planejar troca preventiva antes de atingir 20% do comprimento original. Verificar temperatura de anéis coletores.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Transformadores</div>
+      <div class="card-body">Gestão do programa de DGA trimestral. Controle de nível e qualidade do óleo isolante (Rigidez Dielétrica, Teor de Água, acidez). Coordenação de serviços de filtração de óleo quando necessário.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 29. SCHEDULER ======================= -->
+<section id="scheduler" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">29</div>
+    <h2>Programador PCM</h2>
+  </div>
+
+  <p>
+    O Programador é o <strong>maestro da agenda semanal</strong> — transforma as OS planejadas em uma programação executável, alocando recursos, coordenando janelas operacionais com a Operação e garantindo que todos os insumos estejam disponíveis antes de liberar para execução.
+  </p>
+
+  <h3>Rotina Semanal do Programador</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Dia</th><th>Atividade Principal</th><th>Output</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Segunda</strong></td>
+          <td>Verificar CP da semana anterior; classificar OS não executadas (adiamento justificado ou desvio?); atualizar backlog</td>
+          <td>Relatório de CP semana N-1</td>
+        </tr>
+        <tr>
+          <td><strong>Terça</strong></td>
+          <td>Triagem de novas solicitações; verificar materiais disponíveis para OS da próxima semana; acionar Almoxarifado para itens em falta</td>
+          <td>Lista de materiais pendentes</td>
+        </tr>
+        <tr>
+          <td><strong>Quarta</strong></td>
+          <td>Confirmar janelas operacionais com Operação; montar pacotes de OS (OS + PT + lista de materiais + ferramental); pre-job briefing se OS complexa</td>
+          <td>Pacotes de trabalho preparados</td>
+        </tr>
+        <tr>
+          <td><strong>Quinta 14h</strong></td>
+          <td>Reunião de Programação Semanal — apresentar programação, ajustar com base nas discussões, obter aprovação do Coordenador</td>
+          <td>Programação semanal aprovada</td>
+        </tr>
+        <tr>
+          <td><strong>Sexta</strong></td>
+          <td>Emitir programação formal no CMMS; distribuir para Chefes de Equipe; garantir que OS P1/P2 têm material disponível</td>
+          <td>Programação semana N+1 emitida</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Métricas do Programador</h3>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">CP Semanal (meta)</div>
+      <div class="kpi-value green">≥ 85%</div>
+      <div class="kpi-sub">OS executadas / programadas</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">OS sem material (meta)</div>
+      <div class="kpi-value blue">&lt; 5%</div>
+      <div class="kpi-sub">OS com falta de material</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Lead time médio</div>
+      <div class="kpi-value yellow">&lt; 5 dias</div>
+      <div class="kpi-sub">Solicitação → emissão OS</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">OS em backlog</div>
+      <div class="kpi-value orange">≤ 4 sem</div>
+      <div class="kpi-sub">HH pendentes / cap. semanal</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 30. TEAM LEADS ======================= -->
+<section id="team-leads" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">30</div>
+    <h2>Chefes de Equipe</h2>
+  </div>
+
+  <p>
+    Os Chefes de Equipe (2 mecânicos + 2 elétricos) são o elo entre o planejamento e o campo. São os <strong>guardiões da segurança no campo</strong> — nenhuma atividade começa sem sua aprovação de que as condições de segurança foram atendidas.
+  </p>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Chefe de Equipe — Mecânica</div>
+      <div class="card-body">
+        <strong>Responsabilidades:</strong>
+        <ul style="margin-top:8px;">
+          <li>Receber OS do Programador e distribuir para a equipe</li>
+          <li>Verificar disponibilidade de materiais e ferramental antes de iniciar</li>
+          <li>Garantir LOTO mecânico conforme NR-12 e procedimento</li>
+          <li>Acompanhar execução de OS complexas (NR-33 em câmara espiral)</li>
+          <li>Registrar HH real, materiais consumidos e achados no campo</li>
+          <li>Encerrar OS com feedback de qualidade de execução</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Chefe de Equipe — Elétrica</div>
+      <div class="card-body">
+        <strong>Responsabilidades:</strong>
+        <ul style="margin-top:8px;">
+          <li>Verificar PT (Permissão de Trabalho) antes de qualquer intervenção elétrica</li>
+          <li>Garantir LOTO elétrico conforme NR-10 SEP</li>
+          <li>Supervisionar ensaios elétricos (IR, PI, Hipot)</li>
+          <li>Verificar se a equipe tem habilitação NR-10 adequada para o serviço</li>
+          <li>Registrar ocorrências elétricas no livro de turno</li>
+          <li>Comunicar anomalias ao Planejador Elétrico imediatamente</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout danger">
+    <span class="callout-icon">⛔</span>
+    <div class="callout-body">
+      <div class="callout-title">Autoridade de Parada — Chefe de Equipe</div>
+      <p class="callout-text">O Chefe de Equipe tem autoridade para <strong>paralisar qualquer serviço</strong> se identificar condição insegura — sem necessidade de aprovação prévia do Coordenador. A retomada, sim, exige autorização. Essa autoridade é inviolável e deve ser apoiada pela Gerência.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 31. RACI ======================= -->
+<section id="raci" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">31</div>
+    <h2>Matriz RACI</h2>
+  </div>
+
+  <p>A Matriz RACI define, para cada processo do PCM, quem é <strong>R</strong>esponsável pela execução, quem tem <strong>A</strong>utoridade de aprovação, quem deve ser <strong>C</strong>onsultado e quem deve ser <strong>I</strong>nformado.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Processo</th>
+          <th>Coord PCM</th>
+          <th>Plan Mec</th>
+          <th>Plan Elé</th>
+          <th>Program</th>
+          <th>Chefe Eq</th>
+          <th>Executores</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Elaborar plano preventivo (PMA)</td>
+          <td><span class="raci-a">A</span></td>
+          <td><span class="raci-r">R</span></td>
+          <td><span class="raci-r">R</span></td>
+          <td><span class="raci-c">C</span></td>
+          <td><span class="raci-c">C</span></td>
+          <td><span class="raci-i">I</span></td>
+        </tr>
+        <tr>
+          <td>Elaborar OS (detalhar escopo)</td>
+          <td><span class="raci-a">A</span></td>
+          <td><span class="raci-r">R</span></td>
+          <td><span class="raci-r">R</span></td>
+          <td><span class="raci-c">C</span></td>
+          <td><span class="raci-c">C</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Aprovar OS para execução</td>
+          <td><span class="raci-r">R</span>/<span class="raci-a">A</span></td>
+          <td><span class="raci-c">C</span></td>
+          <td><span class="raci-c">C</span></td>
+          <td><span class="raci-i">I</span></td>
+          <td><span class="raci-i">I</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Programar semana (alocar recursos)</td>
+          <td><span class="raci-a">A</span></td>
+          <td><span class="raci-c">C</span></td>
+          <td><span class="raci-c">C</span></td>
+          <td><span class="raci-r">R</span></td>
+          <td><span class="raci-c">C</span></td>
+          <td><span class="raci-i">I</span></td>
+        </tr>
+        <tr>
+          <td>Executar OS em campo</td>
+          <td><span class="raci-i">I</span></td>
+          <td><span class="raci-i">I</span></td>
+          <td><span class="raci-i">I</span></td>
+          <td><span class="raci-i">I</span></td>
+          <td><span class="raci-a">A</span></td>
+          <td><span class="raci-r">R</span></td>
+        </tr>
+        <tr>
+          <td>Encerrar OS (registrar HH real)</td>
+          <td><span class="raci-i">I</span></td>
+          <td><span class="raci-i">I</span></td>
+          <td><span class="raci-i">I</span></td>
+          <td><span class="raci-c">C</span></td>
+          <td><span class="raci-r">R</span>/<span class="raci-a">A</span></td>
+          <td><span class="raci-r">R</span></td>
+        </tr>
+        <tr>
+          <td>Calcular e reportar KPIs</td>
+          <td><span class="raci-r">R</span>/<span class="raci-a">A</span></td>
+          <td><span class="raci-c">C</span></td>
+          <td><span class="raci-c">C</span></td>
+          <td><span class="raci-r">R</span></td>
+          <td><span class="raci-i">I</span></td>
+          <td><span class="raci-i">I</span></td>
+        </tr>
+        <tr>
+          <td>Declarar parada ao ONS</td>
+          <td><span class="raci-r">R</span></td>
+          <td><span class="raci-c">C</span></td>
+          <td><span class="raci-c">C</span></td>
+          <td><span class="raci-i">I</span></td>
+          <td><span class="raci-i">I</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Gerir estoque de sobressalentes</td>
+          <td><span class="raci-a">A</span></td>
+          <td><span class="raci-r">R</span></td>
+          <td><span class="raci-r">R</span></td>
+          <td><span class="raci-r">R</span></td>
+          <td><span class="raci-c">C</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Analisar causa-raiz (RCA)</td>
+          <td><span class="raci-r">R</span>/<span class="raci-a">A</span></td>
+          <td><span class="raci-r">R</span></td>
+          <td><span class="raci-r">R</span></td>
+          <td><span class="raci-i">I</span></td>
+          <td><span class="raci-c">C</span></td>
+          <td><span class="raci-c">C</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:12px;color:var(--text-3);margin-top:-8px;"><span class="raci-r">R</span> = Responsável (executa) · <span class="raci-a">A</span> = Autoridade (aprova) · <span class="raci-c">C</span> = Consultado · <span class="raci-i">I</span> = Informado</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 32. ANEEL ONS ======================= -->
+<section id="aneel-ons" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">32</div>
+    <h2>ANEEL / ONS — Regulamentação</h2>
+  </div>
+
+  <h3>Principais Resoluções ANEEL</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Norma</th><th>Assunto</th><th>Impacto no PCM</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>RN 846/2019</strong></td>
+          <td>Indicadores de desempenho de usinas (TEIF, TEIP, TEIG)</td>
+          <td>Define as métricas de disponibilidade que o PCM deve controlar</td>
+        </tr>
+        <tr>
+          <td><strong>RN 1.059/2023</strong></td>
+          <td>Atualização do FID = TEIF + TEIP (rolling 60 meses)</td>
+          <td>Janela de 60 meses para cálculo do FID — histórico de 5 anos importa</td>
+        </tr>
+        <tr>
+          <td><strong>RN 1.033/2022</strong></td>
+          <td>Contrato de disponibilidade (CCEAR) — penalidades</td>
+          <td>Define multas por descumprimento de disponibilidade contratual</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>ONS — Submódulo 6.3 (Paradas Programadas)</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Prazo</th><th>Ação Obrigatória</th><th>Responsável</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>10 dias antes</strong></td><td>Notificar ONS via SAGER/POP com data, hora e duração prevista da parada</td><td>Coordenador PCM</td></tr>
+        <tr><td><strong>48h antes</strong></td><td>Confirmar a parada (ou solicitar cancelamento com justificativa)</td><td>Coordenador PCM</td></tr>
+        <tr><td><strong>Ao iniciar</strong></td>
+          <td>Registrar início da indisponibilidade no SAGER (data/hora exata)</td>
+          <td>Operador de Turno</td>
+        </tr>
+        <tr><td><strong>Ao concluir</strong></td><td>Registrar retorno da UG ao sistema com dados reais de duração</td><td>Operador de Turno</td></tr>
+        <tr><td><strong>Após retorno</strong></td><td>Preencher relatório de manutenção no SAGER com atividades executadas</td><td>Coordenador PCM</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 33. NR SAFETY ======================= -->
+<section id="nr-safety" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">33</div>
+    <h2>NRs de Segurança</h2>
+  </div>
+
+  <p>A conformidade com as Normas Regulamentadoras (NRs) do MTE é obrigatória para todos os trabalhos de manutenção. As NRs mais críticas para usinas hidrelétricas são:</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>NR</th><th>Título</th><th>Aplicação em Hidrelétricas</th><th>Habilitação</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>NR-10</strong></td>
+          <td>Segurança em Instalações e Serviços em Eletricidade</td>
+          <td>Todo trabalho elétrico. SEP (Sistema Elétrico de Potência): curso especial de 40h obrigatório</td>
+          <td>NR-10 básico (40h) + SEP (40h)</td>
+        </tr>
+        <tr>
+          <td><strong>NR-12</strong></td>
+          <td>Segurança no Trabalho em Máquinas e Equipamentos</td>
+          <td>Trabalho em turbinas, reguladores de velocidade, servo-motores — LOTO mecânico</td>
+          <td>Treinamento específico por máquina</td>
+        </tr>
+        <tr>
+          <td><strong>NR-33</strong></td>
+          <td>Segurança e Saúde em Espaços Confinados</td>
+          <td>Câmara espiral, caixa de engrenagens, dutos de ventilação — permissão de entrada</td>
+          <td>Vigia + Supervisor de entrada (16h)</td>
+        </tr>
+        <tr>
+          <td><strong>NR-35</strong></td>
+          <td>Trabalho em Altura</td>
+          <td>Trabalho em partes externas do gerador, manutenção de comportas</td>
+          <td>Treinamento teórico-prático (8h + reciclagem bienal)</td>
+        </tr>
+        <tr>
+          <td><strong>NR-6</strong></td>
+          <td>Equipamentos de Proteção Individual (EPI)</td>
+          <td>EPI obrigatórios por tipo de serviço (luvas isolantes, capacete, óculos, botas)</td>
+          <td>Treinamento de uso e CA vigente</td>
+        </tr>
+        <tr>
+          <td><strong>NR-7</strong></td>
+          <td>PCMSO — Programa de Controle Médico</td>
+          <td>Exames periódicos, especialmente para exposição a campos eletromagnéticos e ruído</td>
+          <td>ASO em dia para todos</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout danger">
+    <span class="callout-icon">⚡</span>
+    <div class="callout-body">
+      <div class="callout-title">LOTO — Lock Out / Tag Out</div>
+      <p class="callout-text">Antes de qualquer intervenção em equipamento energizado (elétrico ou mecânico), aplicar LOTO: <strong>Isolamento → Bloqueio (cadeado pessoal) → Verificação de ausência de tensão/pressão → Início do trabalho</strong>. Cada trabalhador aplica seu próprio cadeado. Nenhum supervisor pode retirar o cadeado de outro trabalhador sem sua autorização explícita.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 34. STANDARDS ======================= -->
+<section id="standards" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">34</div>
+    <h2>Normas IEC / ABNT / IEEE</h2>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Norma</th><th>Título resumido</th><th>Aplicação</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>IEC 60034</strong></td><td>Máquinas Elétricas Girantes</td><td>Requisitos construtivos e de ensaio dos geradores</td></tr>
+        <tr><td><strong>IEC 60076</strong></td><td>Transformadores de Potência</td><td>Especificação técnica e ensaios de transformadores</td></tr>
+        <tr><td><strong>IEC 60599</strong></td><td>DGA — Guia de interpretação</td><td>Limites de gases dissolvidos e métodos de diagnóstico</td></tr>
+        <tr><td><strong>IEC 61850</strong></td><td>Comunicação em subestações</td><td>Protocolo de comunicação entre IEDs de proteção</td></tr>
+        <tr><td><strong>IEEE C37.102</strong></td><td>Proteção de geradores síncronos</td><td>Funções de proteção (87G, 51V, 40, 27, 59...)</td></tr>
+        <tr><td><strong>IEEE C57.104</strong></td><td>DGA — Interpretação e limites</td><td>Limites de gases e ações recomendadas (norte-americano)</td></tr>
+        <tr><td><strong>IEEE 1434</strong></td><td>Ensaios de descarga parcial em máquinas</td><td>Procedimento de ensaio PD em geradores</td></tr>
+        <tr><td><strong>ISO 55001</strong></td><td>Sistemas de gestão de ativos</td><td>Framework de gestão que engloba o PCM</td></tr>
+        <tr><td><strong>ISO 20816</strong></td><td>Vibração mecânica em máquinas</td><td>Limites de vibração (Zonas A, B, C, D)</td></tr>
+        <tr><td><strong>ISO 4406</strong></td><td>Contagem de partículas em fluidos</td><td>Classificação de limpeza de óleos lubrificantes</td></tr>
+        <tr><td><strong>ABNT NBR 5462</strong></td><td>Confiabilidade e mantenabilidade</td><td>Terminologia de MTBF, MTTR, disponibilidade</td></tr>
+        <tr><td><strong>ABNT NBR 7274/7286</strong></td><td>Análise de óleo isolante</td><td>Procedimentos de ensaio de óleo de transformadores</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 35. ROADMAP ======================= -->
+<section id="roadmap" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">35</div>
+    <h2>Roadmap de Implementação — 90 Dias</h2>
+  </div>
+
+  <p>
+    O plano de implementação do PCM em Miranda e Jaguará está estruturado em <strong>3 fases de 30 dias</strong>, com entregas progressivas. O PCM estará operacional ao final do Dia 90, com ciclo semanal estável e primeiros KPIs sendo medidos.
+  </p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Fase</th><th>Semana</th><th>Objetivo</th><th>Entregas</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td rowspan="4"><strong>Fase 1</strong><br>Diagnóstico<br>(Dias 1-30)</td>
+          <td>1-2</td>
+          <td>Diagnóstico situacional</td>
+          <td>Relatório de gaps; inventário de equipamentos; levantamento de pendências</td>
+        </tr>
+        <tr>
+          <td>2-3</td>
+          <td>Primeiras reuniões de programação</td>
+          <td>1ª reunião semanal realizada; formulário mínimo de OS definido</td>
+        </tr>
+        <tr>
+          <td>3-4</td>
+          <td>Backlog quantificado</td>
+          <td>Total de HH pendentes em ambas as usinas; primeiros KPIs estimados</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Seleção da equipe PCM</td>
+          <td>Planejadores e Programador identificados/contratados; perfis definidos</td>
+        </tr>
+        <tr>
+          <td rowspan="4"><strong>Fase 2</strong><br>Estruturação<br>(Dias 31-60)</td>
+          <td>5-6</td>
+          <td>Equipe PCM operacional</td>
+          <td>Planejadores e Programador em atividade; treinamento CMMS iniciado</td>
+        </tr>
+        <tr>
+          <td>6-7</td>
+          <td>Planos preventivos top 10 TAGs</td>
+          <td>Primeiros planos de manutenção elaborados para equipamentos mais críticos</td>
+        </tr>
+        <tr>
+          <td>7-8</td>
+          <td>1ª programação formal</td>
+          <td>Programador emitindo programação toda sexta; OS via CMMS ou planilha</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>Dashboard mensal v1</td>
+          <td>KPIs básicos reportados à Gerência; calendário de paradas do semestre</td>
+        </tr>
+        <tr>
+          <td rowspan="4"><strong>Fase 3</strong><br>Consolidação<br>(Dias 61-90)</td>
+          <td>9-10</td>
+          <td>Ciclo semanal estável</td>
+          <td>Reunião toda quinta; programação toda sexta; CP medido semanalmente</td>
+        </tr>
+        <tr>
+          <td>10-11</td>
+          <td>Backlog sob controle</td>
+          <td>Backlog ≤ 4 semanas; tendência estável ou decrescente</td>
+        </tr>
+        <tr>
+          <td>11-12</td>
+          <td>Avaliação de CMMS</td>
+          <td>Recomendação formal (Fracttal / SAP PM) com justificativa e custo</td>
+        </tr>
+        <tr>
+          <td>12-13</td>
+          <td>Relatório de 90 dias</td>
+          <td>KPIs, evolução, lições aprendidas; proposta para próximos 90 dias</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Metas dos 90 Dias</h3>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">CP mínimo D90</div>
+      <div class="kpi-value green">≥ 80%</div>
+      <div class="kpi-sub">Meta conservadora de início</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Backlog D90</div>
+      <div class="kpi-value blue">≤ 4 sem</div>
+      <div class="kpi-sub">HH pendentes / cap. semanal</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Preventiva D90</div>
+      <div class="kpi-value yellow">≥ 60%</div>
+      <div class="kpi-sub">HH preventivo / total</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">OS no sistema D90</div>
+      <div class="kpi-value green">100%</div>
+      <div class="kpi-sub">Toda manutenção com OS</div>
+    </div>
+  </div>
+
+  <h3>Riscos e Mitigações</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Risco</th><th>Probabilidade</th><th>Impacto</th><th>Mitigação</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Dificuldade de contratar Planejadores qualificados</td>
+          <td><span class="tag tag-yellow">Média</span></td>
+          <td><span class="tag tag-red">Alto</span></td>
+          <td>Contratar empresa de consultoria para Fase 1; processo seletivo amplo com perfil flexível</td>
+        </tr>
+        <tr>
+          <td>Resistência cultural da equipe à mudança</td>
+          <td><span class="tag tag-orange">Alta</span></td>
+          <td><span class="tag tag-yellow">Médio</span></td>
+          <td>Comunicação ativa desde D1; apresentar benefícios práticos (menos corretiva); apoio da Gerência visível</td>
+        </tr>
+        <tr>
+          <td>Backlog inicial muito maior que estimado</td>
+          <td><span class="tag tag-yellow">Média</span></td>
+          <td><span class="tag tag-yellow">Médio</span></td>
+          <td>Contratar prestador de serviço temporário para "zerar" backlog em paralelo ao PCM</td>
+        </tr>
+        <tr>
+          <td>Ausência de CMMS adequado</td>
+          <td><span class="tag tag-red">Alta</span></td>
+          <td><span class="tag tag-yellow">Médio</span></td>
+          <td>Iniciar com planilha Excel estruturada; migrar para Fracttal em D60 sem esperar SAP PM</td>
+        </tr>
+        <tr>
+          <td>Evento de indisponibilidade forçada durante implantação</td>
+          <td><span class="tag tag-yellow">Média</span></td>
+          <td><span class="tag tag-red">Alto</span></td>
+          <td>Priorizar P1/P2 sempre; manter comunicação com ONS/ANEEL; Coordenador PCM on-call nos primeiros 90 dias</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 36. CRITICAL SITUATIONS ======================= -->
+<section id="critical-situations" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">36</div>
+    <h2>Situações Críticas e Como Agir</h2>
+  </div>
+
+  <p>Manual de decisão rápida para as situações de maior frequência e impacto nas usinas ENGIE.</p>
+
+  <h3>Trip de UG com Indisponibilidade Forçada</h3>
+  <div class="callout danger">
+    <span class="callout-icon">🔴</span>
+    <div class="callout-body">
+      <div class="callout-title">Cenário: Trip da proteção 87G (diferencial de gerador) às 03h00 — rearme falhou</div>
+      <p class="callout-text">1. Classificar como P1 imediatamente. 2. Acionar Planejador Elétrico para planejar inspeção emergencial. 3. Informar ONS — registrar TEIF. 4. Comunicar Gerente da Usina. 5. Acompanhar diagnóstico: trip real (falha de isolamento) vs falso trip (relé com defeito). 6. Após retorno: abrir RCA. <strong>Escalamento:</strong> se diagnóstico indicar falha grave do gerador (desmontagem), escalar para Gerência imediatamente.</p>
+    </div>
+  </div>
+
+  <h3>DGA com Acetileno em Transformador</h3>
+  <div class="callout warning">
+    <span class="callout-icon">⚠️</span>
+    <div class="callout-body">
+      <div class="callout-title">Cenário: C₂H₂ = 12 ppm em T1 Jaguará (era 3 ppm há 6 meses)</div>
+      <p class="callout-text">1. Classificar como P2 — urgente, não emergência imediata. 2. Com Planejador Elétrico: aplicar Triângulo de Duval. Calcular taxa: (12-3)/180 dias = 0,05 ppm/dia. 3. Solicitar nova coleta em 7 dias. 4. Se confirmar: programar desligamento para investigação. 5. Comunicar Gerência. 6. Verificar existência de transformador reserva. <strong>Escalamento:</strong> C₂H₂ &gt; 20 ppm ou taxa &gt; 0,1 ppm/dia → desligar imediatamente.</p>
+    </div>
+  </div>
+
+  <h3>Backlog Ultrapassou 6 Semanas</h3>
+  <div class="callout warning">
+    <span class="callout-icon">📊</span>
+    <div class="callout-body">
+      <div class="callout-title">Cenário: Backlog consolidado em 6,5 semanas (meta ≤ 4)</div>
+      <p class="callout-text">1. Analisar composição: onde está o acúmulo? 2. Identificar causa-raiz: falta de material? Janela de UG? Equipe subdimensionada? 3. Ação correspondente: reunião emergencial com Compras / negociar janelas / contratar prestador. 4. Comunicar Gerência imediatamente. <strong>Escalamento:</strong> Ao atingir 6 semanas — comunicar Gerência para liberação de recursos.</p>
+    </div>
+  </div>
+
+  <h3>TEIF Aproximando-se do Limite Contratual</h3>
+  <div class="callout danger">
+    <span class="callout-icon">📉</span>
+    <div class="callout-body">
+      <div class="callout-title">Cenário: TEIF rolling 60 meses em 3,8% — limite CCEAR = 4,5%</div>
+      <p class="callout-text">1. Analisar quais eventos "puxam" o TEIF (meses antigos saindo da janela de 60 meses). 2. Projetar: em quantos meses ultrapassa 4,5% na tendência atual? 3. Intensificar preditiva nos equipamentos que mais falharam. Considerar antecipar overhaul de equipamentos em condição degradada. 4. Comunicar Área Regulatória/Comercial ENGIE. <strong>Escalamento:</strong> 80% do limite (3,6%) → Área Regulatória. 90% (4,05%) → reunião com Gerência e Diretoria.</p>
+    </div>
+  </div>
+
+  <h3>Achado Grave em Parada de UG — Mudança de Escopo</h3>
+  <div class="callout warning">
+    <span class="callout-icon">🔍</span>
+    <div class="callout-body">
+      <div class="callout-title">Cenário: Parada prevista para 15 dias — cavitação severa encontrada em 3 pás do runner</div>
+      <p class="callout-text">1. Documentar imediatamente: fotos, medições, localização. 2. Avaliar severidade: profundidade &gt; 10mm em CA6NM exige reparo. 3. Definir escopo adicional: soldagem MIG/MAG + acabamento (+5 a +10 dias). 4. Comunicar ONS: nova previsão de retorno. 5. Comunicar Gerência: impacto em TEIP. 6. Acionar fornecedor especializado se não houver equipe de soldagem. <strong>Escalamento:</strong> Imediatamente ao confirmar o achado.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= 37. SPARE PARTS ======================= -->
+<section id="spare-parts" class="section-anchor">
+  <div class="section-header">
+    <div class="section-number">37</div>
+    <h2>Gestão de Sobressalentes</h2>
+  </div>
+
+  <p>
+    A gestão de sobressalentes é um dos maiores desafios do PCM hidrelétrico — itens críticos têm lead time de 18-36 meses (ex: tiristores de excitação, mancal de escora completo) e custo unitário elevado.
+  </p>
+
+  <h3>Classificação ABC de Sobressalentes</h3>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title">Classe A — Críticos</div>
+      <div class="card-body">Alto impacto na disponibilidade. Sem substituto imediato. Lead time longo (&gt; 90 dias). Exemplos: rolamento de escora, tiristores de excitação, relé de proteção IED, segmento de runner para reparo. <strong>Política: manter estoque mínimo de 1 unidade.</strong></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Classe B — Importantes</div>
+      <div class="card-body">Impacto moderado. Fornecedor alternativo disponível. Lead time 30-90 dias. Exemplos: escovas de carvão, vedações de eixo, filtros de óleo, válvulas solenoides da HPU. <strong>Política: estoque de consumo médio de 3 meses.</strong></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Classe C — Rotineiros</div>
+      <div class="card-body">Baixo impacto. Disponível localmente. Lead time &lt; 30 dias. Exemplos: óleos lubrificantes, parafusos, juntas, lâmpadas, fusíveis. <strong>Política: estoque mínimo baseado em consumo histórico.</strong></div>
+    </div>
+  </div>
+
+  <h3>Lead Time de Sobressalentes Críticos</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Item</th><th>Equipamento</th><th>Lead Time Típico</th><th>Fornecedor Principal</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Runner turbina Francis</td><td>Turbina</td><td>18–36 meses</td><td>Voith Hydro, Andritz</td></tr>
+        <tr><td>Mancal de escora completo</td><td>Turbina/Gerador</td><td>12–18 meses</td><td>Voith, Kingsbury</td></tr>
+        <tr><td>Tiristores de excitação</td><td>Excitação estática</td><td>6–12 meses</td><td>ABB, GE, Siemens</td></tr>
+        <tr><td>IED de proteção (relé digital)</td><td>Proteção</td><td>3–6 meses</td><td>ABB, SEL, Siemens</td></tr>
+        <tr><td>Transformador de força completo</td><td>Transformador</td><td>18–36 meses</td><td>WEG, ABB, GE Vernova</td></tr>
+        <tr><td>Selos do regulador de velocidade</td><td>Governor HPU</td><td>30–90 dias</td><td>Parker, Bosch Rexroth</td></tr>
+        <tr><td>Escovas de carvão do gerador</td><td>Gerador</td><td>30–60 dias</td><td>Mersen, SGL Carbon</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout info">
+    <span class="callout-icon">📦</span>
+    <div class="callout-body">
+      <div class="callout-title">Contrato de FSA — Field Service Agreement</div>
+      <p class="callout-text">Para itens com lead time &gt; 12 meses, considerar <strong>contratos FSA</strong> com fabricantes (Voith, Andritz, GE Vernova) que garantem peças prioritárias em caso de falha, com prazo e custo pré-negociados. O FSA reduz o impacto financeiro de eventos de longa duração e é uma boa prática em usinas com frota envelhecida como Jaguará.</p>
+    </div>
+  </div>
+
+  <h3>Fabricantes e Fornecedores Qualificados</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Fornecedor</th><th>Especialidade</th><th>Equipamentos Principais</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Voith Hydro</strong></td><td>OEM turbinas e geradores hidráulicos</td><td>Runners Francis, servomotores, reguladores</td></tr>
+        <tr><td><strong>Andritz Hydro</strong></td><td>OEM turbinas e geradores hidráulicos</td><td>Runners, mancais, geradores</td></tr>
+        <tr><td><strong>GE Vernova</strong></td><td>Sistemas de proteção, transformadores, APM</td><td>IEDs de proteção, transformadores, plataforma APM</td></tr>
+        <tr><td><strong>Siemens Energy</strong></td><td>Transformadores, sistemas de proteção e controle</td><td>Transformadores de força, SCADA</td></tr>
+        <tr><td><strong>WEG</strong></td><td>Motores, transformadores, drives</td><td>Transformadores, motores de serviço</td></tr>
+        <tr><td><strong>ABB Ability</strong></td><td>Sistemas de excitação, proteção, automação</td><td>Excitação estática, relés ABB REx</td></tr>
+        <tr><td><strong>Mersen / SGL Carbon</strong></td><td>Escovas de carvão grafitado</td><td>Escovas para anéis coletores</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Footer -->
+<div style="text-align:center; padding: 32px 0 16px; border-top: 1px solid var(--border); margin-top: 48px;">
+  <div style="font-size:13px; color:var(--text-3); margin-bottom:8px;">
+    <span style="color:var(--primary); font-weight:700;">ENGIE Brasil</span> — PCM UHE Miranda &amp; UHE Jaguará
+  </div>
+  <div style="font-size:12px; color:var(--text-4);">
+    Documentação técnica interna · Versão 1.0 · 2026 · Gerado por Digital AI
+  </div>
+  <div style="margin-top:16px; display:flex; justify-content:center; gap:24px; flex-wrap:wrap;">
+    <span style="font-size:11px; color:var(--text-4);">Miranda: 408 MW · 3 UGs · Rio Araguari</span>
+    <span style="color:var(--border-2)">|</span>
+    <span style="font-size:11px; color:var(--text-4);">Jaguará: 424 MW · 4 UGs · Rio Grande</span>
+    <span style="color:var(--border-2)">|</span>
+    <span style="font-size:11px; color:var(--text-4);">Total: 832 MW · 7 UGs</span>
+  </div>
+</div>
+
+</div><!-- end content-inner -->
+</main>
+</div><!-- end layout -->
+
+<script>
+// Smooth scroll + active nav on scroll
+const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+const sections = [];
+
+navLinks.forEach(link => {
+  const id = link.getAttribute('href').slice(1);
+  const el = document.getElementById(id);
+  if (el) sections.push({ el, link });
+});
+
+function updateActive() {
+  let current = sections[0];
+  const scrollY = window.scrollY + 100;
+  for (const s of sections) {
+    if (s.el.offsetTop <= scrollY) current = s;
+    else break;
+  }
+  navLinks.forEach(l => l.classList.remove('active'));
+  if (current) current.link.classList.add('active');
+}
+
+window.addEventListener('scroll', updateActive, { passive: true });
+updateActive();
+
+// Search
+const searchInput = document.getElementById('searchInput');
+searchInput.addEventListener('input', function() {
+  const q = this.value.toLowerCase();
+  navLinks.forEach(link => {
+    const text = link.textContent.toLowerCase();
+    link.style.display = text.includes(q) ? '' : 'none';
+  });
+  document.querySelectorAll('.nav-section-title').forEach(title => {
+    const section = title.parentElement;
+    const visible = [...section.querySelectorAll('.nav-link')].some(l => l.style.display !== 'none');
+    section.style.display = visible ? '' : 'none';
+  });
+  if (!q) {
+    navLinks.forEach(l => l.style.display = '');
+    document.querySelectorAll('.nav-section').forEach(s => s.style.display = '');
+  }
+});
+
+// Smooth scroll on nav click
+navLinks.forEach(link => {
+  link.addEventListener('click', function(e) {
+    const id = this.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if (el) {
+      e.preventDefault();
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>
