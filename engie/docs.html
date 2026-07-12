@@ -4014,5 +4014,274 @@ navLinks.forEach(link => {
   });
 });
 </script>
+
+<script>
+/* ============================================================
+   HIDRA PCM — Auto Tooltip Engine
+   Injeta ⓘ na 1ª ocorrência de cada termo por <section>
+   ============================================================ */
+(function() {
+  const TERMS = {
+    // ── MÉTRICAS REGULATÓRIAS ──────────────────────────────
+    'TEIF': {
+      title: 'Taxa de Indisponibilidade Forçada',
+      formula: 'TEIF = Σ(h_forçadas × pot) / (h_período × pot_total) × 100',
+      body: 'Percentual do tempo em que a usina ficou indisponível por falhas não planejadas.',
+      caveats: ['Meta ANEEL: TEIF ≤ 1,5%. Descumprimento gera Parcela Variável (PV) — redução de receita.', 'Apurado por unidade geradora (UG) pelo ONS.'],
+      fonte: 'ANEEL RN 614/2014 + ONS Módulo 14 (Submódulo 14.1)'
+    },
+    'TEIP': {
+      title: 'Taxa de Indisponibilidade Programada',
+      formula: 'TEIP = Σ(h_programadas × pot) / (h_período × pot_total) × 100',
+      body: 'Percentual do tempo em paradas planejadas (preventivas, revisões). TEIP elevado pode indicar bom planejamento.',
+      caveats: ['Meta ANEEL: TEIP ≤ 3,0%. Paradas devem ser aprovadas no PMI do ONS.', 'Parada que excede prazo aprovado é reclassificada como forçada (impacta TEIF).'],
+      fonte: 'ANEEL RN 614/2014 + ONS Módulo 14'
+    },
+    'FID': {
+      title: 'Fator de Indisponibilidade Declarada',
+      formula: 'FID = TEIF + TEIP (rolling médio dos últimos 60 meses)',
+      body: 'Indicador consolidado de indisponibilidade regulatória. Calculado como média móvel de 5 anos.',
+      caveats: ['Ultrapassar o FID contratual resulta em penalidades no CCEAR e possível descredenciamento no SIN.', 'Janela de 60 meses significa que eventos de 5 anos atrás ainda impactam o índice atual.'],
+      fonte: 'ANEEL RN 1.059/2023 — cláusulas de disponibilidade CCEAR'
+    },
+    'Disponibilidade': {
+      title: 'Disponibilidade da Usina',
+      formula: 'Disponibilidade = 100 − TEIF − TEIP (%)',
+      body: 'Percentual do tempo em que a usina estava pronta para gerar. Meta ENGIE Brasil: ≥ 99,5%.',
+      caveats: ['Disponibilidade ≠ fator de capacidade — usina disponível pode gerar 0 MWh se ONS não despachar.', 'Meta regulatória derivada: Disp ≥ 95,5% (TEIF ≤ 1,5% + TEIP ≤ 3,0%).'],
+      fonte: 'Calculada a partir de TEIF e TEIP apurados pelo ONS'
+    },
+    // ── MÉTRICAS DE CONFIABILIDADE ─────────────────────────
+    'MTBF': {
+      title: 'Mean Time Between Failures',
+      formula: 'MTBF = horas de operação / número de falhas',
+      body: 'Tempo médio entre falhas. MTBF crescente = confiabilidade melhorando.',
+      caveats: ['Calculado por equipamento — agregar por usina perde granularidade.', 'Exige registro preciso de cada falha no CMMS.'],
+      fonte: 'ABNT NBR 5462 / IEC 60050-191 — sem meta normativa ANEEL direta'
+    },
+    'MTTR': {
+      title: 'Mean Time To Repair',
+      formula: 'MTTR = Σ(horas de reparo) / número de eventos corretivos',
+      body: 'Tempo médio de reparo após falha — inclui diagnóstico, mobilização, reparo e testes.',
+      caveats: ['Tempo de espera de peça pode dominar em usinas remotas.', 'MTTR baixo nem sempre é positivo — pode indicar reparo paliativo sem tratar causa-raiz.'],
+      fonte: 'ABNT NBR 5462 — dados do CMMS'
+    },
+    'CP': {
+      title: 'Cumprimento do Plano',
+      formula: 'CP = (OS executadas no prazo / OS programadas) × 100',
+      body: 'Indica a disciplina do planejamento: quantas OS programadas foram realmente executadas no prazo previsto.',
+      caveats: ['Meta típica: CP ≥ 90%.', 'CP < 85% indica problema sistêmico: falta de material, equipe subdimensionada ou planejamento irrealista.', 'Deve ser calculado separadamente para preventivas e preditivas.'],
+      fonte: 'Indicador interno PCM — calculado no CMMS'
+    },
+    'Backlog': {
+      title: 'Backlog de Manutenção',
+      formula: 'Backlog (semanas) = Σ HH de todas OS pendentes / HH disponível por semana',
+      body: 'Quantidade de trabalho de manutenção acumulado (em semanas-equipe para execução). Semáforo: ≤ 2 sem = verde | 2–4 = amarelo | > 4 = vermelho.',
+      caveats: ['Backlog > 4 semanas indica equipe subdimensionada ou planejamento excessivo.', 'Backlog zero pode significar subplanejamento ou equipe ociosa — não é necessariamente bom.', 'Separar backlog por prioridade (P1-P5) para gestão eficaz.'],
+      fonte: 'Indicador interno PCM — calculado no CMMS'
+    },
+    // ── MERCADO DE ENERGIA ─────────────────────────────────
+    'PLD': {
+      title: 'Preço de Liquidação de Diferenças',
+      formula: 'Impacto/hora = Potência_MW × PLD_R$/MWh',
+      body: 'Preço do mercado spot de energia elétrica. Define o custo financeiro de cada hora de indisponibilidade forçada.',
+      caveats: ['Varia hora a hora: piso ~R$70/MWh (período úmido) até teto ~R$603/MWh (escassez hídrica).', 'Referência usada no doc: R$330/MWh (cenário médio-alto, período seco).'],
+      fonte: 'CCEE Infomercado — dados públicos, Submercado SE/CO'
+    },
+    'MRE': {
+      title: 'Mecanismo de Realocação de Energia',
+      formula: 'Distribui riscos hidrológicos entre geradores do pool nacional',
+      body: 'Sistema que redistribui a energia gerada entre usinas do SIN. Usinas que geram acima de sua Garantia Física "vendem" excedente para as que geraram abaixo.',
+      caveats: ['MRE pode mitigar o impacto financeiro real de indisponibilidade — se o pool tiver excedente, a perda é absorvida.', 'Em anos secos (GSF < 1), o MRE amplifica o impacto — geradores devem comprar energia no spot para cobrir déficit.'],
+      fonte: 'CCEE — Resolução Normativa ANEEL 109/2004'
+    },
+    'CCEAR': {
+      title: 'Contrato de Comercialização de Energia no Ambiente Regulado',
+      formula: 'Penalidade = Desvio_MWh × PLD_vigente',
+      body: 'Contrato de longo prazo entre geradoras e distribuidoras. Define energia assegurada, prazo e condições de penalidade por indisponibilidade.',
+      caveats: ['Descumprir disponibilidade contratual gera Parcela Variável (PV) — redução da receita mensal.', 'Renovação de concessão exige histórico de disponibilidade dentro dos limites CCEAR.'],
+      fonte: 'ANEEL RN 614/2014 + Lei 10.848/2004'
+    },
+    'GF': {
+      title: 'Garantia Física',
+      formula: 'GF (MWmédios) = energia assegurada certificada pela EPE/ANEEL',
+      body: 'Certificação oficial da capacidade de geração de uma usina, em MWmédios. Base para o contrato CCEAR.',
+      caveats: ['GF ≠ potência instalada — é a geração média certificada considerando hidrologia histórica.', 'Miranda: ~312 MWmédios estimados | Jaguará: ~324 MWmédios (não confirmado em fonte oficial).'],
+      fonte: 'EPE (Empresa de Pesquisa Energética) + ANEEL'
+    },
+    'SIN': {
+      title: 'Sistema Interligado Nacional',
+      formula: null,
+      body: 'Rede elétrica integrada que conecta geração e consumo em todo o Brasil. Operado pelo ONS. Quase 97% da capacidade instalada do país está no SIN.',
+      caveats: ['Usinas conectadas ao SIN devem seguir os Procedimentos de Rede do ONS.', 'Desconexão ou descredenciamento do SIN é a penalidade máxima por não conformidade.'],
+      fonte: 'ONS — Procedimentos de Rede'
+    },
+    'ACR': {
+      title: 'Ambiente de Contratação Regulada',
+      formula: null,
+      body: 'Mercado regulado onde distribuidoras compram energia via leilões da ANEEL. Contratos CCEAR de longo prazo (15-30 anos) com receita previsível.',
+      caveats: ['ACR oferece receita estável mas menos flexibilidade de preço.'],
+      fonte: 'Lei 10.848/2004 — Decreto 5.163/2004'
+    },
+    'ACL': {
+      title: 'Ambiente de Contratação Livre',
+      formula: null,
+      body: 'Mercado livre onde geradores negociam diretamente com consumidores livres. Preços definidos bilateralmente.',
+      caveats: ['ACL permite capturar PLD alto em períodos de escassez — maior risco e maior potencial de receita.'],
+      fonte: 'Lei 10.848/2004'
+    },
+    // ── MÉTODOS DE MANUTENÇÃO ──────────────────────────────
+    'RCM': {
+      title: 'Reliability Centered Maintenance',
+      formula: null,
+      body: 'Metodologia que define, para cada modo de falha de cada equipamento, qual estratégia de manutenção é mais adequada: preventiva, preditiva, corretiva ou nenhuma.',
+      caveats: ['Baseado nas 7 perguntas do RCM (Nowlan & Heap, 1978 / SAE JA1011).', 'Aplicação completa pode levar meses — priorizar equipamentos críticos (Criticidade A).'],
+      fonte: 'SAE JA1011 / IEC 60300-3-11 / NBR 5462'
+    },
+    'FMEA': {
+      title: 'Failure Mode and Effects Analysis',
+      formula: 'NPR = Severidade × Ocorrência × Detecção (1–10 cada)',
+      body: 'Análise sistemática dos modos de falha de um equipamento e seus efeitos na operação. Prioriza ações de mitigação pelo Número de Prioridade de Risco (NPR).',
+      caveats: ['NPR > 200 exige ação imediata.', 'FMECA é a extensão com análise de criticalidade (Criticality Analysis).'],
+      fonte: 'IEC 60812 / MIL-STD-1629A'
+    },
+    'FMECA': {
+      title: 'Failure Mode, Effects and Criticality Analysis',
+      formula: 'Criticalidade = Probabilidade × Severidade × Taxa de falha',
+      body: 'Extensão do FMEA que adiciona análise quantitativa de criticalidade. Mapeia probabilidade, severidade e impacto de cada modo de falha.',
+      caveats: ['Mais completo que FMEA — exige dados históricos de taxas de falha.', 'Padrão para equipamentos em setores de segurança crítica.'],
+      fonte: 'MIL-STD-1629A / IEC 60812'
+    },
+    'CbM': {
+      title: 'Manutenção Baseada em Condição',
+      formula: null,
+      body: 'Estratégia em que a manutenção é realizada com base no estado real do equipamento (medições contínuas), não em intervalos fixos. Resultado: manutenção apenas quando necessário.',
+      caveats: ['Requer sensores e sistemas de monitoramento online (vibração, temperatura, corrente, óleo).', 'Reduz custos de preventivas desnecessárias e evita falhas catastróficas.'],
+      fonte: 'ISO 13381 / IEC 60300-3-12'
+    },
+    // ── TÉCNICAS PREDITIVAS ────────────────────────────────
+    'DGA': {
+      title: 'Dissolved Gas Analysis — Análise de Gases Dissolvidos',
+      formula: null,
+      body: 'Análise dos gases dissolvidos no óleo do transformador para detectar falhas internas (descargas parciais, superaquecimento, arcos elétricos) antes que se tornem catastróficas.',
+      caveats: ['Gases-chave: H₂ (descarga parcial), CH₄, C₂H₄, C₂H₂ (arco elétrico — crítico!).', 'Método Triângulo de Duval classifica a falha em 7 zonas com base em CH₄, C₂H₄ e C₂H₂.', 'Frequência recomendada: semestral (rotina) + imediata se acetileno detectado.'],
+      fonte: 'IEC 60599 + IEEE C57.104 — limites de referência'
+    },
+    // ── SISTEMAS E FERRAMENTAS ─────────────────────────────
+    'CMMS': {
+      title: 'Computerized Maintenance Management System',
+      formula: null,
+      body: 'Software de gestão de manutenção. Gerencia OS, histórico de equipamentos, planos preventivos, estoque, custos e KPIs em um único sistema.',
+      caveats: ['Sem CMMS adequado, backlog e CP não podem ser calculados com confiabilidade.', 'Opções avaliadas: SAP PM, IBM Maximo, ENGEMAN, Fracttal.'],
+      fonte: 'Padrão de mercado — sem norma específica'
+    },
+    'ISO 55001': {
+      title: 'ISO 55001 — Gestão de Ativos',
+      formula: null,
+      body: 'Norma internacional para sistema de gestão de ativos físicos. Define requisitos para política, objetivos, planos e estrutura de gestão do ciclo de vida dos ativos.',
+      caveats: ['Certificação por auditoria de terceira parte (DNV, Bureau Veritas, TÜV).', 'PCM estruturado é condição necessária mas não suficiente para certificação ISO 55001.'],
+      fonte: 'ISO 55001:2014 — traduzida como ABNT NBR ISO 55001:2014'
+    },
+    'PMI': {
+      title: 'Programa Mensal de Intervenções',
+      formula: null,
+      body: 'Documento enviado ao ONS com antecedência mínima de 10 dias listando todas as paradas programadas do mês. Aprovação do ONS é obrigatória antes da parada.',
+      caveats: ['Parada não aprovada no PMI pode ser penalizada pelo ONS.', 'O ONS pode recusar ou renegociar datas se houver conflito com necessidade do SIN.'],
+      fonte: 'ONS — Submódulo 6.3 dos Procedimentos de Rede'
+    },
+    // ── MANUTENÇÃO ─────────────────────────────────────────
+    'Overhaul': {
+      title: 'Major Overhaul — Revisão Geral',
+      formula: null,
+      body: 'Parada de maior escopo no ciclo de vida de uma UG — desmontagem completa da turbina e gerador, ensaios extensivos e substituição/reparo de componentes com desgaste avançado.',
+      caveats: ['Miranda: ciclo de 8–10 anos. Jaguará: 6–8 anos (equipamentos mais antigos).', 'Planejamento deve iniciar com 12–18 meses de antecedência.', 'Duração típica: 45–90 dias por UG.'],
+      fonte: 'IEC 60034-18 + diretrizes Voith/Andritz para turbinas Francis e Kaplan'
+    },
+    'Tan δ': {
+      title: 'Fator de Dissipação (Tangente Delta)',
+      formula: 'Tan δ = R_paralela / X_C (componente resistiva / capacitiva)',
+      body: 'Medição da degradação dielétrica do isolamento do enrolamento do gerador/transformador. Indica contaminação, umidade ou envelhecimento do isolamento.',
+      caveats: ['Referência: Tan δ < 0,01 a 1 kV (acompanhar tendência — variação > 20% entre medições é alarme).', 'Medição anual recomendada; comparar com baseline da instalação.'],
+      fonte: 'IEC 60894 / IEEE 286 — diagnóstico de isolamento de máquinas elétricas'
+    }
+  };
+
+  function buildTooltipHTML(key, def) {
+    let html = `<span class="metric-tooltip" data-term="${key}">`;
+    html += `<span class="tooltip-icon" tabindex="0" role="button" aria-label="Informações sobre ${key}">ⓘ</span>`;
+    html += `<span class="tooltip-box">`;
+    html += `<strong>${def.title}</strong>`;
+    if (def.formula) html += `<div class="tooltip-formula">${def.formula}</div>`;
+    if (def.body) html += `<div style="margin-top:4px;">${def.body}</div>`;
+    if (def.caveats && def.caveats.length) {
+      def.caveats.forEach(c => { html += `<span class="tooltip-caveat">${c}</span>`; });
+    }
+    if (def.fonte) html += `<div class="tooltip-fonte">Fonte: ${def.fonte}</div>`;
+    html += `</span></span>`;
+    return html;
+  }
+
+  function injectTooltips() {
+    const containers = document.querySelectorAll('section, .kpi-grid, .kpi-card, table, .callout, .card, .grid-2, h2, h3');
+    const injectedPerSection = new Map();
+
+    containers.forEach(container => {
+      const sectionEl = container.closest('section');
+      const sectionId = (sectionEl && sectionEl.id) ? sectionEl.id : (container.id || 'root');
+
+      Object.entries(TERMS).forEach(([term, def]) => {
+        const key = sectionId + '|' + term;
+        if (injectedPerSection.has(key)) return;
+
+        const walker = document.createTreeWalker(
+          container,
+          NodeFilter.SHOW_TEXT,
+          {
+            acceptNode(node) {
+              const parent = node.parentElement;
+              if (!parent) return NodeFilter.FILTER_REJECT;
+              if (parent.closest('.metric-tooltip') || parent.closest('.tooltip-box') ||
+                  parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE') {
+                return NodeFilter.FILTER_REJECT;
+              }
+              return NodeFilter.FILTER_ACCEPT;
+            }
+          }
+        );
+
+        const textNodes = [];
+        let node;
+        while ((node = walker.nextNode())) textNodes.push(node);
+
+        for (const textNode of textNodes) {
+          const text = textNode.textContent;
+          const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const regex = new RegExp(`(?<![\\w])${escapedTerm}(?![\\w])`, '');
+          if (!regex.test(text)) continue;
+
+          const parent = textNode.parentElement;
+          if (!parent || parent.closest('.metric-tooltip')) continue;
+
+          const newHTML = parent.innerHTML.replace(
+            new RegExp(`(?<![\\w>])(${escapedTerm})(?![\\w<])`),
+            `$1${buildTooltipHTML(term, def)}`
+          );
+          if (newHTML !== parent.innerHTML) {
+            parent.innerHTML = newHTML;
+            injectedPerSection.set(key, true);
+            break;
+          }
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', injectTooltips);
+  } else {
+    injectTooltips();
+  }
+})();
+</script>
 </body>
 </html>
