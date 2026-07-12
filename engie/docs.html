@@ -931,6 +931,107 @@ ol li {
 
 /* === SCROLLSPY ACTIVE TRACKING === */
 .nav-link { cursor: pointer; }
+
+/* =========================================
+   TOOLTIPS INFORMATIVOS — MÉTRICAS PCM
+   ========================================= */
+.metric-tooltip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.metric-tooltip .tooltip-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--primary-muted);
+  border: 1px solid var(--primary-border);
+  color: var(--primary);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: help;
+  flex-shrink: 0;
+  vertical-align: middle;
+  transition: background .2s;
+}
+.metric-tooltip .tooltip-icon:hover { background: var(--primary); color: #fff; }
+.metric-tooltip .tooltip-box {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 280px;
+  max-width: 360px;
+  background: var(--surface-2);
+  border: 1px solid var(--primary-border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-2);
+  z-index: 9999;
+  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+  pointer-events: none;
+}
+.metric-tooltip .tooltip-box::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--primary-border);
+}
+.metric-tooltip .tooltip-icon:hover + .tooltip-box,
+.metric-tooltip .tooltip-icon:focus + .tooltip-box { display: block; }
+.tooltip-formula {
+  background: rgba(45,82,239,.1);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--primary);
+  margin: 6px 0;
+  word-break: break-word;
+}
+.tooltip-fonte {
+  font-size: 11px;
+  color: var(--text-4);
+  border-top: 1px solid var(--border-1);
+  margin-top: 8px;
+  padding-top: 6px;
+}
+.tooltip-caveat {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-top: 4px;
+}
+.tooltip-caveat::before { content: "⚠ "; }
+.sensitivity-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-top: 12px;
+}
+.sensitivity-table th {
+  background: var(--primary-dark, #0F1F5C);
+  color: #fff;
+  padding: 7px 10px;
+  text-align: left;
+  font-size: 11px;
+}
+.sensitivity-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border-1);
+  color: var(--text-2);
+}
+.sensitivity-table tr:nth-child(even) td { background: var(--surface-2); }
+.sensitivity-table tr.highlight-row td { background: rgba(45,82,239,.1); font-weight: 600; }
 </style>
 </head>
 <body>
@@ -1078,7 +1179,19 @@ ol li {
   </p>
 
   <p>
-    Nas usinas hidrelétricas da ENGIE Brasil, o PCM não é apenas uma ferramenta administrativa: é o sistema central que conecta planejamento técnico, operação, suprimentos, segurança e resultado financeiro. Uma hora de indisponibilidade forçada em Jaguará representa aproximadamente <strong>R$ 140.000</strong> em geração não realizada.
+    Nas usinas hidrelétricas da ENGIE Brasil, o PCM não é apenas uma ferramenta administrativa: é o sistema central que conecta planejamento técnico, operação, suprimentos, segurança e resultado financeiro. Uma hora de indisponibilidade forçada em Jaguará representa aproximadamente
+<span class="metric-tooltip">
+  <strong>R$ 140.000</strong>
+  <span class="tooltip-icon" tabindex="0">ⓘ</span>
+  <span class="tooltip-box">
+    <strong>Como é calculado</strong>
+    <div class="tooltip-formula">424 MW × R$330/MWh × 1h ≈ R$140.000</div>
+    <span class="tooltip-caveat">Estimativa para cenário PLD médio-alto (~R$330/MWh, período seco ou ano hidrológico desfavorável).</span>
+    <span class="tooltip-caveat">Varia de ~R$30k/hora (PLD piso, período úmido) até ~R$255k/hora (PLD teto, escassez hídrica).</span>
+    <div class="tooltip-fonte">Fonte PLD: CCEE Infomercado — Submercado SE/CO. Fonte normativa: ANEEL RN 614/2014.</div>
+  </span>
+</span>
+em geração não realizada. <a href="#sensibilidade-pld" style="font-size:12px;color:var(--primary);text-decoration:none;">Ver tabela de sensibilidade ↓</a>
   </p>
 
   <div class="kpi-grid">
@@ -1113,6 +1226,8 @@ ol li {
       <div class="kpi-sub">Comissionada em 1971</div>
     </div>
   </div>
+
+  <div id="sensibilidade-pld" style="margin-top:24px;"><h3 style="font-size:14px;font-weight:700;color:var(--text-1);margin-bottom:8px;">Sensibilidade do Custo/hora × PLD — Submercado SE/CO</h3><p style="font-size:13px;color:var(--text-3);margin-bottom:10px;">O custo real de 1h de indisponibilidade forçada varia conforme o PLD vigente. Fonte: CCEE Infomercado.</p><div class="tbl-wrap"><table class="sensitivity-table"><thead><tr><th>Cenário PLD</th><th>PLD (R$/MWh)</th><th>Jaguará (424 MW)</th><th>Miranda (408 MW)</th></tr></thead><tbody><tr><td>Piso — período úmido</td><td>R$ 70</td><td>~R$ 29.700/h</td><td>~R$ 28.600/h</td></tr><tr><td>Médio úmido (nov–abr)</td><td>R$ 150</td><td>~R$ 63.600/h</td><td>~R$ 61.200/h</td></tr><tr class="highlight-row"><td>⭐ Referência doc</td><td>R$ 330</td><td><strong>~R$ 140.000/h</strong></td><td><strong>~R$ 135.000/h</strong></td></tr><tr><td>Seco moderado (mai–out)</td><td>R$ 450</td><td>~R$ 190.800/h</td><td>~R$ 183.600/h</td></tr><tr><td>Teto — escassez hídrica</td><td>R$ 603</td><td>~R$ 255.500/h</td><td>~R$ 245.900/h</td></tr></tbody></table></div><p style="font-size:11px;color:var(--text-4);margin-top:8px;">* Potência instalada × PLD × 1h. Impacto real pode ser menor via MRE e contratos CCEAR. Norma: ANEEL RN 614/2014 + ONS Módulo 14.</p></div>
 
   <div class="callout success">
     <span class="callout-icon">⚡</span>
@@ -1683,14 +1798,30 @@ ol li {
       </thead>
       <tbody>
         <tr>
-          <td><strong>TEIF</strong></td>
+          <td><strong>TEIF</strong> <span class="metric-tooltip"><span class="tooltip-icon" tabindex="0">ⓘ</span>
+<span class="tooltip-box">
+  <strong>Taxa de Indisponibilidade Forçada</strong>
+  <div class="tooltip-formula">TEIF = Σ(h_forçadas × pot) / (h_período × pot_total) × 100</div>
+  Mede o tempo em que a usina ficou indisponível por falhas não planejadas.
+  <span class="tooltip-caveat">Meta ANEEL: TEIF ≤ 1,5% por usina.</span>
+  <span class="tooltip-caveat">Descumprimento gera redução de receita via Parcela Variável (PV).</span>
+  <div class="tooltip-fonte">Base normativa: ANEEL RN 614/2014 + ONS Módulo 14 (Submódulo 14.1).</div>
+</span></span></td>
           <td><code>HIF / HPO × 100</code></td>
           <td>≤ 2,0%</td>
           <td>≤ 1,5%</td>
           <td>ANEEL RN 1.059/2023</td>
         </tr>
         <tr>
-          <td><strong>TEIP</strong></td>
+          <td><strong>TEIP</strong> <span class="metric-tooltip"><span class="tooltip-icon" tabindex="0">ⓘ</span>
+<span class="tooltip-box">
+  <strong>Taxa de Indisponibilidade Programada</strong>
+  <div class="tooltip-formula">TEIP = Σ(h_programadas × pot) / (h_período × pot_total) × 100</div>
+  Mede paradas planejadas (manutenção preventiva, revisões). TEIP elevado pode indicar bom planejamento.
+  <span class="tooltip-caveat">Meta ANEEL: TEIP ≤ 3,0%. Paradas devem ser aprovadas no PMI do ONS.</span>
+  <span class="tooltip-caveat">Parada programada que excede prazo aprovado é reclassificada como forçada (impacta TEIF).</span>
+  <div class="tooltip-fonte">Base normativa: ANEEL RN 614/2014 + ONS Módulo 14.</div>
+</span></span></td>
           <td><code>HIP / HPO × 100</code></td>
           <td>≤ 4,0%</td>
           <td>≤ 3,0%</td>
@@ -1704,14 +1835,14 @@ ol li {
           <td>Contrato CCEAR</td>
         </tr>
         <tr>
-          <td><strong>MTBF</strong></td>
+          <td><strong>MTBF</strong> <span class="metric-tooltip"><span class="tooltip-icon" tabindex="0">ⓘ</span><span class="tooltip-box"><strong>Mean Time Between Failures</strong><div class="tooltip-formula">MTBF = horas de operação / nº de falhas</div>Tempo médio entre falhas. Valor crescente indica confiabilidade melhorando.<span class="tooltip-caveat">Exige registro preciso de todas as falhas no CMMS.</span><div class="tooltip-fonte">Indicador interno — sem meta normativa ANEEL direta. Ref: ABNT NBR 5462.</div></span></span></td>
           <td><code>∑ tempo entre falhas / N° falhas</code></td>
           <td>≥ 2.000 h</td>
           <td>≥ 4.000 h</td>
           <td>CMMS (interno)</td>
         </tr>
         <tr>
-          <td><strong>MTTR</strong></td>
+          <td><strong>MTTR</strong> <span class="metric-tooltip"><span class="tooltip-icon" tabindex="0">ⓘ</span><span class="tooltip-box"><strong>Mean Time To Repair</strong><div class="tooltip-formula">MTTR = Σ(horas de reparo) / nº de eventos corretivos</div>Tempo médio de reparo — inclui diagnóstico, mobilização e teste.<span class="tooltip-caveat">Tempo de espera de peça pode dominar em usinas remotas.</span><div class="tooltip-fonte">Indicador interno — calculado com dados do CMMS. Ref: ABNT NBR 5462.</div></span></span></td>
           <td><code>∑ tempo de reparo / N° reparos</code></td>
           <td>≤ 12 h</td>
           <td>≤ 8 h</td>
