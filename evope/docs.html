@@ -496,11 +496,12 @@
       </div>
       <div class="nav-section">
         <div class="nav-label">Segurança</div>
-        <a href="#guardrails"    class="nav-link">Guardrails (3 camadas)</a>
+        <a href="#guardrails"    class="nav-link">Guardrails (4 camadas)</a>
+        <a href="#guardrail0"    class="nav-link">· Filtro JS (Pré-LLM)</a>
         <a href="#guardrail1"    class="nav-link">· Entrada (Guardrails1)</a>
-        <a href="#guardrail2"    class="nav-link">· System Prompt</a>
+        <a href="#guardrail2"    class="nav-link">· System Prompt <span style="color:#F87171;font-size:10px">[removido]</span></a>
         <a href="#guardrail3"    class="nav-link">· Saída (Guardrails)</a>
-        <a href="#testes"        class="nav-link">Testes 11/11</a>
+        <a href="#testes"        class="nav-link">Testes 16/16</a>
       </div>
       <div class="nav-section">
         <div class="nav-label">Dados</div>
@@ -548,13 +549,13 @@
       <div class="kpi-grid">
         <div class="kpi-card blue">
           <div class="kpi-label">Total de Nós</div>
-          <div class="kpi-value">31</div>
+          <div class="kpi-value">35</div>
           <div class="kpi-sub">Workflow n8n</div>
         </div>
         <div class="kpi-card green">
           <div class="kpi-label">Camadas Guardrail</div>
-          <div class="kpi-value">3</div>
-          <div class="kpi-sub">Entrada + Prompt + Saída</div>
+          <div class="kpi-value">4</div>
+          <div class="kpi-sub">JS + Entrada + Prompt + Saída</div>
         </div>
         <div class="kpi-card amber">
           <div class="kpi-label">Tipos de Análise</div>
@@ -563,7 +564,7 @@
         </div>
         <div class="kpi-card blue">
           <div class="kpi-label">Testes Guardrail</div>
-          <div class="kpi-value">11/11</div>
+          <div class="kpi-value">16/16</div>
           <div class="kpi-sub">100% aprovados</div>
         </div>
       </div>
@@ -633,13 +634,19 @@
     Formatar Contexto para Chat (se nova análise) | Gate - Texto Puro (se follow-up)
     │
     Injetar Historico de Sessao
-    (injeta: _historyContext, _businessScope, _sessionId, _chatInput)
+    (injeta: _historyContext*, _businessScope, _sessionId, _chatInput)
+    │  * _historyContext lido via fallback direto — Guardrails1 descarta todos os campos
     │
-    Guardrails1 ← CAMADA 1: filtra INPUT do usuário (jailbreak + NSFW + topicalAlignment)
+    Filtro de Escopo ← CAMADA 0 (JavaScript, pré-LLM, determinístico)
+    ├─[BLOCKED: procedural]─► "Para orientações, consulte o suporte EVOPE"
+    ├─[BLOCKED: off-topic]──► "Responda apenas sobre dados de análise"
+    └─[PASS: pergunta válida]─►
+    │
+    Guardrails1 ← CAMADA 1: filtra INPUT (jailbreak + NSFW + topicalAlignment via LLM)
     ├─[PASS]──► AI Agent - Chat (gpt-5.4-nano)
     │           ├── Tools: Think, Calculator
     │           ├── Memory: PostgreSQL Chat Memory (_sessionId)
-    │           └── System: GUARDRAIL block + contexto completo
+    │           └── System: contexto + identidade (sem REGRAS INVIOLÁVEIS — removidas 2026-07-09)
     │                   │
     │           Guardrails ← CAMADA 3: filtra OUTPUT do AI Agent
     │           ├─[PASS]──► Salvar Historico → Salvar AI Response → Responder Chat
@@ -1428,14 +1435,21 @@ OR ($json.body.data.EmployeeList !== undefined)
         </table>
       </div>
 
-      <h3>Estrutura do System Message (3 blocos)</h3>
+      <h3>Estrutura do System Message (2 blocos)</h3>
       <div class="tbl-wrap">
         <table>
           <thead><tr><th>Bloco</th><th>Condicional</th><th>Conteúdo</th></tr></thead>
           <tbody>
-            <tr><td><strong>1 — Histórico</strong></td><td>Se <code>_historyContext</code> preenchido</td><td>"HISTÓRICO DESTA CONVERSA:" + contexto completo da análise com todos os dados de apps e colaboradores</td></tr>
-            <tr><td><strong>2 — Guardrail</strong></td><td>Se <code>_businessScope</code> preenchido</td><td>Bloco GUARDRAIL com lista de perguntas bloqueadas e instruções de HTML de bloqueio (Camada 2)</td></tr>
-            <tr><td><strong>3 — Identidade</strong></td><td>Sempre</td><td>Persona do Especialista EVOPE, instruções de formatação HTML, regras de ranking e tabelas</td></tr>
+            <tr>
+              <td><strong>1 — Histórico</strong></td>
+              <td>Se <code>_historyContext</code> disponível</td>
+              <td>"HISTÓRICO DESTA CONVERSA:" + histórico da análise anterior. Lido via fallback direto de <code>$('Injetar Historico de Sessao').first().json._historyContext</code> para contornar strip do Guardrails1.</td>
+            </tr>
+            <tr>
+              <td><strong>2 — Identidade</strong></td>
+              <td>Sempre</td>
+              <td>Persona do Especialista EVOPE, instruções de formatação HTML, regras de ranking e tabelas. <em>Nota: bloco GUARDRAIL de escopo removido em 2026-07-09 — substituído pelo Filtro de Escopo JS.</em></td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -1460,9 +1474,21 @@ sessionKey:    <span class="hl-n">{{ $('Injetar Historico de Sessao').first().js
     <section id="guardrails">
       <h2><span class="sec-num">10</span>Sistema de Guardrails <a class="anchor" href="#guardrails">#</a></h2>
 
-      <p>Arquitetura de <strong>defesa em profundidade com 3 camadas independentes</strong>. Garante que tanto o INPUT quanto o OUTPUT do agente estejam dentro do escopo autorizado por sessão.</p>
+      <p>Arquitetura de <strong>defesa em profundidade com 4 camadas independentes</strong>. A Camada 0 (Filtro de Escopo JavaScript) é determinística e pré-LLM — bloqueia perguntas procedurais e off-topic sem consumir tokens. As camadas 1–3 atuam em sequência sobre o INPUT e OUTPUT do agente.</p>
 
       <div class="guard-layers">
+        <div class="guard-layer">
+          <div class="guard-num" style="background:#7C3AED">C0</div>
+          <div class="guard-body">
+            <div class="guard-title">Filtro de Escopo — JavaScript Determinístico (Pré-LLM)</div>
+            <div class="guard-desc">Nó JavaScript posicionado antes de Guardrails1. Triagem por keyword/regex — sem LLM, sem custo de token. Define <code>_scopeBlocked=1/0</code>. Lê <code>body.chatInput</code> diretamente do Webhook.</div>
+            <div class="guard-tags">
+              <span class="pill" style="background:#7C3AED20;color:#7C3AED;border:1px solid #7C3AED40">procedural 25+ padrões</span>
+              <span class="pill" style="background:#7C3AED20;color:#7C3AED;border:1px solid #7C3AED40">off-topic 10+ padrões</span>
+              <span class="pill" style="background:#7C3AED20;color:#7C3AED;border:1px solid #7C3AED40">0 tokens LLM</span>
+            </div>
+          </div>
+        </div>
         <div class="guard-layer">
           <div class="guard-num">C1</div>
           <div class="guard-body">
@@ -1476,13 +1502,13 @@ sessionKey:    <span class="hl-n">{{ $('Injetar Historico de Sessao').first().js
           </div>
         </div>
         <div class="guard-layer">
-          <div class="guard-num">C2</div>
-          <div class="guard-body">
-            <div class="guard-title">System Prompt — Instrução interna ao LLM</div>
-            <div class="guard-desc">Bloco GUARDRAIL no system message do AI Agent - Chat. Instrui o próprio LLM a retornar HTML de bloqueio para perguntas fora do escopo. Atua como fallback de perguntas borderline.</div>
+          <div class="guard-num" style="background:#6B7280;opacity:0.6">C2</div>
+          <div class="guard-body" style="opacity:0.6">
+            <div class="guard-title">System Prompt — <span style="color:#F87171;font-weight:700">[REMOVIDO EM 2026-07-09]</span></div>
+            <div class="guard-desc">Bloco REGRAS INVIOLÁVEIS no system message foi removido. Gerava falsos positivos — o LLM bloqueava perguntas válidas como "qual o aplicativo com maior uso de teclado?". Responsabilidade transferida para Camada 0 (Filtro JS determinístico).</div>
             <div class="guard-tags">
-              <span class="pill pill-gray">lista de tópicos bloqueados</span>
-              <span class="pill pill-gray">HTML de bloqueio dinâmico</span>
+              <span class="pill pill-gray" style="text-decoration:line-through">lista de tópicos bloqueados</span>
+              <span class="pill" style="background:#F8717120;color:#F87171;border:1px solid #F8717140">substituído pelo Filtro JS (C0)</span>
             </div>
           </div>
         </div>
@@ -1502,7 +1528,30 @@ sessionKey:    <span class="hl-n">{{ $('Injetar Historico de Sessao').first().js
 
     <!-- ══ GUARDRAIL ENTRADA ══ -->
     <section id="guardrail1">
+      <h2><span class="sec-num">10.0</span>Camada 0 — Filtro de Escopo JavaScript <a class="anchor" href="#guardrail0">#</a></h2>
+
+      <p>Nó JavaScript (Code node) executado <strong>antes</strong> de qualquer LLM. Triagem determinística com 0 tokens consumidos.</p>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Atributo</th><th>Valor</th></tr></thead>
+          <tbody>
+            <tr><td>Tipo</td><td>Code node (JavaScript)</td></tr>
+            <tr><td>Posição no pipeline</td><td>Após <code>Injetar Historico de Sessao</code>, antes de <code>Guardrails1</code></td></tr>
+            <tr><td>Input lido</td><td><code>$('Webhook Chat').first().json.body.chatInput</code></td></tr>
+            <tr><td>Output (_scopeBlocked=1)</td><td>→ IF - Escopo Bloqueado? → Resposta imediata sem LLM</td></tr>
+            <tr><td>Output (_scopeBlocked=0)</td><td>→ Guardrails1 → AI Agent - Chat</td></tr>
+            <tr><td>Padrões procedurais</td><td>25+ keywords: "como cadastrar", "como faço para", "como atribuir horas", "qual tela do evope"…</td></tr>
+            <tr><td>Padrões off-topic</td><td>10+ keywords: "copa do mundo", "placar", "vai chover", "receita de"…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
       <h2><span class="sec-num">10.1</span>Camada 1 — Guardrails1 (Entrada) <a class="anchor" href="#guardrail1">#</a></h2>
+
+      <div class="callout callout-amber" style="background:#FEF3C720;border-left:3px solid #F59E0B;padding:10px 14px;margin-bottom:16px;border-radius:4px;font-size:0.85rem">
+        ⚠️ <strong>Comportamento crítico:</strong> O Guardrails1 descarta TODOS os campos do input e retorna apenas <code>{guardrailsInput, checks}</code>. Campos como <code>_historyContext</code>, <code>_businessScope</code> e <code>_sessionId</code> são perdidos. O AI Agent - Chat lê <code>_historyContext</code> diretamente de <code>$('Injetar Historico de Sessao').first().json._historyContext</code>.
+      </div>
 
       <div class="tbl-wrap">
         <table>
@@ -1521,8 +1570,11 @@ sessionKey:    <span class="hl-n">{{ $('Injetar Historico de Sessao').first().js
 
     <!-- ══ GUARDRAIL SYSTEM PROMPT ══ -->
     <section id="guardrail2">
-      <h2><span class="sec-num">10.2</span>Camada 2 — System Prompt <a class="anchor" href="#guardrail2">#</a></h2>
-      <p>Tópicos bloqueados por instrução direta ao LLM:</p>
+      <h2><span class="sec-num">10.2</span>Camada 2 — System Prompt <span style="color:#F87171;margin-left:8px;font-size:0.7em;font-weight:400">[REMOVIDO EM 2026-07-09]</span> <a class="anchor" href="#guardrail2">#</a></h2>
+      <div class="callout callout-red" style="background:#F8717120;border-left:3px solid #F87171;padding:10px 14px;margin-bottom:16px;border-radius:4px;font-size:0.85rem">
+        🚫 Esta camada foi <strong>removida</strong>. O bloco "REGRAS INVIOLÁVEIS" no system message causava falsos positivos — o LLM bloqueava perguntas válidas como "qual o aplicativo com maior uso de <strong>teclado</strong>?" por confundir com off-topic. A responsabilidade de bloqueio foi transferida integralmente para a <strong>Camada 0 (Filtro de Escopo JavaScript)</strong>, determinística.
+      </div>
+      <p style="opacity:0.5;text-decoration:line-through">Tópicos anteriormente bloqueados por instrução direta ao LLM:</p>
       <div class="tbl-wrap">
         <table>
           <thead><tr><th>Categoria Bloqueada</th><th>Exemplos</th></tr></thead>
