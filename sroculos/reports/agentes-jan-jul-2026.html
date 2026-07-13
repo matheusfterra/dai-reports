@@ -121,7 +121,7 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 .mini-bar-pct{font-size:.78rem;font-weight:600;color:var(--text-secondary);min-width:36px;text-align:right}
 
 /* Cost */
-.cost-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cost-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 @media(max-width:600px){.cost-grid{grid-template-columns:1fr}}
 .cost-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius-lg);padding:24px;position:relative}
 .cost-card.featured{border-color:var(--brand)}
@@ -208,17 +208,17 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(255,255
   <div class="kpi-grid">
     <div class="kpi-card">
       <div class="kpi-label">Conversas <span class="tip"><span class="tip-icon">?</span><div class="tip-box"><strong>conversations_count</strong><br>Fonte: Chat API v2<br><code>metric=conversations_count&amp;type=account&amp;group_by=month&amp;since=1767225600&amp;until=1783987199</code><br><br>Novas conversas criadas no período. O CSV de 10/07 registra 84.804 — diferença de 2 dias de coleta.</div></span></div>
-      <div class="kpi-value">87.169</div>
+      <div class="kpi-value">87.539</div>
       <div class="kpi-sub">conversas no período</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-label">Resoluções <span class="tip"><span class="tip-icon">?</span><div class="tip-box"><strong>resolutions_count</strong><br>Fonte: Chat API v2<br>Cada evento de resolução é contado separadamente. Uma conversa pode ser resolvida mais de uma vez (reaberta → resolvida), gerando ratio ~1,9 resoluções/conversa — comportamento esperado no fluxo de atendimento.</div></span></div>
-      <div class="kpi-value">167.052</div>
+      <div class="kpi-value">167.115</div>
       <div class="kpi-sub">eventos de resolução no período</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-label">Mensagens <span class="tip"><span class="tip-icon">?</span><div class="tip-box"><strong>incoming_messages_count + outgoing_messages_count</strong><br>Fonte: Chat API v2<br>Recebidas: 287.876<br>Enviadas: 349.712<br>Total: 637.588<br><br>Inclui todas as mensagens da plataforma (humanas, bot, templates automáticos).</div></span></div>
-      <div class="kpi-value">637.588</div>
+      <div class="kpi-label">Mensagens <span class="tip"><span class="tip-icon">?</span><div class="tip-box"><strong>incoming_messages_count + outgoing_messages_count</strong><br>Fonte: Chat API v2<br>Recebidas: 287.956<br>Enviadas: 349.830<br>Total: 637.786<br><br>Inclui todas as mensagens da plataforma (humanas, bot, templates automáticos).</div></span></div>
+      <div class="kpi-value">637.786</div>
       <div class="kpi-sub">mensagens trocadas (recebidas + enviadas)</div>
     </div>
     <div class="kpi-card">
@@ -291,8 +291,8 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(255,255
           <tr><td>Abril/26</td><td class="num">19.401</td><td class="num">32.006</td><td class="num">51.227</td><td class="num">66.101</td></tr>
           <tr><td>Maio/26</td><td class="num">13.480</td><td class="num">27.808</td><td class="num">45.579</td><td class="num">56.334</td></tr>
           <tr><td>Junho/26</td><td class="num">9.584</td><td class="num">30.230</td><td class="num">52.448</td><td class="num">60.020</td></tr>
-          <tr><td>Julho/26 <em style="font-size:.75rem;color:var(--text-muted)">(parcial)</em></td><td class="num">3.192</td><td class="num">10.992</td><td class="num">18.975</td><td class="num">22.389</td></tr>
-          <tr style="font-weight:700;background:var(--bg)"><td><strong>TOTAL</strong></td><td class="num hl">87.530</td><td class="num hl">167.052</td><td class="num hl">287.876</td><td class="num hl">349.712</td></tr>
+          <tr><td>Julho/26 <em style="font-size:.75rem;color:var(--text-muted)">(parcial)</em></td><td class="num">3.201</td><td class="num">10.992</td><td class="num">19.055</td><td class="num">22.507</td></tr>
+          <tr style="font-weight:700;background:var(--bg)"><td><strong>TOTAL</strong></td><td class="num hl">87.539</td><td class="num hl">167.115</td><td class="num hl">287.956</td><td class="num hl">349.830</td></tr>
         </tbody>
       </table>
     </div>
@@ -315,7 +315,7 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(255,255
           <th>% Total</th>
           <th class="num"><span class="tip">Msgs Enviadas<span class="tip-icon" style="margin-left:4px">?</span><div class="tip-box">outgoing_messages_count · type=agent&amp;id={id}<br>Mensagens recebidas por agente retornam 0 na API (bug do fork).</div></span></th>
           <th class="num"><span class="tip">Conversas<span class="tip-icon" style="margin-left:4px">?</span><div class="tip-box">conversations_count · type=agent&amp;id={id}</div></span></th>
-          <th class="num"><span class="tip">1ª Resposta<span class="tip-icon" style="margin-left:4px">?</span><div class="tip-box">avg_first_response_time · type=agent&amp;id={id}<br>Para humanos: inclui triagem + transferência da Iris.</div></span></th>
+          <th class="num"><span class="tip">1ª Resposta<span class="tip-icon" style="margin-left:4px">?</span><div class="tip-box">Mediana em horas úteis (08h–20h BRT) · n=34 Thais, n=321 Helen<br>Outliers >48h excluídos (conversas reabertas). API bruta: ~2h20min (inclui madrugada).</div></span></th>
         </tr>
       </thead>
       <tbody>
@@ -329,26 +329,26 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(255,255
         </tr>
         <tr>
           <td><div class="agent-name"><div class="agent-avatar av-thais">TH</div><div><strong>Thais</strong><br><span style="font-size:.75rem;color:var(--text-secondary)">Atendente · Humano</span></div></div></td>
-          <td class="num">42.686</td>
+          <td class="num">42.830</td>
           <td><div class="mini-bar-wrap"><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:25.6%"></div></div><div class="mini-bar-pct">25,6%</div></div></td>
           <td class="num">86.948</td>
           <td class="num">25.750</td>
-          <td class="num">~2h20min</td>
+          <td class="num" style="color:var(--success);font-weight:600"><span class="tip">~1 min<span class="tip-icon" style="margin-left:3px">?</span><div class="tip-box">Mediana horas úteis: 1,2 min (n=34)<br>P25=0,4min · P75=9,9min · P90=177min<br>API bruta sem filtro: 2h27min</div></span></td>
         </tr>
         <tr>
           <td><div class="agent-name"><div class="agent-avatar av-helen">HE</div><div><strong>Helen</strong><br><span style="font-size:.75rem;color:var(--text-secondary)">Atendente · Humano</span></div></div></td>
-          <td class="num">31.475</td>
+          <td class="num">32.204</td>
           <td><div class="mini-bar-wrap"><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:18.8%"></div></div><div class="mini-bar-pct">18,8%</div></div></td>
           <td class="num">130.475</td>
-          <td class="num">13.749</td>
-          <td class="num">~2h20min</td>
+          <td class="num">13.752</td>
+          <td class="num" style="color:var(--brand);font-weight:600"><span class="tip">~9 min<span class="tip-icon" style="margin-left:3px">?</span><div class="tip-box">Mediana horas úteis: 9,4 min (n=321)<br>P25=0,4min · P75=69,2min · P90=239,8min<br>API bruta sem filtro: 2h20min</div></span></td>
         </tr>
       </tbody>
     </table>
   </div>
   <div class="info-box">
     <span>ℹ️</span>
-    <span><strong>Tempo de resposta dos atendentes:</strong> A Iris responde primeiro em todos os atendimentos. O tempo exibido para Thais e Helen representa o tempo até assumirem após a triagem da Iris. Para rastreamento mais preciso, recomenda-se aplicar <em>transferencia_time</em> de forma consistente em todas as conversas transferidas.</span>
+    <span><strong>Tempo de resposta corrigido para horas úteis (08h–20h BRT):</strong> A API bruta (~2h20min) incluía madrugada e fins de semana. Valores exibidos são <em>medianas</em> calculadas sobre amostras reais, excluindo conversas reabertas após 48h. Para Thais: n=34 conversas analisadas; para Helen: n=321. P90 reflete picos de atendimento concentrado.</span>
   </div>
 </div>
 
@@ -373,19 +373,19 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(255,255
       <div class="chart-card-header"><div class="chart-card-title">Top Canais por Volume</div></div>
       <div style="overflow-x:auto;max-height:320px;overflow-y:auto">
         <table class="data-table">
-          <thead><tr><th>Canal</th><th class="num">Conversas</th><th class="num">Resoluções</th></tr></thead>
+          <thead><tr><th>Canal</th><th class="num">Conversas</th><th class="num"><span class="tip">Msgs Recebidas<span class="tip-icon" style="margin-left:3px">?</span><div class="tip-box">incoming_messages_count · API v2 · type=inbox&amp;id={id}</div></span></th><th class="num"><span class="tip">Msgs Enviadas<span class="tip-icon" style="margin-left:3px">?</span><div class="tip-box">outgoing_messages_count · API v2 · type=inbox&amp;id={id}</div></span></th><th class="num">Resoluções</th></tr></thead>
           <tbody>
-            <tr><td>PRE_09 (WA)</td><td class="num">31.964</td><td class="num">37.316</td></tr>
-            <tr><td>Instagram DM</td><td class="num">16.648</td><td class="num">23.079</td></tr>
-            <tr><td>PRE_03_Oficial (WA)</td><td class="num">12.475</td><td class="num">23.554</td></tr>
-            <tr><td>PRE_07 (WA)</td><td class="num">7.722</td><td class="num">30.069</td></tr>
-            <tr><td>POS_13_Oficial (WA)</td><td class="num">4.081</td><td class="num">8.679</td></tr>
-            <tr><td>PRE_10_Oficial (WA)</td><td class="num">3.338</td><td class="num">8.769</td></tr>
-            <tr><td>PRE_08 (WA)</td><td class="num">3.158</td><td class="num">9.977</td></tr>
-            <tr><td>POS_05_Oficial (WA)</td><td class="num">1.256</td><td class="num">2.950</td></tr>
-            <tr><td>POS_09_Oficial (WA)</td><td class="num">1.020</td><td class="num">3.002</td></tr>
-            <tr><td>POS_02 (WA)</td><td class="num">1.002</td><td class="num">3.397</td></tr>
-            <tr style="font-weight:700;background:var(--bg)"><td><strong>Total (excl. teste)</strong></td><td class="num"><strong>84.095</strong></td><td class="num"><strong>158.499</strong></td></tr>
+            <tr><td>PRE_09 (WA)</td><td class="num">31.964</td><td class="num">79.301</td><td class="num">94.756</td><td class="num">37.316</td></tr>
+            <tr><td>Instagram DM</td><td class="num">16.648</td><td class="num">34.681</td><td class="num">52.921</td><td class="num">23.079</td></tr>
+            <tr><td>PRE_03_Oficial (WA)</td><td class="num">12.475</td><td class="num">45.337</td><td class="num">45.832</td><td class="num">23.554</td></tr>
+            <tr><td>PRE_07 (WA)</td><td class="num">7.722</td><td class="num">41.100</td><td class="num">52.615</td><td class="num">30.069</td></tr>
+            <tr><td>POS_13_Oficial (WA)</td><td class="num">4.081</td><td class="num">14.986</td><td class="num">15.818</td><td class="num">8.679</td></tr>
+            <tr><td>PRE_10_Oficial (WA)</td><td class="num">3.338</td><td class="num">15.638</td><td class="num">15.472</td><td class="num">8.769</td></tr>
+            <tr><td>PRE_08 (WA)</td><td class="num">3.158</td><td class="num">14.033</td><td class="num">20.305</td><td class="num">9.977</td></tr>
+            <tr><td>POS_05_Oficial (WA)</td><td class="num">1.256</td><td class="num">4.936</td><td class="num">5.541</td><td class="num">2.950</td></tr>
+            <tr><td>POS_09_Oficial (WA)</td><td class="num">1.020</td><td class="num">5.624</td><td class="num">6.153</td><td class="num">3.002</td></tr>
+            <tr><td>POS_02 (WA)</td><td class="num">1.002</td><td class="num">5.752</td><td class="num">6.736</td><td class="num">3.397</td></tr>
+            <tr style="font-weight:700;background:var(--bg)"><td><strong>Total (excl. teste)</strong></td><td class="num"><strong>84.095</strong></td><td class="num"><strong>261.388</strong></td><td class="num"><strong>316.149</strong></td><td class="num"><strong>158.499</strong></td></tr>
           </tbody>
         </table>
       </div>
@@ -434,9 +434,21 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(255,255
   <div class="section-header">
     <span class="section-title">Projeção de Custo Meta</span>
     <div class="section-divider"></div>
-    <span class="section-meta"><span class="tip">Vigência a partir de outubro/2026<span class="tip-icon" style="margin-left:6px">?</span><div class="tip-box">Mudanças na precificação Meta WhatsApp Business API vigentes out/2026. Projeções baseadas nos volumes reais de Jan–Jun/2026. Cotação: USD 1 = BRL 5,75 (média Jun/2026).</div></span></span>
+    <span class="section-meta"><span class="tip">Cenário A (atual) → B e C a partir de out/2026<span class="tip-icon" style="margin-left:6px">?</span><div class="tip-box">Cenário A: sem cobrança (service convs janela 24h). Cenários B e C vigentes out/2026.<br>Projeções baseadas nos volumes reais de Jan–Jul/2026. Cotação: USD 1 = BRL 5,75 (média Jun/2026).</div></span></span>
   </div>
   <div class="cost-grid">
+    <div class="cost-card" style="background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 100%);border-color:#86efac">
+      <div class="cost-scenario" style="color:#15803d">Cenário A</div>
+      <div class="cost-title" style="color:#166534">Situação Atual</div>
+      <div class="cost-value" style="color:#16a34a">R$ 0<span style="font-size:1rem;font-weight:500">/mês</span></div>
+      <div class="cost-value-sub" style="color:#15803d">Vigente até outubro/2026</div>
+      <div style="margin-top:12px;background:#bbf7d0;border-radius:6px;padding:10px 12px;font-size:.82rem;color:#14532d;font-weight:600">Meta não cobra conversas de serviço na janela de 24h</div>
+      <div class="cost-divider"></div>
+      <div style="font-size:.8rem;color:#166534;line-height:1.7">
+        <div><strong>Como funciona:</strong> Conversas iniciadas pelo cliente são classificadas como <em>service conversations</em> e não geram cobrança enquanto o atendimento ocorre dentro da janela de 24h.</div>
+        <div style="margin-top:8px;font-size:.77rem;color:#15803d">⚠️ A partir de outubro/2026 essa isenção é removida — Cenários B e C entram em vigor.</div>
+      </div>
+    </div>
     <div class="cost-card">
       <div class="cost-scenario">Cenário B</div>
       <div class="cost-title">Meta Service Messages</div>
@@ -461,21 +473,17 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(255,255
       <div class="cost-badge">Alternativa mais eficiente</div>
       <div class="cost-scenario">Cenário C</div>
       <div class="cost-title">Meta Business Agent</div>
-      <div class="cost-value" style="color:var(--brand)">R$ 101<span style="font-size:1rem;font-weight:500">/mês</span></div>
-      <div class="cost-value-sub"><span class="tip">USD 17,58/mês em média · USD 2/1M tokens<span class="tip-icon" style="margin-left:4px">?</span><div class="tip-box">conversations_count real × estimativa de 555 tokens/conversa (1,85 msgs × 150 tokens × 2 direções) × USD 2/1M. <em>Compatibilidade com Chat a verificar.</em></div></span></div>
-      <div style="margin-top:12px;background:var(--brand-accent);border-radius:6px;padding:10px 12px;font-size:.82rem;color:var(--brand-dark);font-weight:600">23,6× mais eficiente que o Cenário B</div>
+      <div class="cost-value" style="color:var(--brand)">R$ 654<span style="font-size:1rem;font-weight:500">/mês</span></div>
+      <div class="cost-value-sub"><span class="tip">4 turns típico · pior caso até R$ 1.104/mês<span class="tip-icon" style="margin-left:4px">?</span><div class="tip-box"><strong>Pior cenário (histórico acumulado por turn):</strong><br>Sys prompt: 800 tokens · User msg: 50 tokens · Bot msg: 80 tokens<br>4 turns: Turn1=850 · Turn2=980 · Turn3=1.110 · Turn4=1.240 = 4.180 tokens/conv<br>6 turns (conservador): + 2 turns extras = 7.050 tokens/conv<br>Custo: tokens × USD 2/1M × BRL 5,75<br>Média: 13.614 conv/mês (Jan–Jul API real)</div></span></div>
+      <div style="margin-top:12px;background:var(--brand-accent);border-radius:6px;padding:10px 12px;font-size:.82rem;color:var(--brand-dark);font-weight:600">3,6× mais eficiente que o Cenário B (típico)</div>
       <div class="cost-divider"></div>
-      <div style="font-size:.78rem;font-weight:700;color:var(--text-secondary);margin-bottom:10px">Detalhamento Mensal</div>
+      <div style="font-size:.78rem;font-weight:700;color:var(--text-secondary);margin-bottom:10px">Sub-cenários (4 vs 6 turns)</div>
       <table class="mct">
-        <thead><tr><th>Mês</th><th class="num">Conversas</th><th class="num">Custo BRL</th></tr></thead>
+        <thead><tr><th>Sub-cenário</th><th class="num">Tokens/conv</th><th class="num">Custo BRL/mês</th></tr></thead>
         <tbody>
-          <tr><td>Jan/26</td><td class="num">5.154</td><td class="num">R$ 33</td></tr>
-          <tr><td>Fev/26</td><td class="num">15.821</td><td class="num">R$ 101</td></tr>
-          <tr><td>Mar/26</td><td class="num">20.898</td><td class="num">R$ 133</td></tr>
-          <tr><td>Abr/26</td><td class="num">19.401</td><td class="num">R$ 124</td></tr>
-          <tr><td>Mai/26</td><td class="num">13.480</td><td class="num">R$ 86</td></tr>
-          <tr><td>Jun/26</td><td class="num">9.584</td><td class="num">R$ 61</td></tr>
-          <tr><td><strong>Média Fev–Jun</strong></td><td class="num"><strong>15.837</strong></td><td class="num"><strong>R$ 101</strong></td></tr>
+          <tr><td>4 turns (típico)</td><td class="num">4.180</td><td class="num" style="color:var(--success);font-weight:700">R$ 654</td></tr>
+          <tr><td>6 turns (pior caso)</td><td class="num">7.050</td><td class="num" style="color:#DC2626;font-weight:700">R$ 1.104</td></tr>
+          <tr style="font-size:.75rem;color:var(--text-muted)"><td colspan="3">vs estimativa anterior (555 tok): R$ 89/mês — subestimada</td></tr>
         </tbody>
       </table>
     </div>
@@ -507,8 +515,8 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(255,255
           <div>· <strong>Julho parcial</strong> — dados até 13/07/2026</div>
           <div>· <strong>Resoluções &gt; Conversas</strong> — ratio ~1,9× esperado (conversas reabertas)</div>
           <div>· <strong>Iris = não atribuído</strong> — bot sem ID de agente; métricas por subtração</div>
-          <div>· <strong>1ª Resposta humanos</strong> — inclui triagem da Iris; usar label <em>transferencia_time</em> para granularidade</div>
-          <div>· <strong>Cenário C</strong> — requer verificação de compatibilidade com Chat</div>
+          <div>· <strong>1ª Resposta humanos</strong> — valores filtrados para horas úteis (08h–20h BRT); mediana Thais=1,2min, Helen=9,4min; n=34 e 321 conversas amostradas</div>
+          <div>· <strong>Cenário C</strong> — modelo cumulativo: sys_prompt (800tok) + histórico acumulado por turn; 4 turns típicos = 4.180 tok/conv</div>
           <div>· <strong>Cotação</strong> — USD/BRL 5,75 (referência Jun/2026)</div>
         </div>
       </div>
@@ -532,10 +540,10 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(255,255
 
 <script>
 const months=['Jan','Fev','Mar','Abr','Mai','Jun','Jul*'];
-const conv=[5154,15821,20898,19401,13480,9584,3192];
+const conv=[5154,15821,20898,19401,13480,9584,3201];
 const resol=[8938,24736,32342,32006,27808,30230,10992];
-const msgIn=[16740,47665,55242,51227,45579,52448,18975];
-const msgOut=[22143,54419,68306,66101,56334,60020,22389];
+const msgIn=[16740,47665,55242,51227,45579,52448,19055];
+const msgOut=[22143,54419,68306,66101,56334,60020,22507];
 
 const CTX=document.getElementById('monthlyChart').getContext('2d');
 let MC=null;
