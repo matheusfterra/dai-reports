@@ -434,7 +434,7 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(255,255
   <div class="section-header">
     <span class="section-title">Projeção de Custo Meta</span>
     <div class="section-divider"></div>
-    <span class="section-meta"><span class="tip">Cenário A (atual) → B e C a partir de out/2026<span class="tip-icon" style="margin-left:6px">?</span><div class="tip-box">Cenário A: sem cobrança (service convs janela 24h). Cenários B e C vigentes out/2026.<br>Projeções baseadas nos volumes reais de Jan–Jul/2026. Cotação: USD 1 = BRL 5,75 (média Jun/2026).</div></span></span>
+    <span class="section-meta"><span class="tip">Cenário A (atual) → B e C a partir de out/2026<span class="tip-icon" style="margin-left:6px">?</span><div class="tip-box">Cenário A: sem cobrança (service convs janela 24h). Cenários B e C vigentes out/2026.<br>Projeções baseadas nos volumes reais de Jan–Jul/2026. Cotação: USD 1 = BRL 5,75 (média Jun/2026).<br><br>🎯 <strong>Gratuidade por campanha:</strong> Clientes que chegam via anúncios Click-to-WhatsApp (Facebook/Instagram Ads) abrem uma janela de <strong>72h gratuita</strong> — sem cobrança de service message nessa janela. Se parte relevante das conversas vem de campanhas pagas, o custo real dos Cenários B e C pode ser menor.</div></span></span>
   </div>
   <div class="cost-grid">
     <div class="cost-card" style="background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 100%);border-color:#86efac">
@@ -453,7 +453,7 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(255,255
       <div class="cost-scenario">Cenário B</div>
       <div class="cost-title">Meta Service Messages</div>
       <div class="cost-value">R$ 2.386<span style="font-size:1rem;font-weight:500">/mês</span></div>
-      <div class="cost-value-sub"><span class="tip">USD 415/mês em média · USD 0,0068/msg<span class="tip-icon" style="margin-left:4px">?</span><div class="tip-box">outgoing_messages_count real (Jan–Jun). Média: 61.036 msgs/mês × USD 0,0068 = USD 415,04 × 5,75.</div></span></div>
+      <div class="cost-value-sub"><span class="tip">USD 415/mês em média · USD 0,0068/msg<span class="tip-icon" style="margin-left:4px">?</span><div class="tip-box">outgoing_messages_count real (Jan–Jun). Média: 61.036 msgs/mês × USD 0,0068 = USD 415,04 × 5,75.<br><br>Taxa utility Brasil confirmada (rate card Meta pós-jul/2025, per-message). Vigência: out/2026. Valor definitivo publicado pela Meta até 01/09/2026.<br><br>🎯 <strong>Desconto gratuidade campanha:</strong> Conversas iniciadas via Click-to-WhatsApp Ads (Facebook/Instagram) têm janela de <strong>72h gratuita</strong> — sem cobrança de service message. Se % relevante do tráfego vem de anúncios pagos, o custo real será menor que este valor.</div></span></div>
       <div class="cost-divider"></div>
       <div style="font-size:.78rem;font-weight:700;color:var(--text-secondary);margin-bottom:10px">Detalhamento Mensal</div>
       <table class="mct">
@@ -470,24 +470,22 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(255,255
       </table>
     </div>
     <div class="cost-card" style="border-color:#DC2626">
-      <div class="cost-badge" style="background:#FEF2F2;color:#DC2626;border:1px solid #FECACA">⚠ 6,6× mais caro que Cenário B</div>
+      <div class="cost-badge" style="background:#FEF2F2;color:#DC2626;border:1px solid #FECACA">⚠ 14,7× mais caro que Cenário B</div>
       <div class="cost-scenario">Cenário C</div>
       <div class="cost-title">Meta Business Agent</div>
-      <div class="cost-value" style="color:#DC2626">R$ 15.793<span style="font-size:1rem;font-weight:500">/mês</span></div>
-      <div class="cost-value-sub"><span class="tip">Benchmark oficial Meta: ~USD 0,045/turno<span class="tip-icon" style="margin-left:4px">?</span><div class="tip-box"><strong>Meta Business Agent — USD 2/1M tokens</strong><br><br>Benchmark publicado pela Meta: 20–25K tokens/turno = ~USD 0,04–0,05/msg.<br><br>61.036 turnos outgoing/mês (média Fev–Jun)<br>× USD 0,045/turno = USD 2.747/mês<br>× BRL 5,75 = R$ 15.793/mês<br><br>⚠ Tokens do workflow Iris atual (56K/turno) não se aplicam — Meta Business Agent tem arquitetura própria. Usar benchmark oficial da Meta. Vigência: ago/2026. Taxas sujeitas a revisão.</div></span></div>
-      <div style="margin-top:12px;background:#FEF2F2;border:1px solid #FECACA;border-radius:6px;padding:10px 12px;font-size:.82rem;color:#991B1B;font-weight:600">⚠ Taxas sujeitas a revisão — lançamento oficial em ago/2026</div>
+      <div class="cost-value" style="color:#DC2626">R$ 35.053<span style="font-size:1rem;font-weight:500">/mês</span></div>
+      <div class="cost-value-sub"><span class="tip">Baseado na execução real n8n #15738550<span class="tip-icon" style="margin-left:4px">?</span><div class="tip-box"><strong>Meta cobra por TODOS os tokens da requisição</strong><br><br>Execução real IW0gbOuha5Hz1aaP #15738550:<br>• synthesis (gpt-4.1-mini2): 13.599 tokens<br>• main agent + RAG lojas: 40.913 tokens<br>• guardrails: 1.462 tokens<br>= 55.974 tokens/turno<br><br>O RAG com ~41K tokens de dados das lojas continuaria sendo contabilizado pelo Meta Business Agent.<br><br>4 turnos/conversa × 13.614 conv/mês<br>= 3,05B tokens/mês × USD 2/1M = USD 6.096<br>× BRL 5,75 = R$ 35.053/mês<br><br>🎯 Clientes via Click-to-WhatsApp Ads: janela de 72h gratuita — custo real pode ser menor dependendo do % de tráfego pago.</div></span></div>
+      <div style="margin-top:12px;background:#FEF2F2;border:1px solid #FECACA;border-radius:6px;padding:10px 12px;font-size:.82rem;color:#991B1B;font-weight:600">RAG com ~41K tokens/turno é o principal driver — inviável sem otimização de contexto</div>
       <div class="cost-divider"></div>
-      <div style="font-size:.78rem;font-weight:700;color:var(--text-secondary);margin-bottom:10px">Custo por mês (benchmark USD 0,045/turno)</div>
+      <div style="font-size:.78rem;font-weight:700;color:var(--text-secondary);margin-bottom:10px">Breakdown por chamada LLM (1 turno)</div>
       <table class="mct">
-        <thead><tr><th>Mês</th><th class="num">Msgs Enviadas</th><th class="num">Custo BRL</th></tr></thead>
+        <thead><tr><th>Chamada LLM</th><th class="num">Input tokens</th><th class="num">% do total</th></tr></thead>
         <tbody>
-          <tr><td>Jan/26</td><td class="num">22.143</td><td class="num">R$ 5.728</td></tr>
-          <tr><td>Fev/26</td><td class="num">54.419</td><td class="num">R$ 14.068</td></tr>
-          <tr><td>Mar/26</td><td class="num">68.306</td><td class="num">R$ 17.662</td></tr>
-          <tr><td>Abr/26</td><td class="num">66.101</td><td class="num">R$ 17.091</td></tr>
-          <tr><td>Mai/26</td><td class="num">56.334</td><td class="num">R$ 14.566</td></tr>
-          <tr><td>Jun/26</td><td class="num">60.020</td><td class="num">R$ 15.518</td></tr>
-          <tr style="font-weight:700;border-top:2px solid var(--border)"><td><strong>Média Fev–Jun</strong></td><td class="num"><strong>61.036</strong></td><td class="num"><strong>R$ 15.793</strong></td></tr>
+          <tr><td>synthesis (gpt-4.1-mini2)</td><td class="num">13.599</td><td class="num">24%</td></tr>
+          <tr><td>main agent + RAG lojas</td><td class="num">40.913</td><td class="num" style="color:#DC2626;font-weight:700">73%</td></tr>
+          <tr><td>guardrails</td><td class="num">1.462</td><td class="num">3%</td></tr>
+          <tr style="font-weight:700;border-top:2px solid var(--border)"><td>Total / turno</td><td class="num">55.974</td><td class="num">100%</td></tr>
+          <tr style="font-size:.75rem;color:var(--text-muted)"><td colspan="3">× 4 turnos = 223.896 tokens/conversa</td></tr>
         </tbody>
       </table>
     </div>
@@ -520,7 +518,7 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(255,255
           <div>· <strong>Resoluções &gt; Conversas</strong> — ratio ~1,9× esperado (conversas reabertas)</div>
           <div>· <strong>Iris = não atribuído</strong> — bot sem ID de agente; métricas por subtração</div>
           <div>· <strong>1ª Resposta humanos</strong> — valores filtrados para horas úteis (08h–20h BRT); mediana Thais=1,2min, Helen=9,4min; n=34 e 321 conversas amostradas</div>
-          <div>· <strong>Cenário C</strong> — benchmark oficial Meta Business Agent: USD 2/1M tokens, ~20–25K tokens/turno = USD 0,045/turno médio. Base: 61.036 msgs outgoing/mês × USD 0,045 × BRL 5,75. Tokens reais do workflow Iris (#15738550: 56K tokens/turno) não aplicáveis — Meta Business Agent tem arquitetura própria e otimizações internas. Validado por SIGMA (ciência de dados).</div>
+          <div>· <strong>Cenário C</strong> — Meta cobra por <em>todos</em> os tokens da requisição (USD 2/1M). Execução real #15738550 (IW0gbOuha5Hz1aaP): 3 chamadas LLM/turno = 55.974 tokens; RAG com ~41K tokens de dados das lojas é o principal driver (73%) e continuaria sendo contabilizado no Meta Business Agent. 4 turnos × 13.614 conv/mês = 3,05B tokens × USD 2/1M = USD 6.096 × 5,75 = R$ 35.053/mês.</div>
           <div>· <strong>Cotação</strong> — USD/BRL 5,75 (referência Jun/2026)</div>
         </div>
       </div>
