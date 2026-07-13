@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EVOPE Gerador de Relatório — Documentação Técnica</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:   #2D52EF;
+      --secondary: #3B2FC9;
+      --dark:      #0F1F5C;
+      --accent:    #E8EEFF;
+      --accent2:   #D0DAFD;
+
+      --bg:        #080E2A;
+      --surface:   #0D1736;
+      --surface2:  #111E42;
+      --surface3:  #172350;
+      --border:    rgba(45,82,239,.18);
+      --border2:   rgba(45,82,239,.10);
+
+      --text:      #F0F3FF;
+      --text-muted:#9AAAD4;
+      --text-dim:  #5B6FA4;
+
+      --green:  #34D399;
+      --amber:  #FBBF24;
+      --red:    #F87171;
+
+      --font-head: 'Plus Jakarta Sans', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --r: 10px; --rs: 6px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.65; }
+
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .layout { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: 268px; flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      position: sticky; top: 0; height: 100vh;
+      overflow-y: auto; padding: 0 0 32px;
+      display: flex; flex-direction: column;
+    }
+
+    .content { flex: 1; max-width: 860px; padding: 52px 60px; min-width: 0; }
+
+    .sidebar-top {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+    .back-link {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--text-dim);
+      text-decoration: none;
+      margin-bottom: 16px;
+      transition: color .15s;
+    }
+    .back-link:hover { color: var(--primary); }
+
+    .logo-row { display: flex; align-items: center; gap: 10px; }
+    .sidebar-logo { height: 28px; width: auto; display: block; flex-shrink: 0; }
+    .logo-name { font-family: var(--font-head); font-size: 13px; font-weight: 700; color: var(--text); }
+    .logo-sub  { font-size: 11px; color: var(--text-dim); margin-top: 1px; }
+
+    .nav-section { padding: 0 14px; margin-top: 6px; }
+    .nav-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.1px;
+      text-transform: uppercase; color: var(--text-dim);
+      padding: 8px 8px 4px;
+    }
+    .nav-link {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 8px;
+      font-size: 12.5px; color: var(--text-muted);
+      text-decoration: none; border-radius: var(--rs);
+      transition: color .15s, background .15s;
+      line-height: 1.3;
+    }
+    .nav-link:hover { color: var(--text); background: var(--surface3); }
+    .nav-link.active { color: #fff; background: rgba(45,82,239,.18); }
+    .nav-link.active::before {
+      content: ''; width: 3px; height: 14px;
+      background: var(--primary); border-radius: 2px; flex-shrink: 0;
+    }
+
+    .meta-bar {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border2);
+      margin-bottom: 0;
+    }
+    .meta-chip {
+      font-size: 11px; font-weight: 600;
+      padding: 3px 9px; border-radius: 100px;
+      background: var(--surface2); color: var(--text-muted);
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+    }
+    .meta-chip.active-chip { background: rgba(52,211,153,.1); color: var(--green); border-color: rgba(52,211,153,.25); }
+
+    h1 {
+      font-family: var(--font-head);
+      font-size: 34px; font-weight: 800; letter-spacing: -.6px;
+      color: var(--text); margin-bottom: 10px; line-height: 1.2;
+    }
+    h1 span { color: var(--primary); }
+    h2 {
+      font-family: var(--font-head);
+      font-size: 20px; font-weight: 700;
+      margin: 52px 0 16px; padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    h2 .sec-num { color: var(--primary); font-size: 12px; font-weight: 600; letter-spacing: .5px; margin-right: 8px; }
+    h3 {
+      font-family: var(--font-head);
+      font-size: 14px; font-weight: 700;
+      margin: 28px 0 10px; color: var(--text);
+    }
+    h3::before { content: '▸ '; color: var(--primary); }
+    p { font-size: 14px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.75; }
+    p strong { color: var(--text); }
+    .lead { font-size: 15px; color: var(--text-muted); margin-bottom: 28px; line-height: 1.75; }
+
+    section { padding-top: 8px; }
+    .anchor { color: var(--text-dim); text-decoration: none; margin-left: 8px; font-size: 14px; opacity: 0; }
+    h2:hover .anchor { opacity: 1; }
+
+    .tbl-wrap { overflow-x: auto; margin: 12px 0 22px; border-radius: var(--r); border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead tr { background: var(--surface2); }
+    th {
+      text-align: left; padding: 9px 14px;
+      color: var(--text-dim); font-size: 10.5px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .8px;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-head);
+    }
+    td {
+      padding: 9px 14px; border-bottom: 1px solid var(--border2);
+      color: var(--text-muted); vertical-align: top; line-height: 1.55;
+    }
+    tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: var(--surface2); }
+    td code { font-family: var(--font-mono); font-size: 11.5px; color: #93C5FD; background: rgba(147,197,253,.08); padding: 1px 6px; border-radius: 4px; }
+    td strong { color: var(--text); }
+    .pill {
+      display: inline-block; padding: 1px 8px; border-radius: 100px;
+      font-size: 10.5px; font-weight: 700; white-space: nowrap;
+    }
+    .pill-blue   { background: rgba(45,82,239,.15); color: #93C5FD; }
+    .pill-green  { background: rgba(52,211,153,.12); color: #34D399; }
+    .pill-amber  { background: rgba(251,191,36,.12); color: #FBBF24; }
+    .pill-red    { background: rgba(248,113,113,.12); color: #F87171; }
+    .pill-gray   { background: var(--surface2); color: var(--text-dim); }
+
+    .code-wrap { position: relative; margin: 14px 0 22px; border-radius: var(--r); overflow: hidden; border: 1px solid var(--border); }
+    .code-header {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--surface2); padding: 8px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .code-lang { font-family: var(--font-mono); font-size: 10.5px; color: var(--primary); }
+    pre {
+      background: var(--surface); padding: 16px 18px; overflow-x: auto;
+      font-family: var(--font-mono); font-size: 12.5px; line-height: 1.7;
+      color: var(--text-muted);
+    }
+    .hl-s { color: #86EFAC; }
+    .hl-n { color: #93C5FD; }
+    .hl-c { color: #4B6FA0; font-style: italic; }
+    .hl-k { color: #C084FC; }
+
+    .kpi-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px; margin: 28px 0;
+    }
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r); padding: 18px 20px;
+    }
+    .kpi-card.blue  { border-top: 2px solid var(--primary); }
+    .kpi-card.green { border-top: 2px solid var(--green); }
+    .kpi-card.amber { border-top: 2px solid var(--amber); }
+    .kpi-card.red   { border-top: 2px solid var(--red); }
+    .kpi-label { font-size: 11px; color: var(--text-dim); font-weight: 700; text-transform: uppercase; letter-spacing: .6px; margin-bottom: 6px; }
+    .kpi-value { font-family: var(--font-head); font-size: 32px; font-weight: 800; color: var(--text); line-height: 1; }
+    .kpi-sub   { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+
+    .hero-banner {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 16px 20px; margin-bottom: 28px;
+    }
+    .hero-badge { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--green); margin-bottom: 8px; }
+    .hero-endpoint { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .hero-method { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; background: rgba(52,211,153,.12); color: var(--green); }
+    .hero-url { font-family: var(--font-mono); font-size: 12.5px; color: var(--text); flex: 1; }
+
+    .node-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0 24px; }
+    .node-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--rs);
+      padding: 14px; transition: border-color .15s;
+    }
+    .node-card:hover { border-color: var(--primary); }
+    .node-type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; color: var(--primary); margin-bottom: 4px; font-family: var(--font-mono); }
+    .node-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .node-desc { font-size: 11.5px; color: var(--text-muted); line-height: 1.5; }
+
+    .flow-section { margin: 20px 0; }
+    .flow-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--text-dim); margin-bottom: 8px; }
+
+    .callout-green { background: rgba(52,211,153,.08); border-left: 3px solid var(--green); padding: 10px 14px; margin-bottom: 16px; border-radius: 4px; font-size: 0.85rem; }
+    .callout-amber { background: rgba(251,191,36,.08); border-left: 3px solid var(--amber); padding: 10px 14px; margin-bottom: 16px; border-radius: 4px; font-size: 0.85rem; }
+    .callout-red   { background: rgba(248,113,113,.08); border-left: 3px solid var(--red); padding: 10px 14px; margin-bottom: 16px; border-radius: 4px; font-size: 0.85rem; }
+    .callout-blue  { background: rgba(45,82,239,.08); border-left: 3px solid var(--primary); padding: 10px 14px; margin-bottom: 16px; border-radius: 4px; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- ════ SIDEBAR ════ -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <a href="index.html" class="back-link">← EVOPE Docs</a>
+      <div class="logo-row">
+        <img
+          src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-negative.svg"
+          alt="Digital AI"
+          class="sidebar-logo"
+        />
+      </div>
+      <div style="margin-top:10px;">
+        <div class="logo-name">EVOPE Gerador</div>
+        <div class="logo-sub">Relatório de Automação</div>
+      </div>
+    </div>
+
+    <nav>
+      <div class="nav-section">
+        <div class="nav-label">Visão Geral</div>
+        <a href="#overview"      class="nav-link active">Sobre o Workflow</a>
+        <a href="#entradas"      class="nav-link">Entradas (2 canais)</a>
+        <a href="#nos"           class="nav-link">Mapa de Nós (26)</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Pipeline Principal</div>
+        <a href="#upload"        class="nav-link">Ingestão de Arquivo</a>
+        <a href="#conversao"     class="nav-link">Conversão XLSX/XLS/CSV</a>
+        <a href="#validacao"     class="nav-link">Validação de Estrutura</a>
+        <a href="#processamento" class="nav-link">Processamento e IA</a>
+        <a href="#html"          class="nav-link">Geração de HTML</a>
+        <a href="#email"         class="nav-link">Envio de Email</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Tratamento de Erros</div>
+        <a href="#erros"         class="nav-link">Pipeline de Erro</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Referência</div>
+        <a href="#webhook"       class="nav-link">Webhook API</a>
+        <a href="#ai-analise"    class="nav-link">AI Agent — Análise</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- ════ CONTENT ════ -->
+  <main class="content">
+
+    <!-- META BAR -->
+    <div class="meta-bar" style="margin: -52px -60px 48px; padding: 10px 60px;">
+      <span class="meta-chip active-chip">● Produção</span>
+      <span class="meta-chip">ID: UwsLxUDVK1HPHNiD</span>
+      <span class="meta-chip">26 nós</span>
+      <span class="meta-chip">n8n · webhook.digital-ai.tech</span>
+      <span class="meta-chip">Julho 2026</span>
+    </div>
+
+    <!-- ══ OVERVIEW ══ -->
+    <section id="overview">
+      <h1>EVOPE <span>Gerador</span></h1>
+      <p class="lead">
+        Documentação técnica do workflow <strong>EVOPE — Gerador de Relatório de Automação</strong>.<br>
+        Processa arquivos de dados XLSX/XLS/CSV, analisa com IA e entrega o relatório HTML por email.
+      </p>
+
+      <div class="callout-blue" style="font-size:13px;color:var(--text-muted);line-height:1.7">
+        📊 Este workflow é o <strong>ponto de entrada</strong> da plataforma EVOPE — gera o relatório HTML que depois alimenta o
+        <a href="agente.html" style="color:var(--primary)">Agente Conversacional</a> para análise interativa.
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card blue">
+          <div class="kpi-label">Total de Nós</div>
+          <div class="kpi-value">26</div>
+          <div class="kpi-sub">Workflow n8n</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">Formatos Suportados</div>
+          <div class="kpi-value">3</div>
+          <div class="kpi-sub">XLSX · XLS · CSV</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">Canais de Entrada</div>
+          <div class="kpi-value">2</div>
+          <div class="kpi-sub">Formulário · Webhook</div>
+        </div>
+        <div class="kpi-card red">
+          <div class="kpi-label">Saídas</div>
+          <div class="kpi-value">2</div>
+          <div class="kpi-sub">Email OK · Email Erro</div>
+        </div>
+      </div>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Atributo</th><th>Valor</th></tr></thead>
+          <tbody>
+            <tr><td>Nome</td><td>EVOPE — Gerador de Relatório de Automação</td></tr>
+            <tr><td>ID do Workflow</td><td><code>UwsLxUDVK1HPHNiD</code></td></tr>
+            <tr><td>Status</td><td><span class="pill pill-green">● Produção</span></td></tr>
+            <tr><td>Total de Nós</td><td>26 nós, 23 conexões</td></tr>
+            <tr><td>Modelo de IA</td><td><code>gpt-5.4-mini</code> com ferramentas Think + Calculator</td></tr>
+            <tr><td>Serviço de Email</td><td>Gmail via OAuth2 (nó nativo n8n)</td></tr>
+            <tr><td>Trigger principal</td><td>Formulário EVOPE (<code>n8n-nodes-base.formTrigger</code>)</td></tr>
+            <tr><td>Trigger alternativo</td><td>Webhook externo (<code>n8n-nodes-base.webhook</code>)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ══ ENTRADAS ══ -->
+    <section id="entradas">
+      <h2><span class="sec-num">1</span>Canais de Entrada <a class="anchor" href="#entradas">#</a></h2>
+
+      <p>O workflow aceita arquivos por <strong>dois canais independentes</strong>. Ambos convergem para o mesmo pipeline de validação e processamento.</p>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Canal</th><th>Node</th><th>Quando Usar</th><th>Resposta</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>Formulário EVOPE</strong></td>
+              <td><code>n8n-nodes-base.formTrigger</code></td>
+              <td>Upload manual pelo usuário final via UI do n8n</td>
+              <td>Resultado enviado por email — sem resposta inline</td>
+            </tr>
+            <tr>
+              <td><strong>Webhook Externo</strong></td>
+              <td><code>n8n-nodes-base.webhook</code></td>
+              <td>Integração programática — a plataforma EVOPE envia o arquivo automaticamente</td>
+              <td>Responde <code>202 Accepted</code> imediatamente (async), resultado por email</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Fluxo do Webhook (assíncrono)</h3>
+      <p>O webhook retorna resposta imediata para não travar a requisição enquanto o processamento ocorre em background:</p>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">fluxo webhook</span></div>
+        <pre>POST /webhook/evope/gerador
+    │
+    ├── Webhook (recebe arquivo binário)
+    │       │
+    │   Preparar Dados Webhook (normaliza estrutura para o pipeline)
+    │       │
+    │   Responder Webhook ─────────────────► 202 {"status":"processing"} (imediato)
+    │       │
+    │   Validar Estrutura do Arquivo
+    │       │
+    │   [pipeline continua...] → Email com resultado</pre>
+      </div>
+    </section>
+
+    <!-- ══ NÓS ══ -->
+    <section id="nos">
+      <h2><span class="sec-num">2</span>Mapa de Nós (26) <a class="anchor" href="#nos">#</a></h2>
+
+      <div class="node-grid">
+        <div class="node-card">
+          <div class="node-type">formTrigger</div>
+          <div class="node-name">Formulário EVOPE</div>
+          <div class="node-desc">Interface de upload para o usuário final. Aceita arquivo como entrada principal.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">webhook</div>
+          <div class="node-name">Webhook</div>
+          <div class="node-desc">Endpoint HTTP para integração programática. Retorna 202 imediato via Responder Webhook.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">respondToWebhook</div>
+          <div class="node-name">Responder Webhook</div>
+          <div class="node-desc">Responde 202 imediatamente ao chamador do webhook. Pipeline continua em background.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">code</div>
+          <div class="node-name">Preparar Dados Webhook</div>
+          <div class="node-desc">Normaliza o payload do webhook para o mesmo formato do formulário antes do pipeline.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">code</div>
+          <div class="node-name">Validar e Sanitizar Arquivo</div>
+          <div class="node-desc">Valida tipo, tamanho e integridade do arquivo. Sanitiza nome e metadados.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">switch</div>
+          <div class="node-name">Switch</div>
+          <div class="node-desc">Roteamento por extensão: XLSX → fromXLSX, XLS → fromXLS, CSV → Normalizar Encoding.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">extractFromFile</div>
+          <div class="node-name">fromXLSX</div>
+          <div class="node-desc">Extrai dados de arquivos .xlsx (Excel moderno). Output: JSON com linhas e colunas.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">extractFromFile</div>
+          <div class="node-name">fromXLS</div>
+          <div class="node-desc">Extrai dados de arquivos .xls (Excel legado). Output: JSON com linhas e colunas.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">code</div>
+          <div class="node-name">Normalizar Encoding CSV</div>
+          <div class="node-desc">Normaliza encoding do CSV (UTF-8, Latin-1) antes de extrair. Evita caracteres corrompidos.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">extractFromFile</div>
+          <div class="node-name">fromCSV</div>
+          <div class="node-desc">Extrai dados de arquivos .csv. Recebe após normalização de encoding.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">code · validar-estrutura</div>
+          <div class="node-name">Validar Estrutura do Arquivo</div>
+          <div class="node-desc">Verifica se as colunas obrigatórias estão presentes e se os dados são consistentes.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">if</div>
+          <div class="node-name">Verificar Erro</div>
+          <div class="node-desc">Bifurcação: se erro de validação → pipeline de erro; se OK → processamento normal.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">set</div>
+          <div class="node-name">Configuração de Ferramentas</div>
+          <div class="node-desc">Prepara variáveis e configurações globais antes do processamento com IA.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">code · v3.4</div>
+          <div class="node-name">Processar e Agregar Dados</div>
+          <div class="node-desc">Agrega métricas por colaborador: aproveitamento, entretenimento, apps, horas. Output estruturado para a IA.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">agent · gpt-5.4-mini</div>
+          <div class="node-name">AI Agent — Análise</div>
+          <div class="node-desc">Analisa os dados agregados, gera insights, rankings e recomendações. Usa Think + Calculator.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">lmChatOpenAi</div>
+          <div class="node-name">OpenAI Chat Model</div>
+          <div class="node-desc">Modelo de linguagem: gpt-5.4-mini. Sub-nó do AI Agent — Análise.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">toolThink</div>
+          <div class="node-name">Think</div>
+          <div class="node-desc">Ferramenta de raciocínio encadeado. Permite ao agente "pensar" antes de responder.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">toolCalculator</div>
+          <div class="node-name">Calculator</div>
+          <div class="node-desc">Calculadora para o agente. Garante precisão em médias, percentuais e comparações numéricas.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">code</div>
+          <div class="node-name">Extrair JSON da IA</div>
+          <div class="node-desc">Extrai e parseia o JSON estruturado do output do AI Agent. Valida schema antes de prosseguir.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">code</div>
+          <div class="node-name">Gerar HTML Final</div>
+          <div class="node-desc">Gera o relatório HTML completo a partir do JSON da IA. Inclui estilos inline para compatibilidade de email.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">code</div>
+          <div class="node-name">Preparar Email e Anexo</div>
+          <div class="node-desc">Monta o corpo do email, assunto e o HTML gerado como anexo ou corpo inline.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">gmail</div>
+          <div class="node-name">Enviar Email Gmail</div>
+          <div class="node-desc">Envia o relatório por email via Gmail OAuth2. Destinatário configurado pelo usuário no formulário.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">code</div>
+          <div class="node-name">Preparar Email de Erro</div>
+          <div class="node-desc">Monta email de erro com diagnóstico: tipo de erro, arquivo recebido, colunas encontradas vs esperadas.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">gmail</div>
+          <div class="node-name">Enviar Email de Erro</div>
+          <div class="node-desc">Envia email de erro ao usuário com instruções para corrigir o arquivo e tentar novamente.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">manualTrigger · disabled</div>
+          <div class="node-name">Trigger Manual</div>
+          <div class="node-desc">Trigger de desenvolvimento. Desabilitado em produção — acionado apenas para testes manuais no editor n8n.</div>
+        </div>
+        <div class="node-card">
+          <div class="node-type">stickyNote</div>
+          <div class="node-name">📋 Regras de Negócio</div>
+          <div class="node-desc">Nota interna com regras de negócio e decisões de implementação. Não executa.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ PIPELINE PRINCIPAL ══ -->
+    <section id="upload">
+      <h2><span class="sec-num">3</span>Pipeline Completo <a class="anchor" href="#upload">#</a></h2>
+
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">fluxo principal — Formulário EVOPE</span></div>
+        <pre>Formulário EVOPE (upload de arquivo)
+    │
+    Validar e Sanitizar Arquivo
+    │
+    Switch (por extensão do arquivo)
+     ├── .xlsx ──► fromXLSX ──────────────────────────────────────┐
+     ├── .xls  ──► fromXLS  ──────────────────────────────────────┤
+     └── .csv  ──► Normalizar Encoding CSV ──► fromCSV ───────────┘
+                                                                   │
+                                               Validar Estrutura do Arquivo
+                                                                   │
+                                               Verificar Erro
+                                                ├── [ERRO] ──► Preparar Email de Erro ──► Enviar Email de Erro
+                                                │
+                                                └── [OK]  ──► Configuração de Ferramentas
+                                                                       │
+                                                               Processar e Agregar Dados
+                                                                       │
+                                                               AI Agent — Análise (gpt-5.4-mini)
+                                                               ├── Tools: Think, Calculator
+                                                                       │
+                                                               Extrair JSON da IA
+                                                                       │
+                                                               Gerar HTML Final
+                                                                       │
+                                                               Preparar Email e Anexo
+                                                                       │
+                                                               Enviar Email Gmail ──► ✅ Relatório entregue</pre>
+      </div>
+    </section>
+
+    <!-- ══ CONVERSÃO ══ -->
+    <section id="conversao">
+      <h2><span class="sec-num">4</span>Conversão de Formatos <a class="anchor" href="#conversao">#</a></h2>
+
+      <p>O workflow suporta três formatos. Cada um tem um nó específico de extração, com normalização de encoding para CSV (problema comum com arquivos exportados pelo Windows).</p>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Formato</th><th>Nó</th><th>Observação</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>.xlsx</strong></td>
+              <td><code>fromXLSX</code></td>
+              <td>Excel 2007+. Formato preferencial — preserva tipos de dados e encoding UTF-8 nativamente.</td>
+            </tr>
+            <tr>
+              <td><strong>.xls</strong></td>
+              <td><code>fromXLS</code></td>
+              <td>Excel legado (97-2003). Suportado para compatibilidade com exports de sistemas antigos.</td>
+            </tr>
+            <tr>
+              <td><strong>.csv</strong></td>
+              <td><code>Normalizar Encoding CSV</code> → <code>fromCSV</code></td>
+              <td>Passa por normalização antes da extração. Detecta e converte Latin-1/Windows-1252 para UTF-8.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ══ VALIDAÇÃO ══ -->
+    <section id="validacao">
+      <h2><span class="sec-num">5</span>Validação de Estrutura <a class="anchor" href="#validacao">#</a></h2>
+
+      <p>Após a extração, o nó <strong>Validar Estrutura do Arquivo</strong> verifica se os dados têm o formato esperado pelo EVOPE.</p>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Verificação</th><th>Ação se Falhar</th></tr></thead>
+          <tbody>
+            <tr><td>Colunas obrigatórias presentes</td><td>Erro → email com lista de colunas faltantes vs esperadas</td></tr>
+            <tr><td>Arquivo não vazio (pelo menos 1 linha de dados)</td><td>Erro → email informando arquivo vazio</td></tr>
+            <tr><td>Tipos de dados coerentes</td><td>Erro → email com diagnóstico da coluna problemática</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout-amber" style="font-size:13px;color:var(--text-muted);line-height:1.7">
+        ⚠️ <strong>Nó Verificar Erro:</strong> É um nó <code>if</code> que bifurca o fluxo. A saída 0 (true) vai para o pipeline de erro; a saída 1 (false) continua o processamento normal.
+      </div>
+    </section>
+
+    <!-- ══ PROCESSAMENTO ══ -->
+    <section id="processamento">
+      <h2><span class="sec-num">6</span>Processamento e Análise de IA <a class="anchor" href="#processamento">#</a></h2>
+
+      <p>Após validação, os dados passam por dois estágios: agregação determinística (JavaScript) e análise semântica (IA).</p>
+
+      <h3>Estágio 1 — Processar e Agregar Dados (JavaScript)</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Atributo</th><th>Valor</th></tr></thead>
+          <tbody>
+            <tr><td>Versão</td><td>v3.4</td></tr>
+            <tr><td>Função</td><td>Agrega métricas por colaborador: aproveitamento, entretenimento, apps, horas trabalhadas</td></tr>
+            <tr><td>Output</td><td>JSON estruturado com arrays de colaboradores e métricas normalizadas</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Estágio 2 — AI Agent — Análise (gpt-5.4-mini)</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Atributo</th><th>Valor</th></tr></thead>
+          <tbody>
+            <tr><td>Modelo</td><td><code>gpt-5.4-mini</code></td></tr>
+            <tr><td>Ferramentas</td><td><code>Think</code> (raciocínio encadeado) + <code>Calculator</code> (precisão numérica)</td></tr>
+            <tr><td>Output esperado</td><td>JSON com insights, rankings, recomendações e análise de jornada excessiva</td></tr>
+            <tr><td>Pós-processamento</td><td><strong>Extrair JSON da IA</strong> faz parse e validação do schema antes de prosseguir</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ══ HTML ══ -->
+    <section id="html">
+      <h2><span class="sec-num">7</span>Geração do Relatório HTML <a class="anchor" href="#html">#</a></h2>
+
+      <p>O nó <strong>Gerar HTML Final</strong> converte o JSON da IA em um relatório HTML completo.</p>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Característica</th><th>Detalhe</th></tr></thead>
+          <tbody>
+            <tr><td>Formato</td><td>HTML com CSS inline (compatível com clientes de email)</td></tr>
+            <tr><td>Conteúdo</td><td>Rankings de colaboradores, métricas de aproveitamento, entretenimento, horas, jornada excessiva, recomendações e apps mais usados</td></tr>
+            <tr><td>Uso posterior</td><td>O mesmo HTML alimenta o <a href="agente.html" style="color:var(--primary)">Agente Conversacional</a> como base de análise interativa</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ══ EMAIL ══ -->
+    <section id="email">
+      <h2><span class="sec-num">8</span>Envio de Email <a class="anchor" href="#email">#</a></h2>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Atributo</th><th>Valor</th></tr></thead>
+          <tbody>
+            <tr><td>Serviço</td><td>Gmail via OAuth2 (nó nativo n8n)</td></tr>
+            <tr><td>Nó</td><td><code>Enviar Email Gmail</code></td></tr>
+            <tr><td>Preparação</td><td>Nó <code>Preparar Email e Anexo</code> monta assunto, corpo e anexos antes do envio</td></tr>
+            <tr><td>Conteúdo</td><td>Relatório HTML no corpo do email ou como anexo</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ══ ERROS ══ -->
+    <section id="erros">
+      <h2><span class="sec-num">9</span>Pipeline de Tratamento de Erros <a class="anchor" href="#erros">#</a></h2>
+
+      <p>Quando a validação falha, o workflow não quebra — envia um email de diagnóstico ao usuário com instruções claras.</p>
+
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">fluxo de erro</span></div>
+        <pre>Verificar Erro [SAÍDA 0 = erro detectado]
+    │
+    Preparar Email de Erro
+    │   Inclui:
+    │   - Tipo de erro (estrutura inválida / arquivo vazio / encoding)
+    │   - Colunas encontradas vs colunas esperadas
+    │   - Nome do arquivo recebido
+    │   - Instruções para corrigir e reenviar
+    │
+    Enviar Email de Erro (Gmail)</pre>
+      </div>
+
+      <div class="callout-green" style="font-size:13px;color:var(--text-muted);line-height:1.7">
+        ✅ <strong>Design de resiliência:</strong> Nenhum erro quebra silenciosamente. O usuário sempre recebe feedback — seja o relatório ou um email explicando o problema.
+      </div>
+    </section>
+
+    <!-- ══ WEBHOOK ══ -->
+    <section id="webhook">
+      <h2><span class="sec-num">10</span>Webhook API <a class="anchor" href="#webhook">#</a></h2>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Atributo</th><th>Valor</th></tr></thead>
+          <tbody>
+            <tr><td>Endpoint</td><td><code>POST /webhook/evope/gerador</code></td></tr>
+            <tr><td>Host</td><td><code>webhook.digital-ai.tech</code></td></tr>
+            <tr><td>Corpo esperado</td><td>Arquivo binário ou multipart/form-data</td></tr>
+            <tr><td>Resposta imediata</td><td><code>202 {"status":"processing"}</code></td></tr>
+            <tr><td>Resultado final</td><td>Email com relatório (assíncrono)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ══ AI AGENT ══ -->
+    <section id="ai-analise">
+      <h2><span class="sec-num">11</span>AI Agent — Análise <a class="anchor" href="#ai-analise">#</a></h2>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Atributo</th><th>Detalhe</th></tr></thead>
+          <tbody>
+            <tr><td>Tipo</td><td><code>@n8n/n8n-nodes-langchain.agent</code></td></tr>
+            <tr><td>Modelo</td><td><code>gpt-5.4-mini</code> (nó <code>OpenAI Chat Model</code>)</td></tr>
+            <tr>
+              <td>Ferramenta Think</td>
+              <td>
+                <code>@n8n/n8n-nodes-langchain.toolThink</code><br>
+                <span style="font-size:12px;color:var(--text-dim)">Permite ao agente raciocinar em etapas antes de formular a análise final</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Ferramenta Calculator</td>
+              <td>
+                <code>@n8n/n8n-nodes-langchain.toolCalculator</code><br>
+                <span style="font-size:12px;color:var(--text-dim)">Garante precisão em cálculos de médias, percentuais e comparações</span>
+              </td>
+            </tr>
+            <tr><td>Diferença vs AI Agent Chat</td><td>Este agente é <strong>stateless</strong> — sem memória de sessão. Cada geração de relatório é independente. O AI Agent Chat (Agente Conversacional) tem memória PostgreSQL.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // Active nav on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const link = document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
