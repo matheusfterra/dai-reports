@@ -31,8 +31,8 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 .header{background:var(--surface);border-bottom:1px solid var(--border);padding:20px 0;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm)}
 .header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px}
 .header-brand{display:flex;align-items:center;gap:14px}
-.header-logo{width:42px;height:42px;background:var(--brand);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.header-logo svg{width:24px;height:24px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.header-logo{display:flex;align-items:center;flex-shrink:0}
+.header-logo img{height:34px;width:auto;display:block}
 .header-title{font-family:var(--font-head);font-weight:700;font-size:1.15rem;color:var(--brand-dark)}
 .header-sub{font-size:.82rem;color:var(--text-secondary);margin-top:1px}
 .header-badge{display:flex;align-items:center;gap:8px;background:var(--brand-light);border:1px solid #C7D7FD;border-radius:20px;padding:6px 14px;font-size:.78rem;font-family:var(--font-head);font-weight:600;color:var(--brand-dark)}
@@ -158,8 +158,8 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 .footer{background:var(--surface);border-top:1px solid var(--border);padding:24px 0;margin-top:60px}
 .footer-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .footer-brand{display:flex;align-items:center;gap:8px}
-.footer-logo{width:24px;height:24px;background:var(--brand);border-radius:5px;display:flex;align-items:center;justify-content:center}
-.footer-logo svg{width:14px;height:14px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.footer-logo{display:flex;align-items:center}
+.footer-logo img{height:22px;width:auto;display:block}
 .footer-name{font-family:var(--font-head);font-size:.82rem;font-weight:700;color:var(--brand-dark)}
 .footer-meta{font-size:.75rem;color:var(--text-muted)}
 .footer-note{font-size:.72rem;color:var(--text-muted);text-align:right}
@@ -173,7 +173,7 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(255,255
   <div class="container">
     <div class="header-inner">
       <div class="header-brand">
-        <div class="header-logo"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div class="header-logo"><img src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-horizontal.svg" alt="Digital AI"></div>
         <div>
           <div class="header-title">Sr. Óculos — Painel de Atendimento</div>
           <div class="header-sub">Inteligência operacional · Janeiro–Julho 2026</div>
@@ -188,6 +188,7 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(255,255
   <div class="container">
     <div class="period-inner">
       <div>
+        <img src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-negative.svg" alt="Digital AI" style="height:28px;width:auto;display:block;margin-bottom:12px;opacity:.9">
         <div class="period-title">Janeiro — Julho 2026</div>
         <div class="period-sub">7 meses monitorados · Julho parcial (dados até 13/07)</div>
       </div>
@@ -206,17 +207,17 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(255,255
 <div class="section">
   <div class="kpi-grid">
     <div class="kpi-card">
-      <div class="kpi-label">Conversas <span class="tip"><span class="tip-icon">?</span><div class="tip-box"><strong>conversations_count</strong><br>Fonte: Chatwoot API v2<br><code>metric=conversations_count&amp;type=account&amp;group_by=month&amp;since=1767225600&amp;until=1783987199</code><br><br>Novas conversas criadas no período. O CSV de 10/07 registra 84.804 — diferença de 2 dias de coleta.</div></span></div>
+      <div class="kpi-label">Conversas <span class="tip"><span class="tip-icon">?</span><div class="tip-box"><strong>conversations_count</strong><br>Fonte: Chat API v2<br><code>metric=conversations_count&amp;type=account&amp;group_by=month&amp;since=1767225600&amp;until=1783987199</code><br><br>Novas conversas criadas no período. O CSV de 10/07 registra 84.804 — diferença de 2 dias de coleta.</div></span></div>
       <div class="kpi-value">87.169</div>
       <div class="kpi-sub">conversas no período</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-label">Resoluções <span class="tip"><span class="tip-icon">?</span><div class="tip-box"><strong>resolutions_count</strong><br>Fonte: Chatwoot API v2<br>Cada evento de resolução é contado separadamente. Uma conversa pode ser resolvida mais de uma vez (reaberta → resolvida), gerando ratio ~1,9 resoluções/conversa — comportamento esperado no fluxo de atendimento.</div></span></div>
+      <div class="kpi-label">Resoluções <span class="tip"><span class="tip-icon">?</span><div class="tip-box"><strong>resolutions_count</strong><br>Fonte: Chat API v2<br>Cada evento de resolução é contado separadamente. Uma conversa pode ser resolvida mais de uma vez (reaberta → resolvida), gerando ratio ~1,9 resoluções/conversa — comportamento esperado no fluxo de atendimento.</div></span></div>
       <div class="kpi-value">167.052</div>
       <div class="kpi-sub">eventos de resolução no período</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-label">Mensagens <span class="tip"><span class="tip-icon">?</span><div class="tip-box"><strong>incoming_messages_count + outgoing_messages_count</strong><br>Fonte: Chatwoot API v2<br>Recebidas: 287.876<br>Enviadas: 349.712<br>Total: 637.588<br><br>Inclui todas as mensagens da plataforma (humanas, bot, templates automáticos).</div></span></div>
+      <div class="kpi-label">Mensagens <span class="tip"><span class="tip-icon">?</span><div class="tip-box"><strong>incoming_messages_count + outgoing_messages_count</strong><br>Fonte: Chat API v2<br>Recebidas: 287.876<br>Enviadas: 349.712<br>Total: 637.588<br><br>Inclui todas as mensagens da plataforma (humanas, bot, templates automáticos).</div></span></div>
       <div class="kpi-value">637.588</div>
       <div class="kpi-sub">mensagens trocadas (recebidas + enviadas)</div>
     </div>
@@ -258,7 +259,7 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(255,255
   <div class="section-header">
     <span class="section-title">Volumetria Mensal</span>
     <div class="section-divider"></div>
-    <span class="section-meta"><span class="tip">Jan–Jul 2026 · Julho parcial <span class="tip-icon">?</span><div class="tip-box">Fonte: Chatwoot API v2 · group_by=month<br>since=1767225600 (01/01/2026) · until=1783987199 (13/07/2026 UTC)</div></span></span>
+    <span class="section-meta"><span class="tip">Jan–Jul 2026 · Julho parcial <span class="tip-icon">?</span><div class="tip-box">Fonte: Chat API v2 · group_by=month<br>since=1767225600 (01/01/2026) · until=1783987199 (13/07/2026 UTC)</div></span></span>
   </div>
   <div class="chart-card">
     <div class="chart-card-header">
@@ -461,7 +462,7 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(255,255
       <div class="cost-scenario">Cenário C</div>
       <div class="cost-title">Meta Business Agent</div>
       <div class="cost-value" style="color:var(--brand)">R$ 101<span style="font-size:1rem;font-weight:500">/mês</span></div>
-      <div class="cost-value-sub"><span class="tip">USD 17,58/mês em média · USD 2/1M tokens<span class="tip-icon" style="margin-left:4px">?</span><div class="tip-box">conversations_count real × estimativa de 555 tokens/conversa (1,85 msgs × 150 tokens × 2 direções) × USD 2/1M. <em>Compatibilidade com Chatwoot a verificar.</em></div></span></div>
+      <div class="cost-value-sub"><span class="tip">USD 17,58/mês em média · USD 2/1M tokens<span class="tip-icon" style="margin-left:4px">?</span><div class="tip-box">conversations_count real × estimativa de 555 tokens/conversa (1,85 msgs × 150 tokens × 2 direções) × USD 2/1M. <em>Compatibilidade com Chat a verificar.</em></div></span></div>
       <div style="margin-top:12px;background:var(--brand-accent);border-radius:6px;padding:10px 12px;font-size:.82rem;color:var(--brand-dark);font-weight:600">23,6× mais eficiente que o Cenário B</div>
       <div class="cost-divider"></div>
       <div style="font-size:.78rem;font-weight:700;color:var(--text-secondary);margin-bottom:10px">Detalhamento Mensal</div>
@@ -492,7 +493,7 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(255,255
       <div>
         <div style="font-size:.82rem;font-weight:700;color:var(--brand-dark);margin-bottom:10px">Fontes de Dados</div>
         <div style="font-size:.8rem;color:var(--text-secondary);line-height:1.85">
-          <div>· <strong>API Chatwoot v2</strong> — <code>/api/v2/accounts/6/reports</code></div>
+          <div>· <strong>API Chat v2</strong> — <code>/api/v2/accounts/6/reports</code></div>
           <div>· <strong>Período</strong> — since=1767225600 · until=1783987199 (UTC)</div>
           <div>· <strong>Métricas</strong> — conversations_count, resolutions_count, incoming/outgoing_messages_count, avg_first_response_time</div>
           <div>· <strong>Segmentação</strong> — type=account | agent | inbox | label</div>
@@ -507,7 +508,7 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(255,255
           <div>· <strong>Resoluções &gt; Conversas</strong> — ratio ~1,9× esperado (conversas reabertas)</div>
           <div>· <strong>Iris = não atribuído</strong> — bot sem ID de agente; métricas por subtração</div>
           <div>· <strong>1ª Resposta humanos</strong> — inclui triagem da Iris; usar label <em>transferencia_time</em> para granularidade</div>
-          <div>· <strong>Cenário C</strong> — requer verificação de compatibilidade com Chatwoot</div>
+          <div>· <strong>Cenário C</strong> — requer verificação de compatibilidade com Chat</div>
           <div>· <strong>Cotação</strong> — USD/BRL 5,75 (referência Jun/2026)</div>
         </div>
       </div>
@@ -521,11 +522,10 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(255,255
   <div class="container">
     <div class="footer-inner">
       <div class="footer-brand">
-        <div class="footer-logo"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-        <div class="footer-name">Digital AI</div>
+        <div class="footer-logo"><img src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-primary.svg" alt="Digital AI"></div>
       </div>
       <div class="footer-meta">Dados validados por equipe de ciência de dados · Uso interno</div>
-      <div class="footer-note">Gerado em 13/07/2026 · Chatwoot API v2 · Conta #6</div>
+      <div class="footer-note">Gerado em 13/07/2026 · Chat API v2 · Conta #6</div>
     </div>
   </div>
 </footer>
