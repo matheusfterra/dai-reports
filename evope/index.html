@@ -3,71 +3,203 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EVOPE — Relatórios | Digital AI</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>EVOPE — Documentação Técnica</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --navy: #0F172A; --surface: #1E293B; --border: #334155;
-      --indigo: #6366F1; --indigo-dim: rgba(99,102,241,0.12);
-      --muted: #94A3B8; --white: #FFFFFF;
-      --green: #10B981; --green-dim: rgba(16,185,129,0.12);
-      --radius: 14px;
-    }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', sans-serif; background: var(--navy); color: var(--white); min-height: 100vh; padding: 40px 24px 80px; -webkit-font-smoothing: antialiased; }
-    .container { max-width: 860px; margin: 0 auto; }
-    .header { margin-bottom: 40px; }
-    .back { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 20px; transition: color 0.15s; }
-    .back:hover { color: var(--white); }
-    .client-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--indigo-dim); border: 1px solid rgba(99,102,241,0.2); border-radius: 20px; padding: 5px 14px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--indigo); margin-bottom: 14px; }
-    h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
-    .subtitle { font-size: 14px; color: var(--muted); margin-top: 6px; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 16px; }
-    .report-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; text-decoration: none; color: inherit; display: block; transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; position: relative; overflow: hidden; }
-    .report-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--indigo), #818cf8); }
-    .report-card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,0.4); border-color: rgba(99,102,241,0.3); }
-    .card-category { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--indigo); margin-bottom: 8px; }
-    .card-title { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 6px; letter-spacing: -0.2px; }
-    .card-period { font-size: 12px; color: var(--green); font-weight: 600; margin-bottom: 10px; }
-    .card-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
-    .card-arrow { position: absolute; top: 24px; right: 24px; font-size: 18px; color: var(--muted); transition: color 0.15s, transform 0.15s; }
-    .report-card:hover .card-arrow { color: var(--indigo); transform: translateX(3px); }
-    .footer-note { margin-top: 40px; font-size: 12px; color: #475569; text-align: center; }
-    .report-card.docs-card::before { background: linear-gradient(90deg, #DCF84C, #b8d632); }
-    .report-card.docs-card:hover { border-color: rgba(220,248,76,0.4); }
-    .report-card.docs-card .card-arrow { color: #94A3B8; }
-    .report-card.docs-card:hover .card-arrow { color: #DCF84C; }
+    :root {
+      --primary:   #2D52EF;
+      --secondary: #3B2FC9;
+      --dark:      #0F1F5C;
+      --bg:        #080E2A;
+      --surface:   #0D1736;
+      --surface2:  #111E42;
+      --surface3:  #172350;
+      --border:    rgba(45,82,239,.18);
+      --border2:   rgba(45,82,239,.10);
+      --text:      #F0F3FF;
+      --text-muted:#9AAAD4;
+      --text-dim:  #5B6FA4;
+      --green:  #34D399;
+      --amber:  #FBBF24;
+      --red:    #F87171;
+      --font-head: 'Plus Jakarta Sans', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --r: 10px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ── Header ── */
+    .header {
+      padding: 28px 60px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: 1100px; margin: 0 auto;
+    }
+    .logo-row { display: flex; align-items: center; gap: 14px; padding-bottom: 24px; }
+    .sidebar-logo { height: 28px; width: auto; }
+    .logo-sep { width: 1px; height: 22px; background: var(--border); }
+    .logo-name { font-family: var(--font-head); font-size: 15px; font-weight: 700; color: var(--text); }
+    .logo-sub  { font-size: 12px; color: var(--text-dim); }
+
+    /* ── Hero ── */
+    .hero {
+      max-width: 1100px; margin: 0 auto;
+      padding: 72px 60px 56px;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 11px; font-weight: 700; letter-spacing: 1.4px;
+      text-transform: uppercase; color: var(--primary);
+      background: rgba(45,82,239,.1); border: 1px solid rgba(45,82,239,.2);
+      padding: 4px 14px; border-radius: 100px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-family: var(--font-head);
+      font-size: 42px; font-weight: 800; letter-spacing: -.8px;
+      color: var(--text); margin-bottom: 14px; line-height: 1.15;
+    }
+    h1 span { color: var(--primary); }
+    .hero-lead {
+      font-size: 16px; color: var(--text-muted); max-width: 540px;
+      margin: 0 auto 48px; line-height: 1.75;
+    }
+
+    /* ── Cards ── */
+    .cards {
+      max-width: 1100px; margin: 0 auto;
+      padding: 0 60px 80px;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden;
+      text-decoration: none;
+      display: flex; flex-direction: column;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .card:hover {
+      border-color: var(--primary);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(45,82,239,.18);
+    }
+    .card-top {
+      padding: 28px 28px 22px;
+      flex: 1;
+    }
+    .card-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; margin-bottom: 18px;
+    }
+    .card-icon.blue   { background: rgba(45,82,239,.15); }
+    .card-icon.green  { background: rgba(52,211,153,.12); }
+    .card-icon.amber  { background: rgba(251,191,36,.10); }
+    .card-title {
+      font-family: var(--font-head); font-size: 17px; font-weight: 700;
+      color: var(--text); margin-bottom: 6px;
+    }
+    .card-subtitle { font-size: 11.5px; color: var(--primary); margin-bottom: 12px; font-weight: 600; }
+    .card-desc { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+    .card-footer {
+      padding: 14px 28px;
+      background: var(--surface2);
+      border-top: 1px solid var(--border2);
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .chip {
+      font-size: 11px; font-weight: 600;
+      padding: 3px 9px; border-radius: 100px;
+      background: var(--surface); color: var(--text-dim);
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+    }
+    .chip.active { background: rgba(52,211,153,.1); color: var(--green); border-color: rgba(52,211,153,.25); }
+    .card-arrow {
+      font-size: 12px; color: var(--primary);
+      margin-left: auto; align-self: center;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <a href="../index.html" class="back">← Voltar para todos os clientes</a>
-      <div class="client-badge">📊 EVOPE</div>
-      <h1>Relatórios EVOPE</h1>
-      <p class="subtitle">Projeto Agente de Insights · Digital AI</p>
+
+  <div class="header">
+    <div class="logo-row">
+      <img
+        src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-negative.svg"
+        alt="Digital AI"
+        class="sidebar-logo"
+      />
+      <div class="logo-sep"></div>
+      <div>
+        <div class="logo-name">EVOPE</div>
+        <div class="logo-sub">Centro de Documentação Técnica</div>
+      </div>
     </div>
-
-    <div class="grid">
-      <a href="analise-dados-maio-2026.html" class="report-card">
-        <span class="card-arrow">→</span>
-        <div class="card-category">Análise de Dados</div>
-        <div class="card-title">Análise de Produtividade — Burnout, Grupos & Processos</div>
-        <div class="card-period">Maio 2026 · Análise Preliminar</div>
-        <div class="card-desc">17 colaboradores analisados. 2 em risco de burnout. Aproveitamento médio 39%. 4 workflows identificados no Mapa de Processos. Base técnica para o Agente de IA.</div>
-      </a>
-
-      <a href="docs.html" class="report-card docs-card">
-        <span class="card-arrow">→</span>
-        <div class="card-category" style="color:#DCF84C">Documentação Técnica</div>
-        <div class="card-title">Guia de Integração — EVOPE AI Agent</div>
-        <div class="card-period" style="color:#DCF84C">API · Payloads · Exemplos · Quick Start</div>
-        <div class="card-desc">Documentação completa para integrar o Agente de Insights no front-end: endpoint, sessão, payloads por página (Mapa, Burnout, Grupos), botão widget, iframe e exemplos em JS, cURL e Python.</div>
-      </a>
-    </div>
-
-    <p class="footer-note">Digital AI × EVOPE — Relatórios gerados pela equipe Digital AI</p>
   </div>
+
+  <div class="hero">
+    <div class="hero-eyebrow">Documentação Técnica</div>
+    <h1>EVOPE <span>Platform</span></h1>
+    <p class="hero-lead">
+      Referência técnica dos workflows de IA que alimentam a plataforma EVOPE.
+      Selecione o módulo que deseja consultar.
+    </p>
+  </div>
+
+  <div class="cards">
+
+    <!-- AGENTE CONVERSACIONAL -->
+    <a href="agente.html" class="card">
+      <div class="card-top">
+        <div class="card-icon blue">💬</div>
+        <div class="card-title">Agente Conversacional</div>
+        <div class="card-subtitle">agente-mapa-processos · ID: eJ4CTb9f4fxSS04d</div>
+        <p class="card-desc">
+          Agente de chat que responde perguntas sobre os dados de análise carregados no relatório.
+          Pipeline completo: webhook → guardrails → AI Agent → memória PostgreSQL.
+          Documentação inclui arquitetura de nós, sistema de guardrails em 4 camadas,
+          memória de sessão, schema de dados e testes.
+        </p>
+      </div>
+      <div class="card-footer">
+        <span class="chip active">● Produção</span>
+        <span class="chip">35 nós</span>
+        <span class="chip">4 guardrails</span>
+        <span class="chip">16/16 testes</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- GERADOR DE RELATÓRIO -->
+    <a href="gerador.html" class="card">
+      <div class="card-top">
+        <div class="card-icon green">📊</div>
+        <div class="card-title">Gerador de Relatório</div>
+        <div class="card-subtitle">Gerador de Relatório de Automação · ID: UwsLxUDVK1HPHNiD</div>
+        <p class="card-desc">
+          Workflow de geração automática de relatórios a partir de arquivos XLSX/XLS/CSV.
+          Processa dados com AI Agent (gpt-5.4-mini), gera HTML do relatório e envia
+          por email via Gmail. Suporta entrada via formulário EVOPE ou webhook externo.
+        </p>
+      </div>
+      <div class="card-footer">
+        <span class="chip active">● Produção</span>
+        <span class="chip">26 nós</span>
+        <span class="chip">XLSX · XLS · CSV</span>
+        <span class="chip">Gmail</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+
 </body>
 </html>
