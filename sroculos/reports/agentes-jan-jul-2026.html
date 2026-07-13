@@ -1,910 +1,1149 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sr. Óculos — Performance de Atendimento | Jan–Jul 2026</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <style>
-    :root {
-      --brand:        #2D52EF;
-      --brand-dark:   #0F1F5C;
-      --brand-mid:    #1E3AC8;
-      --brand-accent: #E8EEFF;
-      --brand-light:  #F0F4FF;
-      --ai-color:     #059669;
-      --ai-light:     #D1FAE5;
-      --ai-mid:       #10B981;
-      --gold:         #D97706;
-      --gold-light:   #FEF3C7;
-      --purple:       #7C3AED;
-      --purple-light: #EDE9FE;
-      --bg:           #F8FAFF;
-      --surface:      #FFFFFF;
-      --border:       #E2E8F0;
-      --border2:      #CBD5E1;
-      --text:         #0F172A;
-      --text-muted:   #475569;
-      --text-subtle:  #94A3B8;
-      --shadow-sm:    0 1px 3px rgba(15,31,92,.06), 0 1px 2px rgba(15,31,92,.04);
-      --shadow-md:    0 4px 16px rgba(15,31,92,.10), 0 2px 4px rgba(15,31,92,.06);
-      --radius:       14px;
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard de Atendimento — Digital AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ─── HEADER ────────────────────────────────────── */
-    .header {
-      background: linear-gradient(135deg, #2D52EF 0%, #0F1F5C 100%);
-      padding: 0 32px;
-      position: sticky; top: 0; z-index: 100;
-      box-shadow: 0 2px 12px rgba(15,31,92,.25);
-    }
-    .header-inner {
-      max-width: 1280px; margin: 0 auto;
-      height: 60px; display: flex; align-items: center; justify-content: space-between;
-    }
-    .header-left  { display: flex; align-items: center; gap: 16px; }
-    .header-logo  { height: 28px; filter: brightness(0) invert(1); }
-    .header-sep   { width: 1px; height: 20px; background: rgba(255,255,255,.25); }
-    .header-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 600; color: rgba(255,255,255,.9); }
-    .header-badge {
-      background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.2);
-      color: rgba(255,255,255,.85); font-size: 11px; font-weight: 600;
-      padding: 3px 10px; border-radius: 20px;
-    }
+  :root {
+    --brand-primary:   #2D52EF;
+    --brand-secondary: #3B2FC9;
+    --brand-dark:      #0F1F5C;
+    --brand-accent:    #E8EEFF;
+    --bg-base:         #060d24;
+    --bg-card:         rgba(15, 31, 92, 0.45);
+    --bg-card-hover:   rgba(15, 31, 92, 0.65);
+    --border-subtle:   rgba(45, 82, 239, 0.18);
+    --border-active:   rgba(45, 82, 239, 0.5);
+    --text-primary:    #ffffff;
+    --text-secondary:  rgba(255,255,255,0.6);
+    --text-muted:      rgba(255,255,255,0.35);
+    --green:           #10b981;
+    --green-dim:       rgba(16,185,129,0.15);
+    --amber:           #f59e0b;
+    --amber-dim:       rgba(245,158,11,0.15);
+    --red:             #ef4444;
+    --red-dim:         rgba(239,68,68,0.12);
+    --purple:          #8b5cf6;
+    --purple-dim:      rgba(139,92,246,0.15);
+    --font-heading:    'Plus Jakarta Sans', sans-serif;
+    --font-body:       'DM Sans', sans-serif;
+    --radius-sm:  6px;
+    --radius-md:  12px;
+    --radius-lg:  16px;
+    --radius-xl:  24px;
+    --shadow-card: 0 4px 24px rgba(0,0,0,0.4), 0 1px 3px rgba(0,0,0,0.3);
+    --glow-blue:   0 0 32px rgba(45,82,239,0.25);
+  }
 
-    /* ─── PERIOD BANNER ─────────────────────────────── */
-    .period-banner {
-      background: var(--brand-light);
-      border-bottom: 1px solid var(--brand-accent);
-      padding: 10px 32px;
-    }
-    .period-inner {
-      max-width: 1280px; margin: 0 auto;
-      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
-    }
-    .period-text { font-size: 13px; color: var(--brand-dark); font-weight: 500; }
-    .period-text strong { font-weight: 700; }
-    .period-tag {
-      background: var(--brand); color: white;
-      font-size: 11px; font-weight: 700;
-      padding: 3px 10px; border-radius: 20px; letter-spacing: .03em;
-    }
+  html { scroll-behavior: smooth; }
 
-    /* ─── MAIN ──────────────────────────────────────── */
-    .main { max-width: 1280px; margin: 0 auto; padding: 32px 24px 64px; }
+  body {
+    font-family: var(--font-body);
+    background: var(--bg-base);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-    .section-title {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 13px; font-weight: 700;
-      color: var(--text-subtle);
-      letter-spacing: .08em; text-transform: uppercase;
-      margin-bottom: 14px;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  body::before {
+    content: '';
+    position: fixed;
+    top: -200px; left: -200px;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(45,82,239,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -150px; right: -150px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(59,47,201,0.10) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
 
-    /* ─── GRIDS ──────────────────────────────────────── */
-    .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 28px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 28px; }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
-    .grid-60-40 { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; margin-bottom: 28px; }
-    .grid-40-60 { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; margin-bottom: 28px; }
+  /* ── HEADER ─────────────────────────────── */
+  .header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(6,13,36,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 16px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px;
+  }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .header-logo { height: 32px; }
+  .header-divider { width: 1px; height: 28px; background: var(--border-subtle); }
+  .header-title { font-family: var(--font-heading); font-size: 16px; font-weight: 700; color: var(--text-primary); }
+  .header-subtitle { font-size: 13px; color: var(--text-secondary); margin-top: 1px; }
+  .header-badge {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--green-dim);
+    border: 1px solid rgba(16,185,129,0.3);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 12px; font-weight: 600; color: var(--green);
+  }
+  .header-badge::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-    /* ─── KPI CARDS ──────────────────────────────────── */
-    .kpi {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 22px 20px;
-      box-shadow: var(--shadow-sm);
-      position: relative; overflow: hidden;
-    }
-    .kpi-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
-    .kpi-icon {
-      width: 36px; height: 36px; border-radius: 10px;
-      display: flex; align-items: center; justify-content: center; font-size: 17px;
-    }
-    .kpi-icon.blue   { background: var(--brand-accent); }
-    .kpi-icon.green  { background: var(--ai-light); }
-    .kpi-icon.gold   { background: var(--gold-light); }
-    .kpi-icon.purple { background: var(--purple-light); }
-    .kpi-badge {
-      font-size: 10px; font-weight: 700; padding: 2px 8px;
-      border-radius: 20px; letter-spacing: .04em;
-    }
-    .kpi-badge.ai { background: var(--ai-light); color: var(--ai-color); }
-    .kpi-val {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 30px; font-weight: 800;
-      color: var(--text); letter-spacing: -.02em;
-      margin-bottom: 2px;
-    }
-    .kpi-val.brand  { color: var(--brand); }
-    .kpi-val.green  { color: var(--ai-color); }
-    .kpi-label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
-    .kpi-divider { height: 1px; background: var(--border); margin: 12px 0; }
-    .kpi-footer { font-size: 11px; color: var(--text-subtle); display: flex; align-items: center; gap: 6px; }
-    .dot-green  { color: var(--ai-color); font-size: 8px; }
-    .dot-blue   { color: var(--brand); font-size: 8px; }
+  /* ── MAIN LAYOUT ────────────────────────── */
+  .main { max-width: 1400px; margin: 0 auto; padding: 32px 32px 64px; position: relative; z-index: 1; }
 
-    /* ─── CARD ──────────────────────────────────────── */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px 22px;
-      box-shadow: var(--shadow-sm);
-    }
-    .card-head { margin-bottom: 18px; }
-    .card-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
-    .card-desc  { font-size: 12px; color: var(--text-muted); }
+  .section-title {
+    font-family: var(--font-heading);
+    font-size: 13px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1.2px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1; height: 1px;
+    background: linear-gradient(to right, var(--border-subtle), transparent);
+  }
 
-    /* ─── AGENT TABLE ───────────────────────────────── */
-    .ag-table { width: 100%; border-collapse: collapse; }
-    .ag-table th {
-      font-size: 10px; font-weight: 700; color: var(--text-subtle);
-      letter-spacing: .08em; text-transform: uppercase;
-      text-align: left; padding: 0 14px 10px;
-      border-bottom: 2px solid var(--border);
-    }
-    .ag-table td { padding: 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
-    .ag-table tr:last-child td { border-bottom: none; }
-    .ag-table tbody tr:hover td { background: var(--bg); }
-    .ag-avatar {
-      width: 34px; height: 34px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-weight: 800; font-size: 12px; flex-shrink: 0;
-    }
-    .ag-cell { display: flex; align-items: center; gap: 11px; }
-    .ag-name { font-weight: 600; color: var(--text); font-size: 13px; }
-    .ag-role { font-size: 11px; color: var(--text-muted); }
-    .type-badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 10px; font-weight: 700; letter-spacing: .04em;
-      padding: 3px 9px; border-radius: 20px;
-    }
-    .type-ai  { background: var(--ai-light);     color: var(--ai-color); }
-    .type-hum { background: var(--brand-accent);  color: var(--brand); }
-    .ag-metric {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-weight: 700; font-size: 15px;
-    }
-    .ag-metric.green { color: var(--ai-color); }
-    .ag-metric.blue  { color: var(--brand); }
-    .ag-metric.muted { color: var(--text-muted); font-size: 13px; font-weight: 500; }
+  /* ── CARDS ──────────────────────────────── */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-card);
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .card:hover {
+    border-color: var(--border-active);
+    box-shadow: var(--shadow-card), var(--glow-blue);
+  }
 
-    /* ─── CHANNEL TABLE ─────────────────────────────── */
-    .ch-table { width: 100%; border-collapse: collapse; }
-    .ch-table th {
-      font-size: 10px; font-weight: 700; color: var(--text-subtle);
-      letter-spacing: .08em; text-transform: uppercase;
-      text-align: left; padding: 0 12px 10px;
-      border-bottom: 2px solid var(--border);
-    }
-    .ch-table td { padding: 11px 12px; border-bottom: 1px solid var(--border); font-size: 12px; }
-    .ch-table tr:last-child td { border-bottom: none; }
-    .ch-table tbody tr:hover td { background: var(--bg); }
-    .ch-name { font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; }
-    .ch-icon { font-size: 15px; }
-    .ch-num  { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; color: var(--text); }
-    .ch-bar  { display: flex; align-items: center; gap: 8px; }
-    .ch-bar-bg { flex: 1; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
-    .ch-bar-fill { height: 100%; border-radius: 3px; }
-    .ch-pct { font-size: 11px; color: var(--text-subtle); min-width: 34px; text-align: right; }
-    .ch-tag {
-      font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 20px;
-    }
-    .ch-tag.pre  { background: #DBEAFE; color: #1D4ED8; }
-    .ch-tag.pos  { background: #D1FAE5; color: #065F46; }
-    .ch-tag.ig   { background: #FCE7F3; color: #9D174D; }
+  /* ── KPI GRID ───────────────────────────── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  @media (max-width: 1100px) { .kpi-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 700px)  { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
 
-    /* ─── RESPONSE BAR ──────────────────────────────── */
-    .resp-row { margin-bottom: 20px; }
-    .resp-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
-    .resp-name { font-size: 13px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; }
-    .resp-val  { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 17px; font-weight: 800; }
-    .resp-bg   { height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; }
-    .resp-fill { height: 100%; border-radius: 5px; }
-    .resp-note { font-size: 11px; color: var(--text-subtle); margin-top: 4px; }
+  .kpi-card {
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary));
+  }
+  .kpi-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+    font-size: 18px;
+  }
+  .kpi-label {
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .kpi-value {
+    font-family: var(--font-heading);
+    font-size: 28px; font-weight: 800;
+    line-height: 1;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+  .kpi-sub {
+    font-size: 12px; color: var(--text-secondary);
+    display: flex; align-items: center; gap: 4px;
+  }
+  .tag-up   { color: var(--green); }
+  .tag-ai   { color: var(--brand-primary); }
+  .tag-warn { color: var(--amber); }
 
-    /* ─── PRICING ───────────────────────────────────── */
-    .pricing-row  { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
-    .pricing-row:last-child { border-bottom: none; }
-    .pricing-item { font-size: 13px; color: var(--text-muted); }
-    .pricing-val  { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 13px; color: var(--text); }
-    .pricing-total {
-      margin-top: 14px; padding-top: 14px;
-      border-top: 2px solid var(--border);
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .pricing-total-label { font-size: 13px; font-weight: 600; color: var(--text-muted); }
-    .pricing-total-val   { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 20px; color: var(--brand); }
+  /* ── CHARTS GRID ────────────────────────── */
+  .charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+  @media (max-width: 900px) { .charts-grid { grid-template-columns: 1fr; } }
 
-    /* ─── INFO BOX ──────────────────────────────────── */
-    .info-box {
-      background: var(--brand-light);
-      border: 1px solid var(--brand-accent);
-      border-radius: 10px;
-      padding: 14px 16px;
-      font-size: 12px; color: var(--text-muted);
-      display: flex; align-items: flex-start; gap: 10px;
-      margin-top: 16px;
-    }
-    .info-box strong { color: var(--brand-dark); }
+  .chart-card { padding: 24px; }
+  .chart-title {
+    font-family: var(--font-heading);
+    font-size: 15px; font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .chart-desc { font-size: 12px; color: var(--text-secondary); margin-bottom: 20px; }
+  .chart-wrap { position: relative; }
 
-    /* ─── HIGHLIGHT STRIP ───────────────────────────── */
-    .iris-strip {
-      background: linear-gradient(135deg, var(--ai-light) 0%, #ECFDF5 100%);
-      border: 1px solid #A7F3D0;
-      border-radius: var(--radius);
-      padding: 22px 24px;
-      margin-bottom: 28px;
-      display: flex; align-items: center; gap: 24px;
-      flex-wrap: wrap;
-    }
-    .iris-strip-icon { font-size: 32px; flex-shrink: 0; }
-    .iris-strip-body { flex: 1; min-width: 200px; }
-    .iris-strip-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 15px; color: var(--text); margin-bottom: 4px; }
-    .iris-strip-text  { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
-    .iris-strip-stats { display: flex; gap: 28px; flex-shrink: 0; flex-wrap: wrap; }
-    .iris-stat { text-align: center; }
-    .iris-stat-val {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 26px; font-weight: 800; color: var(--ai-color);
-    }
-    .iris-stat-label { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  /* ── DONUT LEGEND ───────────────────────── */
+  .donut-legend {
+    display: flex; flex-direction: column; gap: 10px;
+    margin-top: 20px;
+  }
+  .legend-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.03);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .legend-left { display: flex; align-items: center; gap: 10px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .legend-name { font-size: 13px; font-weight: 500; }
+  .legend-right { display: flex; align-items: center; gap: 10px; }
+  .legend-count { font-family: var(--font-heading); font-size: 14px; font-weight: 700; }
+  .legend-pct { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; }
 
-    /* ─── FOOTER ─────────────────────────────────────── */
-    .footer {
-      text-align: center; padding: 24px;
-      border-top: 1px solid var(--border);
-      margin-top: 40px;
-      color: var(--text-subtle); font-size: 11px;
-    }
+  /* ── TABLE ──────────────────────────────── */
+  .table-wrap { overflow-x: auto; }
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th {
+    text-align: left;
+    padding: 10px 16px;
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .data-table td {
+    padding: 14px 16px;
+    font-size: 14px; color: var(--text-secondary);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: middle;
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: rgba(255,255,255,0.03); }
+  .agent-name {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 600; color: var(--text-primary);
+  }
+  .agent-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .avatar-ai   { background: rgba(45,82,239,0.3);  color: #7b9aff; border: 1px solid rgba(45,82,239,0.4); }
+  .avatar-t    { background: rgba(16,185,129,0.2); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+  .avatar-h    { background: rgba(139,92,246,0.2); color: var(--purple); border: 1px solid rgba(139,92,246,0.3); }
+  .avatar-m    { background: rgba(245,158,11,0.2); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+  .badge-ai {
+    font-size: 10px; font-weight: 700;
+    background: rgba(45,82,239,0.2); color: #7b9aff;
+    border: 1px solid rgba(45,82,239,0.3);
+    border-radius: 999px; padding: 1px 7px;
+  }
+  .num-good { color: var(--green); font-weight: 600; }
+  .num-warn { color: var(--amber); font-weight: 600; }
+  .num-bad  { color: var(--red);   font-weight: 600; }
+  .num-normal { color: var(--text-primary); font-weight: 600; }
+  .progress-bar-wrap { display: flex; align-items: center; gap: 10px; }
+  .progress-bar { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.08); flex: 1; min-width: 80px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+  .table-total td { background: rgba(45,82,239,0.08); color: var(--text-primary); font-weight: 700; border-top: 1px solid var(--border-active); }
 
-    /* ─── RESPONSIVE ─────────────────────────────────── */
-    @media (max-width: 900px) {
-      .grid-4 { grid-template-columns: repeat(2,1fr); }
-      .grid-60-40, .grid-40-60, .grid-2 { grid-template-columns: 1fr; }
-      .iris-strip { flex-direction: column; align-items: flex-start; }
-      .iris-strip-stats { gap: 20px; }
-    }
-    @media (max-width: 560px) {
-      .grid-4, .grid-3 { grid-template-columns: 1fr; }
-    }
-  </style>
+  /* ── RESPONSE TIME ──────────────────────── */
+  .two-col-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+  @media (max-width: 900px) { .two-col-grid { grid-template-columns: 1fr; } }
+
+  /* ── PRICING SECTION ────────────────────── */
+  .pricing-section {
+    padding: 32px;
+    border-radius: var(--radius-xl);
+    background: linear-gradient(135deg, rgba(45,82,239,0.1) 0%, rgba(59,47,201,0.08) 100%);
+    border: 1px solid rgba(45,82,239,0.3);
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .pricing-section::before {
+    content: '';
+    position: absolute; top: -80px; right: -80px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(45,82,239,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .pricing-title {
+    font-family: var(--font-heading);
+    font-size: 20px; font-weight: 800;
+    margin-bottom: 4px;
+  }
+  .pricing-subtitle { font-size: 13px; color: var(--text-secondary); margin-bottom: 28px; }
+
+  .pricing-controls {
+    display: flex; flex-wrap: wrap; gap: 24px;
+    margin-bottom: 28px;
+    padding: 20px;
+    background: rgba(0,0,0,0.2);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+  }
+  .control-group { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 200px; }
+  .control-label { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+  .control-value { font-family: var(--font-heading); font-size: 20px; font-weight: 800; color: var(--brand-accent); }
+  input[type=range] {
+    width: 100%; height: 6px; border-radius: 3px;
+    appearance: none; background: rgba(255,255,255,0.1);
+    outline: none; cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    appearance: none; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--brand-primary); cursor: pointer;
+    box-shadow: 0 0 8px rgba(45,82,239,0.5);
+    border: 2px solid white;
+  }
+
+  .scenarios-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 900px) { .scenarios-grid { grid-template-columns: 1fr; } }
+
+  .scenario-card {
+    padding: 24px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-subtle);
+    position: relative; overflow: hidden;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .scenario-card:hover { transform: translateY(-2px); }
+  .scenario-tag {
+    font-size: 10px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 1px;
+    padding: 4px 10px; border-radius: 999px;
+    margin-bottom: 16px; display: inline-block;
+  }
+  .scenario-cost {
+    font-family: var(--font-heading);
+    font-size: 36px; font-weight: 800;
+    line-height: 1; margin-bottom: 4px;
+  }
+  .scenario-period { font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; }
+  .scenario-breakdown { display: flex; flex-direction: column; gap: 8px; }
+  .scenario-line {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; color: var(--text-secondary);
+    padding: 6px 10px;
+    background: rgba(0,0,0,0.2); border-radius: var(--radius-sm);
+  }
+  .scenario-line strong { color: var(--text-primary); }
+
+  .scen-today {
+    background: rgba(255,255,255,0.03);
+    border-color: rgba(255,255,255,0.1);
+  }
+  .scen-today .scenario-cost { color: var(--green); }
+  .scen-today .scenario-tag  { background: var(--green-dim); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+
+  .scen-service {
+    background: rgba(45,82,239,0.05);
+    border-color: rgba(45,82,239,0.3);
+  }
+  .scen-service .scenario-cost { color: var(--brand-accent); }
+  .scen-service .scenario-tag  { background: rgba(45,82,239,0.15); color: #7b9aff; border: 1px solid rgba(45,82,239,0.4); }
+  .scen-service::before {
+    content: ''; position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+    background: linear-gradient(135deg, rgba(45,82,239,0.05) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .scen-meta {
+    background: rgba(139,92,246,0.05);
+    border-color: rgba(139,92,246,0.3);
+  }
+  .scen-meta .scenario-cost { color: var(--purple); }
+  .scen-meta .scenario-tag  { background: var(--purple-dim); color: var(--purple); border: 1px solid rgba(139,92,246,0.4); }
+
+  .pricing-note {
+    padding: 14px 18px;
+    background: rgba(245,158,11,0.08);
+    border: 1px solid rgba(245,158,11,0.25);
+    border-radius: var(--radius-md);
+    font-size: 12px; color: rgba(255,255,255,0.7);
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .pricing-note-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  .insight-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 12px; margin-top: 20px;
+  }
+  @media (max-width: 900px) { .insight-grid { grid-template-columns: 1fr; } }
+
+  .insight-card {
+    padding: 14px 16px;
+    background: rgba(0,0,0,0.25);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+  .insight-icon { font-size: 20px; margin-bottom: 6px; }
+  .insight-text { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+  .insight-text strong { color: var(--text-primary); }
+
+  /* ── FOOTER ─────────────────────────────── */
+  .footer {
+    border-top: 1px solid var(--border-subtle);
+    padding: 24px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-left { display: flex; align-items: center; gap: 12px; }
+  .footer-logo { height: 22px; opacity: 0.6; }
+  .footer-text { font-size: 12px; color: var(--text-muted); }
+  .footer-right { font-size: 11px; color: var(--text-muted); }
+
+  /* ── RESPONSIVE ─────────────────────────── */
+  @media (max-width: 700px) {
+    .header { padding: 12px 16px; }
+    .main { padding: 20px 16px 48px; }
+    .kpi-value { font-size: 22px; }
+    .pricing-section { padding: 20px; }
+    .scenario-cost { font-size: 28px; }
+  }
+
+  /* ── HELPERS ────────────────────────────── */
+  .mb-8  { margin-bottom: 8px; }
+  .mb-20 { margin-bottom: 20px; }
+  .mb-32 { margin-bottom: 32px; }
+  .p-24  { padding: 24px; }
+  .flex  { display: flex; }
+  .gap-8 { gap: 8px; }
+  .text-xs { font-size: 12px; }
+  .font-heading { font-family: var(--font-heading); }
+</style>
 </head>
 <body>
 
-<!-- HEADER -->
+<!-- ═══════════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════════════ -->
 <header class="header">
-  <div class="header-inner">
-    <div class="header-left">
-      <img class="header-logo"
-        src="https://pub-2fe4d6a91b344f9b98bef4eb1e0d3ef5.r2.dev/uploads/digital-ai-logo-white.png"
-        alt="Digital AI" onerror="this.style.display='none'" />
-      <div class="header-sep"></div>
-      <span class="header-title">Sr. Óculos — Relatório de Performance</span>
+  <div class="header-left">
+    <img class="header-logo"
+      src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-negative.svg"
+      alt="Digital AI" onerror="this.style.display='none'">
+    <div class="header-divider"></div>
+    <div>
+      <div class="header-title">Dashboard de Atendimento</div>
+      <div class="header-subtitle">Jan 01 – Jul 11, 2026 · Chatwoot Analytics</div>
     </div>
-    <span class="header-badge">Janeiro – Julho 2026</span>
   </div>
+  <div class="header-badge">Dados atualizados</div>
 </header>
 
-<!-- PERIOD BANNER -->
-<div class="period-banner">
-  <div class="period-inner">
-    <span class="period-text">
-      📋 Relatório gerado pela <strong>Digital AI Chat</strong> ·
-      Período: <strong>01/01/2026 – 11/07/2026</strong> ·
-      Todas as caixas de entrada monitoradas
-    </span>
-    <span class="period-tag">6 meses de operação</span>
-  </div>
-</div>
-
+<!-- ═══════════════════════════════════════════════
+     MAIN
+══════════════════════════════════════════════════ -->
 <main class="main">
 
-  <!-- ── KPIs GERAIS ── -->
-  <div class="section-title">Visão geral do período</div>
-  <div class="grid-4">
-    <div class="kpi">
-      <div class="kpi-top">
-        <div class="kpi-icon blue">💬</div>
-      </div>
-      <div class="kpi-val brand">84.804</div>
-      <div class="kpi-label">Conversas atendidas</div>
-      <div class="kpi-divider"></div>
-      <div class="kpi-footer"><span class="dot-blue">●</span> 17 canais ativos · WhatsApp + Instagram</div>
+  <!-- KPI CARDS -->
+  <div class="section-title">Visão Geral do Período</div>
+  <div class="kpi-grid mb-32">
+
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(45,82,239,0.15)">💬</div>
+      <div class="kpi-label">Total de Conversas</div>
+      <div class="kpi-value" id="kpi-conv">40.052</div>
+      <div class="kpi-sub"><span>191 dias · Jan–Jul 2026</span></div>
     </div>
-    <div class="kpi">
-      <div class="kpi-top">
-        <div class="kpi-icon blue">📨</div>
-      </div>
-      <div class="kpi-val">157.532</div>
-      <div class="kpi-label">Mensagens processadas</div>
-      <div class="kpi-divider"></div>
-      <div class="kpi-footer"><span class="dot-blue">●</span> Média de 1,85 mensagens por conversa</div>
+
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(16,185,129,0.15)">✅</div>
+      <div class="kpi-label">Total de Resoluções</div>
+      <div class="kpi-value" id="kpi-res">74.820</div>
+      <div class="kpi-sub tag-up">↑ 1,87× mais que conversas</div>
     </div>
-    <div class="kpi">
-      <div class="kpi-top">
-        <div class="kpi-icon green">🤖</div>
-        <span class="kpi-badge ai">Iris</span>
-      </div>
-      <div class="kpi-val green">31s</div>
-      <div class="kpi-label">1ª resposta — Iris (IA)</div>
-      <div class="kpi-divider"></div>
-      <div class="kpi-footer"><span class="dot-green">●</span> Primeiro contato automático</div>
+
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(45,82,239,0.15)">🤖</div>
+      <div class="kpi-label">Resposta IA (1ª)</div>
+      <div class="kpi-value" style="font-size:22px">11m 12s</div>
+      <div class="kpi-sub tag-ai">⚡ vs. 2h+ agentes humanos</div>
     </div>
-    <div class="kpi">
-      <div class="kpi-top">
-        <div class="kpi-icon purple">👥</div>
-      </div>
-      <div class="kpi-val">~2 min</div>
-      <div class="kpi-label">1ª resposta — Equipe humana</div>
-      <div class="kpi-divider"></div>
-      <div class="kpi-footer"><span class="dot-blue">●</span> Thais & Helen — atendimento especializado</div>
+
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(245,158,11,0.15)">📊</div>
+      <div class="kpi-label">Média Diária</div>
+      <div class="kpi-value">210</div>
+      <div class="kpi-sub">conversas/dia</div>
     </div>
+
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(139,92,246,0.15)">🧠</div>
+      <div class="kpi-label">Taxa de Automação IA</div>
+      <div class="kpi-value">1,68%</div>
+      <div class="kpi-sub tag-ai">673 de 40.052 conversas</div>
+    </div>
+
   </div>
 
-  <!-- ── IRIS STRIP ── -->
-  <div class="iris-strip">
-    <div class="iris-strip-icon">🤖</div>
-    <div class="iris-strip-body">
-      <div class="iris-strip-title">Iris — Inteligência Artificial de Atendimento</div>
-      <div class="iris-strip-text">
-        A Iris é o agente de IA responsável pelo primeiro contato em todas as conversas.
-        Disponível 24 horas por dia, 7 dias por semana, garante respostas imediatas
-        e triagem automática para a equipe especializada quando necessário.
+  <!-- CHARTS: DONUT + BAR RESOLUÇÕES -->
+  <div class="section-title">Distribuição por Agente</div>
+  <div class="charts-grid mb-32">
+
+    <!-- Donut -->
+    <div class="card chart-card">
+      <div class="chart-title">Conversas Atribuídas</div>
+      <div class="chart-desc">Distribuição por agente no período completo</div>
+      <div class="chart-wrap" style="max-width:240px; margin:0 auto">
+        <canvas id="donutChart" height="240"></canvas>
+      </div>
+      <div class="donut-legend" id="donutLegend"></div>
+    </div>
+
+    <!-- Bar Resoluções -->
+    <div class="card chart-card">
+      <div class="chart-title">Resoluções por Agente</div>
+      <div class="chart-desc">Número total de conversas resolvidas no período</div>
+      <div class="chart-wrap">
+        <canvas id="resChart" height="260"></canvas>
       </div>
     </div>
-    <div class="iris-strip-stats">
-      <div class="iris-stat">
-        <div class="iris-stat-val">31s</div>
-        <div class="iris-stat-label">1ª resposta</div>
-      </div>
-      <div class="iris-stat">
-        <div class="iris-stat-val">24s</div>
-        <div class="iris-stat-label">Espera do cliente</div>
-      </div>
-      <div class="iris-stat">
-        <div class="iris-stat-val">24/7</div>
-        <div class="iris-stat-label">Disponibilidade</div>
-      </div>
-    </div>
+
   </div>
 
-  <!-- ── EQUIPE ── -->
-  <div class="section-title">Equipe de atendimento</div>
-  <div class="card" style="margin-bottom:28px;">
-    <div class="card-head">
-      <div class="card-title">Composição da Equipe</div>
-      <div class="card-desc">Agentes ativos na operação Digital AI Chat — Jan a Jul 2026</div>
-    </div>
-    <table class="ag-table">
-      <thead>
-        <tr>
-          <th>Agente</th>
-          <th>Tipo</th>
-          <th>1ª Resposta</th>
-          <th>Espera do Cliente</th>
-          <th>Disponibilidade</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <div class="ag-cell">
-              <div class="ag-avatar" style="background:#D1FAE5; color:#065F46;">🤖</div>
-              <div>
-                <div class="ag-name">Iris</div>
-                <div class="ag-role">Agente de Inteligência Artificial</div>
-              </div>
-            </div>
-          </td>
-          <td><span class="type-badge type-ai">IA</span></td>
-          <td><span class="ag-metric green">31 segundos</span></td>
-          <td><span class="ag-metric green">24 segundos</span></td>
-          <td style="font-size:12px;color:var(--ai-color);font-weight:600;">24h / 7 dias</td>
-        </tr>
-        <tr>
-          <td>
-            <div class="ag-cell">
-              <div class="ag-avatar" style="background:var(--brand-accent); color:var(--brand);">T</div>
-              <div>
-                <div class="ag-name">Thais</div>
-                <div class="ag-role">Atendente Especializada</div>
-              </div>
-            </div>
-          </td>
-          <td><span class="type-badge type-hum">Humano</span></td>
-          <td><span class="ag-metric blue">~2 minutos</span></td>
-          <td><span class="ag-metric muted">1 min 33s</span></td>
-          <td style="font-size:12px;color:var(--text-muted);">Horário comercial</td>
-        </tr>
-        <tr>
-          <td>
-            <div class="ag-cell">
-              <div class="ag-avatar" style="background:var(--purple-light); color:var(--purple);">H</div>
-              <div>
-                <div class="ag-name">Helen</div>
-                <div class="ag-role">Atendente Especializada</div>
-              </div>
-            </div>
-          </td>
-          <td><span class="type-badge type-hum">Humano</span></td>
-          <td><span class="ag-metric blue">~1 min 38s</span></td>
-          <td><span class="ag-metric muted">1 min 33s</span></td>
-          <td style="font-size:12px;color:var(--text-muted);">Horário comercial</td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="info-box">
-      💡 <span>O tempo médio de uma conversa completa — da primeira mensagem até o encerramento — é de aproximadamente <strong>31 minutos</strong>.</span>
-    </div>
-  </div>
-
-  <!-- ── TEMPO DE RESPOSTA ── -->
-  <div class="section-title">Tempo de primeira resposta</div>
-  <div class="grid-40-60">
-    <div class="card">
-      <div class="card-head">
-        <div class="card-title">Por Agente</div>
-        <div class="card-desc">Tempo médio para a primeira resposta ao cliente</div>
-      </div>
-      <div class="resp-row">
-        <div class="resp-header">
-          <span class="resp-name">🤖 Iris</span>
-          <span class="resp-val" style="color:var(--ai-color)">31 segundos</span>
-        </div>
-        <div class="resp-bg">
-          <div class="resp-fill" style="width:26%;background:var(--ai-mid);"></div>
-        </div>
-        <div class="resp-note">Resposta automática · primeiro contato</div>
-      </div>
-      <div class="resp-row">
-        <div class="resp-header">
-          <span class="resp-name">👩 Helen</span>
-          <span class="resp-val" style="color:var(--brand)">1 min 38s</span>
-        </div>
-        <div class="resp-bg">
-          <div class="resp-fill" style="width:82%;background:var(--brand);"></div>
-        </div>
-        <div class="resp-note">Dentro do horário comercial</div>
-      </div>
-      <div class="resp-row">
-        <div class="resp-header">
-          <span class="resp-name">👩 Thais</span>
-          <span class="resp-val" style="color:var(--brand)">~2 minutos</span>
-        </div>
-        <div class="resp-bg">
-          <div class="resp-fill" style="width:100%;background:var(--brand-mid);"></div>
-        </div>
-        <div class="resp-note">Dentro do horário comercial</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-head">
-        <div class="card-title">Evolução Mensal de Conversas</div>
-        <div class="card-desc">Total de conversas por mês no período</div>
-      </div>
-      <div style="height: 200px;">
-        <canvas id="chartMonthly"></canvas>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── CANAIS ── -->
-  <div class="section-title">Distribuição por canal de atendimento</div>
-  <div class="grid-60-40">
-    <div class="card">
-      <div class="card-head">
-        <div class="card-title">Canais Ativos</div>
-        <div class="card-desc">Volume de conversas por grupo de canais — Jan a Jul 2026</div>
-      </div>
-      <table class="ch-table">
+  <!-- PERFORMANCE TABLE -->
+  <div class="section-title">Performance Detalhada dos Agentes</div>
+  <div class="card p-24 mb-32">
+    <div class="table-wrap">
+      <table class="data-table">
         <thead>
           <tr>
-            <th>Canal</th>
-            <th>Categoria</th>
-            <th style="text-align:right">Conversas</th>
-            <th style="min-width:140px">Participação</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><span class="ch-name"><span class="ch-icon">📱</span>WhatsApp — Pré-Atendimento</span></td>
-            <td><span class="ch-tag pre">PRÉ-VENDA</span></td>
-            <td style="text-align:right"><span class="ch-num">60.874</span></td>
-            <td>
-              <div class="ch-bar">
-                <div class="ch-bar-bg"><div class="ch-bar-fill" style="width:72%;background:#25D366;"></div></div>
-                <span class="ch-pct">71,8%</span>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td><span class="ch-name"><span class="ch-icon">📸</span>Instagram DM</span></td>
-            <td><span class="ch-tag ig">INSTAGRAM</span></td>
-            <td style="text-align:right"><span class="ch-num">16.524</span></td>
-            <td>
-              <div class="ch-bar">
-                <div class="ch-bar-bg"><div class="ch-bar-fill" style="width:19.5%;background:#E1306C;"></div></div>
-                <span class="ch-pct">19,5%</span>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td><span class="ch-name"><span class="ch-icon">📱</span>WhatsApp — Pós-Venda</span></td>
-            <td><span class="ch-tag pos">PÓS-VENDA</span></td>
-            <td style="text-align:right"><span class="ch-num">7.406</span></td>
-            <td>
-              <div class="ch-bar">
-                <div class="ch-bar-bg"><div class="ch-bar-fill" style="width:8.7%;background:#3B82F6;"></div></div>
-                <span class="ch-pct">8,7%</span>
-              </div>
-            </td>
-          </tr>
-          <tr style="background:var(--bg);">
-            <td><span class="ch-name" style="color:var(--text-muted);">Total consolidado</span></td>
-            <td><span style="font-size:11px;color:var(--text-subtle);">17 linhas ativas</span></td>
-            <td style="text-align:right"><span class="ch-num" style="color:var(--brand);">84.804</span></td>
-            <td>
-              <div class="ch-bar">
-                <div class="ch-bar-bg"><div class="ch-bar-fill" style="width:100%;background:var(--brand);"></div></div>
-                <span class="ch-pct">100%</span>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="card">
-      <div class="card-head">
-        <div class="card-title">Proporção por Canal</div>
-        <div class="card-desc">Distribuição percentual das conversas</div>
-      </div>
-      <div style="height: 190px; margin-bottom: 20px;">
-        <canvas id="chartChannels"></canvas>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:9px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;">
-          <span style="display:flex;align-items:center;gap:7px;color:var(--text-muted);">
-            <span style="width:10px;height:10px;border-radius:3px;background:#25D366;display:inline-block;"></span>
-            WhatsApp Pré-Atendimento
-          </span>
-          <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:var(--text);">60.874</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;">
-          <span style="display:flex;align-items:center;gap:7px;color:var(--text-muted);">
-            <span style="width:10px;height:10px;border-radius:3px;background:#E1306C;display:inline-block;"></span>
-            Instagram DM
-          </span>
-          <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:var(--text);">16.524</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;">
-          <span style="display:flex;align-items:center;gap:7px;color:var(--text-muted);">
-            <span style="width:10px;height:10px;border-radius:3px;background:#3B82F6;display:inline-block;"></span>
-            WhatsApp Pós-Venda
-          </span>
-          <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:var(--text);">7.406</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── ETIQUETAS / FLUXO ── -->
-  <div class="section-title">Fluxo de atendimento — etiquetas</div>
-  <div class="grid-4" style="margin-bottom:28px;">
-    <div class="kpi">
-      <div class="kpi-top"><div class="kpi-icon blue">🔀</div></div>
-      <div class="kpi-val brand">3.701</div>
-      <div class="kpi-label">Transferências para equipe humana</div>
-      <div class="kpi-divider"></div>
-      <div class="kpi-footer"><span class="dot-blue">●</span> Roteadas pela Iris após triagem</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-top"><div class="kpi-icon green">📸</div></div>
-      <div class="kpi-val">810</div>
-      <div class="kpi-label">Encerramentos via Instagram</div>
-      <div class="kpi-divider"></div>
-      <div class="kpi-footer"><span class="dot-green">●</span> Conversas finalizadas no Instagram DM</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-top"><div class="kpi-icon gold">📣</div></div>
-      <div class="kpi-val">304</div>
-      <div class="kpi-label">Conversas via campanhas</div>
-      <div class="kpi-divider"></div>
-      <div class="kpi-footer"><span class="dot-blue">●</span> Aniversário · Limpeza · Receita vencida</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-top"><div class="kpi-icon purple">✅</div></div>
-      <div class="kpi-val">23.711</div>
-      <div class="kpi-label">Resoluções vinculadas a etiquetas</div>
-      <div class="kpi-divider"></div>
-      <div class="kpi-footer"><span class="dot-blue">●</span> Conversas marcadas e acompanhadas</div>
-    </div>
-  </div>
-
-  <!-- Campanhas de Disparo -->
-  <div class="grid-60-40" style="margin-bottom:28px;">
-    <div class="card">
-      <div class="card-head">
-        <div class="card-title">Campanhas de Disparo Ativo</div>
-        <div class="card-desc">Campanhas proativas enviadas pela plataforma no período — Jan a Jul 2026</div>
-      </div>
-      <table class="ch-table">
-        <thead>
-          <tr>
-            <th>Campanha</th>
-            <th style="text-align:right">Conversas</th>
-            <th style="text-align:right">Resoluções</th>
-            <th style="min-width:130px">Volume</th>
+            <th>Agente</th>
+            <th>Conversas</th>
+            <th>Resoluções</th>
+            <th>1ª Resposta</th>
+            <th>Tempo Resolução</th>
+            <th>Espera Cliente</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>
-              <div style="display:flex;align-items:center;gap:8px;">
-                <span style="font-size:16px;">🎂</span>
+              <div class="agent-name">
+                <div class="agent-avatar avatar-ai">🤖</div>
                 <div>
-                  <div style="font-weight:600;color:var(--text);font-size:13px;">Disparo Aniversariantes</div>
-                  <div style="font-size:11px;color:var(--text-subtle);">Mensagem automática em datas de aniversário</div>
+                  Digital AI DEV
+                  <br><span class="badge-ai">IA Automação</span>
                 </div>
               </div>
             </td>
-            <td style="text-align:right"><span class="ch-num">173</span></td>
-            <td style="text-align:right"><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;color:var(--ai-color);">672</span></td>
             <td>
-              <div class="ch-bar">
-                <div class="ch-bar-bg"><div class="ch-bar-fill" style="width:57%;background:#F59E0B;"></div></div>
-                <span class="ch-pct">57%</span>
+              <div class="progress-bar-wrap">
+                <span class="num-normal">673</span>
+                <div class="progress-bar"><div class="progress-fill" style="width:2.6%;background:#2D52EF"></div></div>
+                <span style="font-size:11px;color:var(--text-muted)">1,7%</span>
               </div>
             </td>
+            <td class="num-normal">842</td>
+            <td class="num-good">11m 12s</td>
+            <td class="num-normal">11h 40m</td>
+            <td class="num-warn">38m 6s</td>
           </tr>
           <tr>
             <td>
-              <div style="display:flex;align-items:center;gap:8px;">
-                <span style="font-size:16px;">👓</span>
-                <div>
-                  <div style="font-weight:600;color:var(--text);font-size:13px;">Disparo Limpeza de Óculos</div>
-                  <div style="font-size:11px;color:var(--text-subtle);">Lembrete de manutenção preventiva</div>
-                </div>
+              <div class="agent-name">
+                <div class="agent-avatar avatar-t">T</div>
+                Thais
               </div>
             </td>
-            <td style="text-align:right"><span class="ch-num">87</span></td>
-            <td style="text-align:right"><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;color:var(--ai-color);">255</span></td>
             <td>
-              <div class="ch-bar">
-                <div class="ch-bar-bg"><div class="ch-bar-fill" style="width:29%;background:#6366F1;"></div></div>
-                <span class="ch-pct">29%</span>
+              <div class="progress-bar-wrap">
+                <span class="num-normal">25.731</span>
+                <div class="progress-bar"><div class="progress-fill" style="width:64.2%;background:#10b981"></div></div>
+                <span style="font-size:11px;color:var(--text-muted)">64,2%</span>
               </div>
             </td>
+            <td class="num-normal">42.678</td>
+            <td class="num-warn">2h 27m</td>
+            <td class="num-bad">3d 16h</td>
+            <td class="num-normal">30m 53s</td>
           </tr>
           <tr>
             <td>
-              <div style="display:flex;align-items:center;gap:8px;">
-                <span style="font-size:16px;">📋</span>
-                <div>
-                  <div style="font-weight:600;color:var(--text);font-size:13px;">Disparo Receita Vencida</div>
-                  <div style="font-size:11px;color:var(--text-subtle);">Alerta proativo de renovação de receita</div>
-                </div>
+              <div class="agent-name">
+                <div class="agent-avatar avatar-h">H</div>
+                Helen
               </div>
             </td>
-            <td style="text-align:right"><span class="ch-num">44</span></td>
-            <td style="text-align:right"><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;color:var(--ai-color);">108</span></td>
             <td>
-              <div class="ch-bar">
-                <div class="ch-bar-bg"><div class="ch-bar-fill" style="width:14%;background:#EC4899;"></div></div>
-                <span class="ch-pct">14%</span>
+              <div class="progress-bar-wrap">
+                <span class="num-normal">13.375</span>
+                <div class="progress-bar"><div class="progress-fill" style="width:33.4%;background:#8b5cf6"></div></div>
+                <span style="font-size:11px;color:var(--text-muted)">33,4%</span>
               </div>
             </td>
+            <td class="num-normal">30.991</td>
+            <td class="num-warn">2h 20m</td>
+            <td class="num-bad">4d 19h</td>
+            <td class="num-good">26m 20s</td>
           </tr>
-          <tr style="background:var(--bg);">
-            <td><span style="font-weight:600;color:var(--text-muted);font-size:13px;">Total campanhas</span></td>
-            <td style="text-align:right"><span class="ch-num" style="color:var(--brand);">304</span></td>
-            <td style="text-align:right"><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:var(--ai-color);font-size:14px;">1.035</span></td>
-            <td><span style="font-size:11px;color:var(--text-subtle);">3,4 resoluções por conversa</span></td>
+          <tr>
+            <td>
+              <div class="agent-name">
+                <div class="agent-avatar avatar-m">M</div>
+                Matheus Terra
+              </div>
+            </td>
+            <td>
+              <div class="progress-bar-wrap">
+                <span class="num-normal">273</span>
+                <div class="progress-bar"><div class="progress-fill" style="width:0.7%;background:#f59e0b"></div></div>
+                <span style="font-size:11px;color:var(--text-muted)">0,7%</span>
+              </div>
+            </td>
+            <td class="num-normal">309</td>
+            <td class="num-bad">18h 45m</td>
+            <td class="num-good">7h 50m</td>
+            <td class="num-good">17m 32s</td>
           </tr>
         </tbody>
+        <tfoot>
+          <tr class="table-total">
+            <td><strong>TOTAL</strong></td>
+            <td><strong>40.052</strong></td>
+            <td><strong>74.820</strong></td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+        </tfoot>
       </table>
-      <div class="info-box">
-        📌 <span>Cada conversa de campanha gerou em média <strong>3,4 interações de resolução</strong>, indicando alto engajamento do cliente com as mensagens proativas.</span>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-head">
-        <div class="card-title">Roteamento Inteligente</div>
-        <div class="card-desc">Como a Iris classifica e encaminha as conversas</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:16px;">
-        <div style="background:var(--bg);border-radius:10px;padding:16px 18px;border:1px solid var(--border);">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-            <span style="font-size:13px;font-weight:600;color:var(--text);">🔀 Transferência para equipe</span>
-            <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:18px;color:var(--brand);">3.701</span>
-          </div>
-          <div style="font-size:11px;color:var(--text-subtle);">Conversas roteadas da Iris para Thais / Helen</div>
-          <div style="height:5px;background:var(--border);border-radius:3px;margin-top:10px;">
-            <div style="height:100%;width:82%;background:var(--brand);border-radius:3px;"></div>
-          </div>
-        </div>
-        <div style="background:var(--bg);border-radius:10px;padding:16px 18px;border:1px solid var(--border);">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-            <span style="font-size:13px;font-weight:600;color:var(--text);">📸 Finalização Instagram</span>
-            <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:18px;color:var(--ai-color);">810</span>
-          </div>
-          <div style="font-size:11px;color:var(--text-subtle);">Conversas encerradas no canal Instagram</div>
-          <div style="height:5px;background:var(--border);border-radius:3px;margin-top:10px;">
-            <div style="height:100%;width:18%;background:var(--ai-mid);border-radius:3px;"></div>
-          </div>
-        </div>
-        <div style="background:var(--gold-light);border-radius:10px;padding:16px 18px;border:1px solid #FDE68A;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-            <span style="font-size:13px;font-weight:600;color:#92400E;">📣 Campanhas disparadas</span>
-            <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:18px;color:#D97706;">304</span>
-          </div>
-          <div style="font-size:11px;color:#A16207;">Aniversário + Limpeza + Receita vencida</div>
-        </div>
-      </div>
     </div>
   </div>
 
-  <!-- ── PRECIFICAÇÃO ── -->
-  <div class="section-title">Simulação de precificação</div>
-  <div class="grid-2">
-    <div class="card">
-      <div class="card-head">
-        <div class="card-title">Custo de Mensagens WhatsApp</div>
-        <div class="card-desc">Projeção baseada na precificação Meta Business — Brasil · por 10.000 conversas/mês</div>
+  <!-- RESPONSE TIME CHARTS -->
+  <div class="section-title">Análise de Tempo de Resposta</div>
+  <div class="two-col-grid mb-32">
+    <div class="card chart-card">
+      <div class="chart-title">Tempo de Primeira Resposta</div>
+      <div class="chart-desc">Comparativo entre agentes (em minutos)</div>
+      <canvas id="firstRespChart" height="200"></canvas>
+    </div>
+    <div class="card chart-card">
+      <div class="chart-title">Tempo Médio de Resolução</div>
+      <div class="chart-desc">Comparativo entre agentes (em horas)</div>
+      <canvas id="resolutionChart" height="200"></canvas>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PRICING SIMULATION
+  ═══════════════════════════════════════════ -->
+  <div class="section-title">Simulação Financeira</div>
+  <div class="pricing-section">
+
+    <div class="pricing-title">💰 Impacto da Nova Precificação Meta WhatsApp</div>
+    <div class="pricing-subtitle">
+      Simulação baseada no volume mensal médio de <strong>6.327 conversas</strong> · Tarifa Brasil: <strong>$0,0068/mensagem</strong> (Service Messages)
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="pricing-controls">
+      <div class="control-group">
+        <div class="control-label">Mensagens por conversa (média estimada)</div>
+        <div class="control-value" id="ctrl-msgs-val">8 msgs</div>
+        <input type="range" id="ctrl-msgs" min="3" max="20" value="8" step="1">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)">
+          <span>3 (simples)</span><span>20 (complexo)</span>
+        </div>
       </div>
-      <div class="pricing-row">
-        <span class="pricing-item">Taxa de entrega por mensagem (BR)</span>
-        <span class="pricing-val">US$ 0,0068 / msg</span>
-      </div>
-      <div class="pricing-row">
-        <span class="pricing-item">Mensagens por conversa (média)</span>
-        <span class="pricing-val">~1,85 mensagens</span>
-      </div>
-      <div class="pricing-row">
-        <span class="pricing-item">Mensagens em 10.000 conversas</span>
-        <span class="pricing-val">~18.500 mensagens</span>
-      </div>
-      <div class="pricing-row">
-        <span class="pricing-item">Custo de entrega estimado</span>
-        <span class="pricing-val">~US$ 126 / mês</span>
-      </div>
-      <div class="pricing-row">
-        <span class="pricing-item">Meta Business Agent (IA) — a partir out/2026</span>
-        <span class="pricing-val">US$ 2 / 1M tokens</span>
-      </div>
-      <div class="pricing-total">
-        <span class="pricing-total-label">Custo estimado · 10k conv/mês</span>
-        <span class="pricing-total-val">~US$ 130–150</span>
+      <div class="control-group">
+        <div class="control-label">% de conversas tratadas pela IA</div>
+        <div class="control-value" id="ctrl-ai-val">1,7% (atual)</div>
+        <input type="range" id="ctrl-ai" min="0" max="100" value="1.68" step="0.5">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)">
+          <span>0% (só humanos)</span><span>100% (full IA)</span>
+        </div>
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-head">
-        <div class="card-title">Projeção Anual da Operação</div>
-        <div class="card-desc">Baseado no volume atual da Sr. Óculos — ~14.134 conversas/mês</div>
+    <!-- SCENARIO CARDS -->
+    <div class="scenarios-grid">
+
+      <!-- TODAY -->
+      <div class="scenario-card scen-today">
+        <div class="scenario-tag">Hoje · até set/2026</div>
+        <div class="scenario-cost">$0</div>
+        <div class="scenario-period">por mês · entrega WhatsApp</div>
+        <div class="scenario-breakdown">
+          <div class="scenario-line">
+            <span>Mensagens não-template</span>
+            <strong style="color:var(--green)">Gratuitas ✓</strong>
+          </div>
+          <div class="scenario-line">
+            <span>IA própria (OpenAI)</span>
+            <strong id="own-ai-today">~$0,06/mês</strong>
+          </div>
+          <div class="scenario-line">
+            <span>Total estimado</span>
+            <strong style="color:var(--green)" id="total-today">≈$0/mês</strong>
+          </div>
+        </div>
       </div>
-      <div class="pricing-row">
-        <span class="pricing-item">Volume mensal médio (6 meses)</span>
-        <span class="pricing-val">~14.134 conversas</span>
+
+      <!-- OCT 2026 - CURRENT SOLUTION -->
+      <div class="scenario-card scen-service">
+        <div class="scenario-tag">⭐ Out/2026 · Solução Atual</div>
+        <div class="scenario-cost" id="scen-service-cost">$344</div>
+        <div class="scenario-period">por mês · estimado</div>
+        <div class="scenario-breakdown">
+          <div class="scenario-line">
+            <span>Service Messages</span>
+            <strong id="s-delivery">$344</strong>
+          </div>
+          <div class="scenario-line">
+            <span>IA própria (low-cost)</span>
+            <strong id="s-ai-cost">~$0,06</strong>
+          </div>
+          <div class="scenario-line">
+            <span>Total estimado</span>
+            <strong id="s-total" style="color:var(--brand-accent)">$344</strong>
+          </div>
+        </div>
       </div>
-      <div class="pricing-row">
-        <span class="pricing-item">Projeção anual de conversas</span>
-        <span class="pricing-val">~169.600 conversas</span>
+
+      <!-- META BUSINESS AGENT -->
+      <div class="scenario-card scen-meta">
+        <div class="scenario-tag">🟣 Out/2026 · Meta Business Agent</div>
+        <div class="scenario-cost" id="scen-meta-cost">$376</div>
+        <div class="scenario-period">por mês · estimado</div>
+        <div class="scenario-breakdown">
+          <div class="scenario-line">
+            <span>Meta Agent tokens (IA)</span>
+            <strong id="m-agent-cost">$38</strong>
+          </div>
+          <div class="scenario-line">
+            <span>Humanos (Service Msgs)</span>
+            <strong id="m-human-cost">$338</strong>
+          </div>
+          <div class="scenario-line">
+            <span>Total estimado</span>
+            <strong id="m-total" style="color:var(--purple)">$376</strong>
+          </div>
+        </div>
       </div>
-      <div class="pricing-row">
-        <span class="pricing-item">Projeção anual de mensagens</span>
-        <span class="pricing-val">~313.760 mensagens</span>
+
+    </div>
+
+    <!-- PRICING CHART -->
+    <div class="card p-24 mb-20" style="background:rgba(0,0,0,0.2)">
+      <div class="chart-title mb-8">Custo por % de Automação IA</div>
+      <div class="chart-desc">Como o custo mensal varia conforme mais conversas são tratadas pela IA</div>
+      <canvas id="pricingChart" height="200"></canvas>
+    </div>
+
+    <!-- NOTE -->
+    <div class="pricing-note">
+      <span class="pricing-note-icon">⚠️</span>
+      <div>
+        <strong>Premissas desta simulação:</strong> Volume mensal médio de 6.327 conversas (total / 6,33 meses).
+        Tarifa de entrega Brasil: <strong>$0,0068/mensagem</strong> (Service Messages — mesma de Utility/Authentication).
+        Meta Business Agent: <strong>$0,04–0,05/mensagem</strong> tudo incluso (tokens + entrega, estimativa 22.500 tokens/mensagem × $2/1M tokens).
+        IA própria atual estimada em <strong>gpt-4o-mini @ $0,15/1M tokens</strong> (~1.000 tokens/resposta).
+        Custo humano (labor) não incluído. Preços em USD.
+        <strong>Relatório de Conversas pendente</strong> para volumetria mensal precisa.
       </div>
-      <div class="pricing-row">
-        <span class="pricing-item">Canais mantidos em operação</span>
-        <span class="pricing-val">17 canais</span>
+    </div>
+
+    <!-- INSIGHTS -->
+    <div class="insight-grid">
+      <div class="insight-card">
+        <div class="insight-icon">💡</div>
+        <div class="insight-text">
+          <strong>Meta Business Agent custa ~$32/mês a mais</strong> no cenário atual (1,68% IA).
+          Só faz sentido financeiro se substituir IA cara de terceiros.
+        </div>
       </div>
-      <div class="pricing-row">
-        <span class="pricing-item">Custo de entrega anual estimado</span>
-        <span class="pricing-val">~US$ 2.134 / ano</span>
+      <div class="insight-card">
+        <div class="insight-icon">📈</div>
+        <div class="insight-text">
+          <strong>Escalar IA própria é muito mais barato.</strong>
+          Dobrar automação de 1,7% → 50% com gpt-4o-mini custa só ~$7/mês extra.
+        </div>
       </div>
-      <div class="pricing-total">
-        <span class="pricing-total-label">Projeção total anual</span>
-        <span class="pricing-total-val">~US$ 2.400–2.800</span>
+      <div class="insight-card">
+        <div class="insight-icon">📅</div>
+        <div class="insight-text">
+          <strong>A cobrança começa em out/2026.</strong>
+          Hoje, mensagens de atendimento são gratuitas. Novidade: toda msg conversacional será cobrada.
+        </div>
       </div>
-      <div class="info-box" style="margin-top:14px;">
-        📌 <span>Precificação de referência: <strong>Meta WhatsApp Business API</strong> · Taxa de entrega Brasil vigente em 2026. Valores sujeitos a alteração conforme nova política Meta (outubro/2026).</span>
-      </div>
+    </div>
+
+  </div><!-- /pricing-section -->
+
+  <!-- MONTHLY VOLUMETRY PLACEHOLDER -->
+  <div class="section-title">Volumetria Mensal</div>
+  <div class="card p-24 mb-32" style="min-height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;border-style:dashed;opacity:0.7">
+    <div style="font-size:32px">📊</div>
+    <div style="font-family:var(--font-heading);font-size:16px;font-weight:700">Aguardando relatório de Conversas</div>
+    <div style="font-size:13px;color:var(--text-secondary);text-align:center;max-width:420px">
+      O relatório de agentes tem apenas totais do período. Assim que você enviar o relatório <strong>Conversas</strong> (com volume diário/mensal), esta seção será preenchida automaticamente com gráficos de linha e barras.
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:8px">
+      <span style="font-size:11px;background:rgba(45,82,239,0.15);border:1px solid rgba(45,82,239,0.3);border-radius:999px;padding:3px 10px;color:#7b9aff">Agentes ✓</span>
+      <span style="font-size:11px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:999px;padding:3px 10px;color:var(--text-muted)">Conversas ⏳</span>
+      <span style="font-size:11px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:999px;padding:3px 10px;color:var(--text-muted)">Etiquetas ⏳</span>
+      <span style="font-size:11px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:999px;padding:3px 10px;color:var(--text-muted)">CSAT ⏳</span>
+      <span style="font-size:11px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:999px;padding:3px 10px;color:var(--text-muted)">SLA ⏳</span>
     </div>
   </div>
 
 </main>
 
-<!-- FOOTER -->
+<!-- ═══════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════ -->
 <footer class="footer">
-  <p><strong style="color:var(--text-muted);">Digital AI Chat</strong> · Relatório de Performance de Atendimento · Sr. Óculos · Janeiro – Julho 2026</p>
-  <p style="margin-top:4px;">digital-ai.tech · Dados referentes ao período 01/01/2026 – 11/07/2026</p>
+  <div class="footer-left">
+    <img class="footer-logo"
+      src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-negative.svg"
+      alt="Digital AI" onerror="this.style.display='none'">
+    <div class="footer-text">Dashboard de Atendimento · Powered by Digital AI</div>
+  </div>
+  <div class="footer-right">Dados: Chatwoot · Período: Jan–Jul 2026 · Gerado em 10/07/2026</div>
 </footer>
 
+<!-- ═══════════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════════════ -->
 <script>
-  Chart.defaults.color        = '#94A3B8';
-  Chart.defaults.font.family  = "'DM Sans', sans-serif";
-  Chart.defaults.font.size    = 12;
+// ── DATA ────────────────────────────────────────
+const AGENTS = [
+  { name: 'Digital AI DEV', conv: 673,   res: 842,   firstResp: 11.2,  resTime: 11.67, wait: 38.1,  color: '#2D52EF', avatarClass: 'avatar-ai', isAI: true  },
+  { name: 'Thais',          conv: 25731, res: 42678, firstResp: 147,   resTime: 88,    wait: 30.88, color: '#10b981', avatarClass: 'avatar-t',  isAI: false },
+  { name: 'Helen',          conv: 13375, res: 30991, firstResp: 140,   resTime: 115,   wait: 26.33, color: '#8b5cf6', avatarClass: 'avatar-h',  isAI: false },
+  { name: 'Matheus Terra',  conv: 273,   res: 309,   firstResp: 1125,  resTime: 7.83,  wait: 17.53, color: '#f59e0b', avatarClass: 'avatar-m',  isAI: false },
+];
 
-  // ─── Monthly bar ────────────────────────────────────────
-  const ctxM = document.getElementById('chartMonthly').getContext('2d');
-  const grad = ctxM.createLinearGradient(0, 0, 0, 200);
-  grad.addColorStop(0, 'rgba(45,82,239,.85)');
-  grad.addColorStop(1, 'rgba(45,82,239,.20)');
-  new Chart(ctxM, {
-    type: 'bar',
-    data: {
-      labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'],
-      datasets: [{
-        label: 'Conversas',
-        data: [10800, 11200, 12400, 13100, 14200, 13500, 9604],
-        backgroundColor: grad,
-        borderRadius: 6,
-        borderSkipped: false,
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: '#fff',
-          borderColor: '#E2E8F0', borderWidth: 1,
-          titleColor: '#0F172A', bodyColor: '#475569',
-          padding: 10,
-          callbacks: { label: ctx => ` ${ctx.parsed.y.toLocaleString('pt-BR')} conversas` }
+const TOTAL_CONV = AGENTS.reduce((s, a) => s + a.conv, 0); // 40052
+const MONTHS = 6.33;
+const MONTHLY_CONV = TOTAL_CONV / MONTHS; // ~6327
+const DELIVERY_RATE = 0.0068; // USD per service message
+const META_AGENT_RATE = 0.045; // USD per meta business agent message (~22500 tokens × $2/1M)
+const OWN_AI_TOKENS_PER_MSG = 1000; // gpt-4o-mini input+output
+const OWN_AI_RATE = 0.15 / 1e6; // $0.15/1M tokens (gpt-4o-mini)
+
+// ── Chart.js DEFAULTS ───────────────────────────
+Chart.defaults.color = 'rgba(255,255,255,0.55)';
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+
+// ── DONUT CHART ──────────────────────────────────
+const donutCtx = document.getElementById('donutChart').getContext('2d');
+const donutChart = new Chart(donutCtx, {
+  type: 'doughnut',
+  data: {
+    labels: AGENTS.map(a => a.name),
+    datasets: [{
+      data: AGENTS.map(a => a.conv),
+      backgroundColor: AGENTS.map(a => a.color + 'cc'),
+      borderColor: AGENTS.map(a => a.color),
+      borderWidth: 2,
+      hoverOffset: 6,
+    }]
+  },
+  options: {
+    responsive: true,
+    cutout: '68%',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.label}: ${ctx.raw.toLocaleString('pt-BR')} conversas (${(ctx.raw/TOTAL_CONV*100).toFixed(1)}%)`
         }
+      }
+    }
+  }
+});
+
+// Donut legend
+const legendEl = document.getElementById('donutLegend');
+AGENTS.forEach(a => {
+  const pct = (a.conv / TOTAL_CONV * 100).toFixed(1);
+  legendEl.innerHTML += `
+    <div class="legend-item">
+      <div class="legend-left">
+        <div class="legend-dot" style="background:${a.color}"></div>
+        <div class="legend-name">${a.name}${a.isAI ? ' 🤖' : ''}</div>
+      </div>
+      <div class="legend-right">
+        <div class="legend-count">${a.conv.toLocaleString('pt-BR')}</div>
+        <div class="legend-pct" style="background:${a.color}22;color:${a.color};border:1px solid ${a.color}55">${pct}%</div>
+      </div>
+    </div>`;
+});
+
+// ── RESOLUTIONS BAR CHART ────────────────────────
+const resCtx = document.getElementById('resChart').getContext('2d');
+new Chart(resCtx, {
+  type: 'bar',
+  data: {
+    labels: AGENTS.map(a => a.name),
+    datasets: [{
+      label: 'Resoluções',
+      data: AGENTS.map(a => a.res),
+      backgroundColor: AGENTS.map(a => a.color + '99'),
+      borderColor: AGENTS.map(a => a.color),
+      borderWidth: 2,
+      borderRadius: 8,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ` ${ctx.raw.toLocaleString('pt-BR')} resoluções` } }
+    },
+    scales: {
+      y: {
+        grid: { color: 'rgba(255,255,255,0.06)' },
+        ticks: { callback: v => v >= 1000 ? (v/1000).toFixed(0)+'k' : v }
       },
-      scales: {
-        x: { grid: { display: false }, border: { display: false }, ticks: { color: '#94A3B8' } },
-        y: {
-          grid: { color: '#F1F5F9', drawBorder: false }, border: { display: false },
-          ticks: { color: '#94A3B8', callback: v => v >= 1000 ? (v/1000).toFixed(0)+'k' : v }
-        }
-      }
+      x: { grid: { display: false } }
     }
-  });
+  }
+});
 
-  // ─── Doughnut channels ─────────────────────────────────
-  const ctxC = document.getElementById('chartChannels').getContext('2d');
-  new Chart(ctxC, {
-    type: 'doughnut',
-    data: {
-      labels: ['WhatsApp Pré', 'Instagram DM', 'WhatsApp Pós'],
-      datasets: [{
-        data: [60874, 16524, 7406],
-        backgroundColor: ['#25D366', '#E1306C', '#3B82F6'],
-        borderWidth: 3, borderColor: '#fff',
-        hoverOffset: 5,
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      cutout: '65%',
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: '#fff',
-          borderColor: '#E2E8F0', borderWidth: 1,
-          titleColor: '#0F172A', bodyColor: '#475569',
-          padding: 10,
-          callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed.toLocaleString('pt-BR')}` }
+// ── FIRST RESPONSE CHART ─────────────────────────
+const frCtx = document.getElementById('firstRespChart').getContext('2d');
+new Chart(frCtx, {
+  type: 'bar',
+  data: {
+    labels: AGENTS.map(a => a.name),
+    datasets: [{
+      label: '1ª Resposta (min)',
+      data: AGENTS.map(a => a.firstResp),
+      backgroundColor: AGENTS.map(a => a.color + '99'),
+      borderColor: AGENTS.map(a => a.color),
+      borderWidth: 2,
+      borderRadius: 6,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => {
+            const mins = ctx.raw;
+            if (mins < 60) return ` ${mins.toFixed(0)} min`;
+            const h = Math.floor(mins/60), m = Math.round(mins%60);
+            return ` ${h}h ${m}m`;
+          }
         }
       }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(255,255,255,0.06)' },
+        ticks: { callback: v => v < 60 ? v+'m' : (v/60).toFixed(0)+'h' }
+      },
+      y: { grid: { display: false } }
     }
+  }
+});
+
+// ── RESOLUTION TIME CHART ────────────────────────
+const rtCtx = document.getElementById('resolutionChart').getContext('2d');
+new Chart(rtCtx, {
+  type: 'bar',
+  data: {
+    labels: AGENTS.map(a => a.name),
+    datasets: [{
+      label: 'Resolução (horas)',
+      data: AGENTS.map(a => a.resTime),
+      backgroundColor: AGENTS.map(a => a.color + '99'),
+      borderColor: AGENTS.map(a => a.color),
+      borderWidth: 2,
+      borderRadius: 6,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => {
+            const h = ctx.raw;
+            if (h < 24) return ` ${h.toFixed(1)}h`;
+            const d = Math.floor(h/24), rem = Math.round(h%24);
+            return ` ${d}d ${rem}h`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(255,255,255,0.06)' },
+        ticks: { callback: v => v < 24 ? v+'h' : Math.floor(v/24)+'d' }
+      },
+      y: { grid: { display: false } }
+    }
+  }
+});
+
+// ── PRICING SIMULATION ───────────────────────────
+const msgsSlider = document.getElementById('ctrl-msgs');
+const aiSlider   = document.getElementById('ctrl-ai');
+const msgsValEl  = document.getElementById('ctrl-msgs-val');
+const aiValEl    = document.getElementById('ctrl-ai-val');
+
+function updatePricing() {
+  const msgsPerConv = parseInt(msgsSlider.value);
+  const aiPct = parseFloat(aiSlider.value) / 100;
+
+  const monthlyConv = MONTHLY_CONV;
+  const aiConv      = monthlyConv * aiPct;
+  const humanConv   = monthlyConv * (1 - aiPct);
+  const totalMsgs   = monthlyConv * msgsPerConv;
+  const aiMsgs      = aiConv * msgsPerConv;
+  const humanMsgs   = humanConv * msgsPerConv;
+
+  // Scenario A: Today (free)
+  const ownAIToday = aiMsgs * OWN_AI_TOKENS_PER_MSG * OWN_AI_RATE;
+  document.getElementById('own-ai-today').textContent = `$${ownAIToday.toFixed(2)}`;
+  document.getElementById('total-today').textContent  = `≈$${ownAIToday.toFixed(2)}/mês`;
+
+  // Scenario B: Service Messages (Oct 2026, own AI)
+  const sDelivery = totalMsgs * DELIVERY_RATE;
+  const sAI       = aiMsgs * OWN_AI_TOKENS_PER_MSG * OWN_AI_RATE;
+  const sTotal    = sDelivery + sAI;
+  document.getElementById('s-delivery').textContent      = `$${sDelivery.toFixed(0)}`;
+  document.getElementById('s-ai-cost').textContent       = `$${sAI < 1 ? sAI.toFixed(2) : sAI.toFixed(0)}`;
+  document.getElementById('s-total').textContent         = `$${sTotal.toFixed(0)}`;
+  document.getElementById('scen-service-cost').textContent = `$${sTotal.toFixed(0)}`;
+
+  // Scenario C: Meta Business Agent
+  const mAgentCost = aiMsgs * META_AGENT_RATE;
+  const mHumanCost = humanMsgs * DELIVERY_RATE;
+  const mTotal     = mAgentCost + mHumanCost;
+  document.getElementById('m-agent-cost').textContent    = `$${mAgentCost.toFixed(0)}`;
+  document.getElementById('m-human-cost').textContent    = `$${mHumanCost.toFixed(0)}`;
+  document.getElementById('m-total').textContent         = `$${mTotal.toFixed(0)}`;
+  document.getElementById('scen-meta-cost').textContent  = `$${mTotal.toFixed(0)}`;
+
+  // Update labels
+  msgsValEl.textContent = `${msgsPerConv} msg${msgsPerConv > 1 ? 's' : ''}`;
+  const aiPctLabel = aiPct < 0.02 ? `${(aiPct*100).toFixed(1)}% (atual)` : `${(aiPct*100).toFixed(0)}%`;
+  aiValEl.textContent   = aiPctLabel;
+
+  // Update pricing chart
+  updatePricingChart(msgsPerConv);
+}
+
+// ── PRICING CHART ────────────────────────────────
+const pricingCtx = document.getElementById('pricingChart').getContext('2d');
+const aiPcts = [0, 5, 10, 20, 30, 50, 75, 100];
+
+function calcCosts(msgsPerConv) {
+  return aiPcts.map(pct => {
+    const aiPct    = pct / 100;
+    const totalMsgs = MONTHLY_CONV * msgsPerConv;
+    const aiMsgs   = totalMsgs * aiPct;
+    const humanMsgs = totalMsgs * (1 - aiPct);
+
+    const service = totalMsgs * DELIVERY_RATE;
+    const meta    = aiMsgs * META_AGENT_RATE + humanMsgs * DELIVERY_RATE;
+
+    return { service: Math.round(service), meta: Math.round(meta) };
   });
+}
+
+let pricingChart;
+function updatePricingChart(msgsPerConv) {
+  const costs = calcCosts(msgsPerConv || parseInt(msgsSlider.value));
+  if (pricingChart) {
+    pricingChart.data.datasets[0].data = costs.map(c => c.service);
+    pricingChart.data.datasets[1].data = costs.map(c => c.meta);
+    pricingChart.update('none');
+  }
+}
+
+pricingChart = new Chart(pricingCtx, {
+  type: 'line',
+  data: {
+    labels: aiPcts.map(p => p + '%'),
+    datasets: [
+      {
+        label: 'Solução Atual (Service Msgs)',
+        data: calcCosts(8).map(c => c.service),
+        borderColor: '#2D52EF',
+        backgroundColor: 'rgba(45,82,239,0.1)',
+        tension: 0.4, fill: true, borderWidth: 2,
+        pointBackgroundColor: '#2D52EF', pointRadius: 4,
+      },
+      {
+        label: 'Meta Business Agent',
+        data: calcCosts(8).map(c => c.meta),
+        borderColor: '#8b5cf6',
+        backgroundColor: 'rgba(139,92,246,0.08)',
+        tension: 0.4, fill: true, borderWidth: 2, borderDash: [5,3],
+        pointBackgroundColor: '#8b5cf6', pointRadius: 4,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: { boxWidth: 12, padding: 16, font: { size: 12 } }
+      },
+      tooltip: {
+        callbacks: { label: ctx => ` ${ctx.dataset.label}: $${ctx.raw}/mês` }
+      }
+    },
+    scales: {
+      y: {
+        grid: { color: 'rgba(255,255,255,0.06)' },
+        ticks: { callback: v => `$${v}` }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// Sliders
+msgsSlider.addEventListener('input', updatePricing);
+aiSlider.addEventListener('input',   updatePricing);
+updatePricing();
 </script>
+
 </body>
 </html>
