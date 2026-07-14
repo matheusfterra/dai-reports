@@ -490,9 +490,9 @@ function selectGrp(el,grp){
   document.querySelectorAll('.gc').forEach(c=>c.classList.remove('on'));
   el.classList.add('on');
   document.getElementById('grp-s').value=grp;
-  // Resolve group name → numeric ID via GD.groups (populated after first API call)
-  const gObj=(GD.groups||[]).find(g=>g.name===grp);
-  document.getElementById('grp-id').value=gObj?gObj.id:'';
+  // Resolve group name → numeric ID via pre-embedded EVOPE groups
+  const resolvedId = resolveGroupId(grp);
+  document.getElementById('grp-id').value = resolvedId;
   applyFilters();
 }
 
@@ -529,9 +529,85 @@ async function applyFilters(){
       ' · '+((d.stats&&d.stats.totalNodes)||'?')+' apps · '+((d.stats&&d.stats.totalEdges)||'?')+' conexões';
   }catch(e){
     document.getElementById('ld').classList.add('hi');
-    alert('Erro: '+e.message);
+    toastErr(e.message);
   }
   btn.disabled=false;btn.textContent='Atualizar Mapa';
+}
+
+
+// ── EVOPE Groups (pre-embedded, 2026-07-14) ──
+const EVOPE_GROUPS=[
+  {"id":5524,"name":"Accounts","parentId":5172},
+  {"id":5980,"name":"AccountsMP","parentId":5798},
+  {"id":5366,"name":"Atendimento","parentId":5365},
+  {"id":5953,"name":"BI","parentId":5798},
+  {"id":6116,"name":"Bizops","parentId":1020},
+  {"id":35289,"name":"Comercial","parentId":19474},
+  {"id":6139,"name":"Data Science.","parentId":6137},
+  {"id":41735,"name":"DataRank","parentId":1020},
+  {"id":6133,"name":"Desenvolvimento","parentId":6129},
+  {"id":19474,"name":"Di","parentId":1020},
+  {"id":5173,"name":"Estrategistas","parentId":5172},
+  {"id":5954,"name":"Estratégia","parentId":5798},
+  {"id":6120,"name":"Execs","parentId":6117},
+  {"id":7578,"name":"Executivos","parentId":31025},
+  {"id":6232,"name":"Facilities","parentId":6124},
+  {"id":5760,"name":"Finance","parentId":1020},
+  {"id":34150,"name":"Juridico","parentId":5760},
+  {"id":6128,"name":"Liderancas","parentId":6124},
+  {"id":6135,"name":"Liderancas.","parentId":5760},
+  {"id":36864,"name":"Liderança","parentId":5172},
+  {"id":37179,"name":"Liderança.","parentId":5365},
+  {"id":5977,"name":"Lideranças","parentId":5798},
+  {"id":6123,"name":"Lideranças.","parentId":6121},
+  {"id":5172,"name":"MI.","parentId":1020},
+  {"id":6121,"name":"Marketing","parentId":1020},
+  {"id":1020,"name":"Master","parentId":0},
+  {"id":31027,"name":"Negócios.","parentId":1020},
+  {"id":35290,"name":"Operações","parentId":19474},
+  {"id":5174,"name":"Ops","parentId":5172},
+  {"id":6124,"name":"People","parentId":1020},
+  {"id":6137,"name":"Produto","parentId":1020},
+  {"id":5365,"name":"RI.","parentId":1020},
+  {"id":6117,"name":"RMAds Negócios","parentId":31027},
+  {"id":5798,"name":"RMAds Operações","parentId":1020},
+  {"id":31025,"name":"RMApp Negócios","parentId":31027},
+  {"id":6126,"name":"Talent & BP","parentId":6124},
+  {"id":6129,"name":"Tech","parentId":1020},
+  {"id":6134,"name":"Tesouraria","parentId":5760}
+];
+
+// Build fast lookup: sidebar path → numeric ID
+// e.g. "MI. > Accounts" → 5524, "Produto" → 6137
+function resolveGroupId(path){
+  if(!path) return '';
+  // Try exact match first
+  const exact = EVOPE_GROUPS.find(g=>g.name===path);
+  if(exact) return String(exact.id);
+  // Try last segment (e.g. "MI. > Accounts" → "Accounts")
+  const segments = path.split(' > ');
+  const last = segments[segments.length-1].trim();
+  const byLast = EVOPE_GROUPS.find(g=>g.name===last);
+  if(byLast) return String(byLast.id);
+  return '';
+}
+
+// Toast error (replaces alert)
+function toastErr(msg){
+  let t=document.getElementById('toast-err');
+  if(!t){
+    t=document.createElement('div');
+    t.id='toast-err';
+    t.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);'+
+      'background:#EF4444;color:#fff;padding:10px 20px;border-radius:8px;'+
+      'font-size:13px;z-index:9999;max-width:90%;word-break:break-all;'+
+      'box-shadow:0 4px 20px rgba(0,0,0,.4)';
+    document.body.appendChild(t);
+  }
+  t.textContent='Erro: '+msg;
+  t.style.display='block';
+  clearTimeout(t._to);
+  t._to=setTimeout(()=>t.style.display='none',6000);
 }
 
 buildNet(GD);
