@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>EVOPE — Mapa de Processos</title>
+<script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
 <style>
 :root {
   --bg:#080E2A; --bg2:#0D1535; --bg3:#111B40; --bg4:#172250;
@@ -11,9 +12,6 @@
   --ac:#2D52EF; --ac2:#1E3EBD;
   --t:#E8EDF8; --t2:#9AAAD4; --t3:#5B6B99;
   --gr:#10B981;
-  --hdr-h:54px;
-  --kpi-h:78px;
-  --top-offset:132px; /* hdr-h + kpi-h */
 }
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html { height:100%; }
@@ -26,13 +24,13 @@ body {
   overflow-x:hidden;
 }
 
-/* -- HEADER -- */
+/* ── HEADER ── */
 .hdr {
   position:sticky; top:0; z-index:100;
   background:var(--bg2);
   border-bottom:1px solid var(--bd);
   display:flex; align-items:center; gap:12px;
-  padding:0 20px; height:var(--hdr-h); flex-shrink:0;
+  padding:0 20px; height:54px; flex-shrink:0;
 }
 .badge { background:var(--ac); border-radius:6px; padding:3px 9px; font-size:10px; font-weight:700; letter-spacing:.5px; color:#fff; }
 .hdr-title { font-size:14px; font-weight:600; }
@@ -40,13 +38,11 @@ body {
 .back { margin-left:auto; font-size:11px; color:var(--t2); text-decoration:none; padding:5px 11px; border:1px solid var(--bd); border-radius:5px; white-space:nowrap; }
 .back:hover { background:var(--bg3); color:var(--t); }
 
-/* -- KPI STRIP (sticky below header) -- */
+/* ── KPI STRIP ── */
 .kpi-strip {
-  position:sticky; top:var(--hdr-h); z-index:99;
   display:flex; flex-wrap:wrap;
   background:var(--bg2);
   border-bottom:1px solid var(--bd2);
-  flex-shrink:0;
 }
 .kpi {
   flex:1; min-width:100px;
@@ -59,22 +55,23 @@ body {
 .kv { font-size:22px; font-weight:700; line-height:1; }
 .kl { font-size:10px; color:var(--t3); margin-top:4px; text-transform:uppercase; letter-spacing:.5px; }
 
-/* -- MAIN LAYOUT -- */
+/* ── MAIN LAYOUT ── */
 .layout {
   display:flex;
-  min-height:calc(100vh - var(--top-offset));
+  min-height:calc(100vh - 54px - 78px); /* subtract header + kpi */
 }
 
-/* -- LEFT SIDEBAR -- */
+/* ── LEFT SIDEBAR ── */
 .sidebar {
   width:260px; flex-shrink:0;
   background:var(--bg2);
   border-right:1px solid var(--bd2);
   overflow-y:auto;
+  /* Sticky dentro do layout */
   position:sticky;
-  top:var(--top-offset);
+  top:54px; /* header height */
   align-self:flex-start;
-  max-height:calc(100vh - var(--top-offset));
+  max-height:calc(100vh - 54px);
 }
 .sidebar::-webkit-scrollbar { width:3px; }
 .sidebar::-webkit-scrollbar-thumb { background:var(--bd); border-radius:2px; }
@@ -126,7 +123,7 @@ select:focus, input[type=date]:focus { border-color:var(--ac); }
 .gc.on { background:var(--bg4); border-color:var(--ac); color:var(--t); }
 .gcn { background:var(--bg3); padding:1px 6px; border-radius:8px; font-size:10px; color:var(--t3); }
 
-/* -- CENTER: GRAPH -- */
+/* ── CENTER: GRAPH ── */
 .center {
   flex:1;
   display:flex;
@@ -138,7 +135,7 @@ select:focus, input[type=date]:focus { border-color:var(--ac); }
   padding:0 14px; height:42px;
   background:var(--bg2); border-bottom:1px solid var(--bd2);
   display:flex; align-items:center; gap:8px;
-  position:sticky; top:var(--top-offset); z-index:50;
+  position:sticky; top:54px; z-index:50;
   flex-shrink:0;
 }
 .tb-t { font-size:12px; font-weight:600; color:var(--t2); }
@@ -148,7 +145,7 @@ select:focus, input[type=date]:focus { border-color:var(--ac); }
 .btn-t:hover { background:var(--bg); color:var(--t); }
 .btn-t.on { background:var(--ac); color:#fff; border-color:var(--ac); }
 
-/* GRAPH CONTAINER */
+/* GRAPH CONTAINER — ocupa o espaco disponivel */
 .graph-wrap {
   flex:1;
   position:relative;
@@ -175,13 +172,13 @@ select:focus, input[type=date]:focus { border-color:var(--ac); }
 }
 .sdot { width:6px; height:6px; border-radius:50%; background:var(--gr); display:inline-block; }
 
-/* -- RIGHT DRAWER -- */
+/* ── RIGHT DRAWER ── */
 .drawer {
   width:0; flex-shrink:0; overflow:hidden;
   background:var(--bg2); border-left:1px solid var(--bd2);
   display:flex; flex-direction:column;
-  position:sticky; top:var(--top-offset); align-self:flex-start;
-  max-height:calc(100vh - var(--top-offset));
+  position:sticky; top:54px; align-self:flex-start;
+  max-height:calc(100vh - 54px);
   transition:width .22s cubic-bezier(.4,0,.2,1);
 }
 .drawer.open { width:290px; }
@@ -189,7 +186,7 @@ select:focus, input[type=date]:focus { border-color:var(--ac); }
 .drw-hdr { padding:14px 14px 10px; display:flex; align-items:center; gap:8px; flex-shrink:0; border-bottom:1px solid var(--bd2); }
 .drw-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
 .drw-name { font-size:14px; font-weight:700; color:var(--t); flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.drw-close { cursor:pointer; color:var(--t3); font-size:18px; line-height:1; padding:2px 4px; flex-shrink:0; border:none; background:none; }
+.drw-close { cursor:pointer; color:var(--t3); font-size:18px; line-height:1; padding:2px 4px; flex-shrink:0; }
 .drw-close:hover { color:var(--t); }
 
 .drw-body { flex:1; overflow-y:auto; padding:14px; }
@@ -212,45 +209,24 @@ select:focus, input[type=date]:focus { border-color:var(--ac); }
 .conn-item:hover .conn-name { color:var(--ac); }
 .conn-name { color:var(--t2); flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .conn-w { color:var(--t3); font-size:10px; background:var(--bg3); padding:1px 5px; border-radius:3px; flex-shrink:0; }
-
-/* Error state */
-.err-msg {
-  position:absolute; inset:0;
-  background:rgba(8,14,42,.95);
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  z-index:25; font-size:14px; color:#F87171; gap:8px; text-align:center; padding:20px;
-}
-.err-msg.hi { display:none; }
 </style>
 </head>
 <body>
 
 <header class="hdr">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 677 110" height="28" style="width:auto;display:block;">
-    <defs><style>@font-face{font-family:'Plus Jakarta Sans';font-weight:700;src:url('https://fonts.gstatic.com/s/plusjakartasans/v12/LDIbaomQNQcsA88c7O9yZ4KMCoOg4IA6-91aHEjcWuA_TknNSg.ttf') format('truetype');}</style></defs>
-    <g transform="scale(0.1803) translate(133, 0)">
-      <path fill="#FFFFFF" fill-rule="evenodd" d="M1.5 303c0 163.63.1 230.56.25 148.75s.14-215.69 0-297.5-.26-14.87-.26 148.75m373.98 7.25-6.97 7.25 7.25-6.97c6.73-6.48 7.7-7.53 6.97-7.53-.15 0-3.41 3.26-7.25 7.25m-13.02 13-3.95 4.25 4.25-3.95c3.95-3.68 4.71-4.55 3.95-4.55-.16 0-2.07 1.91-4.25 4.25"/>
-      <path fill="#FFFFFF" fill-rule="evenodd" d="M81.76 67.7c1.25.25 3.05.24 4-.01s-.06-.45-2.26-.44-2.98.22-1.74.46m21 .02c1.8.22 4.5.21 6-.02 1.51-.22.04-.4-3.26-.4s-4.53.2-2.73.41m39.05.03c16.68.15 43.68.15 60 0 16.33-.16 2.68-.28-30.32-.28s-46.35.13-29.68.28M113.48 234.5c0 66 .12 93.15.27 60.33s.15-86.82 0-120-.27-6.33-.27 59.67m65.76-.54-.24 57.46-4.24 4.54-4.23 4.54 4.74-4.52 4.75-4.52-.27-57.48-.27-57.48zM309 216.5c-2.43 2.47-4.2 4.5-3.92 4.5s2.5-2.03 4.92-4.5c2.43-2.47 4.2-4.5 3.92-4.5s-2.5 2.03-4.92 4.5m92.98 67.25L390.5 295.5l11.75-11.48c10.91-10.67 12.2-12.02 11.48-12.02-.14 0-5.43 5.29-11.75 11.75M465.3 292c0 3.02.19 4.26.42 2.75a22 22 0 0 0 0-5.5c-.23-1.51-.42-.27-.42 2.75m67.08 11.5c0 6.6.17 9.17.36 5.71.2-3.46.2-8.86 0-12s-.36-.31-.36 6.29m-146.43-3.75-3.45 3.75 3.75-3.45c2.06-1.9 3.75-3.58 3.75-3.75 0-.76-.85-.04-4.05 3.45m79.3 12.75c.01 2.2.22 2.98.46 1.74.24-1.25.23-3.05-.02-4s-.45.06-.44 2.26m-332.77 24.75-9.98 10.25 10.25-9.98c9.52-9.27 10.7-10.52 9.98-10.52-.15 0-4.76 4.61-10.25 10.25M113.46 452c0 22.27.13 31.39.29 20.25s.16-29.36 0-40.5-.3-2.02-.3 20.25m87.3-21.25c5.64.17 14.86.17 20.5 0s1.03-.33-10.25-.33-15.89.15-10.25.33m-57.43 63c16.95.15 44.4.15 61 0s2.73-.28-30.82-.28-47.13.13-30.18.28m106.43 108.96c1.24.23 3.26.23 4.5 0s.22-.44-2.25-.44-3.49.2-2.25.44"/>
-      <path fill="#FFFFFF" fill-rule="evenodd" d="M1.74 303.7 2 602.5l117.75.3c122.44.31 137.8-.05 162.87-3.86 129.63-19.7 233.36-129.63 247.84-262.65 4.02-36.9.39-81.67-9.39-115.84C489.77 111.08 398.64 30.03 285 10.48c-28.32-4.87-25.14-4.77-158-5.19L1.5 4.9zm66.26-.44V539.5l95.75-.6c52.66-.34 97.1-.93 98.75-1.33s8.82-1.86 15.94-3.25c25.95-5.05 58.06-18.5 81.56-34.16 130.74-87.1 142.5-274.85 23.5-374.88a246 246 0 0 0-96-49.73c-29.64-7.7-43.06-8.51-139.25-8.53L68 67zm46-68.51v120.74l17.25-17.1c9.49-9.42 24.11-23.78 32.5-31.92l15.25-14.8V176.78l31.25.46c27.35.4 32.56.73 41.75 2.68 20.23 4.27 39.96 13.28 55.42 25.28l7.35 5.72L214.4 311.2 114 411.5v81.63l68.25-.38c73.72-.42 73.74-.42 96.84-6.27 74.2-18.81 131.93-86.65 139.85-164.34 1.7-16.54.4-52.14-1.88-52.14-.31 0-14.43 13.86-31.36 30.8l-30.78 30.8-1.47 6.3c-7.6 32.6-36.4 65.8-69.94 80.64-20.06 8.87-35.62 11.56-70.63 12.2l-27.63.5 107.06-107.07c103.93-103.93 107.03-107.14 105.9-109.6-2.66-5.85-14.81-22.85-24.02-33.62-31.58-36.94-78.4-60.91-128.61-65.87-6.47-.64-35.54-1.08-71.25-1.08H114z"/>
-    </g>
-    <g transform="translate(153, 15)">
-      <text x="0" y="76" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="72" fill="#FFFFFF" letter-spacing="-1">
-        <tspan>Digital</tspan><tspan dx="16" fill="#E8EEFF">AI</tspan>
-      </text>
-    </g>
-  </svg>
+  <img src="/_shared/logo-negative.svg" height="28" style="display:block;width:auto;" alt="Digital AI">
   <div class="badge">EVOPE</div>
-  <div><div class="hdr-title">Mapa de Processos</div><div class="hdr-meta">vis-network.js &middot; workflow: 0ooIAhl3lP9bdlw6</div></div>
+  <div><div class="hdr-title">Mapa de Processos</div><div class="hdr-meta">vis-network.js · workflow: 0ooIAhl3lP9bdlw6</div></div>
   <a href="index.html" class="back">&larr; EVOPE Docs</a>
 </header>
 
 <div class="kpi-strip">
-  <div class="kpi"><div class="kv">40</div><div class="kl">Apps unicos</div></div>
-  <div class="kpi"><div class="kv">291</div><div class="kl">Conexoes</div></div>
+  <div class="kpi"><div class="kv">40</div><div class="kl">Apps únicos</div></div>
+  <div class="kpi"><div class="kv">291</div><div class="kl">Conexões</div></div>
   <div class="kpi"><div class="kv">38</div><div class="kl">Colaboradores</div></div>
-  <div class="kpi"><div class="kv">1,019</div><div class="kl">Sessoes</div></div>
+  <div class="kpi"><div class="kv">1,019</div><div class="kl">Sessões</div></div>
   <div class="kpi"><div class="kv">3,946</div><div class="kl">Registros</div></div>
-  <div class="kpi"><div class="kv" id="k-sel">&mdash;</div><div class="kl">Selecionado</div></div>
+  <div class="kpi"><div class="kv" id="k-sel">—</div><div class="kl">Selecionado</div></div>
 </div>
 
 <div class="layout">
@@ -259,55 +235,55 @@ select:focus, input[type=date]:focus { border-color:var(--ac); }
   <div class="sidebar">
 
     <div class="ss">
-      <div class="sh" onclick="tgl('fil')"><span class="st">&#9881; Filtros</span><span id="a-fil">&#9662;</span></div>
+      <div class="sh" onclick="tgl('fil')"><span class="st">⚙ Filtros</span><span id="a-fil">▾</span></div>
       <div class="sb" id="sec-fil">
-        <div class="fl">Data inicio</div>
+        <div class="fl">Data início</div>
         <input type="date" id="d-ini" value="2026-07-07"/>
         <div class="fl">Data fim</div>
         <input type="date" id="d-end" value="2026-07-14"/>
         <div class="fl">Grupo</div>
         <input type="hidden" id="grp-id" value=""/>
-        <select id="grp-s" onchange="var gObj=(GD.groups||[]).find(function(g){return g.name===this.value}.bind(this));document.getElementById('grp-id').value=gObj?gObj.id:''"><option value="">Todos os grupos</option><option value="RI. &gt; Atendimento">RI. &gt; Atendimento (5 pessoas)</option>
-<option value="MI. &gt; Ops">MI. &gt; Ops (1 pessoas)</option>
-<option value="MI. &gt; Estrategistas">MI. &gt; Estrategistas (5 pessoas)</option>
-<option value="MI. &gt; Accounts">MI. &gt; Accounts (4 pessoas)</option>
-<option value="Produto &gt; Data Science.">Produto &gt; Data Science. (3 pessoas)</option>
+        <select id="grp-s" onchange="var gObj=(GD.groups||[]).find(g=>g.name===this.value);document.getElementById('grp-id').value=gObj?gObj.id:''"><option value="">Todos os grupos</option><option value="RI. > Atendimento">RI. > Atendimento (5 pessoas)</option>
+<option value="MI. > Ops">MI. > Ops (1 pessoas)</option>
+<option value="MI. > Estrategistas">MI. > Estrategistas (5 pessoas)</option>
+<option value="MI. > Accounts">MI. > Accounts (4 pessoas)</option>
+<option value="Produto > Data Science.">Produto > Data Science. (3 pessoas)</option>
 <option value="Produto">Produto (8 pessoas)</option>
-<option value="MI. &gt; Lideranca">MI. &gt; Lideranca (2 pessoas)</option>
+<option value="MI. > Liderança">MI. > Liderança (2 pessoas)</option>
 <option value="MI.">MI. (5 pessoas)</option>
-<option value="RI. &gt; Lideranca.">RI. &gt; Lideranca. (1 pessoas)</option>
+<option value="RI. > Liderança.">RI. > Liderança. (1 pessoas)</option>
 <option value="RI.">RI. (4 pessoas)</option></select>
         <button class="btn-ap" id="btn-ap" onclick="applyFilters()">Atualizar Mapa</button>
       </div>
     </div>
 
     <div class="ss">
-      <div class="sh" onclick="tgl('cat')"><span class="st">&#127912; Categorias</span><span id="a-cat">&#9662;</span></div>
+      <div class="sh" onclick="tgl('cat')"><span class="st">🎨 Categorias</span><span id="a-cat">▾</span></div>
       <div class="sb" id="sec-cat">
         <div class="li on" id="l-all" onclick="filterCat(null)"><div class="dot" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2)"></div>Todos<span class="lc">40</span></div>
         <div class="li" id="l-browser" onclick="filterCat('browser')"><div class="dot" style="background:#3B82F6"></div>Navegadores<span class="lc">3</span></div>
-        <div class="li" id="l-comunicacao" onclick="filterCat('comunicacao')"><div class="dot" style="background:#8B5CF6"></div>Comunicacao<span class="lc">5</span></div>
+        <div class="li" id="l-comunicacao" onclick="filterCat('comunicacao')"><div class="dot" style="background:#8B5CF6"></div>Comunicação<span class="lc">5</span></div>
         <div class="li" id="l-dev" onclick="filterCat('dev')"><div class="dot" style="background:#10B981"></div>Desenvolvimento<span class="lc">7</span></div>
         <div class="li" id="l-office" onclick="filterCat('office')"><div class="dot" style="background:#F59E0B"></div>Office / Docs<span class="lc">6</span></div>
         <div class="li" id="l-sistema" onclick="filterCat('sistema')"><div class="dot" style="background:#6B7280"></div>Sistema<span class="lc">11</span></div>
-        <div class="li" id="l-midia" onclick="filterCat('midia')"><div class="dot" style="background:#EC4899"></div>Midia<span class="lc">3</span></div>
+        <div class="li" id="l-midia" onclick="filterCat('midia')"><div class="dot" style="background:#EC4899"></div>Mídia<span class="lc">3</span></div>
         <div class="li" id="l-outro" onclick="filterCat('outro')"><div class="dot" style="background:#9CA3AF"></div>Outros<span class="lc">5</span></div>
       </div>
     </div>
 
     <div class="ss">
-      <div class="sh" onclick="tgl('top')"><span class="st">&#128202; Top Apps</span><span id="a-top">&#9662;</span></div>
+      <div class="sh" onclick="tgl('top')"><span class="st">📊 Top Apps</span><span id="a-top">▾</span></div>
       <div class="sb" id="sec-top"><div class="ri" onclick="focusNode(1)"><span class="rn">1</span><div class="rb"><div class="rl"><span class="dot" style="background:#3B82F6"></span><span class="rm">chrome</span></div><div class="rbar" style="width:100%;background:#3B82F6"></div></div><span class="rv">804.3h</span></div><div class="ri" onclick="focusNode(2)"><span class="rn">2</span><div class="rb"><div class="rl"><span class="dot" style="background:#8B5CF6"></span><span class="rm">Discord</span></div><div class="rbar" style="width:22%;background:#8B5CF6"></div></div><span class="rv">179.0h</span></div><div class="ri" onclick="focusNode(13)"><span class="rn">3</span><div class="rb"><div class="rl"><span class="dot" style="background:#3B82F6"></span><span class="rm">msedge</span></div><div class="rbar" style="width:4%;background:#3B82F6"></div></div><span class="rv">32.4h</span></div><div class="ri" onclick="focusNode(9)"><span class="rn">4</span><div class="rb"><div class="rl"><span class="dot" style="background:#3B82F6"></span><span class="rm">firefox</span></div><div class="rbar" style="width:3%;background:#3B82F6"></div></div><span class="rv">30.0h</span></div><div class="ri" onclick="focusNode(5)"><span class="rn">5</span><div class="rb"><div class="rl"><span class="dot" style="background:#10B981"></span><span class="rm">Code</span></div><div class="rbar" style="width:3%;background:#10B981"></div></div><span class="rv">26.3h</span></div><div class="ri" onclick="focusNode(3)"><span class="rn">6</span><div class="rb"><div class="rl"><span class="dot" style="background:#6B7280"></span><span class="rm">explorer</span></div><div class="rbar" style="width:3%;background:#6B7280"></div></div><span class="rv">22.5h</span></div><div class="ri" onclick="focusNode(10)"><span class="rn">7</span><div class="rb"><div class="rl"><span class="dot" style="background:#6B7280"></span><span class="rm">Notepad</span></div><div class="rbar" style="width:3%;background:#6B7280"></div></div><span class="rv">11.2h</span></div><div class="ri" onclick="focusNode(18)"><span class="rn">8</span><div class="rb"><div class="rl"><span class="dot" style="background:#6B7280"></span><span class="rm">ApplicationFrameHost</span></div><div class="rbar" style="width:3%;background:#6B7280"></div></div><span class="rv">6.5h</span></div></div>
     </div>
 
     <div class="ss">
-      <div class="sh" onclick="tgl('edg')"><span class="st">&#128279; Top Conexoes</span><span id="a-edg">&#9662;</span></div>
-      <div class="sb" id="sec-edg"><div class="ri" onclick="focusEdge(1,2)"><div class="re">chrome &harr; Discord</div><span class="rw">787x</span></div><div class="ri" onclick="focusEdge(1,3)"><div class="re">chrome &harr; explorer</div><span class="rw">724x</span></div><div class="ri" onclick="focusEdge(2,3)"><div class="re">Discord &harr; explorer</div><span class="rw">663x</span></div><div class="ri" onclick="focusEdge(1,7)"><div class="re">chrome &harr; SnippingTool</div><span class="rw">329x</span></div><div class="ri" onclick="focusEdge(3,7)"><div class="re">explorer &harr; SnippingTool</div><span class="rw">305x</span></div><div class="ri" onclick="focusEdge(2,7)"><div class="re">Discord &harr; SnippingTool</div><span class="rw">300x</span></div><div class="ri" onclick="focusEdge(18,1)"><div class="re">ApplicationFrameHost &harr; chrome</div><span class="rw">200x</span></div><div class="ri" onclick="focusEdge(18,3)"><div class="re">ApplicationFrameHost &harr; explorer</div><span class="rw">195x</span></div></div>
+      <div class="sh" onclick="tgl('edg')"><span class="st">🔗 Top Conexões</span><span id="a-edg">▾</span></div>
+      <div class="sb" id="sec-edg"><div class="ri" onclick="focusEdge(1,2)"><div class="re">chrome ↔ Discord</div><span class="rw">787x</span></div><div class="ri" onclick="focusEdge(1,3)"><div class="re">chrome ↔ explorer</div><span class="rw">724x</span></div><div class="ri" onclick="focusEdge(2,3)"><div class="re">Discord ↔ explorer</div><span class="rw">663x</span></div><div class="ri" onclick="focusEdge(1,7)"><div class="re">chrome ↔ SnippingTool</div><span class="rw">329x</span></div><div class="ri" onclick="focusEdge(3,7)"><div class="re">explorer ↔ SnippingTool</div><span class="rw">305x</span></div><div class="ri" onclick="focusEdge(2,7)"><div class="re">Discord ↔ SnippingTool</div><span class="rw">300x</span></div><div class="ri" onclick="focusEdge(18,1)"><div class="re">ApplicationFrameHost ↔ chrome</div><span class="rw">200x</span></div><div class="ri" onclick="focusEdge(18,3)"><div class="re">ApplicationFrameHost ↔ explorer</div><span class="rw">195x</span></div></div>
     </div>
 
     <div class="ss">
-      <div class="sh" onclick="tgl('grp')"><span class="st">&#128101; Grupos</span><span id="a-grp">&#9662;</span></div>
-      <div class="sb" id="sec-grp"><div class="gc" onclick="selectGrp(this,'RI. &gt; Atendimento')"><span>RI. &gt; Atendimento</span><span class="gcn">5</span></div><div class="gc" onclick="selectGrp(this,'MI. &gt; Ops')"><span>MI. &gt; Ops</span><span class="gcn">1</span></div><div class="gc" onclick="selectGrp(this,'MI. &gt; Estrategistas')"><span>MI. &gt; Estrategistas</span><span class="gcn">5</span></div><div class="gc" onclick="selectGrp(this,'MI. &gt; Accounts')"><span>MI. &gt; Accounts</span><span class="gcn">4</span></div><div class="gc" onclick="selectGrp(this,'Produto &gt; Data Science.')"><span>Produto &gt; Data Science.</span><span class="gcn">3</span></div><div class="gc" onclick="selectGrp(this,'Produto')"><span>Produto</span><span class="gcn">8</span></div><div class="gc" onclick="selectGrp(this,'MI. &gt; Lideranca')"><span>MI. &gt; Lideranca</span><span class="gcn">2</span></div><div class="gc" onclick="selectGrp(this,'MI.')"><span>MI.</span><span class="gcn">5</span></div><div class="gc" onclick="selectGrp(this,'RI. &gt; Lideranca.')"><span>RI. &gt; Lideranca.</span><span class="gcn">1</span></div><div class="gc" onclick="selectGrp(this,'RI.')"><span>RI.</span><span class="gcn">4</span></div></div>
+      <div class="sh" onclick="tgl('grp')"><span class="st">👥 Grupos</span><span id="a-grp">▾</span></div>
+      <div class="sb" id="sec-grp"><div class="gc" onclick="selectGrp(this,'RI. > Atendimento')"><span>RI. > Atendimento</span><span class="gcn">5</span></div><div class="gc" onclick="selectGrp(this,'MI. > Ops')"><span>MI. > Ops</span><span class="gcn">1</span></div><div class="gc" onclick="selectGrp(this,'MI. > Estrategistas')"><span>MI. > Estrategistas</span><span class="gcn">5</span></div><div class="gc" onclick="selectGrp(this,'MI. > Accounts')"><span>MI. > Accounts</span><span class="gcn">4</span></div><div class="gc" onclick="selectGrp(this,'Produto > Data Science.')"><span>Produto > Data Science.</span><span class="gcn">3</span></div><div class="gc" onclick="selectGrp(this,'Produto')"><span>Produto</span><span class="gcn">8</span></div><div class="gc" onclick="selectGrp(this,'MI. > Liderança')"><span>MI. > Liderança</span><span class="gcn">2</span></div><div class="gc" onclick="selectGrp(this,'MI.')"><span>MI.</span><span class="gcn">5</span></div><div class="gc" onclick="selectGrp(this,'RI. > Liderança.')"><span>RI. > Liderança.</span><span class="gcn">1</span></div><div class="gc" onclick="selectGrp(this,'RI.')"><span>RI.</span><span class="gcn">4</span></div></div>
     </div>
 
   </div><!-- /sidebar -->
@@ -315,21 +291,20 @@ select:focus, input[type=date]:focus { border-color:var(--ac); }
   <!-- GRAFO -->
   <div class="center">
     <div class="toolbar">
-      <span class="tb-t">Grafo de Co-ocorrencia</span>
-      <span class="tb-h">&middot; clique em um no para detalhes</span>
+      <span class="tb-t">Grafo de Co-ocorrência</span>
+      <span class="tb-h">· clique em um nó para detalhes</span>
       <div class="sp"></div>
-      <button class="btn-t on" id="btn-phy" onclick="togglePhysics()">Fisica</button>
+      <button class="btn-t on" id="btn-phy" onclick="togglePhysics()">Física</button>
       <button class="btn-t" onclick="fitGraph()">Ajustar</button>
       <button class="btn-t" onclick="clearSel()">Limpar</button>
     </div>
     <div class="graph-wrap">
       <div id="graph"></div>
       <div class="loading" id="ld"><div class="spin"></div><span>Renderizando grafo...</span></div>
-      <div class="err-msg hi" id="err-banner"><strong>Erro ao carregar vis-network</strong><br/><span id="err-detail">A biblioteca nao foi carregada. Recarregue a pagina.</span></div>
     </div>
     <div class="stbar">
       <span class="sdot"></span>
-      <span id="st-txt">07/07/2026 &ndash; 14/07/2026 &middot; Todos os grupos &middot; 40 apps &middot; 291 conexoes</span>
+      <span id="st-txt">07/07/2026 – 14/07/2026 · Todos os grupos · 40 apps · 291 conexões</span>
     </div>
   </div>
 
@@ -338,81 +313,60 @@ select:focus, input[type=date]:focus { border-color:var(--ac); }
     <div class="drw-hdr">
       <span class="drw-dot" id="drw-dot"></span>
       <span class="drw-name" id="drw-name"></span>
-      <button class="drw-close" onclick="closeDrawer()">&#10005;</button>
+      <span class="drw-close" onclick="closeDrawer()">✕</span>
     </div>
     <div class="drw-body" id="drw-body"></div>
   </div>
 
 </div><!-- /layout -->
 
-<!-- vis-network loaded at end of body to guarantee DOM is ready -->
-<script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
 <script>
-/* ===== EMBEDDED DATA ===== */
-var GD={"nodes": [{"id": 1, "label": "chrome", "title": "chrome\n48257 min total | 939 sessoes", "value": 48257, "topSites": [["docs.google.com", 4506.280000000001], ["ReviewSheet-RITool-GoogleChrome", 1702.4800000000002], ["meet.google.com", 1343.0000000000007], ["rankmyapp:20agenda20-20Semana20de201220de20julho20de20202620-20Google20Chrome", 744.7400000000005], ["meet:20GEO207C20Treinamento20-20Google20Chrome", 672.24], ["rankmyapp:20agenda20-20Semana20de20520de20julho20de20202620-20Google20Chrome", 640.4399999999997], ["Qulture.Rocks-GoogleChrome", 583.3200000000002], ["jupyterhub.rankmyapp.com", 580.78], ["AppStoreConnect-GoogleChrome", 559.8599999999997], ["calendar.google.com", 538.6100000000001]], "siteCategories": ["Trabalho", "Ferramentas IA", "Navegadores internet", "Sistema", "Ferramentas Google", "Bancos", "Entretenimento", "Estudo", "Comunicacao", "Pesquisa Internet"]}, {"id": 2, "label": "Discord", "title": "Discord\n10740 min total | 836 sessoes", "value": 10740, "topSites": [], "siteCategories": []}, {"id": 3, "label": "explorer", "title": "explorer\n1352 min total | 762 sessoes", "value": 1352, "topSites": [], "siteCategories": []}, {"id": 4, "label": "olk", "title": "olk\n60 min total | 30 sessoes", "value": 60, "topSites": [], "siteCategories": []}, {"id": 5, "label": "Code", "title": "Code\n1578 min total | 89 sessoes", "value": 1578, "topSites": [], "siteCategories": []}, {"id": 6, "label": "MongoDBCompass", "title": "MongoDBCompass\n88 min total | 27 sessoes", "value": 88, "topSites": [], "siteCategories": []}, {"id": 7, "label": "SnippingTool", "title": "SnippingTool\n178 min total | 331 sessoes", "value": 178, "topSites": [], "siteCategories": []}, {"id": 8, "label": "claude", "title": "claude\n95 min total | 18 sessoes", "value": 95, "topSites": [], "siteCategories": []}, {"id": 9, "label": "firefox", "title": "firefox\n1802 min total | 39 sessoes", "value": 1802, "topSites": [["docs.google.com", 1077.8500000000001], ["meet.google.com", 501.23], ["web.whatsapp.com", 31.889999999999997], ["www.kabum.com.br", 28.380000000000003], ["Firefox-Indicadordecompartilhamento", 24.72], ["Escolhaummecanismodepesquisa", 20.31], ["calendar.google.com", 18.49], ["rma-cms.rankmyapp.com", 18.470000000000002], ["meet:20GEO207C20Treinamento20E2809420Mozilla20Firefox", 15.12], ["mail.google.com", 13.36]], "siteCategories": ["Trabalho", "Navegadores internet", "Pesquisa Internet", "Sistema", "Ferramentas Google", "Estudo", "Comunicacao", "Entretenimento"]}, {"id": 10, "label": "Notepad", "title": "Notepad\n670 min total | 159 sessoes", "value": 670, "topSites": [], "siteCategories": []}, {"id": 11, "label": "heidisql", "title": "heidisql\n47 min total | 15 sessoes", "value": 47, "topSites": [], "siteCategories": []}, {"id": 12, "label": "OpenVPNConnect", "title": "OpenVPNConnect\n8 min total | 32 sessoes", "value": 8, "topSites": [], "siteCategories": []}, {"id": 13, "label": "msedge", "title": "msedge\n1945 min total | 115 sessoes", "value": 1945, "topSites": [["ri-tool.rankmyapp.com", 1433.7300000000002], ["account-status.amazon.com.br", 356.2], ["meet.google.com", 221.84], ["docs.google.com", 134.83999999999997], ["tool.rankmyapp.com", 95.42000000000002], ["auth.rankmyapp.com", 25.239999999999995], ["api.rankmyapp.com", 21.32], ["appstoreconnect.apple.com", 14.25], ["meet.google.comestcompartilhandoumajanela.", 11.04], ["file://C:/Users/lucas.lima/Downloads/Santander/Proposta_Continuidade_Santander.pptx.pdf", 9.08]], "siteCategories": ["Trabalho", "Sistema", "Entretenimento", "Comunicacao", "Pesquisa Internet"]}, {"id": 14, "label": "Photos", "title": "Photos\n21 min total | 31 sessoes", "value": 21, "topSites": [], "siteCategories": []}, {"id": 15, "label": "slack", "title": "slack\n42 min total | 32 sessoes", "value": 42, "topSites": [], "siteCategories": []}, {"id": 16, "label": "WhatsApp.Root", "title": "WhatsApp.Root\n370 min total | 49 sessoes", "value": 370, "topSites": [], "siteCategories": []}, {"id": 17, "label": "WindowsTerminal", "title": "WindowsTerminal\n17 min total | 15 sessoes", "value": 17, "topSites": [], "siteCategories": []}, {"id": 18, "label": "ApplicationFrameHost", "title": "ApplicationFrameHost\n387 min total | 205 sessoes", "value": 387, "topSites": [], "siteCategories": []}, {"id": 19, "label": "Spotify", "title": "Spotify\n89 min total | 45 sessoes", "value": 89, "topSites": [], "siteCategories": []}, {"id": 20, "label": "Acrobat", "title": "Acrobat\n36 min total | 71 sessoes", "value": 36, "topSites": [], "siteCategories": []}, {"id": 21, "label": "dbeaver", "title": "dbeaver\n14 min total | 11 sessoes", "value": 14, "topSites": [], "siteCategories": []}, {"id": 22, "label": "PlanMaker", "title": "PlanMaker\n0 min total | 1 sessoes", "value": 0, "topSites": [], "siteCategories": []}, {"id": 23, "label": "mspaint", "title": "mspaint\n1 min total | 2 sessoes", "value": 1, "topSites": [], "siteCategories": []}, {"id": 24, "label": "EXCEL", "title": "EXCEL\n2 min total | 3 sessoes", "value": 2, "topSites": [], "siteCategories": []}, {"id": 25, "label": "Lightshot", "title": "Lightshot\n29 min total | 26 sessoes", "value": 29, "topSites": [], "siteCategories": []}, {"id": 26, "label": "PickerHost", "title": "PickerHost\n25 min total | 13 sessoes", "value": 25, "topSites": [], "siteCategories": []}, {"id": 27, "label": "POWERPNT", "title": "POWERPNT\n5 min total | 4 sessoes", "value": 5, "topSites": [], "siteCategories": []}, {"id": 28, "label": "ms-teams", "title": "ms-teams\n15 min total | 2 sessoes", "value": 15, "topSites": [], "siteCategories": []}, {"id": 29, "label": "Widgets", "title": "Widgets\n0 min total | 5 sessoes", "value": 0, "topSites": [], "siteCategories": []}, {"id": 30, "label": "notepad", "title": "notepad\n2 min total | 7 sessoes", "value": 2, "topSites": [], "siteCategories": []}, {"id": 31, "label": "WINWORD", "title": "WINWORD\n6 min total | 6 sessoes", "value": 6, "topSites": [], "siteCategories": []}, {"id": 32, "label": "Lens", "title": "Lens\n1 min total | 5 sessoes", "value": 1, "topSites": [], "siteCategories": []}, {"id": 33, "label": "PBIDesktop", "title": "PBIDesktop\n32 min total | 8 sessoes", "value": 32, "topSites": [], "siteCategories": []}, {"id": 34, "label": "Taskmgr", "title": "Taskmgr\n0 min total | 1 sessoes", "value": 0, "topSites": [], "siteCategories": []}, {"id": 35, "label": "Zoom", "title": "Zoom\n136 min total | 2 sessoes", "value": 136, "topSites": [], "siteCategories": []}, {"id": 36, "label": "notepad++", "title": "notepad++\n9 min total | 3 sessoes", "value": 9, "topSites": [], "siteCategories": []}, {"id": 37, "label": "AnyDesk", "title": "AnyDesk\n12 min total | 3 sessoes", "value": 12, "topSites": [], "siteCategories": []}, {"id": 38, "label": "EPSecurityConsoleUI", "title": "EPSecurityConsoleUI\n1 min total | 2 sessoes", "value": 1, "topSites": [], "siteCategories": []}, {"id": 39, "label": "Evope.Collector", "title": "Evope.Collector\n2 min total | 1 sessoes", "value": 2, "topSites": [], "siteCategories": []}, {"id": 40, "label": "WinRAR", "title": "WinRAR\n0 min total | 1 sessoes", "value": 0, "topSites": [], "siteCategories": []}], "edges": [{"id": 1, "from": 1, "to": 2, "value": 787, "title": "Usados juntos: 787x", "label": "787"}, {"id": 2, "from": 1, "to": 3, "value": 724, "title": "Usados juntos: 724x", "label": "724"}, {"id": 3, "from": 2, "to": 3, "value": 663, "title": "Usados juntos: 663x", "label": "663"}, {"id": 4, "from": 1, "to": 7, "value": 329, "title": "Usados juntos: 329x", "label": "329"}, {"id": 5, "from": 3, "to": 7, "value": 305, "title": "Usados juntos: 305x", "label": "305"}, {"id": 6, "from": 2, "to": 7, "value": 300, "title": "Usados juntos: 300x", "label": "300"}, {"id": 7, "from": 18, "to": 1, "value": 200, "title": "Usados juntos: 200x", "label": "200"}, {"id": 8, "from": 18, "to": 3, "value": 195, "title": "Usados juntos: 195x", "label": "195"}, {"id": 9, "from": 18, "to": 2, "value": 181, "title": "Usados juntos: 181x", "label": "181"}, {"id": 10, "from": 1, "to": 10, "value": 154, "title": "Usados juntos: 154x", "label": "154"}, {"id": 11, "from": 3, "to": 10, "value": 145, "title": "Usados juntos: 145x", "label": "145"}, {"id": 12, "from": 2, "to": 10, "value": 140, "title": "Usados juntos: 140x", "label": "140"}, {"id": 13, "from": 1, "to": 13, "value": 109, "title": "Usados juntos: 109x", "label": "109"}, {"id": 14, "from": 3, "to": 13, "value": 100, "title": "Usados juntos: 100x", "label": "100"}, {"id": 15, "from": 2, "to": 13, "value": 97, "title": "Usados juntos: 97x", "label": "97"}, {"id": 16, "from": 18, "to": 7, "value": 94, "title": "Usados juntos: 94x", "label": "94"}, {"id": 17, "from": 5, "to": 3, "value": 80, "title": "Usados juntos: 80x", "label": "80"}, {"id": 18, "from": 5, "to": 2, "value": 77, "title": "Usados juntos: 77x", "label": "77"}, {"id": 19, "from": 1, "to": 5, "value": 76, "title": "Usados juntos: 76x", "label": "76"}, {"id": 20, "from": 20, "to": 1, "value": 71, "title": "Usados juntos: 71x", "label": "71"}, {"id": 21, "from": 20, "to": 3, "value": 69, "title": "Usados juntos: 69x", "label": "69"}, {"id": 22, "from": 20, "to": 2, "value": 68, "title": "Usados juntos: 68x", "label": "68"}, {"id": 23, "from": 1, "to": 16, "value": 49, "title": "Usados juntos: 49x", "label": "49"}, {"id": 24, "from": 10, "to": 7, "value": 47, "title": "Usados juntos: 47x", "label": "47"}, {"id": 25, "from": 1, "to": 19, "value": 45, "title": "Usados juntos: 45x", "label": "45"}, {"id": 26, "from": 3, "to": 16, "value": 44, "title": "Usados juntos: 44x", "label": "44"}, {"id": 27, "from": 18, "to": 10, "value": 43, "title": "Usados juntos: 43x", "label": "43"}, {"id": 28, "from": 2, "to": 19, "value": 42, "title": "Usados juntos: 42x", "label": "42"}, {"id": 29, "from": 13, "to": 7, "value": 40, "title": "Usados juntos: 40x", "label": "40"}, {"id": 30, "from": 3, "to": 19, "value": 40, "title": "Usados juntos: 40x", "label": "40"}, {"id": 31, "from": 20, "to": 7, "value": 40, "title": "Usados juntos: 40x", "label": "40"}, {"id": 32, "from": 2, "to": 16, "value": 39, "title": "Usados juntos: 39x", "label": "39"}, {"id": 33, "from": 18, "to": 13, "value": 39, "title": "Usados juntos: 39x", "label": "39"}, {"id": 34, "from": 5, "to": 10, "value": 37, "title": "Usados juntos: 37x", "label": "37"}, {"id": 35, "from": 2, "to": 9, "value": 36, "title": "Usados juntos: 36x", "label": "36"}, {"id": 36, "from": 3, "to": 9, "value": 36, "title": "Usados juntos: 36x", "label": "36"}, {"id": 37, "from": 1, "to": 15, "value": 32, "title": "Usados juntos: 32x", "label": "32"}, {"id": 38, "from": 1, "to": 9, "value": 32, "title": "Usados juntos: 32x", "label": "32"}, {"id": 39, "from": 1, "to": 12, "value": 31, "title": "Usados juntos: 31x", "label": "31"}, {"id": 40, "from": 1, "to": 14, "value": 31, "title": "Usados juntos: 31x", "label": "31"}, {"id": 41, "from": 3, "to": 15, "value": 31, "title": "Usados juntos: 31x", "label": "31"}, {"id": 42, "from": 7, "to": 16, "value": 31, "title": "Usados juntos: 31x", "label": "31"}, {"id": 43, "from": 1, "to": 4, "value": 30, "title": "Usados juntos: 30x", "label": "30"}, {"id": 44, "from": 2, "to": 12, "value": 30, "title": "Usados juntos: 30x", "label": "30"}, {"id": 45, "from": 2, "to": 15, "value": 30, "title": "Usados juntos: 30x", "label": "30"}, {"id": 46, "from": 3, "to": 14, "value": 29, "title": "Usados juntos: 29x", "label": "29"}, {"id": 47, "from": 2, "to": 4, "value": 28, "title": "Usados juntos: 28x", "label": "28"}, {"id": 48, "from": 2, "to": 14, "value": 28, "title": "Usados juntos: 28x", "label": "28"}, {"id": 49, "from": 3, "to": 4, "value": 27, "title": "Usados juntos: 27x", "label": "27"}, {"id": 50, "from": 2, "to": 6, "value": 27, "title": "Usados juntos: 27x", "label": "27"}, {"id": 51, "from": 3, "to": 6, "value": 27, "title": "Usados juntos: 27x", "label": "27"}, {"id": 52, "from": 3, "to": 12, "value": 26, "title": "Usados juntos: 26x", "label": "26"}, {"id": 53, "from": 1, "to": 25, "value": 26, "title": "Usados juntos: 26x", "label": "26"}, {"id": 54, "from": 1, "to": 6, "value": 25, "title": "Usados juntos: 25x", "label": "25"}, {"id": 55, "from": 18, "to": 16, "value": 24, "title": "Usados juntos: 24x", "label": "24"}, {"id": 56, "from": 3, "to": 25, "value": 24, "title": "Usados juntos: 24x", "label": "24"}, {"id": 57, "from": 20, "to": 18, "value": 22, "title": "Usados juntos: 22x", "label": "22"}, {"id": 58, "from": 5, "to": 6, "value": 21, "title": "Usados juntos: 21x", "label": "21"}, {"id": 59, "from": 13, "to": 16, "value": 21, "title": "Usados juntos: 21x", "label": "21"}, {"id": 60, "from": 2, "to": 25, "value": 21, "title": "Usados juntos: 21x", "label": "21"}, {"id": 61, "from": 15, "to": 7, "value": 19, "title": "Usados juntos: 19x", "label": "19"}, {"id": 62, "from": 7, "to": 19, "value": 19, "title": "Usados juntos: 19x", "label": "19"}, {"id": 63, "from": 8, "to": 2, "value": 18, "title": "Usados juntos: 18x", "label": "18"}, {"id": 64, "from": 14, "to": 7, "value": 18, "title": "Usados juntos: 18x", "label": "18"}, {"id": 65, "from": 8, "to": 3, "value": 17, "title": "Usados juntos: 17x", "label": "17"}, {"id": 66, "from": 6, "to": 10, "value": 17, "title": "Usados juntos: 17x", "label": "17"}, {"id": 67, "from": 18, "to": 19, "value": 16, "title": "Usados juntos: 16x", "label": "16"}, {"id": 68, "from": 18, "to": 9, "value": 16, "title": "Usados juntos: 16x", "label": "16"}, {"id": 69, "from": 1, "to": 11, "value": 15, "title": "Usados juntos: 15x", "label": "15"}, {"id": 70, "from": 2, "to": 11, "value": 15, "title": "Usados juntos: 15x", "label": "15"}, {"id": 71, "from": 1, "to": 17, "value": 15, "title": "Usados juntos: 15x", "label": "15"}, {"id": 72, "from": 2, "to": 17, "value": 15, "title": "Usados juntos: 15x", "label": "15"}, {"id": 73, "from": 1, "to": 8, "value": 15, "title": "Usados juntos: 15x", "label": "15"}, {"id": 74, "from": 20, "to": 10, "value": 15, "title": "Usados juntos: 15x", "label": "15"}, {"id": 75, "from": 13, "to": 15, "value": 14, "title": "Usados juntos: 14x", "label": "14"}, {"id": 76, "from": 5, "to": 17, "value": 14, "title": "Usados juntos: 14x", "label": "14"}, {"id": 77, "from": 3, "to": 17, "value": 14, "title": "Usados juntos: 14x", "label": "14"}, {"id": 78, "from": 18, "to": 14, "value": 14, "title": "Usados juntos: 14x", "label": "14"}, {"id": 79, "from": 20, "to": 13, "value": 14, "title": "Usados juntos: 14x", "label": "14"}, {"id": 80, "from": 3, "to": 11, "value": 13, "title": "Usados juntos: 13x", "label": "13"}, {"id": 81, "from": 15, "to": 16, "value": 13, "title": "Usados juntos: 13x", "label": "13"}, {"id": 82, "from": 9, "to": 7, "value": 13, "title": "Usados juntos: 13x", "label": "13"}, {"id": 83, "from": 18, "to": 15, "value": 13, "title": "Usados juntos: 13x", "label": "13"}, {"id": 84, "from": 5, "to": 7, "value": 13, "title": "Usados juntos: 13x", "label": "13"}, {"id": 85, "from": 18, "to": 5, "value": 13, "title": "Usados juntos: 13x", "label": "13"}, {"id": 86, "from": 8, "to": 9, "value": 12, "title": "Usados juntos: 12x", "label": "12"}, {"id": 87, "from": 25, "to": 10, "value": 12, "title": "Usados juntos: 12x", "label": "12"}, {"id": 88, "from": 1, "to": 26, "value": 12, "title": "Usados juntos: 12x", "label": "12"}, {"id": 89, "from": 2, "to": 26, "value": 12, "title": "Usados juntos: 12x", "label": "12"}, {"id": 90, "from": 10, "to": 17, "value": 11, "title": "Usados juntos: 11x", "label": "11"}, {"id": 91, "from": 8, "to": 7, "value": 11, "title": "Usados juntos: 11x", "label": "11"}, {"id": 92, "from": 1, "to": 21, "value": 11, "title": "Usados juntos: 11x", "label": "11"}, {"id": 93, "from": 18, "to": 25, "value": 11, "title": "Usados juntos: 11x", "label": "11"}, {"id": 94, "from": 3, "to": 26, "value": 11, "title": "Usados juntos: 11x", "label": "11"}, {"id": 95, "from": 11, "to": 7, "value": 9, "title": "Usados juntos: 9x", "label": "9"}, {"id": 96, "from": 12, "to": 7, "value": 9, "title": "Usados juntos: 9x", "label": "9"}, {"id": 97, "from": 10, "to": 14, "value": 9, "title": "Usados juntos: 9x", "label": "9"}, {"id": 98, "from": 21, "to": 3, "value": 9, "title": "Usados juntos: 9x", "label": "9"}, {"id": 99, "from": 21, "to": 2, "value": 9, "title": "Usados juntos: 9x", "label": "9"}, {"id": 100, "from": 5, "to": 9, "value": 8, "title": "Usados juntos: 8x", "label": "8"}, {"id": 101, "from": 19, "to": 16, "value": 8, "title": "Usados juntos: 8x", "label": "8"}, {"id": 102, "from": 10, "to": 16, "value": 8, "title": "Usados juntos: 8x", "label": "8"}, {"id": 103, "from": 1, "to": 33, "value": 8, "title": "Usados juntos: 8x", "label": "8"}, {"id": 104, "from": 10, "to": 12, "value": 8, "title": "Usados juntos: 8x", "label": "8"}, {"id": 105, "from": 9, "to": 10, "value": 7, "title": "Usados juntos: 7x", "label": "7"}, {"id": 106, "from": 15, "to": 19, "value": 7, "title": "Usados juntos: 7x", "label": "7"}, {"id": 107, "from": 4, "to": 7, "value": 7, "title": "Usados juntos: 7x", "label": "7"}, {"id": 108, "from": 1, "to": 30, "value": 7, "title": "Usados juntos: 7x", "label": "7"}, {"id": 109, "from": 2, "to": 30, "value": 7, "title": "Usados juntos: 7x", "label": "7"}, {"id": 110, "from": 3, "to": 30, "value": 7, "title": "Usados juntos: 7x", "label": "7"}, {"id": 111, "from": 5, "to": 12, "value": 7, "title": "Usados juntos: 7x", "label": "7"}, {"id": 112, "from": 6, "to": 17, "value": 6, "title": "Usados juntos: 6x", "label": "6"}, {"id": 113, "from": 20, "to": 16, "value": 6, "title": "Usados juntos: 6x", "label": "6"}, {"id": 114, "from": 18, "to": 6, "value": 6, "title": "Usados juntos: 6x", "label": "6"}, {"id": 115, "from": 5, "to": 25, "value": 6, "title": "Usados juntos: 6x", "label": "6"}, {"id": 116, "from": 18, "to": 12, "value": 6, "title": "Usados juntos: 6x", "label": "6"}, {"id": 117, "from": 13, "to": 12, "value": 6, "title": "Usados juntos: 6x", "label": "6"}, {"id": 118, "from": 1, "to": 31, "value": 6, "title": "Usados juntos: 6x", "label": "6"}, {"id": 119, "from": 2, "to": 31, "value": 6, "title": "Usados juntos: 6x", "label": "6"}, {"id": 120, "from": 3, "to": 31, "value": 6, "title": "Usados juntos: 6x", "label": "6"}, {"id": 121, "from": 3, "to": 33, "value": 6, "title": "Usados juntos: 6x", "label": "6"}, {"id": 122, "from": 14, "to": 16, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 123, "from": 5, "to": 21, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 124, "from": 18, "to": 26, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 125, "from": 26, "to": 7, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 126, "from": 13, "to": 26, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 127, "from": 1, "to": 29, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 128, "from": 7, "to": 31, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 129, "from": 1, "to": 32, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 130, "from": 5, "to": 32, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 131, "from": 2, "to": 32, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 132, "from": 3, "to": 32, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 133, "from": 32, "to": 10, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 134, "from": 2, "to": 33, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 135, "from": 20, "to": 19, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 136, "from": 11, "to": 12, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 137, "from": 5, "to": 4, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 138, "from": 9, "to": 19, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 139, "from": 20, "to": 14, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 140, "from": 21, "to": 10, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 141, "from": 1, "to": 27, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 142, "from": 2, "to": 27, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 143, "from": 3, "to": 27, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 144, "from": 18, "to": 4, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 145, "from": 2, "to": 29, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 146, "from": 3, "to": 29, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 147, "from": 18, "to": 30, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 148, "from": 13, "to": 30, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 149, "from": 18, "to": 31, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 150, "from": 21, "to": 12, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 151, "from": 32, "to": 17, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 152, "from": 10, "to": 33, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 153, "from": 20, "to": 11, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 154, "from": 18, "to": 33, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 155, "from": 8, "to": 5, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 156, "from": 13, "to": 14, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 157, "from": 10, "to": 19, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 158, "from": 18, "to": 8, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 159, "from": 9, "to": 6, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 160, "from": 14, "to": 19, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 161, "from": 1, "to": 24, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 162, "from": 24, "to": 7, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 163, "from": 10, "to": 4, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 164, "from": 10, "to": 31, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 165, "from": 16, "to": 31, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 166, "from": 21, "to": 7, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 167, "from": 8, "to": 10, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 168, "from": 13, "to": 19, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 169, "from": 1, "to": 36, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 170, "from": 2, "to": 36, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 171, "from": 3, "to": 36, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 172, "from": 11, "to": 36, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 173, "from": 6, "to": 12, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 174, "from": 5, "to": 26, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 175, "from": 18, "to": 17, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 176, "from": 18, "to": 21, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 177, "from": 5, "to": 11, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 178, "from": 1, "to": 23, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 179, "from": 2, "to": 23, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 180, "from": 3, "to": 23, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 181, "from": 23, "to": 7, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 182, "from": 2, "to": 24, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 183, "from": 24, "to": 3, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 184, "from": 10, "to": 26, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 185, "from": 20, "to": 4, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 186, "from": 20, "to": 27, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 187, "from": 10, "to": 27, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 188, "from": 4, "to": 27, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 189, "from": 18, "to": 28, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 190, "from": 1, "to": 28, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 191, "from": 2, "to": 28, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 192, "from": 3, "to": 28, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 193, "from": 27, "to": 7, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 194, "from": 20, "to": 15, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 195, "from": 30, "to": 12, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 196, "from": 20, "to": 31, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 197, "from": 33, "to": 7, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 198, "from": 1, "to": 35, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 199, "from": 2, "to": 35, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 200, "from": 3, "to": 35, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 201, "from": 12, "to": 14, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 202, "from": 20, "to": 33, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 203, "from": 20, "to": 9, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 204, "from": 25, "to": 30, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 205, "from": 36, "to": 7, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 206, "from": 20, "to": 25, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 207, "from": 25, "to": 33, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 208, "from": 5, "to": 19, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 209, "from": 6, "to": 7, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 210, "from": 6, "to": 26, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 211, "from": 4, "to": 17, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 212, "from": 32, "to": 25, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 213, "from": 21, "to": 9, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 214, "from": 7, "to": 29, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 215, "from": 37, "to": 38, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 216, "from": 37, "to": 3, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 217, "from": 21, "to": 6, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 218, "from": 13, "to": 10, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 219, "from": 12, "to": 17, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 220, "from": 10, "to": 15, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 221, "from": 14, "to": 15, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 222, "from": 6, "to": 4, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 223, "from": 20, "to": 5, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 224, "from": 20, "to": 22, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 225, "from": 1, "to": 22, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 226, "from": 5, "to": 22, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 227, "from": 2, "to": 22, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 228, "from": 3, "to": 22, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 229, "from": 22, "to": 7, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 230, "from": 18, "to": 23, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 231, "from": 23, "to": 14, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 232, "from": 23, "to": 19, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 233, "from": 28, "to": 7, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 234, "from": 18, "to": 27, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 235, "from": 18, "to": 29, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 236, "from": 9, "to": 29, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 237, "from": 32, "to": 6, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 238, "from": 4, "to": 31, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 239, "from": 1, "to": 34, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 240, "from": 5, "to": 34, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 241, "from": 2, "to": 34, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 242, "from": 3, "to": 34, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 243, "from": 10, "to": 34, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 244, "from": 20, "to": 12, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 245, "from": 12, "to": 16, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 246, "from": 20, "to": 8, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 247, "from": 20, "to": 36, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 248, "from": 8, "to": 11, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 249, "from": 8, "to": 36, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 250, "from": 20, "to": 30, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 251, "from": 30, "to": 33, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 252, "from": 14, "to": 31, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 253, "from": 6, "to": 19, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 254, "from": 12, "to": 19, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 255, "from": 18, "to": 32, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 256, "from": 25, "to": 17, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 257, "from": 10, "to": 29, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 258, "from": 14, "to": 29, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 259, "from": 25, "to": 7, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 260, "from": 13, "to": 35, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 261, "from": 7, "to": 35, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 262, "from": 28, "to": 10, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 263, "from": 5, "to": 14, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 264, "from": 25, "to": 14, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 265, "from": 21, "to": 17, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 266, "from": 37, "to": 26, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 267, "from": 38, "to": 26, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 268, "from": 37, "to": 39, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 269, "from": 38, "to": 39, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 270, "from": 38, "to": 3, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 271, "from": 39, "to": 3, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 272, "from": 5, "to": 36, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 273, "from": 18, "to": 40, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 274, "from": 1, "to": 40, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 275, "from": 2, "to": 40, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 276, "from": 3, "to": 40, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 277, "from": 14, "to": 40, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 278, "from": 7, "to": 40, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 279, "from": 16, "to": 40, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 280, "from": 11, "to": 26, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 281, "from": 32, "to": 12, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 282, "from": 21, "to": 26, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 283, "from": 9, "to": 26, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 284, "from": 37, "to": 18, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 285, "from": 37, "to": 1, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 286, "from": 37, "to": 2, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 287, "from": 37, "to": 10, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 288, "from": 9, "to": 13, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 289, "from": 25, "to": 12, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 290, "from": 4, "to": 14, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 291, "from": 14, "to": 27, "value": 1, "title": "Usados juntos: 1x", "label": "1"}]};
-var SD={"chrome": {"topSites": [["docs.google.com", 4506.280000000001], ["ReviewSheet-RITool-GoogleChrome", 1702.4800000000002], ["meet.google.com", 1343.0000000000007], ["rankmyapp:20agenda20-20Semana20de201220de20julho20de20202620-20Google20Chrome", 744.7400000000005], ["meet:20GEO207C20Treinamento20-20Google20Chrome", 672.24], ["rankmyapp:20agenda20-20Semana20de20520de20julho20de20202620-20Google20Chrome", 640.4399999999997], ["Qulture.Rocks-GoogleChrome", 583.3200000000002], ["jupyterhub.rankmyapp.com", 580.78], ["AppStoreConnect-GoogleChrome", 559.8599999999997], ["calendar.google.com", 538.6100000000001]], "categories": ["Trabalho", "Ferramentas IA", "Navegadores internet", "Sistema", "Ferramentas Google", "Bancos", "Entretenimento", "Estudo", "Comunicacao", "Pesquisa Internet"]}, "msedge": {"topSites": [["ri-tool.rankmyapp.com", 1433.7300000000002], ["account-status.amazon.com.br", 356.2], ["meet.google.com", 221.84], ["docs.google.com", 134.83999999999997], ["tool.rankmyapp.com", 95.42000000000002], ["auth.rankmyapp.com", 25.239999999999995], ["api.rankmyapp.com", 21.32], ["appstoreconnect.apple.com", 14.25], ["meet.google.comestcompartilhandoumajanela.", 11.04], ["file://C:/Users/lucas.lima/Downloads/Santander/Proposta_Continuidade_Santander.pptx.pdf", 9.08]], "categories": ["Trabalho", "Sistema", "Entretenimento", "Comunicacao", "Pesquisa Internet"]}, "firefox": {"topSites": [["docs.google.com", 1077.8500000000001], ["meet.google.com", 501.23], ["web.whatsapp.com", 31.889999999999997], ["www.kabum.com.br", 28.380000000000003], ["Firefox-Indicadordecompartilhamento", 24.72], ["Escolhaummecanismodepesquisa", 20.31], ["calendar.google.com", 18.49], ["rma-cms.rankmyapp.com", 18.470000000000002], ["meet:20GEO207C20Treinamento20E2809420Mozilla20Firefox", 15.12], ["mail.google.com", 13.36]], "categories": ["Trabalho", "Navegadores internet", "Pesquisa Internet", "Sistema", "Ferramentas Google", "Estudo", "Comunicacao", "Entretenimento"]}};
+const GD={"nodes": [{"id": 1, "label": "chrome", "title": "chrome\n48257 min total | 939 sessões", "value": 48257, "topSites": [["docs.google.com", 4506.280000000001], ["ReviewSheet-RITool-GoogleChrome", 1702.4800000000002], ["meet.google.com", 1343.0000000000007], ["rankmyapp:20agenda20-20Semana20de201220de20julho20de20202620-20Google20Chrome", 744.7400000000005], ["meet:20GEO207C20Treinamento20-20Google20Chrome", 672.24], ["rankmyapp:20agenda20-20Semana20de20520de20julho20de20202620-20Google20Chrome", 640.4399999999997], ["Qulture.Rocks-GoogleChrome", 583.3200000000002], ["jupyterhub.rankmyapp.com", 580.78], ["AppStoreConnect-GoogleChrome", 559.8599999999997], ["calendar.google.com", 538.6100000000001]], "siteCategories": ["Trabalho", "Ferramentas IA", "Navegadores internet", "Sistema", "Ferramentas Google", "Bancos", "Entretenimento", "Estudo", "Comunicação", "Pesquisa Internet"]}, {"id": 2, "label": "Discord", "title": "Discord\n10740 min total | 836 sessões", "value": 10740, "topSites": [], "siteCategories": []}, {"id": 3, "label": "explorer", "title": "explorer\n1352 min total | 762 sessões", "value": 1352, "topSites": [], "siteCategories": []}, {"id": 4, "label": "olk", "title": "olk\n60 min total | 30 sessões", "value": 60, "topSites": [], "siteCategories": []}, {"id": 5, "label": "Code", "title": "Code\n1578 min total | 89 sessões", "value": 1578, "topSites": [], "siteCategories": []}, {"id": 6, "label": "MongoDBCompass", "title": "MongoDBCompass\n88 min total | 27 sessões", "value": 88, "topSites": [], "siteCategories": []}, {"id": 7, "label": "SnippingTool", "title": "SnippingTool\n178 min total | 331 sessões", "value": 178, "topSites": [], "siteCategories": []}, {"id": 8, "label": "claude", "title": "claude\n95 min total | 18 sessões", "value": 95, "topSites": [], "siteCategories": []}, {"id": 9, "label": "firefox", "title": "firefox\n1802 min total | 39 sessões", "value": 1802, "topSites": [["docs.google.com", 1077.8500000000001], ["meet.google.com", 501.23], ["web.whatsapp.com", 31.889999999999997], ["www.kabum.com.br", 28.380000000000003], ["Firefox-Indicadordecompartilhamento", 24.72], ["Escolhaummecanismodepesquisa", 20.31], ["calendar.google.com", 18.49], ["rma-cms.rankmyapp.com", 18.470000000000002], ["meet:20GEO207C20Treinamento20E2809420Mozilla20Firefox", 15.12], ["mail.google.com", 13.36]], "siteCategories": ["Trabalho", "Navegadores internet", "Pesquisa Internet", "Sistema", "Ferramentas Google", "Estudo", "Comunicação", "Entretenimento"]}, {"id": 10, "label": "Notepad", "title": "Notepad\n670 min total | 159 sessões", "value": 670, "topSites": [], "siteCategories": []}, {"id": 11, "label": "heidisql", "title": "heidisql\n47 min total | 15 sessões", "value": 47, "topSites": [], "siteCategories": []}, {"id": 12, "label": "OpenVPNConnect", "title": "OpenVPNConnect\n8 min total | 32 sessões", "value": 8, "topSites": [], "siteCategories": []}, {"id": 13, "label": "msedge", "title": "msedge\n1945 min total | 115 sessões", "value": 1945, "topSites": [["ri-tool.rankmyapp.com", 1433.7300000000002], ["account-status.amazon.com.br", 356.2], ["meet.google.com", 221.84], ["docs.google.com", 134.83999999999997], ["tool.rankmyapp.com", 95.42000000000002], ["auth.rankmyapp.com", 25.239999999999995], ["api.rankmyapp.com", 21.32], ["appstoreconnect.apple.com", 14.25], ["meet.google.comestcompartilhandoumajanela.", 11.04], ["file://C:/Users/lucas.lima/Downloads/Santander/Proposta_Continuidade_Santander.pptx.pdf", 9.08]], "siteCategories": ["Trabalho", "Sistema", "Entretenimento", "Comunicação", "Pesquisa Internet"]}, {"id": 14, "label": "Photos", "title": "Photos\n21 min total | 31 sessões", "value": 21, "topSites": [], "siteCategories": []}, {"id": 15, "label": "slack", "title": "slack\n42 min total | 32 sessões", "value": 42, "topSites": [], "siteCategories": []}, {"id": 16, "label": "WhatsApp.Root", "title": "WhatsApp.Root\n370 min total | 49 sessões", "value": 370, "topSites": [], "siteCategories": []}, {"id": 17, "label": "WindowsTerminal", "title": "WindowsTerminal\n17 min total | 15 sessões", "value": 17, "topSites": [], "siteCategories": []}, {"id": 18, "label": "ApplicationFrameHost", "title": "ApplicationFrameHost\n387 min total | 205 sessões", "value": 387, "topSites": [], "siteCategories": []}, {"id": 19, "label": "Spotify", "title": "Spotify\n89 min total | 45 sessões", "value": 89, "topSites": [], "siteCategories": []}, {"id": 20, "label": "Acrobat", "title": "Acrobat\n36 min total | 71 sessões", "value": 36, "topSites": [], "siteCategories": []}, {"id": 21, "label": "dbeaver", "title": "dbeaver\n14 min total | 11 sessões", "value": 14, "topSites": [], "siteCategories": []}, {"id": 22, "label": "PlanMaker", "title": "PlanMaker\n0 min total | 1 sessões", "value": 0, "topSites": [], "siteCategories": []}, {"id": 23, "label": "mspaint", "title": "mspaint\n1 min total | 2 sessões", "value": 1, "topSites": [], "siteCategories": []}, {"id": 24, "label": "EXCEL", "title": "EXCEL\n2 min total | 3 sessões", "value": 2, "topSites": [], "siteCategories": []}, {"id": 25, "label": "Lightshot", "title": "Lightshot\n29 min total | 26 sessões", "value": 29, "topSites": [], "siteCategories": []}, {"id": 26, "label": "PickerHost", "title": "PickerHost\n25 min total | 13 sessões", "value": 25, "topSites": [], "siteCategories": []}, {"id": 27, "label": "POWERPNT", "title": "POWERPNT\n5 min total | 4 sessões", "value": 5, "topSites": [], "siteCategories": []}, {"id": 28, "label": "ms-teams", "title": "ms-teams\n15 min total | 2 sessões", "value": 15, "topSites": [], "siteCategories": []}, {"id": 29, "label": "Widgets", "title": "Widgets\n0 min total | 5 sessões", "value": 0, "topSites": [], "siteCategories": []}, {"id": 30, "label": "notepad", "title": "notepad\n2 min total | 7 sessões", "value": 2, "topSites": [], "siteCategories": []}, {"id": 31, "label": "WINWORD", "title": "WINWORD\n6 min total | 6 sessões", "value": 6, "topSites": [], "siteCategories": []}, {"id": 32, "label": "Lens", "title": "Lens\n1 min total | 5 sessões", "value": 1, "topSites": [], "siteCategories": []}, {"id": 33, "label": "PBIDesktop", "title": "PBIDesktop\n32 min total | 8 sessões", "value": 32, "topSites": [], "siteCategories": []}, {"id": 34, "label": "Taskmgr", "title": "Taskmgr\n0 min total | 1 sessões", "value": 0, "topSites": [], "siteCategories": []}, {"id": 35, "label": "Zoom", "title": "Zoom\n136 min total | 2 sessões", "value": 136, "topSites": [], "siteCategories": []}, {"id": 36, "label": "notepad++", "title": "notepad++\n9 min total | 3 sessões", "value": 9, "topSites": [], "siteCategories": []}, {"id": 37, "label": "AnyDesk", "title": "AnyDesk\n12 min total | 3 sessões", "value": 12, "topSites": [], "siteCategories": []}, {"id": 38, "label": "EPSecurityConsoleUI", "title": "EPSecurityConsoleUI\n1 min total | 2 sessões", "value": 1, "topSites": [], "siteCategories": []}, {"id": 39, "label": "Evope.Collector", "title": "Evope.Collector\n2 min total | 1 sessões", "value": 2, "topSites": [], "siteCategories": []}, {"id": 40, "label": "WinRAR", "title": "WinRAR\n0 min total | 1 sessões", "value": 0, "topSites": [], "siteCategories": []}], "edges": [{"id": 1, "from": 1, "to": 2, "value": 787, "title": "Usados juntos: 787x", "label": "787"}, {"id": 2, "from": 1, "to": 3, "value": 724, "title": "Usados juntos: 724x", "label": "724"}, {"id": 3, "from": 2, "to": 3, "value": 663, "title": "Usados juntos: 663x", "label": "663"}, {"id": 4, "from": 1, "to": 7, "value": 329, "title": "Usados juntos: 329x", "label": "329"}, {"id": 5, "from": 3, "to": 7, "value": 305, "title": "Usados juntos: 305x", "label": "305"}, {"id": 6, "from": 2, "to": 7, "value": 300, "title": "Usados juntos: 300x", "label": "300"}, {"id": 7, "from": 18, "to": 1, "value": 200, "title": "Usados juntos: 200x", "label": "200"}, {"id": 8, "from": 18, "to": 3, "value": 195, "title": "Usados juntos: 195x", "label": "195"}, {"id": 9, "from": 18, "to": 2, "value": 181, "title": "Usados juntos: 181x", "label": "181"}, {"id": 10, "from": 1, "to": 10, "value": 154, "title": "Usados juntos: 154x", "label": "154"}, {"id": 11, "from": 3, "to": 10, "value": 145, "title": "Usados juntos: 145x", "label": "145"}, {"id": 12, "from": 2, "to": 10, "value": 140, "title": "Usados juntos: 140x", "label": "140"}, {"id": 13, "from": 1, "to": 13, "value": 109, "title": "Usados juntos: 109x", "label": "109"}, {"id": 14, "from": 3, "to": 13, "value": 100, "title": "Usados juntos: 100x", "label": "100"}, {"id": 15, "from": 2, "to": 13, "value": 97, "title": "Usados juntos: 97x", "label": "97"}, {"id": 16, "from": 18, "to": 7, "value": 94, "title": "Usados juntos: 94x", "label": "94"}, {"id": 17, "from": 5, "to": 3, "value": 80, "title": "Usados juntos: 80x", "label": "80"}, {"id": 18, "from": 5, "to": 2, "value": 77, "title": "Usados juntos: 77x", "label": "77"}, {"id": 19, "from": 1, "to": 5, "value": 76, "title": "Usados juntos: 76x", "label": "76"}, {"id": 20, "from": 20, "to": 1, "value": 71, "title": "Usados juntos: 71x", "label": "71"}, {"id": 21, "from": 20, "to": 3, "value": 69, "title": "Usados juntos: 69x", "label": "69"}, {"id": 22, "from": 20, "to": 2, "value": 68, "title": "Usados juntos: 68x", "label": "68"}, {"id": 23, "from": 1, "to": 16, "value": 49, "title": "Usados juntos: 49x", "label": "49"}, {"id": 24, "from": 10, "to": 7, "value": 47, "title": "Usados juntos: 47x", "label": "47"}, {"id": 25, "from": 1, "to": 19, "value": 45, "title": "Usados juntos: 45x", "label": "45"}, {"id": 26, "from": 3, "to": 16, "value": 44, "title": "Usados juntos: 44x", "label": "44"}, {"id": 27, "from": 18, "to": 10, "value": 43, "title": "Usados juntos: 43x", "label": "43"}, {"id": 28, "from": 2, "to": 19, "value": 42, "title": "Usados juntos: 42x", "label": "42"}, {"id": 29, "from": 13, "to": 7, "value": 40, "title": "Usados juntos: 40x", "label": "40"}, {"id": 30, "from": 3, "to": 19, "value": 40, "title": "Usados juntos: 40x", "label": "40"}, {"id": 31, "from": 20, "to": 7, "value": 40, "title": "Usados juntos: 40x", "label": "40"}, {"id": 32, "from": 2, "to": 16, "value": 39, "title": "Usados juntos: 39x", "label": "39"}, {"id": 33, "from": 18, "to": 13, "value": 39, "title": "Usados juntos: 39x", "label": "39"}, {"id": 34, "from": 5, "to": 10, "value": 37, "title": "Usados juntos: 37x", "label": "37"}, {"id": 35, "from": 2, "to": 9, "value": 36, "title": "Usados juntos: 36x", "label": "36"}, {"id": 36, "from": 3, "to": 9, "value": 36, "title": "Usados juntos: 36x", "label": "36"}, {"id": 37, "from": 1, "to": 15, "value": 32, "title": "Usados juntos: 32x", "label": "32"}, {"id": 38, "from": 1, "to": 9, "value": 32, "title": "Usados juntos: 32x", "label": "32"}, {"id": 39, "from": 1, "to": 12, "value": 31, "title": "Usados juntos: 31x", "label": "31"}, {"id": 40, "from": 1, "to": 14, "value": 31, "title": "Usados juntos: 31x", "label": "31"}, {"id": 41, "from": 3, "to": 15, "value": 31, "title": "Usados juntos: 31x", "label": "31"}, {"id": 42, "from": 7, "to": 16, "value": 31, "title": "Usados juntos: 31x", "label": "31"}, {"id": 43, "from": 1, "to": 4, "value": 30, "title": "Usados juntos: 30x", "label": "30"}, {"id": 44, "from": 2, "to": 12, "value": 30, "title": "Usados juntos: 30x", "label": "30"}, {"id": 45, "from": 2, "to": 15, "value": 30, "title": "Usados juntos: 30x", "label": "30"}, {"id": 46, "from": 3, "to": 14, "value": 29, "title": "Usados juntos: 29x", "label": "29"}, {"id": 47, "from": 2, "to": 4, "value": 28, "title": "Usados juntos: 28x", "label": "28"}, {"id": 48, "from": 2, "to": 14, "value": 28, "title": "Usados juntos: 28x", "label": "28"}, {"id": 49, "from": 3, "to": 4, "value": 27, "title": "Usados juntos: 27x", "label": "27"}, {"id": 50, "from": 2, "to": 6, "value": 27, "title": "Usados juntos: 27x", "label": "27"}, {"id": 51, "from": 3, "to": 6, "value": 27, "title": "Usados juntos: 27x", "label": "27"}, {"id": 52, "from": 3, "to": 12, "value": 26, "title": "Usados juntos: 26x", "label": "26"}, {"id": 53, "from": 1, "to": 25, "value": 26, "title": "Usados juntos: 26x", "label": "26"}, {"id": 54, "from": 1, "to": 6, "value": 25, "title": "Usados juntos: 25x", "label": "25"}, {"id": 55, "from": 18, "to": 16, "value": 24, "title": "Usados juntos: 24x", "label": "24"}, {"id": 56, "from": 3, "to": 25, "value": 24, "title": "Usados juntos: 24x", "label": "24"}, {"id": 57, "from": 20, "to": 18, "value": 22, "title": "Usados juntos: 22x", "label": "22"}, {"id": 58, "from": 5, "to": 6, "value": 21, "title": "Usados juntos: 21x", "label": "21"}, {"id": 59, "from": 13, "to": 16, "value": 21, "title": "Usados juntos: 21x", "label": "21"}, {"id": 60, "from": 2, "to": 25, "value": 21, "title": "Usados juntos: 21x", "label": "21"}, {"id": 61, "from": 15, "to": 7, "value": 19, "title": "Usados juntos: 19x", "label": "19"}, {"id": 62, "from": 7, "to": 19, "value": 19, "title": "Usados juntos: 19x", "label": "19"}, {"id": 63, "from": 8, "to": 2, "value": 18, "title": "Usados juntos: 18x", "label": "18"}, {"id": 64, "from": 14, "to": 7, "value": 18, "title": "Usados juntos: 18x", "label": "18"}, {"id": 65, "from": 8, "to": 3, "value": 17, "title": "Usados juntos: 17x", "label": "17"}, {"id": 66, "from": 6, "to": 10, "value": 17, "title": "Usados juntos: 17x", "label": "17"}, {"id": 67, "from": 18, "to": 19, "value": 16, "title": "Usados juntos: 16x", "label": "16"}, {"id": 68, "from": 18, "to": 9, "value": 16, "title": "Usados juntos: 16x", "label": "16"}, {"id": 69, "from": 1, "to": 11, "value": 15, "title": "Usados juntos: 15x", "label": "15"}, {"id": 70, "from": 2, "to": 11, "value": 15, "title": "Usados juntos: 15x", "label": "15"}, {"id": 71, "from": 1, "to": 17, "value": 15, "title": "Usados juntos: 15x", "label": "15"}, {"id": 72, "from": 2, "to": 17, "value": 15, "title": "Usados juntos: 15x", "label": "15"}, {"id": 73, "from": 1, "to": 8, "value": 15, "title": "Usados juntos: 15x", "label": "15"}, {"id": 74, "from": 20, "to": 10, "value": 15, "title": "Usados juntos: 15x", "label": "15"}, {"id": 75, "from": 13, "to": 15, "value": 14, "title": "Usados juntos: 14x", "label": "14"}, {"id": 76, "from": 5, "to": 17, "value": 14, "title": "Usados juntos: 14x", "label": "14"}, {"id": 77, "from": 3, "to": 17, "value": 14, "title": "Usados juntos: 14x", "label": "14"}, {"id": 78, "from": 18, "to": 14, "value": 14, "title": "Usados juntos: 14x", "label": "14"}, {"id": 79, "from": 20, "to": 13, "value": 14, "title": "Usados juntos: 14x", "label": "14"}, {"id": 80, "from": 3, "to": 11, "value": 13, "title": "Usados juntos: 13x", "label": "13"}, {"id": 81, "from": 15, "to": 16, "value": 13, "title": "Usados juntos: 13x", "label": "13"}, {"id": 82, "from": 9, "to": 7, "value": 13, "title": "Usados juntos: 13x", "label": "13"}, {"id": 83, "from": 18, "to": 15, "value": 13, "title": "Usados juntos: 13x", "label": "13"}, {"id": 84, "from": 5, "to": 7, "value": 13, "title": "Usados juntos: 13x", "label": "13"}, {"id": 85, "from": 18, "to": 5, "value": 13, "title": "Usados juntos: 13x", "label": "13"}, {"id": 86, "from": 8, "to": 9, "value": 12, "title": "Usados juntos: 12x", "label": "12"}, {"id": 87, "from": 25, "to": 10, "value": 12, "title": "Usados juntos: 12x", "label": "12"}, {"id": 88, "from": 1, "to": 26, "value": 12, "title": "Usados juntos: 12x", "label": "12"}, {"id": 89, "from": 2, "to": 26, "value": 12, "title": "Usados juntos: 12x", "label": "12"}, {"id": 90, "from": 10, "to": 17, "value": 11, "title": "Usados juntos: 11x", "label": "11"}, {"id": 91, "from": 8, "to": 7, "value": 11, "title": "Usados juntos: 11x", "label": "11"}, {"id": 92, "from": 1, "to": 21, "value": 11, "title": "Usados juntos: 11x", "label": "11"}, {"id": 93, "from": 18, "to": 25, "value": 11, "title": "Usados juntos: 11x", "label": "11"}, {"id": 94, "from": 3, "to": 26, "value": 11, "title": "Usados juntos: 11x", "label": "11"}, {"id": 95, "from": 11, "to": 7, "value": 9, "title": "Usados juntos: 9x", "label": "9"}, {"id": 96, "from": 12, "to": 7, "value": 9, "title": "Usados juntos: 9x", "label": "9"}, {"id": 97, "from": 10, "to": 14, "value": 9, "title": "Usados juntos: 9x", "label": "9"}, {"id": 98, "from": 21, "to": 3, "value": 9, "title": "Usados juntos: 9x", "label": "9"}, {"id": 99, "from": 21, "to": 2, "value": 9, "title": "Usados juntos: 9x", "label": "9"}, {"id": 100, "from": 5, "to": 9, "value": 8, "title": "Usados juntos: 8x", "label": "8"}, {"id": 101, "from": 19, "to": 16, "value": 8, "title": "Usados juntos: 8x", "label": "8"}, {"id": 102, "from": 10, "to": 16, "value": 8, "title": "Usados juntos: 8x", "label": "8"}, {"id": 103, "from": 1, "to": 33, "value": 8, "title": "Usados juntos: 8x", "label": "8"}, {"id": 104, "from": 10, "to": 12, "value": 8, "title": "Usados juntos: 8x", "label": "8"}, {"id": 105, "from": 9, "to": 10, "value": 7, "title": "Usados juntos: 7x", "label": "7"}, {"id": 106, "from": 15, "to": 19, "value": 7, "title": "Usados juntos: 7x", "label": "7"}, {"id": 107, "from": 4, "to": 7, "value": 7, "title": "Usados juntos: 7x", "label": "7"}, {"id": 108, "from": 1, "to": 30, "value": 7, "title": "Usados juntos: 7x", "label": "7"}, {"id": 109, "from": 2, "to": 30, "value": 7, "title": "Usados juntos: 7x", "label": "7"}, {"id": 110, "from": 3, "to": 30, "value": 7, "title": "Usados juntos: 7x", "label": "7"}, {"id": 111, "from": 5, "to": 12, "value": 7, "title": "Usados juntos: 7x", "label": "7"}, {"id": 112, "from": 6, "to": 17, "value": 6, "title": "Usados juntos: 6x", "label": "6"}, {"id": 113, "from": 20, "to": 16, "value": 6, "title": "Usados juntos: 6x", "label": "6"}, {"id": 114, "from": 18, "to": 6, "value": 6, "title": "Usados juntos: 6x", "label": "6"}, {"id": 115, "from": 5, "to": 25, "value": 6, "title": "Usados juntos: 6x", "label": "6"}, {"id": 116, "from": 18, "to": 12, "value": 6, "title": "Usados juntos: 6x", "label": "6"}, {"id": 117, "from": 13, "to": 12, "value": 6, "title": "Usados juntos: 6x", "label": "6"}, {"id": 118, "from": 1, "to": 31, "value": 6, "title": "Usados juntos: 6x", "label": "6"}, {"id": 119, "from": 2, "to": 31, "value": 6, "title": "Usados juntos: 6x", "label": "6"}, {"id": 120, "from": 3, "to": 31, "value": 6, "title": "Usados juntos: 6x", "label": "6"}, {"id": 121, "from": 3, "to": 33, "value": 6, "title": "Usados juntos: 6x", "label": "6"}, {"id": 122, "from": 14, "to": 16, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 123, "from": 5, "to": 21, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 124, "from": 18, "to": 26, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 125, "from": 26, "to": 7, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 126, "from": 13, "to": 26, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 127, "from": 1, "to": 29, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 128, "from": 7, "to": 31, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 129, "from": 1, "to": 32, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 130, "from": 5, "to": 32, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 131, "from": 2, "to": 32, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 132, "from": 3, "to": 32, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 133, "from": 32, "to": 10, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 134, "from": 2, "to": 33, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 135, "from": 20, "to": 19, "value": 5, "title": "Usados juntos: 5x", "label": "5"}, {"id": 136, "from": 11, "to": 12, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 137, "from": 5, "to": 4, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 138, "from": 9, "to": 19, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 139, "from": 20, "to": 14, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 140, "from": 21, "to": 10, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 141, "from": 1, "to": 27, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 142, "from": 2, "to": 27, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 143, "from": 3, "to": 27, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 144, "from": 18, "to": 4, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 145, "from": 2, "to": 29, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 146, "from": 3, "to": 29, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 147, "from": 18, "to": 30, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 148, "from": 13, "to": 30, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 149, "from": 18, "to": 31, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 150, "from": 21, "to": 12, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 151, "from": 32, "to": 17, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 152, "from": 10, "to": 33, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 153, "from": 20, "to": 11, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 154, "from": 18, "to": 33, "value": 4, "title": "Usados juntos: 4x", "label": "4"}, {"id": 155, "from": 8, "to": 5, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 156, "from": 13, "to": 14, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 157, "from": 10, "to": 19, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 158, "from": 18, "to": 8, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 159, "from": 9, "to": 6, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 160, "from": 14, "to": 19, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 161, "from": 1, "to": 24, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 162, "from": 24, "to": 7, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 163, "from": 10, "to": 4, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 164, "from": 10, "to": 31, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 165, "from": 16, "to": 31, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 166, "from": 21, "to": 7, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 167, "from": 8, "to": 10, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 168, "from": 13, "to": 19, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 169, "from": 1, "to": 36, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 170, "from": 2, "to": 36, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 171, "from": 3, "to": 36, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 172, "from": 11, "to": 36, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 173, "from": 6, "to": 12, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 174, "from": 5, "to": 26, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 175, "from": 18, "to": 17, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 176, "from": 18, "to": 21, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 177, "from": 5, "to": 11, "value": 3, "title": "Usados juntos: 3x", "label": "3"}, {"id": 178, "from": 1, "to": 23, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 179, "from": 2, "to": 23, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 180, "from": 3, "to": 23, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 181, "from": 23, "to": 7, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 182, "from": 2, "to": 24, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 183, "from": 24, "to": 3, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 184, "from": 10, "to": 26, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 185, "from": 20, "to": 4, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 186, "from": 20, "to": 27, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 187, "from": 10, "to": 27, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 188, "from": 4, "to": 27, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 189, "from": 18, "to": 28, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 190, "from": 1, "to": 28, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 191, "from": 2, "to": 28, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 192, "from": 3, "to": 28, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 193, "from": 27, "to": 7, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 194, "from": 20, "to": 15, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 195, "from": 30, "to": 12, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 196, "from": 20, "to": 31, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 197, "from": 33, "to": 7, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 198, "from": 1, "to": 35, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 199, "from": 2, "to": 35, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 200, "from": 3, "to": 35, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 201, "from": 12, "to": 14, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 202, "from": 20, "to": 33, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 203, "from": 20, "to": 9, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 204, "from": 25, "to": 30, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 205, "from": 36, "to": 7, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 206, "from": 20, "to": 25, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 207, "from": 25, "to": 33, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 208, "from": 5, "to": 19, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 209, "from": 6, "to": 7, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 210, "from": 6, "to": 26, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 211, "from": 4, "to": 17, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 212, "from": 32, "to": 25, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 213, "from": 21, "to": 9, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 214, "from": 7, "to": 29, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 215, "from": 37, "to": 38, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 216, "from": 37, "to": 3, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 217, "from": 21, "to": 6, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 218, "from": 13, "to": 10, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 219, "from": 12, "to": 17, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 220, "from": 10, "to": 15, "value": 2, "title": "Usados juntos: 2x", "label": "2"}, {"id": 221, "from": 14, "to": 15, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 222, "from": 6, "to": 4, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 223, "from": 20, "to": 5, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 224, "from": 20, "to": 22, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 225, "from": 1, "to": 22, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 226, "from": 5, "to": 22, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 227, "from": 2, "to": 22, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 228, "from": 3, "to": 22, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 229, "from": 22, "to": 7, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 230, "from": 18, "to": 23, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 231, "from": 23, "to": 14, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 232, "from": 23, "to": 19, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 233, "from": 28, "to": 7, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 234, "from": 18, "to": 27, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 235, "from": 18, "to": 29, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 236, "from": 9, "to": 29, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 237, "from": 32, "to": 6, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 238, "from": 4, "to": 31, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 239, "from": 1, "to": 34, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 240, "from": 5, "to": 34, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 241, "from": 2, "to": 34, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 242, "from": 3, "to": 34, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 243, "from": 10, "to": 34, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 244, "from": 20, "to": 12, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 245, "from": 12, "to": 16, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 246, "from": 20, "to": 8, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 247, "from": 20, "to": 36, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 248, "from": 8, "to": 11, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 249, "from": 8, "to": 36, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 250, "from": 20, "to": 30, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 251, "from": 30, "to": 33, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 252, "from": 14, "to": 31, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 253, "from": 6, "to": 19, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 254, "from": 12, "to": 19, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 255, "from": 18, "to": 32, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 256, "from": 25, "to": 17, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 257, "from": 10, "to": 29, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 258, "from": 14, "to": 29, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 259, "from": 25, "to": 7, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 260, "from": 13, "to": 35, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 261, "from": 7, "to": 35, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 262, "from": 28, "to": 10, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 263, "from": 5, "to": 14, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 264, "from": 25, "to": 14, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 265, "from": 21, "to": 17, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 266, "from": 37, "to": 26, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 267, "from": 38, "to": 26, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 268, "from": 37, "to": 39, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 269, "from": 38, "to": 39, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 270, "from": 38, "to": 3, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 271, "from": 39, "to": 3, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 272, "from": 5, "to": 36, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 273, "from": 18, "to": 40, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 274, "from": 1, "to": 40, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 275, "from": 2, "to": 40, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 276, "from": 3, "to": 40, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 277, "from": 14, "to": 40, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 278, "from": 7, "to": 40, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 279, "from": 16, "to": 40, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 280, "from": 11, "to": 26, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 281, "from": 32, "to": 12, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 282, "from": 21, "to": 26, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 283, "from": 9, "to": 26, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 284, "from": 37, "to": 18, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 285, "from": 37, "to": 1, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 286, "from": 37, "to": 2, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 287, "from": 37, "to": 10, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 288, "from": 9, "to": 13, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 289, "from": 25, "to": 12, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 290, "from": 4, "to": 14, "value": 1, "title": "Usados juntos: 1x", "label": "1"}, {"id": 291, "from": 14, "to": 27, "value": 1, "title": "Usados juntos: 1x", "label": "1"}]};
+const SD={"chrome": {"topSites": [["docs.google.com", 4506.280000000001], ["ReviewSheet-RITool-GoogleChrome", 1702.4800000000002], ["meet.google.com", 1343.0000000000007], ["rankmyapp:20agenda20-20Semana20de201220de20julho20de20202620-20Google20Chrome", 744.7400000000005], ["meet:20GEO207C20Treinamento20-20Google20Chrome", 672.24], ["rankmyapp:20agenda20-20Semana20de20520de20julho20de20202620-20Google20Chrome", 640.4399999999997], ["Qulture.Rocks-GoogleChrome", 583.3200000000002], ["jupyterhub.rankmyapp.com", 580.78], ["AppStoreConnect-GoogleChrome", 559.8599999999997], ["calendar.google.com", 538.6100000000001]], "categories": ["Trabalho", "Ferramentas IA", "Navegadores internet", "Sistema", "Ferramentas Google", "Bancos", "Entretenimento", "Estudo", "Comunicação", "Pesquisa Internet"]}, "msedge": {"topSites": [["ri-tool.rankmyapp.com", 1433.7300000000002], ["account-status.amazon.com.br", 356.2], ["meet.google.com", 221.84], ["docs.google.com", 134.83999999999997], ["tool.rankmyapp.com", 95.42000000000002], ["auth.rankmyapp.com", 25.239999999999995], ["api.rankmyapp.com", 21.32], ["appstoreconnect.apple.com", 14.25], ["meet.google.comestcompartilhandoumajanela.", 11.04], ["file://C:/Users/lucas.lima/Downloads/Santander/Proposta_Continuidade_Santander.pptx.pdf", 9.08]], "categories": ["Trabalho", "Sistema", "Entretenimento", "Comunicação", "Pesquisa Internet"]}, "firefox": {"topSites": [["docs.google.com", 1077.8500000000001], ["meet.google.com", 501.23], ["web.whatsapp.com", 31.889999999999997], ["www.kabum.com.br", 28.380000000000003], ["Firefox-Indicadordecompartilhamento", 24.72], ["Escolhaummecanismodepesquisa", 20.31], ["calendar.google.com", 18.49], ["rma-cms.rankmyapp.com", 18.470000000000002], ["meet:20GEO207C20Treinamento20E2809420Mozilla20Firefox", 15.12], ["mail.google.com", 13.36]], "categories": ["Trabalho", "Navegadores internet", "Pesquisa Internet", "Sistema", "Ferramentas Google", "Estudo", "Comunicação", "Entretenimento"]}};
 
-/* ===== CATEGORIES ===== */
-var CATS={
+
+const CATS={
   browser:['chrome','msedge','firefox','opera','brave','chromium','iexplore','safari'],
-  comunicacao:['Discord','WhatsApp.Root','slack','Teams','olk','Zoom','zoom','Lync','telegram','skype','ms-teams'],
+  comunicacao:['Discord','WhatsApp.Root','slack','Teams','olk','zoom','Lync','telegram','skype'],
   dev:['Code','WindowsTerminal','MongoDBCompass','heidisql','dbeaver','claude','DBeaver','postman','PBIDesktop'],
-  office:['EXCEL','POWERPNT','WINWORD','PlanMaker','Acrobat','notepad++','WinRAR'],
-  sistema:['explorer','ApplicationFrameHost','SnippingTool','Photos','Notepad','notepad','Lightshot','PickerHost','EPSecurityConsoleUI','Evope.Collector','Taskmgr','taskmgr','Widgets','Lens','mspaint'],
-  midia:['Spotify','VLC','AnyDesk','OpenVPNConnect']
+  office:['EXCEL','POWERPNT','WINWORD','PlanMaker','Acrobat','notepad++'],
+  sistema:['explorer','ApplicationFrameHost','SnippingTool','Photos','Notepad','Lightshot','PickerHost','EPSecurityConsoleUI','Evope.Collector','taskmgr'],
+  midia:['Spotify','VLC','AnyDesk','OpenVPNConnect'],
 };
-var C={browser:'#3B82F6',comunicacao:'#8B5CF6',dev:'#10B981',office:'#F59E0B',sistema:'#6B7280',midia:'#EC4899',outro:'#9CA3AF'};
-
-function gc(l){
-  for(var k in CATS){
-    if(!CATS.hasOwnProperty(k))continue;
-    for(var i=0;i<CATS[k].length;i++){
-      if(CATS[k][i]===l||CATS[k][i].toLowerCase()===l.toLowerCase())return k;
-    }
-  }
-  return 'outro';
-}
+const C={browser:'#3B82F6',comunicacao:'#8B5CF6',dev:'#10B981',office:'#F59E0B',sistema:'#6B7280',midia:'#EC4899',outro:'#9CA3AF'};
+function gc(l){for(const[cat,apps]of Object.entries(CATS)){if(apps.includes(l)||apps.map(a=>a.toLowerCase()).includes(l.toLowerCase()))return cat;}return'outro';}
 function fh(m){return Math.round(m/60*10)/10+'h';}
 
-var net=null, nDS=null, eDS=null, phOn=true;
+let net=null,nDS=null,eDS=null,phOn=true;
 
 function buildNet(data){
-  /* Guard: vis-network must be loaded */
-  if(typeof vis==='undefined'){
-    document.getElementById('ld').classList.add('hi');
-    document.getElementById('err-banner').classList.remove('hi');
-    document.getElementById('err-detail').textContent='vis-network nao carregou. Recarregue a pagina.';
-    return;
-  }
-
+  const wrap=document.querySelector('.graph-wrap');
   document.getElementById('ld').classList.remove('hi');
-  document.getElementById('err-banner').classList.add('hi');
 
-  var rawN=data.nodes.map(function(n){
-    var cat=gc(n.label), col=C[cat], sd=SD[n.label]||{};
-    return {id:n.id, label:n.label, value:n.value,
+  const rawN=data.nodes.map(n=>{
+    const cat=gc(n.label),col=C[cat],sd=SD[n.label]||{};
+    return{id:n.id,label:n.label,value:n.value,
       title:makeTip(n,sd),
       color:{background:col,border:col,highlight:{background:col,border:'#fff'},hover:{background:col,border:'#fff'}},
       font:{color:'#E8EDF8',size:13},
-      _cat:cat, _col:col,
+      _cat:cat,_col:col,
       _sites:(n.topSites||sd.topSites||[]),
       _cats:(n.siteCategories||sd.categories||[])
     };
   });
 
-  var rawE=data.edges.map(function(e){
-    return {id:e.id, from:e.from, to:e.to, value:e.value,
-      title:e.value+' co-ocorrencias',
-      color:{color:'rgba(45,82,239,.28)',highlight:'rgba(45,82,239,.9)',hover:'rgba(45,82,239,.6)'},
-      font:{color:'#9AAAD4',size:10},
-      scaling:{min:1,max:12}
-    };
-  });
+  const rawE=data.edges.map(e=>({
+    id:e.id,from:e.from,to:e.to,value:e.value,
+    title:e.value+' co-ocorrências',
+    color:{color:'rgba(45,82,239,.28)',highlight:'rgba(45,82,239,.9)',hover:'rgba(45,82,239,.6)'},
+    font:{color:'#9AAAD4',size:10},
+    scaling:{min:1,max:12}
+  }));
 
   nDS=new vis.DataSet(rawN);
   eDS=new vis.DataSet(rawE);
 
-  var el=document.getElementById('graph');
+  const el=document.getElementById('graph');
   net=new vis.Network(el,{nodes:nDS,edges:eDS},{
     nodes:{shape:'dot',scaling:{min:16,max:64,label:{enabled:true,min:13,max:22}},borderWidth:2,shadow:{enabled:true,color:'rgba(0,0,0,.4)',size:8,x:2,y:2}},
     edges:{smooth:{type:'continuous',roundness:.3},scaling:{min:1,max:12},width:1.5,selectionWidth:3},
@@ -421,54 +375,53 @@ function buildNet(data){
     layout:{randomSeed:42}
   });
 
-  net.on('stabilizationIterationsDone',function(){document.getElementById('ld').classList.add('hi');});
+  net.on('stabilizationIterationsDone',()=>document.getElementById('ld').classList.add('hi'));
 
-  net.on('click',function(p){
+  net.on('click',p=>{
     if(p.nodes.length>0){openDrawer(p.nodes[0]);hlNode(p.nodes[0]);}
     else{closeDrawer();clearHL();}
   });
 }
 
 function makeTip(n,sd){
-  var el=document.createElement('div');
-  el.style.cssText='background:#0D1535;border:1px solid rgba(45,82,239,.3);border-radius:8px;padding:10px 13px;font-size:12px;color:#9AAAD4;line-height:1.7;max-width:250px;pointer-events:none';
-  var sites=n.topSites||sd.topSites||[], cats=n.siteCategories||sd.categories||[];
-  var h='<strong style="color:#E8EDF8;font-size:13px;display:block;margin-bottom:5px">'+n.label+'</strong>';
+  const el=document.createElement('div');
+  el.style='background:#0D1535;border:1px solid rgba(45,82,239,.3);border-radius:8px;padding:10px 13px;font-size:12px;color:#9AAAD4;line-height:1.7;max-width:250px;pointer-events:none';
+  const sites=n.topSites||sd.topSites||[],cats=n.siteCategories||sd.categories||[];
+  let h='<strong style="color:#E8EDF8;font-size:13px;display:block;margin-bottom:5px">'+n.label+'</strong>';
   h+='<div>'+fh(n.value)+' de uso total</div>';
   if(sites.length){
     h+='<div style="margin-top:5px;color:#E8EDF8;font-size:11px;font-weight:600">Top sites:</div>';
-    sites.slice(0,5).forEach(function(s){h+='<div style="font-size:11px">&middot; '+(s[0].length>34?s[0].slice(0,34)+'...':s[0])+' <span style="color:#5B6B99">('+fh(s[1])+')</span></div>';});
+    sites.slice(0,5).forEach(([s,m])=>{h+='<div style="font-size:11px">· '+(s.length>34?s.slice(0,34)+'…':s)+' <span style="color:#5B6B99">('+fh(m)+')</span></div>';});
   }
-  if(cats.length) h+='<div style="margin-top:5px;font-size:10px;color:#5B6B99">'+cats.join(' &middot; ')+'</div>';
-  el.innerHTML=h;
-  return el;
+  if(cats.length)h+='<div style="margin-top:5px;font-size:10px;color:#5B6B99">'+cats.join(' · ')+'</div>';
+  el.innerHTML=h;return el;
 }
 
 function openDrawer(id){
-  var n=nDS.get(id); if(!n)return;
+  const n=nDS.get(id);if(!n)return;
   document.getElementById('k-sel').textContent=n.label;
   document.getElementById('drw-dot').style.background=n._col;
   document.getElementById('drw-name').textContent=n.label;
-  var ce=net.getConnectedEdges(id), cn=net.getConnectedNodes(id);
-  var h='';
+  const ce=net.getConnectedEdges(id),cn=net.getConnectedNodes(id);
+  let h='';
   h+='<div class="dr"><span class="dk">Uso total</span><span class="dv">'+fh(n.value)+' ('+n.value+' min)</span></div>';
   h+='<div class="dr"><span class="dk">Categoria</span><span class="dv" style="color:'+n._col+'">'+n._cat+'</span></div>';
   h+='<div class="dr"><span class="dk">Apps relacionados</span><span class="dv">'+cn.length+'</span></div>';
   h+='<div class="dr"><span class="dk">Arestas</span><span class="dv">'+ce.length+'</span></div>';
-  var sites=n._sites||[];
+  const sites=n._sites||[];
   if(sites.length){
     h+='<div class="dsec">Sites dentro deste app</div>';
-    sites.slice(0,8).forEach(function(s){h+='<div class="dsite"><span class="dsite-n">'+s[0]+'</span><span class="dsite-h">'+fh(s[1])+'</span></div>';});
+    sites.slice(0,8).forEach(([s,m])=>{h+='<div class="dsite"><span class="dsite-n">'+s+'</span><span class="dsite-h">'+fh(m)+'</span></div>';});
   }
-  var cats=n._cats||[];
-  if(cats.length){h+='<div class="dsec">Categorias de uso</div><div class="dtags">';cats.forEach(function(c){h+='<span class="dtag">'+c+'</span>';});h+='</div>';}
+  const cats=n._cats||[];
+  if(cats.length){h+='<div class="dsec">Categorias de uso</div><div class="dtags">';cats.forEach(c=>{h+='<span class="dtag">'+c+'</span>';});h+='</div>';}
   if(cn.length){
     h+='<div class="dsec">Apps conectados ('+cn.length+')</div>';
-    var edgeMap={};
-    ce.forEach(function(eid){var e=eDS.get(eid);if(!e)return;var other=e.from===id?e.to:e.from;edgeMap[other]=e.value;});
-    var sorted=cn.slice().sort(function(a,b){return(edgeMap[b]||0)-(edgeMap[a]||0);}).slice(0,8);
-    sorted.forEach(function(nid){
-      var cn2=nDS.get(nid);if(!cn2)return;
+    const edgeMap={};
+    ce.forEach(eid=>{const e=eDS.get(eid);if(!e)return;const other=e.from===id?e.to:e.from;edgeMap[other]=e.value;});
+    const sorted=cn.slice().sort((a,b)=>(edgeMap[b]||0)-(edgeMap[a]||0)).slice(0,8);
+    sorted.forEach(nid=>{
+      const cn2=nDS.get(nid);if(!cn2)return;
       h+='<div class="conn-item" onclick="focusNode('+nid+')">';
       h+='<span class="dot" style="background:'+cn2._col+';width:7px;height:7px;flex-shrink:0"></span>';
       h+='<span class="conn-name">'+cn2.label+'</span>';
@@ -482,19 +435,19 @@ function openDrawer(id){
 
 function closeDrawer(){
   document.getElementById('drawer').classList.remove('open');
-  document.getElementById('k-sel').innerHTML='&mdash;';
+  document.getElementById('k-sel').textContent='—';
 }
 
 function hlNode(id){
-  var cn=new Set(net.getConnectedNodes(id)), ce=new Set(net.getConnectedEdges(id));
+  const cn=new Set(net.getConnectedNodes(id)),ce=new Set(net.getConnectedEdges(id));
   cn.add(id);
-  nDS.update(nDS.get().map(function(n){return{id:n.id,opacity:cn.has(n.id)?1:0.08};}));
-  eDS.update(eDS.get().map(function(e){return{id:e.id,color:{color:ce.has(e.id)?'rgba(45,82,239,.9)':'rgba(45,82,239,.03)'}};}));
+  nDS.update(nDS.get().map(n=>({id:n.id,opacity:cn.has(n.id)?1:0.08})));
+  eDS.update(eDS.get().map(e=>({id:e.id,color:{color:ce.has(e.id)?'rgba(45,82,239,.9)':'rgba(45,82,239,.03)'}})));
 }
 function clearHL(){
   if(!nDS)return;
-  nDS.update(nDS.get().map(function(n){return{id:n.id,opacity:1};}));
-  eDS.update(eDS.get().map(function(e){return{id:e.id,color:{color:'rgba(45,82,239,.28)'}};}));
+  nDS.update(nDS.get().map(n=>({id:n.id,opacity:1})));
+  eDS.update(eDS.get().map(e=>({id:e.id,color:{color:'rgba(45,82,239,.28)'}})));
 }
 function clearSel(){clearHL();closeDrawer();}
 
@@ -508,80 +461,82 @@ function focusEdge(f,t){
   if(!net)return;
   net.fit({nodes:[f,t],animation:{duration:500,easingFunction:'easeInOutQuad'}});
 }
-function fitGraph(){if(net)net.fit({animation:{duration:400,easingFunction:'easeInOutQuad'}});}
+function fitGraph(){net&&net.fit({animation:{duration:400,easingFunction:'easeInOutQuad'}});}
 
 function filterCat(cat){
-  document.querySelectorAll('.li').forEach(function(el){el.classList.remove('on');});
+  document.querySelectorAll('.li').forEach(el=>el.classList.remove('on'));
   document.getElementById(cat?'l-'+cat:'l-all').classList.add('on');
   if(!cat){clearHL();return;}
   if(!nDS)return;
-  var m=nDS.get().filter(function(n){return gc(n.label)===cat;}).map(function(n){return n.id;});
-  nDS.update(nDS.get().map(function(n){return{id:n.id,opacity:m.indexOf(n.id)!==-1?1:0.07};}));
-  eDS.update(eDS.get().map(function(e){return{id:e.id,color:{color:m.indexOf(e.from)!==-1&&m.indexOf(e.to)!==-1?'rgba(45,82,239,.85)':'rgba(45,82,239,.03)'}};}));
+  const m=nDS.get().filter(n=>gc(n.label)===cat).map(n=>n.id);
+  nDS.update(nDS.get().map(n=>({id:n.id,opacity:m.includes(n.id)?1:0.07})));
+  eDS.update(eDS.get().map(e=>({id:e.id,color:{color:m.includes(e.from)&&m.includes(e.to)?'rgba(45,82,239,.85)':'rgba(45,82,239,.03)'}})));
 }
 
 function togglePhysics(){
   phOn=!phOn;
-  if(net)net.setOptions({physics:{enabled:phOn}});
-  var b=document.getElementById('btn-phy');
-  b.textContent=phOn?'Fisica':'Fisica Off';
+  net&&net.setOptions({physics:{enabled:phOn}});
+  const b=document.getElementById('btn-phy');
+  b.textContent=phOn?'Física':'Física ✗';
   b.classList.toggle('on',phOn);
 }
 
 function tgl(id){
-  var b=document.getElementById('sec-'+id), a=document.getElementById('a-'+id);
-  var c=b.classList.toggle('hi');
-  a.innerHTML=c?'&#9656;':'&#9662;';
+  const b=document.getElementById('sec-'+id),a=document.getElementById('a-'+id);
+  const c=b.classList.toggle('hi');
+  a.textContent=c?'▸':'▾';
 }
 
 function selectGrp(el,grp){
-  document.querySelectorAll('.gc').forEach(function(c){c.classList.remove('on');});
+  document.querySelectorAll('.gc').forEach(c=>c.classList.remove('on'));
   el.classList.add('on');
   document.getElementById('grp-s').value=grp;
-  var gObj=(GD.groups||[]).find(function(g){return g.name===grp;});
+  // Resolve group name → numeric ID via GD.groups (populated after first API call)
+  const gObj=(GD.groups||[]).find(g=>g.name===grp);
   document.getElementById('grp-id').value=gObj?gObj.id:'';
   applyFilters();
 }
 
-function applyFilters(){
-  var btn=document.getElementById('btn-ap');
-  btn.disabled=true; btn.textContent='Carregando...';
+async function applyFilters(){
+  const btn=document.getElementById('btn-ap');
+  btn.disabled=true;btn.textContent='Carregando...';
   document.getElementById('ld').classList.remove('hi');
-  closeDrawer(); clearHL();
-  var di=document.getElementById('d-ini').value;
-  var de=document.getElementById('d-end').value;
-  var grp=document.getElementById('grp-s').value;
-  var grpId=document.getElementById('grp-id').value;
-
-  var reqBody={DateIni:di, DateEnd:de, SearchSubgroups:true};
-  if(grpId) reqBody.ClientGroupId=Number(grpId);
-
-  fetch('https://webhook.digital-ai.tech/webhook/evope/processmap',{
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body:JSON.stringify(reqBody)
-  }).then(function(r){
+  closeDrawer();clearHL();
+  const di=document.getElementById('d-ini').value;
+  const de=document.getElementById('d-end').value;
+  const grp=document.getElementById('grp-s').value;
+  const grpId=document.getElementById('grp-id').value;
+  try{
+    // Build request body: only include ClientGroupId when a numeric ID is available
+    const reqBody=Object.assign(
+      {DateIni:di,DateEnd:de,SearchSubgroups:true},
+      grpId?{ClientGroupId:Number(grpId)}:{}
+    );
+    const r=await fetch('https://webhook.digital-ai.tech/webhook/evope/processmap',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(reqBody)
+    });
     if(!r.ok) throw new Error('HTTP '+r.status);
-    return r.text();
-  }).then(function(text){
+    const text=await r.text();
     if(!text||text.trim()==='') throw new Error('Servidor retornou resposta vazia');
-    var d=JSON.parse(text);
+    const d=JSON.parse(text);
+    // Persist groups for future name→ID lookups
     if(d.groups&&d.groups.length) GD.groups=d.groups;
     if(net){net.destroy();net=null;}
     buildNet(d.graph||d);
-    var d1=di.split('-').reverse().join('/'), d2=de.split('-').reverse().join('/');
+    const d1=di.split('-').reverse().join('/'),d2=de.split('-').reverse().join('/');
     document.getElementById('st-txt').textContent=
-      'Atualizado &middot; '+d1+' &ndash; '+d2+' &middot; '+(grp||'Todos os grupos')+
-      ' &middot; '+((d.stats&&d.stats.totalNodes)||'?')+' apps &middot; '+((d.stats&&d.stats.totalEdges)||'?')+' conexoes';
-    btn.disabled=false; btn.textContent='Atualizar Mapa';
-  }).catch(function(e){
+      'Atualizado · '+d1+' – '+d2+' · '+(grp||'Todos os grupos')+
+      ' · '+((d.stats&&d.stats.totalNodes)||'?')+' apps · '+((d.stats&&d.stats.totalEdges)||'?')+' conexões';
+  }catch(e){
     document.getElementById('ld').classList.add('hi');
     alert('Erro: '+e.message);
-    btn.disabled=false; btn.textContent='Atualizar Mapa';
-  });
+  }
+  btn.disabled=false;btn.textContent='Atualizar Mapa';
 }
 
-/* Initialize: wait for DOM to be ready, then build */
 buildNet(GD);
+
 </script>
 </body>
 </html>
