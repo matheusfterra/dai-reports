@@ -14,19 +14,21 @@
   --gr:#10B981;
 }
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { height:100%; }
+
+/* ── APP SHELL: viewport locked, no body scroll ── */
+html, body { height:100%; overflow:hidden; }
 body {
-  min-height:100vh;
   background:var(--bg);
   color:var(--t);
   font-family:'Inter','Segoe UI',system-ui,sans-serif;
   font-size:14px;
-  overflow-x:hidden;
+  display:flex;
+  flex-direction:column;
 }
 
 /* ── HEADER ── */
 .hdr {
-  position:sticky; top:0; z-index:100;
+  z-index:100;
   background:var(--bg2);
   border-bottom:1px solid var(--bd);
   display:flex; align-items:center; gap:12px;
@@ -43,6 +45,7 @@ body {
   display:flex; flex-wrap:wrap;
   background:var(--bg2);
   border-bottom:1px solid var(--bd2);
+  flex-shrink:0;
 }
 .kpi {
   flex:1; min-width:100px;
@@ -55,23 +58,20 @@ body {
 .kv { font-size:22px; font-weight:700; line-height:1; }
 .kl { font-size:10px; color:var(--t3); margin-top:4px; text-transform:uppercase; letter-spacing:.5px; }
 
-/* ── MAIN LAYOUT ── */
+/* ── MAIN LAYOUT: fills remaining viewport ── */
 .layout {
+  flex:1;
   display:flex;
-  min-height:calc(100vh - 54px - 78px); /* subtract header + kpi */
+  overflow:hidden;
+  min-height:0;
 }
 
-/* ── LEFT SIDEBAR ── */
+/* ── LEFT SIDEBAR: internal scroll ── */
 .sidebar {
   width:260px; flex-shrink:0;
   background:var(--bg2);
   border-right:1px solid var(--bd2);
   overflow-y:auto;
-  /* Sticky dentro do layout */
-  position:sticky;
-  top:54px; /* header height */
-  align-self:flex-start;
-  max-height:calc(100vh - 54px);
 }
 .sidebar::-webkit-scrollbar { width:3px; }
 .sidebar::-webkit-scrollbar-thumb { background:var(--bd); border-radius:2px; }
@@ -123,19 +123,19 @@ select:focus, input[type=date]:focus { border-color:var(--ac); }
 .gc.on { background:var(--bg4); border-color:var(--ac); color:var(--t); }
 .gcn { background:var(--bg3); padding:1px 6px; border-radius:8px; font-size:10px; color:var(--t3); }
 
-/* ── CENTER: GRAPH ── */
+/* ── CENTER: flex column, graph fills remaining space ── */
 .center {
   flex:1;
   display:flex;
   flex-direction:column;
+  overflow:hidden;
   min-width:0;
-  min-height:700px;
+  min-height:0;
 }
 .toolbar {
   padding:0 14px; height:42px;
   background:var(--bg2); border-bottom:1px solid var(--bd2);
   display:flex; align-items:center; gap:8px;
-  position:sticky; top:54px; z-index:50;
   flex-shrink:0;
 }
 .tb-t { font-size:12px; font-weight:600; color:var(--t2); }
@@ -145,11 +145,11 @@ select:focus, input[type=date]:focus { border-color:var(--ac); }
 .btn-t:hover { background:var(--bg); color:var(--t); }
 .btn-t.on { background:var(--ac); color:#fff; border-color:var(--ac); }
 
-/* GRAPH CONTAINER — ocupa o espaco disponivel */
+/* GRAPH CONTAINER: fills all remaining center space */
 .graph-wrap {
   flex:1;
   position:relative;
-  min-height:600px;
+  min-height:0;
 }
 #graph {
   position:absolute;
@@ -172,13 +172,11 @@ select:focus, input[type=date]:focus { border-color:var(--ac); }
 }
 .sdot { width:6px; height:6px; border-radius:50%; background:var(--gr); display:inline-block; }
 
-/* ── RIGHT DRAWER ── */
+/* ── RIGHT DRAWER: internal scroll, no sticky ── */
 .drawer {
   width:0; flex-shrink:0; overflow:hidden;
   background:var(--bg2); border-left:1px solid var(--bd2);
   display:flex; flex-direction:column;
-  position:sticky; top:54px; align-self:flex-start;
-  max-height:calc(100vh - 54px);
   transition:width .22s cubic-bezier(.4,0,.2,1);
 }
 .drawer.open { width:290px; }
@@ -189,7 +187,7 @@ select:focus, input[type=date]:focus { border-color:var(--ac); }
 .drw-close { cursor:pointer; color:var(--t3); font-size:18px; line-height:1; padding:2px 4px; flex-shrink:0; }
 .drw-close:hover { color:var(--t); }
 
-.drw-body { flex:1; overflow-y:auto; padding:14px; }
+.drw-body { flex:1; overflow-y:auto; padding:14px; min-height:0; }
 .drw-body::-webkit-scrollbar { width:3px; }
 .drw-body::-webkit-scrollbar-thumb { background:var(--bd); border-radius:2px; }
 
@@ -390,7 +388,7 @@ function makeTip(n,sd){
   h+='<div>'+fh(n.value)+' de uso total</div>';
   if(sites.length){
     h+='<div style="margin-top:5px;color:#E8EDF8;font-size:11px;font-weight:600">Top sites:</div>';
-    sites.slice(0,5).forEach(([s,m])=>{h+='<div style="font-size:11px">· '+(s.length>34?s.slice(0,34)+'…':s)+' <span style="color:#5B6B99">('+fh(m)+')</span></div>';});
+    sites.slice(0,5).forEach(([s,m])=>{h+='<div style="font-size:11px">· '+(s.length>34?s.slice(0,34)+'...':s)+' <span style="color:#5B6B99">('+fh(m)+')</span></div>';});
   }
   if(cats.length)h+='<div style="margin-top:5px;font-size:10px;color:#5B6B99">'+cats.join(' · ')+'</div>';
   el.innerHTML=h;return el;
@@ -490,9 +488,8 @@ function selectGrp(el,grp){
   document.querySelectorAll('.gc').forEach(c=>c.classList.remove('on'));
   el.classList.add('on');
   document.getElementById('grp-s').value=grp;
-  // Resolve group name → numeric ID via pre-embedded EVOPE groups
-  const resolvedId = resolveGroupId(grp);
-  document.getElementById('grp-id').value = resolvedId;
+  const gObj=(GD.groups||[]).find(g=>g.name===grp);
+  document.getElementById('grp-id').value=gObj?gObj.id:'';
   applyFilters();
 }
 
@@ -506,7 +503,6 @@ async function applyFilters(){
   const grp=document.getElementById('grp-s').value;
   const grpId=document.getElementById('grp-id').value;
   try{
-    // Build request body: only include ClientGroupId when a numeric ID is available
     const reqBody=Object.assign(
       {DateIni:di,DateEnd:de,SearchSubgroups:true},
       grpId?{ClientGroupId:Number(grpId)}:{}
@@ -519,7 +515,6 @@ async function applyFilters(){
     const text=await r.text();
     if(!text||text.trim()==='') throw new Error('Servidor retornou resposta vazia');
     const d=JSON.parse(text);
-    // Persist groups for future name→ID lookups
     if(d.groups&&d.groups.length) GD.groups=d.groups;
     if(net){net.destroy();net=null;}
     buildNet(d.graph||d);
@@ -529,85 +524,9 @@ async function applyFilters(){
       ' · '+((d.stats&&d.stats.totalNodes)||'?')+' apps · '+((d.stats&&d.stats.totalEdges)||'?')+' conexões';
   }catch(e){
     document.getElementById('ld').classList.add('hi');
-    toastErr(e.message);
+    alert('Erro: '+e.message);
   }
   btn.disabled=false;btn.textContent='Atualizar Mapa';
-}
-
-
-// ── EVOPE Groups (pre-embedded, 2026-07-14) ──
-const EVOPE_GROUPS=[
-  {"id":5524,"name":"Accounts","parentId":5172},
-  {"id":5980,"name":"AccountsMP","parentId":5798},
-  {"id":5366,"name":"Atendimento","parentId":5365},
-  {"id":5953,"name":"BI","parentId":5798},
-  {"id":6116,"name":"Bizops","parentId":1020},
-  {"id":35289,"name":"Comercial","parentId":19474},
-  {"id":6139,"name":"Data Science.","parentId":6137},
-  {"id":41735,"name":"DataRank","parentId":1020},
-  {"id":6133,"name":"Desenvolvimento","parentId":6129},
-  {"id":19474,"name":"Di","parentId":1020},
-  {"id":5173,"name":"Estrategistas","parentId":5172},
-  {"id":5954,"name":"Estratégia","parentId":5798},
-  {"id":6120,"name":"Execs","parentId":6117},
-  {"id":7578,"name":"Executivos","parentId":31025},
-  {"id":6232,"name":"Facilities","parentId":6124},
-  {"id":5760,"name":"Finance","parentId":1020},
-  {"id":34150,"name":"Juridico","parentId":5760},
-  {"id":6128,"name":"Liderancas","parentId":6124},
-  {"id":6135,"name":"Liderancas.","parentId":5760},
-  {"id":36864,"name":"Liderança","parentId":5172},
-  {"id":37179,"name":"Liderança.","parentId":5365},
-  {"id":5977,"name":"Lideranças","parentId":5798},
-  {"id":6123,"name":"Lideranças.","parentId":6121},
-  {"id":5172,"name":"MI.","parentId":1020},
-  {"id":6121,"name":"Marketing","parentId":1020},
-  {"id":1020,"name":"Master","parentId":0},
-  {"id":31027,"name":"Negócios.","parentId":1020},
-  {"id":35290,"name":"Operações","parentId":19474},
-  {"id":5174,"name":"Ops","parentId":5172},
-  {"id":6124,"name":"People","parentId":1020},
-  {"id":6137,"name":"Produto","parentId":1020},
-  {"id":5365,"name":"RI.","parentId":1020},
-  {"id":6117,"name":"RMAds Negócios","parentId":31027},
-  {"id":5798,"name":"RMAds Operações","parentId":1020},
-  {"id":31025,"name":"RMApp Negócios","parentId":31027},
-  {"id":6126,"name":"Talent & BP","parentId":6124},
-  {"id":6129,"name":"Tech","parentId":1020},
-  {"id":6134,"name":"Tesouraria","parentId":5760}
-];
-
-// Build fast lookup: sidebar path → numeric ID
-// e.g. "MI. > Accounts" → 5524, "Produto" → 6137
-function resolveGroupId(path){
-  if(!path) return '';
-  // Try exact match first
-  const exact = EVOPE_GROUPS.find(g=>g.name===path);
-  if(exact) return String(exact.id);
-  // Try last segment (e.g. "MI. > Accounts" → "Accounts")
-  const segments = path.split(' > ');
-  const last = segments[segments.length-1].trim();
-  const byLast = EVOPE_GROUPS.find(g=>g.name===last);
-  if(byLast) return String(byLast.id);
-  return '';
-}
-
-// Toast error (replaces alert)
-function toastErr(msg){
-  let t=document.getElementById('toast-err');
-  if(!t){
-    t=document.createElement('div');
-    t.id='toast-err';
-    t.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);'+
-      'background:#EF4444;color:#fff;padding:10px 20px;border-radius:8px;'+
-      'font-size:13px;z-index:9999;max-width:90%;word-break:break-all;'+
-      'box-shadow:0 4px 20px rgba(0,0,0,.4)';
-    document.body.appendChild(t);
-  }
-  t.textContent='Erro: '+msg;
-  t.style.display='block';
-  clearTimeout(t._to);
-  t._to=setTimeout(()=>t.style.display='none',6000);
 }
 
 buildNet(GD);
