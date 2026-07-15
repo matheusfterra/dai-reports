@@ -211,7 +211,7 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--surface2);pa
         <strong>Por que não usar o GetProcessMaps do portal?</strong><br/>
         O endpoint <code>/Pages/ProcessMap.aspx/GetProcessMaps</code> usa cookie de sessão ASP.NET (HttpOnly) —
         não é compatível com Bearer token da API REST. Nossa abordagem via <code>/applicationreport</code> +
-        <code>/sitereport</code> produz resultados equivalentes usando a API pública e documentada.
+        <code>/sitereport</code> produz resultados equivalentes usando a API pública.
       </div>
     </section>
 
@@ -233,8 +233,8 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--surface2);pa
           <div class="code-wrap">
             <span class="code-label">JSON</span>
             <pre>{
-  <span class="hl-key">"email"</span>:    <span class="hl-str">"jefferson.freitas@rankmyapp.com.br"</span>,
-  <span class="hl-key">"password"</span>: <span class="hl-str">"#Ln2Jaby9qkhMQV"</span>
+  <span class="hl-key">"email"</span>:    <span class="hl-str">"seu-email@evope.com.br"</span>,
+  <span class="hl-key">"password"</span>: <span class="hl-str">"sua-senha"</span>
 }</pre>
           </div>
 
@@ -480,6 +480,13 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--surface2);pa
         </div>
         <div class="ep-body">
 
+          <h4>Autenticação do Webhook</h4>
+          <p style="margin-bottom:8px;color:var(--text-muted)">Toda chamada ao webhook requer o header <code>X-Auth-Token</code>. Solicite o token ao time Digital AI.</p>
+          <div class="code-wrap">
+            <span class="code-label">Header</span>
+            <pre>X-Auth-Token: &lt;token-fornecido-pelo-time-digital-ai&gt;</pre>
+          </div>
+
           <h4 id="payload-webhook">Payload de Entrada</h4>
           <div class="code-wrap">
             <span class="code-label">JSON</span>
@@ -721,6 +728,7 @@ const edges = Object.entries(edgeMap).map(([key, weight], idx) => {
         <span class="code-label">bash</span>
         <pre>curl -X POST https://webhook.digital-ai.tech/webhook/evope/processmap \
   -H "Content-Type: application/json" \
+  -H "X-Auth-Token: &lt;seu-token&gt;" \
   -d '{
     "DateIni": "2026-07-07",
     "DateEnd": "2026-07-14",
@@ -736,7 +744,7 @@ const edges = Object.entries(edgeMap).map(([key, weight], idx) => {
   'https://webhook.digital-ai.tech/webhook/evope/processmap',
   {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'X-Auth-Token': '<seu-token>' },
     body: JSON.stringify({
       DateIni: '2026-07-07',
       DateEnd: '2026-07-14',
@@ -760,6 +768,7 @@ console.log(`Employees: ${data.stats.totalEmployees}`);</pre>
 
 response = requests.post(
     "https://webhook.digital-ai.tech/webhook/evope/processmap",
+    headers={"X-Auth-Token": "<seu-token>"},
     json={
         "DateIni": "2026-07-07",
         "DateEnd": "2026-07-14",
@@ -790,8 +799,8 @@ from itertools import combinations
 from collections import defaultdict
 
 BASE_URL = "https://openrest.evope.com.br/api/v0"
-EMAIL    = "jefferson.freitas@rankmyapp.com.br"
-PASSWD   = "#Ln2Jaby9qkhMQV"
+EMAIL    = "seu-email@evope.com.br"
+PASSWD   = "sua-senha"
 
 def build_processmap(date_ini: str, date_end: str, group_id: str = ""):
     <span class="hl-cmt"># 1. Autenticar</span>
