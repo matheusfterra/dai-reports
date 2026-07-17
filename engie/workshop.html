@@ -1,0 +1,1843 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workshop HIDRA — Formação de Especialistas O&M | ENGIE Brasil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   ENGIE Brasil — Workshop HIDRA
+   Baseado no NJ Design System (Nexus Journey)
+   ============================================================ */
+
+:root {
+  --engie-blue: #00AAFF;
+  --engie-teal: #23D2B5;
+  --engie-gradient: linear-gradient(90deg, #00AAFF 0%, #23D2B5 100%);
+  --primary: #007ACD;
+  --primary-hover: #005AA0;
+  --navy: #182663;
+  --navy-mid: #2B3D83;
+  --text: #232D35;
+  --text-secondary: #334551;
+  --text-muted: #60798B;
+  --surface: #EBEEF1;
+  --bg: #F6F8F9;
+  --bg-blue: #F0F4FF;
+  --white: #FFFFFF;
+  --border: #CCD4DA;
+  --border-strong: #9EADB8;
+  --shadow-md: 0 1px 18px 0 rgba(0,0,0,.06), 0 6px 10px 0 rgba(0,0,0,.06), 0 3px 5px 0 rgba(0,0,0,.1);
+  --shadow-lg: 0 8px 24px 0 rgba(0,0,0,.12);
+  --m1: #007ACD;
+  --m2: #23D2B5;
+  --m3: #005FA3;
+  --m4: #182663;
+  --m5: #E63946;
+  --radius: 8px;
+  --font: "Lato", sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--bg);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+/* ---- NAVBAR ---- */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--navy);
+  box-shadow: 0 2px 12px rgba(0,0,0,.3);
+}
+.navbar-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 24px;
+  height: 56px;
+  overflow-x: auto;
+}
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  margin-right: 24px;
+  padding-right: 24px;
+  border-right: 1px solid rgba(255,255,255,.2);
+}
+.navbar-logo span {
+  color: rgba(255,255,255,.7);
+  font-size: 13px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  flex-shrink: 0;
+}
+.navbar-nav a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255,255,255,.75);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 4px;
+  transition: background .15s, color .15s;
+  white-space: nowrap;
+}
+.navbar-nav a:hover {
+  color: #fff;
+  background: rgba(255,255,255,.12);
+}
+.navbar-nav a .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ---- HERO ---- */
+.hero {
+  background: var(--navy);
+  padding: 72px 24px 56px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--engie-gradient);
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  top: -120px; right: -120px;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,170,255,.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0,170,255,.15);
+  border: 1px solid rgba(0,170,255,.3);
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: 12px;
+  color: var(--engie-blue);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin-bottom: 24px;
+}
+.hero-title {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+.hero-title span {
+  background: var(--engie-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-subtitle {
+  font-size: 1.125rem;
+  color: rgba(255,255,255,.7);
+  max-width: 680px;
+  margin-bottom: 40px;
+}
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.hero-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255,255,255,.6);
+  font-size: 14px;
+}
+.hero-meta-item strong {
+  color: #fff;
+  font-weight: 700;
+}
+.hero-modules {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-top: 40px;
+}
+.hero-module-card {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+  text-decoration: none;
+  transition: background .2s, border-color .2s;
+}
+.hero-module-card:hover {
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.2);
+}
+.hero-module-card .mod-num {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  opacity: .6;
+  margin-bottom: 4px;
+  color: #fff;
+}
+.hero-module-card .mod-icon {
+  font-size: 28px;
+  margin: 4px 0;
+}
+.hero-module-card .mod-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
+}
+
+/* ---- LAYOUT ---- */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ---- MODULE SECTION ---- */
+.module-section {
+  padding: 64px 0;
+}
+.module-section.alt {
+  background: var(--bg-blue);
+}
+
+.module-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 40px;
+  padding-bottom: 32px;
+  border-bottom: 3px solid;
+}
+
+.module-icon-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+}
+.module-header-text {}
+.module-number {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  opacity: .65;
+  margin-bottom: 4px;
+}
+.module-title {
+  font-size: 1.75rem;
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.module-desc {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  max-width: 700px;
+}
+
+/* ---- SUBMODULE ---- */
+.submodule {
+  margin-bottom: 48px;
+}
+.submodule-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  padding-left: 16px;
+  border-left: 4px solid;
+}
+
+/* ---- CARDS ---- */
+.cards-grid {
+  display: grid;
+  gap: 16px;
+}
+.cards-grid.col2 { grid-template-columns: repeat(2, 1fr); }
+.cards-grid.col3 { grid-template-columns: repeat(3, 1fr); }
+
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+  border-top: 3px solid;
+}
+.card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.card p {
+  font-size: .925rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+.card ul, .card ol {
+  margin-left: 18px;
+  margin-top: 8px;
+}
+.card li {
+  font-size: .925rem;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+/* ---- TABLES ---- */
+.table-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  margin: 16px 0 32px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--white);
+  font-size: .875rem;
+}
+thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 700;
+  font-size: .8rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  border-bottom: 2px solid;
+  color: var(--white);
+  white-space: nowrap;
+}
+tbody tr:nth-child(even) { background: var(--bg); }
+tbody tr:hover { background: var(--bg-blue); }
+tbody td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+tbody td strong { color: var(--text); }
+tbody td:first-child { font-weight: 600; color: var(--text); }
+
+/* ---- CHECKLIST ---- */
+.checklist {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  margin: 16px 0;
+}
+.checklist-header {
+  padding: 14px 20px;
+  font-weight: 700;
+  font-size: .875rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--white);
+}
+.checklist-body {
+  padding: 16px 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+.checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: .875rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+.checklist-item::before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border-strong);
+  border-radius: 3px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ---- ALERT BOXES ---- */
+.alert {
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin: 16px 0;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: .9rem;
+}
+.alert-danger {
+  background: #FFF0F0;
+  border-left: 4px solid var(--m5);
+  color: #7D1A1A;
+}
+.alert-warning {
+  background: #FFF8E1;
+  border-left: 4px solid #F4A600;
+  color: #6D4C00;
+}
+.alert-info {
+  background: #E7F3FF;
+  border-left: 4px solid var(--primary);
+  color: #0D4282;
+}
+.alert-success {
+  background: #E8FAF5;
+  border-left: 4px solid var(--engie-teal);
+  color: #0A4A3A;
+}
+.alert-icon { font-size: 1.2em; flex-shrink: 0; }
+
+/* ---- BADGE ---- */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.badge-norm { background: #E7F3FF; color: var(--primary); }
+.badge-danger { background: #FFEAEA; color: var(--m5); }
+.badge-warn { background: #FFF3D0; color: #7D5A00; }
+.badge-ok { background: #E8FAF5; color: #0A5A3A; }
+
+/* ---- FORMULA BOX ---- */
+.formula-box {
+  background: var(--navy);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin: 16px 0;
+  font-family: 'Courier New', monospace;
+  font-size: .875rem;
+  line-height: 1.7;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+/* ---- DIAGRAM ---- */
+.diagram {
+  background: #F8FAFF;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin: 16px 0;
+  font-family: 'Courier New', monospace;
+  font-size: .8rem;
+  line-height: 1.6;
+  overflow-x: auto;
+  white-space: pre;
+  color: var(--text);
+}
+
+/* ---- PARAM TABLE (horizontal cards) ---- */
+.param-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 16px 0;
+}
+.param-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  border-bottom: 3px solid;
+}
+.param-value {
+  font-size: 1.5rem;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.param-unit {
+  font-size: .75rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.param-label {
+  font-size: .8rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+/* ---- ANSI TABLE ---- */
+.ansi-code {
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+/* ---- SECTION DIVIDER ---- */
+.section-divider {
+  height: 4px;
+  background: var(--engie-gradient);
+  border: none;
+  margin: 0;
+}
+
+/* ---- FOOTER ---- */
+.footer {
+  background: var(--navy);
+  color: rgba(255,255,255,.6);
+  padding: 40px 24px;
+  margin-top: 80px;
+}
+.footer-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.footer-text { font-size: 13px; }
+.footer-text strong { color: #fff; }
+.footer-credits { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.dai-logo { opacity: .5; }
+
+/* ---- COLOR UTILITIES ---- */
+.m1 { --c: var(--m1); }
+.m2 { --c: var(--m2); }
+.m3 { --c: var(--m3); }
+.m4 { --c: var(--m4); }
+.m5 { --c: var(--m5); }
+
+.module-section.m1 .module-header { border-color: var(--m1); }
+.module-section.m1 .module-icon-wrap { background: rgba(0,122,205,.12); color: var(--m1); }
+.module-section.m1 .module-number { color: var(--m1); }
+.module-section.m1 .module-title { color: var(--m1); }
+.module-section.m1 .submodule-title { border-color: var(--m1); color: var(--m1); }
+.module-section.m1 .card { border-color: var(--m1); }
+.module-section.m1 thead th { background: var(--m1); border-color: var(--m1); }
+.module-section.m1 .checklist-header { background: var(--m1); }
+.module-section.m1 .param-card { border-color: var(--m1); }
+.module-section.m1 .param-value { color: var(--m1); }
+
+.module-section.m2 .module-header { border-color: var(--m2); }
+.module-section.m2 .module-icon-wrap { background: rgba(35,210,181,.12); color: var(--m2); }
+.module-section.m2 .module-number { color: var(--m2); }
+.module-section.m2 .module-title { color: var(--m2); }
+.module-section.m2 .submodule-title { border-color: var(--m2); color: var(--m2); }
+.module-section.m2 .card { border-color: var(--m2); }
+.module-section.m2 thead th { background: var(--m2); border-color: var(--m2); }
+.module-section.m2 .checklist-header { background: var(--m2); }
+.module-section.m2 .param-card { border-color: var(--m2); }
+.module-section.m2 .param-value { color: var(--m2); }
+
+.module-section.m3 .module-header { border-color: var(--m3); }
+.module-section.m3 .module-icon-wrap { background: rgba(0,95,163,.12); color: var(--m3); }
+.module-section.m3 .module-number { color: var(--m3); }
+.module-section.m3 .module-title { color: var(--m3); }
+.module-section.m3 .submodule-title { border-color: var(--m3); color: var(--m3); }
+.module-section.m3 .card { border-color: var(--m3); }
+.module-section.m3 thead th { background: var(--m3); border-color: var(--m3); }
+.module-section.m3 .checklist-header { background: var(--m3); }
+.module-section.m3 .param-card { border-color: var(--m3); }
+.module-section.m3 .param-value { color: var(--m3); }
+
+.module-section.m4 .module-header { border-color: var(--m4); }
+.module-section.m4 .module-icon-wrap { background: rgba(24,38,99,.12); color: var(--m4); }
+.module-section.m4 .module-number { color: var(--m4); }
+.module-section.m4 .module-title { color: var(--m4); }
+.module-section.m4 .submodule-title { border-color: var(--m4); color: var(--m4); }
+.module-section.m4 .card { border-color: var(--m4); }
+.module-section.m4 thead th { background: var(--m4); border-color: var(--m4); }
+.module-section.m4 .checklist-header { background: var(--m4); }
+.module-section.m4 .param-card { border-color: var(--m4); }
+.module-section.m4 .param-value { color: var(--m4); }
+
+.module-section.m5 .module-header { border-color: var(--m5); }
+.module-section.m5 .module-icon-wrap { background: rgba(230,57,70,.12); color: var(--m5); }
+.module-section.m5 .module-number { color: var(--m5); }
+.module-section.m5 .module-title { color: var(--m5); }
+.module-section.m5 .submodule-title { border-color: var(--m5); color: var(--m5); }
+.module-section.m5 .card { border-color: var(--m5); }
+.module-section.m5 thead th { background: var(--m5); border-color: var(--m5); }
+.module-section.m5 .checklist-header { background: var(--m5); }
+.module-section.m5 .param-card { border-color: var(--m5); }
+.module-section.m5 .param-value { color: var(--m5); }
+
+/* ---- PRINT ---- */
+@media print {
+  .navbar { display: none; }
+  .hero { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .module-section { break-inside: avoid; }
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 900px) {
+  .hero-modules { grid-template-columns: repeat(3, 1fr); }
+  .cards-grid.col3 { grid-template-columns: repeat(2, 1fr); }
+  .param-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .hero-modules { grid-template-columns: repeat(2, 1fr); }
+  .cards-grid.col2, .cards-grid.col3 { grid-template-columns: 1fr; }
+  .checklist-body { grid-template-columns: 1fr; }
+  .param-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- ======================================================== -->
+<!-- NAVBAR -->
+<!-- ======================================================== -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <div class="navbar-logo">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 382.68 138.23" width="80" height="29">
+        <defs><style>.ec1{fill-rule:evenodd}.ec1,.ec2{fill:#007bc5}</style></defs>
+        <g>
+          <path class="ec2" d="M23.59,98.07c0-8.7,8.93-15.13,21.84-15.13s21.24,6.43,21.24,15.13H23.59ZM82.71,110.32c3.07-23.48-6.96-39.25-37.68-39.25-23.66,0-38.76,11.08-38.76,33.33,0,35.57,43.54,38.7,73.1,29.26l-2.56-11.62c-4.57,1.56-46.96,10.13-53.22-11.73h59.12Z"/>
+          <polyline class="ec2" points="153.4 112.64 153.4 72.6 169.44 72.6 169.44 136.57 155.21 136.56 111.21 94.74 111.22 136.57 95.18 136.57 95.18 72.6 111.22 72.6 153.4 112.64"/>
+          <path class="ec2" d="M253.64,87.32c-46.96-10.71-55.55.34-55.55,17.2,0,14.22,12.14,23.35,44.48,19.73v-13.9h-23.91v-12.3h39.88v23.91c0,5.89-2.65,9.43-6.73,11.63-6.36,3.43-15.62,4.45-27.22,4.45-23.95,0-43.3-11.07-43.3-33.52,0-19.9,13.2-33.45,40.51-33.45,13.18,0,22.8,1.73,31.85,4.21v12.03Z"/>
+          <rect class="ec2" x="271.14" y="89.6" width="16.08" height="46.97"/>
+          <rect class="ec2" x="271.14" y="72.59" width="16.08" height="11.65"/>
+          <path class="ec2" d="M316.76,98.07c0-8.7,8.93-15.13,21.84-15.13s21.24,6.43,21.24,15.13h-43.09ZM375.88,110.32c3.07-23.48-6.96-39.25-37.68-39.25-23.66,0-38.76,11.08-38.76,33.33,0,35.57,43.54,38.7,73.1,29.26l-2.56-11.62c-4.57,1.56-46.96,10.13-53.22-11.73h59.12Z"/>
+          <path class="ec1" d="M382.68,55.5C331.4,20.95,264.51,0,191.34,0S51.28,20.95,0,55.5c51-17.11,110.62-28.54,191.34-28.54s140.34,11.43,191.34,28.54Z"/>
+        </g>
+      </svg>
+      <span>Workshop HIDRA</span>
+    </div>
+    <ul class="navbar-nav">
+      <li><a href="#modulo1"><span class="dot" style="background:#007ACD"></span>M01 Geradores</a></li>
+      <li><a href="#modulo2"><span class="dot" style="background:#23D2B5"></span>M02 AVR</a></li>
+      <li><a href="#modulo3"><span class="dot" style="background:#005FA3"></span>M03 Governor</a></li>
+      <li><a href="#modulo4"><span class="dot" style="background:#182663"></span>M04 SDSC</a></li>
+      <li><a href="#modulo5"><span class="dot" style="background:#E63946"></span>M05 Proteção</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ======================================================== -->
+<!-- HERO -->
+<!-- ======================================================== -->
+<section class="hero" id="topo">
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="6" fill="#00AAFF" opacity=".4"/><circle cx="6" cy="6" r="3" fill="#00AAFF"/></svg>
+      ENGIE Brasil — Projeto HIDRA
+    </div>
+    <h1 class="hero-title">Workshop Técnico<br><span>Formação de Especialistas O&amp;M</span></h1>
+    <p class="hero-subtitle">Material de estudo completo para a equipe de Operação &amp; Manutenção das UHE Miranda (408 MW) e UHE Jaguara (424 MW) — Programa de 40 horas em 5 módulos especializados.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">⚡ Carga horária: <strong>40 horas</strong></div>
+      <div class="hero-meta-item">🏭 Usinas: <strong>Miranda + Jaguara</strong></div>
+      <div class="hero-meta-item">👥 Equipe: <strong>Daniela, Célio, Leandro, Jean</strong></div>
+      <div class="hero-meta-item">📋 Normas: <strong>IEEE · IEC · ONS · ABNT</strong></div>
+    </div>
+    <div class="hero-modules">
+      <a href="#modulo1" class="hero-module-card">
+        <div class="mod-num">Módulo 01</div>
+        <div class="mod-icon">⚡</div>
+        <div class="mod-title">Geradores Síncronos</div>
+      </a>
+      <a href="#modulo2" class="hero-module-card">
+        <div class="mod-num">Módulo 02</div>
+        <div class="mod-icon">🎛️</div>
+        <div class="mod-title">Regulador de Tensão (AVR)</div>
+      </a>
+      <a href="#modulo3" class="hero-module-card">
+        <div class="mod-num">Módulo 03</div>
+        <div class="mod-icon">🌊</div>
+        <div class="mod-title">Regulador de Velocidade</div>
+      </a>
+      <a href="#modulo4" class="hero-module-card">
+        <div class="mod-num">Módulo 04</div>
+        <div class="mod-icon">🖥️</div>
+        <div class="mod-title">SDSC e Automação</div>
+      </a>
+      <a href="#modulo5" class="hero-module-card">
+        <div class="mod-num">Módulo 05</div>
+        <div class="mod-icon">🛡️</div>
+        <div class="mod-title">Proteção Elétrica</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ======================================================== -->
+<!-- MÓDULO 01 — GERADORES -->
+<!-- ======================================================== -->
+<section class="module-section m1" id="modulo1">
+  <div class="container">
+
+    <div class="module-header">
+      <div class="module-icon-wrap">⚡</div>
+      <div class="module-header-text">
+        <div class="module-number">Módulo 01 · 8 horas</div>
+        <h2 class="module-title">Geradores Síncronos de UHE</h2>
+        <p class="module-desc">Fundamentos construtivos, parâmetros elétricos das usinas Miranda e Jaguara, manutenção preditiva e diagnóstico de falhas em geradores hidráulicos de grande porte.</p>
+      </div>
+    </div>
+
+    <!-- Sub-módulo 1.1 -->
+    <div class="submodule">
+      <h3 class="submodule-title">1.1 · Fundamentos do Gerador Síncrono</h3>
+      <div class="cards-grid col3">
+        <div class="card">
+          <div class="card-title">Princípio de Funcionamento</div>
+          <p>O gerador síncrono converte energia mecânica em elétrica por indução eletromagnética. O rotor (campo) gira sincronizado à frequência da rede (60 Hz).</p>
+          <div class="formula-box">f = (n × P) / 120
+n = rpm | P = nº de polos
+
+60 Hz, 20 polos → 360 rpm (Francis)
+60 Hz, 40 polos → 180 rpm (Kaplan)</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Rotor — Polo Saliente</div>
+          <p><strong>Típico de hidrogeneradores.</strong></p>
+          <ul>
+            <li>Núcleo de aço laminado</li>
+            <li>Bobinas de cobre (campo)</li>
+            <li>Anéis deslizantes (excitação CC)</li>
+            <li>Amortecedor (gaiola de esquilo)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Estator — Armadura</div>
+          <p><strong>Onde a energia elétrica é gerada.</strong></p>
+          <ul>
+            <li>Carcaça de aço + núcleo laminado</li>
+            <li>Enrolamento trifásico (barras de cobre)</li>
+            <li>Isolamento Classe F (155°C)</li>
+            <li>Resfriamento: ar / água / hidrogênio</li>
+          </ul>
+        </div>
+      </div>
+
+      <h4 style="font-size:1rem;font-weight:700;margin:24px 0 12px;color:var(--m1)">Parâmetros Elétricos — UHE Miranda e Jaguara</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Parâmetro</th><th>Miranda (408 MW)</th><th>Jaguara (424 MW)</th>
+          </tr></thead>
+          <tbody>
+            <tr><td>Potência nominal</td><td>408 MW</td><td>424 MW</td></tr>
+            <tr><td>Tensão de geração</td><td>13,8 kV</td><td>13,8 kV</td></tr>
+            <tr><td>Fator de potência</td><td>0,85 (ind.)</td><td>0,85 (ind.)</td></tr>
+            <tr><td>Frequência</td><td>60 Hz</td><td>60 Hz</td></tr>
+            <tr><td>Tensão de excitação</td><td>~450 V CC</td><td>~450 V CC</td></tr>
+            <tr><td>Classe de isolamento</td><td>F (155°C)</td><td>F (155°C)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert alert-info">
+        <span class="alert-icon">ℹ️</span>
+        <div><strong>Tipos de geradores hidráulicos:</strong> Eixo vertical (Francis/Kaplan — 20 a 800 MW), Cápsula/Bulbo (Kaplan, baixa queda — 5 a 100 MW), Eixo horizontal (PCHs — &lt;30 MW).</div>
+      </div>
+    </div>
+
+    <!-- Sub-módulo 1.2 -->
+    <div class="submodule">
+      <h3 class="submodule-title">1.2 · Manutenção Preditiva</h3>
+
+      <h4 style="font-size:1rem;font-weight:700;margin:0 0 12px;color:var(--text)">Análise de Vibração — ISO 10816-5 (máquinas &gt;15 MW)</h4>
+      <div class="param-grid">
+        <div class="param-card" style="border-color:#2E7D32">
+          <div class="param-value" style="color:#2E7D32">&lt;2,3</div>
+          <div class="param-unit">mm/s RMS</div>
+          <div class="param-label">✅ Boa</div>
+        </div>
+        <div class="param-card" style="border-color:#F9A825">
+          <div class="param-value" style="color:#F9A825">2,3–4,5</div>
+          <div class="param-unit">mm/s RMS</div>
+          <div class="param-label">⚠️ Satisfatória</div>
+        </div>
+        <div class="param-card" style="border-color:#E65100">
+          <div class="param-value" style="color:#E65100">4,5–7,1</div>
+          <div class="param-unit">mm/s RMS</div>
+          <div class="param-label">🔶 Insatisfatória</div>
+        </div>
+        <div class="param-card" style="border-color:#E63946">
+          <div class="param-value" style="color:#E63946">&gt;7,1</div>
+          <div class="param-unit">mm/s RMS</div>
+          <div class="param-label">🚨 Inaceitável</div>
+        </div>
+      </div>
+
+      <div class="cards-grid col2" style="margin-top:16px">
+        <div class="card">
+          <div class="card-title">Pontos de Medição de Vibração</div>
+          <ul>
+            <li>Mancais guias superior e inferior (radial X/Y)</li>
+            <li>Mancal escora (axial Z)</li>
+            <li>Carcaça do estator</li>
+          </ul>
+          <p style="margin-top:10px"><strong>Análise espectral FFT:</strong> 1× = desbalanceamento | 2× = desalinhamento | Subsincrônico = problema de mancal</p>
+        </div>
+        <div class="card">
+          <div class="card-title">Análise de Descargas Parciais (DP)</div>
+          <p>Ionização localizada no isolamento — precursor de falha de alta tensão.</p>
+          <ul>
+            <li><strong>Online:</strong> sensor capacitivo nas barras do estator</li>
+            <li><strong>Offline:</strong> ensaio com tensão aplicada + sensor DP</li>
+          </ul>
+          <div class="alert alert-warning" style="margin-top:12px">
+            <span>⚠️</span>
+            <div>Valores &gt;1000 pC em operação indicam investigação necessária (CIGRE Brochure 226).</div>
+          </div>
+        </div>
+      </div>
+
+      <h4 style="font-size:1rem;font-weight:700;margin:24px 0 12px;color:var(--text)">Índice de Polarização (IP) — IEEE Std 43</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>IP = R10min / R1min</th><th>Condição</th><th>Ação</th></tr></thead>
+          <tbody>
+            <tr><td style="color:#E63946;font-weight:700">&lt;1,0</td><td>Falha</td><td class="badge badge-danger">Não energizar</td></tr>
+            <tr><td style="color:#E65100;font-weight:700">1,0–2,0</td><td>Questionável</td><td class="badge badge-warn">Investigar</td></tr>
+            <tr><td style="color:#1976D2;font-weight:700">2,0–4,0</td><td>Bom</td><td class="badge badge-norm">Monitorar</td></tr>
+            <tr><td style="color:#2E7D32;font-weight:700">&gt;4,0</td><td>Excelente</td><td class="badge badge-ok">Aprovado</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Sub-módulo 1.3 — FMEA -->
+    <div class="submodule">
+      <h3 class="submodule-title">1.3 · Diagnóstico de Falhas — FMEA</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Falha</th><th>Causa Raiz</th><th>Sintoma</th><th>Diagnóstico</th></tr></thead>
+          <tbody>
+            <tr><td>Curto entre espiras</td><td>Degradação de isolamento</td><td>Calor excessivo, DP elevada, alarme 87G</td><td>Ensaio de DP, megôhmetro</td></tr>
+            <tr><td>Terra de estator</td><td>Isolamento rompido</td><td>Trip 64, alarme de fuga</td><td>Megôhmetro, injeção de corrente</td></tr>
+            <tr><td>Desequilíbrio de corrente</td><td>Falha de espira, contato frouxo</td><td>Aquecimento assimétrico, alarme 46</td><td>Análise de corrente, termografia</td></tr>
+            <tr><td>Aquecimento excessivo</td><td>Falha de resfriamento, sobrecarga</td><td>Alta temperatura nos RTDs</td><td>Verificar sistema de resfriamento</td></tr>
+            <tr><td>Vibração excessiva</td><td>Desbalanceamento do rotor</td><td>Vibração &gt;7,1 mm/s</td><td>Análise espectral, balanceamento dinâmico</td></tr>
+            <tr><td>Falha de mancal</td><td>Desgaste, contaminação do óleo</td><td>Temperatura elevada, ruído</td><td>Análise vibração + óleo</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Checklist Módulo 1 -->
+    <div class="submodule">
+      <h3 class="submodule-title">1.4 · Checklists de Manutenção</h3>
+      <div class="checklist">
+        <div class="checklist-header">✅ Mensal</div>
+        <div class="checklist-body">
+          <div class="checklist-item">Leitura de temperatura dos mancais e enrolamento</div>
+          <div class="checklist-item">Verificação visual de escovas e anéis coletores</div>
+          <div class="checklist-item">Leitura de vibração (online ou portátil)</div>
+          <div class="checklist-item">Análise de óleo dos mancais (nível e condição visual)</div>
+        </div>
+      </div>
+      <div class="checklist" style="margin-top:16px">
+        <div class="checklist-header" style="background:#005AA0">✅ Semestral</div>
+        <div class="checklist-body">
+          <div class="checklist-item">Termografia com máquina em operação</div>
+          <div class="checklist-item">Limpeza das escovas e anéis coletores</div>
+          <div class="checklist-item">Medição de resistência de isolamento (megôhmetro)</div>
+          <div class="checklist-item">Análise laboratorial do óleo dos mancais</div>
+          <div class="checklist-item">Inspeção do sistema de resfriamento</div>
+        </div>
+      </div>
+      <div class="checklist" style="margin-top:16px">
+        <div class="checklist-header" style="background:#004478">✅ Anual / Grande Parada</div>
+        <div class="checklist-body">
+          <div class="checklist-item">Inspeção interna completa (estator e rotor)</div>
+          <div class="checklist-item">Medição do entreferro (verificar excentricidade)</div>
+          <div class="checklist-item">Inspeção das cunhas do estator</div>
+          <div class="checklist-item">Ensaio de DP (descargas parciais)</div>
+          <div class="checklist-item">Balanceamento do rotor (se indicado por vibração)</div>
+          <div class="checklist-item">Revisão dos mancais (folgas, desgaste de patins)</div>
+          <div class="checklist-item">Resistência de isolamento ≥ 1 MΩ/kV; IP ≥ 2,0</div>
+          <div class="checklist-item">Proteções testadas e ajustadas (87G, 40, 46, 64)</div>
+        </div>
+      </div>
+      <div class="alert alert-info" style="margin-top:16px">
+        <span class="alert-icon">📐</span>
+        <div><strong>Referências normativas:</strong> IEEE Std 43-2013 (isolamento), ISO 10816-5 (vibração), ABNT NBR 5383 (ensaios), CIGRE Brochure 226 (descargas parciais).</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ======================================================== -->
+<!-- MÓDULO 02 — AVR -->
+<!-- ======================================================== -->
+<section class="module-section m2 alt" id="modulo2">
+  <div class="container">
+
+    <div class="module-header">
+      <div class="module-icon-wrap">🎛️</div>
+      <div class="module-header-text">
+        <div class="module-number">Módulo 02 · 10 horas</div>
+        <h2 class="module-title">Regulador de Tensão Automático (AVR)</h2>
+        <p class="module-desc">O AVR é o coração do sistema de excitação — controla a tensão terminal do gerador, o fluxo de reativos e é fator crítico para a estabilidade do SIN. Inclui fabricantes, PSS e diagnóstico de falhas.</p>
+      </div>
+    </div>
+
+    <!-- 2.1 Fundamentos -->
+    <div class="submodule">
+      <h3 class="submodule-title">2.1 · Fundamentos de Regulação de Tensão</h3>
+      <div class="cards-grid col3">
+        <div class="card">
+          <div class="card-title">Relação Q × V (Fundamental)</div>
+          <div class="formula-box">Q ≈ V × (Ea - V) / Xs
+
+Onde:
+  Q  = Potência reativa (MVAR)
+  V  = Tensão terminal (kV)
+  Ea = FEM ∝ corrente de campo If
+  Xs = Reatância síncrona</div>
+          <p style="margin-top:10px"><strong>↑ If</strong> → gerador fica sobreexcitado → <strong>tensão sobe</strong><br><strong>↓ If</strong> → gerador subexcitado → <strong>tensão cai</strong></p>
+        </div>
+        <div class="card">
+          <div class="card-title">Modos de Operação do AVR</div>
+          <div class="table-wrap" style="margin:0">
+            <table>
+              <thead><tr><th>Modo</th><th>Uso</th></tr></thead>
+              <tbody>
+                <tr><td><strong>AVR (Tensão)</strong></td><td>Operação normal SIN</td></tr>
+                <tr><td>FCR (Corrente Campo)</td><td>Partida, testes, fallback</td></tr>
+                <tr><td>FVR (Tensão Campo)</td><td>Diagnóstico, modo manual</td></tr>
+                <tr><td>VAR (Reativo)</td><td>Controle Q pelo ONS</td></tr>
+                <tr><td>FP (Fator Potência)</td><td>Contratos especiais</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Requisitos ONS — Submódulo 2.10</div>
+          <ul>
+            <li>Faixa de regulação: <strong>±5% da tensão nominal</strong></li>
+            <li><strong>PSS obrigatório</strong> para geradores &gt;50 MVA</li>
+            <li>Tempo de resposta: &lt;0,1s para atingir 95% do teto</li>
+            <li>Testes de step response periódicos</li>
+            <li>Registro de eventos com oscilografia</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2.2 Arquitetura -->
+    <div class="submodule">
+      <h3 class="submodule-title">2.2 · Arquitetura do Sistema de Excitação</h3>
+      <div class="cards-grid col3">
+        <div class="card">
+          <div class="card-title">Canal de Medição</div>
+          <ul>
+            <li>Transformador de potencial (PT/VT): 6,6–22 kV → 110 V</li>
+            <li>Transformador de corrente (CT): 1A ou 5A</li>
+            <li>Tempo de resposta do filtro: 20–50 ms</li>
+            <li>Precisão: ±0,5% da tensão nominal</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Canal de Controle (AVR)</div>
+          <ul>
+            <li><strong>Regulador PID</strong> digital (Kp, Ki, Kd)</li>
+            <li>Ajuste de setpoint ±10% da Vnom</li>
+            <li>Droop/Estatismo: 2–5%</li>
+            <li><strong>PSS</strong> integrado por software</li>
+            <li>Limitadores: OEL, UEL, V/Hz</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Canal de Potência (Tiristores)</div>
+          <ul>
+            <li>Retificador SCR: ponte trifásica totalmente controlada</li>
+            <li>Saída CC: 100–600 V, centenas a milhares de A</li>
+            <li>Disjuntor de campo (DCF)</li>
+            <li>Transformador de excitação (isolado galvanicamente)</li>
+          </ul>
+        </div>
+      </div>
+
+      <h4 style="font-size:1rem;font-weight:700;margin:24px 0 12px;color:var(--text)">Fabricantes — Perfil Técnico</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Fabricante / Produto</th><th>Comunicação</th><th>Características Principais</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Basler DECS-250/300</strong></td><td>Ethernet (Modbus TCP), RS-232</td><td>5 modos, Auto-Tune PID, PSS IEEE 421.5, OEL/UEL integrados</td></tr>
+            <tr><td><strong>ABB Unitrol 6000</strong></td><td>IEC 61850, Modbus TCP, OPC-UA</td><td>Ciclo I/O: 400µs, PSS2A e PSS4B, até 12.000 A, redundância dupla</td></tr>
+            <tr><td><strong>GE Vernova EX2100e</strong></td><td>Ethernet LAN, Mark VIe</td><td>Oscilografia embarcada, integração nativa com governor GE</td></tr>
+            <tr><td><strong>Voith HyCon Thyricon</strong></td><td>IEC 61850, Modbus</td><td>Integrado ao pacote de automação hidráulica Voith</td></tr>
+            <tr><td><strong>Ingeteam Ingecon Hydro AVR</strong></td><td>Ethernet TCP/IP (IEC 61850, 60870-5-104)</td><td>5–2.500 A, para PCHs e médias usinas na América Latina</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4 style="font-size:1rem;font-weight:700;margin:24px 0 12px;color:var(--text)">PSS — Power System Stabilizer</h4>
+      <div class="alert alert-warning">
+        <span class="alert-icon">⚠️</span>
+        <div><strong>PSS é requisito mandatório do ONS</strong> para geradores acima de determinada potência conectados ao SIN. Sem PSS, o AVR pode introduzir amortecimento negativo nas faixas de 0,2–4 Hz, causando oscilações crescentes.</div>
+      </div>
+      <div class="formula-box">Diagrama PSS:
+Sinal entrada ──▶ Bloco Washout ──▶ Lead-Lag 1 ──▶ Lead-Lag 2 ──▶ Limitador ──▶ Saída (Vs → AVR)
+(ω ou P elétrica)  T_W: 1–10 s      T1/T2          T3/T4          Vs_max: ±0,05–0,15 pu</div>
+    </div>
+
+    <!-- 2.3 Parâmetros -->
+    <div class="submodule">
+      <h3 class="submodule-title">2.3 · Parâmetros Típicos de AVR — Geradores 100–500 MW</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Parâmetro</th><th>100 MW</th><th>200 MW</th><th>350 MW (Miranda/Jaguara)</th><th>500 MW</th></tr></thead>
+          <tbody>
+            <tr><td>If nominal (A)</td><td>500–1.200</td><td>800–2.000</td><td>1.500–2.500</td><td>2.500–5.000</td></tr>
+            <tr><td>Vf nominal (V CC)</td><td>200–350</td><td>300–450</td><td>350–500</td><td>400–700</td></tr>
+            <tr><td>Potência de excitação</td><td>150–350 kW</td><td>250–700 kW</td><td>500–900 kW</td><td>800–2.000 kW</td></tr>
+            <tr><td>Kp (proporcional PID)</td><td>20–60</td><td>30–80</td><td>40–100</td><td>50–120</td></tr>
+            <tr><td>Ki (integral PID, s⁻¹)</td><td>10–30</td><td>10–40</td><td>15–50</td><td>20–60</td></tr>
+            <tr><td>Droop (estatismo)</td><td>2–5%</td><td>2–5%</td><td>2–5%</td><td>2–5%</td></tr>
+            <tr><td>OEL contínuo (× If_nom)</td><td>1,05–1,10</td><td>1,05–1,10</td><td>1,05–1,10</td><td>1,05–1,10</td></tr>
+            <tr><td>OEL temporizado 30s</td><td>1,5 × If_nom</td><td>1,5 × If_nom</td><td>1,5 × If_nom</td><td>1,5 × If_nom</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 2.4 Falhas -->
+    <div class="submodule">
+      <h3 class="submodule-title">2.4 · Diagnóstico de Falhas do AVR</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Sintoma</th><th>Causa Mais Provável</th><th>Diagnóstico</th><th>Urgência</th></tr></thead>
+          <tbody>
+            <tr><td>Hunting (oscilação ~1 Hz)</td><td>Kp alto ou droop baixo</td><td>Step response test; checar droop</td><td class="badge badge-warn">Média</td></tr>
+            <tr><td>Trip indevido do AVR</td><td>OEL/UEL mal ajustados; falha de PT</td><td>Verificar log de eventos; checar PT</td><td class="badge badge-danger">Alta</td></tr>
+            <tr><td>Tensão não sobe na partida</td><td>Sem residual magnético; DCF fechado</td><td>Verificar DCF; field flashing</td><td class="badge badge-danger">Alta</td></tr>
+            <tr><td>Temperatura alta no cubículo</td><td>Filtros sujos, ventilador parado</td><td>Limpar filtros; checar ventilador</td><td class="badge badge-danger">Alta</td></tr>
+            <tr><td>Oscilação inter-área (&lt;0,5 Hz)</td><td>PSS desativado ou mal ajustado</td><td>Verificar PSS; estudar com ONS</td><td class="badge badge-danger">Crítica</td></tr>
+            <tr><td>Diferença Canal A vs B</td><td>PT defeituoso ou fusível aberto</td><td>Checar PT do canal com leitura errada</td><td class="badge badge-danger">Alta</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Checklist AVR -->
+    <div class="submodule">
+      <h3 class="submodule-title">2.5 · Checklists de Manutenção AVR</h3>
+      <div class="checklist">
+        <div class="checklist-header" style="background:var(--m2)">✅ Mensal (sem intervenção)</div>
+        <div class="checklist-body">
+          <div class="checklist-item">Verificar alarmes ativos no painel do AVR e no SDSC</div>
+          <div class="checklist-item">Conferir tensão terminal Vt: dentro do setpoint (±0,5%)</div>
+          <div class="checklist-item">Verificar corrente de campo If dentro da faixa normal</div>
+          <div class="checklist-item">Verificar temperatura interna do cubículo (&lt;45°C)</div>
+          <div class="checklist-item">AVR em modo AUTO, PSS ativo, canal primário OK</div>
+          <div class="checklist-item">Registrar leituras no formulário de acompanhamento</div>
+        </div>
+      </div>
+      <div class="checklist" style="margin-top:16px">
+        <div class="checklist-header" style="background:#008480">✅ Semestral (intervenção)</div>
+        <div class="checklist-body">
+          <div class="checklist-item">Limpeza dos filtros de ar do cubículo AVR e tiristores</div>
+          <div class="checklist-item">Verificação visual de cabos, conectores e terminais</div>
+          <div class="checklist-item">Apertar terminais com torquímetro</div>
+          <div class="checklist-item">Termografia do cubículo de tiristores</div>
+          <div class="checklist-item">Testar transferência automática para canal reserva (B)</div>
+          <div class="checklist-item">Backup dos parâmetros do AVR (exportar configuração)</div>
+        </div>
+      </div>
+      <div class="checklist" style="margin-top:16px">
+        <div class="checklist-header" style="background:#004478">✅ Anual (unidade parada)</div>
+        <div class="checklist-body">
+          <div class="checklist-item">Calibração completa do canal de medição (±0,5%)</div>
+          <div class="checklist-item">Teste de step response ±5% — overshoot &lt;15%, settling &lt;3s</div>
+          <div class="checklist-item">Verificação e calibração do OEL</div>
+          <div class="checklist-item">Verificação e calibração do UEL</div>
+          <div class="checklist-item">Verificação do PSS com parâmetros de comissionamento</div>
+          <div class="checklist-item">Verificação do V/Hz: alarme e trip</div>
+          <div class="checklist-item">Verificação do DCF: contatos e mecanismo</div>
+          <div class="checklist-item">Verificação dos tiristores (termografia + torque de parafusos)</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ======================================================== -->
+<!-- MÓDULO 03 — REGULADOR DE VELOCIDADE -->
+<!-- ======================================================== -->
+<section class="module-section m3" id="modulo3">
+  <div class="container">
+
+    <div class="module-header">
+      <div class="module-icon-wrap">🌊</div>
+      <div class="module-header-text">
+        <div class="module-number">Módulo 03 · 10 horas</div>
+        <h2 class="module-title">Regulador de Velocidade (Governor)</h2>
+        <p class="module-desc">O governor mantém a frequência de 60 Hz respondendo automaticamente a variações de carga na rede. Controla as pás diretizes via sistema eletro-hidráulico. Inclui fundamentos, HPU, calibração e ensaio de rejeição de carga.</p>
+      </div>
+    </div>
+
+    <!-- 3.1 Fundamentos -->
+    <div class="submodule">
+      <h3 class="submodule-title">3.1 · Fundamentos de Regulação de Frequência</h3>
+      <div class="cards-grid col3">
+        <div class="card">
+          <div class="card-title">Por que Regular Frequência?</div>
+          <p>A frequência é proporcional à velocidade dos geradores síncronos. Desequilíbrio entre geração e carga resulta em desvio de frequência.</p>
+          <div class="alert alert-danger" style="margin-top:12px">
+            <span>🚨</span>
+            <div><strong>&gt;61,5 Hz</strong> → trip por sobrevelocidade<br><strong>&lt;58,5 Hz</strong> → corte de carga, risco de cascata</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Estatismo Permanente (Ep / Droop)</div>
+          <div class="formula-box">Ep = (ΔN/N₀) / (ΔP/P₀) × 100%
+
+Ep = 5% → Requisito ONS padrão
+Ep = 0% → Isocrono (APENAS isolado!)</div>
+          <p style="margin-top:10px"><strong>ONS exige:</strong> Ep ajustável entre 2% e 8% | Banda morta ≤ ±0,04 Hz</p>
+        </div>
+        <div class="card">
+          <div class="card-title">Regulação Primária vs. Secundária</div>
+          <div class="table-wrap" style="margin:0">
+            <table>
+              <thead><tr><th>Tipo</th><th>Tempo</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Primária (Governor)</strong></td><td>2–30 s</td></tr>
+                <tr><td>Secundária (AGC/ONS)</td><td>Minutos</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="margin-top:10px">Após distúrbio, a regulação primária estabiliza a frequência; a secundária restaura os 60,00 Hz exatos.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3.2 Componentes -->
+    <div class="submodule">
+      <h3 class="submodule-title">3.2 · Componentes do Sistema Governor</h3>
+      <div class="diagram">MALHA DE CONTROLE — GOVERNOR DIGITAL
+
+[Setpoint N_ref / P_ref / AGC ONS]
+         │
+         ▼
+[CONTROLADOR DIGITAL (PLC)]
+  Erro: e = N_ref - N_atual
+  PID: u = Kp·e + Ki·∫e·dt + Kd·de/dt
+  Droop: Ep = 5% | Banda morta: ±0,04 Hz
+         │
+         ▼
+[VÁLVULA PROPORCIONAL ELETRO-HIDRÁULICA]
+  ±10 VDC → fluxo de óleo | TR &lt; 50 ms
+         │
+    [HPU 100–160 bar] ──▶ óleo pressurizado
+         │
+         ▼
+[SERVOMOTOR PRINCIPAL]
+  Curso: 400–600 mm | Força: 1–3 MN
+         │
+         ▼
+[DISTRIBUIDOR → Pás Diretizes (24–32 pás)]
+         │
+         ▼
+[TURBINA FRANCIS → GERADOR (realimentação: encoder N)]</div>
+
+      <div class="cards-grid col3" style="margin-top:16px">
+        <div class="card">
+          <div class="card-title">Unidade Hidráulica (HPU)</div>
+          <ul>
+            <li>Reservatório: 500–5.000 litros</li>
+            <li>Bomba de pistões axiais: 40–100 bar</li>
+            <li>Acumulador de N₂: pré-carga 55–80% P_max</li>
+            <li>Filtros: ISO 16/14/11 ou melhor</li>
+            <li>Óleo: ISO VG 46 ou VG 68</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Válvula Proporcional</div>
+          <p><strong>Componente crítico — sensível à contaminação.</strong></p>
+          <ul>
+            <li>Servo-válvula eletro-hidráulica proporcional</li>
+            <li>Contaminação acima de ISO 4406 classe 17/15/12 → travamento</li>
+            <li>Substituição preventiva a cada 10 anos</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Servomotor Principal</div>
+          <ul>
+            <li>Cilindro hidráulico de dupla ação</li>
+            <li>Realimentação de posição: LVDT</li>
+            <li>Vedação: NBR ou Viton (até 80°C)</li>
+            <li>Folga haste/bucha nominal: 0,02–0,08 mm</li>
+            <li>Folga máxima admissível: 0,15 mm</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabela parâmetros governor -->
+    <div class="submodule">
+      <h3 class="submodule-title">3.3 · Valores de Referência</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Parâmetro</th><th>Símbolo</th><th>Valor Típico</th><th>Requisito ONS</th></tr></thead>
+          <tbody>
+            <tr><td>Estatismo permanente</td><td>Ep</td><td>4–6%</td><td>2–8%</td></tr>
+            <tr><td>Estatismo transitório</td><td>Bp</td><td>30–80%</td><td>10–500%</td></tr>
+            <tr><td>Banda morta de frequência</td><td>f_db</td><td>≤±0,03 Hz</td><td>≤±0,04 Hz</td></tr>
+            <tr><td>Tempo de água (penstock curto)</td><td>Tw</td><td>0,5–1,0 s</td><td>—</td></tr>
+            <tr><td>Tempo de água (penstock longo)</td><td>Tw</td><td>1,0–3,0 s</td><td>—</td></tr>
+            <tr><td>Constante de inércia (Francis grande)</td><td>H</td><td>3–6 s</td><td>—</td></tr>
+            <tr><td>Pressão de trabalho (sistema moderno)</td><td>—</td><td>100–160 bar</td><td>—</td></tr>
+            <tr><td>Temperatura de alarme do óleo</td><td>—</td><td>55°C</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4 style="font-size:1rem;font-weight:700;margin:24px 0 12px;color:var(--text)">Critérios de Aceitação — Ensaio de Rejeição de Carga (IEEE 1207)</h4>
+      <div class="param-grid">
+        <div class="param-card" style="border-color:var(--m3)">
+          <div class="param-value" style="color:var(--m3)">&lt;40%</div>
+          <div class="param-unit">% de N₀</div>
+          <div class="param-label">Speed Rise (100% carga)</div>
+        </div>
+        <div class="param-card" style="border-color:var(--m3)">
+          <div class="param-value" style="color:var(--m3)">&lt;110%</div>
+          <div class="param-unit">% de N₀</div>
+          <div class="param-label">Velocidade máxima absoluta</div>
+        </div>
+        <div class="param-card" style="border-color:var(--m3)">
+          <div class="param-value" style="color:var(--m3)">&lt;30s</div>
+          <div class="param-unit">segundos</div>
+          <div class="param-label">Retorno a ±2% N₀</div>
+        </div>
+        <div class="param-card" style="border-color:var(--m3)">
+          <div class="param-value" style="color:var(--m3)">&lt;125%</div>
+          <div class="param-unit">% pressão normal</div>
+          <div class="param-label">Pressão máxima penstock</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Checklist Governor -->
+    <div class="submodule">
+      <h3 class="submodule-title">3.4 · Checklists de Manutenção — Governor</h3>
+      <div class="checklist">
+        <div class="checklist-header" style="background:var(--m3)">✅ Mensal</div>
+        <div class="checklist-body">
+          <div class="checklist-item">Verificar nível de óleo no reservatório da HPU</div>
+          <div class="checklist-item">Verificar pressão do sistema (100–160 bar)</div>
+          <div class="checklist-item">Verificar pré-carga do acumulador de N₂</div>
+          <div class="checklist-item">Verificar temperatura do óleo (&lt;55°C)</div>
+          <div class="checklist-item">Inspecionar vazamentos externos (haste do servo)</div>
+          <div class="checklist-item">Verificar alarmes ativos no CLP do governor</div>
+          <div class="checklist-item">Verificar corrente dos solenóides das válvulas</div>
+          <div class="checklist-item">Registrar potência e posição do distribuidor</div>
+        </div>
+      </div>
+      <div class="checklist" style="margin-top:16px">
+        <div class="checklist-header" style="background:#004A80">✅ Trimestral</div>
+        <div class="checklist-body">
+          <div class="checklist-item">Coletar amostra de óleo (análise ISO 4406)</div>
+          <div class="checklist-item">Verificar filtros de retorno e pressão (ΔP)</div>
+          <div class="checklist-item">Testar solenóides de fechamento de emergência (3 ciclos)</div>
+          <div class="checklist-item">Verificar calibração do encoder de velocidade</div>
+          <div class="checklist-item">Verificar interlocks (trip sobrevelocidade, pressão mínima)</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ======================================================== -->
+<!-- MÓDULO 04 — SDSC -->
+<!-- ======================================================== -->
+<section class="module-section m4 alt" id="modulo4">
+  <div class="container">
+
+    <div class="module-header">
+      <div class="module-icon-wrap">🖥️</div>
+      <div class="module-header-text">
+        <div class="module-number">Módulo 04 · 8 horas</div>
+        <h2 class="module-title">SDSC e Automação de Usinas</h2>
+        <p class="module-desc">O SDSC é a espinha dorsal operacional da usina — integra hardware, software e comunicação industrial conectando o campo ao ONS. Cobre arquitetura em 4 níveis, sequência de partida, protocolos e manutenção.</p>
+      </div>
+    </div>
+
+    <!-- 4.1 Arquitetura -->
+    <div class="submodule">
+      <h3 class="submodule-title">4.1 · Hierarquia de Controle — 4 Níveis</h3>
+      <div class="diagram">╔══════════════════════════════════════════════════════════╗
+║  NÍVEL 4: CCO/ONS (Centro de Controle da Operação)      ║
+║  Protocolo: IEC 60870-5-104 / DNP3 sobre TCP/IP         ║
+║  Funções: CAG, despacho de carga, telessupervisão        ║
+╠══════════════════════════════════════════════════════════╣
+║  NÍVEL 3: USINA (Sala de Controle)                       ║
+║  Componentes: Servidores SCADA, IHMs, estações op.       ║
+║  Protocolo: MMS (IEC 61850), OPC UA, Modbus TCP          ║
+║  Funções: supervisão global, relatórios, histórico        ║
+╠══════════════════════════════════════════════════════════╣
+║  NÍVEL 2: UNIDADE GERADORA (Controlador UC)              ║
+║  Componentes: UC/UAC, IEDs de proteção, reguladores      ║
+║  Protocolo: IEC 61850 GOOSE, Modbus RTU/TCP              ║
+║  Funções: sequenciamento, automatismo, regulação          ║
+╠══════════════════════════════════════════════════════════╣
+║  NÍVEL 1: CAMPO (Sensores, Atuadores, Transdutores)     ║
+║  Componentes: TPs, TCs, transdutores 4-20mA, RTDs       ║
+║  Protocolo: HART, 4-20mA analógico, contatos secos       ║
+╚══════════════════════════════════════════════════════════╝</div>
+
+      <h4 style="font-size:1rem;font-weight:700;margin:24px 0 12px;color:var(--text)">Comparativo de Protocolos</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Critério</th><th>DNP3</th><th>IEC 61850 GOOSE</th><th>Modbus TCP</th><th>IEC 60870-5-104</th></tr></thead>
+          <tbody>
+            <tr><td>Velocidade</td><td>ms a s</td><td><strong>&lt;4 ms</strong></td><td>ms a s</td><td>ms a s</td></tr>
+            <tr><td>Timestamping</td><td>Sim (ms)</td><td>Sim (µs)</td><td>Não nativo</td><td>Sim (ms)</td></tr>
+            <tr><td>Onde usar no SDSC</td><td>RTU → ONS (legado)</td><td><strong>IEDs proteção entre si</strong></td><td>Reguladores, legado</td><td><strong>Link ONS (padrão atual)</strong></td></tr>
+            <tr><td>Complexidade</td><td>Média</td><td>Alta</td><td>Baixa</td><td>Média</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Sequência de partida -->
+    <div class="submodule">
+      <h3 class="submodule-title">4.2 · Sequência de Partida da Unidade Geradora (5 Estados)</h3>
+      <div class="cards-grid col2">
+        <div class="card">
+          <div class="card-title">Estado 1 — UI (Unidade Isolada)</div>
+          <p>Repouso: resistências de aquecimento ativas, freio aplicado, todas as proteções armadas.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">Estado 2 — UPP (Pronta para Partir)</div>
+          <p>Desligar resistências, abrir sistema de resfriamento, acionar bombas de óleo (alta pressão + guias), pressurizar HPU do governor.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">Estado 3 — UVNSC (Velocidade Nominal Sem Carga)</div>
+          <p>Abrir distribuidor gradualmente; bomba de alta pressão desliga a 80% N. Aguardar 60 Hz ± tolerância, sem vibração excessiva.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">Estado 4 — EU (Unidade Excitada)</div>
+          <p>Acionar pré-excitação → excitação principal (AVR) → tensão eleva até Vnom (13,8 kV). AVR em modo automático confirmado.</p>
+        </div>
+      </div>
+      <div class="alert alert-danger" style="margin-top:16px">
+        <span class="alert-icon">🚨</span>
+        <div><strong>Estado 5 — US (Unidade Sincronizada):</strong> Verificar simultâneamente: f_UG ≈ f_rede (±0,1 Hz), θ_UG ≈ θ_rede (±5°), V_UG ≈ V_barra (±5%). <strong>NUNCA realizar sincronismo manual</strong> — risco de dano grave ao gerador. Aguardar autorização do ONS para usinas com despacho centralizado.</div>
+      </div>
+
+      <h4 style="font-size:1rem;font-weight:700;margin:24px 0 12px;color:var(--text)">Backup de Configurações — Regra 3-2-1</h4>
+      <div class="alert alert-warning">
+        <span class="alert-icon">💾</span>
+        <div><strong>Ponto mais crítico da manutenção do SDSC:</strong> A perda de configuração de um UC ou IED pode significar semanas de recuperação. <strong>3 cópias</strong> dos dados críticos | <strong>2 mídias diferentes</strong> | <strong>1 cópia offsite</strong> | Teste mensal de restauração.</div>
+      </div>
+
+      <h4 style="font-size:1rem;font-weight:700;margin:16px 0 12px;color:var(--text)">O que fazer backup:</h4>
+      <div class="cards-grid col3">
+        <div class="card">
+          <div class="card-title">① Lógica dos UCs</div>
+          <p>Programas IEC 61131-3 (SFC, FBD, LD, ST). A cada mudança + mensal.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">② IEDs de Proteção</div>
+          <p>Arquivos .PCM, .RCP, .COMTRADE. A cada ajuste de relay + semestral.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">③ Banco de Dados SCADA</div>
+          <p>Pontos, tags, trends. Backup automático diário + semanal manual.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">④ Imagem do SO dos Servidores</div>
+          <p>Disk image (Ghost, Clonezilla). Após cada atualização.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">⑤ Configuração de Rede</div>
+          <p>Switches, roteadores, firewalls. A cada mudança + trimestral.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">⑥ Oscilografias COMTRADE</div>
+          <p>Mínimo 2 anos de histórico. Armazenar offsite.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4.3 Grandezas ONS -->
+    <div class="submodule">
+      <h3 class="submodule-title">4.3 · Integração com ONS — Grandezas Obrigatórias</h3>
+      <div class="alert alert-info" style="margin-bottom:16px">
+        <span class="alert-icon">📡</span>
+        <div>Disponibilidade do link ONS: <strong>99,95%</strong> (instalações estratégicas) | Protocolo padrão: <strong>IEC 60870-5-104</strong> | Downtime máximo: ~4,38 horas/ano</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Grandeza</th><th>Símbolo</th><th>Tipo</th><th>Banda Morta Típica</th></tr></thead>
+          <tbody>
+            <tr><td>Potência ativa (por UG)</td><td>P (MW)</td><td>Analógica</td><td>1 MW</td></tr>
+            <tr><td>Potência reativa (por UG)</td><td>Q (Mvar)</td><td>Analógica</td><td>0,5 Mvar</td></tr>
+            <tr><td>Tensão de terminal</td><td>V (kV)</td><td>Analógica</td><td>0,5% fundo de escala</td></tr>
+            <tr><td>Corrente de linha</td><td>I (kA)</td><td>Analógica</td><td>Contínua</td></tr>
+            <tr><td>Estado do disjuntor principal</td><td>52G</td><td>Digital</td><td>Por evento</td></tr>
+            <tr><td>Estado da UG (modo)</td><td>UI/UPP/UVNSC/EU/US</td><td>Digital</td><td>Por evento</td></tr>
+            <tr><td>Posição de tap OLTC (trafo)</td><td>Tap</td><td>Digital</td><td>Por degrau</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Checklist SDSC -->
+    <div class="submodule">
+      <h3 class="submodule-title">4.4 · Checklists de Manutenção SDSC</h3>
+      <div class="checklist">
+        <div class="checklist-header" style="background:var(--m4)">✅ Diário (turno operacional)</div>
+        <div class="checklist-body">
+          <div class="checklist-item">Verificar status de alarmes ativos — resolver P1/P2</div>
+          <div class="checklist-item">Confirmar sincronização de tempo (GPS/NTP)</div>
+          <div class="checklist-item">Verificar status do servidor redundante (hot-standby)</div>
+          <div class="checklist-item">Checar status do UPS (carga das baterias, modo)</div>
+          <div class="checklist-item">Verificar link de comunicação com ONS (dados chegando)</div>
+          <div class="checklist-item">Registrar ocorrências no livro de turno</div>
+        </div>
+      </div>
+      <div class="checklist" style="margin-top:16px">
+        <div class="checklist-header" style="background:#2B3D83">✅ Mensal</div>
+        <div class="checklist-body">
+          <div class="checklist-item"><strong>BACKUP COMPLETO</strong> de toda configuração SDSC</div>
+          <div class="checklist-item">Teste de restauração de backup em ambiente de teste</div>
+          <div class="checklist-item">Verificação de todos os pontos analógicos</div>
+          <div class="checklist-item">Atualização de patches de segurança</div>
+          <div class="checklist-item">Teste de comunicação ONS (grandezas e qualidade)</div>
+          <div class="checklist-item">Teste de UPS: simulação de falta de AC</div>
+        </div>
+      </div>
+      <div class="checklist" style="margin-top:16px">
+        <div class="checklist-header" style="background:#44549B">✅ Semestral</div>
+        <div class="checklist-body">
+          <div class="checklist-item">Inspeção termográfica de todos os armários do SDSC</div>
+          <div class="checklist-item">Teste de redundância de rede (reconvergência RSTP &lt;50ms)</div>
+          <div class="checklist-item">Teste de failover do link ONS (primário → backup)</div>
+          <div class="checklist-item">Teste de capacidade das baterias do UPS</div>
+          <div class="checklist-item">Limpeza física dos gabinetes</div>
+          <div class="checklist-item">Revisão e racionalização de alarmes</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ======================================================== -->
+<!-- MÓDULO 05 — PROTEÇÃO -->
+<!-- ======================================================== -->
+<section class="module-section m5" id="modulo5">
+  <div class="container">
+
+    <div class="module-header">
+      <div class="module-icon-wrap">🛡️</div>
+      <div class="module-header-text">
+        <div class="module-number">Módulo 05 · 48 horas (mais extenso)</div>
+        <h2 class="module-title">Proteção de Sistemas Elétricos</h2>
+        <p class="module-desc">Núcleo técnico do Workshop HIDRA. Filosofia, funções ANSI para geradores e transformadores, DGA, oscilografia e análise de falhas. Referência: IEEE C37.102, IEC 60255, ONS Submódulo 3.8.</p>
+      </div>
+    </div>
+
+    <!-- 5.1 Filosofia -->
+    <div class="submodule">
+      <h3 class="submodule-title">5.1 · Filosofia de Proteção — 4 Princípios Fundamentais</h3>
+      <div class="cards-grid col2">
+        <div class="card">
+          <div class="card-title">⚡ Seletividade</div>
+          <p>Apenas o elemento mais próximo da falta opera — isolando a menor porção possível. Uma falta no Gerador 2 abre somente o disjuntor do Gerador 2.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">⏱️ Rapidez</div>
+          <p>Proteção principal (87G): atua em <strong>&lt;50 ms</strong> (2–3 ciclos a 60 Hz). Backup: 0,5 s a vários segundos. Quanto mais rápida, menor o dano térmico e o risco de instabilidade.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🔍 Sensibilidade</div>
+          <p>Detecta a falta mínima possível — mesmo correntes baixas próximas ao neutro do gerador — sem sensibilidade excessiva que cause atuações indevidas.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🛡️ Confiabilidade</div>
+          <p><strong>Dependabilidade:</strong> opera quando deve. <strong>Segurança:</strong> não opera quando não deve. Obtida por redundância (dois relés independentes) e automonitoramento.</p>
+        </div>
+      </div>
+
+      <h4 style="font-size:1rem;font-weight:700;margin:24px 0 12px;color:var(--text)">Zonas de Proteção — UHE (Overlapping)</h4>
+      <div class="diagram">NEUTRO DO GERADOR
+      │
+      TC-N (TC de Neutro)
+      │
+      ├──── [ZONA 1 — GERADOR — 87G] ──────────────────────┐
+      │                                                    │
+      ESTATOR DO GERADOR                                   │
+      │                                                    │
+      TC-T (TCs de Terminal)                              │
+      │                                                    │
+      ├──── [Sobreposição Zona 1 / Zona 2] ─────────────---|
+      │                                                    │
+      BARRAMENTO FASE ISOLADO (IPB)                       │
+      │                                                    │
+      ├──── [ZONA 2 — TRAFO ELEVADOR — 87T] ───────────────┘
+      │
+      TRANSFORMADOR ELEVADOR (AT + BT)
+      │
+      TC-S (TC Secundário 87T — Bushing AT)
+      │
+      ├──── [Sobreposição Zona 2 / Zona 3]
+      │
+      ├──── [ZONA 3 — BARRAMENTO AT — 87B]
+      │
+      BARRAMENTO DE ALTA TENSÃO (subestação)
+      │
+      ├──── [ZONA 4 — LINHA DE TRANSMISSÃO — 21/87L]
+      │
+      SUBESTAÇÃO RECEPTORA (SIN)</div>
+    </div>
+
+    <!-- 5.2 Funções ANSI Geradores -->
+    <div class="submodule">
+      <h3 class="submodule-title">5.2 · Funções ANSI — Proteção de Geradores</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Cód. ANSI</th><th>Nome</th><th>Ajuste Típico</th><th>Atuação</th><th>Observações para Hidro</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="ansi-code" style="background:#FFEBEE;color:#E63946">87G</span></td>
+              <td>Diferencial de Gerador</td>
+              <td>Pickup: 5–20% In; Slope: 20–40%</td>
+              <td>20–30 ms</td>
+              <td>Proteção principal. TC de neutro e terminal mesma relação.</td>
+            </tr>
+            <tr>
+              <td><span class="ansi-code" style="background:#FFF3E0;color:#E65100">40</span></td>
+              <td>Perda de Excitação</td>
+              <td>Diam. mho = Xd; offset = –X'd/2</td>
+              <td>0,5 s (grave); 10–15 s (gradual)</td>
+              <td>Hidros têm Xd elevado. Coordenar com curva de capabilidade da máquina.</td>
+            </tr>
+            <tr>
+              <td><span class="ansi-code" style="background:#FFF9E0;color:#8D6E00">46</span></td>
+              <td>Desequilíbrio de Corrente</td>
+              <td>Alarme: I₂ &gt;5% In; Trip: I₂²t = K (10–30)</td>
+              <td>Inverso (segundos a minutos)</td>
+              <td>Correntes de dupla frequência (120 Hz) superaquecem o rotor.</td>
+            </tr>
+            <tr>
+              <td><span class="ansi-code" style="background:#E3F2FD;color:#1565C0">32</span></td>
+              <td>Potência Reversa (Anti-Motoring)</td>
+              <td>Hidro: –0,5% a –2% Pn</td>
+              <td>1–3 s (etapa 1); 10–20 s (etapa 2)</td>
+              <td>Turbina hidráulica tem perdas mecânicas muito baixas — pickup extremamente sensível.</td>
+            </tr>
+            <tr>
+              <td><span class="ansi-code" style="background:#E8F5E9;color:#1B5E20">64S</span></td>
+              <td>Terra de Estator (100%)</td>
+              <td>Injeção 20 Hz; Trip: corrente &gt; limiar</td>
+              <td>100–200 ms</td>
+              <td>Detecta 100% do enrolamento. Método de injeção de baixa frequência é o mais confiável.</td>
+            </tr>
+            <tr>
+              <td><span class="ansi-code" style="background:#F3E5F5;color:#4A148C">59N</span></td>
+              <td>Sobretensão de Neutro (Terra)</td>
+              <td>Trip: 5–10% Vn (tensão de neutro)</td>
+              <td>1–2 s</td>
+              <td>Cobre 90–95% do enrolamento. Combinar com 64S para cobertura total.</td>
+            </tr>
+            <tr>
+              <td><span class="ansi-code" style="background:#E8EAF6;color:#283593">64R</span></td>
+              <td>Terra de Rotor</td>
+              <td>Alarme: 1° terra; Trip: 2° terra ou R &lt;1–5 kΩ</td>
+              <td>Alarme imediato</td>
+              <td>1° terra: inofensivo. 2° terra cria curto de espiras → vibração severa.</td>
+            </tr>
+            <tr>
+              <td><span class="ansi-code" style="background:#E0F7FA;color:#006064">59G</span></td>
+              <td>Sobretensão de Gerador</td>
+              <td>Alarme: 110% Vn; Trip: 120–130% Vn</td>
+              <td>Inverso ou definido</td>
+              <td>Crítico durante rejeição de carga — governor pode ser lento.</td>
+            </tr>
+            <tr>
+              <td><span class="ansi-code" style="background:#F9FBE7;color:#33691E">81U/O</span></td>
+              <td>Sub/Sobrefrequência</td>
+              <td>81U: 58,5 Hz alarme, 57,5 Hz trip; 81O: 62 Hz</td>
+              <td>81U: 5–10 s; 81O: 1–2 s</td>
+              <td>Subfrequência prolongada danifica pás do rotor por ressonância.</td>
+            </tr>
+            <tr>
+              <td><span class="ansi-code" style="background:#FCE4EC;color:#880E4F">24</span></td>
+              <td>Volt/Hertz (Sobrefluxo)</td>
+              <td>Trip: 110% V/f (curva inversa)</td>
+              <td>Inverso: 1–30 s</td>
+              <td>Importante durante partida/parada quando tensão sobe e f ainda está baixa.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert alert-danger">
+        <span class="alert-icon">🔴</span>
+        <div><strong>87G — Percentage Differential:</strong> Pickup mínimo 0,10 pu | Slope 1 (baixas correntes): 20–25% | Slope 2 (acima de 3 pu): 35–40% (compensar saturação de TCs durante faltas externas elevadas).</div>
+      </div>
+    </div>
+
+    <!-- 5.3 Funções ANSI Transformadores -->
+    <div class="submodule">
+      <h3 class="submodule-title">5.3 · Proteção de Transformadores + DGA</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Cód. ANSI</th><th>Nome</th><th>Ajuste Típico</th><th>Atuação</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="ansi-code" style="background:#FFEBEE;color:#E63946">87T</span></td>
+              <td>Diferencial de Transformador</td>
+              <td>Pickup: 15–30% In; Slope: 20–40%</td>
+              <td>20–30 ms</td>
+            </tr>
+            <tr>
+              <td><span class="ansi-code" style="background:#FFF3E0;color:#E65100">63</span></td>
+              <td>Buchholz</td>
+              <td>Estágio 1: alarme (gás); Estágio 2: trip (fluxo)</td>
+              <td>Alarme gradual; Trip 0,5–1 s</td>
+            </tr>
+            <tr>
+              <td><span class="ansi-code" style="background:#E8EAF6;color:#283593">96</span></td>
+              <td>Pressão Súbita</td>
+              <td>Trip imediato: arco produz pressão em ms</td>
+              <td>&lt;10 ms</td>
+            </tr>
+            <tr>
+              <td><span class="ansi-code" style="background:#E3F2FD;color:#1565C0">26</span></td>
+              <td>Temperatura do Trafo</td>
+              <td>Alarme óleo: 80°C; Trip: 95–100°C</td>
+              <td>Condição atingida</td>
+            </tr>
+            <tr>
+              <td><span class="ansi-code" style="background:#E8F5E9;color:#1B5E20">71</span></td>
+              <td>Nível de Óleo</td>
+              <td>Alarme: nível baixo; Trip: nível crítico</td>
+              <td>Float switch</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4 style="font-size:1rem;font-weight:700;margin:24px 0 12px;color:var(--text)">DGA — Análise de Gases Dissolvidos no Óleo (IEEE C57.104)</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Gás</th><th>Produzido por</th><th>Falta Indicada</th><th>Limite IEEE C57.104</th></tr></thead>
+          <tbody>
+            <tr><td><strong>H₂ (Hidrogênio)</strong></td><td>Descarga parcial, aquecimento</td><td>Descarga parcial, corona</td><td>&lt;100 ppm (alarme)</td></tr>
+            <tr><td>CH₄ (Metano)</td><td>Aquecimento moderado do óleo</td><td>Ponto quente óleo &lt;300°C</td><td>—</td></tr>
+            <tr><td>C₂H₄ (Etileno)</td><td>Aquecimento severo do óleo</td><td>Ponto quente grave &gt;300°C</td><td>—</td></tr>
+            <tr><td><strong>C₂H₂ (Acetileno)</strong></td><td>Arco elétrico &gt;700°C</td><td><strong>Arco elétrico interno</strong></td><td>&lt;1 ppm (novo); &lt;35 ppm (serviço)</td></tr>
+            <tr><td>CO (Monóxido de Carbono)</td><td>Degradação de celulose</td><td>Aquecimento/carbonização do papel</td><td>—</td></tr>
+            <tr><td>CO₂ (Dióxido de Carbono)</td><td>Degradação lenta de celulose</td><td>Degradação de papel isolante</td><td>Normal em baixas concentrações</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert alert-danger">
+        <span class="alert-icon">🚨</span>
+        <div><strong>Acetileno (C₂H₂) acima de 35 ppm</strong> → indica arco elétrico interno → retirar o transformador de operação imediatamente para inspeção. Não energizar antes de DGA manual e inspeção interna com medidas de segurança.</div>
+      </div>
+    </div>
+
+    <!-- 5.4 Tabela ANSI Consolidada -->
+    <div class="submodule">
+      <h3 class="submodule-title">5.4 · Tabela ANSI Consolidada</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Código ANSI</th><th>Nome</th><th>Equipamento</th><th>Velocidade de Atuação</th></tr></thead>
+          <tbody>
+            <tr><td><span class="ansi-code" style="background:#FFEBEE;color:#E63946">87G</span></td><td>Diferencial de Gerador</td><td>Gerador</td><td>20–30 ms (&lt;2 ciclos)</td></tr>
+            <tr><td><span class="ansi-code" style="background:#FFEBEE;color:#E63946">87T</span></td><td>Diferencial de Transformador</td><td>Trafo elevador</td><td>20–30 ms (&lt;2 ciclos)</td></tr>
+            <tr><td><span class="ansi-code" style="background:#FFEBEE;color:#B71C1C">87B</span></td><td>Diferencial de Barramento</td><td>Barramento AT</td><td>&lt;20 ms (1 ciclo)</td></tr>
+            <tr><td><span class="ansi-code" style="background:#FFF3E0;color:#E65100">40</span></td><td>Perda de Excitação</td><td>Gerador</td><td>0,5 s (grave); 10–15 s (gradual)</td></tr>
+            <tr><td><span class="ansi-code" style="background:#FFF9E0;color:#8D6E00">46</span></td><td>Desequilíbrio de Corrente</td><td>Gerador</td><td>Inverso: I₂²t = K</td></tr>
+            <tr><td><span class="ansi-code" style="background:#E8F5E9;color:#1B5E20">64S</span></td><td>Terra de Estator 100%</td><td>Gerador (Estator)</td><td>100–200 ms</td></tr>
+            <tr><td><span class="ansi-code" style="background:#F3E5F5;color:#4A148C">59N</span></td><td>Tensão de Neutro</td><td>Gerador (Estator)</td><td>1–2 s</td></tr>
+            <tr><td><span class="ansi-code" style="background:#E8EAF6;color:#283593">64R</span></td><td>Terra de Rotor</td><td>Gerador (Rotor)</td><td>Alarme imediato</td></tr>
+            <tr><td><span class="ansi-code" style="background:#FFF3E0;color:#E65100">63</span></td><td>Buchholz</td><td>Trafo</td><td>Alarme gradual; Trip 0,5–1 s</td></tr>
+            <tr><td><span class="ansi-code" style="background:#FCE4EC;color:#880E4F">96</span></td><td>Pressão Súbita</td><td>Trafo</td><td>&lt;10 ms</td></tr>
+            <tr><td><span class="ansi-code" style="background:#E3F2FD;color:#1565C0">32</span></td><td>Potência Reversa</td><td>Gerador</td><td>1–3 s; 10–20 s (etapa 2)</td></tr>
+            <tr><td><span class="ansi-code" style="background:#E0F7FA;color:#006064">59G</span></td><td>Sobretensão</td><td>Gerador</td><td>Alarme; Trip 2–5 s</td></tr>
+            <tr><td><span class="ansi-code" style="background:#FCE4EC;color:#880E4F">24</span></td><td>Volt/Hertz (Sobrefluxo)</td><td>Gerador, Trafo</td><td>Inverso: 1–30 s</td></tr>
+            <tr><td><span class="ansi-code" style="background:#F9FBE7;color:#33691E">81U/O</span></td><td>Sub/Sobrefrequência</td><td>Gerador, Sistema</td><td>81U: 5–10 s; 81O: 1–2 s</td></tr>
+            <tr><td><span class="ansi-code" style="background:#E3F2FD;color:#1565C0">21</span></td><td>Distância</td><td>Gerador, Linha</td><td>Zona 1: &lt;30 ms; Zona 2: 0,2–0,5 s</td></tr>
+            <tr><td><span class="ansi-code" style="background:#E8F5E9;color:#1B5E20">25</span></td><td>Verificação de Sincronismo</td><td>Linha, Barramento</td><td>Supervisão — não é relé de trip</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 5.5 Oscilografia -->
+    <div class="submodule">
+      <h3 class="submodule-title">5.5 · Análise de Falhas e Oscilografia</h3>
+
+      <div class="cards-grid col2">
+        <div class="card">
+          <div class="card-title">Identificação do Tipo de Falta</div>
+          <ul>
+            <li><strong>Falta 3F:</strong> Todas as 3 correntes aumentam igualmente</li>
+            <li><strong>Falta 2F:</strong> Duas correntes em oposição; 1 tensão cai mais</li>
+            <li><strong>Falta 1FT:</strong> 1 corrente aumenta + surge I₀ de neutro</li>
+            <li><strong>Falta 2FT:</strong> Duas correntes altas + surge I₀</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Passos de Análise do Oscilógrafo</div>
+          <ol style="margin-left:16px">
+            <li>Identificar tipo de falta pela assimetria das correntes</li>
+            <li>Verificar sequência de operação dos relés</li>
+            <li>Verificar tempo de abertura do disjuntor (típico: 50–83 ms)</li>
+            <li>Avaliar tensão durante e após a falta</li>
+            <li>Verificar componente CC de offset</li>
+          </ol>
+        </div>
+      </div>
+
+      <h4 style="font-size:1rem;font-weight:700;margin:24px 0 12px;color:var(--text)">Softwares de Análise de Oscilografia</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Software</th><th>Fabricante</th><th>Observação</th></tr></thead>
+          <tbody>
+            <tr><td><strong>SynchroWAVe Event</strong></td><td>SEL</td><td>Análise de COMTRADE, diagnóstico guiado, filtros de harmônicos</td></tr>
+            <tr><td><strong>Conprove Análise de Distúrbios</strong></td><td>Conprove</td><td>Interface em português — usado por geradoras brasileiras</td></tr>
+            <tr><td><strong>OMICRON Comtrade Viewer</strong></td><td>OMICRON</td><td>Visualização gratuita, múltiplos canais, análise fasorial</td></tr>
+            <tr><td><strong>SINAPENET</strong></td><td>CEPEL/Eletrobras</td><td>Sistema nacional de perturbações, integração ao ONS</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Checklist Proteção -->
+    <div class="submodule">
+      <h3 class="submodule-title">5.6 · Checklist de Testes de Proteção</h3>
+      <div class="checklist">
+        <div class="checklist-header" style="background:var(--m5)">✅ Comissionamento (Fase 2 — Testes Funcionais por Injeção Secundária)</div>
+        <div class="checklist-body">
+          <div class="checklist-item">87G: injetar corrente diferencial acima do pickup em todos os modos</div>
+          <div class="checklist-item">87T: testar bloqueio por inrush (2° harmônico) e sobrefluxo (5° harmônico)</div>
+          <div class="checklist-item">40: injetar impedância dentro do círculo mho; verificar temporização</div>
+          <div class="checklist-item">46: injetar corrente de sequência negativa; verificar modelo I₂²t</div>
+          <div class="checklist-item">32: injetar corrente com ângulo de potência negativo; verificar 2 estágios</div>
+          <div class="checklist-item">59N/64S: simular tensão de neutro e injeção de 20 Hz</div>
+          <div class="checklist-item">64R: verificar circuito de injeção DC; simular resistência de falta</div>
+          <div class="checklist-item">81U/O: injetar frequência fora dos limites</div>
+          <div class="checklist-item">87B: verificar operação + imunidade a falta externa (slope)</div>
+          <div class="checklist-item">Verificar comunicação IEC 61850 GOOSE entre relés</div>
+          <div class="checklist-item">Verificar sincronização de tempo GPS (erro &lt;1 ms)</div>
+        </div>
+      </div>
+
+      <h4 style="font-size:1rem;font-weight:700;margin:24px 0 12px;color:var(--text)">Testes Periódicos de Manutenção</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Teste</th><th>Periodicidade</th><th>Valor de Referência</th></tr></thead>
+          <tbody>
+            <tr><td>Inspeção visual e limpeza de relés</td><td>Anual</td><td>—</td></tr>
+            <tr><td>Verificação de ajustes e configuração</td><td>Anual</td><td>Comparar com planilha de ajustes aprovada</td></tr>
+            <tr><td>Teste funcional por injeção secundária</td><td>2–4 anos</td><td>Tempo de atuação 87G: &lt;30 ms</td></tr>
+            <tr><td>DGA do óleo do trafo</td><td>6 meses (risco); 12 meses (normal)</td><td>TDCG &lt;720 ppm; C₂H₂ &lt;35 ppm</td></tr>
+            <tr><td>Buchholz (teste de operação manual)</td><td>Anual</td><td>Manual do fabricante</td></tr>
+            <tr><td>Termografia do trafo e conexões</td><td>Semestral</td><td>ABNT NBR 15830</td></tr>
+            <tr><td>Verificação de sincronização GPS</td><td>Anual</td><td>Erro &lt;1 ms</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert alert-info" style="margin-top:16px">
+        <span class="alert-icon">📚</span>
+        <div><strong>Referências normativas principais:</strong> IEEE Std C37.102 (proteção de geradores), IEEE Std C37.91 (transformadores), IEC 60255 (relés), IEC 61850 (comunicação), IEEE C57.104 (DGA), ONS Submódulo 3.8 (conexão à rede básica).</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ======================================================== -->
+<!-- FOOTER -->
+<!-- ======================================================== -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-text">
+      <strong>Workshop HIDRA</strong> — Formação de Especialistas O&amp;M<br>
+      UHE Miranda (408 MW) · UHE Jaguara (424 MW) · ENGIE Brasil
+    </div>
+    <div class="footer-credits">
+      <span style="opacity:0.4;font-size:11px;color:#8BA3C7;">
+        <svg width="36" height="14" viewBox="0 0 60 20"><rect x="0" y="4" width="12" height="12" rx="2" fill="#2D52EF"/><text x="15" y="15" font-family="Lato,sans-serif" font-size="9" font-weight="700" fill="#8BA3C7">Digital AI</text></svg>
+      </span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
