@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DermaClinic · Performance de Criativos · 01–15/07/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:   #0F172A;
+  --surf:   #1E293B;
+  --surf2:  #243347;
+  --bord:   #334155;
+  --txt:    #FFFFFF;
+  --mut:    #94A3B8;
+  --sub:    #64748B;
+  --ind:    #6366F1;
+  --ind2:   #818cf8;
+  --teal:   #10B981;
+  --amber:  #F59E0B;
+  --red:    #EF4444;
+  --bordo:  #7C3D4E;
+  --bordo2: #a0566a;
+  --gold:   #F59E0B;
+  --silver: #94A3B8;
+  --bronze: #CD7F32;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--navy);color:var(--txt);min-height:100vh;overflow-x:hidden}
+
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--navy)}
+::-webkit-scrollbar-thumb{background:var(--bord);border-radius:3px}
+
+.header{background:rgba(15,23,42,0.95);border-bottom:1px solid var(--bord);padding:0 32px;position:sticky;top:0;z-index:200;backdrop-filter:blur(16px)}
+.h-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px;gap:16px}
+.logo{display:flex;align-items:center;gap:10px}
+.h-right{display:flex;align-items:center;gap:10px}
+.badge{display:inline-flex;align-items:center;gap:5px;background:var(--surf);border:1px solid var(--bord);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:500;color:var(--mut)}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--teal)}
+
+.hero{background:linear-gradient(160deg,#1a1040 0%,var(--navy) 60%);padding:48px 32px 36px;border-bottom:1px solid var(--bord)}
+.hero-inner{max-width:1400px;margin:0 auto}
+.hero-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.25);border-radius:20px;padding:4px 14px;margin-bottom:18px;font-size:11px;font-weight:700;color:var(--ind2);letter-spacing:.5px;text-transform:uppercase}
+.hero h1{font-size:36px;font-weight:900;letter-spacing:-1.5px;line-height:1.1;margin-bottom:10px}
+.hero h1 span{background:linear-gradient(135deg,#fff 0%,var(--ind2) 55%,var(--bordo2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:15px;color:var(--mut);max-width:660px;margin-bottom:28px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kpi{background:var(--surf);border:1px solid var(--bord);border-radius:12px;padding:18px 20px;position:relative;overflow:hidden;transition:transform .2s}
+.kpi:hover{transform:translateY(-2px)}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.kpi.i::before{background:linear-gradient(90deg,var(--ind),var(--ind2))}
+.kpi.t::before{background:linear-gradient(90deg,var(--teal),#34d399)}
+.kpi.a::before{background:linear-gradient(90deg,var(--amber),#fbbf24)}
+.kpi.b::before{background:linear-gradient(90deg,var(--bordo),var(--bordo2))}
+.kpi.r::before{background:linear-gradient(90deg,var(--red),#f87171)}
+.kpi-lbl{font-size:10px;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.kpi-val{font-size:26px;font-weight:900;letter-spacing:-1px}
+.kpi-val.i{color:var(--ind2)}
+.kpi-val.t{color:var(--teal)}
+.kpi-val.a{color:var(--amber)}
+.kpi-val.b{color:var(--bordo2)}
+.kpi-val.r{color:var(--red)}
+.kpi-note{font-size:11px;color:var(--mut);margin-top:3px}
+
+.tabs{background:var(--surf);border-bottom:1px solid var(--bord);position:sticky;top:60px;z-index:100}
+.tabs-inner{max-width:1400px;margin:0 auto;display:flex;padding:0 32px;overflow-x:auto;gap:2px}
+.tab-btn{padding:14px 20px;font-size:13px;font-weight:500;color:var(--mut);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s;display:flex;align-items:center;gap:6px}
+.tab-btn.active,.tab-btn:hover{color:var(--txt);border-bottom-color:var(--ind)}
+
+.section{max-width:1400px;margin:0 auto;padding:40px 32px}
+.s-header{display:flex;align-items:center;gap:10px;margin-bottom:24px}
+.s-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.s-icon.ind{background:rgba(99,102,241,.15)}
+.s-icon.tel{background:rgba(16,185,129,.15)}
+.s-icon.amb{background:rgba(245,158,11,.15)}
+.s-icon.brd{background:rgba(124,61,78,.15)}
+.s-icon.red{background:rgba(239,68,68,.15)}
+.s-title{font-size:16px;font-weight:700}
+.s-sub{font-size:12px;color:var(--mut);margin-top:2px}
+.divider{height:1px;background:var(--bord);margin:0}
+
+/* Adset ranking cards */
+.adset-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.adset-card{background:var(--surf);border:1px solid var(--bord);border-radius:14px;padding:22px;position:relative;overflow:hidden;transition:transform .2s}
+.adset-card:hover{transform:translateY(-2px)}
+.adset-card.gold{border-color:rgba(245,158,11,.35)}
+.adset-card.gold::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#F59E0B,#fbbf24)}
+.adset-card.silver{border-color:rgba(148,163,184,.3)}
+.adset-card.silver::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#94A3B8,#cbd5e1)}
+.adset-card.alert{border-color:rgba(239,68,68,.3)}
+.adset-card.alert::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--red),#f87171)}
+.adset-rank{font-size:26px;margin-bottom:8px}
+.adset-name{font-size:14px;font-weight:800;margin-bottom:4px;color:var(--txt)}
+.adset-cpa{font-size:32px;font-weight:900;letter-spacing:-1.5px;margin-bottom:2px}
+.adset-cpa.gold{color:var(--gold)}
+.adset-cpa.silver{color:var(--silver)}
+.adset-cpa.alert{color:var(--red)}
+.adset-cpa-lbl{font-size:10px;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:14px}
+.adset-stats{display:flex;gap:16px;flex-wrap:wrap}
+.adset-stat-val{font-size:14px;font-weight:700}
+.adset-stat-lbl{font-size:9px;color:var(--sub);text-transform:uppercase;letter-spacing:.3px}
+
+.podium-wrap{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:24px}
+.podium-card{background:var(--surf);border:1px solid var(--bord);border-radius:14px;padding:20px;position:relative;overflow:hidden;transition:transform .2s}
+.podium-card:hover{transform:translateY(-2px)}
+.podium-card.gold{border-color:rgba(245,158,11,.35)}
+.podium-card.gold::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#F59E0B,#fbbf24)}
+.podium-card.silver{border-color:rgba(148,163,184,.3)}
+.podium-card.silver::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#94A3B8,#cbd5e1)}
+.podium-card.bronze{border-color:rgba(205,127,50,.3)}
+.podium-card.bronze::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#CD7F32,#e5a04e)}
+.podium-rank{font-size:28px;margin-bottom:8px}
+.podium-name{font-size:12px;font-weight:800;letter-spacing:-.3px;margin-bottom:4px;color:var(--txt)}
+.podium-conv{font-size:30px;font-weight:900;letter-spacing:-1.5px}
+.podium-conv.gold{color:var(--gold)}
+.podium-conv.silver{color:var(--silver)}
+.podium-conv.bronze{color:var(--bronze)}
+.podium-conv-lbl{font-size:10px;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:12px}
+.podium-stats{display:flex;gap:12px;flex-wrap:wrap}
+.podium-stat{text-align:left}
+.podium-stat-val{font-size:13px;font-weight:700}
+.podium-stat-lbl{font-size:9px;color:var(--sub);text-transform:uppercase;letter-spacing:.3px}
+
+.rank-table-wrap{background:var(--surf);border:1px solid var(--bord);border-radius:14px;overflow:hidden;margin-bottom:24px}
+.rank-table-wrap table{width:100%;border-collapse:collapse}
+.rank-table-wrap thead{background:var(--surf2)}
+.rank-table-wrap thead th{padding:11px 14px;text-align:left;font-size:10px;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--bord);white-space:nowrap}
+.rank-table-wrap tbody tr{border-bottom:1px solid rgba(51,65,85,.5);transition:background .1s}
+.rank-table-wrap tbody tr:last-child{border-bottom:none}
+.rank-table-wrap tbody tr:hover{background:var(--surf2)}
+.rank-table-wrap tbody td{padding:10px 14px;font-size:12px;vertical-align:middle}
+
+.filters-bar{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:20px;padding:14px 16px;background:var(--surf);border:1px solid var(--bord);border-radius:10px}
+.filter-label{font-size:11px;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.4px;margin-right:4px}
+.filter-btn{padding:5px 14px;border-radius:20px;border:1px solid var(--bord);background:transparent;color:var(--mut);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s}
+.filter-btn.active,.filter-btn:hover{background:rgba(99,102,241,.15);border-color:rgba(99,102,241,.4);color:var(--ind2)}
+.sort-select{background:var(--surf2);border:1px solid var(--bord);border-radius:6px;padding:5px 10px;color:var(--txt);font-size:12px;cursor:pointer;margin-left:auto}
+.sort-select option{background:var(--surf)}
+
+.cr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.cr-card{background:var(--surf);border:1px solid var(--bord);border-radius:14px;overflow:hidden;transition:transform .2s,box-shadow .2s,opacity .3s}
+.cr-card:hover{transform:translateY(-3px);box-shadow:0 10px 32px rgba(0,0,0,.4);border-color:rgba(99,102,241,.3)}
+.cr-card.hidden{display:none}
+.cr-thumb{position:relative;width:100%;padding-top:56.25%;overflow:hidden;background:var(--surf2)}
+.cr-thumb img,.cr-thumb video{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover}
+.cr-status{position:absolute;top:8px;right:8px;border-radius:6px;padding:2px 8px;font-size:9px;font-weight:700}
+.cr-body{padding:14px}
+.cr-name{font-family:monospace;font-size:12px;font-weight:700;margin-bottom:4px}
+.cr-conj{font-size:10px;color:var(--mut);margin-bottom:8px;line-height:1.5}
+.cr-type-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.15);border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600;color:var(--ind2);margin-bottom:8px}
+.cr-links{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.cr-link-btn{display:inline-flex;align-items:center;gap:3px;color:var(--ind);font-size:10px;font-weight:600;text-decoration:none;padding:3px 8px;background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.15);border-radius:5px;transition:all .2s;cursor:pointer}
+.cr-link-btn:hover{background:rgba(99,102,241,.2)}
+.cr-link-btn.fb{color:var(--mut);background:rgba(100,116,139,.08);border-color:rgba(100,116,139,.2)}
+.cr-link-btn.fb:hover{background:rgba(100,116,139,.2)}
+.cr-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:linear-gradient(135deg,#1a1040,#0f172a);color:var(--sub)}
+.cr-placeholder .ph-emoji{font-size:36px}
+.cr-placeholder .ph-label{font-size:11px;color:var(--sub)}
+
+.st-top{background:rgba(16,185,129,.15);color:var(--teal)}
+.st-sc{background:rgba(99,102,241,.15);color:var(--ind2)}
+.st-wn{background:rgba(245,158,11,.15);color:var(--amber)}
+.st-ps{background:rgba(239,68,68,.15);color:var(--red)}
+.st-ot{background:rgba(100,116,139,.15);color:var(--mut)}
+
+.pattern-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.pattern-card{background:var(--surf);border:1px solid var(--bord);border-radius:14px;padding:22px}
+.pattern-title{font-size:13px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.pattern-list{display:flex;flex-direction:column;gap:10px}
+.pattern-item{display:flex;align-items:flex-start;gap:10px;padding:10px;background:var(--surf2);border-radius:8px}
+.pattern-num{width:22px;height:22px;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.25);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--ind2);flex-shrink:0}
+.pattern-num.alert{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.25);color:var(--red)}
+.pattern-num.gold{background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.25);color:var(--amber)}
+.pattern-text{font-size:12px;color:var(--mut);line-height:1.5}
+.pattern-text strong{color:var(--txt);font-weight:600}
+
+.tbl-wrap{background:var(--surf);border:1px solid var(--bord);border-radius:14px;overflow:hidden}
+table{width:100%;border-collapse:collapse}
+thead{background:var(--surf2)}
+thead th{padding:11px 14px;text-align:left;font-size:10px;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--bord);white-space:nowrap}
+tbody tr{border-bottom:1px solid rgba(51,65,85,.5);transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--surf2)}
+tbody td{padding:10px 14px;font-size:12px;vertical-align:middle}
+.rk{width:26px;height:26px;border-radius:7px;background:var(--surf2);border:1px solid var(--bord);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--mut)}
+.rk.top{background:rgba(99,102,241,.12);border-color:rgba(99,102,241,.25);color:var(--ind2)}
+.tag{display:inline-flex;background:var(--surf2);border:1px solid var(--bord);border-radius:5px;padding:2px 7px;font-size:10px;color:var(--mut)}
+.lbtn{display:inline-flex;align-items:center;gap:3px;color:var(--ind);font-size:10px;font-weight:600;text-decoration:none;padding:2px 7px;background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.15);border-radius:5px;transition:all .2s}
+.lbtn:hover{background:rgba(99,102,241,.2)}
+.lbtn.fb{color:var(--mut);background:rgba(100,116,139,.08);border-color:rgba(100,116,139,.2)}
+.metric-cell{font-weight:700}
+.metric-cell.hi{color:var(--teal)}
+.metric-cell.mid{color:var(--amber)}
+.metric-cell.lo{color:var(--mut)}
+.metric-cell.lo2{color:var(--red)}
+.metric-cell.zero{color:var(--sub)}
+
+.comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.comp-card{background:var(--surf);border:1px solid var(--bord);border-radius:14px;padding:20px}
+.comp-period{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--mut);margin-bottom:4px}
+.comp-val{font-size:28px;font-weight:900;letter-spacing:-1px;margin-bottom:2px}
+.comp-sub{font-size:11px;color:var(--sub)}
+.comp-badge{display:inline-flex;align-items:center;gap:4px;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700;margin-top:8px}
+.comp-badge.up{background:rgba(239,68,68,.12);color:var(--red)}
+.comp-badge.dn{background:rgba(16,185,129,.12);color:var(--teal)}
+.comp-badge.neu{background:rgba(100,116,139,.12);color:var(--mut)}
+
+.callout{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:10px;padding:16px 20px;display:flex;align-items:flex-start;gap:12px;margin-bottom:24px}
+.callout.amber{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.2)}
+.callout.ind{background:rgba(99,102,241,.08);border-color:rgba(99,102,241,.2)}
+.callout.red{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.2)}
+.callout-icon{font-size:20px;flex-shrink:0}
+.callout-title{font-size:13px;font-weight:700;color:var(--teal);margin-bottom:6px}
+.callout.amber .callout-title{color:var(--amber)}
+.callout.ind .callout-title{color:var(--ind2)}
+.callout.red .callout-title{color:var(--red)}
+.callout-body{font-size:12px;color:var(--mut);line-height:1.6}
+
+.note-box{background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.15);border-radius:8px;padding:12px 16px;font-size:11px;color:var(--mut);line-height:1.6;margin-top:16px}
+.note-box strong{color:var(--ind2)}
+
+.inversion-banner{background:linear-gradient(135deg,rgba(239,68,68,.08),rgba(16,185,129,.06));border:1px solid var(--bord);border-radius:14px;padding:24px;margin-bottom:24px}
+.inversion-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center}
+.inv-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--mut);margin-bottom:6px}
+.inv-arrow{font-size:28px;text-align:center}
+.inv-period{font-size:12px;font-weight:800;margin-bottom:14px}
+.inv-adset{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-radius:8px;margin-bottom:6px;font-size:12px;font-weight:600}
+.inv-adset.good{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.15)}
+.inv-adset.bad{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.15)}
+.inv-adset .name{color:var(--txt)}
+.inv-adset .val.g{color:var(--teal)}
+.inv-adset .val.r{color:var(--red)}
+
+.footer{border-top:1px solid var(--bord);padding:20px 32px;text-align:center;font-size:11px;color:var(--sub)}
+.footer a{color:var(--mut);text-decoration:none}
+
+@media(max-width:900px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .adset-grid{grid-template-columns:1fr}
+  .podium-wrap{grid-template-columns:1fr}
+  .pattern-grid{grid-template-columns:1fr}
+  .comp-grid{grid-template-columns:1fr}
+  .inversion-grid{grid-template-columns:1fr;text-align:center}
+  .inv-arrow{display:none}
+  .section{padding:28px 16px}
+  .hero{padding:32px 16px 24px}
+  .header{padding:0 16px}
+  .tabs-inner{padding:0 16px}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="h-inner">
+    <div class="logo">
+      <img src="../../../_shared/logo-negative.svg" style="height:28px;" alt="Digital AI" />
+    </div>
+    <div class="h-right">
+      <span class="badge"><span class="dot"></span>DermaClinic · 01–15/07 2026</span>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="tabs-inner">
+    <button class="tab-btn active" onclick="scrollToSection('sec-adsets',this)">📊 Por Conjunto</button>
+    <button class="tab-btn" onclick="scrollToSection('sec-grid',this)">🎬 Criativos</button>
+    <button class="tab-btn" onclick="scrollToSection('sec-insights',this)">🧠 Diagnóstico</button>
+    <button class="tab-btn" onclick="scrollToSection('sec-comparativo',this)">📈 Comparativo Jun</button>
+    <button class="tab-btn" onclick="scrollToSection('sec-acao',this)">🛠️ Plano de Ação</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-chip">📊 Meta Ads · Performance de Criativos</div>
+    <h1><span>Performance Criativos</span><br>01 a 15 Jul 2026</h1>
+    <p class="hero-sub">Análise de performance por conjunto — 15 dias de veiculação, 3 adsets: LUXO, SITE e QUENTE. Inversão de papéis em relação a junho: LUXO assume liderança com R$6,07/msg enquanto QUENTE estoura meta.</p>
+    <div class="kpis">
+      <div class="kpi t">
+        <div class="kpi-lbl">Total de Mensagens</div>
+        <div class="kpi-val t">55</div>
+        <div class="kpi-note">01/07–15/07 · 3 conjuntos ativos</div>
+      </div>
+      <div class="kpi i">
+        <div class="kpi-lbl">Alcance Único</div>
+        <div class="kpi-val i">8.672</div>
+        <div class="kpi-note">pessoas únicas alcançadas · freq. 1,38–1,58</div>
+      </div>
+      <div class="kpi a">
+        <div class="kpi-lbl">CPA Médio / Mensagem</div>
+        <div class="kpi-val a">R$8,00</div>
+        <div class="kpi-note">abaixo da meta · benchmark: &lt;R$10</div>
+      </div>
+      <div class="kpi r">
+        <div class="kpi-lbl">CTR Médio</div>
+        <div class="kpi-val r">0,66%</div>
+        <div class="kpi-note">queda vs junho (0,89%) · CPM R$27,59</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+<div class="section" id="sec-adsets">
+  <div class="s-header">
+    <div class="s-icon amb">📊</div>
+    <div>
+      <div class="s-title">Ranking por Conjunto — 01 a 15/07</div>
+      <div class="s-sub">Performance de cada adset em 15 dias de veiculação</div>
+    </div>
+  </div>
+
+  <div class="adset-grid">
+    <!-- LUXO — destaque positivo -->
+    <div class="adset-card gold">
+      <div class="adset-rank">🥇</div>
+      <div class="adset-name">Público LUXO</div>
+      <div class="adset-cpa gold">R$6,07</div>
+      <div class="adset-cpa-lbl">custo por mensagem · melhor CPA</div>
+      <div class="adset-stats">
+        <div>
+          <div class="adset-stat-val" style="color:var(--teal)">20</div>
+          <div class="adset-stat-lbl">mensagens</div>
+        </div>
+        <div>
+          <div class="adset-stat-val" style="color:var(--mut)">R$121</div>
+          <div class="adset-stat-lbl">investido est.</div>
+        </div>
+        <div>
+          <div class="adset-stat-val" style="color:var(--teal)">36%</div>
+          <div class="adset-stat-lbl">do volume total</div>
+        </div>
+        <div>
+          <div class="adset-stat-val" style="color:var(--ind2)">↑ destaque</div>
+          <div class="adset-stat-lbl">vs junho R$8,15</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SITE — volume líder, CPA saudável -->
+    <div class="adset-card silver">
+      <div class="adset-rank">🥈</div>
+      <div class="adset-name">Público SITE</div>
+      <div class="adset-cpa silver">R$7,85</div>
+      <div class="adset-cpa-lbl">custo por mensagem · estável</div>
+      <div class="adset-stats">
+        <div>
+          <div class="adset-stat-val" style="color:var(--ind2)">21</div>
+          <div class="adset-stat-lbl">mensagens (líder volume)</div>
+        </div>
+        <div>
+          <div class="adset-stat-val" style="color:var(--mut)">R$165</div>
+          <div class="adset-stat-lbl">investido est.</div>
+        </div>
+        <div>
+          <div class="adset-stat-val" style="color:var(--ind2)">38%</div>
+          <div class="adset-stat-lbl">do volume total</div>
+        </div>
+        <div>
+          <div class="adset-stat-val" style="color:var(--teal)">saudável</div>
+          <div class="adset-stat-lbl">CPA muito estável</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUENTE — alerta -->
+    <div class="adset-card alert">
+      <div class="adset-rank">⚠️</div>
+      <div class="adset-name">Público QUENTE</div>
+      <div class="adset-cpa alert">R$10,99</div>
+      <div class="adset-cpa-lbl">custo por mensagem · acima da meta</div>
+      <div class="adset-stats">
+        <div>
+          <div class="adset-stat-val" style="color:var(--red)">14</div>
+          <div class="adset-stat-lbl">mensagens (queda)</div>
+        </div>
+        <div>
+          <div class="adset-stat-val" style="color:var(--mut)">R$154</div>
+          <div class="adset-stat-lbl">investido est.</div>
+        </div>
+        <div>
+          <div class="adset-stat-val" style="color:var(--red)">CPM R$31,19</div>
+          <div class="adset-stat-lbl">maior da conta</div>
+        </div>
+        <div>
+          <div class="adset-stat-val" style="color:var(--red)">↓ saturação</div>
+          <div class="adset-stat-lbl">vs junho R$6,60</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-bottom:16px">
+    <div class="callout-icon">⭐</div>
+    <div>
+      <div class="callout-title">Destaque positivo — LUXO assume liderança com R$6,07/msg</div>
+      <div class="callout-body">
+        O público de LUXO <strong style="color:var(--txt)">corrigiu de R$8,15 (junho) para R$6,07 (julho)</strong> — queda de 25,5% no CPA. Com 20 mensagens e CPM saudável, é o conjunto de maior eficiência no período. Sinal forte para aumentar investimento neste conjunto nas próximas semanas.
+      </div>
+    </div>
+  </div>
+
+  <div class="callout red" style="margin-bottom:16px">
+    <div class="callout-icon">🚨</div>
+    <div>
+      <div class="callout-title">Alerta — QUENTE saturou: CPM disparou para R$31,19</div>
+      <div class="callout-body">
+        O público QUENTE (pessoas que já interagiram com a página) <strong style="color:var(--txt)">saiu de R$6,60 para R$10,99/msg (+66%)</strong>. O CPM R$31,19 indica que o algoritmo está com dificuldade para extrair cliques desta audiência — sinal claro de <strong style="color:var(--txt)">saturação criativa</strong>. A boa notícia: 2 criativos ainda performam abaixo de R$5,00/msg e sustentam o conjunto. Intervenção com novos criativos é urgente.
+      </div>
+    </div>
+  </div>
+
+  <div class="rank-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Conjunto</th>
+          <th>Mensagens</th>
+          <th>CPA / Msg</th>
+          <th>CPM</th>
+          <th>% do Total</th>
+          <th>Status</th>
+          <th>Variação vs Jun</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="rk top">1</span></td>
+          <td><strong>LUXO</strong></td>
+          <td><span class="metric-cell hi">20</span></td>
+          <td><span class="metric-cell hi">R$6,07</span></td>
+          <td>—</td>
+          <td>36%</td>
+          <td><span style="color:var(--teal);font-size:10px;font-weight:600">✓ Abaixo da meta</span></td>
+          <td><span style="color:var(--teal);font-size:11px">R$8,15 → R$6,07 ↓25,5%</span></td>
+        </tr>
+        <tr>
+          <td><span class="rk top">2</span></td>
+          <td><strong>SITE</strong></td>
+          <td><span class="metric-cell hi">21</span></td>
+          <td><span class="metric-cell hi">R$7,85</span></td>
+          <td>—</td>
+          <td>38%</td>
+          <td><span style="color:var(--teal);font-size:10px;font-weight:600">✓ Estável e saudável</span></td>
+          <td><span style="color:var(--mut);font-size:11px">Novo conjunto — sem histórico</span></td>
+        </tr>
+        <tr>
+          <td><span class="rk">3</span></td>
+          <td><strong>QUENTE</strong></td>
+          <td><span class="metric-cell lo2">14</span></td>
+          <td><span class="metric-cell lo2">R$10,99</span></td>
+          <td><span style="color:var(--red);font-weight:700">R$31,19</span></td>
+          <td>25%</td>
+          <td><span style="color:var(--red);font-size:10px;font-weight:600">⚠ Acima da meta</span></td>
+          <td><span style="color:var(--red);font-size:11px">R$6,60 → R$10,99 ↑66%</span></td>
+        </tr>
+        <tr style="background:var(--surf2)">
+          <td colspan="2"><strong style="font-size:11px">TOTAL / MÉDIA</strong></td>
+          <td><span class="metric-cell hi">55</span></td>
+          <td><span class="metric-cell mid">R$8,00</span></td>
+          <td><span style="color:var(--amber);font-weight:700">R$27,59</span></td>
+          <td>100%</td>
+          <td><span style="color:var(--teal);font-size:10px;font-weight:600">✓ Média abaixo da meta</span></td>
+          <td><span style="color:var(--red);font-size:11px">CTR 0,89% → 0,66% ↓26%</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="divider"></div>
+<div class="section" id="sec-grid">
+  <div class="s-header">
+    <div class="s-icon ind">🎬</div>
+    <div>
+      <div class="s-title">Criativos Ativos no Portfólio</div>
+      <div class="s-sub">Links dos criativos veiculados — dados individuais por criativo disponíveis no export do Gerenciador</div>
+    </div>
+  </div>
+
+  <div class="callout ind" style="margin-bottom:20px">
+    <div class="callout-icon">📌</div>
+    <div>
+      <div class="callout-title">Nota sobre este período</div>
+      <div class="callout-body">
+        O breakdown por criativo individual não está disponível neste relatório — os dados foram fornecidos a nível de conjunto (adset). Os criativos abaixo são os ativos no portfólio com seus links originais. Para análise granular, solicitar export do Gerenciador filtrado por anúncio.
+        <br><br>
+        <strong style="color:var(--txt)">Dado relevante:</strong> No conjunto QUENTE, <strong style="color:var(--txt)">apenas 2 criativos estão com CPA abaixo de R$5,00/msg</strong> — identificar quais via export e manter budget neles.
+      </div>
+    </div>
+  </div>
+
+  <div class="filters-bar">
+    <span class="filter-label">Adset:</span>
+    <button class="filter-btn active" onclick="filterCards('adset','todos',this)">TODOS</button>
+    <button class="filter-btn" onclick="filterCards('adset','quente',this)">QUENTE</button>
+    <button class="filter-btn" onclick="filterCards('adset','luxo',this)">LUXO</button>
+    <button class="filter-btn" onclick="filterCards('adset','site',this)">SITE</button>
+  </div>
+
+  <div class="cr-grid" id="crGrid">
+
+    <div class="cr-card" data-adset="quente luxo site" data-nome="REJUVENESCER AS MÃOS">
+      <div class="cr-thumb">
+        <div class="cr-placeholder"><span class="ph-emoji">🤲</span><span class="ph-label">REJUVENESCER AS MÃOS</span></div>
+        <span class="cr-status st-top">Ativo</span>
+      </div>
+      <div class="cr-body">
+        <div class="cr-name">AN|REJUVENESCER AS MÃOS|01</div>
+        <div class="cr-conj">QUENTE · LUXO · SITE</div>
+        <div class="cr-type-badge">🎬 Reels</div>
+        <div class="cr-links">
+          <a href="https://www.instagram.com/p/DYBD7RZAN1e/" target="_blank" class="cr-link-btn">📷 Instagram</a>
+          <a href="https://www.facebook.com/reel/999196385888372/" target="_blank" class="cr-link-btn fb">👍 Facebook</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cr-card" data-adset="quente luxo site" data-nome="O MAIOR ÓRGÃO DO CORPO">
+      <div class="cr-thumb">
+        <div class="cr-placeholder"><span class="ph-emoji">🫁</span><span class="ph-label">O MAIOR ÓRGÃO DO CORPO</span></div>
+        <span class="cr-status st-sc">Ativo</span>
+      </div>
+      <div class="cr-body">
+        <div class="cr-name">AN|O MAIOR ÓRGÃO DO CORPO|01</div>
+        <div class="cr-conj">QUENTE · LUXO · SITE</div>
+        <div class="cr-type-badge">🎬 Reels</div>
+        <div class="cr-links">
+          <a href="https://www.instagram.com/p/DYA5lUYAKWG/" target="_blank" class="cr-link-btn">📷 Instagram</a>
+          <a href="https://www.facebook.com/61570812722285/videos/1269776311906947" target="_blank" class="cr-link-btn fb">👍 Facebook</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cr-card" data-adset="quente luxo site" data-nome="3 TRATAMENTOS">
+      <div class="cr-thumb">
+        <div class="cr-placeholder"><span class="ph-emoji">💊</span><span class="ph-label">3 TRATAMENTOS QUE PODEM...</span></div>
+        <span class="cr-status st-sc">Ativo</span>
+      </div>
+      <div class="cr-body">
+        <div class="cr-name">AN|3 TRATAMENTOS QUE PODEM MUDAR SUA PELE|01</div>
+        <div class="cr-conj">QUENTE · LUXO · SITE</div>
+        <div class="cr-type-badge">🎬 Reels</div>
+        <div class="cr-links">
+          <a href="https://www.instagram.com/p/DYA5FVsgKhf/" target="_blank" class="cr-link-btn">📷 Instagram</a>
+          <a href="https://www.facebook.com/61570812722285/videos/1300450482035600" target="_blank" class="cr-link-btn fb">👍 Facebook</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cr-card" data-adset="luxo site quente" data-nome="UNYQUE PRO">
+      <div class="cr-thumb">
+        <div class="cr-placeholder"><span class="ph-emoji">✨</span><span class="ph-label">UNYQUE PRO</span></div>
+        <span class="cr-status st-sc">Ativo</span>
+      </div>
+      <div class="cr-body">
+        <div class="cr-name">AN|UNYQUE PRO|01</div>
+        <div class="cr-conj">LUXO · SITE · QUENTE</div>
+        <div class="cr-type-badge">🎬 Reels</div>
+        <div class="cr-links">
+          <a href="https://www.instagram.com/p/DYi3T-RAAv3/" target="_blank" class="cr-link-btn">📷 Instagram</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cr-card" data-adset="quente luxo site" data-nome="REJUVESNECER">
+      <div class="cr-thumb">
+        <div class="cr-placeholder"><span class="ph-emoji">💉</span><span class="ph-label">REJUVESNECER</span></div>
+        <span class="cr-status st-top">⚡ &lt;R$5</span>
+      </div>
+      <div class="cr-body">
+        <div class="cr-name">AN|REJUVESNECER|01 ⚡</div>
+        <div class="cr-conj">QUENTE · LUXO · SITE</div>
+        <div class="cr-type-badge">🎬 Reels</div>
+        <div style="font-size:10px;color:var(--teal);font-weight:600;margin-bottom:6px">★ Candidato ao CPA &lt;R$5 no QUENTE</div>
+        <div class="cr-links">
+          <a href="https://www.instagram.com/p/DYBC-qHAEt0/" target="_blank" class="cr-link-btn">📷 Instagram</a>
+          <a href="https://www.facebook.com/61570812722285/videos/3460100710807825" target="_blank" class="cr-link-btn fb">👍 Facebook</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cr-card" data-adset="luxo site" data-nome="MELASMA">
+      <div class="cr-thumb">
+        <div class="cr-placeholder"><span class="ph-emoji">🌑</span><span class="ph-label">MELASMA 01</span></div>
+        <span class="cr-status st-wn">Ativo</span>
+      </div>
+      <div class="cr-body">
+        <div class="cr-name">AN|MELASMA|01</div>
+        <div class="cr-conj">LUXO · SITE</div>
+        <div class="cr-type-badge">🎬 Reels</div>
+        <div class="cr-links">
+          <a href="https://www.instagram.com/p/DWHlgjrgDtU/" target="_blank" class="cr-link-btn">📷 Instagram</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cr-card" data-adset="quente luxo site" data-nome="ESTRIAS">
+      <div class="cr-thumb">
+        <div class="cr-placeholder"><span class="ph-emoji">🪴</span><span class="ph-label">ESTRIAS 01</span></div>
+        <span class="cr-status st-sc">Ativo</span>
+      </div>
+      <div class="cr-body">
+        <div class="cr-name">AN|ESTRIAS|01</div>
+        <div class="cr-conj">QUENTE · LUXO · SITE</div>
+        <div class="cr-type-badge">🎬 Reels</div>
+        <div class="cr-links">
+          <a href="https://www.instagram.com/p/DWpg8KcgC-L/" target="_blank" class="cr-link-btn">📷 Instagram</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cr-card" data-adset="luxo site" data-nome="LIFTING">
+      <div class="cr-thumb">
+        <div class="cr-placeholder"><span class="ph-emoji">🏋️</span><span class="ph-label">LIFTING 01</span></div>
+        <span class="cr-status st-sc">Ativo</span>
+      </div>
+      <div class="cr-body">
+        <div class="cr-name">AN|LIFTING|01</div>
+        <div class="cr-conj">LUXO · SITE</div>
+        <div class="cr-type-badge">🎬 Reels</div>
+        <div class="cr-links">
+          <a href="https://www.instagram.com/p/DYKX20QAB72/" target="_blank" class="cr-link-btn">📷 Instagram</a>
+          <a href="https://www.facebook.com/reel/484741764678821/" target="_blank" class="cr-link-btn fb">👍 Facebook</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cr-card" data-adset="quente luxo site" data-nome="BRUNA MARQUEZINE">
+      <div class="cr-thumb">
+        <div class="cr-placeholder"><span class="ph-emoji">⭐</span><span class="ph-label">BRUNA MARQUEZINE 01</span></div>
+        <span class="cr-status st-wn">Ativo</span>
+      </div>
+      <div class="cr-body">
+        <div class="cr-name">AN|BRUNA MARQUEZINE|01</div>
+        <div class="cr-conj">QUENTE · LUXO · SITE</div>
+        <div class="cr-type-badge">🎬 Reels</div>
+        <div class="cr-links">
+          <a href="https://www.instagram.com/p/DYA5Y9zgIRn/" target="_blank" class="cr-link-btn">📷 Instagram</a>
+          <a href="https://www.facebook.com/61570812722285/videos/3418708004978896" target="_blank" class="cr-link-btn fb">👍 Facebook</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cr-card" data-adset="quente site" data-nome="PREENCHIMENTO LABIAL">
+      <div class="cr-thumb">
+        <div class="cr-placeholder"><span class="ph-emoji">💋</span><span class="ph-label">PREENCHIMENTO LABIAL 01</span></div>
+        <span class="cr-status st-sc">Ativo</span>
+      </div>
+      <div class="cr-body">
+        <div class="cr-name">AN|PREENCHIMENTO LABIAL|01</div>
+        <div class="cr-conj">QUENTE · SITE</div>
+        <div class="cr-type-badge">🎬 Reels</div>
+        <div class="cr-links">
+          <a href="https://www.instagram.com/p/DZLid-4gPVk/" target="_blank" class="cr-link-btn">📷 Instagram</a>
+          <a href="https://www.facebook.com/61570812722285/videos/2721892901543081" target="_blank" class="cr-link-btn fb">👍 Facebook</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cr-card" data-adset="quente luxo" data-nome="MELASMA 02">
+      <div class="cr-thumb">
+        <div class="cr-placeholder"><span class="ph-emoji">🌑</span><span class="ph-label">MELASMA 02</span></div>
+        <span class="cr-status st-top">⚡ &lt;R$5</span>
+      </div>
+      <div class="cr-body">
+        <div class="cr-name">AN|MELASMA|02</div>
+        <div class="cr-conj">QUENTE · LUXO</div>
+        <div class="cr-type-badge">🎬 Reels</div>
+        <div style="font-size:10px;color:var(--teal);font-weight:600;margin-bottom:6px">★ Candidato ao CPA &lt;R$5 no QUENTE</div>
+        <div class="cr-links">
+          <a href="https://www.instagram.com/p/DWphavxgIUf/" target="_blank" class="cr-link-btn">📷 Instagram</a>
+          <a href="https://www.facebook.com/61570812722285/videos/953870484254283" target="_blank" class="cr-link-btn fb">👍 Facebook</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cr-card" data-adset="luxo site" data-nome="BOTOX DOS 30">
+      <div class="cr-thumb">
+        <div class="cr-placeholder"><span class="ph-emoji">💉</span><span class="ph-label">BOTOX DOS 30 É O MESMO DOS 60</span></div>
+        <span class="cr-status st-sc">Ativo</span>
+      </div>
+      <div class="cr-body">
+        <div class="cr-name">AN|BOTOX DOS 30 É O MESMO DOS 60|01</div>
+        <div class="cr-conj">LUXO · SITE</div>
+        <div class="cr-type-badge">🎬 Reels</div>
+        <div class="cr-links">
+          <a href="https://www.facebook.com/reel/1488593136037744/" target="_blank" class="cr-link-btn fb">👍 Facebook</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cr-card" data-adset="quente site" data-nome="CANETAS EMAGRECEDORAS">
+      <div class="cr-thumb">
+        <div class="cr-placeholder"><span class="ph-emoji">💊</span><span class="ph-label">CANETAS EMAGRECEDORAS 01</span></div>
+        <span class="cr-status st-wn">Ativo</span>
+      </div>
+      <div class="cr-body">
+        <div class="cr-name">AN|CANETAS EMAGRECEDORAS|01</div>
+        <div class="cr-conj">QUENTE · SITE</div>
+        <div class="cr-type-badge">🎬 Reels</div>
+        <div class="cr-links">
+          <a href="https://www.instagram.com/p/DVldVOlAMQz/" target="_blank" class="cr-link-btn">📷 Instagram</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cr-card" data-adset="luxo site" data-nome="BOTOX">
+      <div class="cr-thumb">
+        <div class="cr-placeholder"><span class="ph-emoji">💉</span><span class="ph-label">BOTOX 01</span></div>
+        <span class="cr-status st-sc">Ativo</span>
+      </div>
+      <div class="cr-body">
+        <div class="cr-name">AN|BOTOX|01</div>
+        <div class="cr-conj">LUXO · SITE</div>
+        <div class="cr-type-badge">🎬 Reels</div>
+        <div class="cr-links">
+          <a href="https://www.facebook.com/61570812722285/videos/27353292440926514" target="_blank" class="cr-link-btn fb">👍 Facebook</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+<div class="section" id="sec-insights">
+  <div class="s-header">
+    <div class="s-icon tel">🧠</div>
+    <div>
+      <div class="s-title">Diagnóstico — O que aconteceu em julho?</div>
+      <div class="s-sub">Análise de padrões · inversão de papéis · causas e efeitos</div>
+    </div>
+  </div>
+
+  <!-- Inversão banner -->
+  <div class="inversion-banner">
+    <div style="font-size:13px;font-weight:700;margin-bottom:16px;color:var(--ind2)">🔄 Inversão Completa de Papéis — Junho vs Julho</div>
+    <div class="inversion-grid">
+      <div>
+        <div class="inv-period">Junho 2026</div>
+        <div class="inv-adset good">
+          <span class="name">QUENTE</span>
+          <span class="val g">R$6,60/msg ✓</span>
+        </div>
+        <div class="inv-adset bad">
+          <span class="name">LUXO</span>
+          <span class="val r">R$8,15/msg ⚠</span>
+        </div>
+      </div>
+      <div class="inv-arrow">🔄</div>
+      <div>
+        <div class="inv-period">Julho 2026</div>
+        <div class="inv-adset good">
+          <span class="name">LUXO</span>
+          <span class="val g">R$6,07/msg ✓</span>
+        </div>
+        <div class="inv-adset bad">
+          <span class="name">QUENTE</span>
+          <span class="val r">R$10,99/msg 🚨</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pattern-grid">
+    <div class="pattern-card">
+      <div class="pattern-title">🔴 Por que o QUENTE piorou?</div>
+      <div class="pattern-list">
+        <div class="pattern-item">
+          <div class="pattern-num alert">1</div>
+          <div class="pattern-text"><strong>Saturação criativa:</strong> O público QUENTE (pessoas que já interagiram com a página — curtidas, mensagens etc.) já viu os mesmos criativos repetidamente. O CPM explodiu para R$31,19 porque o algoritmo precisa fazer muito mais esforço para extrair um clique dessa audiência cansada dos mesmos conteúdos.</div>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-num alert">2</div>
+          <div class="pattern-text"><strong>CTR em queda geral:</strong> O CTR médio da conta caiu de 0,89% (junho) para 0,66% — redução de 26%. Menos cliques, CPM mais caro (R$27,59 na média) = CPC inflacionado para R$4,19. Para o QUENTE, esse efeito é amplificado pela saturação.</div>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-num alert">3</div>
+          <div class="pattern-text"><strong>Frequência saudável, mas problema real:</strong> A frequência (1,38–1,58) está dentro do benchmark de segurança — logo o problema <strong>não é o tamanho do público na região</strong>. É o anúncio em si. Novos criativos são a solução, não nova segmentação.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pattern-card">
+      <div class="pattern-title">🟢 Por que o LUXO melhorou?</div>
+      <div class="pattern-list">
+        <div class="pattern-item">
+          <div class="pattern-num gold">1</div>
+          <div class="pattern-text"><strong>Público frio respondendo bem:</strong> O público de LUXO (alto poder aquisitivo, interests premium) tem menor histórico de exposição aos criativos — o algoritmo ainda tem espaço para otimizar a entrega e encontrar os perfis certos.</div>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-num gold">2</div>
+          <div class="pattern-text"><strong>Criativos ainda em fase de aprendizado:</strong> Em junho o LUXO estava com CPA mais alto porque o algoritmo ainda aprendia o perfil do público. Agora, com dados acumulados, a entrega ficou mais eficiente: R$6,07/msg é excelente para este segmento.</div>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-num gold">3</div>
+          <div class="pattern-text"><strong>SITE assume liderança em volume:</strong> O novo conjunto focado em quem acessou o site entregou 21 mensagens com CPA de R$7,85 — saudável. Alta intenção de compra já demonstrada (visita ao site) + criativos frescos = boa combinação.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pattern-card">
+      <div class="pattern-title">📐 CTR e CPC — o efeito cascata</div>
+      <div class="pattern-list">
+        <div class="pattern-item">
+          <div class="pattern-num">i</div>
+          <div class="pattern-text"><strong>CTR caiu de 0,89% → 0,66%:</strong> Menos pessoas clicando no link. Quando o criativo perde relevância, o CTR cai primeiro — é o sinal mais rápido de saturação.</div>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-num">i</div>
+          <div class="pattern-text"><strong>CPM subiu para R$27,59:</strong> Com CTR mais baixo, o algoritmo do Meta precisa mostrar o anúncio para mais pessoas para conseguir o mesmo número de cliques — custo por mil impressões sobe automaticamente.</div>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-num">i</div>
+          <div class="pattern-text"><strong>CPC inflacionou para R$4,19:</strong> CPM alto + CTR baixo = custo por clique elevado. Para o QUENTE: CPC estimado próximo de R$5,00 — alto demais para manter a eficiência do conjunto.</div>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-num">i</div>
+          <div class="pattern-text"><strong>Frequência (1,38–1,58) está saudável:</strong> Isso confirma que a solução é criativa, não de público. Não adianta trocar a segmentação — a audiência está correta. O conteúdo precisa ser renovado.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pattern-card">
+      <div class="pattern-title">✅ O que está funcionando bem</div>
+      <div class="pattern-list">
+        <div class="pattern-item">
+          <div class="pattern-num">✓</div>
+          <div class="pattern-text"><strong>CPA médio geral R$8,00 — dentro da meta:</strong> Apesar da crise no QUENTE, a combinação LUXO (R$6,07) + SITE (R$7,85) equilibra a conta. O resultado geral ainda está abaixo do benchmark de R$10.</div>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-num">✓</div>
+          <div class="pattern-text"><strong>QUENTE tem 2 criativos abaixo de R$5,00:</strong> São os âncoras que estão segurando o conjunto. Com o tempo, conforme criativos mais caros forem pausados, o CPA médio do conjunto deve cair naturalmente.</div>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-num">✓</div>
+          <div class="pattern-text"><strong>Alcance de 8.672 pessoas com frequência saudável:</strong> A conta está chegando a novos perfis sem oversaturar ninguém. Estrutura de targeting correta — só o conteúdo precisa ser renovado.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+<div class="section" id="sec-comparativo">
+  <div class="s-header">
+    <div class="s-icon amb">📈</div>
+    <div>
+      <div class="s-title">Comparativo — Junho Completo vs 01–15/Jul</div>
+      <div class="s-sub">Contexto histórico · períodos diferentes em duração</div>
+    </div>
+  </div>
+
+  <div class="callout ind" style="margin-bottom:24px">
+    <div class="callout-icon">📌</div>
+    <div>
+      <div class="callout-title">Nota sobre o comparativo</div>
+      <div class="callout-body">
+        Junho cobriu o mês completo; julho cobre apenas os primeiros <strong style="color:var(--txt)">15 dias</strong>. Use o <strong style="color:var(--txt)">CPA médio</strong> e as <strong style="color:var(--txt)">mensagens por dia</strong> como métricas comparáveis — não os totais absolutos. O CTR é diretamente comparável em qualquer período.
+      </div>
+    </div>
+  </div>
+
+  <div class="comp-grid">
+    <div class="comp-card">
+      <div class="comp-period">Junho 2026 — mês completo</div>
+      <div class="comp-val" style="color:var(--ind2)">~220+</div>
+      <div class="comp-sub">mensagens totais estimadas (mês cheio)</div>
+      <div style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <div style="font-size:18px;font-weight:900;color:var(--teal)">R$6,60</div>
+          <div style="font-size:10px;color:var(--sub);margin-top:2px">CPA QUENTE</div>
+        </div>
+        <div>
+          <div style="font-size:18px;font-weight:900;color:var(--amber)">R$8,15</div>
+          <div style="font-size:10px;color:var(--sub);margin-top:2px">CPA LUXO</div>
+        </div>
+        <div>
+          <div style="font-size:18px;font-weight:900;color:var(--mut)">0,89%</div>
+          <div style="font-size:10px;color:var(--sub);margin-top:2px">CTR médio</div>
+        </div>
+        <div>
+          <div style="font-size:18px;font-weight:900;color:var(--mut)">—</div>
+          <div style="font-size:10px;color:var(--sub);margin-top:2px">Público SITE</div>
+        </div>
+      </div>
+    </div>
+    <div class="comp-card">
+      <div class="comp-period">Julho 2026 — 15 dias (01–15/07)</div>
+      <div class="comp-val" style="color:var(--amber)">55</div>
+      <div class="comp-sub">mensagens · R$8,00 CPA médio · 3,7/dia</div>
+      <div style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <div style="font-size:18px;font-weight:900;color:var(--red)">R$10,99</div>
+          <div style="font-size:10px;color:var(--sub);margin-top:2px">CPA QUENTE <span style="color:var(--red)">▲+66%</span></div>
+        </div>
+        <div>
+          <div style="font-size:18px;font-weight:900;color:var(--teal)">R$6,07</div>
+          <div style="font-size:10px;color:var(--sub);margin-top:2px">CPA LUXO <span style="color:var(--teal)">▼-25%</span></div>
+        </div>
+        <div>
+          <div style="font-size:18px;font-weight:900;color:var(--red)">0,66%</div>
+          <div style="font-size:10px;color:var(--sub);margin-top:2px">CTR médio <span style="color:var(--red)">▼-26%</span></div>
+        </div>
+        <div>
+          <div style="font-size:18px;font-weight:900;color:var(--teal)">R$7,85</div>
+          <div style="font-size:10px;color:var(--sub);margin-top:2px">CPA SITE (novo)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tbl-wrap" style="margin-bottom:24px">
+    <table>
+      <thead>
+        <tr>
+          <th>Métrica</th>
+          <th>Junho 2026</th>
+          <th>Julho 2026 (15 dias)</th>
+          <th>Variação</th>
+          <th>Análise</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>CPA QUENTE</strong></td>
+          <td style="color:var(--teal)">R$6,60</td>
+          <td style="color:var(--red)">R$10,99</td>
+          <td><span style="color:var(--red)">+66% 🚨</span></td>
+          <td style="font-size:11px;color:var(--mut)">Saturação criativa — público cansou dos criativos</td>
+        </tr>
+        <tr>
+          <td><strong>CPA LUXO</strong></td>
+          <td style="color:var(--amber)">R$8,15</td>
+          <td style="color:var(--teal)">R$6,07</td>
+          <td><span style="color:var(--teal)">-25% ✓</span></td>
+          <td style="font-size:11px;color:var(--mut)">Algoritmo otimizou após mês de aprendizado</td>
+        </tr>
+        <tr>
+          <td><strong>CPA SITE</strong></td>
+          <td style="color:var(--sub)">—</td>
+          <td style="color:var(--teal)">R$7,85</td>
+          <td><span style="color:var(--mut)">Novo</span></td>
+          <td style="font-size:11px;color:var(--mut)">Conjunto novo com ótima estreia — monitorar</td>
+        </tr>
+        <tr>
+          <td><strong>CTR Médio</strong></td>
+          <td>0,89%</td>
+          <td style="color:var(--red)">0,66%</td>
+          <td><span style="color:var(--red)">-26%</span></td>
+          <td style="font-size:11px;color:var(--mut)">Criativos perdendo relevância — renovação urgente</td>
+        </tr>
+        <tr>
+          <td><strong>CPM Médio</strong></td>
+          <td>—</td>
+          <td style="color:var(--amber)">R$27,59</td>
+          <td><span style="color:var(--amber)">↑ vs jun</span></td>
+          <td style="font-size:11px;color:var(--mut)">Efeito cascata do CTR baixo — normal com saturação</td>
+        </tr>
+        <tr>
+          <td><strong>CPC Médio</strong></td>
+          <td>—</td>
+          <td style="color:var(--amber)">R$4,19</td>
+          <td>—</td>
+          <td style="font-size:11px;color:var(--mut)">Custo por clique elevado — criativos com CTR &gt;1% vão reduzir</td>
+        </tr>
+        <tr>
+          <td><strong>CPA Geral</strong></td>
+          <td>~R$7,00–7,50</td>
+          <td style="color:var(--teal)">R$8,00</td>
+          <td><span style="color:var(--amber)">+7–14%</span></td>
+          <td style="font-size:11px;color:var(--mut)">Dentro da meta — intervenção evita deterioração</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="divider"></div>
+<div class="section" id="sec-acao">
+  <div class="s-header">
+    <div class="s-icon brd">🛠️</div>
+    <div>
+      <div class="s-title">Plano de Ação — Próximos Passos</div>
+      <div class="s-sub">Intervenções imediatas · recomendações do gestor · cronograma</div>
+    </div>
+  </div>
+
+  <div class="callout amber" style="margin-bottom:20px">
+    <div class="callout-icon">🎯</div>
+    <div>
+      <div class="callout-title">Estratégia principal — Intervenção criativa no QUENTE</div>
+      <div class="callout-body">
+        O público Quente são pessoas que já <strong style="color:var(--txt)">interagiram com a página da DermaClinic</strong> (curtidas, comentários, DMs). Eles conhecem a clínica — precisam de um criativo mais <strong style="color:var(--txt)">pessoal, exclusivo e especial</strong> do que os criativos de prospecção fria. Depoimentos de clientes reais, bastidores, antes e depois reais, e diferenciais da clínica tendem a performar melhor para este público.
+      </div>
+    </div>
+  </div>
+
+  <div class="pattern-grid">
+    <div class="pattern-card">
+      <div class="pattern-title">⚡ Ação Imediata — Público QUENTE</div>
+      <div class="pattern-list">
+        <div class="pattern-item">
+          <div class="pattern-num">1</div>
+          <div class="pattern-text"><strong>Manter apenas os 2 criativos &lt;R$5,00:</strong> Identificar via export do Gerenciador quais criativos estão abaixo de R$5,00/msg no conjunto QUENTE. Pausar todos os outros para reduzir o CPA médio do conjunto progressivamente.</div>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-num">2</div>
+          <div class="pattern-text"><strong>Criar novos anúncios para o QUENTE:</strong> Conteúdo diferenciado para quem já conhece a DermaClinic. Sugestões: depoimentos de pacientes reais, bastidores de procedimentos, diferenciais que o cliente frio não conhece (equipe, estrutura, tecnologia).</div>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-num">3</div>
+          <div class="pattern-text"><strong>Meta de CPA no QUENTE:</strong> Com os 2 criativos eficientes + novos criativos relevantes, o CPA deve voltar abaixo de R$8,00 nas próximas 2 semanas. Monitorar diariamente após subida dos novos anúncios.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pattern-card">
+      <div class="pattern-title">🚀 Escala — LUXO e SITE</div>
+      <div class="pattern-list">
+        <div class="pattern-item">
+          <div class="pattern-num">1</div>
+          <div class="pattern-text"><strong>LUXO (R$6,07/msg) — aumentar budget:</strong> Melhor conjunto do período. Com CPA 40% abaixo do benchmark, há margem para aumentar investimento em 30–50% sem perder eficiência. Testar incremento gradual.</div>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-num">2</div>
+          <div class="pattern-text"><strong>SITE (R$7,85/msg) — manter e monitorar:</strong> Ótima estreia com 21 mensagens. Alta intenção implícita (visitou o site). Manter budget atual por mais 15 dias para coletar dados suficientes antes de escalar.</div>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-num">3</div>
+          <div class="pattern-text"><strong>Redirecionar budget do QUENTE:</strong> Budget retirado dos criativos ineficientes do QUENTE deve ser realocado para LUXO e SITE enquanto novos criativos para o QUENTE são testados.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note-box">
+    <strong>Próximo relatório:</strong> Quinzena de agosto (01–15/08/2026) — avaliar se intervenção criativa no QUENTE surtiu efeito e se LUXO manteve eficiência com budget aumentado. Referência: CPA médio geral deve voltar abaixo de R$7,50 com as ações acima.
+  </div>
+</div>
+
+<footer class="footer">
+  <p>DermaClinic · Meta Ads Performance Criativos · 01 a 15 de Julho 2026 · Análise: Gestor de Tráfego · Relatório: <a href="https://digital-ai.tech" target="_blank">Digital AI</a></p>
+</footer>
+
+<script>
+function scrollToSection(id, btn) {
+  document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+var activeAdset = 'todos';
+
+function filterCards(type, val, btn) {
+  activeAdset = val;
+  document.querySelectorAll('.filters-bar .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+
+function applyFilters() {
+  document.querySelectorAll('.cr-card').forEach(function(card) {
+    var adset = card.getAttribute('data-adset') || '';
+    var show = activeAdset === 'todos' || adset.indexOf(activeAdset) !== -1;
+    card.classList.toggle('hidden', !show);
+  });
+}
+</script>
+</body>
+</html>
