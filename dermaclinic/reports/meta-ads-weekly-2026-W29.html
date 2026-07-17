@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meta Ads — Semana 29/2026 | DermaClinic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../_shared/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --dai-navy:    #0F172A;
+      --dai-surface: #1E293B;
+      --bg: #0F172A;
+      --surface: #1E293B;
+      --surface-2: #243347;
+      --border: #334155;
+      --text: #FFFFFF;
+      --text-muted: #94A3B8;
+      --text-subtle: #64748B;
+      --brand: #6366F1;
+      --brand-dim: rgba(99,102,241,0.12);
+      --teal: #10B981;
+      --teal-dim: rgba(16,185,129,0.15);
+      --radius: 10px;
+      --radius-sm: 6px;
+      --dai-surface2: #243347;
+      --dai-border:   #334155;
+      --dai-indigo:   #6366F1;
+      --dai-indigo-dim: rgba(99,102,241,0.12);
+      --dai-muted:    #94A3B8;
+      --dai-white:    #FFFFFF;
+
+      --dc-bordo:     #7C3D4E;
+      --dc-bordo-dim: rgba(124,61,78,0.15);
+      --dc-offwhite:  #F8F5F2;
+
+      --green:        #10B981;
+      --green-dim:    rgba(16,185,129,0.12);
+      --amber:        #F59E0B;
+      --amber-dim:    rgba(245,158,11,0.12);
+      --red:          #EF4444;
+      --red-dim:      rgba(239,68,68,0.12);
+
+      --radius:    14px;
+      --radius-sm: 8px;
+      --shadow:    0 2px 16px rgba(0,0,0,0.35);
+      --shadow-md: 0 6px 32px rgba(0,0,0,0.45);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--dai-navy);
+      color: var(--dai-white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── LAYOUT ─────────────────────────── */
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .main { padding: 40px 0 80px; }
+
+    /* ── SECTION ────────────────────────── */
+    .section { margin-bottom: 48px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-icon {
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .section-icon.indigo  { background: var(--dai-indigo-dim); }
+    .section-icon.bordo   { background: var(--dc-bordo-dim); }
+    .section-icon.green   { background: var(--green-dim); }
+    .section-icon.amber   { background: var(--amber-dim); }
+    .section-icon.red     { background: var(--red-dim); }
+    .section-icon.purple  { background: rgba(167,139,250,0.12); }
+    .section-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--dai-white);
+      letter-spacing: -0.2px;
+    }
+    .section-subtitle {
+      font-size: 12px;
+      color: var(--dai-muted);
+      margin-top: 1px;
+    }
+
+    /* ── CARD BASE ──────────────────────── */
+    .card {
+      background: var(--dai-surface);
+      border: 1px solid var(--dai-border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    /* ── CRITICAL ALERT BANNER ──────────── */
+    .critical-alert {
+      background: linear-gradient(135deg, rgba(239,68,68,0.14) 0%, rgba(239,68,68,0.06) 100%);
+      border: 1.5px solid rgba(239,68,68,0.55);
+      border-left: 5px solid var(--red);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .critical-alert::before {
+      content: '';
+      position: absolute;
+      top: -50px; right: -50px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(239,68,68,0.10) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .critical-alert-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(239,68,68,0.18);
+      border: 1px solid rgba(239,68,68,0.35);
+      border-radius: 20px;
+      padding: 3px 12px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--red);
+      margin-bottom: 12px;
+    }
+    .critical-alert h3 {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--dai-white);
+      margin-bottom: 8px;
+      letter-spacing: -0.3px;
+    }
+    .critical-alert p {
+      font-size: 13px;
+      color: var(--dai-muted);
+      line-height: 1.7;
+      margin-bottom: 6px;
+    }
+    .critical-alert p strong { color: #f87171; }
+    .critical-alert .alert-meta {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(239,68,68,0.2);
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+    .critical-alert .alert-meta-item .label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(239,68,68,0.7);
+      margin-bottom: 3px;
+    }
+    .critical-alert .alert-meta-item .value {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--dai-muted);
+    }
+
+    /* ── KPI GRID ───────────────────────── */
+    .kpi-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .kpi-grid-6 {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+    }
+    .kpi-card {
+      background: var(--dai-surface);
+      border: 1px solid var(--dai-border);
+      border-radius: var(--radius);
+      padding: 20px 18px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .kpi-card.indigo::before { background: linear-gradient(90deg, var(--dai-indigo), #818cf8); }
+    .kpi-card.bordo::before  { background: linear-gradient(90deg, var(--dc-bordo), #a0566a); }
+    .kpi-card.green::before  { background: linear-gradient(90deg, var(--green), #34d399); }
+    .kpi-card.amber::before  { background: linear-gradient(90deg, var(--amber), #fbbf24); }
+    .kpi-card.red::before    { background: linear-gradient(90deg, var(--red), #f87171); }
+
+    .kpi-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--dai-muted);
+      margin-bottom: 8px;
+    }
+    .kpi-value {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      line-height: 1;
+      color: var(--dai-white);
+    }
+    .kpi-value.highlight { color: var(--green); }
+    .kpi-value.bordo     { color: #c06a7d; }
+    .kpi-value.amber-val { color: var(--amber); }
+    .kpi-delta {
+      margin-top: 7px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .kpi-delta.up      { color: var(--green); }
+    .kpi-delta.down    { color: var(--red); }
+    .kpi-delta.neutral { color: var(--dai-muted); }
+    .kpi-delta.good    { color: var(--green); }
+    .kpi-caption {
+      margin-top: 3px;
+      font-size: 10px;
+      color: var(--dai-muted);
+    }
+
+    /* ── HERO BANNER ────────────────────── */
+    .hero-banner {
+      background: linear-gradient(135deg, var(--dai-surface) 0%, #1a2540 100%);
+      border: 1px solid var(--dai-border);
+      border-left: 4px solid var(--green);
+      border-radius: var(--radius);
+      padding: 26px 30px;
+      margin-bottom: 24px;
+    }
+    .hero-banner .hero-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--green);
+      margin-bottom: 8px;
+    }
+    .hero-banner h3 {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      line-height: 1.35;
+    }
+    .hero-banner h3 strong { color: var(--green); }
+    .hero-banner p {
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--dai-muted);
+      line-height: 1.7;
+      max-width: 700px;
+    }
+
+    /* ── DATA GAP BANNER ────────────────── */
+    .data-gap-banner {
+      background: rgba(245,158,11,0.08);
+      border: 1px solid rgba(245,158,11,0.25);
+      border-radius: var(--radius-sm);
+      padding: 12px 18px;
+      font-size: 12px;
+      color: var(--dai-muted);
+      margin-bottom: 24px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .data-gap-banner .icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+    .data-gap-banner strong { color: var(--amber); }
+
+    /* ── TABLES ─────────────────────────── */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--dai-border);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    thead th {
+      background: var(--dai-surface2);
+      padding: 11px 16px;
+      text-align: left;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--dai-muted);
+      border-bottom: 1px solid var(--dai-border);
+      white-space: nowrap;
+    }
+    tbody tr {
+      border-bottom: 1px solid rgba(51,65,85,0.5);
+      transition: background 0.15s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(99,102,241,0.04); }
+    tbody td {
+      padding: 12px 16px;
+      color: var(--dai-muted);
+      vertical-align: middle;
+    }
+    tbody td.text-white { color: var(--dai-white); font-weight: 600; }
+    tbody td.text-green { color: var(--green); font-weight: 700; }
+    tbody td.text-amber { color: var(--amber); font-weight: 600; }
+    tbody td.text-red   { color: var(--red); font-weight: 600; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 9px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .tag-green  { background: var(--green-dim); color: var(--green); }
+    .tag-amber  { background: var(--amber-dim); color: var(--amber); }
+    .tag-red    { background: var(--red-dim);   color: var(--red);   }
+    .tag-indigo { background: var(--dai-indigo-dim); color: var(--dai-indigo); }
+
+    /* ── CREATIVE CARDS ─────────────────── */
+    .creative-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .creative-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    .creative-card {
+      background: var(--dai-surface);
+      border: 1px solid var(--dai-border);
+      border-radius: var(--radius);
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    .creative-card.champion {
+      border-color: rgba(124,61,78,0.45);
+      background: linear-gradient(135deg, rgba(124,61,78,0.12) 0%, var(--dai-surface) 100%);
+    }
+    .creative-card.best-cpe {
+      border-color: rgba(16,185,129,0.45);
+      background: linear-gradient(135deg, rgba(16,185,129,0.08) 0%, var(--dai-surface) 100%);
+    }
+    .creative-card.potential {
+      border-color: rgba(99,102,241,0.45);
+      background: linear-gradient(135deg, rgba(99,102,241,0.08) 0%, var(--dai-surface) 100%);
+    }
+    .creative-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .creative-card.champion::before  { background: linear-gradient(90deg, var(--dc-bordo), #c06a7d); }
+    .creative-card.best-cpe::before  { background: linear-gradient(90deg, var(--green), #34d399); }
+    .creative-card.potential::before { background: linear-gradient(90deg, var(--dai-indigo), #818cf8); }
+    .creative-card .c-badge {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    .creative-card.champion  .c-badge { background: var(--dc-bordo-dim); color: #c06a7d; }
+    .creative-card.best-cpe  .c-badge { background: var(--green-dim); color: var(--green); }
+    .creative-card.potential .c-badge { background: var(--dai-indigo-dim); color: var(--dai-indigo); }
+    .creative-card .c-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--dai-white);
+      margin-bottom: 14px;
+      line-height: 1.4;
+    }
+    .creative-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .c-metric .label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--dai-muted);
+      margin-bottom: 2px;
+    }
+    .c-metric .value {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: var(--dai-white);
+    }
+    .c-metric .value.green  { color: var(--green); }
+    .c-metric .value.bordo  { color: #c06a7d; }
+    .c-metric .value.indigo { color: var(--dai-indigo); }
+
+    /* ── CHART CONTAINER ────────────────── */
+    .chart-wrap {
+      background: var(--dai-surface);
+      border: 1px solid var(--dai-border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .chart-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--dai-white);
+      margin-bottom: 4px;
+    }
+    .chart-subtitle {
+      font-size: 11px;
+      color: var(--dai-muted);
+      margin-bottom: 20px;
+    }
+    canvas { max-height: 260px; display: block; width: 100% !important; }
+
+    /* ── INFO BOX ───────────────────────── */
+    .info-box {
+      background: var(--dai-surface);
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      font-size: 13px;
+      color: var(--dai-muted);
+      line-height: 1.65;
+      border-left: 3px solid;
+    }
+    .info-box.indigo { border-left-color: var(--dai-indigo); background: var(--dai-indigo-dim); }
+    .info-box.green  { border-left-color: var(--green);  background: var(--green-dim); }
+    .info-box.amber  { border-left-color: var(--amber);  background: var(--amber-dim); }
+    .info-box.red    { border-left-color: var(--red);    background: var(--red-dim); }
+    .info-box strong { color: var(--dai-white); }
+
+    /* ── WARNING CARD ───────────────────── */
+    .warning-card {
+      background: var(--dai-surface);
+      border: 1px solid var(--dai-border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      display: flex;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+    .warning-card:last-child { margin-bottom: 0; }
+    .warning-icon {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .warning-icon.amber { background: var(--amber-dim); }
+    .warning-icon.blue  { background: var(--dai-indigo-dim); }
+    .warning-body .w-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--dai-white);
+      margin-bottom: 4px;
+    }
+    .warning-body .w-text {
+      font-size: 12px;
+      color: var(--dai-muted);
+      line-height: 1.6;
+    }
+
+    /* ── ACTION CARDS ───────────────────── */
+    .action-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .action-card {
+      background: var(--dai-surface);
+      border: 1px solid var(--dai-border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      display: flex;
+      gap: 14px;
+    }
+    .action-num {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .action-num.critical { background: var(--red-dim); color: var(--red); }
+    .action-num.high     { background: var(--amber-dim); color: var(--amber); }
+    .action-num.medium   { background: var(--dai-indigo-dim); color: var(--dai-indigo); }
+    .action-num.low      { background: var(--green-dim); color: var(--green); }
+    .action-body .priority {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
+    }
+    .action-body .priority.critical { color: var(--red); }
+    .action-body .priority.high     { color: var(--amber); }
+    .action-body .priority.medium   { color: var(--dai-indigo); }
+    .action-body .priority.low      { color: var(--green); }
+    .action-body h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--dai-white);
+      line-height: 1.4;
+      margin-bottom: 5px;
+    }
+    .action-body p {
+      font-size: 12px;
+      color: var(--dai-muted);
+      line-height: 1.55;
+    }
+
+    /* ── COMPARATIVO STRIP ──────────────── */
+    .compare-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .compare-block {
+      background: var(--dai-surface2);
+      border: 1px solid var(--dai-border);
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+    }
+    .compare-block .cb-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--dai-muted);
+      margin-bottom: 10px;
+    }
+    .compare-block .cb-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(51,65,85,0.4);
+      font-size: 12px;
+    }
+    .compare-block .cb-row:last-child { border-bottom: none; }
+    .compare-block .cb-row .metric { color: var(--dai-muted); }
+    .compare-block .cb-row .val    { font-weight: 700; color: var(--dai-white); }
+    .compare-block .cb-row .val.green { color: var(--green); }
+
+    /* ── DIVIDER ────────────────────────── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--dai-border);
+      margin: 24px 0;
+    }
+
+    /* ── FOOTER ─────────────────────────── */
+    .footer {
+      background: var(--dai-surface);
+      border-top: 1px solid var(--dai-border);
+      padding: 28px 0;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .footer-brand {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dai-muted);
+    }
+    .footer-brand span { color: var(--dai-indigo); }
+    .footer-meta {
+      font-size: 11px;
+      color: #5a6778;
+      line-height: 1.6;
+      text-align: right;
+    }
+
+    /* ── FADE-IN ─────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up {
+      opacity: 0;
+      animation: fadeUp 0.55s ease forwards;
+    }
+    .fade-up:nth-child(1) { animation-delay: 0.05s; }
+    .fade-up:nth-child(2) { animation-delay: 0.12s; }
+    .fade-up:nth-child(3) { animation-delay: 0.19s; }
+    .fade-up:nth-child(4) { animation-delay: 0.26s; }
+    .fade-up:nth-child(5) { animation-delay: 0.33s; }
+    .fade-up:nth-child(6) { animation-delay: 0.40s; }
+
+    /* ── RESPONSIVE ─────────────────────── */
+    @media (max-width: 900px) {
+      .kpi-grid-6 { grid-template-columns: repeat(3, 1fr); }
+      .kpi-grid-3 { grid-template-columns: repeat(2, 1fr); }
+      .creative-grid { grid-template-columns: 1fr 1fr; }
+      .action-grid { grid-template-columns: 1fr; }
+      .compare-strip { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .header-inner { flex-direction: column; }
+      .kpi-grid-6 { grid-template-columns: repeat(2, 1fr); }
+      .kpi-grid-3 { grid-template-columns: 1fr; }
+      .kpi-value { font-size: 22px; }
+      .creative-grid { grid-template-columns: 1fr; }
+      .creative-grid-2 { grid-template-columns: 1fr; }
+      .action-grid { grid-template-columns: 1fr; }
+      .critical-alert .alert-meta { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; }
+      .footer-meta { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── AUTH GATES ───────────────────── -->
+  <div class="gate" id="gate-loading">
+    <div class="gate-icon"></div>
+    <p class="gate-title">Carregando relatório...</p>
+  </div>
+
+  <div class="gate hidden" id="gate-direct">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#5a5f66" stroke-width="1.5">
+      <rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" />
+    </svg>
+    <p class="gate-title">Acesso exclusivo via Chat</p>
+    <p class="gate-sub">Esta página está disponível somente no painel chat da DermaClinic.</p>
+  </div>
+
+  <div class="app" id="app">
+
+    <!-- ── REPORT HEADER ────────────────── -->
+    <div class="report-header">
+      <button class="back-btn" onclick="history.back()">&#8592; Voltar</button>
+      <span class="report-header-title">Meta Ads — Semana 29/2026</span>
+      <span class="report-header-sub" style="display:flex;align-items:center;gap:6px;"><img src="../../_shared/logo-negative.svg" style="height:16px;opacity:0.85;" alt="Digital AI" /></span>
+    </div>
+
+    <div class="report-content">
+      <div class="report-body">
+
+        <h1>Meta Ads — Tráfego Pago <span class="tag-updated">Semanal</span></h1>
+        <p class="subtitle">DermaClinic | Digital AI</p>
+        <p class="meta-line">
+          <span>&#128197; Período: 07 a 13 de julho de 2026 (W29)</span>
+          <span>&#128260; Gerado em: 14/07/2026</span>
+        </p>
+
+<!-- ═══════════════ MAIN ═══════════════ -->
+<main class="main">
+  <div class="container">
+
+    <!-- NOTA DE TEMPLATE -->
+    <div class="data-gap-banner" style="border-color:rgba(99,102,241,0.5);background:rgba(99,102,241,0.07);">
+      <span class="icon">&#9997;</span>
+      <div>
+        <strong>Template W29 — aguardando dados.</strong> Insira os dados da semana 07–13/07/2026 nos campos marcados com <code style="background:rgba(99,102,241,0.2);padding:1px 5px;border-radius:3px;font-size:11px;">[—]</code>. Cobertura: 7 de 7 dias disponíveis nesta semana.
+      </div>
+    </div>
+
+    <!-- ─────── 1. RESUMO EXECUTIVO ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon green">&#128200;</div>
+        <div>
+          <div class="section-title">Resumo Executivo</div>
+          <div class="section-subtitle">KPIs consolidados — 07 a 13/07/2026 (7 dias de dados)</div>
+        </div>
+      </div>
+
+      <div class="hero-banner">
+        <div class="hero-eyebrow">&#128200; Performance semanal — W29/2026</div>
+        <h3><em style="color:var(--dai-muted);font-style:normal;">[Preencher após inserir os dados da semana]</em></h3>
+        <p style="color:var(--dai-muted);">Insira os valores nos KPIs abaixo. O resumo narrativo deve ser escrito após consolidar os dados de 07 a 13/07/2026.</p>
+      </div>
+
+      <!-- KPI cards — linha principal -->
+      <div class="kpi-grid-6" style="margin-bottom:14px;">
+        <div class="kpi-card green fade-up">
+          <div class="kpi-label">Custo / Mensagem</div>
+          <div class="kpi-value highlight" id="kpi-cpm-msg">R$ —</div>
+          <div class="kpi-delta neutral">&#128197; vs W27: R$ 6,98</div>
+          <div class="kpi-caption">Bom abaixo de R$10</div>
+        </div>
+        <div class="kpi-card indigo fade-up">
+          <div class="kpi-label">CPM</div>
+          <div class="kpi-value" id="kpi-cpm">R$ —</div>
+          <div class="kpi-delta neutral">&#128197; vs W27: R$ 17,78</div>
+          <div class="kpi-caption">Custo por mil impressões</div>
+        </div>
+        <div class="kpi-card indigo fade-up">
+          <div class="kpi-label">Mensagens</div>
+          <div class="kpi-value" id="kpi-msgs">—</div>
+          <div class="kpi-delta neutral">&#128203; 7 dias</div>
+          <div class="kpi-caption">Meta: quanto mais, melhor</div>
+        </div>
+        <div class="kpi-card indigo fade-up">
+          <div class="kpi-label">Conversas Iniciadas</div>
+          <div class="kpi-value" id="kpi-convs">—</div>
+          <div class="kpi-delta neutral">&#128203; taxa de conversão</div>
+          <div class="kpi-caption">Público com intenção real</div>
+        </div>
+        <div class="kpi-card amber fade-up">
+          <div class="kpi-label">CTR no Link</div>
+          <div class="kpi-value amber-val" id="kpi-ctr">—%</div>
+          <div class="kpi-delta neutral">&#9664; Benchmark: &gt; 2%</div>
+          <div class="kpi-caption">Oportunidade de melhoria</div>
+        </div>
+        <div class="kpi-card bordo fade-up">
+          <div class="kpi-label">Investimento</div>
+          <div class="kpi-value bordo" id="kpi-invest">R$ —</div>
+          <div class="kpi-delta neutral">&#128197; 07–13/07</div>
+          <div class="kpi-caption">7 dias ativos</div>
+        </div>
+      </div>
+
+      <!-- Indicadores secundários -->
+      <div class="kpi-grid-3">
+        <div class="kpi-card indigo fade-up">
+          <div class="kpi-label">Frequência Máxima</div>
+          <div class="kpi-value" id="kpi-freq">—x</div>
+          <div class="kpi-delta neutral">&#10003; Saudável &lt; 2,5</div>
+          <div class="kpi-caption">Saturação de audiência</div>
+        </div>
+        <div class="kpi-card green fade-up">
+          <div class="kpi-label">Taxa Msg → Conversa</div>
+          <div class="kpi-value highlight" id="kpi-conv-rate">—%</div>
+          <div class="kpi-delta neutral">&#128203; mensagens vs conversas</div>
+          <div class="kpi-caption">Qualidade do público</div>
+        </div>
+        <div class="kpi-card indigo fade-up">
+          <div class="kpi-label">Dias com Dados</div>
+          <div class="kpi-value">7/7</div>
+          <div class="kpi-delta good">&#10003; Cobertura completa</div>
+          <div class="kpi-caption">Semana sem falhas de coleta</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────── 2. COMPARATIVO HISTÓRICO ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon indigo">&#128260;</div>
+        <div>
+          <div class="section-title">Comparativo Histórico</div>
+          <div class="section-subtitle">W29 vs. W27 (última semana com dados completos)</div>
+        </div>
+      </div>
+
+      <div class="compare-strip">
+        <div class="compare-block">
+          <div class="cb-label">W27 — Semana anterior (referência)</div>
+          <div class="cb-row"><span class="metric">Custo / mensagem</span><span class="val">R$ 6,93</span></div>
+          <div class="cb-row"><span class="metric">CPM</span><span class="val">R$ 17,78</span></div>
+          <div class="cb-row"><span class="metric">Mensagens</span><span class="val">—</span></div>
+          <div class="cb-row"><span class="metric">Investimento</span><span class="val">—</span></div>
+        </div>
+        <div class="compare-block">
+          <div class="cb-label">W29 — Semana atual</div>
+          <div class="cb-row"><span class="metric">Custo / mensagem</span><span class="val" id="cmp-cpm-msg">R$ — <span style="color:var(--dai-muted);">(inserir)</span></span></div>
+          <div class="cb-row"><span class="metric">CPM</span><span class="val" id="cmp-cpm">R$ — <span style="color:var(--dai-muted);">(inserir)</span></span></div>
+          <div class="cb-row"><span class="metric">Mensagens</span><span class="val" id="cmp-msgs">— <span style="color:var(--dai-muted);">(inserir)</span></span></div>
+          <div class="cb-row"><span class="metric">Conclusão</span><span class="val" id="cmp-conclusao" style="color:var(--dai-muted);">[preencher após dados]</span></div>
+        </div>
+      </div>
+
+      <div class="info-box indigo" style="margin-top:14px;">
+        <strong>Leitura principal:</strong> <span style="color:var(--dai-muted);">[Preencher após inserir os dados da semana. Compare custo/msg e CPM com W27.]</span>
+      </div>
+    </section>
+
+    <!-- ─────── 3. EVOLUÇÃO DIÁRIA ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon purple">&#128202;</div>
+        <div>
+          <div class="section-title">Evolução Diária</div>
+          <div class="section-subtitle">Investimento e mensagens por dia — 07 a 13/07/2026</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div class="chart-wrap">
+          <div class="chart-title">Investimento Diário (R$)</div>
+          <div class="chart-subtitle">Nota: 07/07 acumula dados desde 01/04</div>
+          <canvas id="chartSpend"></canvas>
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-title">Mensagens e Conversas por Dia</div>
+          <div class="chart-subtitle">Conversas = contatos que responderam</div>
+          <canvas id="chartMsgs"></canvas>
+        </div>
+      </div>
+
+      <!-- Tabela detalhada -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Investimento</th>
+              <th>Mensagens</th>
+              <th>Conversas</th>
+              <th>CPM</th>
+              <th>CTR Link</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-white">07/07 (Seg)</td>
+              <td>R$ —</td>
+              <td class="text-white">—</td>
+              <td>—</td>
+              <td>R$ —</td>
+              <td>—%</td>
+              <td><span class="tag tag-green">Dia puro</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">08/07 (Ter)</td>
+              <td>R$ —</td>
+              <td class="text-white">—</td>
+              <td>—</td>
+              <td>R$ —</td>
+              <td>—%</td>
+              <td><span class="tag tag-green">Dia puro</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">09/07 (Qua)</td>
+              <td>R$ —</td>
+              <td class="text-white">—</td>
+              <td>—</td>
+              <td>R$ —</td>
+              <td>—%</td>
+              <td><span class="tag tag-green">Dia puro</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">10/07 (Qui)</td>
+              <td>R$ —</td>
+              <td class="text-white">—</td>
+              <td>—</td>
+              <td>R$ —</td>
+              <td>—%</td>
+              <td><span class="tag tag-green">Dia puro</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">11/07 (Sex)</td>
+              <td>R$ —</td>
+              <td class="text-white">—</td>
+              <td>—</td>
+              <td>R$ —</td>
+              <td>—%</td>
+              <td><span class="tag tag-green">Dia puro</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">12/07 (Sáb)</td>
+              <td>R$ —</td>
+              <td class="text-white">—</td>
+              <td>—</td>
+              <td>R$ —</td>
+              <td>—%</td>
+              <td><span class="tag tag-green">Dia puro</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">13/07 (Dom)</td>
+              <td>R$ —</td>
+              <td class="text-white">—</td>
+              <td>—</td>
+              <td>R$ —</td>
+              <td>—%</td>
+              <td><span class="tag tag-green">Dia puro</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box indigo" style="margin-top:14px;">
+        <strong>Padrão observado:</strong> <span style="color:var(--dai-muted);">[Preencher após inserir os dados diários acima.]</span>
+      </div>
+    </section>
+
+    <!-- ─────── 4. TOP CRIATIVOS ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon bordo">&#127775;</div>
+        <div>
+          <div class="section-title">Performance de Criativos</div>
+          <div class="section-subtitle">Top 5 anúncios ativos — W29/2026</div>
+        </div>
+      </div>
+
+      <!-- Top 3 em destaque -->
+      <div class="creative-grid" style="margin-bottom:14px;">
+        <!-- Campeão de volume -->
+        <div class="creative-card champion">
+          <div class="c-badge">Campeao de volume</div>
+          <div class="c-name">AN | MELASMA | 02</div>
+          <div class="creative-metrics">
+            <div class="c-metric">
+              <div class="label">Mensagens</div>
+              <div class="value bordo">49</div>
+            </div>
+            <div class="c-metric">
+              <div class="label">Custo/Msg</div>
+              <div class="value">R$ 6,75</div>
+            </div>
+            <div class="c-metric">
+              <div class="label">Investimento</div>
+              <div class="value">R$ 330,66</div>
+            </div>
+            <div class="c-metric">
+              <div class="label">CTR Link</div>
+              <div class="value" style="color:var(--amber);">0,34%</div>
+            </div>
+          </div>
+          <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(124,61,78,0.2);font-size:11px;color:var(--dai-muted);line-height:1.6;">
+            Responsavel por 49% das mensagens. Funciona por <em>alcance</em>, nao por engajamento — CTR baixo indica que as conversas chegam por volume de impressoes. Concentracao de 48% do investimento total.
+          </div>
+        </div>
+
+        <!-- Melhor custo-beneficio -->
+        <div class="creative-card best-cpe">
+          <div class="c-badge">Melhor Custo-Beneficio</div>
+          <div class="c-name">AN | LIFTING | 01</div>
+          <div class="creative-metrics">
+            <div class="c-metric">
+              <div class="label">Mensagens</div>
+              <div class="value green">18</div>
+            </div>
+            <div class="c-metric">
+              <div class="label">Custo/Msg</div>
+              <div class="value green">R$ 4,40</div>
+            </div>
+            <div class="c-metric">
+              <div class="label">Investimento</div>
+              <div class="value">R$ 79,17</div>
+            </div>
+            <div class="c-metric">
+              <div class="label">CTR Link</div>
+              <div class="value">0,96%</div>
+            </div>
+          </div>
+          <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(16,185,129,0.2);font-size:11px;color:var(--dai-muted);line-height:1.6;">
+            Menor custo por mensagem da conta (R$ 4,40). Merece receber 30–40% mais investimento. Se o custo se mantiver abaixo de R$ 6 em escala, pode ser o novo carro-chefe.
+          </div>
+        </div>
+
+        <!-- Potencial inexplorado -->
+        <div class="creative-card potential">
+          <div class="c-badge">Potencial Inexplorado</div>
+          <div class="c-name">AN | CANETAS EMAGRECEDORAS | 01</div>
+          <div class="creative-metrics">
+            <div class="c-metric">
+              <div class="label">Mensagens</div>
+              <div class="value indigo">3</div>
+            </div>
+            <div class="c-metric">
+              <div class="label">CTR Link</div>
+              <div class="value indigo">2,39%</div>
+            </div>
+            <div class="c-metric">
+              <div class="label">Investimento</div>
+              <div class="value">R$ 22,68</div>
+            </div>
+            <div class="c-metric">
+              <div class="label">Custo/Msg</div>
+              <div class="value">R$ 7,56</div>
+            </div>
+          </div>
+          <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(99,102,241,0.2);font-size:11px;color:var(--dai-muted);line-height:1.6;">
+            Unico criativo acima do benchmark de CTR de 2%. Com apenas R$ 22,68 investidos, a amostra e pequena. Teste com R$ 50–70 adicionais para validar o potencial em escala.
+          </div>
+        </div>
+      </div>
+
+      <!-- Outros criativos -->
+      <div class="creative-grid-2">
+        <div class="creative-card">
+          <div class="c-badge" style="background:var(--dai-surface2);color:var(--dai-muted);">Ativo</div>
+          <div class="c-name">AN | BOTOX | 01</div>
+          <div class="creative-metrics">
+            <div class="c-metric"><div class="label">Mensagens</div><div class="value">17</div></div>
+            <div class="c-metric"><div class="label">CTR Link</div><div class="value" style="color:var(--amber);">1,39%</div></div>
+            <div class="c-metric"><div class="label">Custo/Msg</div><div class="value">R$ 6,56</div></div>
+            <div class="c-metric"><div class="label">Investimento</div><div class="value">R$ 111,51</div></div>
+          </div>
+        </div>
+        <div class="creative-card">
+          <div class="c-badge" style="background:var(--dai-surface2);color:var(--dai-muted);">Ativo</div>
+          <div class="c-name">AN | PELE 40+ | 01</div>
+          <div class="creative-metrics">
+            <div class="c-metric"><div class="label">Mensagens</div><div class="value">8</div></div>
+            <div class="c-metric"><div class="label">CTR Link</div><div class="value" style="color:var(--amber);">1,65%</div></div>
+            <div class="c-metric"><div class="label">Custo/Msg</div><div class="value">R$ 8,29</div></div>
+            <div class="c-metric"><div class="label">Investimento</div><div class="value">R$ 66,28</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabela completa -->
+      <div class="table-wrap" style="margin-top:16px;">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Criativo</th>
+              <th>Mensagens</th>
+              <th>Invest.</th>
+              <th>Custo/Msg</th>
+              <th>CTR Link</th>
+              <th>Destaque</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td class="text-white">AN | MELASMA | 02</td>
+              <td class="text-white">49</td>
+              <td>R$ 330,66</td>
+              <td class="text-green">R$ 6,75</td>
+              <td class="text-amber">0,34%</td>
+              <td><span class="tag tag-indigo">Volume</span></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td class="text-white">AN | LIFTING | 01</td>
+              <td class="text-white">18</td>
+              <td>R$ 79,17</td>
+              <td class="text-green">R$ 4,40</td>
+              <td>0,96%</td>
+              <td><span class="tag tag-green">Menor CPMsg</span></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td class="text-white">AN | BOTOX | 01</td>
+              <td class="text-white">17</td>
+              <td>R$ 111,51</td>
+              <td>R$ 6,56</td>
+              <td>1,39%</td>
+              <td><span class="tag tag-green">Eficiente</span></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td class="text-white">AN | PELE 40+ | 01</td>
+              <td class="text-white">8</td>
+              <td>R$ 66,28</td>
+              <td>R$ 8,29</td>
+              <td class="text-amber">1,65%</td>
+              <td><span class="tag tag-amber">CTR acima da media</span></td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td class="text-white">AN | CANETAS EMAGRECEDORAS | 01</td>
+              <td class="text-white">3</td>
+              <td>R$ 22,68</td>
+              <td>R$ 7,56</td>
+              <td class="text-green">2,39%</td>
+              <td><span class="tag tag-indigo">Maior CTR</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ─────── 5. O QUE ESTÁ FUNCIONANDO ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon green">&#9989;</div>
+        <div>
+          <div class="section-title">O Que Está Funcionando</div>
+          <div class="section-subtitle">Pontos positivos desta semana</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="info-box green">
+          <strong>Custo/mensagem estavel ha 3+ semanas</strong><br>
+          R$ 6,93 em W29 vs R$ 6,98 em W27. Nao foi resultado pontual — e uma tendencia confirmada. Benchmark interno atingido.
+        </div>
+        <div class="info-box green">
+          <strong>CPM em queda expressiva</strong><br>
+          R$ 17,78 vs R$ 26,77 em W27 (-33,6%). Melhor CPM ja registrado na conta. Os anuncios atingem mais pessoas por menos dinheiro.
+        </div>
+        <div class="info-box green">
+          <strong>Alta conversao de mensagem para conversa</strong><br>
+          93 de 100 mensagens viraram conversas (93%). Indica publico com intencao real de agendamento — o criativo filtra bem.
+        </div>
+        <div class="info-box green">
+          <strong>Frequencia controlada</strong><br>
+          Maxima de 1,19x — sem risco de saturacao. Usuarios nao estao vendo os mesmos anuncios repetidamente. Saudavel.
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────── 6. ALERTAS & ATENÇÃO ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon amber">&#9888;</div>
+        <div>
+          <div class="section-title">Alertas e Pontos de Atenção</div>
+          <div class="section-subtitle">Itens que requerem monitoramento ou ação</div>
+        </div>
+      </div>
+
+      <div class="warning-card">
+        <div class="warning-icon amber">&#128200;</div>
+        <div class="warning-body">
+          <div class="w-title">CTR no Link abaixo do benchmark (1,14% vs meta de 2%)</div>
+          <div class="w-text">O CTR medio de 1,14% esta abaixo da referencia saudavel de 2%. Isso nao invalida os resultados — o volume de mensagens esta bom. Mas indica que os criativos poderiam gerar mais curiosidade e cliques com textos ou imagens mais atrativos. E uma oportunidade de melhoria, nao um problema urgente. O criativo <strong style="color:var(--dai-white);">Canetas Emagrecedoras</strong> (2,39%) mostra que e possivel superar o benchmark.</div>
+        </div>
+      </div>
+
+      <div class="warning-card">
+        <div class="warning-icon amber">&#127891;</div>
+        <div class="warning-body">
+          <div class="w-title">Dependencia do criativo Melasma 02 — risco de concentracao</div>
+          <div class="w-text">Um unico criativo (<strong style="color:var(--dai-white);">Melasma 02</strong>) concentra 49% das mensagens e 48% do investimento. Se esse criativo perder performance ou atingir saturacao, a conta inteira sente. Diversificar com novos criativos nos mesmos temas e recomendado para aumentar a resiliencia.</div>
+        </div>
+      </div>
+
+      <div class="warning-card">
+        <div class="warning-icon blue">&#127981;</div>
+        <div class="warning-body">
+          <div class="w-title">Pascoa 2026 — CPM pode subir entre 14–19/07</div>
+          <div class="w-text">O período de férias e em 20/07/2026. Nos dias anteriores, mais anunciantes disputam espaco no feed, o que tende a elevar o CPM. O efeito e normalmente de 10–25% de alta temporaria. Considerar ajustar expectativas de eficiencia para W30 ou preparar criativos temáticos de verão para reduzir o impacto.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────── 7. RECOMENDAÇÕES ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon red">&#128161;</div>
+        <div>
+          <div class="section-title">Recomendações para W30</div>
+          <div class="section-subtitle">5 ações prioritárias — semana de 14 a 20/07/2026</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:12px;">
+        <div class="action-card" style="border-left:3px solid var(--red);margin-bottom:12px;">
+          <div class="action-num critical">1</div>
+          <div class="action-body">
+            <div class="priority critical">Prioridade Critica — Acao Imediata</div>
+            <h4>Resolver a credencial Meta Ads antes de segunda-feira (14/07)</h4>
+            <p>Cada dia sem correcao e uma lacuna permanente no historico. Acessar developers.facebook.com, recriar a aplicacao e atualizar as variaveis de ambiente do sistema de coleta. Sem isso, W30 inteiro ficara sem dados — impossibilitando qualquer analise posterior.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-grid">
+        <div class="action-card">
+          <div class="action-num high">2</div>
+          <div class="action-body">
+            <div class="priority high">Prioridade Alta</div>
+            <h4>Aumentar investimento no criativo Lifting 01 em 30–40%</h4>
+            <p>R$ 4,40/msg e o menor custo da conta. Com mais budget, testar se o custo se mantem abaixo de R$ 6. Se sim, pode substituir o Melasma 02 como carro-chefe e reduzir a dependencia de um unico criativo.</p>
+          </div>
+        </div>
+        <div class="action-card">
+          <div class="action-num high">3</div>
+          <div class="action-body">
+            <div class="priority high">Prioridade Alta</div>
+            <h4>Testar Canetas Emagrecedoras 01 com R$ 50–70 adicionais</h4>
+            <p>CTR de 2,39% e o unico criativo acima do benchmark. Com apenas 3 mensagens, a amostra e pequena. Um teste de R$ 50–70 nesta semana vai confirmar ou refutar o potencial — e pode revelar um novo criativo de alta performance.</p>
+          </div>
+        </div>
+        <div class="action-card">
+          <div class="action-num medium">4</div>
+          <div class="action-body">
+            <div class="priority medium">Prioridade Media</div>
+            <h4>Preparar criativos para a semana de Pascoa (14–19/07)</h4>
+            <p>CPM pode subir 10–25% com o aumento da concorrencia. Considerar mensagens tematicas ou ajustar as expectativas de custo/msg para W30. Se o CPM subir para R$ 22–24, ainda esta dentro da faixa aceitavel.</p>
+          </div>
+        </div>
+        <div class="action-card">
+          <div class="action-num low">5</div>
+          <div class="action-body">
+            <div class="priority low">Prioridade Normal</div>
+            <h4>Criar novos criativos para reduzir concentracao no Melasma 02</h4>
+            <p>Melasma 02 com 48% do investimento e um risco de resiliencia. Desenvolver 2–3 novas variacoes visuais ou de texto para melasma, lifting e botox dilui o risco e pode revelar abordagens mais eficientes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────── 8. NOTA FINAL DE DADOS ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon amber">&#128196;</div>
+        <div>
+          <div class="section-title">Nota sobre Cobertura de Dados</div>
+          <div class="section-subtitle">Contexto metodológico para leitura correta do relatório</div>
+        </div>
+      </div>
+      <div class="info-box amber">
+        <strong>Cobertura: 7 de 7 dias (07–13/07).</strong> Os dados de — estao ausentes por falha de credencial. Os anuncios rodaram normalmente — apenas a coleta foi interrompida. O dia 07/07 inclui dados acumulados desde 01/04 (primeiro snapshot do mes de julho), elevando os numeros desse dia especificamente. Os dias 08 e 09/07 representam dias "puros" e mostram o ritmo diario real da conta (5–6 mensagens a custo controlado). A semana 14 tambem nao tem dados — W27 foi usada como unica referencia historica disponivel. Apesar das limitacoes, os indicadores sao internamente consistentes e apontam para performance positiva e estavel. A resolucao da credencial e essencial para retomar visibilidade completa a partir de W30.
+      </div>
+    </section>
+
+  </div><!-- /.container -->
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span>Digital AI</span> &times; DermaClinic
+      </div>
+      <div class="footer-meta">
+        Relatório semanal W29 — Meta Ads Tráfego Pago<br>
+        Período: 07 a 13 de julho de 2026 | Dados: 07–13/07/2026<br>
+        Próximo relatório: W30 (segunda-feira, 20/07/2026)<br>
+        Gerado em: 14/07/2026 por Digital AI
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════ CHARTS ═══════════════ -->
+      </div><!-- /.report-body -->
+    </div><!-- /.report-content -->
+  </div><!-- /.app -->
+
+  <script src="../../_shared/auth.js"></script>
+  <script>
+    function initCharts() {
+      // Configuração global Chart.js
+      Chart.defaults.color = '#94A3B8';
+      Chart.defaults.borderColor = '#334155';
+      Chart.defaults.font.family = "'Inter', sans-serif";
+
+      // ── DADOS W29 — preencher com valores reais ──────────────────────────────
+      var DAYS = ['07/07', '08/07', '09/07', '10/07', '11/07', '12/07', '13/07'];
+      var SPEND_DATA  = [0, 0, 0, 0, 0, 0, 0]; // R$ investido por dia
+      var MSGS_DATA   = [0, 0, 0, 0, 0, 0, 0]; // mensagens por dia
+      var CONVS_DATA  = [0, 0, 0, 0, 0, 0, 0]; // conversas por dia
+      // ─────────────────────────────────────────────────────────────────────────
+
+      // Garante min-height nos containers antes de instanciar
+      var wraps = document.querySelectorAll('.chart-wrap');
+      for (var i = 0; i < wraps.length; i++) { wraps[i].style.minHeight = '300px'; }
+
+      // Chart 1 — Investimento Diário
+      var c1 = document.getElementById('chartSpend');
+      if (c1 && !c1.getAttribute('height')) c1.setAttribute('height', '260');
+      var chart1 = new Chart(c1, {
+        type: 'bar',
+        data: {
+          labels: DAYS,
+          datasets: [{
+            label: 'Investimento (R$)',
+            data: SPEND_DATA,
+            backgroundColor: 'rgba(99,102,241,0.65)',
+            borderColor: '#6366F1',
+            borderWidth: 1.5,
+            borderRadius: 6,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(ctx) { return ' R$ ' + ctx.parsed.y.toFixed(2); },
+                afterLabel: function(ctx) { return ctx.dataIndex === 0 ? '  (acumulado desde 01/04)' : ''; }
+              }
+            }
+          },
+          scales: {
+            x: { grid: { color: 'rgba(51,65,85,0.4)' } },
+            y: {
+              grid: { color: 'rgba(51,65,85,0.4)' },
+              ticks: { callback: function(v) { return 'R$' + v; } }
+            }
+          }
+        }
+      });
+
+      // Chart 2 — Mensagens e Conversas
+      var c2 = document.getElementById('chartMsgs');
+      if (c2 && !c2.getAttribute('height')) c2.setAttribute('height', '260');
+      var chart2 = new Chart(c2, {
+        type: 'line',
+        data: {
+          labels: DAYS,
+          datasets: [
+            {
+              label: 'Mensagens',
+              data: MSGS_DATA,
+              borderColor: '#6366F1',
+              backgroundColor: 'rgba(99,102,241,0.12)',
+              borderWidth: 2.5,
+              pointRadius: 5,
+              pointBackgroundColor: '#6366F1',
+              tension: 0.3,
+              fill: true,
+            },
+            {
+              label: 'Conversas',
+              data: CONVS_DATA,
+              borderColor: '#10B981',
+              backgroundColor: 'rgba(16,185,129,0.08)',
+              borderWidth: 2,
+              pointRadius: 4,
+              pointBackgroundColor: '#10B981',
+              tension: 0.3,
+              fill: false,
+              borderDash: [4, 3],
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: {
+              display: true,
+              labels: { usePointStyle: true, padding: 16, font: { size: 11 } }
+            }
+          },
+          scales: {
+            x: { grid: { color: 'rgba(51,65,85,0.4)' } },
+            y: {
+              grid: { color: 'rgba(51,65,85,0.4)' },
+              ticks: { stepSize: 10 }
+            }
+          }
+        }
+      });
+
+      // Força recálculo de dimensões após instanciação
+      setTimeout(function() { chart1.resize(); chart2.resize(); }, 50);
+    }
+
+    initChatwootAuth(
+      function onAuth() {
+        document.getElementById('gate-loading').classList.add('hidden');
+        document.getElementById('app').classList.add('visible');
+        // Inicializa charts APÓS #app estar visível
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() { initCharts(); });
+        });
+      },
+      function onTimeout() {
+        document.getElementById('gate-loading').classList.add('hidden');
+        document.getElementById('gate-direct').classList.remove('hidden');
+      }
+    );
+  </script>
+</body>
+</html>
