@@ -282,6 +282,10 @@
         <a href="#upd-processar" class="nav-link">· Processar e Agregar Dados</a>
         <a href="#upd-ai-analise" class="nav-link">· AI Agent — Análise</a>
         <a href="#upd-caminhos"  class="nav-link">· Pipeline Caminhos (3 nós)</a>
+        <a href="#upd-grupos"    class="nav-link" style="color:#FBBF24">Relatório de Grupos Jul/26</a>
+        <a href="#upd-grupos-master"  class="nav-link">· Remoção totalizador Master</a>
+        <a href="#upd-grupos-campos"  class="nav-link">· Burnout → Jornada Excessiva</a>
+        <a href="#upd-grupos-validacao" class="nav-link">· Validação com payloads reais</a>
       </div>
     </nav>
   </aside>
@@ -976,6 +980,118 @@ const aiResponse = (!firstItem._semCaminhos && !firstItem.error)
         </div>
 
         <p style="margin-top:14px;font-size:13px;color:var(--text-muted)"><strong>Regra geral aprendida:</strong> Nós LangChain com BufferMemory <strong>sempre</strong> devem receber exatamente 1 chave de input. Quando dados podem estar ausentes, usar guard <code>_semCaminhos</code> + <code>continueOnFail</code> + guard no nó seguinte é o padrão de segurança adotado.</p>
+      </section>
+
+      <!-- ══ WORKFLOW GRUPOS ══ -->
+      <section id="upd-grupos" style="margin-top:48px;padding-top:24px;border-top:1px solid var(--border)">
+        <h2 style="margin-bottom:4px">Workflow: Relatório de Grupos — Correções Jul/26</h2>
+        <p style="color:var(--text-muted);font-size:13px;margin-bottom:24px">Workflow: <code>eJ4CTb9f4fxSS04d</code> · Nó modificado: <code>Processar Dados Grupos</code> + <code>AI Agent - Analise</code> (system prompt) · Validado em 25/07/2026</p>
+
+        <!-- Fix 1: Totalizador Master -->
+        <section id="upd-grupos-master" style="margin-top:24px">
+          <h3>1. Remoção do totalizador "Master" da análise <a class="anchor" href="#upd-grupos-master">#</a></h3>
+
+          <div class="callout-blue" style="margin-bottom:20px;font-size:13px">
+            <strong>Problema identificado:</strong> A primeira linha de <code>GruposDetalhes</code> sempre é o grupo-raiz (ex: "Master") — um consolidado de todos os subgrupos. O workflow anterior tratava essa linha como um grupo real, causando:
+            <ul style="margin:8px 0 0 16px;padding:0">
+              <li>Média de aproveitamento distorcida (63,3% virava a referência em vez dos subgrupos reais)</li>
+              <li>"Pergunta que muda o jogo" comparando o total com suas próprias partes — incoerente</li>
+              <li>Totalizador podendo aparecer como "Destaque Negativo" mesmo sendo só um consolidado</li>
+            </ul>
+          </div>
+
+          <h4 style="margin:16px 0 8px;font-size:14px;color:var(--text-muted)">Fix aplicado — filtro por nome (robusto)</h4>
+          <p style="font-size:13px">Em vez de <code>slice(1)</code> cego (que dependia da posição), o fix detecta o totalizador pelo campo <code>GrupoID</code> ou por grupos sem subgrupos abaixo deles. Isso é robusto para qualquer estrutura que a EVOPE envie:</p>
+
+          <pre style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px;overflow:auto;font-size:12px;margin:8px 0 16px"><code><span style="color:#9AAAD4">// Antes (frágil): removia sempre a 1ª linha por posição</span>
+<span style="color:#F87171">const grupos = allGrupos.slice(1);</span>
+
+<span style="color:#9AAAD4">// Depois (robusto): identifica totalizador por GrupoID === "0" ou por nome de contexto</span>
+<span style="color:#86EFAC">const totalizador = allGrupos.find(g =>
+  g.GrupoID === '0' || g.GrupoID === 0 ||
+  (nomeGrupoContexto && g.GrupoColaborador &&
+   g.GrupoColaborador.toLowerCase() === nomeGrupoContexto.toLowerCase())
+) || allGrupos[0];
+
+const grupos = allGrupos.filter(g => g !== totalizador);</span>
+
+<span style="color:#9AAAD4">// totalColaboradores vem do totalizador (dado correto), não dos subgrupos</span>
+<span style="color:#86EFAC">var totalColabs = totalizador
+  ? (totalizador.QtdColaboradoresTotal || 0)
+  : (grupos.length > 0 ? (grupos[0].QtdColaboradoresTotal || 0) : 0);</span></code></pre>
+
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Antes</th><th>Depois</th></tr></thead>
+              <tbody>
+                <tr><td>"4 grupos" (incluía Master)</td><td>"3 grupos" (apenas subgrupos reais)</td></tr>
+                <tr><td>Média de 63,3% (puxada pelo total)</td><td>Média de 65,1% (calculada nos subgrupos)</td></tr>
+                <tr><td>Master podia aparecer como Destaque Negativo</td><td>Master nunca aparece na análise</td></tr>
+                <tr><td><code>totalColaboradores</code> pego do 1º grupo</td><td><code>totalColaboradores</code> sempre vem do totalizador</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Fix 2: PropBurnout → JornadaExcessiva -->
+        <section id="upd-grupos-campos" style="margin-top:32px">
+          <h3>2. Renomeação dos campos: Burnout → Jornada Excessiva <a class="anchor" href="#upd-grupos-campos">#</a></h3>
+
+          <div class="callout-blue" style="margin-bottom:20px;font-size:13px">
+            <strong>Problema identificado:</strong> A EVOPE estava enviando os campos com nome <code>PropBurnout</code> / <code>PropBurnoutPercentage</code>, que não representavam corretamente o dado (na verdade, <strong>jornada excessiva de trabalho</strong>). Isso causava:
+            <ul style="margin:8px 0 0 16px;padding:0">
+              <li>A IA analisava os dados mas não conseguia identificar corretamente o contexto ("não existe informação de jornada excessiva por grupo" — erro reportado em produção)</li>
+              <li>Output do relatório exibia "Burnout: 38,5%" no lugar de "Jornada Excessiva: 38,5%"</li>
+              <li>Critérios de grupo positivo/negativo usavam <code>PropBurnoutPercentage</code> como threshold — confuso para o cliente</li>
+            </ul>
+          </div>
+
+          <h4 style="margin:16px 0 8px;font-size:14px;color:var(--text-muted)">Campos renomeados na EVOPE</h4>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Campo antigo (EVOPE)</th><th>Campo novo (EVOPE)</th><th>Usado no workflow como</th></tr></thead>
+              <tbody>
+                <tr><td><code>PropBurnout</code></td><td><code>JornadaExcessiva</code></td><td><code>jornadaExcessivaQtd</code> (quantidade)</td></tr>
+                <tr><td><code>PropBurnoutPercentage</code></td><td><code>JornadaExcessivaPercentage</code></td><td><code>jornadaExcessivaPct</code> (percentual)</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 style="margin:16px 0 8px;font-size:14px;color:var(--text-muted)">Mudanças no system prompt do AI Agent</h4>
+          <p style="font-size:13px">Todas as referências a <code>PropBurnoutPercentage</code> e <code>burnout%</code> foram substituídas no prompt do <code>AI Agent - Analise</code>:</p>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Antes (prompt)</th><th>Depois (prompt)</th></tr></thead>
+              <tbody>
+                <tr><td><code>PropBurnoutPercentage &lt; 15%</code></td><td><code>jornadaExcessivaPct &lt; 15%</code></td></tr>
+                <tr><td><code>burnout%</code> nos labels de grupo</td><td><code>jornada excessiva%</code></td></tr>
+                <tr><td><code>"grupo com burnout mais elevado"</code></td><td><code>"grupo com jornada excessiva mais elevada"</code></td></tr>
+                <tr><td><code>qtdColaboradoresEmBurnout, percentualEmBurnout</code></td><td><code>jornadaExcessivaQtd, jornadaExcessivaPct</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Validação -->
+        <section id="upd-grupos-validacao" style="margin-top:32px">
+          <h3>3. Validação com payloads reais <a class="anchor" href="#upd-grupos-validacao">#</a></h3>
+
+          <p style="font-size:13px">Após as correções, foram realizados testes com os payloads reais das 2 execuções disponíveis no histórico do n8n, mais 2 simulações com dados de grupos e campos novos:</p>
+
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Execução</th><th>Empresa</th><th>Tipo</th><th>Resultado</th></tr></thead>
+              <tbody>
+                <tr><td><code>15918466</code> (23/07)</td><td>EmpresaID 187</td><td>Mapa (real)</td><td>✅ Score 24/100 · gargalos corretos · sem referência a Burnout</td></tr>
+                <tr><td><code>15932523</code> (24/07)</td><td>EmpresaID 8</td><td>Mapa (real)</td><td>✅ Score gerado · fluxos críticos multi-métrica corretos</td></tr>
+                <tr><td>Simulação (25/07)</td><td>Teste</td><td>Grupos (3 subgrupos)</td><td>✅ Master removido · 3 grupos analisados · label "jornada excessiva" correto</td></tr>
+                <tr><td>Simulação (25/07)</td><td>Teste</td><td>Grupos c/ jornada alta</td><td>✅ Grupos negativos por <code>jornadaExcessivaPct ≥ 15%</code> · critérios corretos</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p style="margin-top:12px;font-size:13px;color:var(--text-muted)"><strong>Nota:</strong> Não existem execuções reais de Grupos com os campos <code>JornadaExcessiva</code> no histórico do n8n — o sistema EVOPE ainda estava enviando <code>PropBurnout</code> nas execuções anteriores. A validação dos campos novos foi feita via simulação com payload idêntico ao formato documentado acima.</p>
+        </section>
       </section>
 
     </section>
