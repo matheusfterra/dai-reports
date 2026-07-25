@@ -275,6 +275,14 @@
         <a href="#webhook"       class="nav-link">Webhook API</a>
         <a href="#ai-analise"    class="nav-link">AI Agent — Análise</a>
       </div>
+      <div class="nav-section">
+        <div class="nav-label" style="color:#FBBF24">● Atualizações</div>
+        <a href="#atualizacoes"  class="nav-link">Jul/26 — 6 nós</a>
+        <a href="#upd-config"    class="nav-link">· Configuração de Ferramentas</a>
+        <a href="#upd-processar" class="nav-link">· Processar e Agregar Dados</a>
+        <a href="#upd-ai-analise" class="nav-link">· AI Agent — Análise</a>
+        <a href="#upd-caminhos"  class="nav-link">· Pipeline Caminhos (3 nós)</a>
+      </div>
     </nav>
   </aside>
 
@@ -285,7 +293,8 @@
     <div class="meta-bar" style="margin: -52px -60px 48px; padding: 10px 60px;">
       <span class="meta-chip active-chip">● Produção</span>
       <span class="meta-chip">ID: UwsLxUDVK1HPHNiD</span>
-      <span class="meta-chip">26 nós</span>
+      <span class="meta-chip">30 nós</span>
+      <span class="meta-chip" style="background:rgba(251,191,36,.15);color:#FBBF24;border-color:rgba(251,191,36,.3)">Atualizado Jul/26</span>
       <span class="meta-chip">n8n · webhook.digital-ai.tech</span>
       <span class="meta-chip">Julho 2026</span>
     </div>
@@ -722,6 +731,150 @@
           </tbody>
         </table>
       </div>
+    </section>
+
+    <!-- ══ ATUALIZAÇÕES JUL/26 ══ -->
+    <section id="atualizacoes">
+      <h2><span class="sec-num">12</span>Atualizações — Julho 2026 <a class="anchor" href="#atualizacoes">#</a></h2>
+
+      <div class="callout-blue" style="margin-bottom:28px">
+        Sessão de melhorias pós-reunião EVOPE 24/07. Workflow afetado: <code>qY8CpZceebW3CpPW</code> — <strong>[EVOPE] Mapa - Funções Colaboradores</strong>.<br>
+        Execução de validação: <strong>#15945102</strong> — status <span class="pill pill-green">● success</span> · 32.8s · HTML 18.795 chars.
+      </div>
+
+      <div class="tbl-wrap" style="margin-bottom:32px">
+        <table>
+          <thead><tr><th>Nó</th><th>Tipo de Mudança</th><th>Problema Resolvido</th></tr></thead>
+          <tbody>
+            <tr><td><code>Configuração de Ferramentas</code></td><td>2 novos parâmetros</td><td>Entretenimento e threshold σ agora configuráveis sem tocar código</td></tr>
+            <tr><td><code>Processar e Agregar Dados</code> v2.12</td><td>Lógica JS expandida</td><td>Detecção de entretenimento + jornada excessiva automática via σ</td></tr>
+            <tr><td><code>AI Agent — Análise</code> (system prompt)</td><td>3 novas regras</td><td>Mín. 5 itens de otimização, regra entretenimento, regra jornada σ</td></tr>
+            <tr><td><code>Preparar Prompt Caminhos</code></td><td>Guard <code>_semCaminhos</code></td><td>Evita enviar payload multi-chave para LangChain quando sem caminhos</td></tr>
+            <tr><td><code>AI Agent — Caminhos</code></td><td>continueOnFail</td><td>Workflow não trava quando não há dados de caminhos</td></tr>
+            <tr><td><code>Extrair Análise Caminhos</code></td><td>Guard de erro</td><td>Lê output com segurança mesmo se agente anterior falhou</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Configuração de Ferramentas -->
+      <section id="upd-config">
+        <h3>1. Configuração de Ferramentas — 2 novos parâmetros <a class="anchor" href="#upd-config">#</a></h3>
+        <p>Adicionados dois campos ao nó <code>Set</code> de configuração global para que ajustes de negócio não exijam alteração de código:</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Campo</th><th>Valor padrão</th><th>Função</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><code>config_ferramentas_entretenimento</code></td>
+                <td><code>youtube, netflix, spotify, tiktok, instagram, facebook, twitter, amazon prime, disney+, twitch, reddit, steam, pinterest, 9gag, globoplay, deezer</code></td>
+                <td>Lista CSV de apps classificados como entretenimento. <code>Processar e Agregar Dados</code> compara cada <code>aplicativo</code>/<code>funcionalidade</code> contra esta lista.</td>
+              </tr>
+              <tr>
+                <td><code>config_jornada_sigma_threshold</code></td>
+                <td><code>1.5</code></td>
+                <td>Multiplicador do desvio padrão (σ) para definir o threshold de jornada excessiva. Colaboradores com horas &gt; média + (σ × threshold) são flagados.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top:12px;font-size:13px;color:var(--text-muted)">Para adicionar novos apps de entretenimento, editar apenas este nó — sem alterar o código do <code>Processar e Agregar Dados</code>.</p>
+      </section>
+
+      <!-- Processar e Agregar Dados -->
+      <section id="upd-processar" style="margin-top:32px">
+        <h3>2. Processar e Agregar Dados (v2.12) — Entretenimento + Desvio Padrão <a class="anchor" href="#upd-processar">#</a></h3>
+
+        <h4 style="margin:16px 0 8px;font-size:14px;color:var(--text-muted)">2a — Detecção de Entretenimento</h4>
+        <p>Para cada grupo no loop, verifica se <code>aplicativo</code> ou <code>funcionalidade</code> da linha bate com algum app da lista <code>appsEnt</code>. Campos adicionados ao objeto de grupo:</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Campo</th><th>Tipo</th><th>Descrição</th></tr></thead>
+            <tbody>
+              <tr><td><code>isEntretenimento</code></td><td>boolean</td><td>true se o grupo tem uso de entretenimento detectado</td></tr>
+              <tr><td><code>percEntretenimento</code></td><td>number (0–100)</td><td>% de horas do grupo gasto em apps de entretenimento</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4 style="margin:24px 0 8px;font-size:14px;color:var(--text-muted)">2b — Jornada Excessiva via Desvio Padrão (σ)</h4>
+        <p>Após o forEach principal, calcula média e desvio padrão das horas por colaborador. Retorna campo <code>jornadaExcessiva</code> no objeto de saída:</p>
+        <pre style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:16px;overflow:auto;font-size:12px;margin-top:8px"><code><span style="color:#9AAAD4">// Objeto jornadaExcessiva no output:</span>
+{
+  <span style="color:#7DD3FC">"colaboradores"</span>: [
+    { <span style="color:#7DD3FC">"nome"</span>: <span style="color:#86EFAC">"Marcos Rocha"</span>, <span style="color:#7DD3FC">"horasH"</span>: 30, <span style="color:#7DD3FC">"desvios"</span>: <span style="color:#86EFAC">"2.0σ"</span> },
+    { <span style="color:#7DD3FC">"nome"</span>: <span style="color:#86EFAC">"Ana Paula"</span>,    <span style="color:#7DD3FC">"horasH"</span>: 26, <span style="color:#7DD3FC">"desvios"</span>: <span style="color:#86EFAC">"1.6σ"</span> }
+  ],
+  <span style="color:#7DD3FC">"media"</span>: 12.2,
+  <span style="color:#7DD3FC">"desvioPadrao"</span>: 8.9,
+  <span style="color:#7DD3FC">"threshold"</span>: 25.5,   <span style="color:#9AAAD4">// média + 1.5σ</span>
+  <span style="color:#7DD3FC">"sigma"</span>: 1.5
+}</code></pre>
+        <p style="margin-top:10px;font-size:13px;color:var(--text-muted)">Colaboradores com <code>horasH &gt; threshold</code> são incluídos em <code>colaboradores[]</code>. Threshold 0 é ignorado (sem dados).</p>
+      </section>
+
+      <!-- AI Agent - Análise -->
+      <section id="upd-ai-analise" style="margin-top:32px">
+        <h3>3. AI Agent — Análise (system prompt) — 3 novas regras <a class="anchor" href="#upd-ai-analise">#</a></h3>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Regra</th><th>Instrução adicionada ao prompt</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Mínimo de planos de ação</strong></td>
+                <td><code>OBRIGATÓRIO: planosAcao deve ter MÍNIMO 5 e MÁXIMO 8 itens. Nunca retorne menos de 5 planos de ação.</code></td>
+              </tr>
+              <tr>
+                <td><strong>Entretenimento</strong></td>
+                <td>Quando <code>isEntretenimento=true</code> ou <code>percEntretenimento &gt; 20%</code>, o plano de ação NUNCA deve sugerir integração de API da ferramenta. Sugerir: política de uso aceitável, bloqueio via MDM/UEM (Microsoft Intune/Jamf), e relatório periódico de consumo.</td>
+              </tr>
+              <tr>
+                <td><strong>Jornada Excessiva via σ</strong></td>
+                <td>Usar campo <code>jornadaExcessiva</code> do JSON. Mencionar colaboradores com desvios acima do threshold. Formato: <em>"X colaboradores acima do threshold (média Xh + 1.5σ = Xh)"</em>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Pipeline Caminhos -->
+      <section id="upd-caminhos" style="margin-top:32px">
+        <h3>4. Pipeline Caminhos — Bug LangChain BufferMemory corrigido (3 nós) <a class="anchor" href="#upd-caminhos">#</a></h3>
+
+        <div class="callout-blue" style="margin-bottom:16px;font-size:13px">
+          <strong>Bug original:</strong> <code>AI Agent — Caminhos</code> crashava com <code>"input values have 2 keys, you must specify an input key or pass only 1 key as input"</code> quando o payload não tinha dados de caminhos. O workflow inteiro travava.
+        </div>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Nó</th><th>Mudança</th><th>Motivo</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><code>Preparar Prompt Caminhos</code></td>
+                <td>Quando <code>links.length === 0</code>, adiciona <code>_semCaminhos: true</code> ao output em vez de passar <code>dadosAnalise</code> completo</td>
+                <td>LangChain BufferMemory não aceita objeto com 2+ chaves como input. Passando apenas 1 campo (<code>_semCaminhos</code>), o agente recebe o item mas sem acionar o bug</td>
+              </tr>
+              <tr>
+                <td><code>AI Agent — Caminhos</code></td>
+                <td><code>onError: "continueRegularOutput"</code> (continueOnFail habilitado)</td>
+                <td>Mesmo que o agente falhe internamente, o workflow continua para o próximo nó sem travar a execução</td>
+              </tr>
+              <tr>
+                <td><code>Extrair Análise Caminhos</code></td>
+                <td>Verifica <code>firstItem._semCaminhos</code> e <code>firstItem.error</code> antes de ler <code>output</code>. Retorna string vazia (<code>''</code>) em caso de erro ou ausência</td>
+                <td>Sem este guard, o nó quebrava ao tentar acessar <code>output</code> de um item com erro ou nulo</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <pre style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:16px;overflow:auto;font-size:12px;margin-top:16px"><code><span style="color:#9AAAD4">// Extrair Análise Caminhos — lógica de guard:</span>
+const firstItem = items[0]?.json || {};
+const aiResponse = (!firstItem._semCaminhos && !firstItem.error)
+  ? (firstItem.output || firstItem.text || <span style="color:#86EFAC">''</span>)
+  : <span style="color:#86EFAC">''</span>;  <span style="color:#9AAAD4">// retorna vazio — Gerar HTML Final trata ausência corretamente</span></code></pre>
+      </section>
+
     </section>
 
     <!-- ══ AI AGENT ══ -->
