@@ -784,21 +784,91 @@
       <section id="upd-processar" style="margin-top:32px">
         <h3>2. Processar e Agregar Dados (v2.12) — Entretenimento + Desvio Padrão <a class="anchor" href="#upd-processar">#</a></h3>
 
+        <div class="callout-blue" style="margin-bottom:20px;font-size:13px">
+          <strong>Problema resolvido:</strong> YouTube estava sendo categorizado como ferramenta de processo. O AI Agent sugeria "integrar API do YouTube para coletar métricas de engajamento" — uma recomendação completamente fora de contexto. Com a detecção de entretenimento, o agente passa a sugerir <strong>políticas de uso e controles MDM</strong> em vez de integração.
+        </div>
+
         <h4 style="margin:16px 0 8px;font-size:14px;color:var(--text-muted)">2a — Detecção de Entretenimento</h4>
-        <p>Para cada grupo no loop, verifica se <code>aplicativo</code> ou <code>funcionalidade</code> da linha bate com algum app da lista <code>appsEnt</code>. Campos adicionados ao objeto de grupo:</p>
+        <p>Para cada grupo no loop, verifica se <code>aplicativo</code> ou <code>funcionalidade</code> da linha bate (case-insensitive) com algum app da lista <code>appsEnt</code> (lida de <code>config_ferramentas_entretenimento</code>). Campos adicionados ao objeto de grupo:</p>
         <div class="tbl-wrap">
           <table>
             <thead><tr><th>Campo</th><th>Tipo</th><th>Descrição</th></tr></thead>
             <tbody>
-              <tr><td><code>isEntretenimento</code></td><td>boolean</td><td>true se o grupo tem uso de entretenimento detectado</td></tr>
-              <tr><td><code>percEntretenimento</code></td><td>number (0–100)</td><td>% de horas do grupo gasto em apps de entretenimento</td></tr>
+              <tr><td><code>isEntretenimento</code></td><td>boolean</td><td>true se o grupo tem qualquer uso de entretenimento detectado</td></tr>
+              <tr><td><code>percEntretenimento</code></td><td>number (0–100)</td><td>% de horas do grupo gastas em apps de entretenimento</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top:10px;font-size:13px;color:var(--text-muted)">Exemplo: grupo "Atendimento" com 60% das horas em YouTube → <code>isEntretenimento: true, percEntretenimento: 60</code>. Esse dado é passado ao <code>AI Agent — Análise</code> que aplica a regra de resposta adequada.</p>
+
+        <h4 style="margin:24px 0 8px;font-size:14px;color:var(--text-muted)">2b — Jornada Excessiva via Desvio Padrão (σ)</h4>
+
+        <div class="callout-blue" style="margin-bottom:20px;font-size:13px">
+          <strong>Por que desvio padrão em vez de um número fixo?</strong><br>
+          Um threshold hardcoded (ex: "mais de 10h = excessivo") ignora o contexto da empresa. Se todos trabalham muito por natureza do setor, o sistema flagaria todos. Com desvio padrão, o threshold se <strong>adapta automaticamente à realidade do grupo</strong> — só flagando quem está significativamente acima da média dos próprios colegas.
+        </div>
+
+        <h4 style="margin:20px 0 8px;font-size:13px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em">Como o cálculo funciona (passo a passo)</h4>
+
+        <p>Exemplo com 5 colaboradores e suas horas registradas no período:</p>
+        <div class="tbl-wrap" style="margin-bottom:20px">
+          <table>
+            <thead><tr><th>Colaborador</th><th>Horas</th></tr></thead>
+            <tbody>
+              <tr><td>João</td><td>8h</td></tr>
+              <tr><td>Maria</td><td>10h</td></tr>
+              <tr><td>Carlos</td><td>12h</td></tr>
+              <tr><td>Ana Paula</td><td>26h</td></tr>
+              <tr><td>Marcos Rocha</td><td>30h</td></tr>
             </tbody>
           </table>
         </div>
 
-        <h4 style="margin:24px 0 8px;font-size:14px;color:var(--text-muted)">2b — Jornada Excessiva via Desvio Padrão (σ)</h4>
-        <p>Após o forEach principal, calcula média e desvio padrão das horas por colaborador. Retorna campo <code>jornadaExcessiva</code> no objeto de saída:</p>
-        <pre style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:16px;overflow:auto;font-size:12px;margin-top:8px"><code><span style="color:#9AAAD4">// Objeto jornadaExcessiva no output:</span>
+        <p><strong>Passo 1 — Média (μ):</strong></p>
+        <pre style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px;overflow:auto;font-size:12px;margin:8px 0 16px"><code>μ = (8 + 10 + 12 + 26 + 30) / 5 = 86 / 5 = <span style="color:#86EFAC">17.2h</span></code></pre>
+
+        <p><strong>Passo 2 — Desvio padrão (σ):</strong><br>
+        Calcula o quanto cada pessoa desvia da média, eleva ao quadrado (para eliminar negativos), tira a média e extrai a raiz:</p>
+        <pre style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px;overflow:auto;font-size:12px;margin:8px 0 16px"><code>σ = √[ ((8−17.2)² + (10−17.2)² + (12−17.2)² + (26−17.2)² + (30−17.2)²) / 5 ]
+σ = √[ (84.6 + 51.8 + 27.0 + 77.4 + 163.8) / 5 ]
+σ = √[ 404.6 / 5 ]
+σ = √80.9 ≈ <span style="color:#86EFAC">9.0h</span></code></pre>
+
+        <p><strong>Passo 3 — Threshold dinâmico</strong> (com <code>config_jornada_sigma_threshold = 1.5</code>):</p>
+        <pre style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px;overflow:auto;font-size:12px;margin:8px 0 16px"><code>threshold = μ + (σ × 1.5)
+threshold = 17.2 + (9.0 × 1.5)
+threshold = 17.2 + 13.5 = <span style="color:#FBBF24">30.7h</span>  ← quem ultrapassar este valor é flagado</code></pre>
+
+        <p><strong>Passo 4 — Comparação e output:</strong></p>
+        <div class="tbl-wrap" style="margin-bottom:16px">
+          <table>
+            <thead><tr><th>Colaborador</th><th>Horas</th><th>Acima do threshold (30.7h)?</th><th>Desvios (σ)</th></tr></thead>
+            <tbody>
+              <tr><td>João</td><td>8h</td><td>—</td><td>—</td></tr>
+              <tr><td>Maria</td><td>10h</td><td>—</td><td>—</td></tr>
+              <tr><td>Carlos</td><td>12h</td><td>—</td><td>—</td></tr>
+              <tr><td>Ana Paula</td><td>26h</td><td>— (26 &lt; 30.7)</td><td>—</td></tr>
+              <tr><td>Marcos Rocha</td><td>30h</td><td>— (30 &lt; 30.7)</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:13px;color:var(--text-muted)">Neste exemplo ninguém seria flagado — a variação é considerada normal dentro do grupo. O sistema não gera alarme falso.</p>
+
+        <h4 style="margin:24px 0 8px;font-size:13px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em">O que o sigma controla</h4>
+        <div class="tbl-wrap" style="margin-bottom:16px">
+          <table>
+            <thead><tr><th>sigma (threshold)</th><th>Sensibilidade</th><th>Quando usar</th></tr></thead>
+            <tbody>
+              <tr><td><code>1.0σ</code></td><td>Alta — ~16% podem ser flagados</td><td>Empresas com jornadas muito homogêneas</td></tr>
+              <tr><td><code>1.5σ</code> ← padrão</td><td>Balanceada — pega os outliers reais</td><td>Uso geral recomendado</td></tr>
+              <tr><td><code>2.0σ</code></td><td>Conservadora — apenas casos extremos</td><td>Setor com jornadas naturalmente variáveis</td></tr>
+              <tr><td><code>3.0σ</code></td><td>Muito conservadora — quase ninguém</td><td>Só para desvios gravíssimos</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4 style="margin:20px 0 8px;font-size:13px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em">Output do nó</h4>
+        <pre style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:16px;overflow:auto;font-size:12px;margin-top:8px"><code><span style="color:#9AAAD4">// Campo jornadaExcessiva no objeto de output do nó:</span>
 {
   <span style="color:#7DD3FC">"colaboradores"</span>: [
     { <span style="color:#7DD3FC">"nome"</span>: <span style="color:#86EFAC">"Marcos Rocha"</span>, <span style="color:#7DD3FC">"horasH"</span>: 30, <span style="color:#7DD3FC">"desvios"</span>: <span style="color:#86EFAC">"2.0σ"</span> },
@@ -806,73 +876,106 @@
   ],
   <span style="color:#7DD3FC">"media"</span>: 12.2,
   <span style="color:#7DD3FC">"desvioPadrao"</span>: 8.9,
-  <span style="color:#7DD3FC">"threshold"</span>: 25.5,   <span style="color:#9AAAD4">// média + 1.5σ</span>
+  <span style="color:#7DD3FC">"threshold"</span>: 25.5,   <span style="color:#9AAAD4">// média + 1.5σ (valores reais da execução #15945102)</span>
   <span style="color:#7DD3FC">"sigma"</span>: 1.5
 }</code></pre>
-        <p style="margin-top:10px;font-size:13px;color:var(--text-muted)">Colaboradores com <code>horasH &gt; threshold</code> são incluídos em <code>colaboradores[]</code>. Threshold 0 é ignorado (sem dados).</p>
+        <p style="margin-top:10px;font-size:13px;color:var(--text-muted)">Colaboradores com <code>horasH &gt; threshold</code> são incluídos em <code>colaboradores[]</code>. Threshold 0 é ignorado (sem dados suficientes). Para ajustar a sensibilidade, alterar <code>config_jornada_sigma_threshold</code> em <a href="#upd-config">Configuração de Ferramentas</a>.</p>
       </section>
 
       <!-- AI Agent - Análise -->
       <section id="upd-ai-analise" style="margin-top:32px">
         <h3>3. AI Agent — Análise (system prompt) — 3 novas regras <a class="anchor" href="#upd-ai-analise">#</a></h3>
 
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>Regra</th><th>Instrução adicionada ao prompt</th></tr></thead>
-            <tbody>
-              <tr>
-                <td><strong>Mínimo de planos de ação</strong></td>
-                <td><code>OBRIGATÓRIO: planosAcao deve ter MÍNIMO 5 e MÁXIMO 8 itens. Nunca retorne menos de 5 planos de ação.</code></td>
-              </tr>
-              <tr>
-                <td><strong>Entretenimento</strong></td>
-                <td>Quando <code>isEntretenimento=true</code> ou <code>percEntretenimento &gt; 20%</code>, o plano de ação NUNCA deve sugerir integração de API da ferramenta. Sugerir: política de uso aceitável, bloqueio via MDM/UEM (Microsoft Intune/Jamf), e relatório periódico de consumo.</td>
-              </tr>
-              <tr>
-                <td><strong>Jornada Excessiva via σ</strong></td>
-                <td>Usar campo <code>jornadaExcessiva</code> do JSON. Mencionar colaboradores com desvios acima do threshold. Formato: <em>"X colaboradores acima do threshold (média Xh + 1.5σ = Xh)"</em>.</td>
-              </tr>
-            </tbody>
-          </table>
+        <p>Três regras adicionadas ao system prompt do agente para garantir qualidade e coerência nas análises:</p>
+
+        <h4 style="margin:20px 0 8px;font-size:13px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em">Regra 1 — Mínimo de planos de ação</h4>
+        <div class="callout-blue" style="font-size:13px;margin-bottom:12px">
+          <strong>Problema:</strong> Em algumas execuções, o agente retornava apenas 1 item no array <code>planosAcao</code>. O HTML gerado ficava com uma tabela de otimização quase vazia — sem valor para o cliente.
         </div>
+        <p>Instrução adicionada ao prompt:</p>
+        <pre style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px;overflow:auto;font-size:12px;margin:8px 0 16px"><code>OBRIGATÓRIO: planosAcao deve ter MÍNIMO 5 e MÁXIMO 8 itens.
+Nunca retorne menos de 5 planos de ação, mesmo que os dados sejam simples.</code></pre>
+        <p style="font-size:13px;color:var(--text-muted)">O agente é livre para criar planos de ação complementares (treinamentos, governança, políticas internas) quando os dados brutos não gerarem 5 oportunidades óbvias.</p>
+
+        <h4 style="margin:24px 0 8px;font-size:13px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em">Regra 2 — Tratamento de Apps de Entretenimento</h4>
+        <div class="callout-blue" style="font-size:13px;margin-bottom:12px">
+          <strong>Problema:</strong> Agente sugeria "integrar API do YouTube" para grupos com alto consumo de vídeos — recomendação tecnicamente errada e irrelevante para o cliente.
+        </div>
+        <p>Lógica de decisão adicionada ao prompt:</p>
+        <pre style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px;overflow:auto;font-size:12px;margin:8px 0 12px"><code>SE isEntretenimento = true OU percEntretenimento > 20%:
+  → NUNCA sugerir integração de API da ferramenta de entretenimento
+  → SEMPRE sugerir uma das opções abaixo:
+     1. Política de Uso Aceitável (AUP) — documento formal de TI
+     2. Bloqueio via MDM/UEM (Microsoft Intune ou Jamf para Mac)
+     3. Relatório periódico de consumo com alerta de gestores</code></pre>
+        <p style="font-size:13px;color:var(--text-muted)">O campo <code>percEntretenimento</code> vem do <code>Processar e Agregar Dados</code> e é passado diretamente ao agente no JSON de análise.</p>
+
+        <h4 style="margin:24px 0 8px;font-size:13px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em">Regra 3 — Jornada Excessiva via σ</h4>
+        <div class="callout-blue" style="font-size:13px;margin-bottom:12px">
+          <strong>Problema:</strong> A seção de jornada excessiva no relatório HTML não citava colaboradores específicos — ficava genérica e sem valor acionável para o RH.
+        </div>
+        <p>Instrução adicionada ao prompt:</p>
+        <pre style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px;overflow:auto;font-size:12px;margin:8px 0 12px"><code>Use o campo jornadaExcessiva do JSON recebido.
+Mencione os colaboradores flagados com seus desvios.
+Formato obrigatório: "X colaboradores acima do threshold (média Xh + 1.5σ = Xh)"
+Exemplo: "2 colaboradores acima do threshold (média 12.2h + 1.5σ = 25.5h):
+  - Marcos Rocha: 30h (2.0σ acima da média)
+  - Ana Paula: 26h (1.6σ acima da média)"</code></pre>
+        <p style="font-size:13px;color:var(--text-muted)">Quando <code>jornadaExcessiva.colaboradores</code> está vazio, o agente omite a seção — sem alerta falso.</p>
       </section>
 
       <!-- Pipeline Caminhos -->
       <section id="upd-caminhos" style="margin-top:32px">
         <h3>4. Pipeline Caminhos — Bug LangChain BufferMemory corrigido (3 nós) <a class="anchor" href="#upd-caminhos">#</a></h3>
 
-        <div class="callout-blue" style="margin-bottom:16px;font-size:13px">
-          <strong>Bug original:</strong> <code>AI Agent — Caminhos</code> crashava com <code>"input values have 2 keys, you must specify an input key or pass only 1 key as input"</code> quando o payload não tinha dados de caminhos. O workflow inteiro travava.
+        <h4 style="margin:0 0 12px;font-size:13px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em">O bug</h4>
+        <div class="callout-blue" style="margin-bottom:20px;font-size:13px">
+          <strong>Erro original:</strong> <code>"input values have 2 keys, you must specify an input key or pass only 1 key as input"</code><br><br>
+          <strong>Contexto:</strong> <code>AI Agent — Caminhos</code> usa <strong>LangChain BufferMemory</strong>. Essa memória exige receber exatamente <strong>1 chave</strong> como input. Quando o payload não continha dados de caminhos (links vazios), o nó anterior (<code>Preparar Prompt Caminhos</code>) passava o objeto <code>dadosAnalise</code> completo — com múltiplas chaves (grupo, colaboradores, topApps, etc.) — causando o crash. O workflow inteiro travava e nenhum relatório era gerado.
         </div>
+
+        <h4 style="margin:0 0 12px;font-size:13px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em">Fix em 3 camadas</h4>
+
+        <p><strong>Camada 1 — Preparar Prompt Caminhos</strong> (prevenção upstream):</p>
+        <pre style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px;overflow:auto;font-size:12px;margin:8px 0 16px"><code><span style="color:#9AAAD4">// Antes (bugado): passava dadosAnalise completo mesmo sem caminhos</span>
+return [{ json: dadosAnalise }];  <span style="color:#F87171">// ← múltiplas chaves → crash BufferMemory</span>
+
+<span style="color:#9AAAD4">// Depois (correto): guard quando sem dados</span>
+if (links.length === 0) {
+  return [{ json: { _semCaminhos: true } }];  <span style="color:#86EFAC">// ← 1 chave apenas → sem crash</span>
+}
+return [{ json: { prompt: promptFormatado } }];  <span style="color:#86EFAC">// ← 1 chave → OK</span></code></pre>
+
+        <p><strong>Camada 2 — AI Agent — Caminhos</strong> (tolerância a falha):</p>
+        <pre style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px;overflow:auto;font-size:12px;margin:8px 0 16px"><code><span style="color:#9AAAD4">// Configuração adicionada ao nó:</span>
+onError: "continueRegularOutput"  <span style="color:#9AAAD4">// = continueOnFail habilitado</span>
+
+<span style="color:#9AAAD4">// Efeito: mesmo que o agente falhe internamente,</span>
+<span style="color:#9AAAD4">// o item de erro é passado adiante e o workflow continua.</span>
+<span style="color:#9AAAD4">// Sem isso, qualquer erro aqui travava toda a execução.</span></code></pre>
+
+        <p><strong>Camada 3 — Extrair Análise Caminhos</strong> (guard downstream):</p>
+        <pre style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px;overflow:auto;font-size:12px;margin:8px 0 16px"><code><span style="color:#9AAAD4">// Antes (bugado): acessava output diretamente</span>
+const aiResponse = items[0].json.output;  <span style="color:#F87171">// ← quebra se output não existe</span>
+
+<span style="color:#9AAAD4">// Depois (correto): verifica flags antes de acessar</span>
+const firstItem = items[0]?.json || {};
+const aiResponse = (!firstItem._semCaminhos && !firstItem.error)
+  ? (firstItem.output || firstItem.text || <span style="color:#86EFAC">''</span>)
+  : <span style="color:#86EFAC">''</span>;  <span style="color:#9AAAD4">// string vazia — Gerar HTML Final trata ausência omitindo a seção</span></code></pre>
 
         <div class="tbl-wrap">
           <table>
-            <thead><tr><th>Nó</th><th>Mudança</th><th>Motivo</th></tr></thead>
+            <thead><tr><th>Nó</th><th>Tipo de fix</th><th>Efeito</th></tr></thead>
             <tbody>
-              <tr>
-                <td><code>Preparar Prompt Caminhos</code></td>
-                <td>Quando <code>links.length === 0</code>, adiciona <code>_semCaminhos: true</code> ao output em vez de passar <code>dadosAnalise</code> completo</td>
-                <td>LangChain BufferMemory não aceita objeto com 2+ chaves como input. Passando apenas 1 campo (<code>_semCaminhos</code>), o agente recebe o item mas sem acionar o bug</td>
-              </tr>
-              <tr>
-                <td><code>AI Agent — Caminhos</code></td>
-                <td><code>onError: "continueRegularOutput"</code> (continueOnFail habilitado)</td>
-                <td>Mesmo que o agente falhe internamente, o workflow continua para o próximo nó sem travar a execução</td>
-              </tr>
-              <tr>
-                <td><code>Extrair Análise Caminhos</code></td>
-                <td>Verifica <code>firstItem._semCaminhos</code> e <code>firstItem.error</code> antes de ler <code>output</code>. Retorna string vazia (<code>''</code>) em caso de erro ou ausência</td>
-                <td>Sem este guard, o nó quebrava ao tentar acessar <code>output</code> de um item com erro ou nulo</td>
-              </tr>
+              <tr><td><code>Preparar Prompt Caminhos</code></td><td>Prevenção — guard upstream</td><td>Garante que apenas 1 chave chegue ao BufferMemory</td></tr>
+              <tr><td><code>AI Agent — Caminhos</code></td><td>Tolerância — continueOnFail</td><td>Workflow não trava se agente falhar internamente</td></tr>
+              <tr><td><code>Extrair Análise Caminhos</code></td><td>Defesa — guard downstream</td><td>Retorna string vazia de forma segura; HTML omite seção</td></tr>
             </tbody>
           </table>
         </div>
 
-        <pre style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:16px;overflow:auto;font-size:12px;margin-top:16px"><code><span style="color:#9AAAD4">// Extrair Análise Caminhos — lógica de guard:</span>
-const firstItem = items[0]?.json || {};
-const aiResponse = (!firstItem._semCaminhos && !firstItem.error)
-  ? (firstItem.output || firstItem.text || <span style="color:#86EFAC">''</span>)
-  : <span style="color:#86EFAC">''</span>;  <span style="color:#9AAAD4">// retorna vazio — Gerar HTML Final trata ausência corretamente</span></code></pre>
+        <p style="margin-top:14px;font-size:13px;color:var(--text-muted)"><strong>Regra geral aprendida:</strong> Nós LangChain com BufferMemory <strong>sempre</strong> devem receber exatamente 1 chave de input. Quando dados podem estar ausentes, usar guard <code>_semCaminhos</code> + <code>continueOnFail</code> + guard no nó seguinte é o padrão de segurança adotado.</p>
       </section>
 
     </section>
