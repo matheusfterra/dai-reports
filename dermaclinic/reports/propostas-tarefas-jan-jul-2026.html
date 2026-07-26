@@ -9,15 +9,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --brand:#C4476A; --brand-dark:#7B1D36; --brand-mid:#A33055;
-  --brand-accent:#FDF0F3; --brand-light:#FDF0F3;
-  --bg:#F9FAFB; --surface:#FFFFFF; --border:#E2E8F0; --border-light:#EEF2F8;
+  --brand:#2D52EF; --brand-dark:#0F1F5C; --brand-mid:#1A39C4;
+  --brand-accent:#E8EEFF; --brand-light:#F0F4FF;
+  --bg:#F8FAFF; --surface:#FFFFFF; --border:#E2E8F0; --border-light:#EEF2F8;
   --text-primary:#0F172A; --text-secondary:#475569; --text-muted:#94A3B8;
   --success:#059669; --warning:#D97706; --danger:#DC2626;
   --radius:12px; --radius-lg:16px;
-  --shadow-sm:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
-  --shadow:0 4px 12px rgba(0,0,0,.08),0 2px 4px rgba(0,0,0,.04);
-  --shadow-lg:0 8px 24px rgba(0,0,0,.10),0 4px 8px rgba(0,0,0,.06);
+  --shadow-sm:0 1px 3px rgba(15,31,92,.06),0 1px 2px rgba(15,31,92,.04);
+  --shadow:0 4px 12px rgba(15,31,92,.08),0 2px 4px rgba(15,31,92,.04);
+  --shadow-lg:0 8px 24px rgba(15,31,92,.10),0 4px 8px rgba(15,31,92,.06);
   --font-head:'Plus Jakarta Sans',sans-serif; --font-body:'DM Sans',sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -31,10 +31,10 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 .header{background:var(--surface);border-bottom:1px solid var(--border);padding:18px 0;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm)}
 .header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px}
 .header-brand{display:flex;align-items:center;gap:14px}
-.header-logo-circle{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--brand-dark),var(--brand));display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:.95rem;color:#fff;flex-shrink:0}
+.header-logo-circle{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--brand-dark),var(--brand-mid));display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:.95rem;color:#fff;flex-shrink:0}
 .header-title{font-family:var(--font-head);font-weight:700;font-size:1.1rem;color:var(--brand-dark)}
 .header-sub{font-size:.8rem;color:var(--text-secondary);margin-top:1px}
-.header-badge{display:flex;align-items:center;gap:8px;background:var(--brand-light);border:1px solid rgba(196,71,106,.25);border-radius:20px;padding:6px 14px;font-size:.78rem;font-family:var(--font-head);font-weight:600;color:var(--brand-dark)}
+.header-badge{display:flex;align-items:center;gap:8px;background:var(--brand-light);border:1px solid #C7D7FD;border-radius:20px;padding:6px 14px;font-size:.78rem;font-family:var(--font-head);font-weight:600;color:var(--brand-dark)}
 
 /* PERIOD BANNER */
 .period-banner{background:linear-gradient(135deg,var(--brand-dark) 0%,var(--brand-mid) 60%,var(--brand) 100%);color:#fff;padding:28px 0;margin-bottom:36px}
@@ -117,7 +117,7 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 .tag{padding:.22rem .65rem;border-radius:2rem;font-size:.71rem;font-weight:600;background:var(--bg);border:1px solid var(--border);color:var(--text-secondary)}
 .tag.hot{border-color:rgba(220,38,38,.3);color:#991B1B;background:#FEF2F2}
 .tag.warm{border-color:rgba(217,119,6,.3);color:#92400E;background:#FFFBEB}
-.tag.cool{border-color:rgba(196,71,106,.3);color:var(--brand-dark);background:var(--brand-light)}
+.tag.cool{border-color:rgba(45,82,239,.25);color:var(--brand-dark);background:var(--brand-light)}
 
 /* STAT INLINE */
 .stat-row{display:flex;justify-content:space-between;align-items:center;padding:.55rem 0;border-bottom:1px solid var(--border-light)}
@@ -664,7 +664,7 @@ new C(document.getElementById('chartPropostasMes'), {
       {
         label: 'Executadas',
         data: propostasMes.map(d => d.executadas),
-        backgroundColor: 'rgba(196,71,106,.85)',
+        backgroundColor: 'rgba(45,82,239,.85)',
         borderRadius: 4,
         stack: 'a',
       },
@@ -711,7 +711,7 @@ new C(document.getElementById('chartProcedimentos'), {
     datasets: [{
       label: 'Nº de ofertas',
       data: procedimentos.map(p => p.total),
-      backgroundColor: procedimentos.map((_,i) => `hsla(${340+i*8},65%,55%,.8)`),
+      backgroundColor: procedimentos.map((_,i) => `hsla(${250+i*10},70%,60%,.8)`),
       borderRadius: 4,
     }]
   },
@@ -882,7 +882,7 @@ new C(document.getElementById('chartInteresses'), {
     datasets: [{
       label: 'Menções',
       data: interesses.map(i => i.total),
-      backgroundColor: interesses.map((_,i) => i < 3 ? 'rgba(196,71,106,.85)' : i < 6 ? 'rgba(200,100,130,.65)' : 'rgba(148,163,184,.6)'),
+      backgroundColor: interesses.map((_,i) => i < 3 ? 'rgba(45,82,239,.85)' : i < 6 ? 'rgba(0,212,170,.7)' : 'rgba(100,116,139,.6)'),
       borderRadius: 4,
     }]
   },
