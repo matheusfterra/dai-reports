@@ -3,178 +3,230 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DermaClinic — Relatório de Atendimento & Propostas · Jan–Jul 2026</title>
+<title>DermaClinic — Propostas & Atendimento · Jan–Jul 2026</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0d14;
-    --surface: #111827;
-    --surface2: #1a2235;
-    --border: #1f2d45;
-    --accent: #7c6bff;
-    --accent2: #00d4aa;
-    --accent3: #f59e0b;
-    --accent4: #ef4444;
-    --text: #e2e8f0;
-    --text2: #94a3b8;
-    --text3: #64748b;
-    --positive: #22c55e;
-    --warning: #f59e0b;
-    --danger: #ef4444;
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--bg); color:var(--text); font-family:'Inter','Segoe UI',sans-serif; font-size:14px; line-height:1.6; }
+:root{
+  --brand:#C4476A; --brand-dark:#7B1D36; --brand-mid:#A33055;
+  --brand-accent:#FDF0F3; --brand-light:#FDF0F3;
+  --bg:#F9FAFB; --surface:#FFFFFF; --border:#E2E8F0; --border-light:#EEF2F8;
+  --text-primary:#0F172A; --text-secondary:#475569; --text-muted:#94A3B8;
+  --success:#059669; --warning:#D97706; --danger:#DC2626;
+  --radius:12px; --radius-lg:16px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow:0 4px 12px rgba(0,0,0,.08),0 2px 4px rgba(0,0,0,.04);
+  --shadow-lg:0 8px 24px rgba(0,0,0,.10),0 4px 8px rgba(0,0,0,.06);
+  --font-head:'Plus Jakarta Sans',sans-serif; --font-body:'DM Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px;scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,h5{font-family:var(--font-head)}
+.container{max-width:1180px;margin:0 auto;padding:0 24px}
+.section{margin-bottom:40px}
 
-  /* HEADER */
-  .header { background:linear-gradient(135deg,#0f172a 0%,#1a1040 100%); border-bottom:1px solid var(--border); padding:2.5rem 3rem; display:flex; align-items:center; justify-content:space-between; }
-  .header-left h1 { font-size:1.6rem; font-weight:700; color:#fff; letter-spacing:-.02em; }
-  .header-left h1 span { color:var(--accent); }
-  .header-left p { color:var(--text2); margin-top:.3rem; font-size:.875rem; }
-  .header-badge { background:rgba(124,107,255,.15); border:1px solid rgba(124,107,255,.3); color:var(--accent); padding:.4rem 1rem; border-radius:2rem; font-size:.8rem; font-weight:600; }
-  .header-logo { font-size:2rem; font-weight:800; background:linear-gradient(135deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+/* HEADER */
+.header{background:var(--surface);border-bottom:1px solid var(--border);padding:18px 0;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.header-brand{display:flex;align-items:center;gap:14px}
+.header-logo-circle{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--brand-dark),var(--brand));display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:.95rem;color:#fff;flex-shrink:0}
+.header-title{font-family:var(--font-head);font-weight:700;font-size:1.1rem;color:var(--brand-dark)}
+.header-sub{font-size:.8rem;color:var(--text-secondary);margin-top:1px}
+.header-badge{display:flex;align-items:center;gap:8px;background:var(--brand-light);border:1px solid rgba(196,71,106,.25);border-radius:20px;padding:6px 14px;font-size:.78rem;font-family:var(--font-head);font-weight:600;color:var(--brand-dark)}
 
-  /* LAYOUT */
-  .container { max-width:1400px; margin:0 auto; padding:2rem 2rem 4rem; }
-  .section { margin-bottom:3rem; }
-  .section-title { font-size:1rem; font-weight:700; color:var(--text2); text-transform:uppercase; letter-spacing:.08em; margin-bottom:1.25rem; display:flex; align-items:center; gap:.5rem; padding-bottom:.75rem; border-bottom:1px solid var(--border); }
-  .section-title::before { content:''; width:3px; height:1.1em; background:var(--accent); border-radius:2px; display:inline-block; }
+/* PERIOD BANNER */
+.period-banner{background:linear-gradient(135deg,var(--brand-dark) 0%,var(--brand-mid) 60%,var(--brand) 100%);color:#fff;padding:28px 0;margin-bottom:36px}
+.period-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}
+.period-title{font-size:1.4rem;font-weight:800;letter-spacing:-.5px}
+.period-sub{font-size:.85rem;opacity:.78;margin-top:4px}
+.period-pills{display:flex;gap:10px;flex-wrap:wrap}
+.period-pill{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.28);border-radius:20px;padding:5px 14px;font-size:.76rem;font-weight:600}
 
-  /* GRID */
-  .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
-  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
-  .grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; }
-  .grid-2-1 { display:grid; grid-template-columns:2fr 1fr; gap:1rem; }
-  .grid-1-2 { display:grid; grid-template-columns:1fr 2fr; gap:1rem; }
-  @media(max-width:1024px) { .grid-4,.grid-3 { grid-template-columns:repeat(2,1fr); } }
-  @media(max-width:640px) { .grid-4,.grid-3,.grid-2,.grid-2-1,.grid-1-2 { grid-template-columns:1fr; } }
+/* SECTION HEADER */
+.section-header{display:flex;align-items:baseline;gap:10px;margin-bottom:20px}
+.section-title{font-family:var(--font-head);font-size:1.02rem;font-weight:700;color:var(--brand-dark)}
+.section-divider{flex:1;height:1px;background:var(--border)}
+.section-meta{font-size:.76rem;color:var(--text-muted);font-weight:500}
 
-  /* CARDS */
-  .card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1.25rem 1.5rem; }
-  .card-sm { padding:.9rem 1.1rem; }
-  .card-accent { border-color:rgba(124,107,255,.4); background:rgba(124,107,255,.06); }
-  .card-green { border-color:rgba(34,197,94,.3); background:rgba(34,197,94,.05); }
-  .card-amber { border-color:rgba(245,158,11,.3); background:rgba(245,158,11,.05); }
-  .card-red { border-color:rgba(239,68,68,.3); background:rgba(239,68,68,.05); }
+/* KPI CARDS */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.kpi-grid{grid-template-columns:1fr}}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-sm);position:relative;overflow:visible}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--brand);border-radius:var(--radius-lg) var(--radius-lg) 0 0}
+.kpi-card.green::before{background:var(--success)}
+.kpi-card.amber::before{background:var(--warning)}
+.kpi-card.red::before{background:var(--danger)}
+.kpi-label{font-size:.75rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.kpi-value{font-family:var(--font-head);font-size:1.9rem;font-weight:800;color:var(--brand-dark);line-height:1}
+.kpi-value.sm{font-size:1.45rem}
+.kpi-sub{font-size:.76rem;color:var(--text-secondary);margin-top:5px}
+.kpi-delta{display:inline-flex;align-items:center;gap:.2rem;font-size:.73rem;font-weight:600;padding:.15rem .55rem;border-radius:1rem;margin-top:.5rem}
+.kpi-delta.up{background:#DCFCE7;color:#166534}
+.kpi-delta.warn{background:#FEF3C7;color:#92400E}
+.kpi-delta.down{background:#FEE2E2;color:#991B1B}
 
-  /* KPI CARDS */
-  .kpi-label { font-size:.75rem; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:.06em; margin-bottom:.4rem; }
-  .kpi-value { font-size:2rem; font-weight:800; color:#fff; letter-spacing:-.03em; line-height:1; }
-  .kpi-value.sm { font-size:1.4rem; }
-  .kpi-sub { font-size:.78rem; color:var(--text2); margin-top:.4rem; }
-  .kpi-delta { display:inline-flex; align-items:center; gap:.2rem; font-size:.75rem; font-weight:600; padding:.15rem .5rem; border-radius:1rem; margin-top:.5rem; }
-  .kpi-delta.up { background:rgba(34,197,94,.15); color:var(--positive); }
-  .kpi-delta.warn { background:rgba(245,158,11,.15); color:var(--warning); }
-  .kpi-delta.down { background:rgba(239,68,68,.15); color:var(--danger); }
+/* CHART CARD */
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm)}
+.chart-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:12px;flex-wrap:wrap}
+.chart-card-title{font-family:var(--font-head);font-size:.92rem;font-weight:700;color:var(--brand-dark)}
+.chart-wrap{position:relative;height:260px}
+.chart-wrap.tall{height:310px}
+.chart-wrap.sm{height:190px}
 
-  /* CHART CONTAINERS */
-  .chart-wrap { position:relative; }
-  .chart-wrap canvas { max-height:280px; }
-  .chart-wrap.tall canvas { max-height:340px; }
-  .chart-wrap.sm canvas { max-height:200px; }
+/* GRID */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two-one{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:768px){.two-col,.two-one,.three-col{grid-template-columns:1fr}}
 
-  /* FUNIL */
-  .funil { display:flex; flex-direction:column; gap:.5rem; }
-  .funil-item { display:flex; align-items:center; gap:1rem; }
-  .funil-bar-wrap { flex:1; background:var(--surface2); border-radius:4px; height:28px; overflow:hidden; }
-  .funil-bar { height:100%; border-radius:4px; display:flex; align-items:center; padding-left:.75rem; font-size:.75rem; font-weight:700; color:#fff; transition:width .8s ease; }
-  .funil-label { font-size:.78rem; color:var(--text2); white-space:nowrap; width:130px; text-align:right; }
-  .funil-count { font-size:.85rem; font-weight:700; color:#fff; width:45px; text-align:right; }
+/* FUNIL */
+.funil{display:flex;flex-direction:column;gap:.5rem}
+.funil-item{display:flex;align-items:center;gap:.75rem}
+.funil-bar-wrap{flex:1;background:var(--bg);border-radius:4px;height:26px;overflow:hidden;border:1px solid var(--border)}
+.funil-bar{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:.65rem;font-size:.73rem;font-weight:700;color:#fff}
+.funil-label{font-size:.76rem;color:var(--text-secondary);white-space:nowrap;width:120px;text-align:right}
+.funil-count{font-size:.82rem;font-weight:700;color:var(--brand-dark);width:38px;text-align:right}
 
-  /* TABLE */
-  .table-wrap { overflow-x:auto; }
-  table { width:100%; border-collapse:collapse; }
-  th { font-size:.7rem; font-weight:700; color:var(--text3); text-transform:uppercase; letter-spacing:.06em; padding:.6rem 1rem; text-align:left; border-bottom:1px solid var(--border); }
-  td { padding:.65rem 1rem; border-bottom:1px solid rgba(31,45,69,.5); font-size:.82rem; color:var(--text); vertical-align:top; }
-  tr:last-child td { border-bottom:none; }
-  tr:hover td { background:rgba(124,107,255,.04); }
-  .badge { display:inline-block; padding:.18rem .55rem; border-radius:1rem; font-size:.7rem; font-weight:700; white-space:nowrap; }
-  .badge-aguard { background:rgba(245,158,11,.15); color:var(--warning); }
-  .badge-aprov { background:rgba(34,197,94,.15); color:var(--positive); }
-  .badge-exec { background:rgba(124,107,255,.15); color:var(--accent); }
-  .badge-rej { background:rgba(239,68,68,.15); color:var(--danger); }
-  .tel { color:var(--accent2); font-family:monospace; font-size:.8rem; }
+/* TABLE */
+.table-scroll{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border)}
+.data-table{width:100%;border-collapse:collapse;font-size:.83rem}
+.data-table th{font-family:var(--font-head);font-size:.71rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-secondary);padding:10px 14px;border-bottom:2px solid var(--border);text-align:left;white-space:nowrap}
+.data-table td{padding:11px 14px;border-bottom:1px solid var(--border-light);vertical-align:middle}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:var(--bg)}
+.badge{display:inline-block;padding:.2rem .6rem;border-radius:1rem;font-size:.68rem;font-weight:700}
+.badge-aguard{background:#FEF3C7;color:#92400E}
+.badge-aprov{background:#DCFCE7;color:#166534}
+.badge-exec{background:#EDE9FE;color:#4C1D95}
+.badge-rej{background:#FEE2E2;color:#991B1B}
+.badge-fin{background:#E0F2FE;color:#075985}
+.tel a{color:var(--brand);font-weight:600;text-decoration:none;font-size:.8rem}
+.tel a:hover{text-decoration:underline}
 
-  /* PILLS / TAGS */
-  .tag-list { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.5rem; }
-  .tag { padding:.25rem .7rem; border-radius:2rem; font-size:.73rem; font-weight:600; background:var(--surface2); border:1px solid var(--border); color:var(--text2); }
-  .tag.hot { border-color:rgba(239,68,68,.4); color:#fca5a5; background:rgba(239,68,68,.08); }
-  .tag.warm { border-color:rgba(245,158,11,.4); color:#fcd34d; background:rgba(245,158,11,.08); }
-  .tag.cool { border-color:rgba(124,107,255,.4); color:#a5b4fc; background:rgba(124,107,255,.08); }
+/* INSIGHT */
+.insight{display:flex;gap:1rem;align-items:flex-start;padding:14px 16px;border-radius:10px;background:var(--surface);border:1px solid var(--border);margin-bottom:.6rem;box-shadow:var(--shadow-sm)}
+.insight-icon{font-size:1.25rem;flex-shrink:0;margin-top:.1rem}
+.insight-title{font-size:.85rem;font-weight:700;color:var(--brand-dark);margin-bottom:.2rem;font-family:var(--font-head)}
+.insight-body{font-size:.79rem;color:var(--text-secondary);line-height:1.55}
 
-  /* INSIGHT CARDS */
-  .insight { display:flex; gap:1rem; align-items:flex-start; padding:1rem; border-radius:8px; background:var(--surface2); border:1px solid var(--border); margin-bottom:.6rem; }
-  .insight-icon { font-size:1.4rem; flex-shrink:0; margin-top:.1rem; }
-  .insight-title { font-size:.85rem; font-weight:700; color:#fff; margin-bottom:.2rem; }
-  .insight-body { font-size:.8rem; color:var(--text2); line-height:1.5; }
+/* TAGS */
+.tag-list{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.5rem}
+.tag{padding:.22rem .65rem;border-radius:2rem;font-size:.71rem;font-weight:600;background:var(--bg);border:1px solid var(--border);color:var(--text-secondary)}
+.tag.hot{border-color:rgba(220,38,38,.3);color:#991B1B;background:#FEF2F2}
+.tag.warm{border-color:rgba(217,119,6,.3);color:#92400E;background:#FFFBEB}
+.tag.cool{border-color:rgba(196,71,106,.3);color:var(--brand-dark);background:var(--brand-light)}
 
-  /* FOOTER */
-  .footer { text-align:center; padding:2rem; color:var(--text3); font-size:.75rem; border-top:1px solid var(--border); margin-top:2rem; }
+/* STAT INLINE */
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:.55rem 0;border-bottom:1px solid var(--border-light)}
+.stat-row:last-child{border-bottom:none}
+.stat-label{font-size:.8rem;color:var(--text-secondary)}
+.stat-val{font-size:.85rem;font-weight:700;color:var(--brand-dark)}
+
+/* RECOMENDAÇÕES */
+.rec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:768px){.rec-grid{grid-template-columns:1fr}}
+.rec-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-sm)}
+.rec-card.red{border-top:3px solid var(--danger)}
+.rec-card.amber{border-top:3px solid var(--warning)}
+.rec-card.green{border-top:3px solid var(--success)}
+.rec-title{font-family:var(--font-head);font-size:.9rem;font-weight:800;color:var(--brand-dark);margin-bottom:.75rem}
+.rec-body{font-size:.79rem;color:var(--text-secondary);line-height:1.7}
+
+/* FOOTER */
+.footer{text-align:center;padding:2rem;color:var(--text-muted);font-size:.75rem;border-top:1px solid var(--border);margin-top:1rem}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-left">
-    <h1><span>Derma</span>Clinic — Relatório de Atendimento & Propostas</h1>
-    <p>Janeiro a Julho de 2026 · Análise completa de tarefas, propostas e comportamento de pacientes</p>
+<!-- HEADER -->
+<header class="header">
+  <div class="container">
+    <div class="header-inner">
+      <div class="header-brand">
+        <div class="header-logo-circle">DC</div>
+        <div>
+          <div class="header-title">DermaClinic</div>
+          <div class="header-sub">Propostas & Atendimento · Jan–Jul 2026</div>
+        </div>
+      </div>
+      <span class="header-badge">Jan–Jul 2026</span>
+    </div>
   </div>
-  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.75rem;">
-    <div class="header-logo">DC</div>
-    <span class="header-badge">Jan–Jul 2026</span>
+</header>
+
+<!-- PERIOD BANNER -->
+<div class="period-banner">
+  <div class="container">
+    <div class="period-inner">
+      <div>
+        <div class="period-title">Relatório de Propostas & Atendimento</div>
+        <div class="period-sub">Janeiro a Julho de 2026 · Análise completa de tarefas, propostas e comportamento de pacientes</div>
+      </div>
+      <div class="period-pills">
+        <span class="period-pill">163 Propostas</span>
+        <span class="period-pill">R$ 852k em jogo</span>
+        <span class="period-pill">5.157 Conversas</span>
+        <span class="period-pill">7.064 Tarefas</span>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class="container">
 
-  <!-- ======================================================
-       SEÇÃO 1 — KPIs HERO
-  ====================================================== -->
+  <!-- ① KPIs HERO -->
   <div class="section">
-    <div class="section-title">Visão Geral · Jan–Jul 2026</div>
-    <div class="grid-4">
-      <div class="card card-accent">
+    <div class="section-header">
+      <div class="section-title">Visão Geral</div>
+      <div class="section-divider"></div>
+      <div class="section-meta">Jan–Jul 2026</div>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
         <div class="kpi-label">Total de Tarefas</div>
         <div class="kpi-value">7.064</div>
         <div class="kpi-sub">Aniversários, follow-ups, confirmações, propostas</div>
-        <span class="kpi-delta up">▲ 5 tipos de automação</span>
+        <span class="kpi-delta up">5 tipos de automação</span>
       </div>
-      <div class="card card-green">
+      <div class="kpi-card green">
         <div class="kpi-label">Propostas Geradas</div>
         <div class="kpi-value">163</div>
-        <div class="kpi-sub">Jan–Jul 2026 · Feegow</div>
+        <div class="kpi-sub">Feegow · Jan–Jul 2026</div>
         <span class="kpi-delta up">R$ 852.155 em jogo</span>
       </div>
-      <div class="card card-amber">
+      <div class="kpi-card amber">
         <div class="kpi-label">Valor Executado</div>
         <div class="kpi-value sm">R$ 267k</div>
         <div class="kpi-sub">76 propostas executadas de 163</div>
-        <span class="kpi-delta warn">Taxa 46,6% conversão</span>
+        <span class="kpi-delta warn">46,6% de conversão</span>
       </div>
-      <div class="card card-red">
+      <div class="kpi-card red">
         <div class="kpi-label">Pendentes de Aprovação</div>
         <div class="kpi-value">87</div>
         <div class="kpi-sub">Propostas aguardando resposta do paciente</div>
         <span class="kpi-delta down">R$ 585k em aberto</span>
       </div>
     </div>
-
-    <div class="grid-4" style="margin-top:1rem;">
-      <div class="card card-sm">
+    <div class="kpi-grid" style="margin-top:14px">
+      <div class="kpi-card">
         <div class="kpi-label">Conversas Atendidas</div>
         <div class="kpi-value sm">5.157</div>
         <div class="kpi-sub">Classificadas por IA (Jan–Jul)</div>
       </div>
-      <div class="card card-sm">
-        <div class="kpi-label">Follow-ups (Recall)</div>
-        <div class="kpi-value sm">502</div>
-        <div class="kpi-sub" style="color:var(--danger);">425 ainda pendentes (85%)</div>
+      <div class="kpi-card red">
+        <div class="kpi-label">Follow-ups Pendentes</div>
+        <div class="kpi-value sm">425</div>
+        <div class="kpi-sub">de 502 gerados — 85% sem retorno</div>
       </div>
-      <div class="card card-sm">
+      <div class="kpi-card">
         <div class="kpi-label">Confirmações</div>
         <div class="kpi-value sm">740</div>
         <div class="kpi-sub">347 disparadas · 155 pendentes</div>
       </div>
-      <div class="card card-sm">
+      <div class="kpi-card green">
         <div class="kpi-label">Aniversários</div>
         <div class="kpi-value sm">5.151</div>
         <div class="kpi-sub">3.674 contactados (71%)</div>
@@ -182,127 +234,99 @@
     </div>
   </div>
 
-  <!-- ======================================================
-       SEÇÃO 2 — PROPOSTAS
-  ====================================================== -->
+  <!-- ② PROPOSTAS -->
   <div class="section">
-    <div class="section-title">Propostas Feegow · Jan–Jul 2026</div>
-    <div class="grid-2-1">
-
-      <!-- Gráfico por mês -->
-      <div class="card">
-        <div style="font-size:.85rem;font-weight:700;color:var(--text2);margin-bottom:1rem;">Volume e valor por mês</div>
-        <div class="chart-wrap tall">
-          <canvas id="chartPropostasMes"></canvas>
+    <div class="section-header">
+      <div class="section-title">Propostas Feegow</div>
+      <div class="section-divider"></div>
+      <div class="section-meta">Jan–Jul 2026 · 163 propostas · R$ 852.155</div>
+    </div>
+    <div class="two-one">
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <span class="chart-card-title">Volume e valor por mês</span>
         </div>
+        <div class="chart-wrap tall"><canvas id="chartPropostasMes"></canvas></div>
       </div>
-
-      <!-- Funil de status -->
-      <div class="card">
-        <div style="font-size:.85rem;font-weight:700;color:var(--text2);margin-bottom:1.2rem;">Funil de status (163 propostas)</div>
-        <div class="funil">
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <span class="chart-card-title">Funil de status</span>
+        </div>
+        <div class="funil" style="margin-bottom:1.5rem">
           <div class="funil-item">
             <span class="funil-label">Geradas</span>
-            <div class="funil-bar-wrap">
-              <div class="funil-bar" style="width:100%;background:linear-gradient(90deg,#7c6bff,#9d8dff);">163</div>
-            </div>
+            <div class="funil-bar-wrap"><div class="funil-bar" style="width:100%;background:var(--brand)">163</div></div>
             <span class="funil-count">163</span>
           </div>
           <div class="funil-item">
             <span class="funil-label">Executadas</span>
-            <div class="funil-bar-wrap">
-              <div class="funil-bar" style="width:46.6%;background:linear-gradient(90deg,#22c55e,#4ade80);">76</div>
-            </div>
+            <div class="funil-bar-wrap"><div class="funil-bar" style="width:46.6%;background:#059669">76</div></div>
             <span class="funil-count">76</span>
           </div>
           <div class="funil-item">
             <span class="funil-label">Aprovadas</span>
-            <div class="funil-bar-wrap">
-              <div class="funil-bar" style="width:24.5%;background:linear-gradient(90deg,#00d4aa,#34d399);">40</div>
-            </div>
+            <div class="funil-bar-wrap"><div class="funil-bar" style="width:24.5%;background:#0891B2">40</div></div>
             <span class="funil-count">40</span>
           </div>
           <div class="funil-item">
             <span class="funil-label">Aguardando</span>
-            <div class="funil-bar-wrap">
-              <div class="funil-bar" style="width:28.8%;background:linear-gradient(90deg,#f59e0b,#fbbf24);">47</div>
-            </div>
+            <div class="funil-bar-wrap"><div class="funil-bar" style="width:28.8%;background:#D97706">47</div></div>
             <span class="funil-count">47</span>
           </div>
           <div class="funil-item">
             <span class="funil-label">Rejeitadas</span>
-            <div class="funil-bar-wrap">
-              <div class="funil-bar" style="width:0.6%;background:linear-gradient(90deg,#ef4444,#f87171);min-width:36px;">1</div>
-            </div>
+            <div class="funil-bar-wrap"><div class="funil-bar" style="width:1%;background:#DC2626;min-width:34px">1</div></div>
             <span class="funil-count">1</span>
           </div>
         </div>
-
-        <div style="margin-top:1.5rem;">
-          <div style="font-size:.78rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem;">Por Profissional</div>
-          <div style="display:flex;flex-direction:column;gap:.5rem;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span style="font-size:.82rem;color:var(--text);">Daniela Peixer</span>
-              <span style="font-size:.82rem;font-weight:700;color:var(--accent);">148 · R$ 748.965</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span style="font-size:.82rem;color:var(--text);">Gabriella Hille Gomes</span>
-              <span style="font-size:.82rem;font-weight:700;color:var(--text2);">8 · R$ 80.000</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span style="font-size:.82rem;color:var(--text);">Raquel B. Steglich</span>
-              <span style="font-size:.82rem;font-weight:700;color:var(--text2);">3 · R$ 3.200</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span style="font-size:.82rem;color:var(--text);">Ellyn Carolini de Oliveira</span>
-              <span style="font-size:.82rem;font-weight:700;color:var(--text2);">3 · R$ 8.850</span>
-            </div>
-          </div>
+        <div style="border-top:1px solid var(--border);padding-top:1rem">
+          <div style="font-size:.72rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.6rem">Por Profissional</div>
+          <div class="stat-row"><span class="stat-label">Daniela Peixer</span><span class="stat-val" style="color:var(--brand)">148 · R$ 748.965</span></div>
+          <div class="stat-row"><span class="stat-label">Gabriella Hille Gomes</span><span class="stat-val">8 · R$ 80.000</span></div>
+          <div class="stat-row"><span class="stat-label">Ellyn Carolini de Oliveira</span><span class="stat-val">3 · R$ 8.850</span></div>
+          <div class="stat-row"><span class="stat-label">Raquel B. Steglich</span><span class="stat-val">3 · R$ 3.200</span></div>
         </div>
       </div>
     </div>
-
-    <!-- Top procedimentos -->
-    <div class="card" style="margin-top:1rem;">
-      <div style="font-size:.85rem;font-weight:700;color:var(--text2);margin-bottom:1rem;">Procedimentos mais ofertados nas propostas</div>
-      <div class="chart-wrap sm">
-        <canvas id="chartProcedimentos"></canvas>
-      </div>
+    <div class="chart-card" style="margin-top:14px">
+      <div class="chart-card-header"><span class="chart-card-title">Procedimentos mais ofertados nas propostas</span></div>
+      <div class="chart-wrap sm"><canvas id="chartProcedimentos"></canvas></div>
     </div>
   </div>
 
-  <!-- ======================================================
-       SEÇÃO 3 — PROPOSTAS AGUARDANDO (Follow-up)
-  ====================================================== -->
+  <!-- ③ FOLLOW-UP / PROPOSTAS ABERTAS -->
   <div class="section">
-    <div class="section-title">Propostas Aguardando · Oportunidade de Follow-up</div>
-    <div style="margin-bottom:1rem;" class="grid-3">
-      <div class="card card-amber card-sm">
+    <div class="section-header">
+      <div class="section-title">Propostas Aguardando · Oportunidade de Follow-up</div>
+      <div class="section-divider"></div>
+      <div class="section-meta">87 propostas · R$ 585k em aberto</div>
+    </div>
+    <div class="three-col" style="margin-bottom:14px">
+      <div class="kpi-card amber">
         <div class="kpi-label">Aguardando Aprovação</div>
         <div class="kpi-value sm">46</div>
         <div class="kpi-sub">R$ 347.935 em aberto</div>
       </div>
-      <div class="card card-green card-sm">
+      <div class="kpi-card green">
         <div class="kpi-label">Aprovadas (ag. execução)</div>
         <div class="kpi-value sm">40</div>
         <div class="kpi-sub">R$ 235.130 aprovados</div>
       </div>
-      <div class="card card-sm">
+      <div class="kpi-card">
         <div class="kpi-label">Ag. Financiamento</div>
         <div class="kpi-value sm">1</div>
         <div class="kpi-sub">R$ 2.050</div>
       </div>
     </div>
-
-    <div class="card">
-      <div style="font-size:.85rem;font-weight:700;color:var(--text2);margin-bottom:1rem;">Lista de pacientes para contato · ordenado por data da proposta</div>
-      <div class="table-wrap">
-        <table>
+    <div class="chart-card">
+      <div class="chart-card-header"><span class="chart-card-title">Pacientes com proposta pendente · contato prioritário</span></div>
+      <div class="table-scroll">
+        <table class="data-table">
           <thead>
             <tr>
               <th>#</th>
               <th>Paciente</th>
-              <th>Telefone</th>
+              <th>WhatsApp</th>
               <th>Proposta</th>
               <th>Procedimentos</th>
               <th>Valor</th>
@@ -316,156 +340,110 @@
     </div>
   </div>
 
-  <!-- ======================================================
-       SEÇÃO 4 — TAREFAS POR TIPO
-  ====================================================== -->
+  <!-- ④ TAREFAS -->
   <div class="section">
-    <div class="section-title">Tarefas por Tipo · Performance</div>
-    <div class="grid-2">
-      <div class="card">
-        <div style="font-size:.85rem;font-weight:700;color:var(--text2);margin-bottom:1rem;">Distribuição e execução por tipo</div>
-        <div class="chart-wrap tall">
-          <canvas id="chartTarefasTipo"></canvas>
-        </div>
+    <div class="section-header">
+      <div class="section-title">Tarefas por Tipo · Performance</div>
+      <div class="section-divider"></div>
+      <div class="section-meta">7.064 tarefas totais</div>
+    </div>
+    <div class="two-col">
+      <div class="chart-card">
+        <div class="chart-card-header"><span class="chart-card-title">Executadas vs. Pendentes por tipo</span></div>
+        <div class="chart-wrap tall"><canvas id="chartTarefasTipo"></canvas></div>
       </div>
-      <div class="card">
-        <div style="font-size:.85rem;font-weight:700;color:var(--text2);margin-bottom:1rem;">Volume mensal de tarefas</div>
-        <div class="chart-wrap tall">
-          <canvas id="chartTarefasMes"></canvas>
-        </div>
+      <div class="chart-card">
+        <div class="chart-card-header"><span class="chart-card-title">Volume mensal por tipo</span></div>
+        <div class="chart-wrap tall"><canvas id="chartTarefasMes"></canvas></div>
       </div>
     </div>
-
-    <!-- Alertas de pendência -->
-    <div style="margin-top:1rem;">
+    <div style="margin-top:14px">
       <div class="insight">
         <div class="insight-icon">🔴</div>
-        <div>
-          <div class="insight-title">Follow-up (Recall) com 85% pendente</div>
-          <div class="insight-body">De 502 tarefas de recall geradas, apenas 77 (15%) foram contactadas. Restam <strong>425 pacientes sem retorno</strong> — alto potencial de reativação perdido. Ação: priorizar fila de recall com contato ativo via WhatsApp.</div>
-        </div>
+        <div><div class="insight-title">Follow-up (Recall) com 85% pendente</div>
+        <div class="insight-body">De 502 tarefas de recall geradas, apenas 77 (15%) foram contactadas. Restam <strong>425 pacientes sem retorno</strong> — alto potencial de reativação perdido.</div></div>
       </div>
       <div class="insight">
         <div class="insight-icon">🟡</div>
-        <div>
-          <div class="insight-title">Cancelamentos em alta: 88 registros (Jun–Jul)</div>
-          <div class="insight-body">Os cancelamentos surgiram apenas em junho (27) e julho (61), totalizando 88. Nenhum foi contactado. Vale investigar o motivo do pico e criar fluxo de resgate para pacientes que cancelaram.</div>
-        </div>
+        <div><div class="insight-title">Cancelamentos em alta: 88 registros (Jun–Jul)</div>
+        <div class="insight-body">Os cancelamentos surgiram apenas em junho (27) e julho (61), totalizando 88. Nenhum foi contactado. Vale criar fluxo de resgate para pacientes que cancelaram.</div></div>
       </div>
       <div class="insight">
         <div class="insight-icon">🟢</div>
-        <div>
-          <div class="insight-title">Aniversários com alta taxa de execução (71%)</div>
-          <div class="insight-body">3.674 de 5.151 aniversários foram contactados — a melhor performance entre todos os tipos. O fluxo automático de aniversário está funcionando bem. Oportunidade: adicionar oferta de procedimento na mensagem de aniversário.</div>
-        </div>
+        <div><div class="insight-title">Aniversários com alta taxa de execução (71%)</div>
+        <div class="insight-body">3.674 de 5.151 aniversários foram contactados. O fluxo automático está funcionando bem. Oportunidade: adicionar oferta de procedimento na mensagem.</div></div>
       </div>
     </div>
   </div>
 
-  <!-- ======================================================
-       SEÇÃO 5 — CONVERSAS & SENTIMENTO
-  ====================================================== -->
+  <!-- ⑤ CONVERSAS -->
   <div class="section">
-    <div class="section-title">Conversas & Comportamento dos Pacientes · Jan–Jul 2026</div>
-    <div class="grid-3">
-      <div class="card">
-        <div style="font-size:.85rem;font-weight:700;color:var(--text2);margin-bottom:1rem;">Sentimento geral (5.157 conversas)</div>
-        <div class="chart-wrap sm">
-          <canvas id="chartSentimento"></canvas>
-        </div>
+    <div class="section-header">
+      <div class="section-title">Conversas & Comportamento dos Pacientes</div>
+      <div class="section-divider"></div>
+      <div class="section-meta">5.157 conversas · Jan–Jul 2026</div>
+    </div>
+    <div class="three-col">
+      <div class="chart-card">
+        <div class="chart-card-header"><span class="chart-card-title">Sentimento geral</span></div>
+        <div class="chart-wrap sm"><canvas id="chartSentimento"></canvas></div>
       </div>
-      <div class="card">
-        <div style="font-size:.85rem;font-weight:700;color:var(--text2);margin-bottom:1rem;">Volume de conversas por mês</div>
-        <div class="chart-wrap sm">
-          <canvas id="chartConvMes"></canvas>
-        </div>
+      <div class="chart-card">
+        <div class="chart-card-header"><span class="chart-card-title">Volume por mês</span></div>
+        <div class="chart-wrap sm"><canvas id="chartConvMes"></canvas></div>
       </div>
-      <div class="card">
-        <div style="font-size:.85rem;font-weight:700;color:var(--text2);margin-bottom:1rem;">Origem das conversas</div>
-        <div class="chart-wrap sm">
-          <canvas id="chartOrigens"></canvas>
-        </div>
-        <div style="margin-top:1rem;">
-          <div style="font-size:.78rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem;">Canais · Agendamentos</div>
-          <div style="display:flex;flex-direction:column;gap:.4rem;">
-            <div style="display:flex;justify-content:space-between;">
-              <span style="font-size:.8rem;color:var(--text);">Relacionamento</span>
-              <span style="font-size:.8rem;font-weight:700;color:var(--positive);">437 agend. / 3.222</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;">
-              <span style="font-size:.8rem;color:var(--text);">VIP</span>
-              <span style="font-size:.8rem;font-weight:700;color:var(--accent2);">250 agend. / 1.019</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;">
-              <span style="font-size:.8rem;color:var(--text);">Tráfego Pago</span>
-              <span style="font-size:.8rem;font-weight:700;color:var(--warning);">14 agend. / 620</span>
-            </div>
-          </div>
+      <div class="chart-card">
+        <div class="chart-card-header"><span class="chart-card-title">Agendamentos por canal</span></div>
+        <div class="chart-wrap sm"><canvas id="chartOrigens"></canvas></div>
+        <div style="margin-top:.75rem">
+          <div class="stat-row"><span class="stat-label">Relacionamento</span><span class="stat-val" style="color:var(--success)">437 agend. / 3.222 conv.</span></div>
+          <div class="stat-row"><span class="stat-label">VIP</span><span class="stat-val" style="color:var(--brand)">250 agend. / 1.019 conv.</span></div>
+          <div class="stat-row"><span class="stat-label">Tráfego Pago</span><span class="stat-val" style="color:var(--warning)">14 agend. / 620 conv.</span></div>
         </div>
       </div>
     </div>
-
-    <!-- Sentimento por mês -->
-    <div class="card" style="margin-top:1rem;">
-      <div style="font-size:.85rem;font-weight:700;color:var(--text2);margin-bottom:1rem;">Evolução do sentimento por mês</div>
-      <div class="chart-wrap">
-        <canvas id="chartSentimentoMes"></canvas>
-      </div>
+    <div class="chart-card" style="margin-top:14px">
+      <div class="chart-card-header"><span class="chart-card-title">Evolução do sentimento por mês</span></div>
+      <div class="chart-wrap"><canvas id="chartSentimentoMes"></canvas></div>
     </div>
   </div>
 
-  <!-- ======================================================
-       SEÇÃO 6 — OBJEÇÕES & INTERESSES
-  ====================================================== -->
+  <!-- ⑥ OBJEÇÕES -->
   <div class="section">
-    <div class="section-title">Objeções, Dúvidas e Interesses dos Pacientes</div>
-    <div class="grid-2">
-      <div class="card">
-        <div style="font-size:.85rem;font-weight:700;color:var(--text2);margin-bottom:1rem;">Principais interesses mencionados</div>
-        <div class="chart-wrap tall">
-          <canvas id="chartInteresses"></canvas>
-        </div>
+    <div class="section-header">
+      <div class="section-title">Objeções, Dúvidas e Interesses dos Pacientes</div>
+      <div class="section-divider"></div>
+    </div>
+    <div class="two-col">
+      <div class="chart-card">
+        <div class="chart-card-header"><span class="chart-card-title">Principais interesses mencionados</span></div>
+        <div class="chart-wrap tall"><canvas id="chartInteresses"></canvas></div>
       </div>
-      <div class="card">
-        <div style="font-size:.85rem;font-weight:700;color:var(--text2);margin-bottom:.6rem;">Análise de objeções</div>
-
-        <div class="insight" style="margin-bottom:.5rem;">
+      <div>
+        <div class="insight">
           <div class="insight-icon">💳</div>
-          <div>
-            <div class="insight-title">Convênios — 552 conversas (maior objeção)</div>
-            <div class="insight-body">A objeção mais frequente é a pergunta sobre convênios. A clínica não trabalha com planos, e isso gera atrito logo no início da conversa. Sugestão: criar resposta automática padrão clara sobre o modelo particular + apresentar formas de parcelamento.</div>
-          </div>
+          <div><div class="insight-title">Convênios — 552 conversas (maior objeção)</div>
+          <div class="insight-body">Pergunta mais frequente. A clínica não trabalha com planos, o que gera atrito logo no início. Sugestão: template de resposta automática clara sobre modelo particular + formas de parcelamento.</div></div>
         </div>
-
-        <div class="insight" style="margin-bottom:.5rem;">
+        <div class="insight">
           <div class="insight-icon">💰</div>
-          <div>
-            <div class="insight-title">Valor e parcelamento — 677 menções de "valores" + 179 de "parcelamento"</div>
-            <div class="insight-body">Preço é a segunda maior barreira. 677 conversas mencionaram valores e 179 pediram informações sobre parcelamento. Pacientes querem saber o custo antes de agendar consulta avaliativa.</div>
-          </div>
+          <div><div class="insight-title">Valor e parcelamento — 677 + 179 menções</div>
+          <div class="insight-body">Preço é a segunda maior barreira. Pacientes querem saber o custo antes de agendar consulta avaliativa. Criar conteúdo informativo sobre faixas de valor por procedimento.</div></div>
         </div>
-
-        <div class="insight" style="margin-bottom:.5rem;">
+        <div class="insight">
           <div class="insight-icon">📅</div>
-          <div>
-            <div class="insight-title">Agendamento e horário — 3.344 + 1.223 interações</div>
-            <div class="insight-body">Agendamento (3.344) e horário (1.223) são os interesses dominantes — o fluxo de atendimento está funcional. Porém, tráfego pago converte apenas 14 agendamentos em 620 conversas (2,3%), sinalizando problema no funil pago.</div>
-          </div>
+          <div><div class="insight-title">Tráfego Pago converte apenas 2,3%</div>
+          <div class="insight-body">620 conversas de tráfego pago geraram apenas 14 agendamentos. A qualificação do lead pago precisa ser revisada urgentemente — funil com atrito muito alto.</div></div>
         </div>
-
         <div class="insight">
           <div class="insight-icon">🔬</div>
-          <div>
-            <div class="insight-title">127 leads não qualificados</div>
-            <div class="insight-body">Marcados como "não qualificado" — podem incluir área fora do escopo, sem condição financeira ou área geográfica distante. Vale mapear o motivo predominante para ajustar captação.</div>
-          </div>
+          <div><div class="insight-title">127 leads não qualificados</div>
+          <div class="insight-body">Podem incluir área fora do escopo, sem condição financeira ou geográfica distante. Vale mapear o motivo predominante para ajustar captação e segmentação de anúncios.</div></div>
         </div>
       </div>
     </div>
-
-    <!-- Labels / tags mais comuns -->
-    <div class="card" style="margin-top:1rem;">
-      <div style="font-size:.85rem;font-weight:700;color:var(--text2);margin-bottom:.75rem;">Labels mais frequentes nas conversas (Jan–Jul 2026)</div>
+    <div class="chart-card" style="margin-top:14px">
+      <div class="chart-card-header"><span class="chart-card-title">Labels mais frequentes nas conversas (Jan–Jul 2026)</span></div>
       <div class="tag-list">
         <span class="tag cool">3-agendamento <strong>717</strong></span>
         <span class="tag hot">convênios <strong>552</strong></span>
@@ -479,38 +457,38 @@
         <span class="tag">dúvida <strong>105</strong></span>
         <span class="tag">dia-das-mães <strong>102</strong></span>
         <span class="tag">pesquisa-de-clínicas <strong>85</strong></span>
-        <span class="tag">equipedc <strong>85</strong></span>
         <span class="tag">dia-namorados <strong>79</strong></span>
         <span class="tag">chamado-no-whats <strong>71</strong></span>
       </div>
     </div>
   </div>
 
-  <!-- ======================================================
-       SEÇÃO 7 — RECOMENDAÇÕES
-  ====================================================== -->
+  <!-- ⑦ RECOMENDAÇÕES -->
   <div class="section">
-    <div class="section-title">Recomendações Estratégicas</div>
-    <div class="grid-3">
-      <div class="card card-red">
-        <div style="font-size:.9rem;font-weight:800;color:#fff;margin-bottom:.75rem;">🔴 Ação Imediata</div>
-        <div style="font-size:.82rem;color:var(--text2);line-height:1.7;">
-          <strong style="color:#fff;">1. Fila de Recall:</strong> 425 pacientes aguardam follow-up. Priorizar os que fizeram procedimento há 3–6 meses.<br><br>
-          <strong style="color:#fff;">2. Propostas em aberto:</strong> 87 propostas (R$ 585k) sem retorno. Secretária deve contatar todos os pacientes com proposta pendente por mais de 30 dias.
+    <div class="section-header">
+      <div class="section-title">Recomendações Estratégicas</div>
+      <div class="section-divider"></div>
+    </div>
+    <div class="rec-grid">
+      <div class="rec-card red">
+        <div class="rec-title">🔴 Ação Imediata</div>
+        <div class="rec-body">
+          <strong>1. Fila de Recall:</strong> 425 pacientes aguardam follow-up. Priorizar os que fizeram procedimento há 3–6 meses.<br><br>
+          <strong>2. Propostas em aberto:</strong> 87 propostas (R$ 585k) sem retorno. Contatar todos os pacientes com proposta pendente há mais de 30 dias.
         </div>
       </div>
-      <div class="card card-amber">
-        <div style="font-size:.9rem;font-weight:800;color:#fff;margin-bottom:.75rem;">🟡 Melhorias de Processo</div>
-        <div style="font-size:.82rem;color:var(--text2);line-height:1.7;">
-          <strong style="color:#fff;">3. Resposta padrão convênios:</strong> Criar template de mensagem clara sobre modelo particular + formas de pagamento para tratar os 552 contatos sobre convênio.<br><br>
-          <strong style="color:#fff;">4. Tráfego Pago:</strong> 620 conversas geraram apenas 14 agendamentos (2,3%). Revisar qualificação do lead pago.
+      <div class="rec-card amber">
+        <div class="rec-title">🟡 Melhorias de Processo</div>
+        <div class="rec-body">
+          <strong>3. Resposta convênios:</strong> Criar template claro sobre modelo particular + formas de pagamento para tratar os 552 contatos sobre convênio.<br><br>
+          <strong>4. Tráfego Pago:</strong> 620 conversas geraram apenas 14 agendamentos (2,3%). Revisar qualificação e segmentação do lead pago.
         </div>
       </div>
-      <div class="card card-green">
-        <div style="font-size:.9rem;font-weight:800;color:#fff;margin-bottom:.75rem;">🟢 Oportunidades</div>
-        <div style="font-size:.82rem;color:var(--text2);line-height:1.7;">
-          <strong style="color:#fff;">5. Cancelamentos:</strong> 88 pacientes cancelaram (Jun–Jul). Nenhum foi recontactado. Fluxo de resgate automático pode recuperar parte deles.<br><br>
-          <strong style="color:#fff;">6. Aniversários:</strong> 71% de execução. Adicionar oferta de procedimento ou cupom na mensagem para converter em agendamento.
+      <div class="rec-card green">
+        <div class="rec-title">🟢 Oportunidades</div>
+        <div class="rec-body">
+          <strong>5. Cancelamentos:</strong> 88 pacientes cancelaram (Jun–Jul) e nenhum foi recontactado. Fluxo de resgate automático pode recuperar parte deles.<br><br>
+          <strong>6. Aniversários:</strong> 71% de execução. Adicionar oferta de procedimento ou cupom para converter em agendamento.
         </div>
       </div>
     </div>
@@ -521,6 +499,7 @@
 <div class="footer">
   DermaClinic · Relatório gerado por Digital AI · Janeiro–Julho 2026 · Dados: Feegow + Chatwoot + Sistema de Tarefas
 </div>
+
 
 <script>
 // ============================================================
@@ -663,15 +642,15 @@ C.defaults.font.family = 'Inter, sans-serif';
 C.defaults.font.size = 11;
 
 const gridOpts = {
-  color: 'rgba(31,45,69,0.7)',
+  color: 'rgba(226,232,240,0.8)',
   drawBorder: false,
 };
 const tooltipOpts = {
   backgroundColor: '#0f172a',
-  borderColor: '#1f2d45',
+  borderColor: '#E2E8F0',
   borderWidth: 1,
-  titleColor: '#e2e8f0',
-  bodyColor: '#94a3b8',
+  titleColor: '#FFFFFF',
+  bodyColor: '#CBD5E1',
   padding: 10,
   cornerRadius: 8,
 };
@@ -685,7 +664,7 @@ new C(document.getElementById('chartPropostasMes'), {
       {
         label: 'Executadas',
         data: propostasMes.map(d => d.executadas),
-        backgroundColor: 'rgba(124,107,255,.85)',
+        backgroundColor: 'rgba(196,71,106,.85)',
         borderRadius: 4,
         stack: 'a',
       },
@@ -732,7 +711,7 @@ new C(document.getElementById('chartProcedimentos'), {
     datasets: [{
       label: 'Nº de ofertas',
       data: procedimentos.map(p => p.total),
-      backgroundColor: procedimentos.map((_,i) => `hsla(${250+i*10},70%,65%,.8)`),
+      backgroundColor: procedimentos.map((_,i) => `hsla(${340+i*8},65%,55%,.8)`),
       borderRadius: 4,
     }]
   },
@@ -903,7 +882,7 @@ new C(document.getElementById('chartInteresses'), {
     datasets: [{
       label: 'Menções',
       data: interesses.map(i => i.total),
-      backgroundColor: interesses.map((_,i) => i < 3 ? 'rgba(124,107,255,.85)' : i < 6 ? 'rgba(0,212,170,.7)' : 'rgba(100,116,139,.6)'),
+      backgroundColor: interesses.map((_,i) => i < 3 ? 'rgba(196,71,106,.85)' : i < 6 ? 'rgba(200,100,130,.65)' : 'rgba(148,163,184,.6)'),
       borderRadius: 4,
     }]
   },
