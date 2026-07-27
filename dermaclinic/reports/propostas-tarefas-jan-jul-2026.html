@@ -137,6 +137,32 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 
 /* FOOTER */
 .footer{text-align:center;padding:2rem;color:var(--text-muted);font-size:.75rem;border-top:1px solid var(--border);margin-top:1rem}
+
+/* OBJEÇÕES — estilos extras */
+.obj-kpi-row{display:grid;grid-template-columns:repeat(6,1fr);gap:.6rem;margin-bottom:1rem}
+@media(max-width:900px){.obj-kpi-row{grid-template-columns:repeat(3,1fr)}}
+.obj-kpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 10px;text-align:center;box-shadow:var(--shadow-sm)}
+.obj-kpi-num{font-family:var(--font-head);font-size:1.7rem;font-weight:800;color:var(--brand);line-height:1}
+.obj-kpi-label{font-size:.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;margin-top:.3rem}
+.obj-kpi.warn .obj-kpi-num{color:#e07b39}
+.obj-kpi.neutral .obj-kpi-num{color:#64748b}
+.quote-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:.8rem;margin-top:.8rem}
+.quote-card{background:var(--surface);border-left:4px solid var(--brand);border-radius:0 10px 10px 0;padding:14px 16px;box-shadow:var(--shadow-sm)}
+.quote-text{font-size:.82rem;color:var(--text-primary);font-style:italic;line-height:1.55;margin-bottom:.5rem}
+.quote-context{font-size:.72rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.quote-card.warn{border-left-color:#e07b39}
+.quote-card.neutral{border-left-color:#64748b}
+.obj-table{width:100%;border-collapse:collapse;font-size:.8rem;margin-top:.4rem}
+.obj-table th{background:var(--surface-alt);color:var(--text-muted);font-size:.68rem;text-transform:uppercase;letter-spacing:.07em;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.obj-table td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text-primary);vertical-align:middle}
+.obj-table tr:last-child td{border-bottom:none}
+.obj-bar-wrap{display:flex;align-items:center;gap:.5rem}
+.obj-bar-bg{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.obj-bar-fill{height:100%;border-radius:4px;background:var(--brand)}
+.obj-bar-fill.warn{background:#e07b39}
+.obj-bar-fill.neutral{background:#64748b}
+.badge-pill{display:inline-block;background:rgba(45,82,239,.1);color:var(--brand);font-size:.66rem;font-weight:700;border-radius:20px;padding:2px 8px;margin-left:4px}
+.badge-pill.warn{background:rgba(224,123,57,.12);color:#e07b39}
 </style>
 </head>
 <body>
@@ -411,50 +437,180 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
   <!-- ⑥ OBJEÇÕES -->
   <div class="section">
     <div class="section-header">
-      <div class="section-title">Objeções, Dúvidas e Interesses dos Pacientes</div>
+      <div class="section-title">Objeções, Fricções e Padrões de Perda — Dados Reais das Conversas</div>
       <div class="section-divider"></div>
     </div>
+
+    <!-- KPIs de objeções -->
+    <div class="obj-kpi-row">
+      <div class="obj-kpi">
+        <div class="obj-kpi-num">231</div>
+        <div class="obj-kpi-label">Convênio / Plano</div>
+      </div>
+      <div class="obj-kpi warn">
+        <div class="obj-kpi-num">91</div>
+        <div class="obj-kpi-label">Parcelamento</div>
+      </div>
+      <div class="obj-kpi warn">
+        <div class="obj-kpi-num">32</div>
+        <div class="obj-kpi-label">"Vou Pensar"</div>
+      </div>
+      <div class="obj-kpi neutral">
+        <div class="obj-kpi-num">14</div>
+        <div class="obj-kpi-label">Sábado / Noite</div>
+      </div>
+      <div class="obj-kpi neutral">
+        <div class="obj-kpi-num">8</div>
+        <div class="obj-kpi-label">Reembolso</div>
+      </div>
+      <div class="obj-kpi neutral">
+        <div class="obj-kpi-num">6</div>
+        <div class="obj-kpi-label">Desconto</div>
+      </div>
+    </div>
+
+    <!-- Gráfico evolução + Tabela detalhada -->
     <div class="two-col">
       <div class="chart-card">
-        <div class="chart-card-header"><span class="chart-card-title">Principais interesses mencionados</span></div>
-        <div class="chart-wrap tall"><canvas id="chartInteresses"></canvas></div>
+        <div class="chart-card-header"><span class="chart-card-title">Evolução Mensal das Objeções (fev–jul 2026)</span></div>
+        <div class="chart-wrap tall"><canvas id="chartObjecoesEvolucao"></canvas></div>
       </div>
-      <div>
-        <div class="insight">
-          <div class="insight-icon">💳</div>
-          <div><div class="insight-title">Convênios — 552 conversas (maior objeção)</div>
-          <div class="insight-body">Pergunta mais frequente. A clínica não trabalha com planos, o que gera atrito logo no início. Sugestão: template de resposta automática clara sobre modelo particular + formas de parcelamento.</div></div>
-        </div>
-        <div class="insight">
-          <div class="insight-icon">💰</div>
-          <div><div class="insight-title">Valor e parcelamento — 677 + 179 menções</div>
-          <div class="insight-body">O valor é a segunda maior barreira relatada. Pacientes consultam o custo antes de agendar uma consulta avaliativa. Recomenda-se criar conteúdo informativo com faixas de investimento por procedimento.</div></div>
-        </div>
-        <div class="insight">
-          <div class="insight-icon">📅</div>
-          <div><div class="insight-title">Tráfego Pago converte apenas 2,3%</div>
-          <div class="insight-body">620 conversas de tráfego pago geraram apenas 14 agendamentos. A qualificação do lead pago precisa ser revisada urgentemente — funil com atrito muito alto.</div></div>
-        </div>
-        <div class="insight">
-          <div class="insight-icon">🔬</div>
-          <div><div class="insight-title">127 leads não qualificados</div>
-          <div class="insight-body">Podem incluir área fora do escopo, sem condição financeira ou geográfica distante. Vale mapear o motivo predominante para ajustar captação e segmentação de anúncios.</div></div>
+      <div class="chart-card">
+        <div class="chart-card-header"><span class="chart-card-title">Breakdown por Tipo de Objeção</span></div>
+        <table class="obj-table">
+          <thead>
+            <tr>
+              <th>Objeção</th>
+              <th style="text-align:right">Total</th>
+              <th style="width:120px">Frequência</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>💳 Convênio / Plano de Saúde
+                <span class="badge-pill">Unimed 55 · Amil 10 · Outros 13</span>
+              </td>
+              <td style="text-align:right;font-weight:700;color:var(--brand)">231</td>
+              <td><div class="obj-bar-wrap"><div class="obj-bar-bg"><div class="obj-bar-fill" style="width:100%"></div></div></div></td>
+            </tr>
+            <tr>
+              <td>💰 Dúvida sobre Parcelamento</td>
+              <td style="text-align:right;font-weight:700;color:#e07b39">91</td>
+              <td><div class="obj-bar-wrap"><div class="obj-bar-bg"><div class="obj-bar-fill warn" style="width:39%"></div></div></div></td>
+            </tr>
+            <tr>
+              <td>🤔 Indecisão — "Vou pensar / Vou analisar"</td>
+              <td style="text-align:right;font-weight:700;color:#e07b39">32</td>
+              <td><div class="obj-bar-wrap"><div class="obj-bar-bg"><div class="obj-bar-fill warn" style="width:14%"></div></div></div></td>
+            </tr>
+            <tr>
+              <td>📅 Restrição de Horário (sábado / noite)</td>
+              <td style="text-align:right;font-weight:700;color:#64748b">14</td>
+              <td><div class="obj-bar-wrap"><div class="obj-bar-bg"><div class="obj-bar-fill neutral" style="width:6%"></div></div></div></td>
+            </tr>
+            <tr>
+              <td>🔄 Solicitação de Reembolso por Convênio</td>
+              <td style="text-align:right;font-weight:700;color:#64748b">8</td>
+              <td><div class="obj-bar-wrap"><div class="obj-bar-bg"><div class="obj-bar-fill neutral" style="width:3.5%"></div></div></div></td>
+            </tr>
+            <tr>
+              <td>🏷️ Pedido de Desconto</td>
+              <td style="text-align:right;font-weight:700;color:#64748b">6</td>
+              <td><div class="obj-bar-wrap"><div class="obj-bar-bg"><div class="obj-bar-fill neutral" style="width:2.6%"></div></div></div></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px;padding:10px 12px;background:rgba(45,82,239,.06);border-radius:8px;font-size:.75rem;color:var(--text-muted)">
+          Fonte: varredura de <strong>1.221 históricos de conversas</strong> (conversation_sessions) por padrões textuais + campo <em>interests</em> da classificação por IA (chatwoot_conversations_training · 5.175 registros).
         </div>
       </div>
     </div>
+
+    <!-- Insights detalhados -->
+    <div style="margin-top:1rem">
+      <div class="insight">
+        <div class="insight-icon">💳</div>
+        <div>
+          <div class="insight-title">Convênio / Plano de Saúde — 231 conversas (maior fricção)</div>
+          <div class="insight-body">Objeção número 1 absoluta. Mencionada em <strong>231 históricos de conversa</strong> e classificada por IA como interesse primário em <strong>331 atendimentos</strong>. Os planos mais citados: <strong>Unimed (55)</strong>, Amil (10), Prever (6), Bradesco Saúde, LEVMED e Hapvida. Atenção: a clínica <strong>aceita o convênio Prever com a Dra. Eoda</strong> — esse dado foi informado incorretamente em ao menos 1 conversa mapeada. Ação: resposta-padrão imediata ao detectar a palavra "convênio", com oferta de parcelamento e valor da consulta avaliativa (R$ 400).</div>
+        </div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon">💰</div>
+        <div>
+          <div class="insight-title">Parcelamento — 91 perguntas; pico em abril (28) e maio (25)</div>
+          <div class="insight-body">Pacientes perguntam ativamente sobre parcelamento antes de fechar. O maior pico foi em abril (28 conversas) e maio (25), meses de maior volume geral. A Clara já informa corretamente: consulta 2x, Botox 10x, mapeamento 12x, procedimentos 10x. O parcelamento <strong>não é uma objeção de bloqueio</strong> — é uma pergunta de qualificação financeira que deve ser respondida prontamente para não travar o funil.</div>
+        </div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon">🤔</div>
+        <div>
+          <div class="insight-title">Indecisão pós-preço — 32 casos de "Vou pensar / Vou analisar"</div>
+          <div class="insight-body">Gatilho principal: choque com o valor após descobrir que não há convênio. Padrão identificado: paciente pergunta → recebe preço → responde com "vou pensar" ou silencia. Exemplos reais: após R$ 880 de consulta dermatológica (paciente esperava convênio), após R$ 1.750 de Botox (comparando com preço anterior), após R$ 3.500 de Liftera. O followup automático em 24–48h pode recuperar parte desses leads.</div>
+        </div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon">📅</div>
+        <div>
+          <div class="insight-title">Restrição de Horário — 14 conversas perdidas por sábado ou turno noturno</div>
+          <div class="insight-body">Pacientes que trabalham em horário comercial não conseguem agendar. Frases reais: <em>"Eu só posso início do dia ou fim de tarde ou fds"</em> · <em>"Vocês trabalham no sábado pela manhã?"</em> · <em>"Tem horário à noite?"</em>. A clínica não atende sábados nem noturno. Oportunidade: oferecer lista de espera para horários de encaixe em sextas no final da manhã, ou avaliar viabilidade de 1 sábado/mês.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vozes dos Pacientes — quotes reais -->
+    <div class="chart-card" style="margin-top:1rem">
+      <div class="chart-card-header"><span class="chart-card-title">Vozes dos Pacientes — Frases Reais das Conversas</span></div>
+      <div class="quote-grid">
+        <div class="quote-card">
+          <div class="quote-text">"Achei que atendessem convênio, vou pensar melhor."</div>
+          <div class="quote-context">Após receber valor R$ 880 · consulta dermatológica · paciente esperava plano de saúde</div>
+        </div>
+        <div class="quote-card warn">
+          <div class="quote-text">"O botox fiz fim do ano passado e paguei bem menos. Vou pensar um pouco..."</div>
+          <div class="quote-context">Após ver Botox a R$ 1.750 · paciente recorrente · reajuste do Dysport Galderma</div>
+        </div>
+        <div class="quote-card warn">
+          <div class="quote-text">"Ok. Vou ver se farei com ela ou com um médico conveniado e voltamos a conversar."</div>
+          <div class="quote-context">Após cotação de remoção de ceratoses R$ 1.200 · preferência por convênio</div>
+        </div>
+        <div class="quote-card">
+          <div class="quote-text">"Vocês não aceitam LEVMED por acaso né?"</div>
+          <div class="quote-context">Após receber valor do mapeamento corporal R$ 2.500 · clínica não aceita plano</div>
+        </div>
+        <div class="quote-card neutral">
+          <div class="quote-text">"atende no sabado?" [perguntou duas vezes e encerrou]</div>
+          <div class="quote-context">Paciente com agenda comercial · não encontrou horário compatível · sem conversão</div>
+        </div>
+        <div class="quote-card neutral">
+          <div class="quote-text">"Eu só posso início do dia ou fim de tarde ou fds."</div>
+          <div class="quote-context">Após confirmação de que não há sábado · encaminhada para humano · não agendou</div>
+        </div>
+        <div class="quote-card">
+          <div class="quote-text">"A Dra. faria pela Unimed? Esqueci de perguntar."</div>
+          <div class="quote-context">Paciente que acabara de fazer mapeamento · descobriu atendimento particular no final</div>
+        </div>
+        <div class="quote-card warn">
+          <div class="quote-text">"Eu vou ligar no 0800 da Unimed e solicitar o reembolso, vou ver se autorizam."</div>
+          <div class="quote-context">Paciente com convênio Unimed · busca alternativa de custeio · atendimento particular</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Categorias / Tags -->
     <div class="chart-card" style="margin-top:14px">
       <div class="chart-card-header"><span class="chart-card-title">Categorias Mais Frequentes nas Conversas — Jan–Jul 2026</span></div>
       <div class="tag-list">
         <span class="tag cool">Agendamento <strong>717</strong></span>
-        <span class="tag hot">convênios <strong>552</strong></span>
+        <span class="tag hot">Convênios <strong>552</strong></span>
         <span class="tag">Lead Novo <strong>550</strong></span>
-        <span class="tag">representante <strong>340</strong></span>
-        <span class="tag warm">pesquisa <strong>290</strong></span>
+        <span class="tag">Representante <strong>340</strong></span>
+        <span class="tag warm">Pesquisa <strong>290</strong></span>
         <span class="tag">Já é Paciente <strong>209</strong></span>
-        <span class="tag">confirmação <strong>165</strong></span>
+        <span class="tag">Confirmação <strong>165</strong></span>
         <span class="tag hot">Não Qualificado <strong>127</strong></span>
         <span class="tag cool">Prospect <strong>119</strong></span>
-        <span class="tag">dúvida <strong>105</strong></span>
+        <span class="tag">Dúvida <strong>105</strong></span>
         <span class="tag">Dia das Mães <strong>102</strong></span>
         <span class="tag">Pesquisa de Clínicas <strong>85</strong></span>
         <span class="tag">Dia dos Namorados <strong>79</strong></span>
@@ -946,6 +1102,52 @@ new C(document.getElementById('chartSentimentoMes'), {
     scales: {
       x: { grid:{ display:false }, ticks:{ color:'#64748b' } },
       y: { grid:gridOpts, ticks:{ color:'#64748b' } }
+    }
+  }
+});
+
+// 9b. Evolução mensal das objeções (novo)
+new C(document.getElementById('chartObjecoesEvolucao'), {
+  type: 'bar',
+  data: {
+    labels: ['Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'],
+    datasets: [
+      {
+        label: 'Convênio/Plano',
+        data: [3, 47, 45, 50, 40, 46],
+        backgroundColor: 'rgba(45,82,239,.85)',
+        borderRadius: 4,
+      },
+      {
+        label: 'Parcelamento',
+        data: [11, 15, 28, 25, 9, 3],
+        backgroundColor: 'rgba(224,123,57,.8)',
+        borderRadius: 4,
+      },
+      {
+        label: '"Vou Pensar"',
+        data: [1, 1, 4, 1, 1, 0],
+        backgroundColor: 'rgba(234,179,8,.75)',
+        borderRadius: 4,
+      },
+      {
+        label: 'Sábado/Noite',
+        data: [1, 2, 5, 2, 2, 2],
+        backgroundColor: 'rgba(100,116,139,.7)',
+        borderRadius: 4,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: true, position: 'bottom', labels:{ color:'#94a3b8', font:{size:10}, boxWidth:10 } },
+      tooltip: tooltipOpts
+    },
+    scales: {
+      x: { stacked: false, grid:{ display:false }, ticks:{ color:'#94a3b8' } },
+      y: { stacked: false, grid:gridOpts, ticks:{ color:'#64748b' } }
     }
   }
 });
