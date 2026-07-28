@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>META & Google Ads — Julho 2026 | DermaClinic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../_shared/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --dai-navy:    #0F172A;
+      --dai-surface: #1E293B;
+      --bg: #0F172A;
+      --surface: #1E293B;
+      --surface-2: #243347;
+      --border: #334155;
+      --text: #FFFFFF;
+      --text-muted: #94A3B8;
+      --text-subtle: #64748B;
+      --brand: #6366F1;
+      --brand-dim: rgba(99,102,241,0.12);
+      --teal: #10B981;
+      --teal-dim: rgba(16,185,129,0.15);
+      --radius: 10px;
+      --radius-sm: 6px;
+      --dai-surface2:#243347;
+      --dai-border:  #334155;
+      --dai-indigo:  #6366F1;
+      --dai-indigo-dim: rgba(99,102,241,0.12);
+      --dai-muted:   #94A3B8;
+      --dai-white:   #FFFFFF;
+      --dc-bordo:    #7C3D4E;
+      --dc-bordo-dim:rgba(124,61,78,0.15);
+      --dc-offwhite: #F8F5F2;
+      --green:   #10B981;
+      --green-dim:rgba(16,185,129,0.12);
+      --amber:   #F59E0B;
+      --amber-dim:rgba(245,158,11,0.12);
+      --red:     #EF4444;
+      --red-dim: rgba(239,68,68,0.12);
+      --radius:    14px;
+      --radius-sm: 8px;
+      --shadow:    0 2px 16px rgba(0,0,0,0.35);
+      --shadow-md: 0 6px 32px rgba(0,0,0,0.45);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--dai-navy);
+      color: var(--dai-white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    .main { padding: 40px 0 80px; }
+    .section { margin-bottom: 48px; }
+    .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .section-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .section-icon.indigo  { background: var(--dai-indigo-dim); }
+    .section-icon.bordo   { background: var(--dc-bordo-dim); }
+    .section-icon.green   { background: var(--green-dim); }
+    .section-icon.amber   { background: var(--amber-dim); }
+    .section-icon.red     { background: var(--red-dim); }
+    .section-icon.purple  { background: rgba(167,139,250,0.12); }
+    .section-title { font-size: 17px; font-weight: 700; color: var(--dai-white); letter-spacing: -0.2px; }
+    .section-subtitle { font-size: 12px; color: var(--dai-muted); margin-top: 1px; }
+
+    .card { background: var(--dai-surface); border: 1px solid var(--dai-border); border-radius: var(--radius); padding: 24px; }
+
+    .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .kpi-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .kpi-grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+
+    .kpi-card {
+      background: var(--dai-surface); border: 1px solid var(--dai-border);
+      border-radius: var(--radius); padding: 22px 20px;
+      position: relative; overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kpi-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .kpi-card.indigo::before { background: linear-gradient(90deg, var(--dai-indigo), #818cf8); }
+    .kpi-card.bordo::before  { background: linear-gradient(90deg, var(--dc-bordo), #a0566a); }
+    .kpi-card.green::before  { background: linear-gradient(90deg, var(--green), #34d399); }
+    .kpi-card.amber::before  { background: linear-gradient(90deg, var(--amber), #fbbf24); }
+    .kpi-card.red::before    { background: linear-gradient(90deg, var(--red), #f87171); }
+
+    .kpi-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--dai-muted); margin-bottom: 10px; }
+    .kpi-value { font-size: 28px; font-weight: 800; letter-spacing: -0.8px; line-height: 1; color: var(--dai-white); }
+    .kpi-value.highlight { color: var(--green); }
+    .kpi-value.bordo     { color: #c06a7d; }
+    .kpi-value.amber-v   { color: var(--amber); }
+    .kpi-value.nd        { color: var(--dai-muted); font-size: 18px; }
+    .kpi-delta { margin-top: 8px; display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; }
+    .kpi-delta.up   { color: var(--green); }
+    .kpi-delta.down { color: var(--red); }
+    .kpi-delta.neutral { color: var(--dai-muted); }
+    .kpi-delta.good-down { color: var(--green); }
+    .kpi-caption { margin-top: 4px; font-size: 11px; color: var(--dai-muted); }
+
+    .hero-banner {
+      background: linear-gradient(135deg, var(--dai-surface) 0%, #1a2540 100%);
+      border: 1px solid var(--dai-border); border-left: 4px solid var(--amber);
+      border-radius: var(--radius); padding: 28px 32px; margin-bottom: 24px;
+    }
+    .hero-banner.green-banner { border-left-color: var(--green); }
+    .hero-banner .hero-eyebrow { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--amber); margin-bottom: 10px; }
+    .hero-banner.green-banner .hero-eyebrow { color: var(--green); }
+    .hero-banner h3 { font-size: 22px; font-weight: 800; letter-spacing: -0.4px; line-height: 1.3; }
+    .hero-banner h3 strong { color: var(--amber); }
+    .hero-banner.green-banner h3 strong { color: var(--green); }
+    .hero-banner p { margin-top: 10px; font-size: 14px; color: var(--dai-muted); line-height: 1.7; max-width: 680px; }
+
+    .table-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--dai-border); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead th {
+      background: var(--dai-surface2); padding: 11px 16px; text-align: left;
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em;
+      color: var(--dai-muted); border-bottom: 1px solid var(--dai-border); white-space: nowrap;
+    }
+    tbody tr { border-bottom: 1px solid rgba(51,65,85,0.5); transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(99,102,241,0.04); }
+    tbody td { padding: 12px 16px; color: var(--dai-muted); vertical-align: middle; }
+    tbody td.text-white { color: var(--dai-white); font-weight: 600; }
+    tbody td.text-green { color: var(--green); font-weight: 700; }
+    tbody td.text-amber { color: var(--amber); font-weight: 600; }
+    tbody td.text-red   { color: var(--red); font-weight: 600; }
+    tbody td.text-bordo { color: #c06a7d; font-weight: 700; }
+    .tag { display: inline-flex; align-items: center; gap: 4px; padding: 2px 9px; border-radius: 12px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .tag-green  { background: var(--green-dim); color: var(--green); }
+    .tag-amber  { background: var(--amber-dim); color: var(--amber); }
+    .tag-red    { background: var(--red-dim);   color: var(--red);   }
+    .tag-bordo  { background: var(--dc-bordo-dim); color: #c06a7d; }
+    .tag-indigo { background: var(--dai-indigo-dim); color: var(--dai-indigo); }
+    .tag-muted  { background: rgba(148,163,184,0.1); color: var(--dai-muted); }
+
+    .spotlight {
+      background: linear-gradient(135deg, rgba(124,61,78,0.18) 0%, rgba(124,61,78,0.06) 100%);
+      border: 1px solid rgba(124,61,78,0.4); border-radius: var(--radius); padding: 28px 32px;
+      position: relative; overflow: hidden;
+    }
+    .spotlight::before { content: ''; position: absolute; top: -60px; right: -60px; width: 260px; height: 260px; background: radial-gradient(circle, rgba(124,61,78,0.15) 0%, transparent 70%); border-radius: 50%; }
+    .spotlight .eyebrow { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #c06a7d; margin-bottom: 8px; }
+    .spotlight h3 { font-family: 'Playfair Display', Georgia, serif; font-size: 20px; font-weight: 700; color: var(--dai-white); margin-bottom: 6px; }
+    .spotlight .tagline { font-size: 13px; color: var(--dai-muted); margin-bottom: 24px; line-height: 1.6; }
+    .spotlight-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .spotlight-metric .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: #c06a7d; margin-bottom: 4px; }
+    .spotlight-metric .value { font-size: 24px; font-weight: 800; color: var(--dai-white); letter-spacing: -0.5px; }
+    .spotlight-metric .value.star { color: #e8889a; }
+    .spotlight p.analysis { font-size: 13px; color: var(--dai-muted); line-height: 1.7; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(124,61,78,0.25); }
+    .spotlight p.analysis strong { color: #e8889a; }
+
+    .info-box { background: var(--dai-surface); border-radius: var(--radius-sm); padding: 14px 18px; font-size: 13px; color: var(--dai-muted); line-height: 1.65; border-left: 3px solid; }
+    .info-box.indigo { border-left-color: var(--dai-indigo); background: var(--dai-indigo-dim); }
+    .info-box.green  { border-left-color: var(--green);  background: var(--green-dim); }
+    .info-box.amber  { border-left-color: var(--amber);  background: var(--amber-dim); }
+    .info-box.red    { border-left-color: var(--red);    background: var(--red-dim); }
+    .info-box strong { color: var(--dai-white); }
+
+    .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .action-card { background: var(--dai-surface); border: 1px solid var(--dai-border); border-radius: var(--radius); padding: 20px; display: flex; gap: 14px; }
+    .action-num { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; flex-shrink: 0; }
+    .action-num.critical { background: var(--red-dim); color: var(--red); }
+    .action-num.high     { background: var(--amber-dim); color: var(--amber); }
+    .action-num.medium   { background: var(--dai-indigo-dim); color: var(--dai-indigo); }
+    .action-body .priority { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 5px; }
+    .action-body .priority.critical { color: var(--red); }
+    .action-body .priority.high     { color: var(--amber); }
+    .action-body .priority.medium   { color: var(--dai-indigo); }
+    .action-body h4 { font-size: 13px; font-weight: 700; color: var(--dai-white); line-height: 1.4; margin-bottom: 5px; }
+    .action-body p { font-size: 12px; color: var(--dai-muted); line-height: 1.55; }
+
+    .chart-wrap { background: var(--dai-surface); border: 1px solid var(--dai-border); border-radius: var(--radius); padding: 24px; position: relative; }
+    .chart-title { font-size: 13px; font-weight: 700; color: var(--dai-white); margin-bottom: 4px; }
+    .chart-subtitle { font-size: 11px; color: var(--dai-muted); margin-bottom: 20px; }
+    canvas { display: block; max-height: 280px; }
+
+    .divider { border: none; border-top: 1px solid var(--dai-border); margin: 24px 0; }
+
+    .footer { background: var(--dai-surface); border-top: 1px solid var(--dai-border); padding: 28px 0; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .footer-brand { font-size: 13px; font-weight: 600; color: var(--dai-muted); }
+    .footer-brand span { color: var(--dai-indigo); }
+    .footer-meta { font-size: 11px; color: #5a6778; line-height: 1.6; text-align: right; }
+
+    .week-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+    .week-card { background: var(--dai-surface); border: 1px solid var(--dai-border); border-radius: var(--radius); padding: 18px 16px; text-align: center; position: relative; overflow: hidden; }
+    .week-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .week-card.best::before { background: linear-gradient(90deg, var(--green), #34d399); }
+    .week-card.low::before  { background: linear-gradient(90deg, var(--amber), #fbbf24); }
+    .week-card.normal::before { background: linear-gradient(90deg, var(--dai-indigo), #818cf8); }
+    .week-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--dai-muted); margin-bottom: 10px; }
+    .week-conv  { font-size: 30px; font-weight: 800; letter-spacing: -1px; color: var(--dai-white); line-height: 1; }
+    .week-conv.best { color: var(--green); }
+    .week-conv.low  { color: var(--amber); }
+    .week-sub { font-size: 11px; color: var(--dai-muted); margin-top: 6px; }
+    .week-quali { font-size: 12px; font-weight: 600; margin-top: 4px; }
+    .week-quali.high { color: var(--green); }
+    .week-quali.mid  { color: var(--amber); }
+
+    .bar-chart-manual { display: flex; flex-direction: column; gap: 10px; padding: 8px 0; }
+
+    @media (max-width: 900px) {
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+      .kpi-grid-4 { grid-template-columns: 1fr 1fr; }
+      .kpi-grid-5 { grid-template-columns: repeat(3, 1fr); }
+      .week-grid { grid-template-columns: repeat(3, 1fr); }
+      .action-grid { grid-template-columns: 1fr; }
+      .spotlight-metrics { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+      .kpi-grid-4 { grid-template-columns: 1fr 1fr; }
+      .kpi-grid-5 { grid-template-columns: 1fr 1fr; }
+      .kpi-value { font-size: 24px; }
+      .week-grid { grid-template-columns: 1fr 1fr; }
+      .spotlight-metrics { grid-template-columns: 1fr 1fr; }
+      .action-grid { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; }
+      .footer-meta { text-align: left; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { opacity: 0; animation: fadeUp 0.55s ease forwards; }
+    .fade-up:nth-child(1) { animation-delay: 0.05s; }
+    .fade-up:nth-child(2) { animation-delay: 0.12s; }
+    .fade-up:nth-child(3) { animation-delay: 0.19s; }
+    .fade-up:nth-child(4) { animation-delay: 0.26s; }
+    .fade-up:nth-child(5) { animation-delay: 0.33s; }
+  </style>
+</head>
+<body>
+
+  <div class="gate" id="gate-loading">
+    <div class="gate-icon"></div>
+    <p class="gate-title">Carregando relatório...</p>
+  </div>
+
+  <div class="gate hidden" id="gate-direct">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#5a5f66" stroke-width="1.5">
+      <rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" />
+    </svg>
+    <p class="gate-title">Acesso exclusivo via Chat</p>
+    <p class="gate-sub">Esta página está disponível somente no painel Chatwoot da DermaClinic.</p>
+  </div>
+
+  <div class="app" id="app">
+    <div class="report-header">
+      <button class="back-btn" onclick="history.back()">← Voltar</button>
+      <span class="report-header-title">META & Google Ads — Julho 2026</span>
+      <span class="report-header-sub" style="display:flex;align-items:center;gap:6px;"><img src="../../_shared/logo-negative.svg" style="height:16px;opacity:0.85;" alt="Digital AI" /></span>
+    </div>
+
+    <div class="report-content">
+      <div class="report-body">
+
+        <h1>META & Google Ads — Tráfego Pago <span class="tag-updated" style="background:rgba(245,158,11,0.15);color:#F59E0B;border:1px solid rgba(245,158,11,0.3);">Dados 01–31/07</span></h1>
+        <p class="subtitle">DermaClinic | Digital AI</p>
+        <p class="meta-line">
+          <span>&#128197; Período: 01 a 31 de julho de 2026</span>
+          <span>&#128260; Gerado em: —</span>
+        </p>
+
+<main class="main">
+  <div class="container">
+
+    <!-- ─────── FONTES DE DADOS ─────── -->
+    <div class="info-box green" style="margin-bottom:32px;">
+      <strong>&#128203; Dados pendentes — planilha Meta Ads de julho 2026 a ser fornecida:</strong> Relatório estruturado aguardando dados da planilha oficial Meta Ads Manager (01–31/jul/2026). Investimento, CPM, conversas por criativo e adset serão inseridos após recebimento. <strong>Fonte investimento/CPM/conversas Meta: planilha DermaClinic-Anuncios-Jul2026.xlsx (pendente).</strong> Fonte qualificação interna: Chatwoot/dashboard_metrics (a preencher). Todos os valores exibidos como — serão atualizados.
+    </div>
+
+    <!-- ─────── 1. RESUMO EXECUTIVO ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon amber">&#128200;</div>
+        <div>
+          <div class="section-title">Resumo Executivo</div>
+          <div class="section-subtitle">Visão consolidada do mês — 01 a 31 de julho de 2026</div>
+        </div>
+      </div>
+
+      <div class="hero-banner">
+        <div class="hero-eyebrow">&#128200; Performance mensal — dados a preencher · planilha Meta Ads 01–31/jul</div>
+        <h3>Julho: dados pendentes — <strong>investimento —, — conversas a —/conv</strong> — análise a inserir após recebimento da planilha</h3>
+        <p>Relatório estruturado aguardando dados da planilha oficial do mês. Investimento, CPM, conversas por criativo, adsets e análise de qualificação interna serão inseridos após recebimento. Referência de junho: R$1.069,69 investidos, 143 conversas a R$7,48/conv, CPM R$24,28, qualificação 92,1%.</p>
+      </div>
+
+      <div class="kpi-grid-4">
+        <div class="kpi-card amber fade-up">
+          <div class="kpi-label">Conversas (Meta)</div>
+          <div class="kpi-value amber-v">—</div>
+          <div class="kpi-delta neutral">— vs — (jun)</div>
+          <div class="kpi-caption">— no Chatwoot · — qualificados (—%)</div>
+        </div>
+        <div class="kpi-card indigo fade-up">
+          <div class="kpi-label">Investimento</div>
+          <div class="kpi-value">—</div>
+          <div class="kpi-delta neutral">— vs R$1.069 (jun)</div>
+          <div class="kpi-caption">— adsets · — criativos · — impressões</div>
+        </div>
+        <div class="kpi-card amber fade-up">
+          <div class="kpi-label">Custo / Conversa</div>
+          <div class="kpi-value amber-v">—</div>
+          <div class="kpi-delta neutral">— vs R$7,48 (jun)</div>
+          <div class="kpi-caption">a preencher</div>
+        </div>
+        <div class="kpi-card green fade-up">
+          <div class="kpi-label">CPM Médio</div>
+          <div class="kpi-value highlight">—</div>
+          <div class="kpi-delta neutral">— vs R$24,28 (jun)</div>
+          <div class="kpi-caption">a preencher</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────── 2. DISTRIBUIÇÃO SEMANAL ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon indigo">&#128197;</div>
+        <div>
+          <div class="section-title">Distribuição Semanal de Conversas</div>
+          <div class="section-subtitle">Evolução semana a semana — julho 2026 (fonte: dashboard_metrics)</div>
+        </div>
+      </div>
+
+      <div class="week-grid">
+        <!-- S1 -->
+        <div class="week-card normal">
+          <div class="week-label">S1 · 01–07/jul</div>
+          <div class="week-conv">—</div>
+          <div class="week-sub">conversas</div>
+          <div class="week-quali">— qualif. (—%)</div>
+          <div style="margin-top:10px;font-size:11px;color:var(--dai-muted);">a preencher</div>
+        </div>
+        <!-- S2 -->
+        <div class="week-card low">
+          <div class="week-label">S2 · 08–14/jul</div>
+          <div class="week-conv">—</div>
+          <div class="week-sub">conversas</div>
+          <div class="week-quali">— qualif. (—%)</div>
+          <div style="margin-top:10px;font-size:11px;color:var(--dai-muted);">a preencher</div>
+        </div>
+        <!-- S3 -->
+        <div class="week-card normal">
+          <div class="week-label">S3 · 15–21/jul</div>
+          <div class="week-conv">—</div>
+          <div class="week-sub">conversas</div>
+          <div class="week-quali">— qualif. (—%)</div>
+          <div style="margin-top:10px;font-size:11px;color:var(--dai-muted);">a preencher</div>
+        </div>
+        <!-- S4 -->
+        <div class="week-card best">
+          <div class="week-label">S4 · 22–28/jul</div>
+          <div class="week-conv">—</div>
+          <div class="week-sub">conversas</div>
+          <div class="week-quali">— qualif. (—%)</div>
+          <div style="margin-top:10px;font-size:11px;color:var(--dai-muted);">a preencher</div>
+        </div>
+        <!-- S5 -->
+        <div class="week-card normal">
+          <div class="week-label">S5 · 29–31/jul</div>
+          <div class="week-conv">—</div>
+          <div class="week-sub">conversas</div>
+          <div class="week-quali">— qualif. (—%)</div>
+          <div style="margin-top:10px;font-size:11px;color:var(--dai-muted);">a preencher</div>
+        </div>
+      </div>
+
+      <!-- Gráfico de barras das semanas -->
+      <div class="chart-wrap" style="margin-top:16px;">
+        <div class="chart-title">Conversas por Semana — Julho 2026</div>
+        <div class="chart-subtitle">Volume de leads iniciados via tráfego pago</div>
+        <canvas id="weeklyChart"></canvas>
+      </div>
+
+      <!-- Análise da anomalia S2 -->
+      <div class="info-box amber" style="margin-top:14px;">
+        <strong>&#128203; Análise semanal — Julho 2026:</strong> Distribuição semanal de conversas a preencher após recebimento dos dados. Referência de junho: S1=33, S2=11 (anomalia), S3=30, S4=41 (melhor semana), S5=12. Registrar e analisar eventuais anomalias do período.
+      </div>
+    </section>
+
+    <!-- ─────── 3. ANÁLISE DO GESTOR ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon amber">&#128172;</div>
+        <div>
+          <div class="section-title">Análise do Período</div>
+          <div class="section-subtitle">Avaliação qualitativa dos resultados — Julho 2026</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div class="info-box amber">
+          <strong>Análise de Campanhas Sazonais — Julho 2026</strong><br><br>
+          Dados da distribuição de budget entre campanhas sazonais e regulares a preencher após recebimento da planilha. Referência de junho: campanha Namorados consumiu 19,1% do budget a R$12,01/conv — 74,7% acima da média. Limitar sazonais a 10–12% do budget é recomendação vigente.
+        </div>
+        <div class="info-box green">
+          <strong>Qualificação de Leads — Julho 2026</strong><br><br>
+          Taxa de qualificação a preencher após dados do Chatwoot. Referência de junho: 92,1% (117/127 leads qualificados), taxa de entrega Meta→Chatwoot 88,8%. Monitorar se o padrão de qualidade se mantém.
+        </div>
+        <div class="info-box indigo">
+          <strong>Criativo Dominante — Julho 2026</strong><br><br>
+          Distribuição de conversas por criativo a preencher. Referência de junho: REJUVENESCER AS MÃOS liderou com 56,6% das conversas (HHI 0,349 — zona de risco estrutural). Monitorar se novas variações foram criadas para diversificar a concentração.
+        </div>
+        <div class="info-box" style="border-left:3px solid var(--dai-border);background:rgba(255,255,255,0.02);">
+          <strong>Eficiência por Adset — Julho 2026</strong><br><br>
+          Performance por adset a preencher após planilha. Referência de junho: SITE R$6,39/conv (melhor), QUENTE R$6,60/conv, LUXO+DERM R$8,15/conv, MORNO R$11,15/conv (pior). Verificar se recomendação de redução do MORNO foi implementada.
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────── 4. COMPARATIVO MAIO vs JUNHO ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon green">&#128260;</div>
+        <div>
+          <div class="section-title">Comparativo Histórico</div>
+          <div class="section-subtitle">Junho vs. Julho 2026</div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Indicador</th>
+              <th>Junho 2026</th>
+              <th>Julho 2026</th>
+              <th>Variação</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-white">Conversas (Meta)</td>
+              <td>143</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-muted">a preencher</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">Conversas Chatwoot (topo)</td>
+              <td>127</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-muted">a preencher</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">Leads qualificados</td>
+              <td>117 (92,1%)</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-muted">a preencher</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">Investimento total</td>
+              <td>R$1.069,69</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-muted">a preencher</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">Custo por conversa</td>
+              <td class="text-green">R$7,48</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-muted">a preencher</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">CPM médio</td>
+              <td>R$24,28</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-muted">a preencher</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">Impressões</td>
+              <td>44.052</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-muted">a preencher</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">Melhor semana</td>
+              <td>41 (S4: 22–28/jun)</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-muted">a preencher</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">Pior semana</td>
+              <td>11 (S2: 8–14/jun)</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-muted">a preencher</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">Criativo líder</td>
+              <td>REJUVENESCER AS MÃOS — R$4,99/conv</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-muted">a preencher</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ─────── 5. CRIATIVOS — DADOS COMPLETOS JUNHO 2026 ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon bordo">&#127942;</div>
+        <div>
+          <div class="section-title">Performance de Criativos — Julho 2026</div>
+          <div class="section-subtitle">Planilha oficial Meta Ads Manager · 01 a 31 de julho · dados a preencher após recebimento</div>
+        </div>
+      </div>
+
+      <!-- Adsets breakdown -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;">
+        <div class="kpi-card green" style="padding:14px 16px;">
+          <div class="kpi-label">SITE</div>
+          <div style="font-size:22px;font-weight:800;color:var(--green);">— conv</div>
+          <div style="font-size:11px;color:var(--dai-muted);margin-top:3px;">— · <strong style="color:var(--green);">—/conv</strong></div>
+        </div>
+        <div class="kpi-card green" style="padding:14px 16px;">
+          <div class="kpi-label">QUENTE</div>
+          <div style="font-size:22px;font-weight:800;color:var(--green);">— conv</div>
+          <div style="font-size:11px;color:var(--dai-muted);margin-top:3px;">— · <strong style="color:var(--green);">—/conv</strong></div>
+        </div>
+        <div class="kpi-card amber" style="padding:14px 16px;">
+          <div class="kpi-label">LUXO+DERM</div>
+          <div style="font-size:22px;font-weight:800;color:var(--amber);">— conv</div>
+          <div style="font-size:11px;color:var(--dai-muted);margin-top:3px;">— · <strong style="color:var(--amber);">—/conv</strong></div>
+        </div>
+        <div class="kpi-card" style="padding:14px 16px;border-top:3px solid var(--red);">
+          <div class="kpi-label">MORNO</div>
+          <div style="font-size:22px;font-weight:800;color:var(--red);">— conv</div>
+          <div style="font-size:11px;color:var(--dai-muted);margin-top:3px;">— · <strong style="color:var(--red);">—/conv</strong></div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Criativo</th>
+              <th>Conv. (mês)</th>
+              <th>Invest.</th>
+              <th>Custo/Conv</th>
+              <th>CPM</th>
+              <th>Impressões</th>
+              <th>Status</th>
+              <th>Link</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background:rgba(124,61,78,0.07);">
+              <td class="text-white">1</td>
+              <td class="text-white">AN | REJUVENESCER AS MÃOS | 01 &#11088;</td>
+              <td style="color:var(--dc-bordo);font-weight:700;font-size:15px;">—</td>
+              <td>—</td>
+              <td class="text-green">—</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-green">Líder absoluto · 3 adsets</span></td>
+              <td><a href="https://www.instagram.com/p/DYBD7RZAN1e/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:11px;font-weight:600;text-decoration:none;">📷 IG</a></td>
+            </tr>
+            <tr>
+              <td class="text-white">2</td>
+              <td class="text-white">AN | 3 TRATAMENTOS QUE PODEM MUDAR SUA PELE | 01</td>
+              <td style="font-weight:700;">—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-indigo">2º lugar · CPM alto</span></td>
+              <td><a href="https://www.instagram.com/p/DYA5FVsgKhf/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:11px;font-weight:600;text-decoration:none;">📷 IG</a></td>
+            </tr>
+            <tr>
+              <td class="text-white">3</td>
+              <td class="text-white">AN | REJUVESNECER | 01</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-green">Eficiente · escalar</span></td>
+              <td><a href="https://www.instagram.com/p/DYBC-qHAEt0/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:11px;font-weight:600;text-decoration:none;">📷 IG</a></td>
+            </tr>
+            <tr>
+              <td class="text-white">4</td>
+              <td class="text-white">AN | NAMORADOS | 02</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-amber">Sazonal · CPR elevado</span></td>
+              <td><a href="https://www.instagram.com/p/DZLkS6yANt6/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:11px;font-weight:600;text-decoration:none;">📷 IG</a></td>
+            </tr>
+            <tr>
+              <td class="text-white">5</td>
+              <td class="text-white">AN | O MAIOR ÓRGÃO DO CORPO | 01</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-indigo">Consistente</span></td>
+              <td><a href="https://www.instagram.com/p/DYA5lUYAKWG/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:11px;font-weight:600;text-decoration:none;">📷 IG</a></td>
+            </tr>
+            <tr>
+              <td class="text-white">6</td>
+              <td class="text-white">AN | NAMORADOS | 04</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-amber">Sazonal · CPM bom</span></td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td class="text-white">7</td>
+              <td class="text-white">AN | ESTRIAS | 01</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-green">Melhor CPR do mês · escalar</span></td>
+              <td><a href="https://www.instagram.com/p/DWpg8KcgC-L/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:11px;font-weight:600;text-decoration:none;">📷 IG</a></td>
+            </tr>
+            <tr>
+              <td class="text-white">8</td>
+              <td class="text-white">AN | TODA HISTÓRIA QUE CRESCE | 01</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-indigo">Volume ok</span></td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td class="text-white">9</td>
+              <td class="text-white">AN | BOTOX DOS 30 É O MESMO DOS 60 | 01</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-indigo">CPR ok · CPM alto</span></td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td class="text-white">10</td>
+              <td class="text-white">AN | PREENCHIMENTO LABIAL | 01</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-indigo">Nicho testado</span></td>
+              <td><a href="https://www.instagram.com/p/DZLid-4gPVk/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:11px;font-weight:600;text-decoration:none;">📷 IG</a></td>
+            </tr>
+            <tr>
+              <td class="text-white">11</td>
+              <td class="text-white">AN | NAMORADOS | 03</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-red">Sazonal · CPR crítico</span></td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td class="text-white">12</td>
+              <td class="text-white">AN | NAMORADOS | 06</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-red">Sazonal · CPR crítico</span></td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td class="text-white">13</td>
+              <td class="text-white">AN | BRUNA MARQUEZINE | 01</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-amber">Amostra baixa</span></td>
+              <td><a href="https://www.instagram.com/p/DYA5Y9zgIRn/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:11px;font-weight:600;text-decoration:none;">📷 IG</a></td>
+            </tr>
+            <tr>
+              <td class="text-white">14</td>
+              <td class="text-white">AN | MELASMA | 02</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-green">Melhor CPM · testar mais</span></td>
+              <td><a href="https://www.instagram.com/p/DWphavxgIUf/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:11px;font-weight:600;text-decoration:none;">📷 IG</a></td>
+            </tr>
+            <tr>
+              <td class="text-white">15</td>
+              <td class="text-white">AN | NAMORADOS | 01</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-red">Pausar — CPR 4,7× a média</span></td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td class="text-white">16</td>
+              <td class="text-white">AN | QUANTOS ANOS TEM ESSA PELE? | 01</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-red">Pausar — maior desperdício do mês</span></td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td class="text-white">17</td>
+              <td class="text-white">AN | TROCANDO O JALECO PELA MACA | 01</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag tag-amber">CPR alto · revisar</span></td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Criativos sem conversão -->
+      <div class="info-box amber" style="margin-top:14px;">
+        <strong>&#128203; Criativos sem conversão — Julho 2026:</strong>
+        Lista de criativos sem conversão a preencher após recebimento da planilha.
+        Referência de junho: 7 criativos sem conversão totalizaram R$77,34 (7,2% do budget).
+        Threshold estatístico (95% confiança): 921 impressões mínimas para validação.
+      </div>
+
+      <!-- Bar chart de C/Conv atualizado -->
+      <div class="chart-wrap" style="margin-top:16px;">
+        <div class="chart-title">Custo por Conversa — Criativos com Volume ≥ 3 conversas</div>
+        <div class="chart-subtitle">Menor é melhor — média do mês: — · dados a preencher</div>
+
+        <div class="narrative-block" style="margin-top:16px;padding:16px;background:var(--surface, #1E293B);border-radius:8px;border-left:4px solid #6366F1;">
+          <p style="color:#94A3B8;font-style:italic;">Gráfico de Custo por Conversa será gerado após recebimento dos dados de julho. Referência de junho: ESTRIAS R$3,45 · REJUVENESCER R$4,99 · Média R$7,48 · NAMORADOS|03 R$14,67 (pior).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────── 6. SPOTLIGHT — REJUVENESCER AS MÃOS ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon bordo">&#127775;</div>
+        <div>
+          <div class="section-title">Criativo Dominante</div>
+          <div class="section-subtitle">Criativo líder de julho — a preencher após dados</div>
+        </div>
+      </div>
+
+      <div class="spotlight">
+        <div class="eyebrow">&#127775; Líder de Julho — a preencher após dados</div>
+        <h3>Criativo Dominante — a identificar após planilha de julho</h3>
+        <p class="tagline">O criativo líder de julho será identificado após recebimento dos dados completos. Referência de junho: AN | REJUVENESCER AS MÃOS | 01 liderou com 81 conversas (56,6% do total), CPM R$22,54 e custo R$4,99/conv — terceiro mês consecutivo de liderança.</p>
+
+        <div class="spotlight-metrics">
+          <div class="spotlight-metric">
+            <div class="label">Custo / Conversa</div>
+            <div class="value star">R$4,99</div>
+          </div>
+          <div class="spotlight-metric">
+            <div class="label">Conversas (mês)</div>
+            <div class="value">81</div>
+          </div>
+          <div class="spotlight-metric">
+            <div class="label">CPM</div>
+            <div class="value star">R$22,54</div>
+          </div>
+          <div class="spotlight-metric">
+            <div class="label">Share de Conversas</div>
+            <div class="value">56,6%</div>
+          </div>
+        </div>
+
+        <p class="analysis">
+          <strong>Histórico de liderança (referência):</strong> REJUVENESCER AS MÃOS liderou maio (R$2,83/conv) e junho (R$4,99/conv). Em julho, verificar se a tendência de alta de custo por escalonamento continua e se variações foram criadas para diversificar a concentração.<br><br>
+          <strong>Risco de concentração (referência junho — HHI 0,349):</strong> 56,6% das conversas concentradas em 1 criativo é dependência estrutural. Monitorar se criação de 2–3 variações do tema Mãos foi implementada conforme recomendação de junho.<br><br>
+          <strong>Análise de julho:</strong> Dados de performance do criativo líder a preencher após recebimento da planilha. Identificar CPM, share de conversas e posicionamento vs. média da conta.
+        </p>
+      </div>
+    </section>
+
+    <!-- ─────── 7. QUALIFICAÇÃO DE LEADS ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon green">&#129657;</div>
+        <div>
+          <div class="section-title">Funil de Qualificação — IA de Atendimento</div>
+          <div class="section-subtitle">Performance da IA no filtro de leads — julho 2026</div>
+        </div>
+      </div>
+
+      <div class="hero-banner green-banner" style="margin-bottom:20px;">
+        <div class="hero-eyebrow">&#129657; Eficiência de qualificação — julho 2026</div>
+        <h3>Qualificação de leads: — qualificados de — contatos — <strong>a preencher após dados</strong></h3>
+        <p>Taxa de qualificação de julho a inserir após dados do Chatwoot. Referência de junho: 92,1% (117 de 127 qualificados), taxa de descarte 7,9%. Monitorar se o padrão de eficiência da IA de atendimento se mantém.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+        <div class="card" style="text-align:center;border-top:3px solid var(--dai-indigo);">
+          <div style="font-size:11px;color:var(--dai-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Topo do Funil</div>
+          <div style="font-size:38px;font-weight:800;color:var(--dai-white);">—</div>
+          <div style="font-size:12px;color:var(--dai-muted);margin-top:4px;">conversas via TP</div>
+        </div>
+        <div class="card" style="text-align:center;border-top:3px solid var(--green);">
+          <div style="font-size:11px;color:var(--dai-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Qualificados</div>
+          <div style="font-size:38px;font-weight:800;color:var(--green);">—</div>
+          <div style="font-size:12px;color:var(--green);margin-top:4px;font-weight:700;">—% de aproveitamento</div>
+        </div>
+        <div class="card" style="text-align:center;border-top:3px solid var(--amber);">
+          <div style="font-size:11px;color:var(--dai-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Descartados</div>
+          <div style="font-size:38px;font-weight:800;color:var(--amber);">—</div>
+          <div style="font-size:12px;color:var(--dai-muted);margin-top:4px;">—% de descarte</div>
+        </div>
+      </div>
+
+      <div class="info-box green" style="margin-top:14px;">
+        <strong>Semana com melhor qualificação — julho 2026:</strong> Dados a preencher. Referência de junho: S3 (Jun 15–21) registrou 29 qualificados de 30 conversas (96,7%). S4: 38 de 41 conversas qualificadas (92,7%). Monitorar qual semana de julho registra o melhor índice.
+      </div>
+    </section>
+
+    <!-- ─────── 8. AÇÕES PARA JULHO ─────── -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon red">&#9889;</div>
+        <div>
+          <div class="section-title">5 Ações Concretas para Julho</div>
+          <div class="section-subtitle">Priorizadas por impacto e urgência — baseadas nos dados de julho</div>
+        </div>
+      </div>
+
+      <div class="action-grid">
+        <div class="action-card">
+          <div class="action-num critical">1</div>
+          <div class="action-body">
+            <div class="priority critical">Prioridade Crítica</div>
+            <h4>Verificar diversificação de criativos — monitorar concentração após implementação das variações de junho</h4>
+            <p>Monitorar HHI do criativo líder de julho vs. referência de junho (0,349). Se concentração persistir, priorizar variações do tema dominante. Inserir dados reais de CPR e share de conversas após planilha.</p>
+          </div>
+        </div>
+
+        <div class="action-card">
+          <div class="action-num critical">2</div>
+          <div class="action-body">
+            <div class="priority critical">Prioridade Crítica</div>
+            <h4>Pausar ou realocrar budget do adset MORNO — CPR R$11,15 vs média R$7,48</h4>
+            <p>Verificar se recomendação de redução do adset MORNO (R$11,15/conv em junho) foi implementada. Comparar eficiência dos adsets de julho com referência de junho: SITE R$6,39, QUENTE R$6,60, MORNO R$11,15.</p>
+          </div>
+        </div>
+
+        <div class="action-card">
+          <div class="action-num high">3</div>
+          <div class="action-body">
+            <div class="priority high">Prioridade Alta</div>
+            <h4>Pausar os 7 criativos com zero conversão e R$77,34 desperdiçados em junho</h4>
+            <p>Verificar se criativos sem conversão de junho foram pausados (LIFTING, BOTOX, CANETAS, UNYQUE PRO, NAMORADOS|05, NINGUÉM FALA ABERTAMENTE, DIA DAS MÃES — R$77,34 em junho). Mapear quais criativos de julho estão sem conversão e avaliar pausa ou reconfiguração.</p>
+          </div>
+        </div>
+
+        <div class="action-card">
+          <div class="action-num high">4</div>
+          <div class="action-body">
+            <div class="priority high">Prioridade Alta</div>
+            <h4>Investigar e replicar a estrutura de S4 (22–28/jun: 41 conversas)</h4>
+            <p>Referência de junho: S4 (22–28/jun) gerou 41 conversas com 92,7% de qualificação. Verificar qual semana de julho apresenta melhor resultado e replicar a configuração de criativos e adsets.</p>
+          </div>
+        </div>
+
+        <div class="action-card" style="grid-column: 1 / -1;">
+          <div class="action-num medium">5</div>
+          <div class="action-body">
+            <div class="priority medium">Estratégico — Pipeline Junho → Julho</div>
+            <h4>Re-engajar leads qualificados de julho que ainda não agendaram</h4>
+            <p>Re-engajar os leads qualificados de julho ainda sem agendamento confirmado. Referência de junho: 117 qualificados com potencial de 12–23 consultas adicionais via follow-up WhatsApp sem custo adicional de mídia. Acionar fluxo de re-engajamento para os contatos do mês.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ─────── SEÇÃO GOOGLE ADS ─────── -->
+    <section class="section" id="google-ads">
+      <div class="section-header">
+        <div class="section-icon indigo">&#128200;</div>
+        <div>
+          <div class="section-title">Google Ads — Julho 2026</div>
+          <div class="section-subtitle">Dados Google Ads Manager · 01 a 31 de julho · a preencher</div>
+        </div>
+      </div>
+      <div class="kpi-grid-4">
+        <div class="kpi-card indigo">
+          <div class="kpi-label">Investimento Google</div>
+          <div class="kpi-value">—</div>
+          <div class="kpi-caption">a preencher</div>
+        </div>
+        <div class="kpi-card indigo">
+          <div class="kpi-label">Cliques</div>
+          <div class="kpi-value">—</div>
+          <div class="kpi-caption">a preencher</div>
+        </div>
+        <div class="kpi-card indigo">
+          <div class="kpi-label">CTR Médio</div>
+          <div class="kpi-value">—</div>
+          <div class="kpi-caption">a preencher</div>
+        </div>
+        <div class="kpi-card indigo">
+          <div class="kpi-label">CPC Médio</div>
+          <div class="kpi-value">—</div>
+          <div class="kpi-caption">a preencher</div>
+        </div>
+      </div>
+      <div class="narrative-block" style="margin-top:16px;padding:16px;background:var(--surface, #1E293B);border-radius:8px;border-left:4px solid #6366F1;">
+        <p style="color:#94A3B8;font-style:italic;">Análise do Google Ads será inserida após recebimento dos dados do gestor de tráfego.</p>
+      </div>
+    </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand"><img src="../../_shared/logo-negative.svg" style="height:20px;vertical-align:middle;opacity:0.9;" alt="Digital AI" /></div>
+        <div style="font-size:11px;color:#5a6778;margin-top:3px;">digital-ai.tech · contato@digital-ai.tech</div>
+      </div>
+      <div class="footer-meta">
+        Relatório gerado em: — · Atualizado com dados completos: —<br>
+        Fonte: Meta Ads Manager Export (— conv · — · CPM —) + Chatwoot (— topo · — qualif)<br>
+        Próximo relatório: 01/09/2026
+      </div>
+    </div>
+  </div>
+</footer>
+
+      </div><!-- /.report-body -->
+    </div><!-- /.report-content -->
+  </div><!-- /.app -->
+
+  <script src="../../_shared/auth.js"></script>
+  <script>
+    function initWeeklyChart() {
+      var canvas = document.getElementById('weeklyChart');
+      if (!canvas) return;
+      var wrap = canvas.parentElement;
+
+      function doRender() {
+        if (canvas._rendered) return;
+        canvas._rendered = true;
+
+        // Dimensoes explicitas: bypassa responsive detection do Chart.js
+        var w = (wrap ? (wrap.clientWidth || wrap.offsetWidth) : 0) || 600;
+        w = Math.max(w - 48, 200); // 48px = padding interno do .chart-wrap (24px cada lado)
+        canvas.style.width  = w + 'px';
+        canvas.style.height = '280px';
+        canvas.width  = w;
+        canvas.height = 280;
+
+        new Chart(canvas.getContext('2d'), {
+          type: 'bar',
+          data: {
+            labels: ['S1 (01–07/jul)', 'S2 (08–14/jul)', 'S3 (15–21/jul)', 'S4 (22–28/jul)', 'S5 (29–31/jul)'],
+            datasets: [
+              {
+                label: 'Conversas',
+                data: [0, 0, 0, 0, 0],
+                backgroundColor: ['rgba(99,102,241,0.7)','rgba(245,158,11,0.7)','rgba(99,102,241,0.7)','rgba(16,185,129,0.8)','rgba(99,102,241,0.7)'],
+                borderColor: ['#6366F1','#F59E0B','#6366F1','#10B981','#6366F1'],
+                borderWidth: 1,
+                borderRadius: 6
+              },
+              {
+                label: 'Qualificados',
+                data: [0, 0, 0, 0, 0],
+                backgroundColor: 'rgba(16,185,129,0.25)',
+                borderColor: '#10B981',
+                borderWidth: 1,
+                borderRadius: 6
+              }
+            ]
+          },
+          options: {
+            responsive: false,
+            plugins: {
+              legend: { labels: { color: '#94A3B8', font: { size: 12 } } },
+              tooltip: {
+                backgroundColor: '#1E293B',
+                borderColor: '#334155',
+                borderWidth: 1,
+                titleColor: '#fff',
+                bodyColor: '#94A3B8'
+              }
+            },
+            scales: {
+              x: { ticks: { color: '#64748B', font: { size: 11 } }, grid: { color: 'rgba(51,65,85,0.4)' } },
+              y: { ticks: { color: '#64748B', font: { size: 11 }, stepSize: 10 }, grid: { color: 'rgba(51,65,85,0.4)' }, beginAtZero: true }
+            }
+          }
+        });
+      }
+
+      // Com reflow forcado em auth.js (void appEl.offsetHeight), o wrap ja
+      // deve ter clientWidth > 0 aqui. Mas mantemos fallback por seguranca.
+      if ((wrap && wrap.clientWidth > 0) || canvas.offsetWidth > 0) {
+        doRender();
+        return;
+      }
+
+      // Fallback ResizeObserver
+      if (window.ResizeObserver) {
+        var ro = new ResizeObserver(function() {
+          if (wrap && wrap.clientWidth > 0) { ro.disconnect(); doRender(); }
+        });
+        ro.observe(wrap || canvas);
+        setTimeout(function() { if (!canvas._rendered) { ro.disconnect(); doRender(); } }, 1200);
+      } else {
+        var attempts = 0;
+        (function poll() {
+          if ((wrap && wrap.clientWidth > 0) || attempts++ > 20) { doRender(); return; }
+          setTimeout(poll, 80);
+        })();
+      }
+    }
+
+    // Auth — onReady garante que #app está visível antes de renderizar o gráfico
+    initChatwootAuth({
+      gateLoading: 'gate-loading',
+      gateDirect:  'gate-direct',
+      gateApp:     'app',
+      client:      'dermaclinic',
+      report:      'meta-ads-jul-2026',
+      onReady:     initWeeklyChart
+    });
+  </script>
+</body>
+</html>
