@@ -281,6 +281,11 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 </div>
 <!-- Seletor de mês -->
 <div id="mes-tabs" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
+<button class="mes-btn" data-mes="fevereiro" onclick="mudarMes('fevereiro',this)">Fev/26</button>
+<button class="mes-btn" data-mes="marco" onclick="mudarMes('marco',this)">Mar/26</button>
+<button class="mes-btn" data-mes="abril" onclick="mudarMes('abril',this)">Abr/26</button>
+<button class="mes-btn" data-mes="maio" onclick="mudarMes('maio',this)">Mai/26</button>
+<button class="mes-btn" data-mes="junho" onclick="mudarMes('junho',this)">Jun/26</button>
 <button class="mes-btn active" data-mes="julho" onclick="mudarMes('julho',this)">Jul/26</button>
 </div>
 <!-- Grid principal: donut + tabela -->
@@ -310,6 +315,16 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 <div style="width:11px;height:11px;border-radius:3px;background:#6366f1;flex-shrink:0;"></div>
 <div style="flex:1;font-size:12.5px;color:#374151;">Avaliativa remarcada</div>
 <div id="kpi-remarcada" style="font-weight:700;color:#6366f1;font-size:13px;">1</div>
+        <div class="status-legend-item" id="leg-cancelado" onclick="filtrarStatus('cancelado')" style="display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;cursor:pointer;">
+          <div style="width:11px;height:11px;border-radius:3px;background:#dc2626;flex-shrink:0;"></div>
+          <div style="flex:1;font-size:12.5px;color:#374151;">Cancelado</div>
+          <div id="kpi-cancelado" style="font-weight:700;color:#dc2626;font-size:13px;">0</div>
+        </div>
+        <div class="status-legend-item" id="leg-sem-agendamento" onclick="filtrarStatus('sem-agendamento')" style="display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;cursor:pointer;">
+          <div style="width:11px;height:11px;border-radius:3px;background:#94a3b8;flex-shrink:0;"></div>
+          <div style="flex:1;font-size:12.5px;color:#374151;">Sem agendamento</div>
+          <div id="kpi-sem-agendamento" style="font-weight:700;color:#64748b;font-size:13px;">0</div>
+        </div>
 </div>
 <div style="margin-top:8px;padding-top:8px;border-top:1px solid #e2e8f0;display:flex;justify-content:flex-end;">
 <button onclick="filtrarStatus('todos')" style="font-size:11.5px;color:#2D52EF;background:none;border:none;cursor:pointer;padding:0;font-weight:600;">Limpar filtro</button>
@@ -1741,6 +1756,160 @@ new C(document.getElementById('chartInteresses'), {
 </script>
 <script>
 const TRACKER_DATA = {
+  fevereiro: {
+    label: 'Fevereiro 2026',
+    itens: [
+      { nome: 'CLEDIR APARECIDA FORMULO DOS SANTOS', status: 'aguardando', proc: 'SCULPTRA, Preechimento olheiras', detail: 'Aguardando data — 26-02-2026 ', value: 4550 },
+      { nome: 'Priscila Ligia Pereira', status: 'sem-agendamento', proc: 'SCULPTRA', detail: 'Proposta Aguardando aprovação do cliente — sem agendamento registrado', value: 2500 },
+      { nome: 'MARCIO MARLON DA SILVA', status: 'sem-agendamento', proc: 'CIRURGIA DR JOAO, PREENCHIMENTO MANDIBULA', detail: 'Proposta Aguardando aprovação do cliente — sem agendamento registrado', value: 6000 },
+      { nome: 'Luciane Aparecida Vieira', status: 'sem-agendamento', proc: 'MEGADERME RF MICROAGULHADA, LIFTERA TERCO INFERIOR, LIFTERA PAPADA, fotona olhos, co2 olhos, preench', detail: 'Proposta Aguardando aprovação do cliente — sem agendamento registrado', value: 12500 },
+      { nome: 'MARAIKE KLIMMEK MARSCHALL', status: 'concluida', proc: 'TOXINA BOTULINICA GLOBAL/CERVICAL, FOTONA FACE 4D, LIFTERA PAPADA, fotona olhos', detail: 'Proposta executada — TOXINA BOTULINICA GLOBAL/CERVICAL, FOTONA FACE 4D, LIFTERA PAPADA, fotona olhos', value: 10500 },
+      { nome: 'BRUNO HOLZ', status: 'aguardando', proc: 'LASER CO2 CICATRIZ, MEGADERME RF MICROAGULHADA', detail: 'Aguardando data — 23-02-2026 ', value: 3700 },
+      { nome: 'Sheila Mara Silva de Oliveira', status: 'aguardando', proc: 'SPECTRA,POROS, RUGAS( 6 SESSOES), MEGADERME RF MICROAGULHADA, SCULPTRA', detail: 'Aguardando data — 24-03-2026 ', value: 8140 },
+      { nome: 'JONATAS COELHO GOMES', status: 'aguardando', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR), SPECTRA,POROS, RUGAS( 6 SESSOES), MEGADERME RF MICROAGULHADA', detail: 'Aguardando data — 24-02-2026 ', value: 7390 },
+      { nome: 'Rebecca Doubrawa Bertani', status: 'aguardando', proc: 'FOTONA ESTRIAS ( A5), spectra avulso', detail: 'Aguardando data — 25-02-2026 ', value: 2550 },
+      { nome: 'Marcia Rocha da Silva', status: 'aguardando', proc: 'MMP CAPILAR (1 SESSAO)', detail: 'Aguardando data — 26-02-2026 ', value: 650 }
+    ]
+  },
+  marco: {
+    label: 'Março 2026',
+    itens: [
+      { nome: 'FERNANDA OKABE', status: 'concluida', proc: 'FOTONA ESTRIAS ( A4), MEGADERME RF MICROAGULHADA, MMP ESTRIAS', detail: 'Proposta executada — FOTONA ESTRIAS ( A4), MEGADERME RF MICROAGULHADA, MMP ESTRIAS', value: 3450 },
+      { nome: 'Miriam  Kuchenbecker  Voltolini *', status: 'aguardando', proc: 'RESTYLANE/LYFT/DEFYNE/KYSSE (8SERINGA)', detail: 'Aguardando data — 24-03-2026 ', value: 10400 },
+      { nome: 'PATRICIA KONRAD (DRA)', status: 'aguardando', proc: 'LIFTERA TERCO INFERIOR, LIFTERA PAPADA, SCULPTRA, Fios APTOS', detail: 'Aguardando data — 24-03-2026 ', value: 21250 },
+      { nome: 'Robson Rebelo Leão', status: 'aguardando', proc: 'SPECTRA, POROS, RUGAS 6 SESSAO, MEGADERME RF MICROAGULHADA', detail: 'Aguardando data — 22-04-2026 ', value: 5640 },
+      { nome: 'Camila koprowski', status: 'sem-agendamento', proc: 'RESTYLANE/LYFT/DEFYNE/KYSSE (2SERINGA), SPECTRA, POROS, RUGAS 6 SESSAO, LIFTERA TERCO INFERIOR, LIFT', detail: 'Proposta Aguardando aprovação do cliente — sem agendamento registrado', value: 11140 },
+      { nome: 'ELISANGELA LAUMANN', status: 'sem-agendamento', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR), RESTYLANE/LYFT/DEFYNE/KYSSE (5SERINGA), SCULPTRA FACE OU PES', detail: 'Proposta Aprovada pelo cliente — sem agendamento registrado', value: 14000 },
+      { nome: 'MARIA CECILIA TAKAYAMA KOERICH', status: 'sem-agendamento', proc: 'TOXINA BOTULINICA FACE/PESCOCO, PEQUENOS PROCEDIMENTOS, FOTONA FACE 4D', detail: 'Proposta Aguardando aprovação do cliente — sem agendamento registrado', value: 8400 },
+      { nome: 'MARIANE GEVIESKY ALVES', status: 'sem-agendamento', proc: 'cirugia de hidrosadenite', detail: 'Proposta Aguardando aprovação do cliente — sem agendamento registrado', value: 120 },
+      { nome: 'Paola Cristina Hintz', status: 'concluida', proc: 'TOXINA BOTULINICA FACE/PESCOCO, PREENCHIMENTO OLHEIRAS', detail: 'Proposta executada — TOXINA BOTULINICA FACE/PESCOCO, PREENCHIMENTO OLHEIRAS', value: 3700 },
+      { nome: 'ANISIO BENTO GAMBETTA JUNIOR', status: 'sem-agendamento', proc: 'LASER CO2 CICATRIZ, MEGADERME MULTILAYER, LASER CO2 AREA EXTRA', detail: 'Proposta Aguardando aprovação do cliente — sem agendamento registrado', value: 5300 },
+      { nome: 'Jessica Berkai bender cabral', status: 'sem-agendamento', proc: 'MEGADERME RF MICROAGULHADA', detail: 'Proposta Aguardando aprovação do cliente — sem agendamento registrado', value: 2500 },
+      { nome: 'FRANCINE  EVERLIN RUCKERT MIGUELETTO', status: 'sem-agendamento', proc: 'RESTYLANE/LYFT/DEFYNE/KYSSE (3SERINGA), MEGADERME MULTILAYER, SCULPTRA, spectra avulso', detail: 'Proposta Aguardando aprovação do cliente — sem agendamento registrado', value: 13525 },
+      { nome: 'Bruna da silva ramos', status: 'sem-agendamento', proc: 'SPECTRA, POROS, RUGAS 6 SESSAO, SPECTRA, POROS, RUGAS 12 SESSAO, MEGADERME RF MICROAGULHADA', detail: 'Proposta Aguardando aprovação do cliente — sem agendamento registrado', value: 11640 },
+      { nome: 'LUIZA CRISTINA BRANCO', status: 'sem-agendamento', proc: 'FOTONA FACE 4D, SCULPTRA', detail: 'Proposta Aguardando aprovação do cliente — sem agendamento registrado', value: 7300 },
+      { nome: 'EMANOELA KLOCK COAS', status: 'aguardando', proc: 'LIFTERA TERCO INFERIOR, LIFTERA PAPADA', detail: 'Aguardando data — 30-03-2026 ', value: 5450 },
+      { nome: 'PATRICIA DIAS BIRCKHOLZ', status: 'aguardando', proc: 'FOTONA FACE 4D, SCULPTRA, PREENCHIMENTO 1 SERINGA', detail: 'Aguardando data — 24-03-2026 ', value: 8900 },
+      { nome: 'Eliana Gabriela Perez Alvarez', status: 'aguardando', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR), RESTYLANE/LYFT/DEFYNE/KYSSE (4SERINGA), SPECTRA,POROS, RUGAS', detail: 'Aguardando data — 25-03-2026 ', value: 18190 },
+      { nome: 'Patricia Goncalves Giacomelli', status: 'sem-agendamento', proc: 'FOTONA FACE 4D, FOTONA INTRA ORAL, LIFTERA TERCO INFERIOR, LIFTERA PAPADA, SCULPTRA, fotona olhos', detail: 'Proposta Aguardando aprovação do cliente — sem agendamento registrado', value: 15600 },
+      { nome: 'Maria Clotilde Andreotti Zingali*', status: 'aguardando', proc: 'LASER CO2 FULL FACE, MEGADERME RF MICROAGULHADA', detail: 'Aguardando data — 31-03-2026 ', value: 6300 },
+      { nome: 'SILVIA BENKENDORF', status: 'aguardando', proc: 'SCULPTRA', detail: 'Aguardando data — 31-03-2026 ', value: 2500 }
+    ]
+  },
+  abril: {
+    label: 'Abril 2026',
+    itens: [
+      { nome: 'CLARINA PRADO', status: 'sem-agendamento', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR), FOTONA FACE 4D, LIFTERA TERCO INFERIOR, SCULPTRA', detail: 'Proposta Aguardando aprovação do cliente — sem agendamento', value: 12550 },
+      { nome: 'VIVIANE ISABEL DANIEL SPECK DE SOUZA', status: 'aguardando', proc: 'LIFTERA JAW, LIFTERA PAPADA, LIFTERA PESCOCO', detail: 'Aguardando data — 30-04-2026 ', value: 6350 },
+      { nome: 'SILVANA MAURICIO', status: 'sem-agendamento', proc: 'RESTYLANE/LYFT/DEFYNE/KYSSE (4SERINGA), FOTONA COLO, FIOS APTOS TRAÇÃO', detail: 'Proposta Aguardando aprovação do cliente — sem agendamento', value: 16340 },
+      { nome: 'ROSANE DE SOUZA LILIE', status: 'sem-agendamento', proc: 'TOXINA BOTULINICA FACE/PESCOCO, RESTYLANE/LYFT/DEFYNE/KYSSE (6SERINGA), LASER CO2 FULL FACE, LIFTERA', detail: 'Proposta Aguardando aprovação do cliente — sem agendamento', value: 19800 },
+      { nome: 'SARYTA DE KASSIA OLIVEIRA', status: 'sem-agendamento', proc: 'RESTYLANE/LYFT/DEFYNE/KYSSE (1SERINGA)', detail: 'Proposta Aprovada pelo cliente — sem agendamento', value: 1600 },
+      { nome: 'LIBIA DE SOUSA ESPINDOLA', status: 'sem-agendamento', proc: 'RESTYLANE/LYFT/DEFYNE/KYSSE (1SERINGA)', detail: 'Proposta Aprovada pelo cliente — sem agendamento', value: 1600 },
+      { nome: 'Lívia Mayumi Kawasaki Alves', status: 'cancelado', proc: 'FOTONA VASOS', detail: 'Desmarcado pelo paciente — Agendado para 30-04-2026  — Motivo Desconhecido (sem Chatwoot)', value: 1000 },
+      { nome: 'CATIA BORATTI', status: 'concluida', proc: 'LASER CO2 FULL FACE, MEGADERME MULTILAYER', detail: 'Proposta executada — LASER CO2 FULL FACE, MEGADERME MULTILAYER', value: 7300 },
+      { nome: 'Franziska Marion Wille', status: 'aguardando', proc: 'SCULPTRA, peling media', detail: 'Aguardando data — 30-04-2026 ', value: 3200 },
+      { nome: 'DANIELE FERREIRA DE SOUZA', status: 'aguardando', proc: 'SPECTRA, POROS, RUGAS 6 SESSAO, FOTONA VASOS', detail: 'Aguardando data — 27-04-2026 ', value: 4540 },
+      { nome: 'Sara Luana da Silva', status: 'aguardando', proc: 'RESTYLANE/LYFT/DEFYNE/KYSSE (2SERINGA)', detail: 'Aguardando data — 28-04-2026 ', value: 3100 },
+      { nome: 'Eliane Schurtz Gonzaga', status: 'sem-agendamento', proc: 'RETORNO DE MMP SARDAS BRANCAS, fotona 4d', detail: 'Proposta Aguardando aprovação do cliente — sem agendamento', value: 5400 },
+      { nome: 'Kevin Augusto Cardoso da Silva', status: 'concluida', proc: 'RESTYLANE/LYFT/DEFYNE/KYSSE (2SERINGA), co2 testa', detail: 'Proposta executada — RESTYLANE/LYFT/DEFYNE/KYSSE (2SERINGA), co2 testa', value: 4600 },
+      { nome: 'GIULIANA FROHLICH DA SILVA', status: 'sem-agendamento', proc: 'preenchimento de olheiras', detail: 'Proposta Aprovada pelo cliente — sem agendamento', value: 1600 },
+      { nome: 'MARIA CELESTE IBIRAPITANGA AMBROSIO', status: 'sem-agendamento', proc: 'RESTYLANE/LYFT/DEFYNE/KYSSE (2SERINGA), MEGADERME RF MICROAGULHADA, UNIQUE PRO BRAÇOS', detail: 'Proposta Aprovada pelo cliente — sem agendamento', value: 6800 },
+      { nome: 'Ingrid Lazo Toledo', status: 'aguardando', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR), LIFTERA PAPADA, SCULPTRA', detail: 'Aguardando data — 30-04-2026 ', value: 6200 },
+      { nome: 'MARA RUBIA EMIKWA FERREIRA BUENO', status: 'sem-agendamento', proc: 'TOXINA BOTULINICA FACE/PESCOCO, RESTYLANE/LYFT/DEFYNE/KYSSE (2SERINGA), PEQUENOS PROCEDIMENTOS, FOTO', detail: 'Proposta Aprovada pelo cliente — sem agendamento', value: 7400 },
+      { nome: 'Luiz Roberto Moreira de Catilhos Junior', status: 'sem-agendamento', proc: 'MEGADERME RF MICROAGULHADA', detail: 'Proposta Aprovada pelo cliente — sem agendamento', value: 2500 },
+      { nome: 'AFONSO GRACH', status: 'aguardando', proc: 'PEQUENOS PROCEDIMENTOS', detail: 'Aguardando data — 22-04-2026 ', value: 1200 },
+      { nome: 'Cleide Regina Suominski', status: 'aguardando', proc: 'FOTONA FACE 4D, LIFTERA TERCO INFERIOR, SCULPTRA', detail: 'Aguardando data — 22-04-2026 ', value: 10500 },
+      { nome: 'Osmar Koroll', status: 'aguardando', proc: 'FOTONA FACE 4D, LIFTERA TERCO INFERIOR', detail: 'Aguardando data — 22-04-2026 ', value: 8300 },
+      { nome: 'LARISSA MUHLBAUER', status: 'aguardando', proc: 'FOTONA ESTRIAS ( A4)', detail: 'Aguardando data — 26-05-2026 ', value: 1500 },
+      { nome: 'JAQUELINE ALVES DE SOUZA', status: 'aguardando', proc: 'FOTONA FACE 4D', detail: 'Aguardando data — 25-05-2026 ', value: 4500 },
+      { nome: 'Lucas de Morais Rodrigues', status: 'aguardando', proc: 'RESTYLANE/LYFT/DEFYNE/KYSSE (2SERINGA)', detail: 'Aguardando data — 27-04-2026 ', value: 3000 },
+      { nome: 'RICHELE BOTEGA MAYERLE***', status: 'aguardando', proc: 'LASER CO2 CICATRIZ', detail: 'Aguardando data — 27-04-2026 ', value: 1200 },
+      { nome: 'Amanda Rosa Vidotto', status: 'aguardando', proc: 'FOTONA FACE 4D, MEGADERME RF MICROAGULHADA, MEGADERME REGIAO EXTRA, unique pro', detail: 'Aguardando data — 27-04-2026 ', value: 7900 },
+      { nome: 'Marina Susana Godinho Worm', status: 'aguardando', proc: 'MEGADERME RF MICROAGULHADA, Fotona Vector Lyft, preenchimento labial', detail: 'Aguardando data — 29-04-2026 ', value: 5900 },
+      { nome: 'ELIANE RISCHBECK TODESCAT', status: 'aguardando', proc: 'MEGADERME RF MICROAGULHADA, LIFTERA PAPADA, LIFTERA PESCOCO, SCULPTRA MAOS 1 AMPOLA, MEGADERME REGIA', detail: 'Aguardando data — 29-04-2026 ', value: 9900 },
+      { nome: 'Michele Cristina da Cunha', status: 'aguardando', proc: 'LIFTERA JAW, LIFTERA PAPADA', detail: 'Aguardando data — 30-04-2026 ', value: 3700 }
+    ]
+  },
+  maio: {
+    label: 'Maio 2026',
+    itens: [
+      { nome: 'CRISTIANE SMOLSKI SCHAMBECK', status: 'concluida', proc: 'TOXINA BOTULINICA FACE/PESCOCO', detail: 'Proposta executada — TOXINA BOTULINICA FACE/PESCOCO', value: 2200 },
+      { nome: 'SHEILA  NOGUEIRA', status: 'concluida', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR)', detail: 'Proposta executada — TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR)', value: 1750 },
+      { nome: 'JAIME ROMAGNA GRASSO', status: 'concluida', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR), CRIOCIRUGIA/CRIOTERAPIA', detail: 'Proposta executada — TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR), CRIOCIRUGIA/CRIOTERAPIA', value: 2450 },
+      { nome: 'SILVIA BENKENDORF', status: 'concluida', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR), RESTYLANE/LYFT/DEFYNE/KYSSE (1SERINGA)', detail: 'Proposta executada — TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR), RESTYLANE/LYFT/DEFYNE/KYSSE (1SERINGA)', value: 3350 },
+      { nome: 'Ana Paula Schmitz  *', status: 'concluida', proc: 'MAPEAMENTO CORPORAL, TOXINA BOTULINICA FACE/PESCOCO, LIFTERA TERCO INFERIOR, LIFTERA PAPADA', detail: 'Proposta executada — MAPEAMENTO CORPORAL, TOXINA BOTULINICA FACE/PESCOCO, LIFTERA TERCO INFERIOR, LIFTERA PAPADA', value: 10350 },
+      { nome: 'Michele Cristina da Cunha', status: 'aguardando', proc: 'RESTYLANE/LYFT/DEFYNE/KYSSE (5SERINGA), SCULPTRA', detail: 'Aguardando data — 22-06-2026 ', value: 9750 },
+      { nome: 'LEILA CRISTINA HENRIQUE', status: 'aguardando', proc: 'sculpta', detail: 'Aguardando data — 21-05-2026 ', value: 2500 },
+      { nome: 'VIVIANE ISABEL DANIEL SPECK DE SOUZA', status: 'concluida', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR), FOTONA FACE PESCOCO E COLO', detail: 'Proposta executada — TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR), FOTONA FACE PESCOCO E COLO', value: 8550 },
+      { nome: 'Elenice Cristina da Silva Perazza', status: 'concluida', proc: 'Fotona Vector Lyft', detail: 'Proposta executada — Fotona Vector Lyft', value: 1800 },
+      { nome: 'MARLETE INES PEIXER WEINRICH', status: 'concluida', proc: 'RESTYLANE/LYFT/DEFYNE/KYSSE (1SERINGA), SCULPTRA', detail: 'Proposta executada — RESTYLANE/LYFT/DEFYNE/KYSSE (1SERINGA), SCULPTRA', value: 4100 },
+      { nome: 'Douglas Rodrigo Thomaz', status: 'aguardando', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR)', detail: 'Aguardando data — 25-05-2026 ', value: 1750 },
+      { nome: 'Jessica weber', status: 'concluida', proc: 'MEGADERME MULTILAYER', detail: 'Proposta executada — MEGADERME MULTILAYER', value: 3500 },
+      { nome: 'BIANCA KMIECIK', status: 'concluida', proc: 'FOTONA INTIMO INTERNO E EXTERNO', detail: 'Proposta executada — FOTONA INTIMO INTERNO E EXTERNO', value: 1800 },
+      { nome: 'JEANETE CRISTINE PAUL', status: 'concluida', proc: 'LIFTERA TERCO INFERIOR', detail: 'Proposta executada — LIFTERA TERCO INFERIOR', value: 3300 },
+      { nome: 'JOSEANE FRANCINE PAUL', status: 'concluida', proc: 'SCULPTRA', detail: 'Proposta executada — SCULPTRA', value: 2500 },
+      { nome: 'Rossana Gasperin Ferrreira', status: 'aguardando', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR)', detail: 'Aguardando data — 26-05-2026 ', value: 1750 },
+      { nome: 'DANIELE PALMA DA SILVA', status: 'concluida', proc: 'PEELING MEDIO, PREENCHIMENTO OLHEIRAS', detail: 'Proposta executada — PEELING MEDIO, PREENCHIMENTO OLHEIRAS', value: 700 },
+      { nome: 'MARICLEIA CRISTINA DEONISIO COELHO', status: 'concluida', proc: 'MAPEAMENTO CORPORAL', detail: 'Proposta executada — MAPEAMENTO CORPORAL', value: 2500 },
+      { nome: 'MARCIA DALCASTAGNE', status: 'sem-agendamento', proc: 'MEGADERME RF MICROAGULHADA, skinbooster', detail: 'Proposta Aguardando aprovação do cliente — sem agendamento', value: 2500 },
+      { nome: 'AUREA FERNANDES DE OLIVEIRA', status: 'concluida', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR), RESTYLANE/LYFT/DEFYNE/KYSSE (2SERINGA), SCULPTRA', detail: 'Proposta executada — TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR), RESTYLANE/LYFT/DEFYNE/KYSSE (2SERINGA), SCULPTRA', value: 7350 },
+      { nome: 'ISANETE IVONE BASSO', status: 'aguardando', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR), RESTYLANE/LYFT/DEFYNE/KYSSE (2SERINGA)', detail: 'Aguardando data — 26-05-2026 ', value: 4850 },
+      { nome: 'DEBORA RICHTER CICOGNA', status: 'concluida', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR), sculpta', detail: 'Proposta executada — TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR), sculpta', value: 4250 },
+      { nome: 'CARLA MAXIMO SCHMITZ RAISER', status: 'concluida', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR)', detail: 'Proposta executada — TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR)', value: 1750 },
+      { nome: 'FABIANO BALONI COLZANI', status: 'concluida', proc: 'MAPEAMENTO CORPORAL', detail: 'Proposta executada — MAPEAMENTO CORPORAL', value: 2500 },
+      { nome: 'Luise Caroline Greipel', status: 'concluida', proc: 'MAPEAMENTO CORPORAL', detail: 'Proposta executada — MAPEAMENTO CORPORAL', value: 2500 },
+      { nome: 'Carolina meller Vieira', status: 'concluida', proc: 'FOTONA ESTRIAS ( A4)', detail: 'Proposta executada — FOTONA ESTRIAS ( A4)', value: 1500 },
+      { nome: 'Daniel Rufato Delgado', status: 'concluida', proc: 'MAPEAMENTO CORPORAL', detail: 'Proposta executada — MAPEAMENTO CORPORAL', value: 2500 },
+      { nome: 'LUCIANA MARTINS ACOSTA BAPTISTA', status: 'concluida', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR)', detail: 'Proposta executada — TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR)', value: 1750 },
+      { nome: 'MAIRA OLIVEIRA PALM', status: 'aguardando', proc: 'fotona olhos', detail: 'Aguardando data — 26-05-2026 ', value: 1800 },
+      { nome: 'Caio Henrique Fettback Melo', status: 'aguardando', proc: 'CRIOCIRUGIA/CRIOTERAPIA', detail: 'Aguardando data — 26-06-2026 ', value: 700 },
+      { nome: 'ROSEMERI ZELASKOS MOCHI', status: 'cancelado', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR)', detail: 'Desmarcado pelo paciente — Agendado para 24-06-2026  — Motivo Desconhecido (sem Chatwoot)', value: 1750 },
+      { nome: 'Maria  Durvalina Linhares Cardoso Leal Sequeira', status: 'concluida', proc: 'RESTYLANE/LYFT/DEFYNE/KYSSE (1SERINGA)', detail: 'Proposta executada — RESTYLANE/LYFT/DEFYNE/KYSSE (1SERINGA)', value: 1600 },
+      { nome: 'Celita Knopf', status: 'aguardando', proc: 'RESTYLANE/LYFT/DEFYNE/KYSSE (3SERINGA)', detail: 'Aguardando data — 21-05-2026 ', value: 4500 },
+      { nome: 'Wilham Luís Gneipel Krause', status: 'concluida', proc: 'TOXINA BOTULINICA -AXILAS', detail: 'Proposta executada — TOXINA BOTULINICA -AXILAS', value: 2250 },
+      { nome: 'Priscila Garcia Gato*', status: 'aguardando', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR)', detail: 'Aguardando data — 21-05-2026 ', value: 1750 },
+      { nome: 'JULIANA DE OLIVEIRA STAVIS', status: 'concluida', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR)', detail: 'Proposta executada — TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR)', value: 1750 },
+      { nome: 'Rafael Flores Pavelak', status: 'concluida', proc: 'RESTYLANE/LYFT/DEFYNE/KYSSE (2SERINGA), SCULPTRA', detail: 'Proposta executada — RESTYLANE/LYFT/DEFYNE/KYSSE (2SERINGA), SCULPTRA', value: 5600 },
+      { nome: 'Ana Beatriz Diniz', status: 'concluida', proc: 'FOTONA FACE 4D', detail: 'Proposta executada — FOTONA FACE 4D', value: 4800 },
+      { nome: 'PAULO ROBERTO BATISTA', status: 'concluida', proc: 'SPECTRA TATTOO DE 5CM ATE 25 CM', detail: 'Proposta executada — SPECTRA TATTOO DE 5CM ATE 25 CM', value: 550 },
+      { nome: 'LIGIA DA ROSA EL KOUBA', status: 'concluida', proc: 'TOXINA BOTULINICA GLOBAL/CERVICAL', detail: 'Proposta executada — TOXINA BOTULINICA GLOBAL/CERVICAL', value: 2200 },
+      { nome: 'Thaisa Brych Nunes', status: 'concluida', proc: 'MAPEAMENTO CORPORAL', detail: 'Proposta executada — MAPEAMENTO CORPORAL', value: 2500 },
+      { nome: 'FERNANDA ALVES DOS SANTOS', status: 'aguardando', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR)', detail: 'Aguardando data — 26-05-2026 ', value: 1750 },
+      { nome: 'ZENILDA DUMA', status: 'concluida', proc: 'LASER CO2 FULL FACE, LASER CO2 PESCOCO, co2 maos', detail: 'Proposta executada — LASER CO2 FULL FACE, LASER CO2 PESCOCO, co2 maos', value: 5800 },
+      { nome: 'Lucas Soares Baldani', status: 'aguardando', proc: 'MMP CAPILAR (1 SESSAO), fotona capilar', detail: 'Aguardando data — 22-06-2026 ', value: 1800 },
+      { nome: 'Marion Klimmek', status: 'aguardando', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR)', detail: 'Aguardando data — 25-05-2026 ', value: 1750 },
+      { nome: 'JAQUELINE ALVES DE SOUZA', status: 'aguardando', proc: 'TOXINA BOTULINICA FACE/PESCOCO', detail: 'Aguardando data — 25-05-2026 ', value: 2400 },
+      { nome: 'SONIA REGINA  BITTENCOURT WINTER', status: 'aguardando', proc: 'TOXINA BOTULINICA GLABELA', detail: 'Aguardando data — 25-05-2026 ', value: 1250 },
+      { nome: 'Guillermo Diaz Pereira', status: 'aguardando', proc: 'RESTYLANE/LYFT/DEFYNE/KYSSE (2SERINGA)', detail: 'Aguardando data — 25-05-2026 ', value: 3400 },
+      { nome: 'ROSENETE MARLENE EBERHARDT LLERENA', status: 'aguardando', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR)', detail: 'Aguardando data — 25-05-2026 ', value: 1750 },
+      { nome: 'SERGIO LUIZ LENZI', status: 'aguardando', proc: 'TOXINA BOTULINICA -CERVICAL, LIFTERA PAPADA, LIFTERA PESCOCO, skinbooster', detail: 'Aguardando data — 25-05-2026 ', value: 8350 }
+    ]
+  },
+  junho: {
+    label: 'Junho 2026',
+    itens: [
+      { nome: 'Gilberto Pinheiro Filho', status: 'concluida', proc: 'spectra avulso', detail: 'Proposta executada', value: 0 },
+      { nome: 'LARISSA COIMBRA MARTÍNEZ', status: 'sem-agendamento', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR), FOTONA FACE 4D', detail: 'Proposta Aprovada pelo cliente', value: 6550 },
+      { nome: 'GLAUCIA VOLANI', status: 'aguardando', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR)', detail: 'Aguardando data — 25-06-2026 ', value: 1750 },
+      { nome: 'Pedro de Souza', status: 'sem-agendamento', proc: 'BIOPSIA DE PELE', detail: 'Proposta Aprovada pelo cliente', value: 880 },
+      { nome: 'Daniela Antoniely Gelinski Samapio', status: 'concluida', proc: 'RESTYLANE/LYFT/DEFYNE/KYSSE (3SERINGA), SPECTRA, POROS, RUGAS 4 SESSAO, MEGADERME RF MICROAGULHADA, ', detail: 'Proposta executada', value: 10800 },
+      { nome: 'ANA MARIA KAESTNER DE ARAUJO', status: 'concluida', proc: 'MAPEAMENTO CORPORAL', detail: 'Proposta executada', value: 2500 },
+      { nome: 'Rebeca Duvoisin Horstmann', status: 'concluida', proc: 'FOTONA VASOS', detail: 'Proposta executada', value: 1200 },
+      { nome: 'FERNANDA WEINRICH', status: 'concluida', proc: 'SCULPTRA', detail: 'Proposta executada', value: 2500 },
+      { nome: 'Vanessa Cristine da Silva de Oliveira', status: 'aguardando', proc: 'TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR)', detail: 'Aguardando data — 25-06-2026 ', value: 1750 },
+      { nome: 'KARINA RAMOS WERSON CARDOSO', status: 'concluida', proc: 'LIFTERA TERCO INFERIOR', detail: 'Proposta executada', value: 3500 },
+      { nome: 'Andressa Aguiar Akbari', status: 'concluida', proc: 'RESTYLANE/LYFT/DEFYNE/KYSSE (3SERINGA), FIOS APTOS', detail: 'Proposta executada', value: 17000 },
+      { nome: 'Renan Souza Ramos', status: 'aguardando', proc: 'RESTYLANE/LYFT/DEFYNE/KYSSE (1SERINGA), LASER CO2 FULL FACE, spectra avulso', detail: 'Aguardando data — 25-06-2026 ', value: 5950 },
+      { nome: 'Nicolly de Brito do Vale', status: 'concluida', proc: 'TOXINA BOTULINICA FACE/PESCOCO', detail: 'Proposta executada', value: 2400 },
+      { nome: 'EMANOELA KLOCK COAS', status: 'concluida', proc: 'TOXINA BOTULINICA FACE/PESCOCO', detail: 'Proposta executada', value: 2400 },
+      { nome: 'ANA PAULA DA ROSA PEREIRA', status: 'aguardando', proc: 'TOXINA BOTULINICA FACE/PESCOCO, RESTYLANE/LYFT/DEFYNE/KYSSE (2SERINGA), LIFTERA PAPADA', detail: 'Aguardando data — 25-06-2026 ', value: 7200 },
+      { nome: 'ELISANGELA DA SILVA TAMBOSI', status: 'aguardando', proc: 'FOTONA FACE 4D, avaliacao unique, megademe corporal', detail: 'Aguardando data — 22-06-2026 ', value: 4800 },
+      { nome: 'Fernando Silveira de Oliveira', status: 'aguardando', proc: 'PEQUENOS PROCEDIMENTOS', detail: 'Aguardando data — 22-06-2026 ', value: 1200 },
+      { nome: 'Marilza Stammerjohann Schmitz', status: 'aguardando', proc: 'TOXINA BOTULINICA SORRISO GENGIVAL, RESTYLANE/LYFT/DEFYNE/KYSSE (5SERINGA), LASER CO2 FULL FACE, LIF', detail: 'Aguardando data — 23-06-2026 ', value: 15260 },
+      { nome: 'Gabriela Carolina de Abreu', status: 'aguardando', proc: 'LIMPEZA DE PELE, unique pro, CONSULTA NUTROLOGIA', detail: 'Aguardando data — 25-06-2026 ', value: 2050 },
+      { nome: 'Olívia Drefahl Harger', status: 'sem-agendamento', proc: 'co2 com sedacao', detail: 'Proposta Aguardando aprovação do cliente', value: 0 }
+    ]
+  },
   julho: {
     label: 'Julho 2026',
     itens: [
@@ -1767,12 +1936,15 @@ const TRACKER_DATA = {
       { nome: 'Tatiani Bardini',                    status: 'concluida',  proc: 'Laser CO2 Full Face + Colo (agendado)' }
     ]
   }
+}
 };
 
 const STATUS_CFG = {
-  concluida:  { label: 'Concluída',            color: '#16a34a', bg: '#dcfce7', border: '#bbf7d0' },
-  aguardando: { label: 'Aguardando data',            color: '#d97706', bg: '#fef3c7', border: '#fde68a' },
-  remarcada:  { label: 'Avaliativa remarcada',       color: '#6366f1', bg: '#eef2ff', border: '#c7d2fe' }
+  concluida:          { label: 'Concluída',            color: '#16a34a', bg: '#dcfce7', border: '#bbf7d0' },
+  aguardando:         { label: 'Aguardando data',       color: '#d97706', bg: '#fef3c7', border: '#fde68a' },
+  remarcada:          { label: 'Avaliativa remarcada',  color: '#6366f1', bg: '#eef2ff', border: '#c7d2fe' },
+  cancelado:          { label: 'Cancelado',             color: '#dc2626', bg: '#fee2e2', border: '#fecaca' },
+  'sem-agendamento':  { label: 'Sem agendamento',       color: '#64748b', bg: '#f1f5f9', border: '#e2e8f0' },
 };
 
 let _mes = 'julho';
@@ -1801,12 +1973,16 @@ function renderTracker() {
   const data = TRACKER_DATA[_mes];
   if (!data) return;
 
-  const counts = { concluida: 0, aguardando: 0, remarcada: 0 };
+  const counts = { concluida: 0, aguardando: 0, remarcada: 0, cancelado: 0, 'sem-agendamento': 0 };
   data.itens.forEach(i => { if (counts[i.status] !== undefined) counts[i.status]++; });
 
   document.getElementById('kpi-concluida').textContent  = counts.concluida;
   document.getElementById('kpi-aguardando').textContent = counts.aguardando;
   document.getElementById('kpi-remarcada').textContent  = counts.remarcada;
+  const elCan = document.getElementById('kpi-cancelado');
+  if (elCan) elCan.textContent = counts.cancelado || 0;
+  const elSem = document.getElementById('kpi-sem-agendamento');
+  if (elSem) elSem.textContent = counts['sem-agendamento'] || 0;
   document.getElementById('donut-total').textContent    = data.itens.length;
 
   const itens = _filtro === 'todos' ? data.itens : data.itens.filter(i => i.status === _filtro);
@@ -1834,10 +2010,10 @@ function renderTracker() {
   _chartDonut = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: ['Concluída', 'Aguardando data', 'Avaliativa remarcada'],
+      labels: ['Concluída', 'Aguardando data', 'Avaliativa remarcada', 'Cancelado', 'Sem agendamento'],
       datasets: [{
-        data: [counts.concluida, counts.aguardando, counts.remarcada],
-        backgroundColor: ['#16a34a', '#f59e0b', '#6366f1'],
+        data: [counts.concluida, counts.aguardando, counts.remarcada, counts.cancelado || 0, counts['sem-agendamento'] || 0],
+        backgroundColor: ['#16a34a', '#f59e0b', '#6366f1', '#dc2626', '#94a3b8'],
         borderColor: ['#ffffff', '#ffffff', '#ffffff'],
         borderWidth: 3,
         hoverOffset: 8
