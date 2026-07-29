@@ -262,6 +262,17 @@
 </footer>
 
 <script>
+(async function() {
+// ─── Carregar Chart.js dinamicamente se não disponível (portal injeta inline) ─
+if (!window.Chart) {
+  await new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js';
+    s.onload = res; s.onerror = rej;
+    document.head.appendChild(s);
+  });
+}
+
 const D = {"labels": ["Fev/26", "Mar/26", "Abr/26", "Mai/26", "Jun/26", "Jul/26"], "total_series": [10, 20, 29, 56, 23, 22], "conv_series": [5, 9, 12, 19, 12, 7], "fu_real_series": [3, 3, 3, 5, 2, 5], "val_series": [58.5, 175.3, 169.5, 189.2, 99.3, 123.1], "pct_fu_series": [30.0, 15.0, 10.3, 8.9, 8.7, 22.7], "pct_conv_series": [50.0, 45.0, 41.4, 33.9, 52.2, 31.8], "ctx_keys": ["proposta_followup", "confirmacao_consulta", "campanha_marketing", "pos_procedimento", "sem_followup", "outro", "sem_mensagens", "reativacao_geral"], "ctx_labels": {"proposta_followup": "Follow-up Real da Proposta", "confirmacao_consulta": "Confirmação de Consulta", "campanha_marketing": "Campanha de Marketing", "pos_procedimento": "Pós-Procedimento", "sem_followup": "Sem Conversa", "outro": "Outro", "sem_mensagens": "Sem Mensagens Reais", "reativacao_geral": "Reativação Geral"}, "ctx_colors": {"proposta_followup": "#22c55e", "confirmacao_consulta": "#3b82f6", "campanha_marketing": "#f59e0b", "pos_procedimento": "#8b5cf6", "sem_followup": "#ef4444", "outro": "#6b7280", "sem_mensagens": "#374151", "reativacao_geral": "#06b6d4"}, "ctx_series": {"proposta_followup": [3, 3, 3, 5, 2, 5], "confirmacao_consulta": [5, 9, 13, 24, 13, 9], "campanha_marketing": [2, 3, 5, 11, 1, 0], "pos_procedimento": [0, 1, 1, 5, 1, 1], "sem_followup": [0, 3, 3, 8, 3, 4], "outro": [0, 1, 3, 1, 2, 1], "sem_mensagens": [0, 0, 1, 1, 1, 2], "reativacao_geral": [0, 0, 0, 1, 0, 0]}, "obj_names": ["Não Respondeu", "Converteu / Sem Objeção", "Disponibilidade / Tempo", "Sem Conversa Relacionada", "Preço", "Prioridade Baixa", "Medo do Procedimento"], "obj_vals": [55, 42, 26, 21, 9, 4, 3], "proc_names": ["TOXINA BOTULINICA -GLOBAL(1/3S", "SCULPTRA", "MEGADERME RF MICROAGULHADA", "LIFTERA TERCO INFERIOR", "LIFTERA PAPADA", "FOTONA FACE 4D", "RESTYLANE/LYFT/DEFYNE/KYSSE (2", "TOXINA BOTULINICA FACE/PESCOCO", "LASER CO2 FULL FACE", "RESTYLANE/LYFT/DEFYNE/KYSSE (1"], "proc_vals": [29, 24, 19, 18, 18, 15, 12, 12, 10, 8], "obj_keys_mes": ["nao_respondeu", "sem_objecao", "disponibilidade_tempo", "preco", "prioridade_baixa", "medo_procedimento"], "obj_labels_mes": {"nao_respondeu": "Não Respondeu", "sem_objecao": "Converteu / Sem Objeção", "disponibilidade_tempo": "Disponibilidade / Tempo", "preco": "Preço", "prioridade_baixa": "Prioridade Baixa", "medo_procedimento": "Medo do Procedimento"}, "obj_mes_data": {"nao_respondeu": [5, 4, 9, 23, 5, 9], "sem_objecao": [3, 7, 10, 10, 7, 5], "disponibilidade_tempo": [1, 4, 4, 8, 7, 2], "preco": [1, 2, 2, 3, 1, 0], "prioridade_baixa": [0, 0, 1, 2, 0, 1], "medo_procedimento": [0, 0, 0, 2, 0, 1]}};
 
 // ─── defaults ─────────────────────────────────────────────────────────────────
@@ -406,6 +417,7 @@ D.obj_names.forEach((name, i) => {
     <td><div class="bar-cell"><div class="mini-bar" style="width:${barW}px;background:${color}"></div><span style="font-size:.75rem;color:var(--muted)">${pct}%</span></div></td>
   </tr>`;
 });
+})(); // fim IIFE async
 </script>
 
 </body>
