@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análise Jurídica — DermaClinic x RD Station | Digital AI</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --surface2: #1a1a24;
+    --border: #2a2a3a;
+    --accent: #7c6af7;
+    --accent2: #a78bfa;
+    --green: #10b981;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --white: #fff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif; font-size: 15px; line-height: 1.7; }
+
+  /* Header */
+  .header { background: linear-gradient(135deg, #1a1233 0%, #0d1117 50%, #13131a 100%); border-bottom: 1px solid var(--border); padding: 40px 24px 32px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -80px; left: 50%; transform: translateX(-50%); width: 500px; height: 500px; background: radial-gradient(circle, rgba(124,106,247,0.12) 0%, transparent 70%); pointer-events: none; }
+  .badge { display: inline-block; background: rgba(124,106,247,0.15); border: 1px solid rgba(124,106,247,0.3); color: var(--accent2); font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; padding: 4px 14px; border-radius: 20px; margin-bottom: 20px; }
+  .header h1 { font-size: clamp(22px, 4vw, 36px); font-weight: 700; color: var(--white); margin-bottom: 8px; }
+  .header .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+  .meta-row { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; }
+  .meta-item { font-size: 12px; color: var(--muted); }
+  .meta-item strong { color: var(--text); }
+
+  /* Layout */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+
+  /* Verdict banner */
+  .verdict { background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(16,185,129,0.05)); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; padding: 24px 28px; margin: 32px 0; display: flex; align-items: flex-start; gap: 16px; }
+  .verdict-icon { font-size: 32px; flex-shrink: 0; }
+  .verdict h2 { color: var(--green); font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .verdict p { color: #a7f3d0; font-size: 14px; line-height: 1.6; }
+
+  /* Sections */
+  .section { margin: 40px 0; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+  .section-num { background: var(--accent); color: var(--white); font-size: 12px; font-weight: 700; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .section-header h2 { font-size: 18px; font-weight: 700; color: var(--white); }
+
+  /* Cards */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px 22px; margin-bottom: 14px; }
+  .card-title { font-size: 13px; font-weight: 700; color: var(--accent2); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .card p { color: var(--muted); font-size: 14px; }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--accent), transparent); }
+  .tl-item { position: relative; margin-bottom: 24px; }
+  .tl-item::before { content: ''; position: absolute; left: -20px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg); box-shadow: 0 0 0 3px rgba(124,106,247,0.2); }
+  .tl-item.critical::before { background: var(--red); box-shadow: 0 0 0 3px rgba(239,68,68,0.2); }
+  .tl-item.warning::before { background: var(--yellow); box-shadow: 0 0 0 3px rgba(245,158,11,0.2); }
+  .tl-date { font-size: 11px; font-weight: 700; color: var(--accent2); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .tl-title { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+  .tl-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .tl-quote { background: var(--surface2); border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; padding: 10px 14px; margin-top: 8px; font-size: 13px; color: #c4b5fd; font-style: italic; }
+  .tl-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-left: 8px; }
+  .tl-badge.prova { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+  .tl-badge.alerta { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+
+  /* Legal analysis */
+  .legal-item { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 14px; }
+  .legal-header { padding: 16px 20px; background: var(--surface2); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .legal-q { font-size: 14px; font-weight: 600; color: var(--white); }
+  .verdict-tag { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 10px; white-space: nowrap; }
+  .verdict-tag.favorable { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+  .verdict-tag.medium { background: rgba(245,158,11,0.15); color: var(--yellow); border: 1px solid rgba(245,158,11,0.3); }
+  .legal-body { padding: 16px 20px; font-size: 14px; color: var(--muted); line-height: 1.7; }
+  .legal-body strong { color: var(--text); }
+  .legal-body .law { color: var(--accent2); font-weight: 600; }
+
+  /* Score table */
+  .score-table { width: 100%; border-collapse: collapse; }
+  .score-table th { background: var(--surface2); color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 10px 14px; text-align: left; }
+  .score-table td { padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
+  .score-table tr:last-child td { border-bottom: none; }
+  .score-table .arg { color: var(--text); font-weight: 500; }
+  .score-table .forca { font-weight: 700; }
+  .forca.alta { color: var(--green); }
+  .forca.media-alta { color: #34d399; }
+  .forca.media { color: var(--yellow); }
+  .bar { display: inline-block; height: 6px; border-radius: 3px; margin-left: 8px; vertical-align: middle; }
+  .bar.alta { background: var(--green); width: 80px; }
+  .bar.media-alta { background: #34d399; width: 64px; }
+  .bar.media { background: var(--yellow); width: 48px; }
+
+  /* Action plan */
+  .action-steps { counter-reset: steps; }
+  .step { display: flex; gap: 16px; margin-bottom: 16px; align-items: flex-start; }
+  .step-num { background: var(--accent); color: var(--white); font-size: 12px; font-weight: 700; min-width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .step-content { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; flex: 1; }
+  .step-label { font-size: 11px; color: var(--accent2); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .step-title { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+  .step-desc { font-size: 13px; color: var(--muted); }
+
+  /* Notification */
+  .notif-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 24px; font-size: 13px; color: var(--muted); line-height: 1.8; }
+  .notif-box .notif-title { font-size: 15px; font-weight: 700; color: var(--white); text-align: center; margin-bottom: 20px; letter-spacing: 1px; text-transform: uppercase; }
+  .notif-section { margin-bottom: 16px; }
+  .notif-section strong { color: var(--text); display: block; margin-bottom: 4px; }
+
+  /* Evidence summary */
+  .evidence-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .ev-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .ev-card .ev-type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--accent2); margin-bottom: 6px; }
+  .ev-card .ev-title { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+  .ev-card .ev-date { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .ev-card .ev-rel { font-size: 11px; }
+  .ev-card .ev-rel.critico { color: var(--red); font-weight: 700; }
+  .ev-card .ev-rel.importante { color: var(--yellow); font-weight: 600; }
+
+  /* Warning box */
+  .warn-box { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.3); border-radius: 8px; padding: 14px 16px; margin-top: 16px; }
+  .warn-box p { font-size: 13px; color: #fcd34d; }
+  .warn-box strong { color: var(--yellow); }
+
+  /* Footer */
+  .footer { background: var(--surface); border-top: 1px solid var(--border); padding: 24px; text-align: center; margin-top: 60px; }
+  .footer p { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  .footer .disclaimer { font-size: 11px; color: #475569; margin-top: 12px; line-height: 1.5; }
+
+  @media (max-width: 600px) {
+    .header { padding: 28px 16px 24px; }
+    .meta-row { gap: 12px; }
+    .verdict { flex-direction: column; gap: 10px; }
+    .legal-header { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">Análise Jurídica Confidencial</div>
+  <h1>DermaClinic × RD Station</h1>
+  <p class="subtitle">Cobrança Indevida após Cancelamento Expresso — Renovação Automática Abusiva</p>
+  <div class="meta-row">
+    <div class="meta-item"><strong>Elaborado por:</strong> SPECTER / Digital AI</div>
+    <div class="meta-item"><strong>Data:</strong> 29 de julho de 2026</div>
+    <div class="meta-item"><strong>Protocolo:</strong> DAI-JUR-2026-001</div>
+    <div class="meta-item"><strong>Classificação:</strong> Confidencial</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Veredicto -->
+  <div class="verdict">
+    <div class="verdict-icon">⚖️</div>
+    <div>
+      <h2>Posição Jurídica: Consideravelmente Favorável à DermaClinic</h2>
+      <p>O conjunto probatório é robusto e os argumentos da RD Station são frágeis perante o Código de Defesa do Consumidor e a jurisprudência consolidada do STJ. A DermaClinic tem direito ao estorno integral — e potencialmente em dobro — dos valores cobrados desde março de 2026.</p>
+    </div>
+  </div>
+
+  <!-- 1. Partes -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <h2>Qualificação das Partes</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+      <div class="card">
+        <div class="card-title">🏥 Requerente — Consumidora</div>
+        <p><strong style="color:var(--text);">BS Clínica de Dermatologia Ltda.</strong><br>Nome Fantasia: DermaClinic<br>CNPJ: 16.384.963/0001-76<br>Domicílio: Joinville/SC<br>Representante: Dra. Raquel Steglich</p>
+      </div>
+      <div class="card">
+        <div class="card-title">💼 Requerida — Fornecedora</div>
+        <p><strong style="color:var(--text);">RD Station Marketing Ltda.</strong><br>Nome Fantasia: RD Station<br>Sede: Florianópolis/SC<br>Contatos: Gabriel Vicente, Matheus Freire, Caroline Garcia, Letícia F., Victor</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Cronologia -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <h2>Cronologia das Evidências</h2>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-date">01/12/2025</div>
+        <div class="tl-title">Pedido Expresso de Cancelamento por E-mail <span class="tl-badge prova">Prova Central</span></div>
+        <div class="tl-desc">Dra. Raquel envia e-mail a Gabriel Vicente (CS/RDStation) solicitando expressamente a rescisão:</div>
+        <div class="tl-quote">"Gostaria de rescindir o contrato com o RD Station Chat <strong>e CRM</strong>. Como podemos proceder?"</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">08/12/2025</div>
+        <div class="tl-title">RD Station Designa Gerente para Conduzir o Cancelamento <span class="tl-badge prova">Prova Complementar</span></div>
+        <div class="tl-desc">E-mail formal da RD Station designa <strong>Matheus Freire</strong> como Gerente de Relacionamento para "apoiar na tratativa" de cancelamento — sem questionar o canal (e-mail) nem invalidar o pedido.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">10–17/12/2025</div>
+        <div class="tl-title">Encerramento Operacional do Serviço (WhatsApp) <span class="tl-badge prova">Prova Complementar</span></div>
+        <div class="tl-desc">Matheus Terra (Digital AI) coordena com Matheus Freire a remoção do número da API da Meta. Em 17/12, confirmação de encerramento. Comportamento 100% consistente com cancelamento em curso.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">03–05/01/2026</div>
+        <div class="tl-title">Ticket #01067750 — Backup "Antes do Cancelamento" <span class="tl-badge prova">Prova Complementar</span></div>
+        <div class="tl-desc">DermaClinic solicita backup "antes que aconteça o cancelamento" e cita que "o cancelamento já foi solicitado e Matheus Freire está apoiando." RD Station processa sem questionar. Suporte instrui exportação do CRM.</div>
+      </div>
+      <div class="tl-item critical">
+        <div class="tl-date">19/03/2026</div>
+        <div class="tl-title">Renovação Automática Indevida — Fatura #3932702 <span class="tl-badge alerta">Fato Central</span></div>
+        <div class="tl-desc">RD Station renova automaticamente o CRM sem notificação prévia. O prazo limite para cancelamento (18/03/2026) só seria informado à DermaClinic em 28/07/2026 — <strong>4 meses após a renovação</strong>.</div>
+      </div>
+      <div class="tl-item warning">
+        <div class="tl-date">23/07/2026</div>
+        <div class="tl-title">DermaClinic Exige Estorno de 12 Cobranças</div>
+        <div class="tl-desc">Dra. Raquel envia e-mail formalizando a reclamação e exigindo estorno, citando encerramento de todos os contratos ainda em 2025.</div>
+      </div>
+      <div class="tl-item critical">
+        <div class="tl-date">28/07/2026</div>
+        <div class="tl-title">RD Station Nega Estorno <span class="tl-badge alerta">Ponto Controvertido</span></div>
+        <div class="tl-desc">RD Station alega: (1) não houve pedido de cancelamento do CRM; (2) cancelamento só é válido pela plataforma; (3) em reunião de dezembro o cliente foi orientado sobre isso. Nega todos os estornos.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Análise Jurídica -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <h2>Análise Jurídica</h2>
+    </div>
+
+    <div class="legal-item">
+      <div class="legal-header">
+        <div class="legal-q">CDC é aplicável à DermaClinic (PJ)?</div>
+        <div class="verdict-tag favorable">✓ Sim — Aplicável</div>
+      </div>
+      <div class="legal-body">
+        A DermaClinic se qualifica como consumidora pela <strong>teoria finalista mitigada do STJ</strong> (<span class="law">REsp 476.428/SC; REsp 1.195.642/RJ</span>): clínica médica que contrata CRM/marketing como usuária final, sem expertise técnica equivalente à do fornecedor, está em posição de <strong>vulnerabilidade técnica</strong> e pode invocar o CDC integralmente.
+      </div>
+    </div>
+
+    <div class="legal-item">
+      <div class="legal-header">
+        <div class="legal-q">Cancelamento por e-mail é juridicamente válido?</div>
+        <div class="verdict-tag favorable">✓ Válido</div>
+      </div>
+      <div class="legal-body">
+        O CDC (<span class="law">art. 6.º, V</span>) não exige forma especial para cancelamento. Cláusula que exige canal exclusivo não comunicada adequadamente é ineficaz (<span class="law">CDC, art. 46</span>). O argumento definitivo: a <strong>própria RD Station tratou o e-mail como válido</strong> — designou gerente, conduziu encerramento operacional, processou backup. Invocar invalidade retroativamente é <strong>venire contra factum proprium</strong> (<span class="law">CC, art. 422; STJ REsp 1.322.807/DF</span>).
+      </div>
+    </div>
+
+    <div class="legal-item">
+      <div class="legal-header">
+        <div class="legal-q">Configura-se aceitação tácita do cancelamento pela RD Station?</div>
+        <div class="verdict-tag favorable">✓ Configurada</div>
+      </div>
+      <div class="legal-body">
+        Não foi silêncio — foram atos ativos e reiterados: gerente designado, número removido da API Meta, backup fornecido, exportação do CRM instruída. Tudo isso sem dizer "o CRM ainda está ativo." O <span class="law">CC, art. 111</span> é claro: silêncio qualificado conjugado com atos de encerramento = aceitação tácita inequívoca (<span class="law">STJ, REsp 1.163.114/RS</span>).
+      </div>
+    </div>
+
+    <div class="legal-item">
+      <div class="legal-header">
+        <div class="legal-q">A renovação automática de março/2026 é abusiva?</div>
+        <div class="verdict-tag favorable">✓ Abusiva e Nula</div>
+      </div>
+      <div class="legal-body">
+        Três elementos que tornam a renovação abusiva — <strong>todos presentes</strong>: (1) pedido expresso de não renovar feito 3 meses e 18 dias antes; (2) ausência de notificação prévia do prazo — comunicado 4 meses depois; (3) cláusula não adequadamente destacada. <span class="law">CDC, art. 51, I e II; STJ REsp 1.792.154/SP</span> — cláusula nula de pleno direito.
+      </div>
+    </div>
+
+    <div class="legal-item">
+      <div class="legal-header">
+        <div class="legal-q">A DermaClinic tem direito ao estorno? Pode exigir em dobro?</div>
+        <div class="verdict-tag favorable">✓ Estorno Integral + Potencial Dobro</div>
+      </div>
+      <div class="legal-body">
+        <strong>Fundamentos cumulativos:</strong> <span class="law">CDC, art. 42, §único</span> — cobrança indevida = devolução em dobro (sem "engano justificável" — RD Station sabia do cancelamento). <span class="law">CDC, art. 51</span> — cláusula nula. <span class="law">CC, art. 884</span> — enriquecimento sem causa. <strong>Tema 929 STJ</strong> (EREsp 1.413.542/RS, 2020): repetição em dobro cabe por conduta contrária à boa-fé objetiva — sem necessidade de provar má-fé.
+      </div>
+    </div>
+
+    <div class="legal-item">
+      <div class="legal-header">
+        <div class="legal-q">Argumento da "reunião gravada de dezembro" — como rebutar?</div>
+        <div class="verdict-tag medium">⚡ Mitigável — 4 Frentes</div>
+      </div>
+      <div class="legal-body">
+        <strong>Frente 1 — Exigir a prova:</strong> RD Station deve produzir a gravação integralmente (<span class="law">CPC, art. 422</span>). Se não produzir, alegação unilateral sem valor.<br><br>
+        <strong>Frente 2 — Instrução verbal não invalida pedido escrito preexistente.</strong> O pedido de 01/12 já existia. Orientação oral não cria obrigação de refazê-lo.<br><br>
+        <strong>Frente 3 — Comportamento pós-reunião incompatível:</strong> Se o cliente foi orientado, por que Matheus Freire continuou conduzindo o encerramento em janeiro sem alertar sobre o CRM?<br><br>
+        <strong>Frente 4 — Venire:</strong> Aceitou e-mail para Chat, recusa para CRM. Conduta contraditória inadmissível.
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Força dos argumentos -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <h2>Matriz de Força dos Argumentos</h2>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="score-table">
+        <thead>
+          <tr><th>Argumento</th><th>Força</th><th>Indicador</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="arg">CDC aplicável (teoria finalista mitigada)</td><td class="forca media-alta">Média-Alta</td><td><span class="bar media-alta"></span></td></tr>
+          <tr><td class="arg">Cancelamento por e-mail válido</td><td class="forca alta">Alta</td><td><span class="bar alta"></span></td></tr>
+          <tr><td class="arg">Aceitação tácita pela RD Station</td><td class="forca alta">Alta</td><td><span class="bar alta"></span></td></tr>
+          <tr><td class="arg">Renovação automática abusiva (sem notificação)</td><td class="forca alta">Alta</td><td><span class="bar alta"></span></td></tr>
+          <tr><td class="arg">Devolução dos valores pós-cancelamento</td><td class="forca alta">Alta</td><td><span class="bar alta"></span></td></tr>
+          <tr><td class="arg">Devolução em dobro (Tema 929 STJ)</td><td class="forca media-alta">Média-Alta</td><td><span class="bar media-alta"></span></td></tr>
+          <tr><td class="arg">Dano moral</td><td class="forca media">Média</td><td><span class="bar media"></span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="warn-box">
+      <p><strong>⚠️ Informação pendente crucial:</strong> O valor exato da Fatura #3932702 (renovação de março/2026) ainda não foi coletado. Esse número define o rito processual (JEC se ≤ R$ 56.240 | Vara Cível se superior) e o pedido de dobro. Solicitar extrato do cartão da BS Clínica de Dermatologia Ltda. urgentemente.</p>
+    </div>
+  </div>
+
+  <!-- 5. Plano de Ação -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <h2>Plano de Ação Recomendado</h2>
+    </div>
+    <div class="action-steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-label">⚡ Imediato</div>
+          <div class="step-title">Coletar Extrato do Cartão</div>
+          <div class="step-desc">Extrair do cartão da BS Clínica de Dermatologia Ltda. todas as cobranças da RD Station desde março/2026. Identificar valor da Fatura #3932702 e eventuais parcelas. Necessário para quantificar o pedido.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-label">📧 Esta semana</div>
+          <div class="step-title">Enviar Notificação Extrajudicial</div>
+          <div class="step-desc">Enviar a minuta de notificação (seção abaixo) por e-mail com AR para <em>help@rdstation-support.com</em>, <em>gabriel.vicente@rdstation.com</em> e <em>caroline.garcia@rdstation.com</em>. Guarde comprovante de envio e leitura.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-label">🌐 Concomitante</div>
+          <div class="step-title">Consumidor.gov.br + PROCON Joinville</div>
+          <div class="step-desc">Registrar reclamação na plataforma federal (taxa de resolução &gt;70% para SaaS em 10 dias). Em paralelo, abrir reclamação no PROCON de Joinville/SC — poder de multa administrativa motiva a RD Station a negociar.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-label">⚖️ Após 15 dias sem resolução</div>
+          <div class="step-title">Ação no JEC de Joinville (OAB/SC)</div>
+          <div class="step-desc">Contratar advogado consumerista OAB/SC. Propor ação no JEC de Joinville (domicílio do consumidor — CDC art. 101, I). Pedidos: nulidade da renovação + devolução em dobro + correção IPCA + juros 1% a.m. + danos morais (R$ 5.000–15.000).</div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px;border-color:rgba(239,68,68,0.3);">
+      <div class="card-title" style="color:var(--red);">❌ O Que Não Fazer</div>
+      <p>Não aceitar crédito em plataforma como "solução." A DermaClinic cancelou os serviços e não tem interesse em continuar com a RD Station. Qualquer proposta deve ser <strong style="color:var(--text);">em dinheiro</strong>, não em crédito de serviço.</p>
+    </div>
+  </div>
+
+  <!-- 6. Evidências -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <h2>Documentos de Prova Disponíveis</h2>
+    </div>
+    <div class="evidence-grid">
+      <div class="ev-card">
+        <div class="ev-type">E-mail</div>
+        <div class="ev-title">Pedido de Cancelamento Chat + CRM</div>
+        <div class="ev-date">01/12/2025</div>
+        <div class="ev-rel critico">★ Prova Central</div>
+      </div>
+      <div class="ev-card">
+        <div class="ev-type">E-mail</div>
+        <div class="ev-title">Designação Gerente de Cancelamento</div>
+        <div class="ev-date">08/12/2025</div>
+        <div class="ev-rel critico">★ Prova Central</div>
+      </div>
+      <div class="ev-card">
+        <div class="ev-type">WhatsApp</div>
+        <div class="ev-title">Encerramento Operacional (remoção API Meta)</div>
+        <div class="ev-date">Dez/2025 – Jan/2026</div>
+        <div class="ev-rel importante">◉ Importante</div>
+      </div>
+      <div class="ev-card">
+        <div class="ev-type">E-mail / Ticket</div>
+        <div class="ev-title">Ticket #01067750 — Backup "antes do cancelamento"</div>
+        <div class="ev-date">03–05/01/2026</div>
+        <div class="ev-rel importante">◉ Importante</div>
+      </div>
+      <div class="ev-card">
+        <div class="ev-type">E-mail</div>
+        <div class="ev-title">Negativa de Estorno pela RD Station</div>
+        <div class="ev-date">28/07/2026</div>
+        <div class="ev-rel importante">◉ Documentar defesa deles</div>
+      </div>
+      <div class="ev-card" style="border-color:rgba(245,158,11,0.3);">
+        <div class="ev-type" style="color:var(--yellow);">Pendente</div>
+        <div class="ev-title">Extrato do Cartão (Fatura #3932702)</div>
+        <div class="ev-date">Desde mar/2026</div>
+        <div class="ev-rel" style="color:var(--yellow);">⚠ Urgente — solicitar</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Notificação -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <h2>Minuta de Notificação Extrajudicial</h2>
+    </div>
+    <div class="notif-box">
+      <div class="notif-title">Notificação Extrajudicial</div>
+      <div class="notif-section">
+        <strong>NOTIFICANTE:</strong> BS Clínica de Dermatologia Ltda., CNPJ 16.384.963/0001-76, Joinville/SC, representada por Dra. Raquel Steglich.
+      </div>
+      <div class="notif-section">
+        <strong>NOTIFICADA:</strong> RD Station Marketing Ltda., sede Florianópolis/SC.
+      </div>
+      <div class="notif-section">
+        <strong>I. DOS FATOS</strong><br>
+        Em 01/12/2025, a NOTIFICANTE encaminhou e-mail ao gerente Gabriel Vicente solicitando expressamente a rescisão dos contratos de RD Station Chat e CRM. Em 08/12/2025, a NOTIFICADA designou gerente de relacionamento para conduzir o cancelamento, sem impugnar o canal. Seguiram-se atos de encerramento operacional em dezembro/2025 e janeiro/2026. Em 19/03/2026, a NOTIFICADA renovou automaticamente o CRM (Fatura #3932702) sem notificação prévia — o prazo de cancelamento (18/03/2026) foi revelado somente em 28/07/2026, quatro meses após a renovação.
+      </div>
+      <div class="notif-section">
+        <strong>II. DO DIREITO</strong><br>
+        A conduta viola: CDC arts. 6.º, V; 39, I e V; 42, §único; 46; 51, I e II; CC arts. 184, 422 e 927; instituto do venire contra factum proprium (STJ REsp 1.322.807/DF); Tema 929 STJ (devolução em dobro sem necessidade de prova de má-fé).
+      </div>
+      <div class="notif-section">
+        <strong>III. DA EXIGÊNCIA — Prazo: 15 dias corridos</strong><br>
+        1. Reconhecimento formal do cancelamento de 01/12/2025;<br>
+        2. Estorno integral de todos os valores cobrados desde 19/03/2026, atualizados pelo IPCA + juros de 1% a.m.;<br>
+        3. Confirmação por escrito do encerramento definitivo de todos os contratos, sem multa.
+      </div>
+      <div class="notif-section">
+        <strong>IV. DAS CONSEQUÊNCIAS</strong><br>
+        O descumprimento no prazo ensejará: ação no JEC de Joinville com pedido de devolução em dobro (CDC, art. 42, §único), danos morais e comunicação ao PROCON e SENACON.
+      </div>
+      <div style="text-align:center;margin-top:20px;color:var(--muted);font-size:13px;">
+        Joinville/SC, [DATA DE ENVIO]<br><br>
+        ___________________________<br>
+        <strong style="color:var(--text);">Dra. Raquel Steglich</strong><br>
+        Representante Legal — BS Clínica de Dermatologia Ltda.
+      </div>
+    </div>
+    <div class="warn-box">
+      <p><strong>📧 Enviar para:</strong> help@rdstation-support.com | gabriel.vicente@rdstation.com | caroline.garcia@rdstation.com — com solicitação de confirmação de leitura. Guardar comprovante de envio.</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <p><strong>Digital AI</strong> — Assessoria Jurídica Estratégica via SPECTER</p>
+  <p>Protocolo: DAI-JUR-2026-001 | Gerado em: 29/07/2026</p>
+  <p class="disclaimer">
+    Este parecer é de natureza consultiva e estratégica, elaborado com base nas evidências fornecidas.
+    Para propositura de ação judicial, é obrigatório o envolvimento de advogado habilitado na OAB/SC.
+    Uso exclusivo: BS Clínica de Dermatologia Ltda. e Digital AI.
+  </p>
+</div>
+
+</body>
+</html>
