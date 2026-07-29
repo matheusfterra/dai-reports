@@ -1069,11 +1069,12 @@
 
 <script src="../../_shared/auth.js"></script>
   <script>
-    function initWeeklyChart() {
-      if (window._weeklyChartDone) return;
-      window._weeklyChartDone = true;
+    // Inicializa o chart no DOMContentLoaded — Chart.js com responsive:true usa
+    // ResizeObserver e re-renderiza automaticamente quando auth.js exibe o #app.
+    document.addEventListener('DOMContentLoaded', function() {
       var canvas = document.getElementById('weeklyChart');
       if (!canvas) return;
+      canvas.style.height = '280px';
       new Chart(canvas, {
         type: 'bar',
         data: {
@@ -1098,7 +1099,8 @@
           ]
         },
         options: {
-          responsive: false,
+          responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             legend: { labels: { color: '#94A3B8', font: { size: 12 } } },
             tooltip: {
@@ -1115,19 +1117,15 @@
           }
         }
       });
-    }
+    });
 
     initChatwootAuth({
       gateLoading: 'gate-loading',
       gateDirect:  'gate-direct',
       gateApp:     'app',
       client:      'dermaclinic',
-      report:      'meta-ads-jul-2026',
-      onReady:     function() { setTimeout(initWeeklyChart, 50); }
+      report:      'meta-ads-jul-2026'
     });
-
-    // Fallback: dispara após window.load caso onReady não tenha executado
-    window.addEventListener('load', function() { setTimeout(initWeeklyChart, 300); });
   </script>
 </body>
 </html>
