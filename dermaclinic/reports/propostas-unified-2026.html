@@ -576,9 +576,11 @@ function renderTable(rows) {
     const convIcon = r.convertida
       ? '<span style="color:#4ade80;font-weight:700">✓</span>'
       : '<span style="color:#f87171">✗</span>';
-    const resumo = r.resumo && r.resumo !== '—'
-      ? `<span class="td-resumo" title="${r.resumo.replace(/"/g,"'").replace(/
-/g,' ')}">${r.resumo.length > 80 ? r.resumo.slice(0,80)+'…' : r.resumo}</span>`
+    const safeTitle = r.resumo ? r.resumo.replace(/["\n\r]/g, ' ') : '';
+    const resumoTxt = r.resumo && r.resumo !== '—' ? r.resumo : '';
+    const resumoShort = resumoTxt.length > 80 ? resumoTxt.slice(0,80)+'…' : resumoTxt;
+    const resumo = resumoTxt
+      ? `<span class="td-resumo" title="${safeTitle}">${resumoShort}</span>`
       : '<span style="color:var(--muted);font-size:.72rem">—</span>';
     const procs = r.procedimentos || '—';
     return `<tr>
