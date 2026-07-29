@@ -390,7 +390,7 @@
       <div class="chart-wrap" style="margin-top:16px;">
         <div class="chart-title">Conversas por Semana — Julho 2026</div>
         <div class="chart-subtitle">Volume de leads iniciados via tráfego pago</div>
-        <canvas id="weeklyChart"></canvas>
+        <canvas id="weeklyChart" width="700" height="280" style="max-width:100%;display:block;"></canvas>
       </div>
 
       <!-- Análise da anomalia S2 -->
@@ -1067,100 +1067,67 @@
     </div><!-- /.report-content -->
   </div><!-- /.app -->
 
-  <script src="../../_shared/auth.js"></script>
+<script src="../../_shared/auth.js"></script>
   <script>
     function initWeeklyChart() {
+      if (window._weeklyChartDone) return;
+      window._weeklyChartDone = true;
       var canvas = document.getElementById('weeklyChart');
       if (!canvas) return;
-      var wrap = canvas.parentElement;
-
-      function doRender() {
-        if (canvas._rendered) return;
-        canvas._rendered = true;
-
-        // Dimensoes explicitas: bypassa responsive detection do Chart.js
-        var w = (wrap ? (wrap.clientWidth || wrap.offsetWidth) : 0) || 600;
-        w = Math.max(w - 48, 200); // 48px = padding interno do .chart-wrap (24px cada lado)
-        canvas.style.width  = w + 'px';
-        canvas.style.height = '280px';
-        canvas.width  = w;
-        canvas.height = 280;
-
-        new Chart(canvas.getContext('2d'), {
-          type: 'bar',
-          data: {
-            labels: ['S1 (01–07/jul)', 'S2 (08–14/jul)', 'S3 (15–21/jul)', 'S4 (22–28/jul)'],
-            datasets: [
-              {
-                label: 'Conversas',
-                data: [32, 33, 32, 31],
-                backgroundColor: ['rgba(99,102,241,0.7)','rgba(16,185,129,0.8)','rgba(16,185,129,0.8)','rgba(99,102,241,0.7)'],
-                borderColor: ['#6366F1','#10B981','#10B981','#6366F1'],
-                borderWidth: 1,
-                borderRadius: 6
-              },
-              {
-                label: 'Qualificados',
-                data: [31, 32, 32, 30],
-                backgroundColor: 'rgba(16,185,129,0.25)',
-                borderColor: '#10B981',
-                borderWidth: 1,
-                borderRadius: 6
-              }
-            ]
-          },
-          options: {
-            responsive: false,
-            plugins: {
-              legend: { labels: { color: '#94A3B8', font: { size: 12 } } },
-              tooltip: {
-                backgroundColor: '#1E293B',
-                borderColor: '#334155',
-                borderWidth: 1,
-                titleColor: '#fff',
-                bodyColor: '#94A3B8'
-              }
+      new Chart(canvas, {
+        type: 'bar',
+        data: {
+          labels: ['S1 (01–07/jul)', 'S2 (08–14/jul)', 'S3 (15–21/jul)', 'S4 (22–28/jul)'],
+          datasets: [
+            {
+              label: 'Conversas',
+              data: [32, 33, 32, 31],
+              backgroundColor: ['rgba(99,102,241,0.7)','rgba(16,185,129,0.8)','rgba(16,185,129,0.8)','rgba(99,102,241,0.7)'],
+              borderColor: ['#6366F1','#10B981','#10B981','#6366F1'],
+              borderWidth: 1,
+              borderRadius: 6
             },
-            scales: {
-              x: { ticks: { color: '#64748B', font: { size: 11 } }, grid: { color: 'rgba(51,65,85,0.4)' } },
-              y: { ticks: { color: '#64748B', font: { size: 11 }, stepSize: 10 }, grid: { color: 'rgba(51,65,85,0.4)' }, beginAtZero: true }
+            {
+              label: 'Qualificados',
+              data: [31, 32, 32, 30],
+              backgroundColor: 'rgba(16,185,129,0.25)',
+              borderColor: '#10B981',
+              borderWidth: 1,
+              borderRadius: 6
             }
+          ]
+        },
+        options: {
+          responsive: false,
+          plugins: {
+            legend: { labels: { color: '#94A3B8', font: { size: 12 } } },
+            tooltip: {
+              backgroundColor: '#1E293B',
+              borderColor: '#334155',
+              borderWidth: 1,
+              titleColor: '#fff',
+              bodyColor: '#94A3B8'
+            }
+          },
+          scales: {
+            x: { ticks: { color: '#64748B', font: { size: 11 } }, grid: { color: 'rgba(51,65,85,0.4)' } },
+            y: { ticks: { color: '#64748B', font: { size: 11 }, stepSize: 10 }, grid: { color: 'rgba(51,65,85,0.4)' }, beginAtZero: true }
           }
-        });
-      }
-
-      // Com reflow forcado em auth.js (void appEl.offsetHeight), o wrap ja
-      // deve ter clientWidth > 0 aqui. Mas mantemos fallback por seguranca.
-      if ((wrap && wrap.clientWidth > 0) || canvas.offsetWidth > 0) {
-        doRender();
-        return;
-      }
-
-      // Fallback ResizeObserver
-      if (window.ResizeObserver) {
-        var ro = new ResizeObserver(function() {
-          if (wrap && wrap.clientWidth > 0) { ro.disconnect(); doRender(); }
-        });
-        ro.observe(wrap || canvas);
-        setTimeout(function() { if (!canvas._rendered) { ro.disconnect(); doRender(); } }, 1200);
-      } else {
-        var attempts = 0;
-        (function poll() {
-          if ((wrap && wrap.clientWidth > 0) || attempts++ > 20) { doRender(); return; }
-          setTimeout(poll, 80);
-        })();
-      }
+        }
+      });
     }
 
-    // Auth — onReady garante que #app está visível antes de renderizar o gráfico
     initChatwootAuth({
       gateLoading: 'gate-loading',
       gateDirect:  'gate-direct',
       gateApp:     'app',
       client:      'dermaclinic',
       report:      'meta-ads-jul-2026',
-      onReady:     initWeeklyChart
+      onReady:     function() { setTimeout(initWeeklyChart, 50); }
     });
+
+    // Fallback: dispara após window.load caso onReady não tenha executado
+    window.addEventListener('load', function() { setTimeout(initWeeklyChart, 300); });
   </script>
 </body>
 </html>
