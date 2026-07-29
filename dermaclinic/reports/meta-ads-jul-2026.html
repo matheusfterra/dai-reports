@@ -194,7 +194,7 @@
     .footer-brand span { color: var(--dai-indigo); }
     .footer-meta { font-size: 11px; color: #5a6778; line-height: 1.6; text-align: right; }
 
-    .week-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+    .week-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
     .week-card { background: var(--dai-surface); border: 1px solid var(--dai-border); border-radius: var(--radius); padding: 18px 16px; text-align: center; position: relative; overflow: hidden; }
     .week-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
     .week-card.best::before { background: linear-gradient(90deg, var(--green), #34d399); }
@@ -241,6 +241,20 @@
     .fade-up:nth-child(3) { animation-delay: 0.19s; }
     .fade-up:nth-child(4) { animation-delay: 0.26s; }
     .fade-up:nth-child(5) { animation-delay: 0.33s; }
+    /* Compare Strip (Diagnóstico quinzenas) */
+    .compare-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .compare-block { background: var(--dai-surface); border: 1px solid var(--dai-border); border-radius: var(--radius); padding: 16px 18px; }
+    .cb-label { font-size: 0.75rem; font-weight: 700; color: var(--dai-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+    .cb-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid rgba(51,65,85,0.3); }
+    .cb-row:last-child { border-bottom: none; }
+    .metric { font-size: 0.8rem; color: var(--dai-muted); }
+    .val { font-size: 0.85rem; font-weight: 700; color: var(--dai-white); }
+    .val.amber { color: #F59E0B; }
+    .val.green { color: #10B981; }
+    .val.red { color: #EF4444; }
+    /* kpi-grid-3 */
+    .kpi-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    @media (max-width: 600px) { .compare-strip { grid-template-columns: 1fr; } .kpi-grid-3 { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -255,7 +269,7 @@
       <rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" />
     </svg>
     <p class="gate-title">Acesso exclusivo via Chat</p>
-    <p class="gate-sub">Esta página está disponível somente no painel Chatwoot da DermaClinic.</p>
+    <p class="gate-sub">Esta página está disponível somente no painel Chat da DermaClinic.</p>
   </div>
 
   <div class="app" id="app">
@@ -280,7 +294,7 @@
 
     <!-- ─────── FONTES DE DADOS ─────── -->
     <div class="info-box indigo" style="margin-bottom:32px;">
-      <strong>&#128203; Dados reais 01–28/jul/2026:</strong> Relatório preenchido com dados oficiais do Meta Ads Manager (109 conversas · R$808,67 investidos · CPA R$7,42 · CPM R$26,51) e Google Ads (R$547,96 · 345 cliques · CTR 3,56%). <strong>Período parcial — dados de 01/07 a 28/07/2026 (4 semanas completas). Qualificação de leads (Chatwoot) não disponível nesta versão.</strong>
+      <strong>&#128203; Dados reais 01–28/jul/2026:</strong> Relatório preenchido com dados oficiais do Meta Ads Manager (109 conversas · R$808,67 investidos · CPA R$7,42 · CPM R$26,51) e Google Ads (R$547,96 · 345 cliques · CTR 3,56%). <strong>Período parcial — dados de 01/07 a 28/07/2026 (4 semanas completas). Qualificação Chat: 125 de 128 qualificados (97,7%) — recorde histórico vs 92,1% de junho.</strong>
     </div>
 
     <!-- ─────── 1. RESUMO EXECUTIVO ─────── -->
@@ -341,42 +355,34 @@
         <!-- S1 -->
         <div class="week-card normal">
           <div class="week-label">S1 · 01–07/jul</div>
-          <div class="week-conv">~27</div>
+          <div class="week-conv">32</div>
           <div class="week-sub">conversas</div>
-          <div class="week-quali mid">— qualif.</div>
-          <div style="margin-top:10px;font-size:11px;color:var(--dai-muted);">Estimativa proporcional (sem dado diário Meta)</div>
+          <div class="week-quali high">31 qualif. (96,9%)</div>
+          <div style="margin-top:10px;font-size:11px;color:var(--dai-muted);">Fonte: Chat DB · funnel_topo_pago</div>
         </div>
         <!-- S2 -->
         <div class="week-card best">
           <div class="week-label">S2 · 08–14/jul</div>
-          <div class="week-conv best">~28</div>
+          <div class="week-conv best">33</div>
           <div class="week-sub">conversas</div>
-          <div class="week-quali high">— qualif.</div>
-          <div style="margin-top:10px;font-size:11px;color:var(--dai-muted);">Estimativa proporcional</div>
+          <div class="week-quali high">32 qualif. (97,0%)</div>
+          <div style="margin-top:10px;font-size:11px;color:var(--dai-muted);">Melhor semana em volume</div>
         </div>
         <!-- S3 -->
         <div class="week-card best">
           <div class="week-label">S3 · 15–21/jul</div>
-          <div class="week-conv best">~28</div>
+          <div class="week-conv best">32</div>
           <div class="week-sub">conversas</div>
-          <div class="week-quali high">— qualif.</div>
-          <div style="margin-top:10px;font-size:11px;color:var(--dai-muted);">Estimativa proporcional</div>
+          <div class="week-quali high">32 qualif. (100%)</div>
+          <div style="margin-top:10px;font-size:11px;color:var(--dai-muted);">Qualificação perfeita</div>
         </div>
         <!-- S4 -->
         <div class="week-card normal">
           <div class="week-label">S4 · 22–28/jul</div>
-          <div class="week-conv">~26</div>
+          <div class="week-conv">31</div>
           <div class="week-sub">conversas</div>
-          <div class="week-quali mid">— qualif.</div>
-          <div style="margin-top:10px;font-size:11px;color:var(--dai-muted);">Estimativa proporcional</div>
-        </div>
-        <!-- S5 -->
-        <div class="week-card low">
-          <div class="week-label">S5 · 29–31/jul</div>
-          <div class="week-conv low">0</div>
-          <div class="week-sub">conversas</div>
-          <div class="week-quali mid">—</div>
-          <div style="margin-top:10px;font-size:11px;color:var(--dai-muted);">Sem dados — período cobre 01–28/jul</div>
+          <div class="week-quali high">30 qualif. (96,8%)</div>
+          <div style="margin-top:10px;font-size:11px;color:var(--dai-muted);">Fonte: Chat DB · funnel_topo_pago</div>
         </div>
       </div>
 
@@ -389,7 +395,7 @@
 
       <!-- Análise da anomalia S2 -->
       <div class="info-box amber" style="margin-top:14px;">
-        <strong>&#128203; Análise semanal — Julho 2026:</strong> Período coberto: 01–28/jul (28 dias). Distribuição proporcional — dados diários Meta não disponíveis. Google Ads por semana: S1=84 cliques | S2=87 | S3=92 | S4=82 | S5=0. Referência junho: S4 foi o melhor (41 conv). Qualificação por semana requer dados do Chatwoot.
+        <strong>&#128203; Análise semanal — Julho 2026:</strong> Período coberto: 01–28/jul (28 dias · 4 semanas). Chat DB: S1=32 | S2=33 | S3=32 | S4=31 conversas (total 128). Google Ads por semana: S1=84 cliques | S2=87 | S3=92 | S4=82. Qualificação por semana: S1 31/32 (96,9%) | S2 32/33 (97,0%) | S3 32/32 (100%) | S4 30/31 (96,8%). Total qualificados: 125/128 (97,7% — recorde).
       </div>
     </section>
 
@@ -449,18 +455,18 @@
               <td><span class="tag tag-amber">Redução vs jun</span></td>
             </tr>
             <tr>
-              <td class="text-white">Conversas Chatwoot (topo)</td>
+              <td class="text-white">Conversas Chat (topo)</td>
               <td>127</td>
-              <td>—</td>
-              <td>—</td>
-              <td><span class="tag tag-muted">Dados Chatwoot pendentes</span></td>
+              <td class="text-white">128</td>
+              <td class="text-green">+0,8%</td>
+              <td><span class="tag tag-green">Estável</span></td>
             </tr>
             <tr>
               <td class="text-white">Leads qualificados</td>
               <td>117 (92,1%)</td>
-              <td>—</td>
-              <td>—</td>
-              <td><span class="tag tag-muted">Dados Chatwoot pendentes</span></td>
+              <td class="text-green">125 (97,7%)</td>
+              <td class="text-green">+5,6pp</td>
+              <td><span class="tag tag-green">Recorde histórico</span></td>
             </tr>
             <tr>
               <td class="text-white">Investimento total</td>
@@ -493,16 +499,16 @@
             <tr>
               <td class="text-white">Melhor semana</td>
               <td>41 (S4: 22–28/jun)</td>
-              <td class="text-white">28 (S2/S3)</td>
-              <td class="text-amber">−31,7%</td>
-              <td><span class="tag tag-amber">Estimado</span></td>
+              <td class="text-white">33 (S2: 08–14/jul)</td>
+              <td class="text-amber">−19,5%</td>
+              <td><span class="tag tag-amber">Menor pico</span></td>
             </tr>
             <tr>
               <td class="text-white">Pior semana</td>
               <td>11 (S2: 8–14/jun)</td>
-              <td class="text-green">26 (S4)</td>
-              <td class="text-green">+136%</td>
-              <td><span class="tag tag-green">Mais equilibrado</span></td>
+              <td class="text-green">31 (S4: 22–28/jul)</td>
+              <td class="text-green">+182%</td>
+              <td><span class="tag tag-green">Muito mais equilibrado</span></td>
             </tr>
             <tr>
               <td class="text-white">Criativo líder</td>
@@ -736,7 +742,7 @@
         <div class="section-icon bordo">&#127775;</div>
         <div>
           <div class="section-title">Criativo Dominante</div>
-          <div class="section-subtitle">Criativo líder de julho — a preencher após dados</div>
+          <div class="section-subtitle">Criativo líder de julho — 85/109 conversas (78% share)</div>
         </div>
       </div>
 
@@ -791,30 +797,30 @@
 
       <div class="hero-banner green-banner" style="margin-bottom:20px;">
         <div class="hero-eyebrow">&#129657; Eficiência de qualificação — julho 2026</div>
-        <h3>Qualificação de leads: — qualificados de — contatos — <strong>a preencher após dados</strong></h3>
-        <p>Taxa de qualificação de julho a inserir após dados do Chatwoot. Referência de junho: 92,1% (117 de 127 qualificados), taxa de descarte 7,9%. Monitorar se o padrão de eficiência da IA de atendimento se mantém.</p>
+        <h3>Qualificação de leads: <strong>125 qualificados</strong> de 128 contatos — <strong>97,7% de aproveitamento</strong></h3>
+        <p>Taxa de qualificação de julho atingiu <strong>97,7%</strong> — recorde histórico vs 92,1% de junho (+5,6pp). Apenas 3 leads descartados (2,3%). A IA de atendimento está cada vez mais precisa na triagem.</p>
       </div>
 
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
         <div class="card" style="text-align:center;border-top:3px solid var(--dai-indigo);">
           <div style="font-size:11px;color:var(--dai-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Topo do Funil</div>
-          <div style="font-size:38px;font-weight:800;color:var(--dai-white);">—</div>
+          <div style="font-size:38px;font-weight:800;color:var(--dai-white);">128</div>
           <div style="font-size:12px;color:var(--dai-muted);margin-top:4px;">conversas via TP</div>
         </div>
         <div class="card" style="text-align:center;border-top:3px solid var(--green);">
           <div style="font-size:11px;color:var(--dai-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Qualificados</div>
-          <div style="font-size:38px;font-weight:800;color:var(--green);">—</div>
-          <div style="font-size:12px;color:var(--green);margin-top:4px;font-weight:700;">—% de aproveitamento</div>
+          <div style="font-size:38px;font-weight:800;color:var(--green);">125</div>
+          <div style="font-size:12px;color:var(--green);margin-top:4px;font-weight:700;">97,7% de aproveitamento</div>
         </div>
         <div class="card" style="text-align:center;border-top:3px solid var(--amber);">
           <div style="font-size:11px;color:var(--dai-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Descartados</div>
-          <div style="font-size:38px;font-weight:800;color:var(--amber);">—</div>
-          <div style="font-size:12px;color:var(--dai-muted);margin-top:4px;">—% de descarte</div>
+          <div style="font-size:38px;font-weight:800;color:var(--amber);">3</div>
+          <div style="font-size:12px;color:var(--dai-muted);margin-top:4px;">2,3% de descarte</div>
         </div>
       </div>
 
       <div class="info-box green" style="margin-top:14px;">
-        <strong>Semana com melhor qualificação — julho 2026:</strong> Dados a preencher. Referência de junho: S3 (Jun 15–21) registrou 29 qualificados de 30 conversas (96,7%). S4: 38 de 41 conversas qualificadas (92,7%). Monitorar qual semana de julho registra o melhor índice.
+        <strong>Semana com melhor qualificação — julho 2026:</strong> S3 (15–21/jul) atingiu 100% de qualificação (32 de 32 conversas). S2: 32/33 (97,0%). S1: 31/32 (96,9%). S4: 30/31 (96,8%). Todas as semanas acima de 96% — recorde vs junho (melhor semana jun: S3 96,7%).
       </div>
     </section>
 
@@ -1051,7 +1057,7 @@
       <div class="footer-meta">
         Relatório gerado em: 28/07/2026 · Atualizado com dados reais: 28/07/2026<br>
         Fonte: Meta Ads Manager Export (109 conv · R$808,67 · CPM R$26,51) + Google Ads CSV (R$547,96 · 345 cliques · 47 conv)<br>
-        Próximo relatório: 01/09/2026 · Qualificação Chatwoot a inserir quando disponível
+        Próximo relatório: 01/09/2026 · Qualificação Chat: 125/128 (97,7%)
       </div>
     </div>
   </div>
@@ -1083,19 +1089,19 @@
         new Chart(canvas.getContext('2d'), {
           type: 'bar',
           data: {
-            labels: ['S1 (01–07/jul)', 'S2 (08–14/jul)', 'S3 (15–21/jul)', 'S4 (22–28/jul)', 'S5 (29–31/jul)'],
+            labels: ['S1 (01–07/jul)', 'S2 (08–14/jul)', 'S3 (15–21/jul)', 'S4 (22–28/jul)'],
             datasets: [
               {
                 label: 'Conversas',
-                data: [27, 28, 28, 26, 0],
-                backgroundColor: ['rgba(99,102,241,0.7)','rgba(16,185,129,0.8)','rgba(16,185,129,0.8)','rgba(99,102,241,0.7)','rgba(245,158,11,0.7)'],
-                borderColor: ['#6366F1','#10B981','#10B981','#6366F1','#F59E0B'],
+                data: [32, 33, 32, 31],
+                backgroundColor: ['rgba(99,102,241,0.7)','rgba(16,185,129,0.8)','rgba(16,185,129,0.8)','rgba(99,102,241,0.7)'],
+                borderColor: ['#6366F1','#10B981','#10B981','#6366F1'],
                 borderWidth: 1,
                 borderRadius: 6
               },
               {
                 label: 'Qualificados',
-                data: [0, 0, 0, 0, 0],
+                data: [31, 32, 32, 30],
                 backgroundColor: 'rgba(16,185,129,0.25)',
                 borderColor: '#10B981',
                 borderWidth: 1,
