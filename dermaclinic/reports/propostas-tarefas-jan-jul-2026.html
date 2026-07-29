@@ -164,6 +164,17 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 .obj-bar-fill.neutral{background:#64748b}
 .badge-pill{display:inline-block;background:rgba(45,82,239,.1);color:var(--brand);font-size:.66rem;font-weight:700;border-radius:20px;padding:2px 8px;margin-left:4px}
 .badge-pill.warn{background:rgba(224,123,57,.12);color:#e07b39}
+
+/* ── Tracker de Propostas ── */
+.mes-btn{padding:6px 14px;border-radius:20px;border:1px solid #e2e8f0;background:#fff;
+  color:#475569;font-size:12.5px;font-weight:600;cursor:pointer;transition:all .15s;}
+.mes-btn.active{background:#2D52EF;color:#fff;border-color:#2D52EF;}
+.mes-btn:hover:not(.active){background:#f1f5f9;}
+.tracker-row:hover{background:#f8faff;}
+.status-legend-item{display:flex;align-items:center;gap:8px;cursor:pointer;
+  padding:6px 8px;border-radius:8px;transition:background .15s;}
+.status-legend-item:hover{background:#f1f5f9;}
+.status-legend-item.ativo{background:#f1f5f9;outline:1px solid #e2e8f0;}
 </style>
 </head>
 <body>
@@ -258,7 +269,73 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 <div class="chart-card-header"><span class="chart-card-title">Procedimentos Mais Ofertados em Propostas</span></div>
 <div class="chart-wrap sm"><canvas id="chartProcedimentos"></canvas></div>
 </div>
-</div><div class="section">
+</div>
+<!-- ============================================================ -->
+<!-- SEÇÃO: Tracker de Propostas por Paciente                     -->
+<!-- ============================================================ -->
+<div class="section" id="sec-tracker-propostas">
+<div class="section-header">
+<div class="section-title">Tracker de Propostas — Por Paciente</div>
+<div class="section-divider"></div>
+<div class="section-meta">Acompanhamento individual · Filtro por mês e status</div>
+</div>
+<!-- Seletor de mês -->
+<div id="mes-tabs" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
+<button class="mes-btn active" data-mes="julho" onclick="mudarMes('julho',this)">Jul/26</button>
+</div>
+<!-- Grid principal: donut + tabela -->
+<div style="display:grid;grid-template-columns:220px 1fr;gap:28px;align-items:start;">
+<!-- ESQUERDA: Donut + legenda/filtros -->
+<div>
+<div style="position:relative;width:180px;height:180px;margin:0 auto 20px;">
+<canvas id="chartTrackerDonut"></canvas>
+<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;">
+<div id="donut-total" style="font-size:30px;font-weight:800;color:#0f172a;">21</div>
+<div style="font-size:11px;color:#64748b;margin-top:2px;">propostas</div>
+</div>
+</div>
+<!-- Legenda clicável (age como filtro) -->
+<div style="display:flex;flex-direction:column;gap:4px;">
+<div class="status-legend-item" id="leg-concluida" onclick="filtrarStatus('concluida')">
+<div style="width:11px;height:11px;border-radius:3px;background:#16a34a;flex-shrink:0;"></div>
+<div style="flex:1;font-size:12.5px;color:#374151;">Concluída</div>
+<div id="kpi-concluida" style="font-weight:700;color:#16a34a;font-size:13px;">9</div>
+</div>
+<div class="status-legend-item" id="leg-aguardando" onclick="filtrarStatus('aguardando')">
+<div style="width:11px;height:11px;border-radius:3px;background:#f59e0b;flex-shrink:0;"></div>
+<div style="flex:1;font-size:12.5px;color:#374151;">Aguardando data</div>
+<div id="kpi-aguardando" style="font-weight:700;color:#d97706;font-size:13px;">11</div>
+</div>
+<div class="status-legend-item" id="leg-remarcada" onclick="filtrarStatus('remarcada')">
+<div style="width:11px;height:11px;border-radius:3px;background:#6366f1;flex-shrink:0;"></div>
+<div style="flex:1;font-size:12.5px;color:#374151;">Avaliativa remarcada</div>
+<div id="kpi-remarcada" style="font-weight:700;color:#6366f1;font-size:13px;">1</div>
+</div>
+<div style="margin-top:8px;padding-top:8px;border-top:1px solid #e2e8f0;display:flex;justify-content:flex-end;">
+<button onclick="filtrarStatus('todos')" style="font-size:11.5px;color:#2D52EF;background:none;border:none;cursor:pointer;padding:0;font-weight:600;">Limpar filtro</button>
+</div>
+</div>
+</div>
+<!-- DIREITA: Tabela de pacientes -->
+<div style="overflow-x:auto;">
+<table id="tabelaTracker" style="width:100%;border-collapse:collapse;font-size:13px;">
+<thead>
+<tr style="background:#f8faff;">
+<th style="padding:9px 12px;text-align:left;color:#475569;font-weight:600;border-bottom:2px solid #e2e8f0;width:30px;">#</th>
+<th style="padding:9px 12px;text-align:left;color:#475569;font-weight:600;border-bottom:2px solid #e2e8f0;">Paciente</th>
+<th style="padding:9px 12px;text-align:left;color:#475569;font-weight:600;border-bottom:2px solid #e2e8f0;">Procedimento / Observação</th>
+<th style="padding:9px 12px;text-align:left;color:#475569;font-weight:600;border-bottom:2px solid #e2e8f0;">Status</th>
+</tr>
+</thead>
+<tbody id="tbody-tracker"></tbody>
+</table>
+<div id="tracker-empty" style="display:none;text-align:center;padding:32px;color:#94a3b8;font-size:13px;">
+        Nenhuma proposta encontrada para este filtro.
+      </div>
+</div>
+</div>
+</div>
+<div class="section">
 <div class="section-header">
 <div class="section-title">Propostas Julho 2026 — Status Real via Feegow + Chatwoot</div>
 <div class="section-divider"></div>
@@ -572,7 +649,6 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 </div>
 </div>
 <!-- ② PROPOSTAS -->
-
 <!-- ③ FOLLOW-UP / PROPOSTAS ABERTAS -->
 <div class="section">
 <div class="section-header">
@@ -1663,5 +1739,121 @@ new C(document.getElementById('chartInteresses'), {
   }
 });
 </script>
-</body>
+<script>
+const TRACKER_DATA = {
+  julho: {
+    label: 'Julho 2026',
+    itens: [
+      { nome: 'Maria Nubia Lazo',                  status: 'aguardando', proc: 'Restylane/Lyft/Defyne/Kysse' },
+      { nome: 'Vanessa de Souza Gomes Vilhegas',   status: 'aguardando', proc: 'Spectra avulso' },
+      { nome: 'Gabriela Carolina de Abreu',         status: 'concluida',  proc: '—' },
+      { nome: 'Friedrich Georg Mittelstadt',        status: 'concluida',  proc: '—' },
+      { nome: 'Nicole Anderson Correia',            status: 'aguardando', proc: 'Fotona 4D' },
+      { nome: 'Isabel Cristina Carrara',            status: 'remarcada',  proc: 'Avaliativa remarcada — aguardando nova data' },
+      { nome: 'Silvia Aparecida Marques',           status: 'aguardando', proc: 'Fotona Rosácea' },
+      { nome: 'Odineia da Silva da Veiga',          status: 'concluida',  proc: 'Retorno Botox (agendado)' },
+      { nome: 'Siderlene Serafim',                  status: 'aguardando', proc: 'Crioterapia Mãos' },
+      { nome: 'Douglas Henrique Lima Dutra',        status: 'aguardando', proc: 'Spectra — Poros/Rugas (6 sessões)' },
+      { nome: 'Sirlene Salvador',                   status: 'aguardando', proc: 'Cirurgia (paga prevista)' },
+      { nome: 'Cristiane Gelsleihter Meier',        status: 'aguardando', proc: 'Fotona 4D + Fotona Colo' },
+      { nome: 'Daniele Ferreira de Souza',          status: 'aguardando', proc: 'Fotona Vasos → trocada por Spectra' },
+      { nome: 'Viviane da Silveira Veiga Fachini',  status: 'aguardando', proc: 'Fotona 4D' },
+      { nome: 'Maria Clotilde Andreotti Zingali',   status: 'concluida',  proc: 'Retorno Botox' },
+      { nome: 'Alencar Guilherme Lehmkuhl',         status: 'concluida',  proc: 'Retorno Botox' },
+      { nome: 'Alencar Guilherme Lehmkuhl',         status: 'aguardando', proc: 'Restylane/Lyft/Defyne/Kysse (2ª proposta)' },
+      { nome: 'Tatiana Barreiros',                  status: 'concluida',  proc: 'Megademe Colo' },
+      { nome: 'Maria Evelise Rinaldi',              status: 'concluida',  proc: 'Retorno Botox (agendado)' },
+      { nome: 'Jean Noel Andre Ott',                status: 'concluida',  proc: 'Retorno Procedimento (agendado)' },
+      { nome: 'Tatiani Bardini',                    status: 'concluida',  proc: 'Laser CO2 Full Face + Colo (agendado)' }
+    ]
+  }
+};
+
+const STATUS_CFG = {
+  concluida:  { label: 'Concluída',            color: '#16a34a', bg: '#dcfce7', border: '#bbf7d0' },
+  aguardando: { label: 'Aguardando data',            color: '#d97706', bg: '#fef3c7', border: '#fde68a' },
+  remarcada:  { label: 'Avaliativa remarcada',       color: '#6366f1', bg: '#eef2ff', border: '#c7d2fe' }
+};
+
+let _mes = 'julho';
+let _filtro = 'todos';
+let _chartDonut = null;
+
+function mudarMes(mes, btn) {
+  _mes = mes; _filtro = 'todos';
+  document.querySelectorAll('.mes-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.status-legend-item').forEach(el => el.classList.remove('ativo'));
+  renderTracker();
+}
+
+function filtrarStatus(status) {
+  _filtro = status;
+  document.querySelectorAll('.status-legend-item').forEach(el => el.classList.remove('ativo'));
+  if (status !== 'todos') {
+    const el = document.getElementById('leg-' + status);
+    if (el) el.classList.add('ativo');
+  }
+  renderTracker();
+}
+
+function renderTracker() {
+  const data = TRACKER_DATA[_mes];
+  if (!data) return;
+
+  const counts = { concluida: 0, aguardando: 0, remarcada: 0 };
+  data.itens.forEach(i => { if (counts[i.status] !== undefined) counts[i.status]++; });
+
+  document.getElementById('kpi-concluida').textContent  = counts.concluida;
+  document.getElementById('kpi-aguardando').textContent = counts.aguardando;
+  document.getElementById('kpi-remarcada').textContent  = counts.remarcada;
+  document.getElementById('donut-total').textContent    = data.itens.length;
+
+  const itens = _filtro === 'todos' ? data.itens : data.itens.filter(i => i.status === _filtro);
+  const tbody = document.getElementById('tbody-tracker');
+  const empty = document.getElementById('tracker-empty');
+
+  if (itens.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+  } else {
+    empty.style.display = 'none';
+    tbody.innerHTML = itens.map((item, idx) => {
+      const cfg = STATUS_CFG[item.status] || {};
+      return '<tr class="tracker-row" data-status="' + item.status + '">' +
+        '<td style="padding:9px 12px;color:#94a3b8;font-size:12px;">' + (idx + 1) + '</td>' +
+        '<td style="padding:9px 12px;font-weight:500;color:#1e293b;">' + item.nome + '</td>' +
+        '<td style="padding:9px 12px;color:#64748b;font-size:12px;">' + item.proc + '</td>' +
+        '<td style="padding:9px 12px;"><span style="background:' + cfg.bg + ';color:' + cfg.color + ';border:1px solid ' + cfg.border + ';padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:600;white-space:nowrap;">' + cfg.label + '</span></td>' +
+        '</tr>';
+    }).join('');
+  }
+
+  const ctx = document.getElementById('chartTrackerDonut').getContext('2d');
+  if (_chartDonut) _chartDonut.destroy();
+  _chartDonut = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Concluída', 'Aguardando data', 'Avaliativa remarcada'],
+      datasets: [{
+        data: [counts.concluida, counts.aguardando, counts.remarcada],
+        backgroundColor: ['#16a34a', '#f59e0b', '#6366f1'],
+        borderColor: ['#ffffff', '#ffffff', '#ffffff'],
+        borderWidth: 3,
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      cutout: '65%',
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: function(ctx) { return ' ' + ctx.label + ': ' + ctx.parsed; } } }
+      },
+      animation: { duration: 400 }
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() { renderTracker(); });
+</script></body>
 </html>
