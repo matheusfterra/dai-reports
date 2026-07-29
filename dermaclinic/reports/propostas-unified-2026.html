@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DermaClinic — Análise de Propostas Fev–Jul 2026</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2d3148;
+      --text:#f1f5f9;--muted:#8b92a9;--accent:#7c6fe0;--accent2:#22c55e;
+      --danger:#ef4444;--warn:#f59e0b;--info:#3b82f6;--purple:#8b5cf6;
+      --radius:12px;--radius-sm:8px;
+    }
+    html{font-size:15px}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.5}
+    a{color:inherit;text-decoration:none}
+
+    /* ── Layout ── */
+    .report-body{width:100%;padding:0 0 64px}
+    .container{max-width:1200px;margin:0 auto;padding:0 24px}
+
+    /* ── Header ── */
+    .report-header{background:linear-gradient(135deg,#1a1d27 0%,#0f1117 100%);border-bottom:1px solid var(--border);padding:32px 0 28px}
+    .report-header .container{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+    .header-left h1{font-size:1.5rem;font-weight:700;letter-spacing:-.02em}
+    .header-left p{color:var(--muted);font-size:.85rem;margin-top:4px}
+    .badge-periodo{background:var(--surface2);border:1px solid var(--border);border-radius:999px;padding:4px 14px;font-size:.78rem;color:var(--muted);white-space:nowrap}
+
+    /* ── KPI Grid ── */
+    .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-top:28px}
+    .kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 20px 16px}
+    .kpi .label{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px}
+    .kpi .value{font-size:2rem;font-weight:700;line-height:1}
+    .kpi .sub{font-size:.78rem;color:var(--muted);margin-top:4px}
+    .kpi.danger .value{color:var(--danger)}
+    .kpi.warn   .value{color:var(--warn)}
+    .kpi.ok     .value{color:var(--accent2)}
+    .kpi.purple .value{color:var(--purple)}
+    .kpi.info   .value{color:var(--info)}
+
+    /* ── Section ── */
+    .section{margin-top:40px}
+    .section-title{font-size:1rem;font-weight:600;color:var(--text);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+    .section-title .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0}
+
+    /* ── Card ── */
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px}
+    .card-sm{padding:16px}
+    .card + .card{margin-top:16px}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+    @media(max-width:900px){.grid-2,.grid-3{grid-template-columns:1fr}}
+
+    /* ── Chart wrapper ── */
+    .chart-wrap{position:relative;width:100%;height:260px}
+    .chart-wrap-tall{position:relative;width:100%;height:320px}
+    .chart-title{font-size:.8rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
+
+    /* ── Alert box ── */
+    .alert{border-radius:var(--radius-sm);padding:14px 18px;font-size:.85rem;line-height:1.55;margin-bottom:16px;display:flex;gap:12px;align-items:flex-start}
+    .alert.red{background:#3b0f0f;border:1px solid #7f1d1d;color:#fca5a5}
+    .alert.yellow{background:#2d2208;border:1px solid #78350f;color:#fde68a}
+    .alert.green{background:#052e16;border:1px solid #14532d;color:#86efac}
+    .alert .icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+
+    /* ── Insight pills ── */
+    .pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .pill{background:var(--surface2);border:1px solid var(--border);border-radius:999px;padding:3px 12px;font-size:.75rem;color:var(--muted)}
+    .pill.highlight{background:#2d1f6e;border-color:#4c3bc5;color:#a5b4fc}
+
+    /* ── Table ── */
+    table{width:100%;border-collapse:collapse;font-size:.82rem}
+    thead th{color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;font-size:.72rem;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
+    tbody td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+    tbody tr:last-child td{border-bottom:none}
+    tbody tr:hover{background:var(--surface2)}
+    .bar-cell{display:flex;align-items:center;gap:8px}
+    .mini-bar{height:6px;border-radius:3px;background:var(--accent);flex-shrink:0}
+
+    /* ── Footer ── */
+    .report-footer{margin-top:48px;padding:24px 0;border-top:1px solid var(--border);text-align:center;color:var(--muted);font-size:.78rem}
+  </style>
+</head>
+<body>
+
+<div class="report-body">
+
+<!-- HEADER -->
+<header class="report-header">
+  <div class="container">
+    <div class="header-left">
+      <h1>Propostas DermaClinic — Análise Estratégica</h1>
+      <p>Feegow × Chat · Fevereiro a Julho 2026 · 160 propostas analisadas</p>
+    </div>
+    <span class="badge-periodo">Fev–Jul 2026</span>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- ALERTA PRINCIPAL -->
+<div class="section">
+  <div class="alert red">
+    <span class="icon">🚨</span>
+    <span><strong>Descoberta Crítica:</strong> Apenas <strong>13,1%</strong> das propostas (21 de 160) receberam follow-up real sobre o orçamento. As demais 118 conversas encontradas eram sobre confirmações de consulta, campanhas de marketing e pós-procedimento — o paciente não foi abordado sobre a proposta em si.</span>
+  </div>
+</div>
+
+<!-- KPIs -->
+<div class="section">
+  <div class="section-title"><span class="dot"></span> Visão Geral · Fev–Jul 2026</div>
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="label">Total de Propostas</div>
+      <div class="value">160</div>
+      <div class="sub">Fev a Jul 2026</div>
+    </div>
+    <div class="kpi ok">
+      <div class="label">Convertidas</div>
+      <div class="value">64</div>
+      <div class="sub">40.0% do total</div>
+    </div>
+    <div class="kpi danger">
+      <div class="label">Follow-up Real</div>
+      <div class="value">21</div>
+      <div class="sub">Apenas 13.1% receberam contato sobre a proposta</div>
+    </div>
+    <div class="kpi info">
+      <div class="label">Valor Total Orçado</div>
+      <div class="value">R$814,895</div>
+      <div class="sub">Potencial de receita em aberto</div>
+    </div>
+    <div class="kpi warn">
+      <div class="label">Ticket Médio Proposta</div>
+      <div class="value">R$5,093</div>
+      <div class="sub">Por proposta criada</div>
+    </div>
+    <div class="kpi purple">
+      <div class="label">Ruído (Falso Follow-up)</div>
+      <div class="value">118</div>
+      <div class="sub">73,8% eram outro assunto</div>
+    </div>
+  </div>
+</div>
+
+<!-- SÉRIE TEMPORAL: Volume e Conversões -->
+<div class="section">
+  <div class="section-title"><span class="dot"></span> Evolução Mensal — Volume e Conversões</div>
+  <div class="card">
+    <div class="chart-title">Propostas Criadas vs. Convertidas vs. Follow-up Real</div>
+    <div class="chart-wrap-tall"><canvas id="chartVolume"></canvas></div>
+  </div>
+</div>
+
+<!-- SÉRIE TEMPORAL: Valor e % conversão -->
+<div class="section grid-2">
+  <div class="card">
+    <div class="chart-title">Valor Total Orçado por Mês (R$ mil)</div>
+    <div class="chart-wrap"><canvas id="chartValor"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="chart-title">% Conversão vs % Follow-up Real</div>
+    <div class="chart-wrap"><canvas id="chartPct"></canvas></div>
+  </div>
+</div>
+
+<!-- CONTEXTO DAS CONVERSAS -->
+<div class="section">
+  <div class="section-title"><span class="dot"></span> Contexto Real das Conversas por Mês</div>
+  <div class="alert yellow">
+    <span class="icon">⚠️</span>
+    <span>O Chat cruza pelo número de telefone — o mesmo paciente pode receber confirmações de consulta, campanhas e mensagens pós-procedimento. <strong>Confirmações de consulta</strong> dominam o ruído (73 de 118 conversas incorretas).</span>
+  </div>
+  <div class="card">
+    <div class="chart-title">Distribuição de Contexto por Mês (Stacked)</div>
+    <div class="chart-wrap-tall"><canvas id="chartContexto"></canvas></div>
+  </div>
+</div>
+
+<!-- OBJEÇÕES -->
+<div class="section">
+  <div class="section-title"><span class="dot"></span> Objeções Identificadas pelo GPT-4.1-mini</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="chart-title">Ranking de Objeções · Total Fev–Jul 2026</div>
+      <div class="chart-wrap-tall"><canvas id="chartObjecoes"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="chart-title">Objeções por Mês</div>
+      <div class="chart-wrap-tall"><canvas id="chartObjecoesMes"></canvas></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <table>
+      <thead>
+        <tr>
+          <th>Objeção</th>
+          <th style="text-align:right">Qtd</th>
+          <th style="text-align:right">% do Total</th>
+          <th style="width:200px">Distribuição</th>
+        </tr>
+      </thead>
+      <tbody id="obj-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PROCEDIMENTOS -->
+<div class="section">
+  <div class="section-title"><span class="dot"></span> Top 10 Procedimentos em Proposta</div>
+  <div class="card">
+    <div class="chart-wrap-tall"><canvas id="chartProc"></canvas></div>
+  </div>
+</div>
+
+<!-- INSIGHTS -->
+<div class="section">
+  <div class="section-title"><span class="dot"></span> Insights e Recomendações</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="chart-title" style="color:var(--danger)">🚨 Problemas Identificados</div>
+      <div class="alert red" style="margin-top:8px">
+        <span class="icon">📋</span>
+        <span><strong>86,9% das propostas</strong> não têm follow-up real sobre o orçamento. O paciente recebe a proposta e não é abordado novamente sobre ela.</span>
+      </div>
+      <div class="alert red" style="margin-top:8px">
+        <span class="icon">📉</span>
+        <span><strong>"Não Respondeu"</strong> é a objeção número 1 (55 casos, 34%). Indica ausência de proatividade no follow-up — o paciente simplesmente some.</span>
+      </div>
+      <div class="alert yellow" style="margin-top:8px">
+        <span class="icon">⏰</span>
+        <span><strong>Disponibilidade/Tempo</strong> (26 casos, 16%) é o segundo bloqueio. Sugere necessidade de facilitar agendamento pós-proposta.</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="chart-title" style="color:var(--accent2)">✅ O que Funciona</div>
+      <div class="alert green" style="margin-top:8px">
+        <span class="icon">💬</span>
+        <span>Quando há follow-up real da proposta, <strong>42% convertem</strong> — taxa saudável. O problema não é o produto, é a ausência de abordagem.</span>
+      </div>
+      <div class="alert green" style="margin-top:8px">
+        <span class="icon">📈</span>
+        <span><strong>Julho/26</strong> foi o mês com maior % de follow-up real (22,7%) e recovery de conversões. Entender o que mudou pode replicar o padrão.</span>
+      </div>
+      <div class="alert green" style="margin-top:8px">
+        <span class="icon">💡</span>
+        <span><strong>Sculptra e Toxina</strong> lideram o volume de propostas — foco de conversão nesses dois procedimentos teria o maior impacto.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /.container -->
+</div><!-- /.report-body -->
+
+<footer class="report-footer">
+  <div class="container">
+    DermaClinic · Análise gerada por DAI — Digital AI · 160 propostas · Fevereiro a Julho 2026
+  </div>
+</footer>
+
+<script>
+const D = {"labels": ["Fev/26", "Mar/26", "Abr/26", "Mai/26", "Jun/26", "Jul/26"], "total_series": [10, 20, 29, 56, 23, 22], "conv_series": [5, 9, 12, 19, 12, 7], "fu_real_series": [3, 3, 3, 5, 2, 5], "val_series": [58.5, 175.3, 169.5, 189.2, 99.3, 123.1], "pct_fu_series": [30.0, 15.0, 10.3, 8.9, 8.7, 22.7], "pct_conv_series": [50.0, 45.0, 41.4, 33.9, 52.2, 31.8], "ctx_keys": ["proposta_followup", "confirmacao_consulta", "campanha_marketing", "pos_procedimento", "sem_followup", "outro", "sem_mensagens", "reativacao_geral"], "ctx_labels": {"proposta_followup": "Follow-up Real da Proposta", "confirmacao_consulta": "Confirmação de Consulta", "campanha_marketing": "Campanha de Marketing", "pos_procedimento": "Pós-Procedimento", "sem_followup": "Sem Conversa", "outro": "Outro", "sem_mensagens": "Sem Mensagens Reais", "reativacao_geral": "Reativação Geral"}, "ctx_colors": {"proposta_followup": "#22c55e", "confirmacao_consulta": "#3b82f6", "campanha_marketing": "#f59e0b", "pos_procedimento": "#8b5cf6", "sem_followup": "#ef4444", "outro": "#6b7280", "sem_mensagens": "#374151", "reativacao_geral": "#06b6d4"}, "ctx_series": {"proposta_followup": [3, 3, 3, 5, 2, 5], "confirmacao_consulta": [5, 9, 13, 24, 13, 9], "campanha_marketing": [2, 3, 5, 11, 1, 0], "pos_procedimento": [0, 1, 1, 5, 1, 1], "sem_followup": [0, 3, 3, 8, 3, 4], "outro": [0, 1, 3, 1, 2, 1], "sem_mensagens": [0, 0, 1, 1, 1, 2], "reativacao_geral": [0, 0, 0, 1, 0, 0]}, "obj_names": ["Não Respondeu", "Converteu / Sem Objeção", "Disponibilidade / Tempo", "Sem Conversa Relacionada", "Preço", "Prioridade Baixa", "Medo do Procedimento"], "obj_vals": [55, 42, 26, 21, 9, 4, 3], "proc_names": ["TOXINA BOTULINICA -GLOBAL(1/3S", "SCULPTRA", "MEGADERME RF MICROAGULHADA", "LIFTERA TERCO INFERIOR", "LIFTERA PAPADA", "FOTONA FACE 4D", "RESTYLANE/LYFT/DEFYNE/KYSSE (2", "TOXINA BOTULINICA FACE/PESCOCO", "LASER CO2 FULL FACE", "RESTYLANE/LYFT/DEFYNE/KYSSE (1"], "proc_vals": [29, 24, 19, 18, 18, 15, 12, 12, 10, 8], "obj_keys_mes": ["nao_respondeu", "sem_objecao", "disponibilidade_tempo", "preco", "prioridade_baixa", "medo_procedimento"], "obj_labels_mes": {"nao_respondeu": "Não Respondeu", "sem_objecao": "Converteu / Sem Objeção", "disponibilidade_tempo": "Disponibilidade / Tempo", "preco": "Preço", "prioridade_baixa": "Prioridade Baixa", "medo_procedimento": "Medo do Procedimento"}, "obj_mes_data": {"nao_respondeu": [5, 4, 9, 23, 5, 9], "sem_objecao": [3, 7, 10, 10, 7, 5], "disponibilidade_tempo": [1, 4, 4, 8, 7, 2], "preco": [1, 2, 2, 3, 1, 0], "prioridade_baixa": [0, 0, 1, 2, 0, 1], "medo_procedimento": [0, 0, 0, 2, 0, 1]}};
+
+// ─── defaults ─────────────────────────────────────────────────────────────────
+Chart.defaults.color = '#8b92a9';
+Chart.defaults.font.family = "Inter, system-ui, sans-serif";
+Chart.defaults.font.size = 12;
+const gridColor = '#2d3148';
+const tooltipBg = '#1a1d27';
+
+function baseAxes(yLabel='') {
+  return {
+    x: { grid: { color: gridColor, lineWidth: .5 }, ticks: { maxRotation: 0 } },
+    y: { grid: { color: gridColor, lineWidth: .5 }, beginAtZero: true, title: yLabel ? { display:true, text:yLabel, color:'#8b92a9', font:{size:11} } : {display:false} }
+  };
+}
+
+// ─── 1. Volume Mensal ──────────────────────────────────────────────────────────
+new Chart(document.getElementById('chartVolume'), {
+  type: 'bar',
+  data: {
+    labels: D.labels,
+    datasets: [
+      { label: 'Total Propostas', data: D.total_series, backgroundColor: '#7c6fe066', borderColor: '#7c6fe0', borderWidth: 2, borderRadius: 4 },
+      { label: 'Convertidas', data: D.conv_series, backgroundColor: '#22c55e66', borderColor: '#22c55e', borderWidth: 2, borderRadius: 4 },
+      { label: 'Follow-up Real', data: D.fu_real_series, type: 'line', borderColor: '#ef4444', backgroundColor: 'transparent', borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: '#ef4444', tension: .3 },
+    ]
+  },
+  options: { responsive:true, maintainAspectRatio:false, scales: baseAxes('Qtd propostas'), plugins: { legend:{position:'top'}, tooltip:{backgroundColor:tooltipBg,borderColor:gridColor,borderWidth:1} } }
+});
+
+// ─── 2. Valor por mês ─────────────────────────────────────────────────────────
+new Chart(document.getElementById('chartValor'), {
+  type: 'bar',
+  data: {
+    labels: D.labels,
+    datasets: [{ label: 'Valor Orçado (R$ mil)', data: D.val_series, backgroundColor: '#3b82f666', borderColor: '#3b82f6', borderWidth: 2, borderRadius: 4 }]
+  },
+  options: { responsive:true, maintainAspectRatio:false, scales: baseAxes('R$ mil'), plugins: { legend:{display:false}, tooltip:{ backgroundColor:tooltipBg, borderColor:gridColor, borderWidth:1, callbacks:{ label: ctx => 'R$ ' + ctx.parsed.y.toFixed(1) + ' mil' } } } }
+});
+
+// ─── 3. % Conversão vs % Follow-up ────────────────────────────────────────────
+new Chart(document.getElementById('chartPct'), {
+  type: 'line',
+  data: {
+    labels: D.labels,
+    datasets: [
+      { label: '% Convertidas', data: D.pct_conv_series, borderColor: '#22c55e', backgroundColor: '#22c55e22', fill:true, tension:.3, borderWidth:2.5, pointRadius:5, pointBackgroundColor:'#22c55e' },
+      { label: '% Follow-up Real', data: D.pct_fu_series, borderColor: '#ef4444', backgroundColor: '#ef444422', fill:true, tension:.3, borderWidth:2.5, pointRadius:5, pointBackgroundColor:'#ef4444' },
+    ]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    scales: { ...baseAxes('%'), y: { ...baseAxes('%').y, max:60, ticks:{ callback: v => v+'%' } } },
+    plugins: { legend:{position:'top'}, tooltip:{ backgroundColor:tooltipBg, borderColor:gridColor, borderWidth:1, callbacks:{ label: ctx => ctx.dataset.label+': '+ctx.parsed.y+'%' } } }
+  }
+});
+
+// ─── 4. Contexto Stacked ─────────────────────────────────────────────────────
+new Chart(document.getElementById('chartContexto'), {
+  type: 'bar',
+  data: {
+    labels: D.labels,
+    datasets: D.ctx_keys.map(k => ({
+      label: D.ctx_labels[k],
+      data: D.ctx_series[k],
+      backgroundColor: D.ctx_colors[k] + 'cc',
+      borderColor: D.ctx_colors[k],
+      borderWidth: 1,
+      borderRadius: 3,
+    }))
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    scales: { ...baseAxes('Qtd'), x: { ...baseAxes().x, stacked:true }, y: { ...baseAxes().y, stacked:true } },
+    plugins: { legend:{position:'top', labels:{boxWidth:12, padding:10}}, tooltip:{backgroundColor:tooltipBg,borderColor:gridColor,borderWidth:1,mode:'index',intersect:false} }
+  }
+});
+
+// ─── 5. Objeções global (horizontal bar) ─────────────────────────────────────
+new Chart(document.getElementById('chartObjecoes'), {
+  type: 'bar',
+  data: {
+    labels: D.obj_names,
+    datasets: [{ label: 'Propostas', data: D.obj_vals, backgroundColor: ['#ef4444cc','#22c55ecc','#f59e0bcc','#6b7280cc','#8b5cf6cc','#3b82f6cc','#06b6d4cc'], borderRadius: 4 }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive:true, maintainAspectRatio:false,
+    scales: { x: { grid:{color:gridColor,lineWidth:.5}, beginAtZero:true }, y: { grid:{display:false}, ticks:{font:{size:11}} } },
+    plugins: { legend:{display:false}, tooltip:{backgroundColor:tooltipBg,borderColor:gridColor,borderWidth:1} }
+  }
+});
+
+// ─── 6. Objeções por mês ─────────────────────────────────────────────────────
+const objColors = ['#ef4444','#22c55e','#f59e0b','#6b7280','#8b5cf6','#3b82f6'];
+new Chart(document.getElementById('chartObjecoesMes'), {
+  type: 'bar',
+  data: {
+    labels: D.labels,
+    datasets: D.obj_keys_mes.map((k,i) => ({
+      label: D.obj_labels_mes[k],
+      data: D.obj_mes_data[k],
+      backgroundColor: objColors[i] + 'cc',
+      borderColor: objColors[i],
+      borderWidth:1, borderRadius:3
+    }))
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    scales: { ...baseAxes('Qtd'), x:{...baseAxes().x,stacked:true}, y:{...baseAxes().y,stacked:true} },
+    plugins: { legend:{position:'top',labels:{boxWidth:12,padding:8}}, tooltip:{backgroundColor:tooltipBg,borderColor:gridColor,borderWidth:1,mode:'index',intersect:false} }
+  }
+});
+
+// ─── 7. Procedimentos ────────────────────────────────────────────────────────
+new Chart(document.getElementById('chartProc'), {
+  type: 'bar',
+  data: {
+    labels: D.proc_names,
+    datasets: [{ label: 'Propostas', data: D.proc_vals, backgroundColor: '#7c6fe0cc', borderColor: '#7c6fe0', borderWidth:1, borderRadius:4 }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive:true, maintainAspectRatio:false,
+    scales: { x:{grid:{color:gridColor,lineWidth:.5},beginAtZero:true}, y:{grid:{display:false},ticks:{font:{size:11}}} },
+    plugins: { legend:{display:false}, tooltip:{backgroundColor:tooltipBg,borderColor:gridColor,borderWidth:1} }
+  }
+});
+
+// ─── Tabela de objeções ───────────────────────────────────────────────────────
+const tbody = document.getElementById('obj-tbody');
+const total = D.obj_vals.reduce((a,b)=>a+b,0);
+const tColors = ['#ef4444','#22c55e','#f59e0b','#6b7280','#8b5cf6','#3b82f6','#06b6d4'];
+D.obj_names.forEach((name, i) => {
+  const v = D.obj_vals[i];
+  const pct = (v/total*100).toFixed(1);
+  const barW = Math.round(v/total*160);
+  const color = tColors[i % tColors.length];
+  tbody.innerHTML += `<tr>
+    <td>${name}</td>
+    <td style="text-align:right;font-weight:600">${v}</td>
+    <td style="text-align:right;color:var(--muted)">${pct}%</td>
+    <td><div class="bar-cell"><div class="mini-bar" style="width:${barW}px;background:${color}"></div><span style="font-size:.75rem;color:var(--muted)">${pct}%</span></div></td>
+  </tr>`;
+});
+</script>
+
+</body>
+</html>
