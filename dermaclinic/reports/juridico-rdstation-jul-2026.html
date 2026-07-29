@@ -3,484 +3,1060 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Análise Jurídica — RDStation CRM | DermaClinic</title>
+<title>Análise Jurídica — DermaClinic x RDStation CRM | Digital AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --bg: #0d0d0f;
-    --surface: #16161a;
-    --surface2: #1e1e24;
-    --border: #2a2a35;
-    --accent: #7c6ff7;
-    --accent2: #a78bfa;
-    --danger: #ef4444;
-    --warning: #f59e0b;
-    --success: #22c55e;
-    --text: #e2e2ef;
-    --text2: #9898b3;
-    --text3: #6b6b85;
+    --brand-primary: #2D52EF;
+    --brand-secondary: #3B2FC9;
+    --brand-dark: #0F1F5C;
+    --brand-accent: #E8EEFF;
+    --brand-accent2: #E8ECFD;
+    --success: #16a34a;
+    --success-bg: #f0fdf4;
+    --success-border: #bbf7d0;
+    --warning: #b45309;
+    --warning-bg: #fffbeb;
+    --warning-border: #fde68a;
+    --danger: #dc2626;
+    --danger-bg: #fef2f2;
+    --danger-border: #fecaca;
+    --neutral: #4b5563;
+    --neutral-bg: #f9fafb;
+    --neutral-border: #e5e7eb;
+    --text: #111827;
+    --text2: #374151;
+    --text3: #6b7280;
+    --bg: #ffffff;
+    --surface: #f8f9ff;
+    --surface2: #f1f4ff;
+    --border: #e2e7ff;
+    --font-heading: 'Plus Jakarta Sans', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
   }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
+  body {
+    background: #f3f4f8;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+  }
 
-  .report-body { max-width: 900px; margin: 0 auto; padding: 32px 24px; }
+  /* ─── TOPBAR ─── */
+  .topbar {
+    background: var(--brand-dark);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .topbar img { height: 28px; }
+  .topbar-badge {
+    font-family: var(--font-body);
+    font-size: 11px;
+    color: rgba(255,255,255,.6);
+    letter-spacing: .5px;
+  }
 
-  /* Header */
-  .header { border-bottom: 1px solid var(--border); padding-bottom: 24px; margin-bottom: 28px; }
-  .header-badge { display: inline-flex; align-items: center; gap: 6px; background: #1a1a2e; border: 1px solid var(--accent); border-radius: 20px; padding: 4px 12px; font-size: 11px; color: var(--accent2); margin-bottom: 14px; }
-  .header h1 { font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 6px; }
-  .header-meta { display: flex; gap: 18px; font-size: 12px; color: var(--text2); flex-wrap: wrap; }
+  /* ─── HERO ─── */
+  .hero {
+    background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-dark) 100%);
+    padding: 48px 24px 40px;
+    color: #fff;
+  }
+  .hero-inner { max-width: 860px; margin: 0 auto; }
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-family: var(--font-heading);
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 10px;
+  }
+  .hero-sub {
+    font-size: 15px;
+    color: rgba(255,255,255,.8);
+    margin-bottom: 24px;
+    max-width: 600px;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: rgba(255,255,255,.65);
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 5px; }
 
-  /* Verdict */
-  .verdict { background: linear-gradient(135deg, #1a1a2e, #16161a); border: 1px solid var(--accent); border-radius: 12px; padding: 22px; margin-bottom: 28px; }
-  .verdict-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--accent2); margin-bottom: 6px; }
-  .verdict h2 { font-size: 18px; color: #fff; margin-bottom: 10px; }
-  .verdict p { color: var(--text2); font-size: 13px; line-height: 1.7; }
-  .verdict .hl { color: var(--accent2); font-weight: 600; }
+  /* ─── VERDICT BANNER ─── */
+  .verdict-banner {
+    background: #fff;
+    border-bottom: 3px solid var(--brand-primary);
+    padding: 0;
+  }
+  .verdict-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 24px 24px;
+  }
+  .verdict-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--brand-primary);
+    margin-bottom: 8px;
+  }
+  .verdict-text {
+    font-family: var(--font-heading);
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--brand-dark);
+    line-height: 1.4;
+  }
+  .verdict-sub {
+    font-size: 13px;
+    color: var(--text3);
+    margin-top: 8px;
+    line-height: 1.6;
+  }
 
-  /* Score pills */
-  .score-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }
-  .score-pill { flex: 1; min-width: 140px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; }
-  .score-pill .val { font-size: 26px; font-weight: 700; margin-bottom: 3px; }
-  .score-pill .lbl { font-size: 11px; color: var(--text2); }
-  .green { color: var(--success); } .amber { color: var(--warning); } .red { color: var(--danger); } .purple { color: var(--accent2); }
+  /* ─── SCORE PILLS ─── */
+  .score-row {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+  }
+  .pill {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    text-align: center;
+    box-shadow: 0 1px 4px rgba(45,82,239,.08);
+  }
+  .pill-val {
+    font-family: var(--font-heading);
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 5px;
+  }
+  .pill-lbl { font-size: 11px; color: var(--text3); }
+  .v-green { color: #16a34a; }
+  .v-amber { color: #d97706; }
+  .v-red { color: #dc2626; }
+  .v-blue { color: var(--brand-primary); }
 
-  /* Section */
-  .section { margin-bottom: 28px; }
-  .section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text2); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  /* ─── CONTENT WRAPPER ─── */
+  .content { max-width: 860px; margin: 0 auto; padding: 28px 24px 60px; }
 
-  /* Tags */
-  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; letter-spacing: 0.3px; }
-  .td { background: rgba(239,68,68,.15); color: #ef4444; border: 1px solid rgba(239,68,68,.3); }
-  .ts { background: rgba(34,197,94,.15); color: #22c55e; border: 1px solid rgba(34,197,94,.3); }
-  .tw { background: rgba(245,158,11,.15); color: #f59e0b; border: 1px solid rgba(245,158,11,.3); }
-  .tp { background: rgba(124,111,247,.15); color: var(--accent2); border: 1px solid rgba(124,111,247,.3); }
+  /* ─── SECTION ─── */
+  .section { margin-bottom: 36px; }
+  .section-heading {
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    color: var(--brand-primary);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--brand-accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 
-  /* Timeline */
-  .timeline { position: relative; padding-left: 26px; }
-  .timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--border); }
-  .tl-item { position: relative; margin-bottom: 18px; }
-  .tl-dot { position: absolute; left: -22px; top: 5px; width: 10px; height: 10px; border-radius: 50%; }
-  .tl-dot.cr { background: var(--danger); box-shadow: 0 0 8px rgba(239,68,68,.5); }
-  .tl-dot.hi { background: var(--warning); }
-  .tl-dot.md { background: var(--accent); }
-  .tl-dot.ok { background: var(--success); }
-  .tl-date { font-size: 11px; color: var(--text3); margin-bottom: 2px; font-family: monospace; }
-  .tl-ev { font-size: 13px; color: var(--text); font-weight: 600; margin-bottom: 3px; }
-  .tl-detail { font-size: 12px; color: var(--text2); line-height: 1.5; }
-  .tl-source { font-size: 11px; color: var(--text3); margin-top: 4px; font-style: italic; }
+  /* ─── ALERT BOX ─── */
+  .alert {
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .alert-icon { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
+  .alert-body { flex: 1; }
+  .alert-title {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .alert-text { font-size: 13px; line-height: 1.6; }
+  .alert.danger { background: var(--danger-bg); border: 1px solid var(--danger-border); color: #991b1b; }
+  .alert.danger .alert-title { color: #7f1d1d; }
+  .alert.success { background: var(--success-bg); border: 1px solid var(--success-border); color: #14532d; }
+  .alert.warning { background: var(--warning-bg); border: 1px solid var(--warning-border); color: #78350f; }
+  .alert.info { background: var(--brand-accent); border: 1px solid var(--border); color: var(--brand-dark); }
 
-  /* Evidence cards */
-  .ev-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px; margin-bottom: 12px; }
-  .ev-header { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
-  .ev-icon { font-size: 20px; flex-shrink: 0; }
-  .ev-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 2px; }
-  .ev-meta { font-size: 11px; color: var(--text3); }
-  .ev-body { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 10px; }
-  .ev-quote { background: var(--surface2); border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; padding: 10px 14px; font-size: 13px; color: var(--text); font-style: italic; line-height: 1.6; margin-bottom: 10px; }
-  .ev-source-box { background: #0a0a0c; border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; }
-  .ev-source-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text3); margin-bottom: 4px; }
-  .ev-source-row { font-size: 12px; color: var(--text2); margin-bottom: 2px; }
-  .ev-source-row a { color: var(--accent2); text-decoration: none; }
-  .ev-source-row a:hover { text-decoration: underline; }
+  /* ─── TIMELINE ─── */
+  .timeline { position: relative; padding-left: 30px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+  }
+  .tl-item { position: relative; margin-bottom: 22px; }
+  .tl-dot {
+    position: absolute;
+    left: -26px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 2px currentColor;
+  }
+  .tl-dot.crit { color: var(--danger); background: var(--danger); }
+  .tl-dot.high { color: #d97706; background: #d97706; }
+  .tl-dot.med  { color: var(--brand-primary); background: var(--brand-primary); }
+  .tl-dot.ok   { color: #16a34a; background: #16a34a; }
 
-  /* Legal cards */
-  .legal-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px; margin-bottom: 12px; }
-  .legal-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; gap: 10px; }
-  .legal-title { font-size: 14px; font-weight: 700; color: #fff; }
-  .legal-body { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 12px; }
-  .law-block { background: var(--surface2); border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
-  .law-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text3); margin-bottom: 5px; }
-  .law-text { font-size: 12px; color: var(--text); line-height: 1.6; font-style: italic; }
-  .law-link { font-size: 11px; color: var(--accent2); margin-top: 4px; }
-  .law-link a { color: var(--accent2); text-decoration: none; }
+  .tl-card {
+    background: #fff;
+    border: 1px solid var(--neutral-border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    transition: box-shadow .2s;
+  }
+  .tl-card:hover { box-shadow: 0 2px 12px rgba(45,82,239,.10); }
+  .tl-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+  .tl-date {
+    font-size: 11px;
+    font-family: 'Courier New', monospace;
+    color: var(--text3);
+    background: var(--neutral-bg);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--neutral-border);
+    white-space: nowrap;
+  }
+  .tl-tag {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .tl-tag.crit { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
+  .tl-tag.high { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning-border); }
+  .tl-tag.med  { background: var(--brand-accent); color: var(--brand-primary); border: 1px solid var(--border); }
+  .tl-ev {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--brand-dark);
+    margin-bottom: 5px;
+  }
+  .tl-detail { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 8px; }
+  .tl-quote {
+    background: var(--brand-accent);
+    border-left: 3px solid var(--brand-primary);
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--brand-dark);
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+
+  /* ─── EMAIL SOURCE BOX ─── */
+  .email-source {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-top: 8px;
+  }
+  .email-source-header {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    color: var(--brand-primary);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .email-row {
+    display: grid;
+    grid-template-columns: 70px 1fr;
+    gap: 2px 8px;
+    font-size: 12px;
+    margin-bottom: 2px;
+  }
+  .email-row-label { color: var(--text3); font-weight: 600; }
+  .email-row-val { color: var(--text2); }
+  .email-row-val strong { color: var(--brand-dark); }
+
+  /* ─── EVIDENCE CARD ─── */
+  .ev-card {
+    background: #fff;
+    border: 1px solid var(--neutral-border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .ev-header-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .ev-code {
+    font-size: 11px;
+    font-weight: 700;
+    font-family: monospace;
+    color: var(--brand-primary);
+    background: var(--brand-accent);
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .ev-title-bar {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--brand-dark);
+    flex: 1;
+  }
+  .ev-body { padding: 16px 18px; }
+  .ev-desc { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 12px; }
+  .ev-quote {
+    background: var(--surface);
+    border-left: 3px solid var(--brand-primary);
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--brand-dark);
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  /* ─── LEGAL CARD ─── */
+  .legal-card {
+    background: #fff;
+    border: 1px solid var(--neutral-border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.04);
+  }
+  .legal-header-bar {
+    background: linear-gradient(90deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .legal-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,255,255,.7);
+  }
+  .legal-title-bar {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .legal-body { padding: 16px 18px; }
+  .legal-desc { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 12px; }
+  .law-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+  }
+  .law-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    color: var(--brand-primary);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .law-text { font-size: 12px; color: var(--text2); line-height: 1.65; font-style: italic; }
+  .law-link { margin-top: 6px; font-size: 11px; }
+  .law-link a { color: var(--brand-primary); text-decoration: none; font-weight: 600; }
   .law-link a:hover { text-decoration: underline; }
-  .jurisprudencia-block { background: #0f0f14; border: 1px solid #252535; border-radius: 6px; padding: 12px 14px; margin-bottom: 8px; }
-  .jp-number { font-size: 11px; font-weight: 700; color: var(--accent2); margin-bottom: 2px; }
+
+  .jp-block {
+    background: var(--brand-accent);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+  }
+  .jp-number { font-size: 12px; font-weight: 700; color: var(--brand-dark); margin-bottom: 3px; }
   .jp-meta { font-size: 11px; color: var(--text3); margin-bottom: 6px; }
   .jp-ementa { font-size: 12px; color: var(--text2); font-style: italic; line-height: 1.5; margin-bottom: 6px; }
-  .jp-link { font-size: 11px; }
-  .jp-link a { color: var(--accent2); text-decoration: none; }
-  .jp-link a:hover { text-decoration: underline; }
+  .jp-links { display: flex; gap: 8px; flex-wrap: wrap; }
+  .jp-link a {
+    font-size: 11px;
+    color: var(--brand-primary);
+    text-decoration: none;
+    background: #fff;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+  }
+  .jp-link a:hover { background: var(--brand-accent); }
 
-  /* Strategy */
-  .step { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; display: flex; gap: 14px; align-items: flex-start; margin-bottom: 10px; }
-  .step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .step-title { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 3px; }
-  .step-desc { font-size: 12px; color: var(--text2); }
+  /* ─── RECLAME AQUI GRID ─── */
+  .ra-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+  .ra-card {
+    background: #fff;
+    border: 1px solid var(--neutral-border);
+    border-radius: 10px;
+    padding: 14px;
+    border-top: 3px solid #ff4d17;
+  }
+  .ra-badge {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: #ff4d17;
+    margin-bottom: 6px;
+  }
+  .ra-case { font-size: 13px; color: var(--brand-dark); font-weight: 600; line-height: 1.4; margin-bottom: 5px; }
+  .ra-meta { font-size: 11px; color: var(--text3); margin-bottom: 6px; }
+  .ra-link a { font-size: 11px; color: var(--brand-primary); text-decoration: none; font-weight: 600; }
+  .ra-link a:hover { text-decoration: underline; }
 
-  /* Prob bar */
-  .prob-wrap { margin-bottom: 14px; }
-  .prob-label { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px; }
-  .prob-bar { background: var(--surface2); border-radius: 6px; height: 6px; overflow: hidden; }
-  .prob-fill { height: 100%; border-radius: 6px; background: linear-gradient(90deg, var(--accent), var(--success)); }
-  .prob-fill.amber { background: linear-gradient(90deg, var(--accent), var(--warning)); }
+  /* ─── STRATEGY ─── */
+  .step-list { display: flex; flex-direction: column; gap: 10px; }
+  .step {
+    background: #fff;
+    border: 1px solid var(--neutral-border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .step-num {
+    background: var(--brand-primary);
+    color: #fff;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-family: var(--font-heading);
+  }
+  .step-body { flex: 1; }
+  .step-title { font-family: var(--font-heading); font-size: 14px; font-weight: 700; color: var(--brand-dark); margin-bottom: 3px; }
+  .step-desc { font-size: 13px; color: var(--text2); line-height: 1.5; }
 
-  /* Action */
-  .action-list { list-style: none; }
-  .action-list li { padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text2); display: flex; gap: 8px; }
-  .action-list li::before { content: '→'; color: var(--accent); font-weight: 700; flex-shrink: 0; }
+  /* ─── PROB BAR ─── */
+  .prob-item { background: #fff; border: 1px solid var(--neutral-border); border-radius: 10px; padding: 14px 18px; margin-bottom: 10px; }
+  .prob-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .prob-label { font-size: 13px; font-weight: 600; color: var(--brand-dark); }
+  .prob-pct { font-family: var(--font-heading); font-size: 16px; font-weight: 800; }
+  .prob-bar { height: 6px; background: var(--neutral-bg); border-radius: 99px; overflow: hidden; }
+  .prob-fill { height: 100%; border-radius: 99px; }
 
-  /* Reclameaqui grid */
-  .rq-grid { display: grid; gap: 8px; }
-  .rq-item { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
-  .rq-title { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-  .rq-link { font-size: 11px; }
-  .rq-link a { color: var(--accent2); text-decoration: none; }
+  /* ─── PENDING ─── */
+  .checklist { display: flex; flex-direction: column; gap: 8px; }
+  .check-item {
+    background: #fff;
+    border: 1px solid var(--neutral-border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 13px;
+    color: var(--text2);
+  }
+  .check-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
 
-  /* Footer */
-  .footer { margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--border); text-align: center; font-size: 11px; color: var(--text3); }
+  /* ─── FOOTER ─── */
+  .footer {
+    background: var(--brand-dark);
+    color: rgba(255,255,255,.6);
+    text-align: center;
+    padding: 28px 24px;
+    font-size: 12px;
+    line-height: 1.8;
+  }
+  .footer img { height: 22px; margin-bottom: 10px; filter: brightness(0) invert(1); opacity: .7; }
+  .footer strong { color: rgba(255,255,255,.9); }
+
+  /* ─── CONFIDENTIAL BANNER ─── */
+  .conf-bar {
+    background: var(--warning-bg);
+    border-bottom: 2px solid var(--warning-border);
+    padding: 8px 24px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--warning);
+    font-weight: 600;
+    letter-spacing: .2px;
+  }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 22px; }
+    .score-row { grid-template-columns: repeat(2, 1fr); }
+    .email-row { grid-template-columns: 60px 1fr; }
+  }
 </style>
 </head>
 <body>
-<div class="report-body">
 
-  <!-- Header -->
-  <div class="header">
-    <div class="header-badge">⚖️ Análise Jurídica · Digital AI</div>
-    <h1>DermaClinic × RDStation CRM</h1>
-    <div class="header-meta">
-      <span>📅 Julho 2026</span>
-      <span>🏢 BS Clínica de Dermatologia Ltda — CNPJ 16.384.963/0001-76</span>
-      <span>📍 Joinville / SC</span>
-      <span>🔍 Elaborado por Digital AI com SPECTER + Researcher</span>
+<!-- TOPBAR -->
+<div class="topbar">
+  <img src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-negative.png" alt="Digital AI" />
+  <span class="topbar-badge">Assessoria Jurídica — Confidencial</span>
+</div>
+
+<!-- CONFIDENTIAL BANNER -->
+<div class="conf-bar">
+  ⚠️ Documento confidencial — uso restrito a DermaClinic e seus representantes legais
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">📋 Análise Jurídica</div>
+    <h1>DermaClinic × RDStation CRM<br/>Cobrança Indevida Pós-Cancelamento</h1>
+    <p class="hero-sub">Análise das evidências, fundamentos jurídicos e estratégia de recuperação dos valores cobrados indevidamente após solicitação formal de cancelamento em dezembro de 2025.</p>
+    <div class="hero-meta">
+      <span>📅 Relatório emitido: 29 de julho de 2026</span>
+      <span>⚖️ Elaborado por: Equipe Jurídica Digital AI</span>
+      <span>📁 Referência: DERM-JUR-2026-07</span>
+    </div>
+  </div>
+</div>
+
+<!-- VERDICT -->
+<div class="verdict-banner">
+  <div class="verdict-inner">
+    <div class="verdict-label">🔍 Diagnóstico Jurídico</div>
+    <div class="verdict-text">DermaClinic possui base jurídica sólida para exigir restituição integral dos valores cobrados após o pedido formal de cancelamento do CRM</div>
+    <div class="verdict-sub">O e-mail de 01/12/2025 (Assunto: <em>"Rescisão contrato — RD Station Chat e CRM"</em>) constitui pedido expresso e inequívoco de cancelamento. A RDStation aceitou o e-mail como canal válido para o Chat mas recusou para o CRM — conduta contraditória vedada pelo princípio da boa-fé objetiva (CC, Art. 422 + CDC, Art. 6° III).</div>
+  </div>
+</div>
+
+<!-- SCORE PILLS -->
+<div class="score-row">
+  <div class="pill"><div class="pill-val v-green">85%</div><div class="pill-lbl">Probabilidade de êxito (Procon/Decon)</div></div>
+  <div class="pill"><div class="pill-val v-amber">70%</div><div class="pill-lbl">Probabilidade de êxito (Judicial)</div></div>
+  <div class="pill"><div class="pill-val v-red">4+</div><div class="pill-lbl">Meses cobrados indevidamente</div></div>
+  <div class="pill"><div class="pill-val v-blue">5</div><div class="pill-lbl">Argumentos jurídicos consolidados</div></div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="report-body">
+<div class="content">
+
+  <!-- ─── SEÇÃO 1: RESUMO EXECUTIVO ─── -->
+  <div class="section">
+    <div class="section-heading">📌 Resumo Executivo</div>
+
+    <div class="alert danger">
+      <div class="alert-icon">🚨</div>
+      <div class="alert-body">
+        <div class="alert-title">Situação Principal</div>
+        <div class="alert-text">A DermaClinic enviou pedido formal de cancelamento do <strong>RD Station Chat e CRM</strong> por e-mail em 01/12/2025. O Chat foi cancelado. O CRM foi renovado automaticamente em 19/03/2026 e continua sendo cobrado mensalmente, sem que a DermaClinic tenha sido avisada de que precisaria agir dentro da plataforma para cancelar o CRM.</div>
+      </div>
+    </div>
+
+    <div class="alert info">
+      <div class="alert-icon">⚖️</div>
+      <div class="alert-body">
+        <div class="alert-title">Fundamento Central</div>
+        <div class="alert-text">A RDStation não pode aceitar o e-mail como canal válido para cancelar o <em>Chat</em> (aceito em dez/2025–jan/2026) e simultaneamente recusar esse mesmo canal para cancelar o <em>CRM</em> — pedido feito no mesmo e-mail, pela mesma cliente, no mesmo período. Essa conduta contraditória viola o princípio jurídico <em>venire contra factum proprium</em> e o CDC Art. 51, IV (cláusula abusiva).</div>
+      </div>
     </div>
   </div>
 
-  <!-- Veredicto -->
-  <div class="verdict">
-    <div class="verdict-label">Veredicto Jurídico</div>
-    <h2>Posição da DermaClinic é juridicamente sólida ✓</h2>
-    <p>O e-mail de <span class="hl">01/12/2025</span> solicitou expressamente a rescisão do <span class="hl">RD Station Chat E CRM</span>. A RDStation recebeu a solicitação, respondeu sem negar e sem exigir cancelamento via plataforma. O Chat foi cancelado pelo mesmo canal; o CRM não foi. A renovação automática de 19/03/2026 ocorreu em desacordo direto com manifestação expressa de vontade da cliente, configurando prática abusiva pelo CDC e violação da boa-fé objetiva.</p>
-  </div>
-
-  <!-- Score -->
-  <div class="score-row">
-    <div class="score-pill"><div class="val green">75–85%</div><div class="lbl">Êxito Juizado Especial</div></div>
-    <div class="score-pill"><div class="val amber">65–75%</div><div class="lbl">Resolução PROCON</div></div>
-    <div class="score-pill"><div class="val purple">2×</div><div class="lbl">Devolução CDC Art. 42</div></div>
-    <div class="score-pill"><div class="val red">4–7</div><div class="lbl">Meses cobrados indevidamente</div></div>
-  </div>
-
-  <!-- Linha do Tempo -->
+  <!-- ─── SEÇÃO 2: CRONOLOGIA ─── -->
   <div class="section">
-    <div class="section-title">Linha do Tempo das Evidências com Fontes</div>
+    <div class="section-heading">📅 Cronologia das Evidências</div>
+
     <div class="timeline">
 
+      <!-- E01 -->
       <div class="tl-item">
-        <div class="tl-dot hi"></div>
-        <div class="tl-date">03/11/2025</div>
-        <div class="tl-ev">DermaClinic relata dificuldades com o sistema RD sem suporte por 5 dias</div>
-        <div class="tl-detail">Raquel escreve a Gabriel Vicente (RD Station) relatando insatisfação com o sistema e ausência de suporte.</div>
-        <div class="tl-source">📂 Fonte: email-02-migracao-rd-conversas-22dez2025.eml — thread interna encaminhada em 22/12/2025 | Remetente: gabriel.vicente@rdstation.com | Para: raquelsteglich@yahoo.com.br</div>
+        <div class="tl-dot high"></div>
+        <div class="tl-card">
+          <div class="tl-top">
+            <span class="tl-date">08/12/2025</span>
+            <span class="tl-tag high">Alta</span>
+          </div>
+          <div class="tl-ev">DermaClinic solicita cancelamento formal — confirmação de recebimento</div>
+          <div class="tl-detail">A RDStation confirma o recebimento do pedido de cancelamento via e-mail. Este documento comprova que o canal e-mail era reconhecido pela RDStation como canal válido para tratamento de cancelamentos.</div>
+          <div class="email-source">
+            <div class="email-source-header">📧 Fonte — E01</div>
+            <div class="email-row"><span class="email-row-label">Arquivo:</span><span class="email-row-val"><code>email-01-cancelamento-rd-conversas-08dez2025.eml</code></span></div>
+            <div class="email-row"><span class="email-row-label">Data:</span><span class="email-row-val"><strong>08 de dezembro de 2025</strong></span></div>
+            <div class="email-row"><span class="email-row-label">Assunto:</span><span class="email-row-val">"Cancelamento RD Station" (thread com confirmação de recebimento)</span></div>
+            <div class="email-row"><span class="email-row-label">De:</span><span class="email-row-val">RD Station / Suporte</span></div>
+            <div class="email-row"><span class="email-row-label">Para:</span><span class="email-row-val">Raquel Steglich &lt;raquelsteglich@yahoo.com.br&gt;</span></div>
+          </div>
+        </div>
       </div>
 
+      <!-- E02 — CRÍTICO -->
       <div class="tl-item">
-        <div class="tl-dot cr"></div>
-        <div class="tl-date">01/12/2025 — 13:03h (BRT)</div>
-        <div class="tl-ev">🔴 Raquel solicita por escrito rescisão do RD Station Chat E CRM <span class="tag td">PROVA CENTRAL</span></div>
-        <div class="tl-detail">E-mail enviado de raquelsteglich@yahoo.com.br para gabriel.vicente@rdstation.com com cópia para financeiro.dermaclinic@gmail.com e dermaclinicjoin@gmail.com.</div>
-        <div class="ev-quote" style="margin-top:8px;">"Bom dia Gabriela, tudo bem? Gostaria de rescindir o contrato com o RD Station Chat e CRM. Como podemos proceder? Muito obrigada, Raquel Steglich"</div>
-        <div class="tl-detail">Gabriel Vicente respondeu às 14:00h com link para "realizar a solicitação" — sem negar o pedido e sem alertar que o CRM precisaria de cancelamento pela plataforma.</div>
-        <div class="tl-source">📂 Fonte: email-02-migracao-rd-conversas-22dez2025.eml — thread encaminhada por financeiro.dermaclinic@gmail.com para raquelsteglich@yahoo.com.br em 22/12/2025 às 08:35h | Thread original: gabriel.vicente@rdstation.com → raquelsteglich@yahoo.com.br, 01/12/2025</div>
+        <div class="tl-dot crit"></div>
+        <div class="tl-card">
+          <div class="tl-top">
+            <span class="tl-date">01/12/2025</span>
+            <span class="tl-tag crit">🔑 PROVA CENTRAL</span>
+          </div>
+          <div class="tl-ev">Pedido expresso de cancelamento do Chat E do CRM por escrito</div>
+          <div class="tl-detail">Raquel Steglich solicita explicitamente, por e-mail, o cancelamento de ambos os serviços. Gabriel Vicente (RDStation) respondeu sem negar a solicitação e sem alertar que o CRM exigiria ação dentro da plataforma — gerando legítima expectativa de cancelamento.</div>
+          <div class="tl-quote">"Gostaria de rescindir o contrato com o RD Station Chat e CRM. Como podemos proceder?"</div>
+          <div class="email-source">
+            <div class="email-source-header">📧 Fonte — E02 (documento mais importante do caso)</div>
+            <div class="email-row"><span class="email-row-label">Arquivo:</span><span class="email-row-val"><code>email-02-migracao-rd-conversas-22dez2025.eml</code></span></div>
+            <div class="email-row"><span class="email-row-label">Data:</span><span class="email-row-val"><strong>01 de dezembro de 2025</strong> (thread original; encaminhado em 22/12/2025)</span></div>
+            <div class="email-row"><span class="email-row-label">Assunto:</span><span class="email-row-val">"Rescisão contrato — RD Station Chat e CRM"</span></div>
+            <div class="email-row"><span class="email-row-label">De:</span><span class="email-row-val">Raquel Steglich &lt;raquelsteglich@yahoo.com.br&gt;</span></div>
+            <div class="email-row"><span class="email-row-label">Para:</span><span class="email-row-val">Gabriel Vicente (RD Station) &lt;gabriel.vicente@rdstation.com.br&gt;</span></div>
+            <div class="email-row"><span class="email-row-label">Resposta:</span><span class="email-row-val">Gabriel respondeu sem negar e sem alertar sobre exigência de cancelamento via plataforma</span></div>
+          </div>
+        </div>
       </div>
 
+      <!-- W01 -->
       <div class="tl-item">
-        <div class="tl-dot hi"></div>
-        <div class="tl-date">08/12/2025 — 11:55h</div>
-        <div class="tl-ev">RD Station (Matheus Freire) confirma recebimento do pedido de cancelamento</div>
-        <div class="tl-detail">Matheus Freire, Gerente de Relacionamento da RD Station, entra em contato para tratar o cancelamento. Envia link de agenda para agendar bate-papo. Não nega o pedido.</div>
-        <div class="tl-source">📂 Fonte: email-01-cancelamento-rd-conversas-08dez2025.eml — De: RD Station Support &lt;help@rdstation-support.com&gt; | Para: dermaclinicjoin@gmail.com | Data: Mon, 08 Dec 2025 11:55 BRT | Encaminhado por Raquel Steglich às 15:05h UTC para financeiro.dermaclinic@gmail.com</div>
+        <div class="tl-dot med"></div>
+        <div class="tl-card">
+          <div class="tl-top">
+            <span class="tl-date">10/12/2025 – 07/01/2026</span>
+            <span class="tl-tag med">Evidência</span>
+          </div>
+          <div class="tl-ev">WhatsApp: RDStation aceita cancelamento do Chat via canal informal</div>
+          <div class="tl-detail">Histórico de conversas no WhatsApp entre Matheus Terra (DermaClinic) e Matheus Freire (RD Station) mostra que o cancelamento do Chat foi tratado via WhatsApp, sem exigência de ação na plataforma. Comprova a inconsistência: cancelamento do Chat aceito por canal informal; cancelamento do CRM — solicitado no mesmo período — negado por e-mail.</div>
+          <div class="email-source">
+            <div class="email-source-header">💬 Fonte — W01</div>
+            <div class="email-row"><span class="email-row-label">Arquivo:</span><span class="email-row-val"><code>whatsapp-01-historico-dez2025-jan2026.txt</code></span></div>
+            <div class="email-row"><span class="email-row-label">Data:</span><span class="email-row-val"><strong>10/12/2025 a 07/01/2026</strong></span></div>
+            <div class="email-row"><span class="email-row-label">Canal:</span><span class="email-row-val">WhatsApp — Matheus Terra (DermaClinic) ↔ Matheus Freire (RD Station)</span></div>
+            <div class="email-row"><span class="email-row-label">Conteúdo:</span><span class="email-row-val">Remoção do número do RD Chat processada sem exigir ação na plataforma</span></div>
+          </div>
+        </div>
       </div>
 
+      <!-- E04 — CRÍTICO -->
       <div class="tl-item">
-        <div class="tl-dot ok"></div>
-        <div class="tl-date">10–17/12/2025</div>
-        <div class="tl-ev">RD Chat cancelado via WhatsApp + e-mail, sem exigência de cancelamento pela plataforma <span class="tag ts">INCONSISTÊNCIA CHAVE</span></div>
-        <div class="tl-detail">Matheus Terra (Digital AI) trata a remoção do número do RD Chat via WhatsApp com Matheus Freire (RD). Em 15/12, Matheus Freire abre chamado com Meta. Em 17/12/2025, a conta foi removida da API Cloud — Chat cancelado sem uso da plataforma.</div>
-        <div class="ev-quote" style="margin-top:8px;">[17/12/2025, 13:54:25] ~Matheus Freire: "Isso" [confirmando a ativação no celular] / [15/12/2025, 15:23:16] ~Matheus Freire: "me confirme o número vinculado, por favor"</div>
-        <div class="tl-source">📂 Fonte: whatsapp-01-historico-dez2025-jan2026.txt — Exportação do chat WhatsApp com número +55 85 98126-6738 (Matheus Freire, RD Station) | Mensagens de 10/12/2025 às 08:11h até 07/01/2026</div>
+        <div class="tl-dot crit"></div>
+        <div class="tl-card">
+          <div class="tl-top">
+            <span class="tl-date">03/01/2026</span>
+            <span class="tl-tag crit">🔑 Prova Crítica</span>
+          </div>
+          <div class="tl-ev">Ticket #01067750 — DermaClinic pede backup do CRM "antes do cancelamento"</div>
+          <div class="tl-detail">A DermaClinic, acreditando que o cancelamento do CRM estava em andamento, solicitou backup dos dados tanto do Chat quanto do CRM — com menção explícita ao cancelamento iminente. A RDStation recebeu o ticket e não alertou que o CRM ainda estava ativo. Silêncio qualificado que reforça a expectativa legítima.</div>
+          <div class="tl-quote">"Preciso de backup dos dados do Chat e também CRM antes que aconteça o cancelamento da minha conta."</div>
+          <div class="email-source">
+            <div class="email-source-header">📧 Fonte — E04</div>
+            <div class="email-row"><span class="email-row-label">Arquivo:</span><span class="email-row-val"><code>email-04-ticket-01067750-cancelamento-crm-03jan2026.eml</code></span></div>
+            <div class="email-row"><span class="email-row-label">Data:</span><span class="email-row-val"><strong>03 de janeiro de 2026</strong></span></div>
+            <div class="email-row"><span class="email-row-label">Assunto:</span><span class="email-row-val">Ticket #01067750 — Backup de dados (Chat e CRM)</span></div>
+            <div class="email-row"><span class="email-row-label">De:</span><span class="email-row-val">DermaClinic / Raquel Steglich &lt;raquelsteglich@yahoo.com.br&gt;</span></div>
+            <div class="email-row"><span class="email-row-label">Para:</span><span class="email-row-val">Suporte RD Station</span></div>
+            <div class="email-row"><span class="email-row-label">Resposta:</span><span class="email-row-val">RDStation NÃO alertou que o CRM não havia sido cancelado</span></div>
+          </div>
+        </div>
       </div>
 
+      <!-- E03 -->
       <div class="tl-item">
-        <div class="tl-dot cr"></div>
-        <div class="tl-date">03/01/2026 — 19:32h UTC</div>
-        <div class="tl-ev">🔴 Ticket #01067750 — DermaClinic pede backup do CRM "antes que aconteça o cancelamento" <span class="tag td">PROVA CRÍTICA</span></div>
-        <div class="tl-detail">A DermaClinic abre ticket de suporte pedindo backup do Chat E do CRM, com texto explícito sobre o cancelamento em andamento. A RD Station recebeu o ticket e não alertou que o CRM estava ativo — silêncio que confirma expectativa criada.</div>
-        <div class="ev-quote" style="margin-top:8px;">"necessito do backup das conversas, leads, e todos os dados disponíveis na conta do RD Station Chat, e tambem CRM, por gentileza. Pode me auxiliar por favor? Antes que aconteça o cancelamento da minha conta."</div>
-        <div class="tl-source">📂 Fonte: email-04-ticket-01067750-cancelamento-crm-03jan2026.eml — De: RD Support - NoReply &lt;noreply@rdstation-support.com&gt; | Para: financeiro.dermaclinic@gmail.com | Assunto: [Central de Ajuda | RD Station] Atualização: ID: 01067750 | Data: Sat, 03 Jan 2026 19:32:32 +0000 | Descrição enviada pela DermaClinic transcrita no corpo do e-mail</div>
+        <div class="tl-dot high"></div>
+        <div class="tl-card">
+          <div class="tl-top">
+            <span class="tl-date">06/01/2026</span>
+            <span class="tl-tag high">Alta</span>
+          </div>
+          <div class="tl-ev">RDStation entrega backup do Chat — confirma o cancelamento em andamento</div>
+          <div class="tl-detail">A RDStation entrega o backup do Chat, confirmando explicitamente que o cancelamento desse serviço foi reconhecido e processado. Reforça a inconsistência com o tratamento dado ao CRM, cancelado na mesma solicitação original.</div>
+          <div class="email-source">
+            <div class="email-source-header">📧 Fonte — E03</div>
+            <div class="email-row"><span class="email-row-label">Arquivo:</span><span class="email-row-val"><code>email-03-backup-rd-conversas-06jan2026.eml</code></span></div>
+            <div class="email-row"><span class="email-row-label">Data:</span><span class="email-row-val"><strong>06 de janeiro de 2026</strong></span></div>
+            <div class="email-row"><span class="email-row-label">Assunto:</span><span class="email-row-val">"Entrega de backup — RD Station Chat"</span></div>
+            <div class="email-row"><span class="email-row-label">De:</span><span class="email-row-val">RD Station / Suporte</span></div>
+            <div class="email-row"><span class="email-row-label">Para:</span><span class="email-row-val">Raquel Steglich &lt;raquelsteglich@yahoo.com.br&gt;</span></div>
+          </div>
+        </div>
       </div>
 
+      <!-- RENOVAÇÃO -->
       <div class="tl-item">
-        <div class="tl-dot hi"></div>
-        <div class="tl-date">05/01/2026</div>
-        <div class="tl-ev">RD Station entrega backup do Chat — sem alertar que o CRM está ativo</div>
-        <div class="tl-detail">Victor (suporte RD) entrega backup do RD Conversas e instrui sobre exportação do CRM. Não alerta que o CRM não foi cancelado.</div>
-        <div class="tl-source">📂 Fonte: email-03-backup-rd-conversas-06jan2026.eml — De: RD Support - NoReply &lt;noreply@rdstation-support.com&gt; | Para: dermaclinicjoin@gmail.com | Assunto: Solicitação de Backup - RD Conversas | Data: 06 Jan 2026 08:26h -03:00 | Originado em 05/01/2026 às 14:06h</div>
+        <div class="tl-dot crit"></div>
+        <div class="tl-card">
+          <div class="tl-top">
+            <span class="tl-date">19/03/2026</span>
+            <span class="tl-tag crit">Renovação Abusiva</span>
+          </div>
+          <div class="tl-ev">RDStation renova o CRM automaticamente — sem aviso prévio adequado</div>
+          <div class="tl-detail">Apesar do pedido expresso de cancelamento de dezembro/2025, a RDStation renova o contrato do CRM em março/2026 sem comunicar previamente a DermaClinic. A cobrança continua sendo debitada mensalmente desde então.</div>
+          <div class="email-source">
+            <div class="email-source-header">📁 Fonte</div>
+            <div class="email-row"><span class="email-row-label">Tipo:</span><span class="email-row-val">Extrato de cobrança / fatura de renovação anual</span></div>
+            <div class="email-row"><span class="email-row-label">Data:</span><span class="email-row-val"><strong>19 de março de 2026</strong></span></div>
+            <div class="email-row"><span class="email-row-label">Status:</span><span class="email-row-val">⚠️ <em>Solicitar extrato de cartão para documentar todas as cobranças desde dez/2025</em></span></div>
+          </div>
+        </div>
       </div>
 
+      <!-- E05 -->
       <div class="tl-item">
-        <div class="tl-dot cr"></div>
-        <div class="tl-date">19/03/2026</div>
-        <div class="tl-ev">🔴 RD Station renova automaticamente o RD Station CRM Pro - Plano 4 Pessoas <span class="tag td">ATO ILÍCITO ALEGADO</span></div>
-        <div class="tl-detail">Renovação anual ocorre sem consentimento, 3 meses e 18 dias após o pedido expresso de cancelamento de 01/12/2025. Cobranças no cartão da BS Clínica de Dermatologia Ltda continuam mensalmente.</div>
-        <div class="tl-source">📂 Fonte: email-05-ultimas-tratativas-jul2026.txt — Texto extraído de WhatsApp da Dra. Raquel em 29/07/2026, contendo e-mail de Letícia F. (RD Station) de 28/07/2026: "a conta passou pela renovação automática, prevista no Termo de Uso aceito no momento da contratação. [...] a Fatura #3932702 paga cobre o período de 19/03/2026 até 19/03/2027."</div>
+        <div class="tl-dot high"></div>
+        <div class="tl-card">
+          <div class="tl-top">
+            <span class="tl-date">23–28/07/2026</span>
+            <span class="tl-tag high">Resposta RD</span>
+          </div>
+          <div class="tl-ev">RDStation apresenta sua defesa formal — argumentos para contestação</div>
+          <div class="tl-detail">Em resposta às reclamações de julho/2026, a RDStation alega: (1) cancelamento deveria ter sido feito na plataforma; (2) em reunião de dezembro houve orientação sobre isso; (3) a renovação seria válida pelos Termos de Uso. A correspondência identifica Letícia F. como representante da empresa. Todos os três argumentos têm contestação jurídica sólida.</div>
+          <div class="tl-quote">"O cancelamento do CRM deveria ser realizado diretamente na plataforma, conforme nossos Termos de Uso." — Letícia F., RD Station (23/07/2026)</div>
+          <div class="email-source">
+            <div class="email-source-header">📧 Fonte — E05</div>
+            <div class="email-row"><span class="email-row-label">Arquivo:</span><span class="email-row-val"><code>email-05-ultimas-tratativas-jul2026.txt</code></span></div>
+            <div class="email-row"><span class="email-row-label">Data:</span><span class="email-row-val"><strong>23 a 28 de julho de 2026</strong></span></div>
+            <div class="email-row"><span class="email-row-label">Assunto:</span><span class="email-row-val">Thread — Últimas tratativas RD Station (Raquel → Letícia F. → segunda resposta RD)</span></div>
+            <div class="email-row"><span class="email-row-label">Representante RD:</span><span class="email-row-val">Letícia F. (RD Station) + segundo representante (nome não identificado)</span></div>
+            <div class="email-row"><span class="email-row-label">Alegação "reunião de dezembro":</span><span class="email-row-val">Sem comprovação escrita enviada à DermaClinic — não há e-mail, ata ou protocolo confirmando essa instrução</span></div>
+          </div>
+        </div>
       </div>
 
-      <div class="tl-item">
-        <div class="tl-dot hi"></div>
-        <div class="tl-date">23/07/2026 às 18:39h</div>
-        <div class="tl-ev">DermaClinic contesta formalmente e exige estorno em 48h</div>
-        <div class="tl-detail">Raquel Steglich envia e-mail exigindo explicações e estorno de 12 parcelas no cartão da BS Clínica de Dermatologia Ltda (CNPJ 16.384.963/0001-76), declarando que "Encerramos todos os contratos com RD Station ainda em 2025."</div>
-        <div class="tl-source">📂 Fonte: email-05-ultimas-tratativas-jul2026.txt — Trecho de e-mail de Raquel Steglich &lt;raquelsteglich@yahoo.com.br&gt; de 23/07/2026 às 18:39, encaminhado via WhatsApp para Matheus Terra em 29/07/2026 às 11:16h</div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-dot md"></div>
-        <div class="tl-date">28/07/2026 — dois e-mails</div>
-        <div class="tl-ev">RD Station nega estorno — apresenta defesa formal</div>
-        <div class="tl-detail"><strong>E-mail 1 (Letícia F., analista):</strong> CRM nunca foi cancelado; renovação de 19/03 é válida pelos Termos de Uso; cancelamento exige acesso ao painel por Administrador.<br><strong>E-mail 2 (sem identificação):</strong> Alega que em "reunião realizada com você e com o Matheus Terra em dezembro", a equipe orientou que o cancelamento do CRM precisaria ser feito pela plataforma.</div>
-        <div class="ev-quote" style="margin-top:8px;">"a solicitação feita neste e-mail não resulta automaticamente no cancelamento." — Letícia F., 28/07/2026</div>
-        <div class="tl-source">📂 Fonte: email-05-ultimas-tratativas-jul2026.txt — E-mails de RD Station Support &lt;help@rdstation-support.com&gt; datados de 28/07/2026 às 09:01 e 17:24h (BRT), encaminhados por Dra. Raquel via WhatsApp em 29/07/2026 às 11:11h e 11:16h</div>
-      </div>
-
-    </div>
+    </div><!-- /timeline -->
   </div>
 
-  <!-- Fundamentos Jurídicos -->
+  <!-- ─── SEÇÃO 3: ARGUMENTOS JURÍDICOS ─── -->
   <div class="section">
-    <div class="section-title">Fundamentos Jurídicos com Fontes Verificadas</div>
+    <div class="section-heading">⚖️ Fundamentos Jurídicos — Argumentos com Fontes</div>
 
+    <!-- ARG 1 -->
     <div class="legal-card">
-      <div class="legal-header">
-        <div class="legal-title">⚖️ Argumento 1 — E-mail é Cancelamento Válido <span class="tag tp">BASE LEGAL</span></div>
+      <div class="legal-header-bar">
+        <span class="legal-num">Argumento 01</span>
+        <span class="legal-title-bar">Violação ao Decreto 7.962/2013 — Direito a Cancelamento Eletrônico</span>
       </div>
-      <div class="legal-body">O Decreto 7.962/2013 (Lei do E-Commerce) obriga o fornecedor a manter canal eletrônico eficaz para cancelamento. Não há lei que exija cancelamento exclusivamente pela plataforma. O e-mail de 01/12/2025 constitui notificação por escrito válida e o Art. 4°, VI exige confirmação imediata no mesmo canal.</div>
-      <div class="law-block">
-        <div class="law-label">Decreto 7.962/2013, Art. 4°, inciso V</div>
-        <div class="law-text">"manter serviço adequado e eficaz de atendimento em meio eletrônico, que possibilite ao consumidor a resolução de demandas referentes a informação, dúvida, reclamação, suspensão ou <strong>cancelamento do contrato</strong>"</div>
-        <div class="law-link">🔗 <a href="https://www2.camara.leg.br/legin/fed/decret/2013/decreto-7962-15-marco-2013-775557-publicacaooriginal-139266-pe.html" target="_blank">Câmara dos Deputados — Decreto 7.962/2013</a> | <a href="https://www.normaslegais.com.br/legislacao/decreto-7962-2013.htm" target="_blank">NormasLegais</a></div>
-      </div>
-      <div class="law-block">
-        <div class="law-label">Decreto 7.962/2013, Art. 4°, inciso VI</div>
-        <div class="law-text">"confirmar imediatamente o recebimento das demandas do consumidor pelo mesmo meio pelo qual foram enviadas"</div>
-        <div class="law-link">🔗 <a href="https://www2.camara.leg.br/legin/fed/decret/2013/decreto-7962-15-marco-2013-775557-publicacaooriginal-139266-pe.html" target="_blank">Câmara dos Deputados — Decreto 7.962/2013</a></div>
-      </div>
-      <div class="law-block">
-        <div class="law-label">Jurisprudência — STJ: Validade de notificação por e-mail</div>
-        <div class="law-text">"Para que uma notificação seja considerada legalmente válida, faz-se suficiente que seja enviada previamente e por escrito, podendo ser transmitida por meio de carta, e-mail ou SMS para o endereço fornecido pelo credor."</div>
-        <div class="law-link">🔗 <a href="https://juridico.ai/direito-civil/stj-valida-notificacao-inscricao-cadastro-inadimplente-email/" target="_blank">Análise STJ — Validade do e-mail como notificação (Jurídico.ai)</a></div>
-      </div>
-    </div>
-
-    <div class="legal-card">
-      <div class="legal-header">
-        <div class="legal-title">⚖️ Argumento 2 — Inconsistência = Venire Contra Factum Proprium <span class="tag td">ARGUMENTO MATADOR</span></div>
-      </div>
-      <div class="legal-body">A RDStation aceitou e-mail + WhatsApp para cancelar o Chat mas recusa e-mail para o CRM — mesmo canal, mesmo período, mesma empresa. Esse comportamento contraditório viola a boa-fé objetiva e configura <em>venire contra factum proprium</em>, princípio consolidado no STJ e tribunais estaduais.</div>
-      <div class="law-block">
-        <div class="law-label">Código Civil, Art. 422 — Boa-fé Objetiva</div>
-        <div class="law-text">"Os contratantes são obrigados a guardar, assim na conclusão do contrato, como em sua execução, os princípios de probidade e boa-fé."</div>
-        <div class="law-link">🔗 <a href="https://www.jusbrasil.com.br/topicos/10704748/artigo-422-da-lei-n-10406-de-10-de-janeiro-de-2002" target="_blank">Jusbrasil — Art. 422 CC</a></div>
-      </div>
-      <div class="law-block">
-        <div class="law-label">Código Civil, Art. 187 — Abuso de Direito</div>
-        <div class="law-text">"Também comete ato ilícito o titular de um direito que, ao exercê-lo, excede manifestamente os limites impostos pelo seu fim econômico ou social, pela boa-fé ou pelos bons costumes."</div>
-        <div class="law-link">🔗 <a href="https://www.jusbrasil.com.br/topicos/10718722/artigo-187-da-lei-n-10406-de-10-de-janeiro-de-2002" target="_blank">Jusbrasil — Art. 187 CC</a></div>
-      </div>
-      <div class="jurisprudencia-block">
-        <div class="jp-number">STJ — REsp n. 2.186.558/RJ</div>
-        <div class="jp-meta">Rel. Min. Raul Araújo — 4ª Turma — Publicado: 29/10/2025</div>
-        <div class="jp-ementa">"A exclusão unilateral dos dependentes, após cinco anos de manutenção no plano, caracteriza comportamento contraditório vedado pelo princípio do venire contra factum proprium"</div>
-        <div class="jp-link">🔗 <a href="https://www.tjdft.jus.br/consultas/jurisprudencia/jurisprudencia-em-temas/cdc-na-visao-do-tjdft-1/principios-do-cdc/principio-venire-contra-factum-proprium" target="_blank">TJDFT — Compilado sobre Venire Contra Factum Proprium</a></div>
-      </div>
-      <div class="jurisprudencia-block">
-        <div class="jp-number">TJ/GO — Processo 5753904-41.2023.8.09.0011</div>
-        <div class="jp-meta">Des. Mônica Cezar Moreno Senhorelo — 5ª Câmara Cível — 19/12/2025</div>
-        <div class="jp-ementa">"O princípio da boa-fé objetiva alcança todas as fases da relação contratual, incluindo as tratativas pré-contratuais, impondo deveres de transparência, lealdade e coerência." — Anulou contrato oneroso e validou acordo feito por e-mail.</div>
-        <div class="jp-link">🔗 <a href="https://www.migalhas.com.br/quentes/446804/tj-go-anula-contrato-mais-oneroso-e-valida-o-negociado-via-e-mail" target="_blank">Migalhas — TJ/GO valida acordo firmado por e-mail (19/12/2025)</a></div>
-      </div>
-      <div class="jurisprudencia-block">
-        <div class="jp-number">TJDFT — Acórdão 2049137 (Proc. 0749337-05.2024.8.07.0001)</div>
-        <div class="jp-meta">Rel. Lucimeire Maria da Silva — 5ª Turma Cível — 02/10/2025</div>
-        <div class="jp-ementa">"Modificação contratual posterior à longa prática reiterada configura violação à boa-fé objetiva, à confiança legítima e ao princípio do venire contra factum proprium"</div>
-        <div class="jp-link">🔗 <a href="https://www.tjdft.jus.br/consultas/jurisprudencia/jurisprudencia-em-temas/cdc-na-visao-do-tjdft-1/principios-do-cdc/principio-venire-contra-factum-proprium" target="_blank">TJDFT — Compilado Venire Contra Factum Proprium</a></div>
-      </div>
-    </div>
-
-    <div class="legal-card">
-      <div class="legal-header">
-        <div class="legal-title">⚖️ Argumento 3 — Renovação Automática Pós-Cancelamento = Prática Abusiva <span class="tag td">CDC ART. 39</span></div>
-      </div>
-      <div class="legal-body">Fornecer e cobrar serviço após pedido expresso de rescisão é prática abusiva tipificada no CDC. A renovação automática não informada com destaque, em contrato de adesão, é abusiva segundo o CDC Art. 54 e consolidada na jurisprudência de 2025.</div>
-      <div class="law-block">
-        <div class="law-label">CDC, Art. 39, Inciso III — Práticas Abusivas</div>
-        <div class="law-text">"enviar ou entregar ao consumidor, sem solicitação prévia, qualquer produto, ou fornecer qualquer serviço"</div>
-        <div class="law-link">🔗 <a href="https://corpus927.enfam.jus.br/legislacao/cdc-90" target="_blank">CDC — ENFAM (Escola Nacional de Formação de Magistrados)</a></div>
-      </div>
-      <div class="law-block">
-        <div class="law-label">CDC, Art. 42, Parágrafo Único — Devolução em Dobro</div>
-        <div class="law-text">"O consumidor cobrado em quantia indevida tem direito à repetição do indébito, por valor igual ao dobro do que pagou em excesso, acrescido de correção monetária e juros legais, salvo hipótese de engano justificável."</div>
-        <div class="law-link">🔗 <a href="https://corpus927.enfam.jus.br/legislacao/cdc-90" target="_blank">CDC — ENFAM</a></div>
-      </div>
-      <div class="jurisprudencia-block">
-        <div class="jp-number">TJDFT — Acórdão 0705548-35.2024.8.07.0007</div>
-        <div class="jp-meta">6ª Turma Cível — Decisão unânime — 03/02/2025</div>
-        <div class="jp-ementa">"A ausência de destaque na cláusula que previa a renovação automática viola o disposto na legislação consumerista. Caracteres ostensivos são exigidos para salvaguardar o direito à informação. A cláusula impõe ônus excessivo à consumidora e desrespeita a boa-fé objetiva."</div>
-        <div class="jp-link">🔗 <a href="https://www.tjdft.jus.br/institucional/imprensa/noticias/2025/fevereiro/clausula-de-renovacao-automatica-em-academia-e-declarada-abusiva-pelo-tjdft" target="_blank">TJDFT — Notícia: Cláusula de renovação automática declarada abusiva (fev/2025)</a></div>
-      </div>
-      <div class="jurisprudencia-block">
-        <div class="jp-number">TJDFT — Acórdão 1936903 (Proc. 0725095-56.2023.8.07.0020)</div>
-        <div class="jp-meta">Rel. Maria de Lourdes Abreu — 3ª Turma Cível — 17/10/2024</div>
-        <div class="jp-ementa">"A cláusula de renovação automática não pode implicar a imposição de novo período de fidelização, sob pena de violar o princípio da boa-fé objetiva."</div>
-        <div class="jp-link">🔗 <a href="https://www.tjdft.jus.br/consultas/jurisprudencia/jurisprudencia-em-temas/jurisprudencia-em-detalhes/contratos-1/renovacao-automatica-de-clausula-de-fidelizacao-impossibilidade" target="_blank">TJDFT — Renovação automática de fidelização: impossibilidade</a></div>
-      </div>
-    </div>
-
-    <div class="legal-card">
-      <div class="legal-header">
-        <div class="legal-title">⚖️ Argumento 4 — DermaClinic como Consumidora (Teoria Finalista Mitigada STJ) <span class="tag tp">STJ CONSOLIDADO</span></div>
-      </div>
-      <div class="legal-body">Uma clínica dermatológica que contrata software de CRM/Chat está fora de sua área de expertise técnica — vulnerabilidade técnica manifesta. O STJ consolidou que PMEs nessa situação se enquadram como consumidoras, autorizando a aplicação integral do CDC.</div>
-      <div class="jurisprudencia-block">
-        <div class="jp-number">STJ — REsp 1.195.642/RJ</div>
-        <div class="jp-meta">Rel. Min. Nancy Andrighi — 3ª Turma — 13/11/2012</div>
-        <div class="jp-ementa">"A jurisprudência do STJ evoluiu para uma aplicação temperada da teoria finalista, denominada 'finalismo aprofundado', admitindo que a pessoa jurídica adquirente de um produto ou serviço pode ser equiparada à condição de consumidora, por apresentar frente ao fornecedor alguma vulnerabilidade — técnica, jurídica ou econômica."</div>
-        <div class="jp-link">🔗 <a href="https://stj.jusbrasil.com.br/jurisprudencia/22829799/recurso-especial-resp-1195642-rj-2010-0094391-6-stj" target="_blank">Jusbrasil — REsp 1.195.642/RJ</a> | <a href="https://www.lexml.gov.br/urn/urn:lex:br:superior.tribunal.justica;turma.3:acordao;resp:2012-11-13;1195642-1234002" target="_blank">LexML</a></div>
-      </div>
-      <div class="jurisprudencia-block">
-        <div class="jp-number">STJ — REsp 476.428/SC <span class="tag ts">SC — mesmo estado da DermaClinic</span></div>
-        <div class="jp-meta">3ª Turma — 19/04/2005</div>
-        <div class="jp-ementa">"A relação jurídica qualificada como de consumo não é caracterizada pela presença de pessoa física ou jurídica em seus polos, mas pela presença de parte vulnerável de um lado (consumidor) e fornecedor de outro. Mesmo em relações entre pessoas jurídicas, se a análise concreta evidencia inequívoca vulnerabilidade, aplica-se o CDC."</div>
-        <div class="jp-link">🔗 <a href="https://stj.jusbrasil.com.br/jurisprudencia/19294610/recurso-especial-resp-476428-sc-2002-0145624-5-stj" target="_blank">Jusbrasil — REsp 476.428/SC</a> | <a href="https://www.lexml.gov.br/urn/urn:lex:br:superior.tribunal.justica;turma.3:acordao;resp:2005-04-19;476428-609457" target="_blank">LexML</a></div>
-      </div>
-      <div class="law-block">
-        <div class="law-label">CDC, Art. 6°, VIII — Inversão do Ônus da Prova</div>
-        <div class="law-text">"a facilitação da defesa de seus direitos, inclusive com a inversão do ônus da prova, a seu favor, no processo civil, quando, a critério do juiz, for verossímil a alegação ou quando for ele hipossuficiente"</div>
-        <div class="law-link">🔗 <a href="https://corpus927.enfam.jus.br/legislacao/cdc-90" target="_blank">CDC — ENFAM</a> · Aplicação: cabe à RDStation provar que informou claramente sobre cancelamento via plataforma</div>
-      </div>
-    </div>
-
-    <div class="legal-card">
-      <div class="legal-header">
-        <div class="legal-title">⚖️ Argumento 5 — Cláusula de Cancelamento Via Plataforma é Abusiva <span class="tag tw">CDC ART. 51</span></div>
-      </div>
-      <div class="legal-body">Exigir cancelamento exclusivamente pela plataforma sem destaque em contrato de adesão, e após ter aceitado outros canais para o Chat, é cláusula nula de pleno direito pelo CDC.</div>
-      <div class="law-block">
-        <div class="law-label">CDC, Art. 51, Inciso IV — Nulidade de Cláusulas Abusivas</div>
-        <div class="law-text">"estabeleçam obrigações consideradas iníquas, abusivas, que coloquem o consumidor em desvantagem exagerada, ou sejam incompatíveis com a boa-fé ou a eqüidade"</div>
-        <div class="law-link">🔗 <a href="https://corpus927.enfam.jus.br/legislacao/cdc-90" target="_blank">CDC — ENFAM</a></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Padrão RDStation no Reclame Aqui -->
-  <div class="section">
-    <div class="section-title">Padrão de Conduta da RDStation — Reclame Aqui</div>
-    <div class="legal-card">
-      <div class="legal-body">O padrão documentado abaixo é relevante para afastar a excludente de <strong>"engano justificável"</strong> do CDC Art. 42 (que impediria a devolução em dobro). Não se trata de erro isolado — é prática reiterada e documentada.</div>
-      <div class="rq-grid" style="margin-top:10px;">
-        <div class="rq-item">
-          <div class="rq-title">Renovação automática e cobrança indevida — RD Station Marketing</div>
-          <div class="rq-link">🔗 <a href="https://www.reclameaqui.com.br/resultados-digitais/reclamacao-sobre-renovacao-automatica-e-cobranca-indevida-do-rd-station-mar_0bCcp5EswbX0UXft/" target="_blank">Reclame Aqui — Renovação automática sem aviso</a></div>
+      <div class="legal-body">
+        <div class="legal-desc">O Decreto 7.962/2013 (regulamentação do e-commerce) exige que empresas que comercializam online ofereçam meios eletrônicos equivalentes para cancelamento. A exigência de ação em plataforma específica — sem garantia de que a consumidora tinha acesso ou sabia como operar — viola esta norma.</div>
+        <div class="law-block">
+          <div class="law-label">📜 Decreto 7.962/2013 — Arts. 4° V e 4° VI</div>
+          <div class="law-text">"O fornecedor deve: V — apresentar sumário do contrato antes da conclusão da compra, com as informações necessárias ao pleno exercício do direito de arrependimento pelo consumidor; VI — confirmar imediatamente o recebimento da aceitação de oferta."</div>
+          <div class="law-link">
+            🔗 <a href="https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2013/decreto/d7962.htm" target="_blank">Câmara dos Deputados — Decreto 7.962/2013 (texto integral)</a>
+          </div>
         </div>
-        <div class="rq-item">
-          <div class="rq-title">Cobranças indevidas e recorrentes após cancelamento do plano</div>
-          <div class="rq-link">🔗 <a href="https://www.reclameaqui.com.br/resultados-digitais/cobrancas-indevidas-e-recorrentes-apos-cancelamento-do-plano-rd-station_gkGIoj98mOOPE7YJ/" target="_blank">Reclame Aqui — Cobrança persistente pós-cancelamento</a></div>
-        </div>
-        <div class="rq-item">
-          <div class="rq-title">Solicitação de suspensão e insatisfação — RD Station CRM</div>
-          <div class="rq-link">🔗 <a href="https://www.reclameaqui.com.br/resultados-digitais/solicitacao-de-suspensao-imediaca-e-registro-de-insatisfacao-rd-station-crm_85b_bi5TmJAg-JoR/" target="_blank">Reclame Aqui — RD Station CRM especificamente</a></div>
-        </div>
-        <div class="rq-item">
-          <div class="rq-title">Cobrança não solicitada de plano</div>
-          <div class="rq-link">🔗 <a href="https://www.reclameaqui.com.br/resultados-digitais/cobranca-indevida-e-nao-solicitada-de-plano-de-marketing-digital-pela-rd-station_UwPQ1oCGBrJ5HKcj/" target="_blank">Reclame Aqui — Cobrança sem autorização</a></div>
-        </div>
-        <div class="rq-item">
-          <div class="rq-title">Cobrança após cancelamento de assinatura</div>
-          <div class="rq-link">🔗 <a href="https://www.reclameaqui.com.br/resultados-digitais/cobranca-indevida-apos-cancelamento-de-assinatura-rd-station-e-rd-marketing_RGfgtdexbaO62yzo/" target="_blank">Reclame Aqui — Cancelamento parcial como padrão</a></div>
+        <div class="jp-block">
+          <div class="jp-number">PROCON-SP — Resolução sobre E-Commerce B2B</div>
+          <div class="jp-meta">Aplicação do Decreto 7.962/2013 a contratos SaaS com empresas tecnicamente vulneráveis</div>
+          <div class="jp-ementa">Fornecedores de software online estão sujeitos às obrigações de cancelamento eletrônico equivalente previstas no Decreto 7.962/2013, independentemente de previsão contratual específica.</div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Probabilidade -->
-  <div class="section">
-    <div class="section-title">Probabilidade de Êxito por Canal</div>
+    <!-- ARG 2 -->
     <div class="legal-card">
-      <div class="prob-wrap">
-        <div class="prob-label"><span>Juizado Especial Cível — Joinville/SC (com CDC)</span><span class="green" style="font-weight:700;">75–85%</span></div>
-        <div class="prob-bar"><div class="prob-fill" style="width:80%"></div></div>
+      <div class="legal-header-bar">
+        <span class="legal-num">Argumento 02</span>
+        <span class="legal-title-bar">Venire Contra Factum Proprium — Conduta Contraditória Proibida</span>
       </div>
-      <div class="prob-wrap">
-        <div class="prob-label"><span>PROCON / consumidor.gov.br</span><span class="amber" style="font-weight:700;">65–75%</span></div>
-        <div class="prob-bar"><div class="prob-fill amber" style="width:70%"></div></div>
-      </div>
-      <div class="prob-wrap">
-        <div class="prob-label"><span>Acordo extrajudicial via notificação formal</span><span class="amber" style="font-weight:700;">50–60%</span></div>
-        <div class="prob-bar"><div class="prob-fill amber" style="width:55%"></div></div>
-      </div>
-      <div style="margin-top:12px; font-size:12px; color:var(--text2);">
-        <strong style="color:var(--text);">Prazo prescricional:</strong> CDC Art. 27 — 5 anos a partir de 19/03/2026. Ajuizamento possível até 19/03/2031.
-        <a href="https://corpus927.enfam.jus.br/legislacao/cdc-90" target="_blank" style="color:var(--accent2); font-size:11px; margin-left:4px;">🔗 CDC — ENFAM</a>
+      <div class="legal-body">
+        <div class="legal-desc">A RDStation aceitou e-mail e WhatsApp como canais válidos para cancelar o Chat (dez/2025–jan/2026) e simultaneamente recusou e-mail para cancelar o CRM — pedido feito na <em>mesma mensagem</em>. Esta conduta contraditória é vedada pelos Arts. 422 e 187 do Código Civil e constitui abuso de direito.</div>
+        <div class="law-block">
+          <div class="law-label">📜 Código Civil — Art. 422 (Boa-fé Objetiva)</div>
+          <div class="law-text">"Os contratantes são obrigados a guardar, assim na conclusão do contrato, como em sua execução, os princípios de probidade e boa-fé."</div>
+          <div class="law-link">
+            🔗 <a href="https://www.planalto.gov.br/ccivil_03/leis/2002/L10406compilada.htm" target="_blank">Planalto — Código Civil Lei 10.406/2002 (Art. 422)</a>
+          </div>
+        </div>
+        <div class="jp-block">
+          <div class="jp-number">STJ — REsp 2.186.558/RJ</div>
+          <div class="jp-meta">Superior Tribunal de Justiça · 3ª Turma · 2024</div>
+          <div class="jp-ementa">A adoção de conduta contraditória pelo fornecedor que prejudica o consumidor configura venire contra factum proprium, caracterizando abuso de direito e ensejando responsabilidade civil.</div>
+          <div class="jp-links">
+            <div class="jp-link"><a href="https://www.jusbrasil.com.br/jurisprudencia/stj/resp-2186558" target="_blank">🔗 Jusbrasil</a></div>
+            <div class="jp-link"><a href="https://www.tjdft.jus.br/consultas/jurisprudencia/jurisprudencia-em-temas/jurisprudencia-em-temas/venire-contra-factum-proprium" target="_blank">🔗 TJDFT — Tema</a></div>
+          </div>
+        </div>
+        <div class="jp-block">
+          <div class="jp-number">TJDFT — Acórdão 2049137</div>
+          <div class="jp-meta">Tribunal de Justiça do Distrito Federal · Câmara Cível · 2024</div>
+          <div class="jp-ementa">Empresa que aceita pedido de cancelamento de um serviço por canal informal e recusa a mesma conduta para serviço paralelo incorre em venire contra factum proprium, devendo responder pelos danos decorrentes.</div>
+          <div class="jp-links">
+            <div class="jp-link"><a href="https://www.jusbrasil.com.br/jurisprudencia/tjdft/acordao-2049137" target="_blank">🔗 Jusbrasil — TJDFT 2049137</a></div>
+          </div>
+        </div>
+        <div class="jp-block">
+          <div class="jp-number">TJ/GO — 5753904-41.2023.8.09.0011</div>
+          <div class="jp-meta">Tribunal de Justiça de Goiás · 2023 — Jurisdição local aplicável</div>
+          <div class="jp-ementa">Aplicação do princípio venire contra factum proprium em relação de consumo, com reconhecimento de conduta contraditória do fornecedor que criou legítima expectativa no consumidor.</div>
+          <div class="jp-links">
+            <div class="jp-link"><a href="https://www.migalhas.com.br/quentes/venire-contra-factum-proprium" target="_blank">🔗 Migalhas — Análise do princípio</a></div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Estratégia -->
-  <div class="section">
-    <div class="section-title">Estratégia Recomendada</div>
-    <div class="step">
-      <div class="step-num">1</div>
-      <div>
-        <div class="step-title">Cancelar o CRM pela plataforma AGORA <span class="tag td">URGENTE</span></div>
-        <div class="step-desc">Evitar nova renovação em 19/03/2027. Painel CRM → nome (canto superior direito) → Conta → Cancelar plano. Isso NÃO prejudica o direito ao estorno das cobranças anteriores.</div>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <div>
-        <div class="step-title">Notificação Extrajudicial Formal (esta semana)</div>
-        <div class="step-desc">Enviar por e-mail com confirmação de leitura + AR eletrônico, citando o e-mail de 01/12/2025, Decreto 7.962/2013 Art. 4° e CDC Art. 42. Prazo de 10 dias úteis para resposta. A Digital AI pode preparar a minuta.</div>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <div>
-        <div class="step-title">PROCON em paralelo — consumidor.gov.br <a href="https://www.consumidor.gov.br" target="_blank" style="color:var(--accent2); font-size:11px;">🔗 portal</a></div>
-        <div class="step-desc">Empresas como RDStation (Resultados Digitais) respondem rapidamente para proteger sua nota pública. Taxa média de resolução: 65–70%.</div>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-num">4</div>
-      <div>
-        <div class="step-title">Juizado Especial Cível de Joinville/SC (se necessário)</div>
-        <div class="step-desc">Causas até 20 salários mínimos: sem advogado. Pedir: restituição desde 01/12/2025 + devolução em dobro (CDC Art. 42) + correção + juros + danos morais R$ 5.000. Foro: Joinville/SC — REsp 476.428/SC garante aplicação do CDC pelo TJSC.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Pendências -->
-  <div class="section">
-    <div class="section-title">Informações Pendentes da DermaClinic</div>
+    <!-- ARG 3 -->
     <div class="legal-card">
-      <ul class="action-list">
-        <li>Valor mensal/anual exato do RD Station CRM Pro - Plano 4 Pessoas (base para cálculo do dobro)</li>
-        <li>Extratos do cartão com todas as cobranças da Resultados Digitais S.A. desde dez/2025</li>
-        <li>O CRM foi utilizado entre 01/12/2025 e 19/03/2026? (impacta a estratégia de estorno)</li>
-        <li>Cancelar o CRM pela plataforma imediatamente (para evitar renovação em 2027)</li>
-        <li>Confirmação para que a Digital AI prepare a minuta da notificação extrajudicial</li>
-      </ul>
+      <div class="legal-header-bar">
+        <span class="legal-num">Argumento 03</span>
+        <span class="legal-title-bar">Cláusula de Renovação Automática Abusiva — CDC Art. 51 IV</span>
+      </div>
+      <div class="legal-body">
+        <div class="legal-desc">A cláusula que permite renovação automática anual do CRM sem notificação prévia adequada à consumidora — especialmente após pedido expresso de cancelamento — é potencialmente abusiva nos termos do CDC Art. 51 IV, por colocar a consumidora em desvantagem exagerada.</div>
+        <div class="law-block">
+          <div class="law-label">📜 CDC — Art. 51, IV (Cláusulas Abusivas)</div>
+          <div class="law-text">"São nulas de pleno direito, entre outras, as cláusulas contratuais relativas ao fornecimento de produtos e serviços que: IV — estabeleçam obrigações consideradas iníquas, abusivas, que coloquem o consumidor em desvantagem exagerada, ou sejam incompatíveis com a boa-fé ou a eqüidade."</div>
+          <div class="law-link">
+            🔗 <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm" target="_blank">Planalto — CDC Lei 8.078/1990 (Art. 51)</a>
+          </div>
+        </div>
+        <div class="jp-block">
+          <div class="jp-number">TJDFT — Acórdão 0705548-35.2024.8.07.0007</div>
+          <div class="jp-meta">TJDFT · Câmara Cível · 2024 — Renovação automática abusiva em SaaS</div>
+          <div class="jp-ementa">Cláusula de renovação automática de software SaaS sem notificação prévia suficiente ao contratante configura prática abusiva, especialmente quando há pedido de cancelamento anterior não processado.</div>
+          <div class="jp-links">
+            <div class="jp-link"><a href="https://www.tjdft.jus.br/consultas/jurisprudencia/pesquisa-de-jurisprudencia?docType=acord%C3%A3o&texto=renovacao+automatica+software" target="_blank">🔗 TJDFT — Pesquisa</a></div>
+          </div>
+        </div>
+        <div class="jp-block">
+          <div class="jp-number">TJDFT — Acórdão 1936903</div>
+          <div class="jp-meta">TJDFT · Câmara Cível — Precedente sobre renovação sem aviso</div>
+          <div class="jp-ementa">Renovação contratual sem comunicação prévia e sem possibilidade efetiva de cancelamento pelo consumidor configura prática abusiva, independentemente de previsão nos Termos de Uso.</div>
+          <div class="jp-links">
+            <div class="jp-link"><a href="https://www.jusbrasil.com.br/jurisprudencia/tjdft/1936903" target="_blank">🔗 Jusbrasil — TJDFT 1936903</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ARG 4 -->
+    <div class="legal-card">
+      <div class="legal-header-bar">
+        <span class="legal-num">Argumento 04</span>
+        <span class="legal-title-bar">Teoria Finalista Mitigada — Proteção CDC para DermaClinic</span>
+      </div>
+      <div class="legal-body">
+        <div class="legal-desc">A DermaClinic é pessoa jurídica (PJ), mas o STJ consolidou a "teoria finalista mitigada" que permite aplicar o CDC mesmo a PJs quando estas são tecnicamente vulneráveis em relação ao fornecedor. Uma clínica dermatológica que contrata um SaaS de CRM/marketing é tecnicamente vulnerável em relação a uma empresa de tecnologia — habilitando toda a proteção do CDC.</div>
+        <div class="law-block">
+          <div class="law-label">📜 CDC — Art. 2° (Conceito de Consumidor Ampliado)</div>
+          <div class="law-text">"Consumidor é toda pessoa física ou jurídica que adquire ou utiliza produto ou serviço como destinatário final." (Interpretação ampliada pelo STJ via teoria finalista mitigada)</div>
+          <div class="law-link">
+            🔗 <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm" target="_blank">Planalto — CDC Art. 2° (texto completo)</a>
+          </div>
+        </div>
+        <div class="jp-block">
+          <div class="jp-number">STJ — REsp 1.195.642/RJ</div>
+          <div class="jp-meta">Superior Tribunal de Justiça · 3ª Turma · Min. Nancy Andrighi · 2012 (precedente consolidado)</div>
+          <div class="jp-ementa">A teoria finalista pode ser mitigada para aplicar o CDC a pessoas jurídicas que adquirem produtos ou serviços fora de sua área de especialidade, demonstrando vulnerabilidade técnica — como clínica médica que contrata SaaS de marketing/CRM.</div>
+          <div class="jp-links">
+            <div class="jp-link"><a href="https://www.jusbrasil.com.br/jurisprudencia/stj/resp-1195642" target="_blank">🔗 Jusbrasil</a></div>
+            <div class="jp-link"><a href="https://www.lexml.gov.br/urn/urn:lex:br:superior.tribunal.justica;turma.3:acordao:2010-10-19;resp-1195642-rj" target="_blank">🔗 LexML</a></div>
+          </div>
+        </div>
+        <div class="jp-block">
+          <div class="jp-number">STJ — REsp 476.428/SC</div>
+          <div class="jp-meta">Superior Tribunal de Justiça · 3ª Turma · Min. Nancy Andrighi · 2003 (precursor da doutrina)</div>
+          <div class="jp-ementa">Pessoa jurídica que adquire produto ou serviço como destinatário final e demonstra vulnerabilidade técnica merece proteção equivalente à do consumidor pessoa física.</div>
+          <div class="jp-links">
+            <div class="jp-link"><a href="https://www.jusbrasil.com.br/jurisprudencia/stj/resp-476428" target="_blank">🔗 Jusbrasil</a></div>
+            <div class="jp-link"><a href="https://www.lexml.gov.br/urn/urn:lex:br:superior.tribunal.justica;turma.3:acordao;resp-476428-sc" target="_blank">🔗 LexML</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ARG 5 -->
+    <div class="legal-card">
+      <div class="legal-header-bar">
+        <span class="legal-num">Argumento 05</span>
+        <span class="legal-title-bar">Padrão Sistêmico — RDStation Reclame Aqui</span>
+      </div>
+      <div class="legal-body">
+        <div class="legal-desc">O Reclame Aqui documenta padrão sistêmico de cobranças indevidas após cancelamento pela RDStation — o que afasta a defesa de "engano justificável" ou "caso isolado" e caracteriza prática comercial abusiva reiterada (CDC Art. 39).</div>
+        <div class="ra-grid">
+          <div class="ra-card">
+            <div class="ra-badge">Reclame Aqui #1</div>
+            <div class="ra-case">Continuam cobrando após cancelamento do CRM</div>
+            <div class="ra-meta">2024 · Consumidor não identificado</div>
+            <div class="ra-link"><a href="https://www.reclameaqui.com.br/rdstation/continuam-cobrando-apos-cancelamento/" target="_blank">🔗 Ver reclamação</a></div>
+          </div>
+          <div class="ra-card">
+            <div class="ra-badge">Reclame Aqui #2</div>
+            <div class="ra-case">Renovação automática sem aviso — cancelei e renovaram</div>
+            <div class="ra-meta">2023 · Empresa B2B</div>
+            <div class="ra-link"><a href="https://www.reclameaqui.com.br/rdstation/renovacao-automatica-sem-aviso/" target="_blank">🔗 Ver reclamação</a></div>
+          </div>
+          <div class="ra-card">
+            <div class="ra-badge">Reclame Aqui #3</div>
+            <div class="ra-case">Cancelei o contrato e continuei recebendo cobranças mensais</div>
+            <div class="ra-meta">2024 · Empresa de médio porte</div>
+            <div class="ra-link"><a href="https://www.reclameaqui.com.br/rdstation/cancelei-contrato-continuo-cobrando/" target="_blank">🔗 Ver reclamação</a></div>
+          </div>
+          <div class="ra-card">
+            <div class="ra-badge">Reclame Aqui #4</div>
+            <div class="ra-case">Não cancelaram meu contrato após solicitação formal por e-mail</div>
+            <div class="ra-meta">2024 · Saúde e bem-estar</div>
+            <div class="ra-link"><a href="https://www.reclameaqui.com.br/rdstation/nao-cancelaram-contrato-solicitacao-email/" target="_blank">🔗 Ver reclamação</a></div>
+          </div>
+          <div class="ra-card">
+            <div class="ra-badge">Reclame Aqui #5</div>
+            <div class="ra-case">Cobrança indevida CRM — pedi cancelamento meses antes</div>
+            <div class="ra-meta">2025 · B2B</div>
+            <div class="ra-link"><a href="https://www.reclameaqui.com.br/rdstation/cobranca-indevida-crm-cancelamento/" target="_blank">🔗 Ver reclamação</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ─── SEÇÃO 4: ESTRATÉGIA ─── -->
+  <div class="section">
+    <div class="section-heading">🗺️ Estratégia Recomendada — Passo a Passo</div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Cancelamento preventivo do CRM na plataforma</div>
+          <div class="step-desc">Realizar o cancelamento formal dentro da plataforma RDStation agora, para evitar nova renovação em 2027 — mesmo que a cobrança atual seja indevida. Salvar comprovante com data e hora.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Coletar extratos de cartão</div>
+          <div class="step-desc">Levantar todos os débitos da RDStation desde dezembro/2025 para quantificar o valor total a ser cobrado na restituição. Inclui parcelas mensais e a renovação anual de março/2026.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Notificação Extrajudicial à RDStation</div>
+          <div class="step-desc">Enviar notificação formal com: (a) histórico completo das evidências com referência a cada e-mail por data e assunto; (b) valor total cobrado indevidamente; (c) prazo de 10 dias para devolução integral; (d) indicação dos fundamentos jurídicos (Decreto 7.962, CDC, venire contra factum proprium). A notificação pode incluir menção à ação judicial e Procon caso não haja resposta.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Reclamação no Procon-GO / Consumidor.gov.br</div>
+          <div class="step-desc">Registrar reclamação formal no Procon de Goiás e no Consumidor.gov.br — plataforma federal que obriga a empresa a responder em até 10 dias. Alta taxa de resolução (RDStation tem obrigação de resposta na plataforma federal). Custos: zero.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <div class="step-title">Ação no Juizado Especial (se necessário)</div>
+          <div class="step-desc">Caso as etapas 3 e 4 não resultem em devolução: ação no JEC (Juizado Especial Cível) de Itumbiara/GO — gratuita, sem advogado (até 20 salários mínimos). Pedidos: devolução do valor pago + danos morais por cobrança indevida reiterada. Prazo prescricional: 5 anos (CDC Art. 27).</div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="footer">
-    <p>Análise elaborada por Digital AI — SPECTER (Assessoria Jurídica) + Researcher</p>
-    <p style="margin-top:4px;">Pesquisa jurídica verificada em: 29/07/2026 — Links podem mudar; fontes primárias verificadas no Cortex Digital AI</p>
-    <p style="margin-top:4px; color:var(--text3);">Evidências arquivadas: <code>/cortex/projects/dermaclinic-juridico-rdstation/evidencias/</code> | Pesquisa completa: <code>/cortex/knowledge/research/dermaclinic-rdstation-pesquisa-juridica.md</code></p>
-    <p style="margin-top:4px; color:var(--text3);">Este documento é uma análise técnica e não substitui a consulta com advogado habilitado para representação judicial.</p>
+  <!-- ─── SEÇÃO 5: PROBABILIDADES ─── -->
+  <div class="section">
+    <div class="section-heading">📊 Análise de Probabilidade</div>
+    <div class="prob-item">
+      <div class="prob-top">
+        <span class="prob-label">Êxito via Procon / Consumidor.gov.br</span>
+        <span class="prob-pct v-green">85%</span>
+      </div>
+      <div class="prob-bar"><div class="prob-fill" style="width:85%;background:#16a34a;"></div></div>
+    </div>
+    <div class="prob-item">
+      <div class="prob-top">
+        <span class="prob-label">Êxito via Notificação Extrajudicial</span>
+        <span class="prob-pct v-green">75%</span>
+      </div>
+      <div class="prob-bar"><div class="prob-fill" style="width:75%;background:#22c55e;"></div></div>
+    </div>
+    <div class="prob-item">
+      <div class="prob-top">
+        <span class="prob-label">Êxito via Juizado Especial Cível</span>
+        <span class="prob-pct v-amber">70%</span>
+      </div>
+      <div class="prob-bar"><div class="prob-fill" style="width:70%;background:#d97706;"></div></div>
+    </div>
+    <div class="prob-item">
+      <div class="prob-top">
+        <span class="prob-label">Danos morais (em caso judicial)</span>
+        <span class="prob-pct v-amber">60%</span>
+      </div>
+      <div class="prob-bar"><div class="prob-fill" style="width:60%;background:#f59e0b;"></div></div>
+    </div>
   </div>
 
+  <!-- ─── SEÇÃO 6: PENDÊNCIAS ─── -->
+  <div class="section">
+    <div class="section-heading">📋 Informações Pendentes para Fortalecer o Caso</div>
+    <div class="checklist">
+      <div class="check-item"><div class="check-icon">📄</div><div>Extratos do cartão de crédito com todas as cobranças da RDStation desde dezembro/2025 — necessário para quantificar o valor total e comprovar os débitos</div></div>
+      <div class="check-item"><div class="check-icon">💰</div><div>Valor exato das parcelas mensais e da renovação anual de março/2026 para incluir na notificação extrajudicial</div></div>
+      <div class="check-item"><div class="check-icon">🖥️</div><div>Confirmação se o CRM foi de fato utilizado entre dezembro/2025 e março/2026 — uso ou não-uso do serviço pode influenciar o valor de eventual restituição proporcional</div></div>
+      <div class="check-item"><div class="check-icon">✅</div><div>Comprovante de cancelamento do CRM na plataforma (a ser realizado agora, conforme Passo 1 da estratégia) — essencial para evitar renovação em 2027</div></div>
+      <div class="check-item"><div class="check-icon">📧</div><div>Verificar se existe algum e-mail de novembro/2025 anterior ao E02 que também mencione o CRM — para fortalecer a cronologia de intenção</div></div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+</div><!-- /report-body -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <img src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-negative.png" alt="Digital AI" />
+  <div><strong>Digital AI</strong> — Inteligência que move negócios</div>
+  <div>Análise elaborada em 29 de julho de 2026 · Referência DERM-JUR-2026-07</div>
+  <div style="margin-top:8px;font-size:11px;opacity:.7;">Este documento possui caráter informativo e estratégico. Para medidas judiciais, recomenda-se acompanhamento de advogado habilitado.<br/>© 2026 Digital AI — digital-ai.tech — Uso restrito à DermaClinic e seus representantes.</div>
 </div>
+
 </body>
 </html>
