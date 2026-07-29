@@ -79,6 +79,24 @@
     .bar-cell{display:flex;align-items:center;gap:8px}
     .mini-bar{height:6px;border-radius:3px;background:var(--accent);flex-shrink:0}
 
+    /* ── Case cards (análise detalhada) ── */
+    .case-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;transition:border-color .15s}
+    .case-card:hover{border-color:var(--accent)}
+    .case-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:14px 18px;border-bottom:1px solid var(--border);background:var(--surface2)}
+    .case-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .case-id{font-family:monospace;font-size:.78rem;color:var(--muted);background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:2px 7px}
+    .case-proc{padding:8px 18px;font-size:.78rem;color:var(--muted);border-bottom:1px solid var(--border);background:var(--bg)}
+    .case-body{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+    .case-col{padding:16px 18px}
+    .case-col + .case-col{border-left:1px solid var(--border)}
+    @media(max-width:700px){.case-body{grid-template-columns:1fr}.case-col+.case-col{border-left:none;border-top:1px solid var(--border)}}
+    .case-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:6px}
+    .case-text{font-size:.8rem;line-height:1.55;color:var(--text)}
+    .msg-quote{font-size:.8rem;font-style:italic;color:#c4b5fd;background:#1e1040;border-left:3px solid #7c3aed;padding:8px 12px;border-radius:0 6px 6px 0;margin:0;line-height:1.5}
+    .correction-badge{background:#2d2208;border:1px solid #78350f;color:#fbbf24;border-radius:999px;padding:2px 9px;font-size:.68rem;font-weight:600}
+    .case-filter-btn{background:var(--surface2);border:1px solid var(--border);border-radius:999px;padding:5px 14px;font-size:.78rem;color:var(--muted);cursor:pointer;transition:all .15s}
+    .case-filter-btn:hover,.case-filter-btn.active{background:#2d1f6e;border-color:#4c3bc5;color:#a5b4fc}
+
     /* ── Filter bar ── */
     .filter-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-bottom:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px}
     .filter-group{display:flex;flex-direction:column;gap:4px}
@@ -202,6 +220,648 @@
   <div class="card">
     <div class="chart-title">Distribuição de Contexto por Mês (Stacked)</div>
     <div class="chart-wrap-tall"><canvas id="chartContexto"></canvas></div>
+  </div>
+</div>
+
+<!-- ANÁLISE DETALHADA DE OBJEÇÕES POR CASO -->
+<div class="section">
+  <div class="section-title"><span class="dot"></span> Análise Detalhada — 21 Conversas com Follow-up Real</div>
+  <div class="alert yellow" style="margin-bottom:16px">
+    <span class="icon">🔍</span>
+    <span>Cada card abaixo corresponde a uma conversa real sobre a proposta, com o <strong>trecho exato da objeção</strong>, como a recepção respondeu e avaliação de eficácia. Classificações corrigidas estão marcadas em amarelo. <strong>Eficácia:</strong> ✅ EFICAZ (12) · ⚪ NEUTRA (8) · ❌ INEFICAZ (1)</span>
+  </div>
+
+  <!-- Filtro rápido por objeção -->
+  <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+    <button class="case-filter-btn active" data-filter="">Todas (21)</button>
+    <button class="case-filter-btn" data-filter="preco">Preço (5)</button>
+    <button class="case-filter-btn" data-filter="sem_objecao">Converteu (7)</button>
+    <button class="case-filter-btn" data-filter="disponibilidade_tempo">Disp./Tempo (3)</button>
+    <button class="case-filter-btn" data-filter="medo_procedimento">Medo Proc. (3)</button>
+    <button class="case-filter-btn" data-filter="nao_respondeu">Não Respondeu (3)</button>
+  </div>
+
+  <div id="cases-container">
+<div class="case-card" data-obj="disponibilidade_tempo" data-mes="2026-02">
+  <div class="case-header">
+    <div class="case-meta">
+      <span class="case-id">#410</span>
+      <span style="color:var(--muted);font-size:.78rem">2026-02-18 · 02/26</span>
+      <span class="badge badge-yellow">Disp./Tempo</span>
+      
+    </div>
+    <div class="case-meta" style="gap:12px">
+      <span style="font-size:.78rem;color:#4ade80;font-weight:600">✓ Convertida</span>
+      <span style="font-size:.8rem;color:#4ade80">✅ EFICAZ</span>
+      <a class="chat-link" href="https://chat.digital-ai.tech/app/accounts/4/conversations/16255" target="_blank">↗ Ver conversa</a>
+    </div>
+  </div>
+  <div class="case-proc">📋 CIRURGIA DR JOAO, PREENCHIMENTO MANDIBULA &nbsp;·&nbsp; 💰 R$6,000</div>
+  <div class="case-body">
+    <div class="case-col">
+      <div class="case-label">TRECHO DA OBJEÇÃO</div>
+      <blockquote class="msg-quote">Hj encerra os 30 dias de retorno da minha consulta.  Mas eu só consegui médico urologista (recomendado pela Dra.) Pará 26/03. Será que daria pra prorrogar meu retorno um pouco mais para dar tempo de eu me consultar?</blockquote>
+      <div class="case-label" style="margin-top:12px">EXPLICAÇÃO DA OBJEÇÃO</div>
+      <p class="case-text">O paciente não conseguiu realizar a consulta de retorno dentro do prazo de 30 dias por conta da agenda do médico urologista, o que dificultou o avanço no tratamento e, consequentemente, a conversão imediata da proposta.</p>
+    </div>
+    <div class="case-col">
+      <div class="case-label">COMO A RECEPÇÃO ATENDEU</div>
+      <p class="case-text">A recepção respondeu prontamente aceitando prorrogar o retorno para uma data posterior à consulta do urologista, por exemplo: 'Tudo bem, marcamos para depois do seu médico' e depois confirmou o agendamento para 31/03 às 11h00.</p>
+      <div class="case-label" style="margin-top:12px">AVALIAÇÃO DE EFICÁCIA</div>
+      <p class="case-text">A recepção demonstrou flexibilidade e agilidade para reagendar o retorno conforme a necessidade do paciente, facilitando o prosseguimento do atendimento e mantendo o paciente engajado.</p>
+    </div>
+  </div>
+</div><div class="case-card" data-obj="nao_respondeu" data-mes="2026-02">
+  <div class="case-header">
+    <div class="case-meta">
+      <span class="case-id">#414</span>
+      <span style="color:var(--muted);font-size:.78rem">2026-02-23 · 02/26</span>
+      <span class="badge badge-red">Não Respondeu</span>
+      
+    </div>
+    <div class="case-meta" style="gap:12px">
+      <span style="font-size:.78rem;color:#f87171;font-weight:600">✗ Não Convertida</span>
+      <span style="font-size:.8rem;color:#4ade80">✅ EFICAZ</span>
+      <a class="chat-link" href="https://chat.digital-ai.tech/app/accounts/4/conversations/11297" target="_blank">↗ Ver conversa</a>
+    </div>
+  </div>
+  <div class="case-proc">📋 LASER CO2 CICATRIZ, MEGADERME RF MICROAGULHADA &nbsp;·&nbsp; 💰 R$3,700</div>
+  <div class="case-body">
+    <div class="case-col">
+      <div class="case-label">TRECHO DA OBJEÇÃO</div>
+      <span style="color:var(--muted);font-size:.78rem">Sem trecho identificado</span>
+      <div class="case-label" style="margin-top:12px">EXPLICAÇÃO DA OBJEÇÃO</div>
+      <p class="case-text">Não houve resposta do paciente após a solicitação do orçamento, o que impossibilitou o avanço no processo de conversão.</p>
+    </div>
+    <div class="case-col">
+      <div class="case-label">COMO A RECEPÇÃO ATENDEU</div>
+      <p class="case-text">A recepção respondeu prontamente informando que o orçamento seria enviado pela equipe responsável, por exemplo: 'Como esse orçamento foi gerado a partir da sua consulta com a médica, vou te colocar agora com nossa recepção para que possam te enviar certinho.' Também houve uma mensagem automática de atualização cadastral e felicitações de aniversário, mas sem retorno do paciente.</p>
+      <div class="case-label" style="margin-top:12px">AVALIAÇÃO DE EFICÁCIA</div>
+      <p class="case-text">A recepção respondeu rapidamente e de forma adequada, encaminhando o paciente para o setor correto e mantendo contato, porém a ausência de resposta do paciente impediu a conversão.</p>
+    </div>
+  </div>
+</div><div class="case-card" data-obj="sem_objecao" data-mes="2026-02">
+  <div class="case-header">
+    <div class="case-meta">
+      <span class="case-id">#415</span>
+      <span style="color:var(--muted);font-size:.78rem">2026-02-24 · 02/26</span>
+      <span class="badge badge-green">Converteu</span>
+      
+    </div>
+    <div class="case-meta" style="gap:12px">
+      <span style="font-size:.78rem;color:#4ade80;font-weight:600">✓ Convertida</span>
+      <span style="font-size:.8rem;color:#4ade80">✅ EFICAZ</span>
+      <a class="chat-link" href="https://chat.digital-ai.tech/app/accounts/4/conversations/716" target="_blank">↗ Ver conversa</a>
+    </div>
+  </div>
+  <div class="case-proc">📋 SPECTRA,POROS, RUGAS( 6 SESSOES), MEGADERME RF MICROAGULHADA, SCULPTRA &nbsp;·&nbsp; 💰 R$8,140</div>
+  <div class="case-body">
+    <div class="case-col">
+      <div class="case-label">TRECHO DA OBJEÇÃO</div>
+      <span style="color:var(--muted);font-size:.78rem">Sem trecho identificado</span>
+      <div class="case-label" style="margin-top:12px">EXPLICAÇÃO DA OBJEÇÃO</div>
+      <p class="case-text">Não há nenhuma manifestação de objeção por parte do paciente na conversa. O paciente responde positivamente, confirma e agradece, sem demonstrar dúvidas, receios ou questionamentos que indiquem dificuldade para fechar o procedimento.</p>
+    </div>
+    <div class="case-col">
+      <div class="case-label">COMO A RECEPÇÃO ATENDEU</div>
+      <p class="case-text">A recepção manteve uma comunicação cordial e informativa, orientando o paciente sobre a ordem dos procedimentos ('O mais indicado seria fazer antes mesmo o sculptra!') e dando instruções práticas para o dia do atendimento ('pode vir de make, tiramos aqui e voce pode trazer make tambem para maquiar para ir para o trabalho').</p>
+      <div class="case-label" style="margin-top:12px">AVALIAÇÃO DE EFICÁCIA</div>
+      <p class="case-text">A recepção respondeu prontamente, com clareza e simpatia, esclarecendo dúvidas e facilitando o processo para o paciente, o que contribui para a conversão confirmada.</p>
+    </div>
+  </div>
+</div><div class="case-card" data-obj="sem_objecao" data-mes="2026-03">
+  <div class="case-header">
+    <div class="case-meta">
+      <span class="case-id">#411</span>
+      <span style="color:var(--muted);font-size:.78rem">2026-03-25 · 03/26</span>
+      <span class="badge badge-green">Converteu</span>
+      
+    </div>
+    <div class="case-meta" style="gap:12px">
+      <span style="font-size:.78rem;color:#4ade80;font-weight:600">✓ Convertida</span>
+      <span style="font-size:.8rem;color:#4ade80">✅ EFICAZ</span>
+      <a class="chat-link" href="https://chat.digital-ai.tech/app/accounts/4/conversations/11127" target="_blank">↗ Ver conversa</a>
+    </div>
+  </div>
+  <div class="case-proc">📋 TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR), RESTYLANE/LYFT/DEFYNE/KYSSE (4SERINGA), SPECTRA,POROS, RUGAS( 6 SESSOES), LIFTERA TERCO INFERIOR, LIFTERA PAPADA, sculpta &nbsp;·&nbsp; 💰 R$18,190</div>
+  <div class="case-body">
+    <div class="case-col">
+      <div class="case-label">TRECHO DA OBJEÇÃO</div>
+      <blockquote class="msg-quote">Só pra entender então aqui seria o valor de 1 Siringa de bioestimulador isso?</blockquote>
+      <div class="case-label" style="margin-top:12px">EXPLICAÇÃO DA OBJEÇÃO</div>
+      <p class="case-text">O paciente buscou esclarecer dúvidas sobre o valor e a quantidade de seringas incluídas na proposta, indicando uma possível insegurança ou necessidade de confirmação antes de avançar.</p>
+    </div>
+    <div class="case-col">
+      <div class="case-label">COMO A RECEPÇÃO ATENDEU</div>
+      <p class="case-text">A recepção respondeu de forma clara e objetiva, confirmando que o valor mencionado era para uma seringa: 'Ola, sim uma seringa'. Também esclareceu dúvidas sobre as 4 seringas mencionadas na proposta: 'Sim uma base de 4 seringas, mas Dra vai ver no dia.'</p>
+      <div class="case-label" style="margin-top:12px">AVALIAÇÃO DE EFICÁCIA</div>
+      <p class="case-text">A recepção respondeu prontamente e de forma clara às dúvidas do paciente, facilitando o entendimento da proposta e contribuindo para a conversão sem gerar atritos ou confusões.</p>
+    </div>
+  </div>
+</div><div class="case-card" data-obj="disponibilidade_tempo" data-mes="2026-03">
+  <div class="case-header">
+    <div class="case-meta">
+      <span class="case-id">#424</span>
+      <span style="color:var(--muted);font-size:.78rem">2026-03-11 · 03/26</span>
+      <span class="badge badge-yellow">Disp./Tempo</span>
+      
+    </div>
+    <div class="case-meta" style="gap:12px">
+      <span style="font-size:.78rem;color:#4ade80;font-weight:600">✓ Convertida</span>
+      <span style="font-size:.8rem;color:#4ade80">✅ EFICAZ</span>
+      <a class="chat-link" href="https://chat.digital-ai.tech/app/accounts/4/conversations/9307" target="_blank">↗ Ver conversa</a>
+    </div>
+  </div>
+  <div class="case-proc">📋 SPECTRA, POROS, RUGAS 6 SESSAO, MEGADERME RF MICROAGULHADA &nbsp;·&nbsp; 💰 R$5,640</div>
+  <div class="case-body">
+    <div class="case-col">
+      <div class="case-label">TRECHO DA OBJEÇÃO</div>
+      <blockquote class="msg-quote">Oi, boa tarde.
+
+Eu não posso nas quintas-feiras.</blockquote>
+      <div class="case-label" style="margin-top:12px">EXPLICAÇÃO DA OBJEÇÃO</div>
+      <p class="case-text">O paciente indicou que não pode comparecer em quintas-feiras, o que limita sua disponibilidade para agendamentos, dificultando a marcação do procedimento na data desejada.</p>
+    </div>
+    <div class="case-col">
+      <div class="case-label">COMO A RECEPÇÃO ATENDEU</div>
+      <p class="case-text">A recepção respondeu informando que na semana do dia 27/7 a médica estaria viajando e sugeriu reagendar para a primeira semana de agosto, oferecendo uma alternativa próxima: "Dia 3/8 as 09.30".</p>
+      <div class="case-label" style="margin-top:12px">AVALIAÇÃO DE EFICÁCIA</div>
+      <p class="case-text">A recepção respondeu prontamente, esclareceu a indisponibilidade da médica na data solicitada e ofereceu uma nova data compatível com a disponibilidade do paciente, mantendo o contato e facilitando o reagendamento.</p>
+    </div>
+  </div>
+</div><div class="case-card" data-obj="sem_objecao" data-mes="2026-03">
+  <div class="case-header">
+    <div class="case-meta">
+      <span class="case-id">#425</span>
+      <span style="color:var(--muted);font-size:.78rem">2026-03-11 · 03/26</span>
+      <span class="badge badge-green">Converteu</span>
+      
+    </div>
+    <div class="case-meta" style="gap:12px">
+      <span style="font-size:.78rem;color:#f87171;font-weight:600">✗ Não Convertida</span>
+      <span style="font-size:.8rem;color:#4ade80">✅ EFICAZ</span>
+      <a class="chat-link" href="https://chat.digital-ai.tech/app/accounts/4/conversations/817" target="_blank">↗ Ver conversa</a>
+    </div>
+  </div>
+  <div class="case-proc">📋 RESTYLANE/LYFT/DEFYNE/KYSSE (2SERINGA), SPECTRA, POROS, RUGAS 6 SESSAO, LIFTERA TERCO INFERIOR, LIFTERA PAPADA &nbsp;·&nbsp; 💰 R$11,140</div>
+  <div class="case-body">
+    <div class="case-col">
+      <div class="case-label">TRECHO DA OBJEÇÃO</div>
+      <span style="color:var(--muted);font-size:.78rem">Sem trecho identificado</span>
+      <div class="case-label" style="margin-top:12px">EXPLICAÇÃO DA OBJEÇÃO</div>
+      <p class="case-text">O paciente apenas solicitou o reenvio do orçamento, não houve manifestação de objeção ou recusa explícita que dificultasse a conversão.</p>
+    </div>
+    <div class="case-col">
+      <div class="case-label">COMO A RECEPÇÃO ATENDEU</div>
+      <p class="case-text">A recepção respondeu prontamente, explicou a instabilidade do sistema e enviou o orçamento solicitado, além de se colocar à disposição para dúvidas, por exemplo: 'Desculpe estamos com instabilidade do sistema, obrigada por nos avisar' e 'Segue seu orçamento. Fico à disposição para qualquer dúvida'.</p>
+      <div class="case-label" style="margin-top:12px">AVALIAÇÃO DE EFICÁCIA</div>
+      <p class="case-text">A recepção respondeu rapidamente e de forma cordial, solucionando a solicitação do paciente sem gerar atrito ou demora, demonstrando boa comunicação e suporte.</p>
+    </div>
+  </div>
+</div><div class="case-card" data-obj="preco" data-mes="2026-04">
+  <div class="case-header">
+    <div class="case-meta">
+      <span class="case-id">#447</span>
+      <span style="color:var(--muted);font-size:.78rem">2026-04-08 · 04/26</span>
+      <span class="badge badge-yellow">Preço</span>
+      
+    </div>
+    <div class="case-meta" style="gap:12px">
+      <span style="font-size:.78rem;color:#f87171;font-weight:600">✗ Não Convertida</span>
+      <span style="font-size:.8rem;color:#f87171">❌ INEFICAZ</span>
+      <a class="chat-link" href="https://chat.digital-ai.tech/app/accounts/4/conversations/4679" target="_blank">↗ Ver conversa</a>
+    </div>
+  </div>
+  <div class="case-proc">📋 FOTONA VASOS &nbsp;·&nbsp; 💰 R$1,000</div>
+  <div class="case-body">
+    <div class="case-col">
+      <div class="case-label">TRECHO DA OBJEÇÃO</div>
+      <blockquote class="msg-quote">me foi falado após a consulta de avaliação que seria abatido no valor de 1000, por isso eu pensei em fazer, mas se não houver possibilidade, tudo bem, não consigo marcar pois não tenho esse valor disponível agora</blockquote>
+      <div class="case-label" style="margin-top:12px">EXPLICAÇÃO DA OBJEÇÃO</div>
+      <p class="case-text">A paciente não conseguiu confirmar a sessão porque não dispõe do valor total de R$1.000 no momento e tinha a expectativa de que o valor da consulta de avaliação fosse abatido no preço final, o que aparentemente não foi possível.</p>
+    </div>
+    <div class="case-col">
+      <div class="case-label">COMO A RECEPÇÃO ATENDEU</div>
+      <p class="case-text">A recepção tentou agendar o horário sugerindo opções de quinta-feira à tarde e solicitou o nome completo para confirmar o agendamento, porém não respondeu diretamente à dúvida da paciente sobre o abatimento do valor da consulta na sessão.</p>
+      <div class="case-label" style="margin-top:12px">AVALIAÇÃO DE EFICÁCIA</div>
+      <p class="case-text">A recepção não esclareceu a dúvida da paciente sobre o abatimento do valor da consulta, nem ofereceu alternativas para facilitar o pagamento, o que poderia ter ajudado a contornar a objeção de preço.</p>
+    </div>
+  </div>
+</div><div class="case-card" data-obj="preco" data-mes="2026-04">
+  <div class="case-header">
+    <div class="case-meta">
+      <span class="case-id">#455</span>
+      <span style="color:var(--muted);font-size:.78rem">2026-04-13 · 04/26</span>
+      <span class="badge badge-yellow">Preço</span>
+      
+    </div>
+    <div class="case-meta" style="gap:12px">
+      <span style="font-size:.78rem;color:#f87171;font-weight:600">✗ Não Convertida</span>
+      <span style="font-size:.8rem;color:#94a3b8">⚪ NEUTRA</span>
+      <a class="chat-link" href="https://chat.digital-ai.tech/app/accounts/4/conversations/3810" target="_blank">↗ Ver conversa</a>
+    </div>
+  </div>
+  <div class="case-proc">📋 RETORNO DE MMP SARDAS BRANCAS, fotona 4d &nbsp;·&nbsp; 💰 R$5,400</div>
+  <div class="case-body">
+    <div class="case-col">
+      <div class="case-label">TRECHO DA OBJEÇÃO</div>
+      <blockquote class="msg-quote">Já fiz fotona na região dos olhos com vocês, quanto tá a face toda ? E quando fiz bioestimulador última vez? Quanto tá ?</blockquote>
+      <div class="case-label" style="margin-top:12px">EXPLICAÇÃO DA OBJEÇÃO</div>
+      <p class="case-text">O paciente demonstra interesse nos preços dos procedimentos, indicando uma possível objeção relacionada ao custo, mas não há uma recusa explícita ou negativa direta. A falta de uma resposta clara sobre valores específicos para o fotona face toda e o bioestimulador pode ter dificultado o avanço para a conversão.</p>
+    </div>
+    <div class="case-col">
+      <div class="case-label">COMO A RECEPÇÃO ATENDEU</div>
+      <p class="case-text">A recepção respondeu informando valores aproximados para o bioestimulador (R$ 2.500,00) e sugeriu a realização de uma consulta avaliativa (R$ 400,00, abatidos no procedimento) para definir o protocolo ideal. Também destacou as qualidades do Fotona 4D, tentando valorizar o procedimento e incentivar a avaliação com a médica.</p>
+      <div class="case-label" style="margin-top:12px">AVALIAÇÃO DE EFICÁCIA</div>
+      <p class="case-text">A recepção forneceu informações e tentou esclarecer dúvidas sobre preços e procedimentos, mas não conseguiu apresentar valores claros e completos para todos os tratamentos solicitados, nem conduziu o paciente diretamente para o agendamento da avaliação, o que poderia ter aumentado as chances de conversão.</p>
+    </div>
+  </div>
+</div><div class="case-card" data-obj="sem_objecao" data-mes="2026-04">
+  <div class="case-header">
+    <div class="case-meta">
+      <span class="case-id">#460</span>
+      <span style="color:var(--muted);font-size:.78rem">2026-04-16 · 04/26</span>
+      <span class="badge badge-green">Converteu</span>
+      
+    </div>
+    <div class="case-meta" style="gap:12px">
+      <span style="font-size:.78rem;color:#4ade80;font-weight:600">✓ Convertida</span>
+      <span style="font-size:.8rem;color:#4ade80">✅ EFICAZ</span>
+      <a class="chat-link" href="https://chat.digital-ai.tech/app/accounts/4/conversations/4850" target="_blank">↗ Ver conversa</a>
+    </div>
+  </div>
+  <div class="case-proc">📋 TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR), LIFTERA PAPADA, SCULPTRA &nbsp;·&nbsp; 💰 R$6,200</div>
+  <div class="case-body">
+    <div class="case-col">
+      <div class="case-label">TRECHO DA OBJEÇÃO</div>
+      <span style="color:var(--muted);font-size:.78rem">Sem trecho identificado</span>
+      <div class="case-label" style="margin-top:12px">EXPLICAÇÃO DA OBJEÇÃO</div>
+      <p class="case-text">Não há manifestação clara de objeção por parte da paciente. A conversa indica que a paciente confirmou a consulta, alinhou datas e horários, e agradeceu pela informação dos protocolos e valores. Ela também deixou claro que será a responsável pelo pagamento, o que demonstra interesse e ausência de objeção quanto ao custo.</p>
+    </div>
+    <div class="case-col">
+      <div class="case-label">COMO A RECEPÇÃO ATENDEU</div>
+      <p class="case-text">A recepção respondeu prontamente com os valores detalhados dos procedimentos indicados pela médica, confirmou a consulta agendada e manteve o contato ativo para esclarecimentos. Exemplos: 'Protocolos indicado pela Dra Raquel
+Botox face e pescoco 2400,00
+Prenchimento 3 seringas 4500,00
+liftera terco inferior 3500 ,00
+Biostimulador de colageno Sculptra 2500,00' e 'Oi 💛 Atualização no seu cadastro DermaClinic realizado com sucesso. Ingrid, espero que você esteja bem... 😀 Aqui é a Clara, assistente virtual da DermaClinic. Estou passando para te lembrar da consulta agendada para o dia 09/07/2026 às 10:00.'</p>
+      <div class="case-label" style="margin-top:12px">AVALIAÇÃO DE EFICÁCIA</div>
+      <p class="case-text">A recepção manteve comunicação clara, respondeu às dúvidas, confirmou agendamento e forneceu informações detalhadas, o que facilitou a conversão sem apresentar falhas ou atrasos que pudessem gerar objeções.</p>
+    </div>
+  </div>
+</div><div class="case-card" data-obj="medo_procedimento" data-mes="2026-05">
+  <div class="case-header">
+    <div class="case-meta">
+      <span class="case-id">#430</span>
+      <span style="color:var(--muted);font-size:.78rem">2026-05-12 · 05/26</span>
+      <span class="badge badge-purple">Medo Proc.</span>
+      
+    </div>
+    <div class="case-meta" style="gap:12px">
+      <span style="font-size:.78rem;color:#4ade80;font-weight:600">✓ Convertida</span>
+      <span style="font-size:.8rem;color:#94a3b8">⚪ NEUTRA</span>
+      <a class="chat-link" href="https://chat.digital-ai.tech/app/accounts/4/conversations/4007" target="_blank">↗ Ver conversa</a>
+    </div>
+  </div>
+  <div class="case-proc">📋 FOTONA PERIOCULAR SMOOTH, LIFTERA TERCO INFERIOR, LIFTERA PAPADA, co2 olhos &nbsp;·&nbsp; 💰 R$9,250</div>
+  <div class="case-body">
+    <div class="case-col">
+      <div class="case-label">TRECHO DA OBJEÇÃO</div>
+      <blockquote class="msg-quote">mas eu tava pensando, vou ficar a semana toda inchada?
+ah não quero</blockquote>
+      <div class="case-label" style="margin-top:12px">EXPLICAÇÃO DA OBJEÇÃO</div>
+      <p class="case-text">A paciente demonstrou medo ou receio em relação ao inchaço pós-procedimento, o que indica uma objeção relacionada ao desconforto e efeitos colaterais do tratamento.</p>
+    </div>
+    <div class="case-col">
+      <div class="case-label">COMO A RECEPÇÃO ATENDEU</div>
+      <p class="case-text">A recepção respondeu prontamente oferecendo remarcação para uma data conveniente ("pode ser dia 16/06 as 11.30") e confirmou o agendamento posteriormente, mas não há evidência clara de que tenha abordado diretamente o medo do inchaço ou explicado sobre o procedimento para tranquilizar a paciente.</p>
+      <div class="case-label" style="margin-top:12px">AVALIAÇÃO DE EFICÁCIA</div>
+      <p class="case-text">A recepção foi ágil e prestativa na remarcação e confirmação, mas não trabalhou diretamente a objeção do medo do procedimento, o que poderia ter aumentado as chances de conversão mais rápida e segura.</p>
+    </div>
+  </div>
+</div><div class="case-card" data-obj="medo_procedimento" data-mes="2026-05">
+  <div class="case-header">
+    <div class="case-meta">
+      <span class="case-id">#458</span>
+      <span style="color:var(--muted);font-size:.78rem">2026-05-13 · 05/26</span>
+      <span class="badge badge-purple">Medo Proc.</span>
+      
+    </div>
+    <div class="case-meta" style="gap:12px">
+      <span style="font-size:.78rem;color:#f87171;font-weight:600">✗ Não Convertida</span>
+      <span style="font-size:.8rem;color:#94a3b8">⚪ NEUTRA</span>
+      <a class="chat-link" href="https://chat.digital-ai.tech/app/accounts/4/conversations/4007" target="_blank">↗ Ver conversa</a>
+    </div>
+  </div>
+  <div class="case-proc">📋 PEELING MEDIO, PREENCHIMENTO OLHEIRAS &nbsp;·&nbsp; 💰 R$700</div>
+  <div class="case-body">
+    <div class="case-col">
+      <div class="case-label">TRECHO DA OBJEÇÃO</div>
+      <blockquote class="msg-quote">mas eu tava pensando, vou ficar a semana toda inchada? ah não quero</blockquote>
+      <div class="case-label" style="margin-top:12px">EXPLICAÇÃO DA OBJEÇÃO</div>
+      <p class="case-text">A paciente demonstra medo ou receio em relação ao inchaço e ao tempo de recuperação do procedimento, o que a faz hesitar em confirmar o agendamento.</p>
+    </div>
+    <div class="case-col">
+      <div class="case-label">COMO A RECEPÇÃO ATENDEU</div>
+      <p class="case-text">A recepção respondeu prontamente oferecendo remarcação para outra data (16/06 às 11:30) e confirmou o agendamento posteriormente, mas não há evidências na conversa de que tenha esclarecido dúvidas específicas sobre o inchaço ou o tempo de recuperação do procedimento.</p>
+      <div class="case-label" style="margin-top:12px">AVALIAÇÃO DE EFICÁCIA</div>
+      <p class="case-text">A recepção foi ágil e educada na comunicação e remarcação, porém não abordou diretamente a objeção da paciente sobre o inchaço e o medo do procedimento, o que poderia ter aumentado as chances de conversão.</p>
+    </div>
+  </div>
+</div><div class="case-card" data-obj="preco" data-mes="2026-05">
+  <div class="case-header">
+    <div class="case-meta">
+      <span class="case-id">#501</span>
+      <span style="color:var(--muted);font-size:.78rem">2026-05-18 · 05/26</span>
+      <span class="badge badge-yellow">Preço</span>
+      
+    </div>
+    <div class="case-meta" style="gap:12px">
+      <span style="font-size:.78rem;color:#f87171;font-weight:600">✗ Não Convertida</span>
+      <span style="font-size:.8rem;color:#94a3b8">⚪ NEUTRA</span>
+      <a class="chat-link" href="https://chat.digital-ai.tech/app/accounts/4/conversations/4423" target="_blank">↗ Ver conversa</a>
+    </div>
+  </div>
+  <div class="case-proc">📋 RESTYLANE/LYFT/DEFYNE/KYSSE (2SERINGA), SCULPTRA &nbsp;·&nbsp; 💰 R$5,600</div>
+  <div class="case-body">
+    <div class="case-col">
+      <div class="case-label">TRECHO DA OBJEÇÃO</div>
+      <blockquote class="msg-quote">Se eu pagar à vista, ganho um desconto?</blockquote>
+      <div class="case-label" style="margin-top:12px">EXPLICAÇÃO DA OBJEÇÃO</div>
+      <p class="case-text">O paciente demonstrou preocupação com o preço do procedimento e buscou negociar um desconto para pagamento à vista, indicando que o custo foi um fator que dificultou a conversão.</p>
+    </div>
+    <div class="case-col">
+      <div class="case-label">COMO A RECEPÇÃO ATENDEU</div>
+      <p class="case-text">A recepção respondeu oferecendo um desconto no preenchimento, reduzindo o valor de R$1600 para R$1500, explicando que o valor do Sculptra não poderia ser alterado por ser um produto premium, e ressaltou a qualidade dos materiais usados. Exemplo: 'Consigo dar um desconto no preechimento para 1500, pois o sculptra subiu e Dra permaneceu o mesmo valor, entendemos que é um valor mais caro, mas Dra usa só a linha premium Galderma, nao abre mão usar produtos mais em conta.'</p>
+      <div class="case-label" style="margin-top:12px">AVALIAÇÃO DE EFICÁCIA</div>
+      <p class="case-text">A recepção atendeu a objeção de preço oferecendo um desconto parcial e explicando o valor agregado, mas não houve um fechamento ou avanço claro na negociação, pois o paciente apenas disse que iria analisar e não houve retorno positivo explícito. Portanto, a abordagem foi adequada, porém não suficiente para converter.</p>
+    </div>
+  </div>
+</div><div class="case-card" data-obj="preco" data-mes="2026-05">
+  <div class="case-header">
+    <div class="case-meta">
+      <span class="case-id">#503</span>
+      <span style="color:var(--muted);font-size:.78rem">2026-05-18 · 05/26</span>
+      <span class="badge badge-yellow">Preço</span>
+      
+    </div>
+    <div class="case-meta" style="gap:12px">
+      <span style="font-size:.78rem;color:#f87171;font-weight:600">✗ Não Convertida</span>
+      <span style="font-size:.8rem;color:#94a3b8">⚪ NEUTRA</span>
+      <a class="chat-link" href="https://chat.digital-ai.tech/app/accounts/4/conversations/16327" target="_blank">↗ Ver conversa</a>
+    </div>
+  </div>
+  <div class="case-proc">📋 SPECTRA TATTOO DE 5CM ATE 25 CM &nbsp;·&nbsp; 💰 R$550</div>
+  <div class="case-body">
+    <div class="case-col">
+      <div class="case-label">TRECHO DA OBJEÇÃO</div>
+      <blockquote class="msg-quote">Quero saber se o que eu paguei, tenho direito a um procedimento ou dois?</blockquote>
+      <div class="case-label" style="margin-top:12px">EXPLICAÇÃO DA OBJEÇÃO</div>
+      <p class="case-text">O paciente questiona se o valor pago corresponde a uma única sessão ou se inclui mais de uma, demonstrando dúvida sobre o custo total e a quantidade de sessões incluídas, o que indica uma objeção relacionada ao preço e à clareza do pacote adquirido.</p>
+    </div>
+    <div class="case-col">
+      <div class="case-label">COMO A RECEPÇÃO ATENDEU</div>
+      <p class="case-text">A recepção respondeu informando que o valor é por sessão e que cada nova sessão custa R$650,00, por exemplo: 'o valor é por sessao, a cada nova sessao o valor de 650,00'. Também solicitou foto para avaliação, mas não esclareceu diretamente o valor da proposta original de R$550.</p>
+      <div class="case-label" style="margin-top:12px">AVALIAÇÃO DE EFICÁCIA</div>
+      <p class="case-text">A recepção respondeu à dúvida do paciente sobre o preço por sessão, porém com informações confusas (valor de R$650,00 diferente do proposto R$550,00) e sem esclarecer claramente o que o paciente já pagou ou tem direito, o que pode gerar mais dúvidas e dificultar a conversão.</p>
+    </div>
+  </div>
+</div><div class="case-card" data-obj="nao_respondeu" data-mes="2026-05">
+  <div class="case-header">
+    <div class="case-meta">
+      <span class="case-id">#515</span>
+      <span style="color:var(--muted);font-size:.78rem">2026-05-25 · 05/26</span>
+      <span class="badge badge-red">Não Respondeu</span>
+      <div class="correction-badge">⚠ Corrigido: Converteu / Sem Objeção</div>
+    </div>
+    <div class="case-meta" style="gap:12px">
+      <span style="font-size:.78rem;color:#f87171;font-weight:600">✗ Não Convertida</span>
+      <span style="font-size:.8rem;color:#94a3b8">⚪ NEUTRA</span>
+      <a class="chat-link" href="https://chat.digital-ai.tech/app/accounts/4/conversations/5050" target="_blank">↗ Ver conversa</a>
+    </div>
+  </div>
+  <div class="case-proc">📋 TOXINA BOTULINICA GLABELA &nbsp;·&nbsp; 💰 R$1,250</div>
+  <div class="case-body">
+    <div class="case-col">
+      <div class="case-label">TRECHO DA OBJEÇÃO</div>
+      <span style="color:var(--muted);font-size:.78rem">Sem trecho identificado</span>
+      <div class="case-label" style="margin-top:12px">EXPLICAÇÃO DA OBJEÇÃO</div>
+      <p class="case-text">O paciente apenas confirmou que está aguardando, sem apresentar qualquer objeção explícita relacionada a preço, tempo, medo do procedimento ou prioridade. Portanto, não há uma objeção clara que dificulte a conversão.</p>
+    </div>
+    <div class="case-col">
+      <div class="case-label">COMO A RECEPÇÃO ATENDEU</div>
+      <p class="case-text">Não há registro da resposta da recepção nesta conversa, apenas a mensagem do paciente.</p>
+      <div class="case-label" style="margin-top:12px">AVALIAÇÃO DE EFICÁCIA</div>
+      <p class="case-text">Como não há resposta da recepção registrada, não é possível avaliar a eficácia do atendimento. A classificação original como 'Não Respondeu' não é adequada, pois o paciente respondeu e não apresentou objeção.</p>
+    </div>
+  </div>
+</div><div class="case-card" data-obj="disponibilidade_tempo" data-mes="2026-06">
+  <div class="case-header">
+    <div class="case-meta">
+      <span class="case-id">#526</span>
+      <span style="color:var(--muted);font-size:.78rem">2026-06-10 · 06/26</span>
+      <span class="badge badge-yellow">Disp./Tempo</span>
+      
+    </div>
+    <div class="case-meta" style="gap:12px">
+      <span style="font-size:.78rem;color:#f87171;font-weight:600">✗ Não Convertida</span>
+      <span style="font-size:.8rem;color:#4ade80">✅ EFICAZ</span>
+      <a class="chat-link" href="https://chat.digital-ai.tech/app/accounts/4/conversations/11915" target="_blank">↗ Ver conversa</a>
+    </div>
+  </div>
+  <div class="case-proc">📋 FOTONA VASOS &nbsp;·&nbsp; 💰 R$1,200</div>
+  <div class="case-body">
+    <div class="case-col">
+      <div class="case-label">TRECHO DA OBJEÇÃO</div>
+      <blockquote class="msg-quote">Meu filho está muito doente e tive que levar ele no hospital duas vezes
+Hoje tive que ficar de plantão para ver se precisaria internar</blockquote>
+      <div class="case-label" style="margin-top:12px">EXPLICAÇÃO DA OBJEÇÃO</div>
+      <p class="case-text">A paciente não conseguiu reagendar ou confirmar o procedimento devido a uma emergência familiar que demandou seu tempo e atenção, impossibilitando a continuidade do processo de conversão naquele momento.</p>
+    </div>
+    <div class="case-col">
+      <div class="case-label">COMO A RECEPÇÃO ATENDEU</div>
+      <p class="case-text">A recepção manteve a comunicação clara e respeitosa, confirmando o agendamento para o dia 03/08 às 14h após a paciente manifestar interesse, e respondeu prontamente às mensagens anteriores, por exemplo: 'Dia 03/08 as 14.00' e 'Perfeito agendado'. Também enviou lembretes e mensagens de cortesia, como o parabéns de aniversário e o lembrete do agendamento. Não houve tentativas de pressionar a paciente diante da situação relatada.</p>
+      <div class="case-label" style="margin-top:12px">AVALIAÇÃO DE EFICÁCIA</div>
+      <p class="case-text">A recepção foi atenciosa, respondeu rapidamente, confirmou o agendamento solicitado e respeitou o momento delicado da paciente, mantendo a comunicação aberta sem pressionar, o que é adequado para o contexto.</p>
+    </div>
+  </div>
+</div><div class="case-card" data-obj="preco" data-mes="2026-06">
+  <div class="case-header">
+    <div class="case-meta">
+      <span class="case-id">#539</span>
+      <span style="color:var(--muted);font-size:.78rem">2026-06-22 · 06/26</span>
+      <span class="badge badge-yellow">Preço</span>
+      
+    </div>
+    <div class="case-meta" style="gap:12px">
+      <span style="font-size:.78rem;color:#f87171;font-weight:600">✗ Não Convertida</span>
+      <span style="font-size:.8rem;color:#94a3b8">⚪ NEUTRA</span>
+      <a class="chat-link" href="https://chat.digital-ai.tech/app/accounts/4/conversations/16103" target="_blank">↗ Ver conversa</a>
+    </div>
+  </div>
+  <div class="case-proc">📋 TOXINA BOTULINICA SORRISO GENGIVAL, RESTYLANE/LYFT/DEFYNE/KYSSE (5SERINGA), LASER CO2 FULL FACE, LIFTERA TERCO INFERIOR, LASER CO2 PESCOCO &nbsp;·&nbsp; 💰 R$15,260</div>
+  <div class="case-body">
+    <div class="case-col">
+      <div class="case-label">TRECHO DA OBJEÇÃO</div>
+      <blockquote class="msg-quote">Eu pensei ter entendido 4.100 00</blockquote>
+      <div class="case-label" style="margin-top:12px">EXPLICAÇÃO DA OBJEÇÃO</div>
+      <p class="case-text">O paciente demonstrou dúvida e confusão em relação ao valor cobrado pelas seringas, indicando que o preço informado inicialmente não foi compreendido corretamente, o que gerou uma objeção relacionada ao custo do procedimento.</p>
+    </div>
+    <div class="case-col">
+      <div class="case-label">COMO A RECEPÇÃO ATENDEU</div>
+      <p class="case-text">A recepção respondeu prontamente esclarecendo o valor correto para 3 seringas: 'Ola, bom dia, para 3 seringas que foi indicado o valor é 4500,00' e tranquilizou o paciente com 'Imagina tranquilo'.</p>
+      <div class="case-label" style="margin-top:12px">AVALIAÇÃO DE EFICÁCIA</div>
+      <p class="case-text">A recepção esclareceu a dúvida do paciente de forma educada e rápida, porém não houve tentativa de contornar a objeção de preço ou oferecer alternativas para facilitar a conversão, resultando em ausência de avanço na negociação.</p>
+    </div>
+  </div>
+</div><div class="case-card" data-obj="nao_respondeu" data-mes="2026-07">
+  <div class="case-header">
+    <div class="case-meta">
+      <span class="case-id">#541</span>
+      <span style="color:var(--muted);font-size:.78rem">2026-07-08 · 07/26</span>
+      <span class="badge badge-red">Não Respondeu</span>
+      <div class="correction-badge">⚠ Corrigido: Prioridade Baixa</div>
+    </div>
+    <div class="case-meta" style="gap:12px">
+      <span style="font-size:.78rem;color:#f87171;font-weight:600">✗ Não Convertida</span>
+      <span style="font-size:.8rem;color:#94a3b8">⚪ NEUTRA</span>
+      <a class="chat-link" href="https://chat.digital-ai.tech/app/accounts/4/conversations/592" target="_blank">↗ Ver conversa</a>
+    </div>
+  </div>
+  <div class="case-proc">📋 LASER CO2 FULL FACE, LASER CO2 COLO &nbsp;·&nbsp; 💰 R$4,500</div>
+  <div class="case-body">
+    <div class="case-col">
+      <div class="case-label">TRECHO DA OBJEÇÃO</div>
+      <blockquote class="msg-quote">Recebi este laudo hoje 🙁
+Entendo que a prioridade é tirar as pintas e não fazer o procedimento sugerido né?</blockquote>
+      <div class="case-label" style="margin-top:12px">EXPLICAÇÃO DA OBJEÇÃO</div>
+      <p class="case-text">A paciente demonstra dúvida e preocupação sobre a prioridade do tratamento, questionando se deve priorizar a remoção das pintas em vez do procedimento proposto (LASER CO2). Essa incerteza sobre o tratamento adequado gerou uma objeção que não foi diretamente respondida pela clínica, o que dificultou a conversão.</p>
+    </div>
+    <div class="case-col">
+      <div class="case-label">COMO A RECEPÇÃO ATENDEU</div>
+      <p class="case-text">A recepção respondeu informando que a Dra. Raquel estava fora da clínica e que as dúvidas seriam repassadas para ela, prometendo retorno assim que possível: "Dra Raquel está fora da Clinica esta semana. Estaremos transmitindo suas dúvidas a ela. Assim que tivermos alguma resposta retornamos para vc!"</p>
+      <div class="case-label" style="margin-top:12px">AVALIAÇÃO DE EFICÁCIA</div>
+      <p class="case-text">A recepção respondeu educadamente e informou que a dúvida seria encaminhada, mas não conseguiu dar uma resposta objetiva ou resolver a objeção da paciente em tempo hábil, o que deixou a paciente sem retorno claro e pode ter prejudicado a conversão.</p>
+    </div>
+  </div>
+</div><div class="case-card" data-obj="sem_objecao" data-mes="2026-07">
+  <div class="case-header">
+    <div class="case-meta">
+      <span class="case-id">#545</span>
+      <span style="color:var(--muted);font-size:.78rem">2026-07-09 · 07/26</span>
+      <span class="badge badge-green">Converteu</span>
+      
+    </div>
+    <div class="case-meta" style="gap:12px">
+      <span style="font-size:.78rem;color:#4ade80;font-weight:600">✓ Convertida</span>
+      <span style="font-size:.8rem;color:#4ade80">✅ EFICAZ</span>
+      <a class="chat-link" href="https://chat.digital-ai.tech/app/accounts/4/conversations/16051" target="_blank">↗ Ver conversa</a>
+    </div>
+  </div>
+  <div class="case-proc">📋 TOXINA BOTULINICA FACE/PESCOCO, RESTYLANE/LYFT/DEFYNE/KYSSE (4SERINGA), SCULPTRA &nbsp;·&nbsp; 💰 R$10,700</div>
+  <div class="case-body">
+    <div class="case-col">
+      <div class="case-label">TRECHO DA OBJEÇÃO</div>
+      <blockquote class="msg-quote">Quantas consultas para fazer tudo? achei que seriam varias</blockquote>
+      <div class="case-label" style="margin-top:12px">EXPLICAÇÃO DA OBJEÇÃO</div>
+      <p class="case-text">O paciente demonstrou dúvida e possível surpresa em relação à quantidade de consultas necessárias para realizar todos os procedimentos, indicando uma expectativa diferente do que foi proposto inicialmente, o que poderia dificultar a conversão.</p>
+    </div>
+    <div class="case-col">
+      <div class="case-label">COMO A RECEPÇÃO ATENDEU</div>
+      <p class="case-text">A recepção respondeu prontamente oferecendo opções de agendamento, sugerindo horários alternativos para facilitar o fechamento, por exemplo: 'Sexta a tarde a Dra da aula, poderia ser amanhã as 11h30, surgiu um horário o que acha?' e 'Ok, agendado!'</p>
+      <div class="case-label" style="margin-top:12px">AVALIAÇÃO DE EFICÁCIA</div>
+      <p class="case-text">A recepção respondeu rapidamente às dúvidas do paciente, ofereceu alternativas de horários e conseguiu agendar a consulta, o que indica que a objeção foi superada e a conversão ocorreu com sucesso.</p>
+    </div>
+  </div>
+</div><div class="case-card" data-obj="sem_objecao" data-mes="2026-07">
+  <div class="case-header">
+    <div class="case-meta">
+      <span class="case-id">#546</span>
+      <span style="color:var(--muted);font-size:.78rem">2026-07-09 · 07/26</span>
+      <span class="badge badge-green">Converteu</span>
+      
+    </div>
+    <div class="case-meta" style="gap:12px">
+      <span style="font-size:.78rem;color:#4ade80;font-weight:600">✓ Convertida</span>
+      <span style="font-size:.8rem;color:#4ade80">✅ EFICAZ</span>
+      <a class="chat-link" href="https://chat.digital-ai.tech/app/accounts/4/conversations/16701" target="_blank">↗ Ver conversa</a>
+    </div>
+  </div>
+  <div class="case-proc">📋 FOTONA FACE 4D, MEGADERME RF MICROAGULHADA &nbsp;·&nbsp; 💰 R$7,000</div>
+  <div class="case-body">
+    <div class="case-col">
+      <div class="case-label">TRECHO DA OBJEÇÃO</div>
+      <span style="color:var(--muted);font-size:.78rem">Sem trecho identificado</span>
+      <div class="case-label" style="margin-top:12px">EXPLICAÇÃO DA OBJEÇÃO</div>
+      <p class="case-text">Não houve manifestação de objeção por parte da paciente. A paciente confirmou o entendimento da proposta e demonstrou interesse, inclusive confirmando que estava indo e agradecendo pela informação sobre o procedimento.</p>
+    </div>
+    <div class="case-col">
+      <div class="case-label">COMO A RECEPÇÃO ATENDEU</div>
+      <p class="case-text">A recepção enviou mensagens claras e informativas, incluindo a confirmação da atualização do cadastro e o lembrete da consulta futura. Não houve necessidade de contornar objeções, pois a paciente respondeu positivamente, por exemplo: 'Estou indo', 'Obrigada, Dani. O fotona é completo. Rosto papada/pescoço e por dentro da boca, certo?', 'Combinado! 😘'.</p>
+      <div class="case-label" style="margin-top:12px">AVALIAÇÃO DE EFICÁCIA</div>
+      <p class="case-text">A recepção manteve contato adequado, respondeu às dúvidas da paciente e confirmou o agendamento, facilitando a conversão sem apresentar falhas ou dificuldades.</p>
+    </div>
+  </div>
+</div><div class="case-card" data-obj="sem_objecao" data-mes="2026-07">
+  <div class="case-header">
+    <div class="case-meta">
+      <span class="case-id">#550</span>
+      <span style="color:var(--muted);font-size:.78rem">2026-07-13 · 07/26</span>
+      <span class="badge badge-green">Converteu</span>
+      
+    </div>
+    <div class="case-meta" style="gap:12px">
+      <span style="font-size:.78rem;color:#4ade80;font-weight:600">✓ Convertida</span>
+      <span style="font-size:.8rem;color:#4ade80">✅ EFICAZ</span>
+      <a class="chat-link" href="https://chat.digital-ai.tech/app/accounts/4/conversations/16231" target="_blank">↗ Ver conversa</a>
+    </div>
+  </div>
+  <div class="case-proc">📋 SPECTRA,POROS, RUGAS( 6 SESSOES) &nbsp;·&nbsp; 💰 R$3,140</div>
+  <div class="case-body">
+    <div class="case-col">
+      <div class="case-label">TRECHO DA OBJEÇÃO</div>
+      <span style="color:var(--muted);font-size:.78rem">Sem trecho identificado</span>
+      <div class="case-label" style="margin-top:12px">EXPLICAÇÃO DA OBJEÇÃO</div>
+      <p class="case-text">Não houve nenhuma manifestação de objeção por parte do paciente durante a conversa. O paciente confirmou a presença, esclareceu dúvidas sobre o horário e a médica, e confirmou o fechamento da proposta para a data combinada.</p>
+    </div>
+    <div class="case-col">
+      <div class="case-label">COMO A RECEPÇÃO ATENDEU</div>
+      <p class="case-text">A recepção respondeu prontamente e de forma clara, confirmando o horário correto e o agendamento final. Exemplos: 'Boa tarde, pode ser dia 15/09 as 14.00' e 'Perfeito agendad'.</p>
+      <div class="case-label" style="margin-top:12px">AVALIAÇÃO DE EFICÁCIA</div>
+      <p class="case-text">A recepção respondeu rapidamente, esclareceu dúvidas do paciente e confirmou o agendamento, facilitando a conversão sem gerar atritos ou dúvidas.</p>
+    </div>
+  </div>
+</div><div class="case-card" data-obj="medo_procedimento" data-mes="2026-07">
+  <div class="case-header">
+    <div class="case-meta">
+      <span class="case-id">#555</span>
+      <span style="color:var(--muted);font-size:.78rem">2026-07-15 · 07/26</span>
+      <span class="badge badge-purple">Medo Proc.</span>
+      
+    </div>
+    <div class="case-meta" style="gap:12px">
+      <span style="font-size:.78rem;color:#4ade80;font-weight:600">✓ Convertida</span>
+      <span style="font-size:.8rem;color:#4ade80">✅ EFICAZ</span>
+      <a class="chat-link" href="https://chat.digital-ai.tech/app/accounts/4/conversations/16572" target="_blank">↗ Ver conversa</a>
+    </div>
+  </div>
+  <div class="case-proc">📋 RESTYLANE/LYFT/DEFYNE/KYSSE (4SERINGA), LASER CO2 FULL FACE &nbsp;·&nbsp; 💰 R$9,600</div>
+  <div class="case-body">
+    <div class="case-col">
+      <div class="case-label">TRECHO DA OBJEÇÃO</div>
+      <blockquote class="msg-quote">Depois do procedimento isto vai escalar
+Escamar</blockquote>
+      <div class="case-label" style="margin-top:12px">EXPLICAÇÃO DA OBJEÇÃO</div>
+      <p class="case-text">O paciente demonstrou dúvida e preocupação sobre a possibilidade de descamação após o procedimento, o que indica medo ou receio em relação aos efeitos colaterais do tratamento.</p>
+    </div>
+    <div class="case-col">
+      <div class="case-label">COMO A RECEPÇÃO ATENDEU</div>
+      <p class="case-text">A recepção respondeu prontamente confirmando que haverá descamação e enviou vídeos explicativos para esclarecer o paciente: "Sim vai descamar, vou enviar o video para voce conhecer um pouco" seguido dos links dos vídeos e se colocou à disposição para dúvidas.</p>
+      <div class="case-label" style="margin-top:12px">AVALIAÇÃO DE EFICÁCIA</div>
+      <p class="case-text">A recepção respondeu rapidamente e de forma informativa, enviando materiais visuais para tranquilizar o paciente, o que contribuiu para a conversão do agendamento confirmada posteriormente.</p>
+    </div>
+  </div>
+</div>
   </div>
 </div>
 
@@ -638,6 +1298,18 @@ document.getElementById('f-clear').addEventListener('click', () => {
 });
 
 renderTable(ROWS);
+
+// ─── Filtro dos cards de análise detalhada ────────────────────────────────────
+document.querySelectorAll('.case-filter-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.case-filter-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    const filter = this.dataset.filter;
+    document.querySelectorAll('.case-card').forEach(card => {
+      card.style.display = (!filter || card.dataset.obj === filter) ? '' : 'none';
+    });
+  });
+});
 })(); // fim IIFE async
 </script>
 
