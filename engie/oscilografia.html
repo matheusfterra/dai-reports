@@ -635,12 +635,18 @@ function parseDATBinary(buffer, cfg) {
   for (var a = 0; a < nA; a++) analogData.push(new Float32Array(nSamples));
   for (var d = 0; d < nD; d++) digitalData.push(new Uint8Array(nSamples));
 
+  // Calcular intervalo por amostra a partir da taxa de amostragem
+  var sampRate = (cfg.rates && cfg.rates[0] && cfg.rates[0].samp > 0) ? cfg.rates[0].samp : 60.0;
+  var msPerSample = 1000.0 / sampRate; // ex: 60Hz → 16.667ms, 3840Hz → 0.260ms
+
   var offset = 0;
   for (var s = 0; s < nSamples; s++) {
     if (offset + bytesPerSample > buffer.byteLength) break;
-    /* sampleNum */ view.getUint32(offset, true); offset += 4;
+    var sampleNum = view.getUint32(offset, true); offset += 4;
     var ts = view.getUint32(offset, true); offset += 4;
-    timestamps[s] = ts / 1000.0; // microsegundos -> ms
+    // Relés SIPROTEC frequentemente preenchem timestamps com 0.
+    // Reconstruir a partir do número de amostra e taxa de amostragem.
+    timestamps[s] = (ts > 0) ? ts / 1000.0 : (sampleNum - 1) * msPerSample;
 
     for (var a = 0; a < nA; a++) {
       var raw = view.getInt16(offset, true); offset += 2;
@@ -692,9 +698,21 @@ function parseDATAscii(text, cfg) {
 // NORMALIZAR TRIGGER (t=0 no trigger)
 // ============================================================
 function normalizeTrigger(cfg, dat) {
-  var trigSample = (cfg.rates[0] && cfg.rates[0].endSamp > 0) ? cfg.rates[0].endSamp : Math.floor(dat.nSamples / 3);
+  // endSamp = número da última amostra ANTES do trigger (IEEE C37.111)
+  // Índice 0-based do trigger = endSamp - 1
+  // Se não definido, coloca trigger a 1/3 do registro
+  var trigSample = (cfg.rates[0] && cfg.rates[0].endSamp > 0)
+    ? cfg.rates[0].endSamp
+    : Math.floor(dat.nSamples / 3);
   var safeIdx = Math.min(Math.max(trigSample - 1, 0), dat.nSamples - 1);
   var tOffset = dat.timestamps[safeIdx];
+  // Só normalizar se tOffset é válido (não-zero ou timestamps reais)
+  if (tOffset === 0 && dat.timestamps[dat.nSamples - 1] === 0) {
+    // Todos os timestamps são 0 — reconstruir pela posição no array
+    var sampRate = (cfg.rates && cfg.rates[0] && cfg.rates[0].samp > 0) ? cfg.rates[0].samp : 60.0;
+    var msPerSample = 1000.0 / sampRate;
+    tOffset = safeIdx * msPerSample;
+  }
   for (var s = 0; s < dat.nSamples; s++) {
     dat.timestamps[s] -= tOffset;
   }
@@ -739,7 +757,28 @@ function getType(ch) {
 function initState(cfg) {
   STATE.cfg = cfg;
   STATE.channelColors   = cfg.analogChannels.map(function(_, i){ return CHANNEL_COLORS[i % CHANNEL_COLORS.length]; });
-  STATE.channelVisible  = cfg.analogChannels.map(function(){ return true; });
+  // Limitar visibilidade default: máx 12 canais (prioridade: tensões e correntes de fase A/B/C)
+  var MAX_DEFAULT_VISIBLE = 12;
+  var defaultVisible = cfg.analogChannels.map(function(ch, i){
+    if (cfg.nA <= MAX_DEFAULT_VISIBLE) return true; // arquivo pequeno: mostrar todos
+    var unit = (ch.unit || '').toUpperCase();
+    var name = (ch.name || '').toUpperCase();
+    // Prioridade 1: correntes de fase (unit=A) e tensões (unit=kV ou V) sem "phi" (fasores)
+    var isCurrent = unit === 'A' && !name.includes('PHI') && !name.includes('MAG') === false;
+    var isVoltage = (unit === 'KV' || unit === 'V') && !name.includes('PHI');
+    var isMag = name.includes(' MAG') || (!name.includes(' PHI') && (unit === 'A' || unit === 'KV' || unit === 'V'));
+    return isMag;
+  });
+  // Garantir que não ultrapasse MAX_DEFAULT_VISIBLE
+  var visCount = 0;
+  STATE.channelVisible = defaultVisible.map(function(v){
+    if (v && visCount < MAX_DEFAULT_VISIBLE) { visCount++; return true; }
+    return false;
+  });
+  // Se nenhum foi selecionado, mostrar os primeiros 12
+  if (visCount === 0) {
+    STATE.channelVisible = cfg.analogChannels.map(function(_, i){ return i < MAX_DEFAULT_VISIBLE; });
+  }
   STATE.channelScale    = cfg.analogChannels.map(function(){ return 1.0; });
 }
 
