@@ -3,1870 +3,1259 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Projeto HIDRA — Oscilografia ENGIE Brasil</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Oscilografia COMTRADE · Projeto HIDRA</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
 <style>
-/* === ENGIE / DIGITAL AI THEME === */
-:root {
-  --engie-blue: #007ACD;
-  --engie-teal: #23D2B5;
-  --engie-navy: #182663;
-  --engie-light-blue: #00AAFF;
-  --dai-primary: #2D52EF;
-  --dai-dark: #0F1F5C;
-
-  --bg: #0a0e1a;
-  --bg-2: #0d1220;
-  --bg-3: #0f1829;
-  --bg-4: #132035;
-  --surface: #132035;
-  --surface-2: #1a2d4a;
-  --surface-3: #1e3a5f;
-
-  --border: rgba(0,122,205,.15);
-  --border-2: rgba(0,122,205,.28);
-  --border-accent: rgba(35,210,181,.25);
-
-  --text: #e8f4f8;
-  --text-2: #a8cde0;
-  --text-3: #7bb3c9;
-  --text-4: #4a7a99;
-
-  --sidebar-w: 260px;
-  --header-h: 56px;
-
-  --channel-colors: #007ACD, #23D2B5, #00AAFF, #2D52EF, #F4C542, #E05252, #9B6FD0, #34D399, #E08A2F, #FF6B9D;
-
-  --radius: 8px;
-  --radius-lg: 12px;
-
-  --shadow: 0 2px 8px rgba(0,0,0,.5);
-  --shadow-lg: 0 4px 24px rgba(0,0,0,.6);
-
-  --font: 'Lato', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 14px; }
-body {
-  font-family: var(--font);
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  overflow: hidden;
-  height: 100vh;
-}
-
-/* === SCROLLBAR === */
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 2px; }
-* { scrollbar-width: thin; scrollbar-color: var(--surface-3) transparent; }
-
-/* === HEADER === */
-.header {
-  height: var(--header-h);
-  background: var(--bg-2);
-  border-bottom: 1px solid var(--border-2);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 200;
-  backdrop-filter: blur(10px);
-}
-
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.engie-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.engie-chapeau {
-  width: 32px;
-  height: 20px;
-}
-
-.header-title {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--text);
-  letter-spacing: -0.2px;
-}
-
-.header-subtitle {
-  font-size: 11px;
-  color: var(--text-3);
-  font-weight: 400;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-.header-divider {
-  width: 1px;
-  height: 28px;
-  background: var(--border-2);
-}
-
-.header-badge {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  background: rgba(0,122,205,.12);
-  border: 1px solid rgba(0,122,205,.3);
-  border-radius: 20px;
-  font-size: 11px;
-  color: var(--engie-light-blue);
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
-
-.header-badge .dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--engie-teal);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.dai-credit {
-  font-size: 10px;
-  color: var(--text-4);
-  font-weight: 400;
-  letter-spacing: 0.3px;
-}
-
-.dai-credit span {
-  color: var(--dai-primary);
-  font-weight: 700;
-}
-
-/* === LAYOUT === */
-.app-layout {
-  display: flex;
-  height: 100vh;
-  padding-top: var(--header-h);
-}
-
-/* === SIDEBAR === */
-.sidebar {
-  width: var(--sidebar-w);
-  flex-shrink: 0;
-  background: var(--bg-2);
-  border-right: 1px solid var(--border);
-  height: calc(100vh - var(--header-h));
-  overflow-y: auto;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.sidebar-section {
-  padding: 14px 14px 10px;
-  border-bottom: 1px solid var(--border);
-}
-
-.sidebar-section-title {
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--text-4);
-  margin-bottom: 10px;
-}
-
-/* === UPLOAD ZONE === */
-.upload-zone {
-  border: 2px dashed var(--border-2);
-  border-radius: var(--radius-lg);
-  padding: 18px 12px;
-  text-align: center;
-  cursor: pointer;
-  transition: all .2s;
-  background: var(--bg-3);
-  position: relative;
-}
-
-.upload-zone:hover,
-.upload-zone.dragover {
-  border-color: var(--engie-blue);
-  background: rgba(0,122,205,.08);
-}
-
-.upload-zone input[type="file"] {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  cursor: pointer;
-  width: 100%;
-  height: 100%;
-}
-
-.upload-icon {
-  width: 32px;
-  height: 32px;
-  margin: 0 auto 8px;
-  background: rgba(0,122,205,.15);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.upload-icon svg { width: 16px; height: 16px; stroke: var(--engie-blue); fill: none; stroke-width: 2; }
-
-.upload-text {
-  font-size: 11px;
-  color: var(--text-3);
-  line-height: 1.5;
-}
-
-.upload-text strong {
-  display: block;
-  font-size: 12px;
-  color: var(--text-2);
-  margin-bottom: 2px;
-}
-
-.upload-formats {
-  font-size: 10px;
-  color: var(--text-4);
-  margin-top: 6px;
-  font-family: var(--font-mono);
-}
-
-/* === BUTTONS === */
-.btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 7px 12px;
-  border-radius: var(--radius);
-  font-size: 12px;
-  font-weight: 700;
-  font-family: var(--font);
-  cursor: pointer;
-  border: none;
-  transition: all .15s;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.btn-primary {
-  background: var(--engie-blue);
-  color: #fff;
-}
-.btn-primary:hover { background: #0069b3; }
-
-.btn-secondary {
-  background: transparent;
-  color: var(--text-3);
-  border: 1px solid var(--border-2);
-}
-.btn-secondary:hover { background: var(--surface); color: var(--text); }
-
-.btn-teal {
-  background: rgba(35,210,181,.12);
-  color: var(--engie-teal);
-  border: 1px solid rgba(35,210,181,.25);
-}
-.btn-teal:hover { background: rgba(35,210,181,.2); }
-
-.btn-sm {
-  padding: 4px 8px;
-  font-size: 11px;
-}
-
-.btn-full { width: 100%; }
-
-/* === CHANNEL LIST === */
-.channel-list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 0;
-}
-
-.channel-list-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 14px 8px;
-}
-
-.channel-list-title {
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--text-4);
-}
-
-.channel-list-actions {
-  display: flex;
-  gap: 4px;
-}
-
-.channel-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 14px;
-  cursor: pointer;
-  transition: background .12s;
-  border-left: 2px solid transparent;
-}
-
-.channel-item:hover { background: rgba(0,122,205,.06); }
-
-.channel-item.active { background: rgba(0,122,205,.1); border-left-color: var(--engie-blue); }
-
-.channel-checkbox {
-  width: 14px;
-  height: 14px;
-  border-radius: 3px;
-  border: 2px solid;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  cursor: pointer;
-  transition: all .12s;
-}
-
-.channel-checkbox.checked {
-  background: currentColor;
-}
-
-.channel-checkbox.checked::after {
-  content: '';
-  width: 7px;
-  height: 4px;
-  border-left: 1.5px solid #fff;
-  border-bottom: 1.5px solid #fff;
-  transform: rotate(-45deg) translateY(-1px);
-  display: block;
-}
-
-.channel-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.channel-name {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.channel-meta {
-  font-size: 10px;
-  color: var(--text-4);
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
-
-.channel-unit {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  padding: 1px 5px;
-  border-radius: 3px;
-  background: rgba(255,255,255,.05);
-  color: var(--text-3);
-}
-
-.channel-value {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--text-2);
-  margin-left: auto;
-  white-space: nowrap;
-}
-
-/* === SCALE CONTROLS === */
-.scale-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 14px;
-}
-
-.scale-label {
-  font-size: 10px;
-  color: var(--text-4);
-  width: 18px;
-  flex-shrink: 0;
-  font-family: var(--font-mono);
-}
-
-.scale-slider {
-  flex: 1;
-  -webkit-appearance: none;
-  appearance: none;
-  height: 3px;
-  border-radius: 2px;
-  background: var(--surface-3);
-  outline: none;
-  cursor: pointer;
-}
-
-.scale-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--engie-blue);
-  cursor: pointer;
-  transition: background .1s;
-}
-
-.scale-slider::-webkit-slider-thumb:hover { background: var(--engie-light-blue); }
-
-.scale-value {
-  font-size: 10px;
-  color: var(--text-3);
-  width: 28px;
-  text-align: right;
-  font-family: var(--font-mono);
-}
-
-/* === MAIN CONTENT === */
-.main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  min-width: 0;
-}
-
-/* === META CARD === */
-.meta-bar {
-  background: var(--bg-3);
-  border-bottom: 1px solid var(--border);
-  padding: 10px 18px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  min-height: 50px;
-}
-
-.meta-item {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-
-.meta-label {
-  font-size: 9px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: var(--text-4);
-}
-
-.meta-value {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-2);
-  font-family: var(--font-mono);
-}
-
-.meta-divider {
-  width: 1px;
-  height: 28px;
-  background: var(--border);
-}
-
-.meta-empty {
-  flex: 1;
-  font-size: 12px;
-  color: var(--text-4);
-  font-style: italic;
-}
-
-.trigger-badge {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3px 10px;
-  background: rgba(240,80,80,.12);
-  border: 1px solid rgba(240,80,80,.3);
-  border-radius: 20px;
-  font-size: 11px;
-  color: #f05050;
-  font-weight: 700;
-  font-family: var(--font-mono);
-  margin-left: auto;
-}
-
-.trigger-badge::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #f05050;
-}
-
-/* === PLOT AREA === */
-.plot-area {
-  flex: 1;
-  position: relative;
-  background: var(--bg);
-  overflow: hidden;
-  min-height: 0;
-}
-
-#waveform-plot {
-  width: 100%;
-  height: 100%;
-}
-
-/* === WELCOME STATE === */
-.welcome-state {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 16px;
-  background: var(--bg);
-  z-index: 10;
-}
-
-.welcome-icon {
-  width: 64px;
-  height: 64px;
-  background: rgba(0,122,205,.1);
-  border: 1px solid rgba(0,122,205,.25);
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.welcome-icon svg { width: 28px; height: 28px; stroke: var(--engie-blue); fill: none; stroke-width: 1.5; }
-
-.welcome-title {
-  font-size: 20px;
-  font-weight: 900;
-  color: var(--text);
-  text-align: center;
-}
-
-.welcome-sub {
-  font-size: 13px;
-  color: var(--text-3);
-  text-align: center;
-  max-width: 400px;
-  line-height: 1.6;
-}
-
-.welcome-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 4px;
-}
-
-/* === TIMELINE / X CONTROLS === */
-.x-controls {
-  background: var(--bg-3);
-  border-top: 1px solid var(--border);
-  padding: 10px 18px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-
-.x-controls-label {
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: var(--text-4);
-  white-space: nowrap;
-}
-
-.x-slider-wrap {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 200px;
-}
-
-.x-slider {
-  flex: 1;
-  -webkit-appearance: none;
-  appearance: none;
-  height: 4px;
-  border-radius: 2px;
-  background: var(--surface-3);
-  outline: none;
-  cursor: pointer;
-}
-
-.x-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--engie-blue);
-  cursor: pointer;
-}
-
-.x-range-inputs {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.x-range-inputs input {
-  width: 72px;
-  padding: 4px 8px;
-  background: var(--bg-4);
-  border: 1px solid var(--border-2);
-  border-radius: var(--radius);
-  color: var(--text);
-  font-size: 11px;
-  font-family: var(--font-mono);
-  outline: none;
-  text-align: center;
-}
-
-.x-range-inputs input:focus { border-color: var(--engie-blue); }
-.x-range-inputs span { font-size: 11px; color: var(--text-4); }
-
-.x-btns {
-  display: flex;
-  gap: 4px;
-}
-
-/* === NOTIFICATION === */
-.notification {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  padding: 10px 16px;
-  background: var(--bg-4);
-  border: 1px solid var(--border-2);
-  border-radius: var(--radius-lg);
-  font-size: 12px;
-  color: var(--text-2);
-  box-shadow: var(--shadow-lg);
-  z-index: 300;
-  transform: translateY(80px);
-  opacity: 0;
-  transition: all .3s ease;
-  max-width: 360px;
-}
-
-.notification.show {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-.notification.success { border-color: rgba(35,210,181,.4); color: var(--engie-teal); }
-.notification.error { border-color: rgba(240,80,80,.4); color: #f05050; }
-.notification.info { border-color: rgba(0,122,205,.4); color: var(--engie-light-blue); }
-
-/* === LOADING === */
-.loading-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(10,14,26,.85);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 20;
-  backdrop-filter: blur(4px);
-  display: none;
-}
-
-.loading-spinner {
-  width: 36px;
-  height: 36px;
-  border: 3px solid var(--surface-3);
-  border-top-color: var(--engie-blue);
-  border-radius: 50%;
-  animation: spin .8s linear infinite;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* === EMPTY CHANNELS === */
-.channels-empty {
-  padding: 20px 14px;
-  text-align: center;
-  color: var(--text-4);
-  font-size: 11px;
-  line-height: 1.6;
-}
-
-/* === DIVIDER === */
-.sidebar-divider {
-  height: 1px;
-  background: var(--border);
-  margin: 0;
-}
-
-/* === FOOTER SIDEBAR === */
-.sidebar-footer {
-  padding: 12px 14px;
-  border-top: 1px solid var(--border);
-  margin-top: auto;
-}
-
-.sidebar-footer .btn {
-  width: 100%;
-  margin-bottom: 6px;
-}
-
-/* === Y SCALE PANEL === */
-.y-controls {
-  background: var(--bg-3);
-  border-top: 1px solid var(--border);
-  padding: 8px 0;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height .3s ease;
-}
-
-.y-controls.open { max-height: 200px; }
-
-.y-controls-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 14px 6px;
-}
-
-.y-controls-title {
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: var(--text-4);
-}
-
-.y-scales-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  max-height: 140px;
-  overflow-y: auto;
-}
-
-/* === TOOLTIP CURSOR === */
-.cursor-info {
-  position: absolute;
-  top: 8px;
-  right: 10px;
-  background: rgba(13,18,32,.9);
-  border: 1px solid var(--border-2);
-  border-radius: var(--radius);
-  padding: 6px 10px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--text-3);
-  pointer-events: none;
-  z-index: 5;
-  min-width: 120px;
-}
-
-.cursor-info .cursor-time {
-  font-weight: 700;
-  color: var(--engie-light-blue);
-  margin-bottom: 4px;
-}
-
-.cursor-info .cursor-val {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 2px;
-}
-
-.cursor-info .cursor-val-name { color: var(--text-4); }
-.cursor-info .cursor-val-num { color: var(--text-2); font-weight: 700; }
-
-/* === RESPONSIVE === */
-@media (max-width: 900px) {
-  .sidebar { width: 200px; }
-  :root { --sidebar-w: 200px; }
-}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0e1a;
+    --panel: #0d1526;
+    --border: #1a2d4a;
+    --blue: #007ACD;
+    --teal: #23D2B5;
+    --navy: #182663;
+    --text: #e2eaf5;
+    --muted: #7a9bb5;
+    --red: #e05252;
+    --yellow: #f0c040;
+    --green: #4caf6e;
+    --orange: #e08840;
+    --header-h: 50px;
+    --sidebar-w: 300px;
+    --statusbar-h: 30px;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    overflow: hidden;
+  }
+
+  /* HEADER */
+  #header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--header-h);
+    background: linear-gradient(90deg, #0d1b35 0%, #071122 100%);
+    border-bottom: 1px solid #1a3a5c;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    z-index: 100;
+    gap: 16px;
+  }
+  #header .sep {
+    width: 1px;
+    height: 28px;
+    background: #1a3a5c;
+  }
+  #header .title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.02em;
+    flex: 1;
+  }
+  #header .subtitle {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  /* LAYOUT */
+  #layout {
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    bottom: var(--statusbar-h);
+    display: flex;
+  }
+
+  /* SIDEBAR */
+  #sidebar {
+    width: var(--sidebar-w);
+    min-width: var(--sidebar-w);
+    background: var(--panel);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  #sidebar-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 12px;
+  }
+  #sidebar-scroll::-webkit-scrollbar { width: 4px; }
+  #sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+  #sidebar-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .sb-section { margin-bottom: 14px; }
+  .sb-title {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  /* Upload */
+  #upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    padding: 18px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    background: rgba(0,122,205,0.04);
+  }
+  #upload-zone:hover, #upload-zone.drag-over {
+    border-color: var(--blue);
+    background: rgba(0,122,205,0.10);
+  }
+  #upload-zone .upload-icon { font-size: 24px; margin-bottom: 6px; }
+  #upload-zone .upload-text { font-size: 11px; color: var(--muted); line-height: 1.5; }
+  #upload-zone .upload-text b { color: var(--blue); }
+  #file-input { display: none; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 11px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: rgba(255,255,255,0.04);
+    color: var(--text);
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+  .btn:hover { background: rgba(0,122,205,0.18); border-color: var(--blue); }
+  .btn.primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .btn.primary:hover { background: #0065ab; }
+  .btn.small { padding: 3px 8px; font-size: 10px; }
+  .btn.active { background: rgba(0,122,205,0.3); border-color: var(--blue); color: var(--blue); }
+
+  /* Filtros */
+  .filter-bar { display: flex; flex-wrap: wrap; gap: 4px; }
+  .filter-btn {
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 10px;
+    font-family: 'Lato', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .filter-btn:hover { border-color: var(--blue); color: var(--text); }
+  .filter-btn.on { background: var(--blue); border-color: var(--blue); color: #fff; }
+
+  /* Channel list */
+  #channel-list { display: flex; flex-direction: column; gap: 2px; }
+  .ch-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    transition: background 0.1s;
+    cursor: pointer;
+  }
+  .ch-item:hover { background: rgba(255,255,255,0.04); }
+  .ch-item.hidden-ch { opacity: 0.35; }
+  .ch-cb {
+    width: 13px; height: 13px;
+    border-radius: 3px;
+    border: 2px solid;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; color: #fff;
+  }
+  .ch-name {
+    flex: 1; font-size: 11px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .ch-badges { display: flex; gap: 3px; flex-shrink: 0; }
+  .badge { font-size: 9px; padding: 1px 4px; border-radius: 2px; font-weight: 700; }
+  .badge-phase-A { background: rgba(224,82,82,0.2); color: #e05252; }
+  .badge-phase-B { background: rgba(240,192,64,0.2); color: #f0c040; }
+  .badge-phase-C { background: rgba(76,175,110,0.2); color: #4caf6e; }
+  .badge-phase-N { background: rgba(122,155,181,0.2); color: var(--muted); }
+  .badge-unit { background: rgba(0,122,205,0.15); color: var(--blue); }
+
+  .ch-scale-row {
+    display: flex; align-items: center; gap: 6px;
+    padding: 0 6px 4px 25px;
+  }
+  .ch-scale-row input[type=range] { flex: 1; height: 3px; accent-color: var(--blue); }
+  .ch-scale-val {
+    font-size: 9px; color: var(--muted);
+    width: 28px; text-align: right; flex-shrink: 0;
+  }
+
+  /* MAIN */
+  #main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--bg);
+  }
+
+  /* Metadata */
+  #meta-card {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex; flex-wrap: wrap; gap: 16px;
+    background: var(--panel);
+    flex-shrink: 0;
+  }
+  .meta-item { display: flex; flex-direction: column; gap: 2px; }
+  .meta-label {
+    font-size: 9px; text-transform: uppercase;
+    letter-spacing: 0.07em; color: var(--muted); font-weight: 700;
+  }
+  .meta-value { font-size: 12px; font-weight: 700; color: var(--text); }
+  #meta-card.hidden { display: none; }
+
+  /* Plot */
+  #plot-wrapper {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    min-height: 0;
+  }
+  #plot { width: 100%; height: 100%; }
+
+  #empty-state {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 16px; color: var(--muted);
+  }
+  #empty-state.hidden { display: none; }
+  #empty-state .empty-icon { font-size: 48px; opacity: 0.4; }
+  #empty-state h2 { font-size: 16px; font-weight: 700; color: var(--text); }
+  #empty-state p { font-size: 12px; line-height: 1.6; text-align: center; max-width: 380px; }
+
+  /* X Controls */
+  #x-controls {
+    padding: 8px 16px;
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    background: var(--panel);
+    flex-shrink: 0;
+  }
+  #x-controls.hidden { display: none; }
+  .xctrl-label {
+    font-size: 10px; color: var(--muted); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap;
+  }
+  .xctrl-group { display: flex; gap: 4px; align-items: center; }
+  .xctrl-sep { width: 1px; height: 18px; background: var(--border); }
+  #range-from, #range-to {
+    width: 70px; padding: 3px 6px;
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 4px; color: var(--text);
+    font-family: 'Lato', sans-serif; font-size: 11px;
+  }
+
+  /* Digital panel */
+  #digital-panel {
+    border-top: 1px solid var(--border);
+    background: var(--panel);
+    max-height: 120px; overflow-y: auto;
+    flex-shrink: 0; padding: 6px 16px;
+  }
+  #digital-panel.hidden { display: none; }
+  .dig-title {
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.07em;
+    color: var(--muted); margin-bottom: 6px;
+  }
+  #digital-table { display: flex; flex-wrap: wrap; gap: 6px; }
+  .dig-row {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 10px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 3px; padding: 3px 7px;
+  }
+  .dig-name { color: var(--muted); }
+  .dig-val {
+    font-weight: 700; padding: 1px 5px;
+    border-radius: 2px; min-width: 20px; text-align: center;
+  }
+  .dig-val.on { background: rgba(76,175,110,0.25); color: #4caf6e; }
+  .dig-val.off { background: rgba(122,155,181,0.1); color: var(--muted); }
+
+  /* STATUS BAR */
+  #statusbar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: var(--statusbar-h);
+    background: var(--navy);
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center;
+    padding: 0 16px; gap: 24px;
+    z-index: 100;
+  }
+  .sb-stat { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--muted); }
+  .sb-stat span { color: var(--text); font-weight: 700; }
+
+  /* Loading */
+  #loading {
+    position: fixed; inset: 0;
+    background: rgba(10,14,26,0.85);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 999; gap: 14px;
+    backdrop-filter: blur(4px);
+  }
+  #loading.hidden { display: none; }
+  .spinner {
+    width: 40px; height: 40px;
+    border: 3px solid var(--border);
+    border-top-color: var(--blue);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #loading-msg { font-size: 13px; color: var(--muted); }
+
+  #demo-hint {
+    font-size: 10px; color: var(--muted);
+    text-align: center; padding-top: 8px; line-height: 1.5;
+  }
+
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 </style>
 </head>
 <body>
 
+<!-- LOADING -->
+<div id="loading" class="hidden">
+  <div class="spinner"></div>
+  <div id="loading-msg">Processando arquivo...</div>
+</div>
+
 <!-- HEADER -->
-<header class="header">
-  <div class="header-left">
-    <div class="engie-logo">
-      <!-- ENGIE Chapeau SVG -->
-      <svg class="engie-chapeau" viewBox="0 0 80 50" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0 50 Q20 0 40 0 Q60 0 80 50 Q60 25 40 25 Q20 25 0 50Z" fill="#23D2B5"/>
-      </svg>
-      <div>
-        <div class="header-title">HIDRA — Oscilografia</div>
-        <div class="header-subtitle">Visualizador COMTRADE · ENGIE Brasil</div>
-      </div>
-    </div>
-    <div class="header-divider"></div>
-    <div class="header-badge">
-      <span class="dot"></span>
-      IEEE C37.111
-    </div>
+<header id="header">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 382.68 138.23" width="120" height="44">
+    <defs><style>.engie-cls-1{fill-rule:evenodd;}.engie-cls-1,.engie-cls-2{fill:#FFFFFF;}</style></defs>
+    <g id="ENGIE">
+      <path id="engie-E" class="engie-cls-2" d="M23.59,98.07c0-8.7,8.93-15.13,21.84-15.13s21.24,6.43,21.24,15.13H23.59ZM82.71,110.32c3.07-23.48-6.96-39.25-37.68-39.25-23.66,0-38.76,11.08-38.76,33.33,0,35.57,43.54,38.7,73.1,29.26l-2.56-11.62c-4.57,1.56-46.96,10.13-53.22-11.73h59.12Z"/>
+      <polyline id="engie-N" class="engie-cls-2" points="153.4 112.64 153.4 72.6 169.44 72.6 169.44 136.57 155.21 136.56 111.21 94.74 111.22 136.57 95.18 136.57 95.18 72.6 111.22 72.6 153.4 112.64"/>
+      <path id="engie-G" class="engie-cls-2" d="M253.64,87.32c-46.96-10.71-55.55.34-55.55,17.2,0,14.22,12.14,23.35,44.48,19.73v-13.9h-23.91v-12.3h39.88v23.91c0,5.89-2.65,9.43-6.73,11.63-6.36,3.43-15.62,4.45-27.22,4.45-23.95,0-43.3-11.07-43.3-33.52,0-19.9,13.2-33.45,40.51-33.45,13.18,0,22.8,1.73,31.85,4.21v12.03Z"/>
+      <g id="engie-I"><rect class="engie-cls-2" x="271.14" y="89.6" width="16.08" height="46.97"/><rect class="engie-cls-2" x="271.14" y="72.59" width="16.08" height="11.65"/></g>
+      <path id="engie-E2" class="engie-cls-2" d="M316.76,98.07c0-8.7,8.93-15.13,21.84-15.13s21.24,6.43,21.24,15.13h-43.09ZM375.88,110.32c3.07-23.48-6.96-39.25-37.68-39.25-23.66,0-38.76,11.08-38.76,33.33,0,35.57,43.54,38.7,73.1,29.26l-2.56-11.62c-4.57,1.56-46.96,10.13-53.22-11.73h59.12Z"/>
+    </g>
+    <path id="engie-Chapeau" class="engie-cls-1" d="M382.68,55.5C331.4,20.95,264.51,0,191.34,0S51.28,20.95,0,55.5c51-17.11,110.62-28.54,191.34-28.54s140.34,11.43,191.34,28.54Z"/>
+  </svg>
+  <div class="sep"></div>
+  <div>
+    <div class="title">Oscilografia COMTRADE &middot; Projeto HIDRA</div>
+    <div class="subtitle">Visualizador ZIC / COMTRADE &mdash; Binario &amp; ASCII</div>
   </div>
-  <div class="header-right">
-    <div class="dai-credit">Desenvolvido por <span>Digital AI</span></div>
-  </div>
+  <img src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-negative.svg" alt="Digital AI" height="20" style="opacity:0.6;margin-left:auto">
 </header>
 
-<!-- APP LAYOUT -->
-<div class="app-layout">
+<!-- LAYOUT -->
+<div id="layout">
 
   <!-- SIDEBAR -->
-  <aside class="sidebar">
+  <aside id="sidebar">
+    <div id="sidebar-scroll">
 
-    <!-- Upload Section -->
-    <div class="sidebar-section">
-      <div class="sidebar-section-title">Carregar Arquivo</div>
-      <div class="upload-zone" id="uploadZone">
-        <input type="file" id="fileInput" accept=".cfg,.dat,.zic,.cri,.txt,.csv" multiple>
-        <div class="upload-icon">
-          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+      <div class="sb-section">
+        <div class="sb-title">Arquivo</div>
+        <div id="upload-zone" onclick="document.getElementById('file-input').click()">
+          <div class="upload-icon">&#128194;</div>
+          <div class="upload-text">
+            <b>Clique ou arraste</b> um arquivo<br>
+            .zic &middot; .zip &middot; .cfg &middot; .dat
+          </div>
         </div>
-        <div class="upload-text">
-          <strong>Arraste os arquivos aqui</strong>
-          ou clique para selecionar
+        <input type="file" id="file-input" accept=".zic,.zip,.cfg,.dat,.CFG,.DAT" multiple>
+        <div id="demo-hint">
+          <button class="btn small" onclick="loadDemo()" style="margin-top:8px;width:100%;justify-content:center">&#9889; Carregar Demo</button>
+          Simula curto bifasico 13.8kV / G1
         </div>
-        <div class="upload-formats">.cfg + .dat &nbsp;|&nbsp; .zic &nbsp;|&nbsp; .cri &nbsp;|&nbsp; .txt &nbsp;|&nbsp; .csv</div>
       </div>
-    </div>
 
-    <!-- Channel List -->
-    <div class="channel-list-header">
-      <span class="channel-list-title">Canais</span>
-      <div class="channel-list-actions">
-        <button class="btn btn-sm btn-secondary" id="btnShowAll" title="Mostrar todos">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        </button>
-        <button class="btn btn-sm btn-secondary" id="btnHideAll" title="Ocultar todos">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22"/></svg>
-        </button>
+      <div class="sb-section" id="filter-section" style="display:none">
+        <div class="sb-title">Filtros rapidos</div>
+        <div class="filter-bar" id="group-filters"></div>
+        <div class="filter-bar" style="margin-top:5px" id="type-filters">
+          <button class="filter-btn" data-type="tensao" onclick="filterByType('tensao',this)">Tensoes</button>
+          <button class="filter-btn" data-type="corrente" onclick="filterByType('corrente',this)">Correntes</button>
+          <button class="filter-btn" data-type="outros" onclick="filterByType('outros',this)">Outros</button>
+          <button class="filter-btn" data-type="all" onclick="filterByType('all',this)">Todos</button>
+        </div>
       </div>
-    </div>
 
-    <div class="channel-list" id="channelList">
-      <div class="channels-empty" id="channelsEmpty">
-        Carregue um arquivo COMTRADE ou clique em "Dados de Demo" para visualizar canais
+      <div class="sb-section" id="channel-section" style="display:none">
+        <div class="sb-title" style="display:flex;justify-content:space-between;align-items:center">
+          <span>Canais Analogicos</span>
+          <div style="display:flex;gap:4px">
+            <button class="btn small" onclick="toggleAll(true)">Todos</button>
+            <button class="btn small" onclick="toggleAll(false)">Nenhum</button>
+          </div>
+        </div>
+        <div id="channel-list"></div>
       </div>
-    </div>
 
-    <!-- Y Scale Panel (sidebar bottom) -->
-    <div class="sidebar-divider"></div>
-    <div style="padding:10px 14px 6px;">
-      <div class="sidebar-section-title">Escala Y por Canal</div>
     </div>
-    <div id="yScalesGrid" class="y-scales-grid" style="padding-bottom:8px; flex:0 0 auto; overflow-y:auto; max-height:160px;"></div>
-
-    <div class="sidebar-footer">
-      <button class="btn btn-teal btn-full" id="btnDemo">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        Dados de Demonstração
-      </button>
-      <button class="btn btn-secondary btn-full" id="btnAutoScale">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
-        Auto-Escala
-      </button>
-      <button class="btn btn-secondary btn-full" id="btnResetPlot">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
-        Reset View
-      </button>
-    </div>
-
   </aside>
 
-  <!-- MAIN CONTENT -->
-  <main class="main">
+  <!-- MAIN -->
+  <main id="main">
 
-    <!-- Metadata Bar -->
-    <div class="meta-bar" id="metaBar">
-      <span class="meta-empty" id="metaEmpty">Nenhum arquivo carregado — carregue um COMTRADE (.cfg + .dat) ou use os dados de demonstração</span>
+    <div id="meta-card" class="hidden">
+      <div class="meta-item">
+        <div class="meta-label">Estacao</div>
+        <div class="meta-value" id="m-station">-</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Dispositivo</div>
+        <div class="meta-value" id="m-device">-</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Data do Evento</div>
+        <div class="meta-value" id="m-date">-</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Frequencia</div>
+        <div class="meta-value" id="m-freq">-</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Taxa Amostragem</div>
+        <div class="meta-value" id="m-rate">-</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Amostras</div>
+        <div class="meta-value" id="m-samples">-</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Duracao</div>
+        <div class="meta-value" id="m-duration">-</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Formato DAT</div>
+        <div class="meta-value" id="m-format">-</div>
+      </div>
     </div>
 
-    <!-- Plot Area -->
-    <div class="plot-area" id="plotArea">
-      <div id="waveform-plot"></div>
-
-      <!-- Welcome State -->
-      <div class="welcome-state" id="welcomeState">
-        <div class="welcome-icon">
-          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        </div>
-        <div class="welcome-title">Visualizador de Oscilografia</div>
-        <div class="welcome-sub">
-          Carregue um par de arquivos COMTRADE ASCII (.cfg + .dat) ou clique em "Dados de Demonstração" para visualizar formas de onda de um evento de curto-circuito bifásico.
-        </div>
-        <div class="welcome-actions">
-          <label class="btn btn-primary" for="fileInput">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
-            Carregar COMTRADE
-          </label>
-          <button class="btn btn-teal" id="btnDemoWelcome">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            Ver Demonstração
-          </button>
-        </div>
+    <div id="plot-wrapper">
+      <div id="empty-state">
+        <div class="empty-icon">&#128202;</div>
+        <h2>Nenhum arquivo carregado</h2>
+        <p>Faca upload de um arquivo <b>.zic</b> ou <b>.zip</b> (COMTRADE), ou de um par <b>.cfg</b> + <b>.dat</b> para visualizar os sinais de oscilografia.<br><br>
+        Suporte a formato <b>BINARY</b> (int16) e <b>ASCII</b>, com extracao automatica via JSZip.</p>
+        <button class="btn primary" onclick="loadDemo()">&#9889; Carregar Demo Interativo</button>
       </div>
-
-      <!-- Loading Overlay -->
-      <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-      </div>
-
-      <!-- Cursor Info -->
-      <div class="cursor-info" id="cursorInfo" style="display:none;"></div>
+      <div id="plot"></div>
     </div>
 
-    <!-- X Controls (Timeline) -->
-    <div class="x-controls" id="xControls">
-      <span class="x-controls-label">Janela de Tempo</span>
-      <div class="x-btns">
-        <button class="btn btn-sm btn-secondary" id="btnBeforeTrigger">Pré-Trigger</button>
-        <button class="btn btn-sm btn-secondary" id="btnAfterTrigger">Pós-Trigger</button>
-        <button class="btn btn-sm btn-secondary" id="btnFullWindow">Completo</button>
+    <div id="x-controls" class="hidden">
+      <span class="xctrl-label">Janela X</span>
+      <div class="xctrl-group">
+        <button class="btn small" onclick="setWindow('pre')">Pre-Trigger</button>
+        <button class="btn small" onclick="setWindow('pos')">Pos-Trigger</button>
+        <button class="btn small" onclick="setWindow('all')">Completa</button>
       </div>
-      <div class="meta-divider"></div>
-      <div class="x-range-inputs">
-        <input type="number" id="xStart" placeholder="0" title="Início (ms)">
-        <span>—</span>
-        <input type="number" id="xEnd" placeholder="200" title="Fim (ms)">
-        <span style="font-size:10px;color:var(--text-4)">ms</span>
-        <button class="btn btn-sm btn-primary" id="btnApplyRange">OK</button>
+      <div class="xctrl-sep"></div>
+      <div class="xctrl-group">
+        <span style="font-size:10px;color:var(--muted)">De</span>
+        <input type="number" id="range-from" placeholder="-500" step="10">
+        <span style="font-size:10px;color:var(--muted)">a</span>
+        <input type="number" id="range-to" placeholder="500" step="10">
+        <span style="font-size:10px;color:var(--muted)">ms</span>
+        <button class="btn small primary" onclick="applyRange()">Aplicar</button>
       </div>
-      <div class="meta-divider"></div>
-      <div class="x-slider-wrap">
-        <span style="font-size:10px;color:var(--text-4);">Zoom</span>
-        <input type="range" class="x-slider" id="xZoomSlider" min="1" max="100" value="100">
-        <span class="scale-value" id="xZoomVal">100%</span>
-      </div>
+      <input type="range" id="range-slider" min="0" max="100" value="50" step="1"
+        oninput="onSliderInput(this.value)"
+        style="flex:1;min-width:80px;accent-color:var(--blue)">
+    </div>
+
+    <div id="digital-panel" class="hidden">
+      <div class="dig-title">Canais Digitais &mdash; Estado no Trigger</div>
+      <div id="digital-table"></div>
     </div>
 
   </main>
 </div>
 
-<!-- Notification -->
-<div class="notification" id="notification"></div>
+<!-- STATUS BAR -->
+<div id="statusbar">
+  <div class="sb-stat">Amostras: <span id="st-samples">-</span></div>
+  <div class="sb-stat">Taxa: <span id="st-rate">-</span></div>
+  <div class="sb-stat">Canais: <span id="st-channels">-</span></div>
+  <div class="sb-stat">Cursor: <span id="st-cursor">-</span></div>
+  <div class="sb-stat" style="margin-left:auto">
+    <span id="st-file" style="color:var(--muted);font-weight:400">Aguardando arquivo...</span>
+  </div>
+</div>
 
 <script>
 // ============================================================
-// ENGIE HIDRA — OSCILOGRAFIA VIEWER
-// COMTRADE IEEE C37.111 Parser + Plotly Renderer
+// ESTADO GLOBAL
 // ============================================================
-
-// ─── STATE ───────────────────────────────────────────────────
-const state = {
-  cfgData: null,         // parsed CFG
-  datData: null,         // parsed DAT (raw samples)
-  channels: [],          // channel descriptors
-  timeMs: [],            // time axis in ms
-  triggerMs: 0,          // trigger time in ms
-  visible: {},           // channel_id -> bool
-  scales: {},            // channel_id -> scale multiplier
-  fileInfo: {},          // metadata
-
-  pendingCfg: null,
-  pendingDat: null,
+var STATE = {
+  cfg: null,
+  dat: null,
+  channelColors: [],
+  channelVisible: [],
+  channelScale: [],
+  fileName: '',
 };
 
-// ENGIE color palette for channels
-const CHANNEL_COLORS = [
-  '#007ACD','#23D2B5','#00AAFF','#F4C542','#E05252',
-  '#9B6FD0','#34D399','#E08A2F','#FF6B9D','#2D52EF',
-  '#64B5F6','#A5D6A7','#FFCC02','#FF8A65','#CE93D8',
+var CHANNEL_COLORS = [
+  '#e05252','#f0c040','#4caf6e','#7a9bb5',
+  '#e08840','#a04cd0','#23D2B5','#007ACD',
+  '#ff8080','#ffd070','#70d090','#90c0e0',
+  '#ff6060','#e0a030','#30c060','#6090d0',
+  '#d04040','#b08020','#20a040','#4070b0',
 ];
 
-// ─── DOM REFS ─────────────────────────────────────────────────
-const $uploadZone   = document.getElementById('uploadZone');
-const $fileInput    = document.getElementById('fileInput');
-const $channelList  = document.getElementById('channelList');
-const $channelsEmpty= document.getElementById('channelsEmpty');
-const $metaBar      = document.getElementById('metaBar');
-const $metaEmpty    = document.getElementById('metaEmpty');
-const $welcomeState = document.getElementById('welcomeState');
-const $loadingOvl   = document.getElementById('loadingOverlay');
-const $cursorInfo   = document.getElementById('cursorInfo');
-const $xStart       = document.getElementById('xStart');
-const $xEnd         = document.getElementById('xEnd');
-const $xZoomSlider  = document.getElementById('xZoomSlider');
-const $xZoomVal     = document.getElementById('xZoomVal');
-const $yScalesGrid  = document.getElementById('yScalesGrid');
-const $notification = document.getElementById('notification');
-const $plot         = document.getElementById('waveform-plot');
-
-// ─── NOTIFICATIONS ────────────────────────────────────────────
-let notifTimer = null;
-function notify(msg, type = 'info', duration = 3500) {
-  $notification.textContent = msg;
-  $notification.className = `notification ${type} show`;
-  if (notifTimer) clearTimeout(notifTimer);
-  notifTimer = setTimeout(() => {
-    $notification.classList.remove('show');
-  }, duration);
-}
-
-// ─── LOADING ─────────────────────────────────────────────────
-function setLoading(v) {
-  $loadingOvl.style.display = v ? 'flex' : 'none';
-}
-
-// ─── FILE UPLOAD ─────────────────────────────────────────────
-$uploadZone.addEventListener('dragover', (e) => {
-  e.preventDefault();
-  $uploadZone.classList.add('dragover');
-});
-$uploadZone.addEventListener('dragleave', () => $uploadZone.classList.remove('dragover'));
-$uploadZone.addEventListener('drop', (e) => {
-  e.preventDefault();
-  $uploadZone.classList.remove('dragover');
-  handleFiles([...e.dataTransfer.files]);
-});
-$fileInput.addEventListener('change', (e) => {
-  handleFiles([...e.target.files]);
-  e.target.value = '';
-});
-
-function handleFiles(files) {
-  const cfg = files.find(f => f.name.toLowerCase().endsWith('.cfg'));
-  const dat = files.find(f => f.name.toLowerCase().endsWith('.dat'));
-  const zic = files.find(f => f.name.toLowerCase().endsWith('.zic'));
-  const cri = files.find(f => f.name.toLowerCase().endsWith('.cri'));
-  const txt = files.find(f => f.name.toLowerCase().endsWith('.txt') || f.name.toLowerCase().endsWith('.csv'));
-
-  if (zic || cri) {
-    const ext = (zic || cri).name.split('.').pop().toUpperCase();
-    notify(`Formato ${ext} detectado. Envie uma amostra do arquivo para habilitar o parser específico. Tentando parsear como texto genérico...`, 'info', 6000);
-    const f = zic || cri;
-    readTextFile(f).then(text => tryGenericParse(text, f.name));
-    return;
-  }
-
-  if (txt && !cfg) {
-    readTextFile(txt).then(text => tryGenericParse(text, txt.name));
-    return;
-  }
-
-  if (cfg && dat) {
-    parseCOMTRADE(cfg, dat);
-    return;
-  }
-
-  if (cfg) {
-    state.pendingCfg = cfg;
-    notify('Arquivo .cfg carregado. Aguardando .dat correspondente...', 'info');
-    if (state.pendingDat) parseCOMTRADE(state.pendingCfg, state.pendingDat);
-    return;
-  }
-
-  if (dat) {
-    state.pendingDat = dat;
-    notify('Arquivo .dat carregado. Aguardando .cfg correspondente...', 'info');
-    if (state.pendingCfg) parseCOMTRADE(state.pendingCfg, state.pendingDat);
-    return;
-  }
-
-  notify('Formato não reconhecido. Use .cfg + .dat (COMTRADE), .zic, .cri, .txt ou .csv', 'error');
-}
-
-function readTextFile(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (e) => resolve(e.target.result);
-    reader.onerror = reject;
-    reader.readAsText(file, 'latin1');
-  });
-}
-
-// ─── COMTRADE PARSER ─────────────────────────────────────────
-async function parseCOMTRADE(cfgFile, datFile) {
-  setLoading(true);
-  try {
-    const cfgText = await readTextFile(cfgFile);
-    const datText = await readTextFile(datFile);
-
-    const cfg = parseCFG(cfgText);
-    if (!cfg) { notify('Erro ao parsear arquivo .cfg', 'error'); setLoading(false); return; }
-
-    const { channels, timeMs, triggerMs } = parseDAT(datText, cfg);
-
-    state.cfgData = cfg;
-    state.channels = channels;
-    state.timeMs = timeMs;
-    state.triggerMs = triggerMs;
-    state.fileInfo = {
-      station: cfg.stationName,
-      device: cfg.devId,
-      freq: cfg.lf,
-      sampleRate: cfg.sampleRate,
-      duration: timeMs.length > 0 ? (timeMs[timeMs.length-1] - timeMs[0]).toFixed(1) : 0,
-      startTs: cfg.startTimestamp,
-      triggerTs: cfg.triggerTimestamp,
-      nAnalog: cfg.nA,
-      nDigital: cfg.nD,
-    };
-
-    // init visibility & scales
-    channels.forEach(ch => {
-      state.visible[ch.id] = true;
-      state.scales[ch.id] = 1.0;
-    });
-
-    renderMetaBar();
-    renderChannelList();
-    renderYScales();
-    renderPlot();
-    hideWelcome();
-    notify(`${channels.length} canais carregados · ${timeMs.length} amostras · ${state.fileInfo.duration}ms`, 'success');
-  } catch(err) {
-    console.error(err);
-    notify('Erro ao processar arquivo: ' + err.message, 'error');
-  }
-  setLoading(false);
-}
-
+// ============================================================
+// PARSER CFG (IEEE C37.111 ASCII)
+// ============================================================
 function parseCFG(text) {
-  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l);
-  if (lines.length < 6) return null;
+  var lines = text.split(/\r?\n/).map(function(l){ return l.trim(); }).filter(function(l){ return l.length > 0; });
+  var i = 0;
 
-  let idx = 0;
-  const cfg = {};
+  // Linha 1: station_name,rec_dev_id,rev_year
+  var hdr = lines[i++].split(',');
+  var stationName = (hdr[0] || '').trim();
+  var devId       = (hdr[1] || '').trim();
+  var revYear     = (hdr[2] || '1999').trim();
 
-  // Line 1: station_name,rec_dev_id,rev_year
-  const l1 = lines[idx++].split(',');
-  cfg.stationName = (l1[0] || 'Unknown').trim();
-  cfg.devId       = (l1[1] || '').trim();
-  cfg.revYear     = (l1[2] || '1991').trim();
+  // Linha 2: TT,#A,#D  ex: "6,3A,0D"
+  var l2 = lines[i++].split(',');
+  var nA = 0, nD = 0;
+  for (var p = 0; p < l2.length; p++) {
+    var v = l2[p].trim().toUpperCase();
+    if (v.endsWith('A')) nA = parseInt(v) || 0;
+    else if (v.endsWith('D')) nD = parseInt(v) || 0;
+  }
 
-  // Line 2: TT,#A,#D
-  const l2 = lines[idx++].split(',');
-  cfg.nTotal = parseInt(l2[0]) || 0;
-  // parse "3A" and "2D"
-  const aMatch = (l2[1] || '').match(/(\d+)/);
-  const dMatch = (l2[2] || '').match(/(\d+)/);
-  cfg.nA = aMatch ? parseInt(aMatch[1]) : 0;
-  cfg.nD = dMatch ? parseInt(dMatch[1]) : 0;
-
-  cfg.analogChannels = [];
-  for (let i = 0; i < cfg.nA; i++) {
-    if (idx >= lines.length) break;
-    const parts = lines[idx++].split(',');
-    cfg.analogChannels.push({
-      an:        parseInt(parts[0]) || (i+1),
-      chId:      (parts[1] || `CH${i+1}`).trim(),
-      ph:        (parts[2] || '').trim(),
-      ccbm:      (parts[3] || '').trim(),
-      uu:        (parts[4] || '').trim(),
-      a:         parseFloat(parts[5]) || 1.0,
-      b:         parseFloat(parts[6]) || 0.0,
-      skew:      parseFloat(parts[7]) || 0.0,
-      min:       parseFloat(parts[8]) || -32768,
-      max:       parseFloat(parts[9]) || 32767,
-      primary:   parseFloat(parts[10]) || 1.0,
-      secondary: parseFloat(parts[11]) || 1.0,
-      PS:        (parts[12] || 'P').trim(),
+  // Canais analogicos
+  var analogChannels = [];
+  for (var k = 0; k < nA; k++) {
+    if (i >= lines.length) break;
+    var pts = lines[i++].split(',');
+    analogChannels.push({
+      n:     parseInt(pts[0]) || (k+1),
+      name:  (pts[1] || ('CH'+(k+1))).trim(),
+      phase: (pts[2] || '').trim(),
+      ccbm:  (pts[3] || '').trim(),
+      unit:  (pts[4] || '').trim(),
+      a:     parseFloat(pts[5]) || 1.0,
+      b:     parseFloat(pts[6]) || 0.0,
+      min:   parseFloat(pts[8]) || -1e9,
+      max:   parseFloat(pts[9]) || 1e9,
     });
   }
 
-  cfg.digitalChannels = [];
-  for (let i = 0; i < cfg.nD; i++) {
-    if (idx >= lines.length) break;
-    const parts = lines[idx++].split(',');
-    cfg.digitalChannels.push({
-      dn:    parseInt(parts[0]) || (i+1),
-      chId:  (parts[1] || `D${i+1}`).trim(),
-      ph:    (parts[2] || '').trim(),
-      ccbm:  (parts[3] || '').trim(),
-      y:     parseInt(parts[4]) || 0,
+  // Canais digitais
+  var digitalChannels = [];
+  for (var k = 0; k < nD; k++) {
+    if (i >= lines.length) break;
+    var pts = lines[i++].split(',');
+    digitalChannels.push({
+      n:      parseInt(pts[0]) || (k+1),
+      name:   (pts[1] || ('D'+(k+1))).trim(),
+      phase:  (pts[2] || '').trim(),
+      normal: parseInt(pts[4] || '0') || 0,
     });
   }
 
-  // line frequency
-  if (idx < lines.length) { cfg.lf = parseFloat(lines[idx++]) || 60.0; } else { cfg.lf = 60.0; }
+  // Frequencia nominal
+  var lf = i < lines.length ? (parseFloat(lines[i++]) || 60.0) : 60.0;
 
-  // nrates,endrec  (we just skip)
-  if (idx < lines.length) {
-    const nr = parseInt(lines[idx]) || 1;
-    idx++;
-    // sample rate lines
-    cfg.sampleRate = 0;
-    for (let i = 0; i < nr; i++) {
-      if (idx < lines.length) {
-        const parts = lines[idx++].split(',');
-        if (i === 0) cfg.sampleRate = parseFloat(parts[0]) || 0;
+  // nrates
+  var nrates = i < lines.length ? (parseInt(lines[i++]) || 1) : 1;
+
+  // Taxas
+  var rates = [];
+  for (var k = 0; k < nrates; k++) {
+    if (i >= lines.length) break;
+    var pts = lines[i++].split(',');
+    rates.push({ samp: parseFloat(pts[0]) || 0, endSamp: parseInt(pts[1]) || 0 });
+  }
+
+  var startTime = i < lines.length ? lines[i++] : '';
+  var trigTime  = i < lines.length ? lines[i++] : '';
+  var dataType  = i < lines.length ? lines[i++].toUpperCase().trim() : 'BINARY';
+
+  return { stationName, devId, revYear, nA, nD, analogChannels, digitalChannels, lf, rates, startTime, trigTime, dataType };
+}
+
+// ============================================================
+// PARSER DAT BINARY
+// ============================================================
+function parseDATBinary(buffer, cfg) {
+  var view = new DataView(buffer);
+  var nA = cfg.nA;
+  var nD = cfg.nD;
+  var nDWords = Math.ceil(nD / 16);
+  var bytesPerSample = 4 + 4 + (nA * 2) + (nDWords * 2);
+
+  if (bytesPerSample === 0 || buffer.byteLength === 0) {
+    throw new Error('Arquivo DAT vazio ou estrutura invalida (bytesPerSample=' + bytesPerSample + ')');
+  }
+
+  var nSamples = Math.floor(buffer.byteLength / bytesPerSample);
+  if (nSamples === 0) {
+    throw new Error('Nenhuma amostra encontrada. bytesPerSample=' + bytesPerSample + ', fileSize=' + buffer.byteLength);
+  }
+
+  var timestamps  = new Float64Array(nSamples);
+  var analogData  = [];
+  var digitalData = [];
+  for (var a = 0; a < nA; a++) analogData.push(new Float32Array(nSamples));
+  for (var d = 0; d < nD; d++) digitalData.push(new Uint8Array(nSamples));
+
+  var offset = 0;
+  for (var s = 0; s < nSamples; s++) {
+    if (offset + bytesPerSample > buffer.byteLength) break;
+    /* sampleNum */ view.getUint32(offset, true); offset += 4;
+    var ts = view.getUint32(offset, true); offset += 4;
+    timestamps[s] = ts / 1000.0; // microsegundos -> ms
+
+    for (var a = 0; a < nA; a++) {
+      var raw = view.getInt16(offset, true); offset += 2;
+      analogData[a][s] = raw * cfg.analogChannels[a].a + cfg.analogChannels[a].b;
+    }
+    for (var w = 0; w < nDWords; w++) {
+      var word = view.getUint16(offset, true); offset += 2;
+      for (var b = 0; b < 16; b++) {
+        var dIdx = w * 16 + b;
+        if (dIdx < nD) digitalData[dIdx][s] = (word >> b) & 1;
       }
     }
   }
 
-  // start timestamp
-  if (idx < lines.length) { cfg.startTimestamp = lines[idx++]; } else { cfg.startTimestamp = ''; }
-  // trigger timestamp
-  if (idx < lines.length) { cfg.triggerTimestamp = lines[idx++]; } else { cfg.triggerTimestamp = cfg.startTimestamp; }
-  // file type
-  if (idx < lines.length) { cfg.fileType = lines[idx++].trim().toUpperCase(); } else { cfg.fileType = 'ASCII'; }
-  // timemult
-  if (idx < lines.length) { cfg.timemult = parseFloat(lines[idx++]) || 1.0; } else { cfg.timemult = 1.0; }
-
-  return cfg;
+  return { timestamps: timestamps, analogData: analogData, digitalData: digitalData, nSamples: nSamples };
 }
 
-function parseDAT(text, cfg) {
-  const lines = text.split(/\r?\n/).filter(l => l.trim());
-  const timeMult = cfg.timemult || 1.0;
-  const nA = cfg.nA;
-  const nD = cfg.nD;
+// ============================================================
+// PARSER DAT ASCII
+// ============================================================
+function parseDATAscii(text, cfg) {
+  var nA = cfg.nA;
+  var nD = cfg.nD;
+  var lines = text.split(/\r?\n/).filter(function(l){ return l.trim().length > 0; });
+  var nSamples = lines.length;
 
-  // build channels array
-  const channels = cfg.analogChannels.map((ac, i) => ({
-    id: `A${i}`,
-    name: ac.chId || `CH${i+1}`,
-    unit: ac.uu || '',
-    phase: ac.ph || '',
-    a: ac.a,
-    b: ac.b,
-    colorIdx: i % CHANNEL_COLORS.length,
-    type: 'analog',
-    values: [],
-  }));
+  var timestamps  = new Float64Array(nSamples);
+  var analogData  = [];
+  var digitalData = [];
+  for (var a = 0; a < nA; a++) analogData.push(new Float32Array(nSamples));
+  for (var d = 0; d < nD; d++) digitalData.push(new Uint8Array(nSamples));
 
-  const digitalChannels = cfg.digitalChannels.map((dc, i) => ({
-    id: `D${i}`,
-    name: dc.chId || `D${i+1}`,
-    unit: '',
-    phase: dc.ph || '',
-    a: 1, b: 0,
-    colorIdx: (nA + i) % CHANNEL_COLORS.length,
-    type: 'digital',
-    values: [],
-  }));
-
-  const timeUs = [];
-
-  for (const line of lines) {
-    const parts = line.split(',');
-    if (parts.length < 2 + nA + nD) continue;
-
-    const n  = parseInt(parts[0]);
-    const ts = parseFloat(parts[1]) * timeMult; // microseconds
-    timeUs.push(ts);
-
-    for (let i = 0; i < nA; i++) {
-      const raw = parseFloat(parts[2 + i]);
-      const ac = cfg.analogChannels[i];
-      channels[i].values.push(raw * ac.a + ac.b);
+  for (var s = 0; s < nSamples; s++) {
+    var pts = lines[s].split(',');
+    timestamps[s] = (parseFloat(pts[1]) || 0) / 1000.0; // microseg -> ms
+    for (var a = 0; a < nA; a++) {
+      var raw = parseFloat(pts[2 + a]) || 0;
+      analogData[a][s] = raw * cfg.analogChannels[a].a + cfg.analogChannels[a].b;
     }
-    for (let i = 0; i < nD; i++) {
-      const raw = parseInt(parts[2 + nA + i]) || 0;
-      digitalChannels[i].values.push(raw);
+    for (var d = 0; d < nD; d++) {
+      digitalData[d][s] = parseInt(pts[2 + nA + d]) || 0;
     }
   }
 
-  // convert time to ms, relative to first sample
-  const t0 = timeUs.length > 0 ? timeUs[0] : 0;
-  const timeMs = timeUs.map(t => (t - t0) / 1000.0);
+  return { timestamps: timestamps, analogData: analogData, digitalData: digitalData, nSamples: nSamples };
+}
 
-  // find trigger time in ms
-  let triggerMs = 0;
-  const trigTs = cfg.triggerTimestamp || '';
-  const startTs = cfg.startTimestamp || '';
-  // simple heuristic: if we have timestamps, compute delta
-  try {
-    if (trigTs && startTs && trigTs !== startTs) {
-      const parseTs = (s) => {
-        // dd/mm/yyyy,hh:mm:ss.ssssss
-        const parts = s.replace(',', ' ').split(/[\s,]+/);
-        const dateParts = (parts[0] || '').split('/');
-        const timeParts = (parts[1] || '00:00:00').split(':');
-        if (dateParts.length === 3) {
-          const d = new Date(
-            parseInt(dateParts[2]), parseInt(dateParts[1])-1, parseInt(dateParts[0]),
-            parseInt(timeParts[0]||0), parseInt(timeParts[1]||0), parseFloat(timeParts[2]||0)
-          );
-          return d.getTime();
-        }
-        return 0;
-      };
-      const tStart = parseTs(startTs);
-      const tTrig = parseTs(trigTs);
-      if (tStart > 0 && tTrig > 0) triggerMs = (tTrig - tStart);
-    }
-  } catch(e) {}
-
-  // if trigger not computed, default to 1/3 of window
-  if (triggerMs === 0 && timeMs.length > 0) {
-    triggerMs = timeMs[Math.floor(timeMs.length / 3)];
+// ============================================================
+// NORMALIZAR TRIGGER (t=0 no trigger)
+// ============================================================
+function normalizeTrigger(cfg, dat) {
+  var trigSample = (cfg.rates[0] && cfg.rates[0].endSamp > 0) ? cfg.rates[0].endSamp : Math.floor(dat.nSamples / 3);
+  var safeIdx = Math.min(Math.max(trigSample - 1, 0), dat.nSamples - 1);
+  var tOffset = dat.timestamps[safeIdx];
+  for (var s = 0; s < dat.nSamples; s++) {
+    dat.timestamps[s] -= tOffset;
   }
-
-  return {
-    channels: [...channels, ...digitalChannels],
-    timeMs,
-    triggerMs,
-  };
 }
 
-// ─── GENERIC PARSE (fallback for ZIC/CRI/TXT) ────────────────
-function tryGenericParse(text, filename) {
-  setLoading(true);
-  try {
-    const lines = text.split(/\r?\n/).filter(l => l.trim());
-    if (!lines.length) { notify('Arquivo vazio ou ilegível', 'error'); setLoading(false); return; }
+// ============================================================
+// DETECTAR GRUPOS E FASE
+// ============================================================
+function detectGroups(channels) {
+  var groups = {};
+  channels.forEach(function(ch) {
+    var m = ch.name.match(/_(G\d+|RT\d+|T\d+)/i) || ch.ccbm.match(/(G\d+|RT\d+|T\d+)/i);
+    if (m) groups[m[1].toUpperCase()] = true;
+  });
+  return Object.keys(groups).sort();
+}
 
-    // detect separator
-    const sep = lines[0].includes(';') ? ';' : lines[0].includes('\t') ? '\t' : ',';
-
-    // find header row (contains non-numeric values)
-    let headerIdx = 0;
-    for (let i = 0; i < Math.min(5, lines.length); i++) {
-      const parts = lines[i].split(sep);
-      if (parts.some(p => isNaN(parseFloat(p.trim())) && p.trim() !== '')) {
-        headerIdx = i;
-        break;
-      }
-    }
-
-    const headers = lines[headerIdx].split(sep).map(h => h.trim());
-    const dataLines = lines.slice(headerIdx + 1).filter(l => l.trim());
-
-    const columns = headers.map((h, i) => ({ name: h || `Col${i}`, values: [] }));
-    for (const line of dataLines) {
-      const parts = line.split(sep);
-      parts.forEach((v, i) => {
-        if (i < columns.length) columns[i].values.push(parseFloat(v) || 0);
-      });
-    }
-
-    // try to find time column
-    const timeCol = columns.findIndex(c => /time|tempo|t\b|ts|timestamp|ms|us/i.test(c.name));
-    const dataCols = columns.filter((_, i) => i !== timeCol);
-
-    const timeMs = timeCol >= 0 ? columns[timeCol].values : columns[0].values.map((_, i) => i);
-
-    state.channels = dataCols.map((col, i) => ({
-      id: `G${i}`,
-      name: col.name,
-      unit: '',
-      phase: '',
-      type: 'analog',
-      colorIdx: i % CHANNEL_COLORS.length,
-      values: col.values,
-    }));
-    state.timeMs = timeMs;
-    state.triggerMs = timeMs[Math.floor(timeMs.length / 3)] || 0;
-    state.fileInfo = {
-      station: filename,
-      device: 'Generic CSV/TXT',
-      freq: 60,
-      sampleRate: 0,
-      duration: timeMs.length > 0 ? (timeMs[timeMs.length-1] - timeMs[0]).toFixed(1) : 0,
-      startTs: '',
-      triggerTs: '',
-      nAnalog: dataCols.length,
-      nDigital: 0,
-    };
-
-    state.channels.forEach(ch => { state.visible[ch.id] = true; state.scales[ch.id] = 1.0; });
-    renderMetaBar();
-    renderChannelList();
-    renderYScales();
-    renderPlot();
-    hideWelcome();
-    notify(`Arquivo genérico: ${dataCols.length} colunas · ${timeMs.length} pontos`, 'success');
-  } catch(err) {
-    notify('Erro ao parsear arquivo: ' + err.message, 'error');
+function getPhase(ch) {
+  if (ch.phase) {
+    var p = ch.phase.trim().toUpperCase();
+    if (['A','B','C','N'].includes(p)) return p;
   }
-  setLoading(false);
+  var n = ch.name.toUpperCase();
+  if (/^IA|[_\s]IA|[_\s]A([_\s]|$)/.test(n) || n.endsWith('_A')) return 'A';
+  if (/^IB|[_\s]IB|[_\s]B([_\s]|$)/.test(n) || n.endsWith('_B')) return 'B';
+  if (/^IC|[_\s]IC|[_\s]C([_\s]|$)/.test(n) || n.endsWith('_C')) return 'C';
+  if (/[_\s]N([_\s]|$)/.test(n)) return 'N';
+  return '';
 }
 
-// ─── DEMO DATA ────────────────────────────────────────────────
-function loadDemoData() {
-  setLoading(true);
-  setTimeout(() => {
-    const FS   = 1920;          // 1920 Hz = 32 amostras/ciclo @60Hz
-    const DUR  = 0.200;         // 200ms
-    const N    = Math.round(FS * DUR);
-    const fn   = 60;            // freq nominal
-    const dt   = 1000 / FS;    // ms por amostra
-    const Vn   = 220000 / Math.sqrt(3); // tensão de fase (V) — 220kV sistema
-    const In   = 500;           // corrente nominal (A)
-
-    const timeMs = Array.from({length: N}, (_, i) => i * dt);
-    const triggerMs = 66.67;    // trigger em ~4 ciclos
-
-    // curto-circuito bifásico entre ciclo 3-5 (t=50ms a t=116ms)
-    const faultStart = 0.050;
-    const faultEnd   = 0.116;
-
-    function isFault(t_s) { return t_s >= faultStart && t_s <= faultEnd; }
-
-    const Va = [], Vb = [], Vc = [], Ia = [], Ib = [], Ic = [], Freq = [];
-
-    for (let i = 0; i < N; i++) {
-      const t  = i / FS; // s
-      const tw = 2 * Math.PI * fn * t;
-      const fault = isFault(t);
-
-      // tensões: Vc curto com Vb (fase B-C)
-      let va = Vn * Math.sqrt(2) * Math.sin(tw);
-      let vb = Vn * Math.sqrt(2) * Math.sin(tw - 2*Math.PI/3);
-      let vc = Vn * Math.sqrt(2) * Math.sin(tw + 2*Math.PI/3);
-
-      if (fault) {
-        // durante o curto: tensões B e C colapsom para metade e ficam juntas
-        const collapse = Math.sin(Math.PI * (t - faultStart) / (faultEnd - faultStart));
-        vb = vb * (1 - 0.6 * collapse);
-        vc = vc * (1 - 0.6 * collapse) + (vb * 0.3 * collapse);
-        // harmônicos
-        va = va + Vn * 0.08 * Math.sin(3 * tw) * collapse;
-      }
-
-      Va.push(va / 1000);  // kV
-      Vb.push(vb / 1000);
-      Vc.push(vc / 1000);
-
-      // correntes: Ib e Ic crescem muito durante o curto
-      let ia = In * Math.sqrt(2) * Math.sin(tw + Math.PI/6);
-      let ib = In * Math.sqrt(2) * Math.sin(tw - 2*Math.PI/3 + Math.PI/6);
-      let ic = In * Math.sqrt(2) * Math.sin(tw + 2*Math.PI/3 + Math.PI/6);
-
-      if (fault) {
-        const surge = 1 + 7 * Math.sin(Math.PI * (t - faultStart) / (faultEnd - faultStart));
-        ib *= surge;
-        ic *= surge;
-        ia -= (ib + ic) * 0.3; // componente residual em Ia
-      }
-
-      Ia.push(ia);
-      Ib.push(ib);
-      Ic.push(ic);
-
-      // frequência: oscila durante o curto
-      const freqDev = fault ? 0.3 * Math.sin(2*Math.PI * (t - faultStart) * 8) : 0;
-      Freq.push(fn + freqDev);
-    }
-
-    state.channels = [
-      { id: 'Va', name: 'Va', unit: 'kV', phase: 'A', type: 'analog', colorIdx: 0, values: Va },
-      { id: 'Vb', name: 'Vb', unit: 'kV', phase: 'B', type: 'analog', colorIdx: 1, values: Vb },
-      { id: 'Vc', name: 'Vc', unit: 'kV', phase: 'C', type: 'analog', colorIdx: 2, values: Vc },
-      { id: 'Ia', name: 'Ia', unit: 'A',  phase: 'A', type: 'analog', colorIdx: 3, values: Ia },
-      { id: 'Ib', name: 'Ib', unit: 'A',  phase: 'B', type: 'analog', colorIdx: 4, values: Ib },
-      { id: 'Ic', name: 'Ic', unit: 'A',  phase: 'C', type: 'analog', colorIdx: 5, values: Ic },
-      { id: 'Freq', name: 'Freq', unit: 'Hz', phase: '', type: 'analog', colorIdx: 6, values: Freq },
-    ];
-    state.timeMs = timeMs;
-    state.triggerMs = triggerMs;
-    state.fileInfo = {
-      station: 'UHE Miranda (Demo)',
-      device: 'REL-670 / CLP ENGIE',
-      freq: 60,
-      sampleRate: FS,
-      duration: (DUR * 1000).toFixed(1),
-      startTs: '01/07/2025,14:32:45.123456',
-      triggerTs: '01/07/2025,14:32:45.190123',
-      nAnalog: 7,
-      nDigital: 0,
-    };
-
-    state.channels.forEach(ch => { state.visible[ch.id] = true; state.scales[ch.id] = 1.0; });
-    renderMetaBar();
-    renderChannelList();
-    renderYScales();
-    renderPlot();
-    hideWelcome();
-    notify('Dados de demonstração carregados · Evento: curto bifásico B-C em 50ms', 'success');
-    setLoading(false);
-  }, 300);
+function getType(ch) {
+  var u = (ch.unit || '').toUpperCase();
+  var n = ch.name.toUpperCase();
+  if (u.includes('KV') || u === 'V' || n.startsWith('V') || n.includes('TENS')) return 'tensao';
+  if (u === 'A' || u.includes('KA') || n.match(/^I[ABC]/) || n.includes('CORR')) return 'corrente';
+  return 'outros';
 }
 
-// ─── RENDER META BAR ─────────────────────────────────────────
-function renderMetaBar() {
-  const fi = state.fileInfo;
-  const tMs = state.triggerMs.toFixed(2);
-  $metaBar.innerHTML = `
-    <div class="meta-item">
-      <span class="meta-label">Estação</span>
-      <span class="meta-value">${fi.station || '—'}</span>
-    </div>
-    <div class="meta-divider"></div>
-    <div class="meta-item">
-      <span class="meta-label">Dispositivo</span>
-      <span class="meta-value">${fi.device || '—'}</span>
-    </div>
-    <div class="meta-divider"></div>
-    <div class="meta-item">
-      <span class="meta-label">Freq. Nominal</span>
-      <span class="meta-value">${fi.freq || 60} Hz</span>
-    </div>
-    <div class="meta-divider"></div>
-    <div class="meta-item">
-      <span class="meta-label">Taxa de Amostragem</span>
-      <span class="meta-value">${fi.sampleRate || '—'} Hz</span>
-    </div>
-    <div class="meta-divider"></div>
-    <div class="meta-item">
-      <span class="meta-label">Duração</span>
-      <span class="meta-value">${fi.duration} ms</span>
-    </div>
-    <div class="meta-divider"></div>
-    <div class="meta-item">
-      <span class="meta-label">Canais A/D</span>
-      <span class="meta-value">${fi.nAnalog}A / ${fi.nDigital}D</span>
-    </div>
-    <div class="meta-divider"></div>
-    <div class="meta-item">
-      <span class="meta-label">Data/Hora Evento</span>
-      <span class="meta-value" style="font-size:10px;">${fi.startTs || '—'}</span>
-    </div>
-    <div class="trigger-badge">TRIGGER ${tMs} ms</div>
-  `;
+// ============================================================
+// INICIALIZAR ESTADO DE CANAIS
+// ============================================================
+function initState(cfg) {
+  STATE.cfg = cfg;
+  STATE.channelColors   = cfg.analogChannels.map(function(_, i){ return CHANNEL_COLORS[i % CHANNEL_COLORS.length]; });
+  STATE.channelVisible  = cfg.analogChannels.map(function(){ return true; });
+  STATE.channelScale    = cfg.analogChannels.map(function(){ return 1.0; });
 }
 
-// ─── RENDER CHANNEL LIST ──────────────────────────────────────
+// ============================================================
+// RENDERIZAR SIDEBAR
+// ============================================================
 function renderChannelList() {
-  if (!state.channels.length) {
-    $channelsEmpty.style.display = 'block';
-    return;
+  var cfg = STATE.cfg;
+  if (!cfg) return;
+
+  var list = document.getElementById('channel-list');
+  list.innerHTML = '';
+
+  for (var idx = 0; idx < cfg.analogChannels.length; idx++) {
+    (function(i) {
+      var ch = cfg.analogChannels[i];
+      var color   = STATE.channelColors[i];
+      var visible = STATE.channelVisible[i];
+      var phase   = getPhase(ch);
+
+      var item = document.createElement('div');
+      item.className = 'ch-item' + (visible ? '' : ' hidden-ch');
+      item.innerHTML =
+        '<div class="ch-cb" style="border-color:' + color + ';background:' + (visible ? color : 'transparent') + '" onclick="toggleChannel(' + i + ')">' +
+          (visible ? '&#10003;' : '') +
+        '</div>' +
+        '<div class="ch-name" title="' + ch.name + '">' + ch.name + '</div>' +
+        '<div class="ch-badges">' +
+          (phase ? '<span class="badge badge-phase-' + phase + '">' + phase + '</span>' : '') +
+          (ch.unit ? '<span class="badge badge-unit">' + ch.unit + '</span>' : '') +
+        '</div>';
+      list.appendChild(item);
+
+      var scaleRow = document.createElement('div');
+      scaleRow.className = 'ch-scale-row';
+      scaleRow.innerHTML =
+        '<input type="range" min="-20" max="20" step="1" value="0" title="Escala Y (potencia de 2)" oninput="updateScale(' + i + ', this.value, this.nextElementSibling)">' +
+        '<span class="ch-scale-val">1x</span>';
+      list.appendChild(scaleRow);
+    })(idx);
   }
-  $channelsEmpty.style.display = 'none';
 
-  // remove old items (keep header + empty)
-  const existing = $channelList.querySelectorAll('.channel-item');
-  existing.forEach(el => el.remove());
-
-  state.channels.forEach((ch, idx) => {
-    const color = CHANNEL_COLORS[ch.colorIdx];
-    const visible = state.visible[ch.id] !== false;
-
-    const item = document.createElement('div');
-    item.className = 'channel-item' + (visible ? ' active' : '');
-    item.dataset.chId = ch.id;
-
-    item.innerHTML = `
-      <div class="channel-checkbox ${visible ? 'checked' : ''}" style="color:${color}; border-color:${color};"></div>
-      <div class="channel-info">
-        <div class="channel-name" style="color:${color};">${ch.name}</div>
-        <div class="channel-meta">
-          ${ch.phase ? `<span>${ch.phase}</span>` : ''}
-          ${ch.unit ? `<span class="channel-unit">${ch.unit}</span>` : ''}
-          <span class="channel-type" style="font-size:9px;color:var(--text-4);">${ch.type}</span>
-        </div>
-      </div>
-      <span class="channel-value" id="chval-${ch.id}">—</span>
-    `;
-
-    item.addEventListener('click', () => toggleChannel(ch.id));
-    $channelList.insertBefore(item, $channelsEmpty);
+  // Grupos
+  var groups = detectGroups(cfg.analogChannels);
+  var gf = document.getElementById('group-filters');
+  gf.innerHTML = '';
+  groups.forEach(function(g) {
+    var btn = document.createElement('button');
+    btn.className = 'filter-btn';
+    btn.textContent = g;
+    btn.onclick = function(){ filterByGroup(g, btn); };
+    gf.appendChild(btn);
   });
+
+  document.getElementById('filter-section').style.display  = '';
+  document.getElementById('channel-section').style.display = '';
 }
 
-function toggleChannel(chId) {
-  state.visible[chId] = !state.visible[chId];
+function updateScale(idx, val, label) {
+  var scale = Math.pow(2, parseFloat(val));
+  STATE.channelScale[idx] = scale;
+  label.textContent = (scale < 1 ? scale.toFixed(2) : scale.toFixed(1)) + 'x';
+  updatePlot();
+}
+
+function toggleChannel(idx) {
+  STATE.channelVisible[idx] = !STATE.channelVisible[idx];
   renderChannelList();
-  renderPlot(false);
+  updatePlot();
 }
 
-// ─── RENDER Y SCALES ─────────────────────────────────────────
-function renderYScales() {
-  $yScalesGrid.innerHTML = '';
-  state.channels.filter(ch => ch.type === 'analog').forEach(ch => {
-    const color = CHANNEL_COLORS[ch.colorIdx];
-    const row = document.createElement('div');
-    row.className = 'scale-row';
-    row.innerHTML = `
-      <span class="scale-label" style="color:${color}; width:28px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:9px;">${ch.name}</span>
-      <input type="range" class="scale-slider" min="1" max="200" value="${Math.round((state.scales[ch.id]||1)*100)}" data-ch="${ch.id}" style="--track-color:${color}20;">
-      <span class="scale-value" id="scval-${ch.id}">${(state.scales[ch.id]||1).toFixed(1)}x</span>
-    `;
-    const slider = row.querySelector('input[type=range]');
-    slider.addEventListener('input', (e) => {
-      const v = parseInt(e.target.value) / 100;
-      state.scales[ch.id] = v;
-      document.getElementById(`scval-${ch.id}`).textContent = v.toFixed(1) + 'x';
-      renderPlot(false);
-    });
-    $yScalesGrid.appendChild(row);
+function toggleAll(show) {
+  for (var i = 0; i < STATE.channelVisible.length; i++) STATE.channelVisible[i] = show;
+  renderChannelList();
+  updatePlot();
+}
+
+function filterByGroup(group, btn) {
+  var active = btn.classList.toggle('on');
+  var cfg = STATE.cfg;
+  cfg.analogChannels.forEach(function(ch, i) {
+    var m = ch.name.match(/_(G\d+|RT\d+|T\d+)/i) || ch.ccbm.match(/(G\d+|RT\d+|T\d+)/i);
+    var g = m ? m[1].toUpperCase() : '';
+    if (g === group) STATE.channelVisible[i] = active;
   });
+  renderChannelList();
+  updatePlot();
 }
 
-// ─── RENDER PLOT ─────────────────────────────────────────────
-function renderPlot(fullReset = true) {
-  const traces = [];
+function filterByType(type, btn) {
+  document.querySelectorAll('#type-filters .filter-btn').forEach(function(b){ b.classList.remove('on'); });
+  if (btn) btn.classList.add('on');
+  var cfg = STATE.cfg;
+  cfg.analogChannels.forEach(function(ch, i) {
+    var t = getType(ch);
+    STATE.channelVisible[i] = (type === 'all' || t === type);
+  });
+  renderChannelList();
+  updatePlot();
+}
 
-  state.channels.forEach(ch => {
-    if (!state.visible[ch.id]) return;
-    const color = CHANNEL_COLORS[ch.colorIdx];
-    const scale = state.scales[ch.id] || 1.0;
-    const yVals = ch.values.map(v => v * scale);
+// ============================================================
+// RENDER PLOT (Plotly)
+// ============================================================
+function updatePlot() {
+  var cfg = STATE.cfg;
+  var dat = STATE.dat;
+  if (!cfg || !dat) return;
+
+  var traces = [];
+  var ts = Array.from(dat.timestamps);
+
+  for (var i = 0; i < cfg.nA; i++) {
+    if (!STATE.channelVisible[i]) continue;
+    var ch    = cfg.analogChannels[i];
+    var scale = STATE.channelScale[i] || 1.0;
+    var color = STATE.channelColors[i];
+
+    var yRaw  = dat.analogData[i];
+    var yData = new Array(yRaw.length);
+    for (var s = 0; s < yRaw.length; s++) yData[s] = yRaw[s] * scale;
 
     traces.push({
-      x: state.timeMs,
-      y: yVals,
-      name: `${ch.name}${ch.unit ? ' ('+ch.unit+')' : ''}`,
       type: 'scattergl',
       mode: 'lines',
-      line: {
-        color: color,
-        width: ch.type === 'digital' ? 1.5 : 1.2,
-      },
-      hovertemplate: `<b>${ch.name}</b><br>t: %{x:.3f} ms<br>v: %{y:.4f} ${ch.unit}<extra></extra>`,
+      name: ch.name + (ch.unit ? ' (' + ch.unit + ')' : ''),
+      x: ts,
+      y: yData,
+      line: { color: color, width: 1.5 },
+      hovertemplate: '<b>' + ch.name + '</b><br>t=%{x:.2f} ms<br>val=%{y:.4f} ' + ch.unit + '<extra></extra>',
     });
-  });
+  }
 
-  // Trigger line
-  const trig = {
-    x: [state.triggerMs, state.triggerMs],
-    y: [null, null], // will be overridden by yaxis range
-    type: 'scatter',
-    mode: 'lines',
-    name: 'Trigger',
-    showlegend: false,
-    line: { color: '#f05050', width: 1.5, dash: 'dash' },
-    hoverinfo: 'skip',
-  };
-
-  // compute y range from visible channels
-  let yMin = Infinity, yMax = -Infinity;
-  state.channels.forEach(ch => {
-    if (!state.visible[ch.id]) return;
-    const scale = state.scales[ch.id] || 1.0;
-    ch.values.forEach(v => {
-      const sv = v * scale;
-      if (sv < yMin) yMin = sv;
-      if (sv > yMax) yMax = sv;
-    });
-  });
-  if (!isFinite(yMin)) { yMin = -1; yMax = 1; }
-  const yPad = (yMax - yMin) * 0.1 || 1;
-  trig.y = [yMin - yPad, yMax + yPad];
-
-  const layout = {
+  var layout = {
     paper_bgcolor: '#0a0e1a',
-    plot_bgcolor: '#0a0e1a',
-    font: { family: 'Lato, sans-serif', color: '#7bb3c9', size: 11 },
-    margin: { l: 52, r: 20, t: 20, b: 40 },
+    plot_bgcolor:  '#0d1526',
+    font: { family: 'Lato', color: '#e2eaf5', size: 11 },
     xaxis: {
-      title: { text: 'Tempo (ms)', standoff: 8 },
-      gridcolor: '#1e3a5f',
-      linecolor: '#1e3a5f',
-      tickcolor: '#1e3a5f',
-      zerolinecolor: '#1e3a5f',
-      color: '#7bb3c9',
+      title: { text: 'Tempo (ms)', font: { size: 11 } },
+      gridcolor:     '#1a2d4a',
+      zerolinecolor: '#007ACD',
+      zerolinewidth: 1.5,
+      color: '#7a9bb5',
+      tickformat: '.1f',
     },
     yaxis: {
-      title: { text: 'Amplitude', standoff: 6 },
-      gridcolor: '#1e3a5f',
-      linecolor: '#1e3a5f',
-      tickcolor: '#1e3a5f',
-      zerolinecolor: '#1e3a5f33',
-      color: '#7bb3c9',
-      range: [yMin - yPad, yMax + yPad],
+      title: { text: 'Amplitude', font: { size: 11 } },
+      gridcolor: '#1a2d4a',
+      color: '#7a9bb5',
     },
+    showlegend: true,
     legend: {
-      bgcolor: '#0d122088',
-      bordercolor: '#1e3a5f',
+      bgcolor: 'rgba(13,21,38,0.9)',
+      bordercolor: '#1a2d4a',
       borderwidth: 1,
-      font: { size: 10, color: '#a8cde0' },
+      font: { size: 10 },
+      x: 1.01, xanchor: 'left',
+      y: 1,    yanchor: 'top',
     },
+    margin: { l: 65, r: 10, t: 12, b: 50 },
     hovermode: 'x unified',
-    hoverlabel: {
-      bgcolor: '#0f1829',
-      bordercolor: '#007ACD',
-      font: { color: '#e8f4f8', size: 11 },
-    },
     dragmode: 'zoom',
-    modebar: {
-      bgcolor: '#0d1220',
-      color: '#7bb3c9',
-      activecolor: '#007ACD',
-    },
+    shapes: [{
+      type: 'line',
+      x0: 0, x1: 0,
+      y0: 0, y1: 1,
+      yref: 'paper',
+      line: { color: '#e05252', width: 1.5, dash: 'dash' },
+    }],
+    annotations: [{
+      x: 0, y: 1.03, yref: 'paper',
+      text: 'TRIGGER',
+      showarrow: false,
+      font: { color: '#e05252', size: 9, family: 'Lato' },
+    }],
   };
 
-  if (fullReset) {
-    Plotly.newPlot($plot, [...traces, trig], layout, {
-      responsive: true,
-      displaylogo: false,
-      modeBarButtonsToRemove: ['sendDataToCloud', 'lasso2d', 'select2d'],
-      scrollZoom: true,
-    });
+  var config = {
+    responsive: true,
+    scrollZoom: true,
+    displayModeBar: true,
+    modeBarButtonsToRemove: ['toImage','sendDataToCloud'],
+    displaylogo: false,
+  };
 
-    // cursor hover
-    $plot.on('plotly_hover', (data) => {
-      if (!data.points || !data.points.length) return;
-      const pt = data.points[0];
-      const tMs = pt.x;
-      $cursorInfo.style.display = 'block';
-      let html = `<div class="cursor-time">t = ${tMs.toFixed(3)} ms</div>`;
-      data.points.forEach(p => {
-        html += `<div class="cursor-val"><span class="cursor-val-name">${p.data.name.split(' ')[0]}</span><span class="cursor-val-num">${p.y !== undefined ? p.y.toFixed(4) : '—'}</span></div>`;
-        // update sidebar channel value
-        const ch = state.channels.find(c => c.name === p.data.name.split(' ')[0]);
-        if (ch) {
-          const el = document.getElementById(`chval-${ch.id}`);
-          if (el) el.textContent = p.y !== undefined ? p.y.toFixed(2) : '—';
-        }
-      });
-      $cursorInfo.innerHTML = html;
-    });
+  Plotly.react('plot', traces, layout, config);
 
-    $plot.on('plotly_unhover', () => {
-      $cursorInfo.style.display = 'none';
-      state.channels.forEach(ch => {
-        const el = document.getElementById(`chval-${ch.id}`);
-        if (el) el.textContent = '—';
-      });
-    });
-
-    // init x range inputs
-    if (state.timeMs.length > 0) {
-      $xStart.value = state.timeMs[0].toFixed(1);
-      $xEnd.value   = state.timeMs[state.timeMs.length-1].toFixed(1);
+  document.getElementById('plot').on('plotly_hover', function(data) {
+    if (data.points && data.points[0]) {
+      var pt = data.points[0];
+      document.getElementById('st-cursor').textContent =
+        't=' + (pt.x != null ? Number(pt.x).toFixed(2) : '-') + ' ms  val=' + (pt.y != null ? Number(pt.y).toFixed(4) : '-');
     }
-  } else {
-    Plotly.react($plot, [...traces, trig], layout);
-  }
-}
-
-// ─── X CONTROLS ──────────────────────────────────────────────
-function applyXRange(xMin, xMax) {
-  Plotly.relayout($plot, {
-    'xaxis.range': [xMin, xMax],
   });
-  $xStart.value = xMin.toFixed(1);
-  $xEnd.value   = xMax.toFixed(1);
+
+  updateDigitalTable();
 }
 
-document.getElementById('btnBeforeTrigger').addEventListener('click', () => {
-  if (!state.timeMs.length) return;
-  const t0 = state.timeMs[0];
-  applyXRange(t0, state.triggerMs + (state.triggerMs - t0) * 0.2);
-});
-
-document.getElementById('btnAfterTrigger').addEventListener('click', () => {
-  if (!state.timeMs.length) return;
-  const tLast = state.timeMs[state.timeMs.length - 1];
-  applyXRange(state.triggerMs - (tLast - state.triggerMs) * 0.1, tLast);
-});
-
-document.getElementById('btnFullWindow').addEventListener('click', () => {
-  if (!state.timeMs.length) return;
-  applyXRange(state.timeMs[0], state.timeMs[state.timeMs.length - 1]);
-});
-
-document.getElementById('btnApplyRange').addEventListener('click', () => {
-  const x0 = parseFloat($xStart.value);
-  const x1 = parseFloat($xEnd.value);
-  if (!isNaN(x0) && !isNaN(x1) && x1 > x0) applyXRange(x0, x1);
-});
-
-$xZoomSlider.addEventListener('input', (e) => {
-  const pct = parseInt(e.target.value);
-  $xZoomVal.textContent = pct + '%';
-  if (!state.timeMs.length) return;
-  const tMin = state.timeMs[0];
-  const tMax = state.timeMs[state.timeMs.length - 1];
-  const mid = state.triggerMs;
-  const half = (tMax - tMin) / 2 * (pct / 100);
-  applyXRange(Math.max(tMin, mid - half), Math.min(tMax, mid + half));
-});
-
-// ─── Y AUTO-SCALE ─────────────────────────────────────────────
-document.getElementById('btnAutoScale').addEventListener('click', () => {
-  state.channels.forEach(ch => { state.scales[ch.id] = 1.0; });
-  renderYScales();
-  renderPlot(false);
-  notify('Escala normalizada para todos os canais', 'info');
-});
-
-// ─── RESET PLOT ───────────────────────────────────────────────
-document.getElementById('btnResetPlot').addEventListener('click', () => {
-  if (!state.channels.length) return;
-  Plotly.relayout($plot, {
-    'xaxis.autorange': true,
-    'yaxis.autorange': true,
-  });
-  if (state.timeMs.length > 0) {
-    $xStart.value = state.timeMs[0].toFixed(1);
-    $xEnd.value   = state.timeMs[state.timeMs.length-1].toFixed(1);
+// ============================================================
+// TABELA DIGITAIS
+// ============================================================
+function updateDigitalTable() {
+  var cfg = STATE.cfg;
+  var dat = STATE.dat;
+  if (!cfg || !dat || cfg.nD === 0) {
+    document.getElementById('digital-panel').classList.add('hidden');
+    return;
   }
-  $xZoomSlider.value = 100;
-  $xZoomVal.textContent = '100%';
-});
 
-// ─── SHOW ALL / HIDE ALL ──────────────────────────────────────
-document.getElementById('btnShowAll').addEventListener('click', () => {
-  state.channels.forEach(ch => { state.visible[ch.id] = true; });
-  renderChannelList();
-  renderPlot(false);
-});
-document.getElementById('btnHideAll').addEventListener('click', () => {
-  state.channels.forEach(ch => { state.visible[ch.id] = false; });
-  renderChannelList();
-  renderPlot(false);
-});
+  // Amostra mais proxima de t=0
+  var trigIdx = 0, minDist = Infinity;
+  for (var s = 0; s < dat.nSamples; s++) {
+    var d = Math.abs(dat.timestamps[s]);
+    if (d < minDist) { minDist = d; trigIdx = s; }
+  }
 
-// ─── DEMO BUTTONS ─────────────────────────────────────────────
-document.getElementById('btnDemo').addEventListener('click', loadDemoData);
-document.getElementById('btnDemoWelcome').addEventListener('click', loadDemoData);
-
-// ─── WELCOME STATE ────────────────────────────────────────────
-function hideWelcome() {
-  $welcomeState.style.display = 'none';
+  var table = document.getElementById('digital-table');
+  table.innerHTML = '';
+  for (var d = 0; d < cfg.nD; d++) {
+    var ch  = cfg.digitalChannels[d];
+    var val = dat.digitalData[d][trigIdx];
+    var row = document.createElement('div');
+    row.className = 'dig-row';
+    row.innerHTML =
+      '<span class="dig-name">' + ch.name + '</span>' +
+      '<span class="dig-val ' + (val ? 'on' : 'off') + '">' + val + '</span>';
+    table.appendChild(row);
+  }
+  document.getElementById('digital-panel').classList.remove('hidden');
 }
 
-// ─── RESIZE ───────────────────────────────────────────────────
-window.addEventListener('resize', () => {
-  if (state.channels.length) {
-    Plotly.Plots.resize($plot);
+// ============================================================
+// METADADOS
+// ============================================================
+function renderMeta() {
+  var cfg = STATE.cfg;
+  var dat = STATE.dat;
+  if (!cfg) return;
+  document.getElementById('m-station').textContent = cfg.stationName || '-';
+  document.getElementById('m-device').textContent  = cfg.devId       || '-';
+  document.getElementById('m-date').textContent    = cfg.startTime   || '-';
+  document.getElementById('m-freq').textContent    = cfg.lf ? cfg.lf + ' Hz' : '-';
+  var rate = cfg.rates[0] && cfg.rates[0].samp;
+  document.getElementById('m-rate').textContent    = rate ? rate.toFixed(0) + ' Sa/s' : '-';
+  document.getElementById('m-samples').textContent = dat ? dat.nSamples.toLocaleString() : '-';
+  document.getElementById('m-format').textContent  = cfg.dataType || '-';
+  if (dat && dat.nSamples > 1) {
+    var dur = dat.timestamps[dat.nSamples-1] - dat.timestamps[0];
+    document.getElementById('m-duration').textContent = dur.toFixed(1) + ' ms';
   }
+  document.getElementById('meta-card').classList.remove('hidden');
+}
+
+function updateStatusBar() {
+  var cfg = STATE.cfg;
+  var dat = STATE.dat;
+  document.getElementById('st-samples').textContent  = dat ? dat.nSamples.toLocaleString() : '-';
+  var rate = cfg && cfg.rates[0] && cfg.rates[0].samp;
+  document.getElementById('st-rate').textContent     = rate ? rate.toFixed(0) + ' Sa/s' : '-';
+  var vis = STATE.channelVisible.filter(Boolean).length;
+  document.getElementById('st-channels').textContent = cfg ? vis + '/' + cfg.nA : '-';
+  document.getElementById('st-file').textContent     = STATE.fileName || 'Aguardando arquivo...';
+}
+
+// ============================================================
+// CONTROLES DE JANELA X
+// ============================================================
+function setWindow(type) {
+  var dat = STATE.dat;
+  if (!dat) return;
+  var tMin = dat.timestamps[0];
+  var tMax = dat.timestamps[dat.nSamples-1];
+  var x0, x1;
+  if      (type === 'pre') { x0 = Math.max(tMin, -500); x1 = 0; }
+  else if (type === 'pos') { x0 = 0; x1 = Math.min(tMax, 500); }
+  else                     { x0 = tMin; x1 = tMax; }
+  Plotly.relayout('plot', { 'xaxis.range': [x0, x1] });
+  document.getElementById('range-from').value = x0.toFixed(0);
+  document.getElementById('range-to').value   = x1.toFixed(0);
+}
+
+function applyRange() {
+  var from = parseFloat(document.getElementById('range-from').value);
+  var to   = parseFloat(document.getElementById('range-to').value);
+  if (!isNaN(from) && !isNaN(to) && from < to) {
+    Plotly.relayout('plot', { 'xaxis.range': [from, to] });
+  }
+}
+
+function onSliderInput(val) {
+  var dat = STATE.dat;
+  if (!dat) return;
+  var tMin = dat.timestamps[0];
+  var tMax = dat.timestamps[dat.nSamples-1];
+  var total = tMax - tMin;
+  var win   = total * 0.35;
+  var center = tMin + total * val / 100;
+  Plotly.relayout('plot', { 'xaxis.range': [center - win/2, center + win/2] });
+}
+
+// ============================================================
+// LOADING
+// ============================================================
+function showLoading(msg) {
+  document.getElementById('loading-msg').textContent = msg || 'Processando...';
+  document.getElementById('loading').classList.remove('hidden');
+}
+function hideLoading() {
+  document.getElementById('loading').classList.add('hidden');
+}
+
+// ============================================================
+// UPLOAD HANDLER
+// ============================================================
+document.getElementById('file-input').addEventListener('change', function(e) {
+  handleFiles(e.target.files);
 });
 
-// ─── INIT ─────────────────────────────────────────────────────
-// Plotly plot container fills parent
-$plot.style.width  = '100%';
-$plot.style.height = '100%';
+var zone = document.getElementById('upload-zone');
+zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.classList.add('drag-over'); });
+zone.addEventListener('dragleave', function() { zone.classList.remove('drag-over'); });
+zone.addEventListener('drop', function(e) {
+  e.preventDefault();
+  zone.classList.remove('drag-over');
+  handleFiles(e.dataTransfer.files);
+});
 
+async function handleFiles(files) {
+  if (!files || files.length === 0) return;
+  showLoading('Lendo arquivos...');
+
+  try {
+    var cfgText = null;
+    var datBuffer = null;
+    var fileName = '';
+
+    var fileArray = Array.from(files);
+    var zicFile = fileArray.find(function(f){ return /\.(zic|zip)$/i.test(f.name); });
+    var cfgFile = fileArray.find(function(f){ return /\.cfg$/i.test(f.name); });
+    var datFile = fileArray.find(function(f){ return /\.dat$/i.test(f.name); });
+
+    if (zicFile) {
+      fileName = zicFile.name;
+      showLoading('Extraindo ZIC/ZIP com JSZip...');
+      var zipData = await zicFile.arrayBuffer();
+      var zip = await JSZip.loadAsync(zipData);
+
+      var cfgEntry = null, datEntry = null;
+      Object.values(zip.files).forEach(function(f) {
+        if (!cfgEntry && /\.cfg$/i.test(f.name)) cfgEntry = f;
+        if (!datEntry && /\.dat$/i.test(f.name)) datEntry = f;
+      });
+
+      if (!cfgEntry) throw new Error('Arquivo .cfg nao encontrado no ZIP/ZIC');
+      if (!datEntry) throw new Error('Arquivo .dat nao encontrado no ZIP/ZIC');
+
+      showLoading('Parsing CFG...');
+      cfgText   = await cfgEntry.async('string');
+      showLoading('Lendo DAT...');
+      datBuffer = await datEntry.async('arraybuffer');
+
+    } else if (cfgFile && datFile) {
+      fileName  = cfgFile.name.replace(/\.cfg$/i, '');
+      cfgText   = await cfgFile.text();
+      datBuffer = await datFile.arrayBuffer();
+
+    } else if (cfgFile) {
+      throw new Error('Arquivo .dat nao encontrado. Envie o par .cfg + .dat juntos.');
+    } else if (datFile) {
+      throw new Error('Arquivo .cfg nao encontrado. Envie o par .cfg + .dat juntos.');
+    } else {
+      throw new Error('Formato nao reconhecido. Use .zic, .zip ou par .cfg + .dat');
+    }
+
+    STATE.fileName = fileName;
+    showLoading('Parseando CFG...');
+    var cfg = parseCFG(cfgText);
+    initState(cfg);
+
+    showLoading('Parseando DAT ' + cfg.dataType + '...');
+    var dat;
+    if (cfg.dataType === 'BINARY') {
+      dat = parseDATBinary(datBuffer, cfg);
+    } else {
+      dat = parseDATAscii(new TextDecoder().decode(datBuffer), cfg);
+    }
+    STATE.dat = dat;
+
+    normalizeTrigger(cfg, dat);
+
+    showLoading('Renderizando...');
+    renderMeta();
+    renderChannelList();
+    updatePlot();
+    updateStatusBar();
+
+    document.getElementById('empty-state').classList.add('hidden');
+    document.getElementById('x-controls').classList.remove('hidden');
+    hideLoading();
+
+  } catch (err) {
+    hideLoading();
+    alert('Erro ao processar arquivo:\n\n' + err.message);
+    console.error(err);
+  }
+}
+
+// ============================================================
+// DEMO SINTETICO
+// ============================================================
+function loadDemo() {
+  showLoading('Gerando dados sinteticos...');
+
+  setTimeout(function() {
+    try {
+      var cfg = {
+        stationName: 'UHE Miranda - Demo Sintetico',
+        devId: 'IED-G1-REC01',
+        revYear: '1999',
+        nA: 9,
+        nD: 4,
+        analogChannels: [
+          { n:1, name:'IA_I_G1', phase:'A', ccbm:'', unit:'A',  a:1, b:0 },
+          { n:2, name:'IB_I_G1', phase:'B', ccbm:'', unit:'A',  a:1, b:0 },
+          { n:3, name:'IC_I_G1', phase:'C', ccbm:'', unit:'A',  a:1, b:0 },
+          { n:4, name:'VA_V_G1', phase:'A', ccbm:'', unit:'kV', a:1, b:0 },
+          { n:5, name:'VB_V_G1', phase:'B', ccbm:'', unit:'kV', a:1, b:0 },
+          { n:6, name:'VC_V_G1', phase:'C', ccbm:'', unit:'kV', a:1, b:0 },
+          { n:7, name:'IA_I_G2', phase:'A', ccbm:'', unit:'A',  a:1, b:0 },
+          { n:8, name:'IB_I_G2', phase:'B', ccbm:'', unit:'A',  a:1, b:0 },
+          { n:9, name:'IC_I_G2', phase:'C', ccbm:'', unit:'A',  a:1, b:0 },
+        ],
+        digitalChannels: [
+          { n:1, name:'87G_TRIP_G1', phase:'', normal:0 },
+          { n:2, name:'21_DIST_G1',  phase:'', normal:0 },
+          { n:3, name:'DJ_G1_ABERTO',phase:'', normal:1 },
+          { n:4, name:'PROT_ATIVO',  phase:'', normal:1 },
+        ],
+        lf: 60.0,
+        rates: [{ samp: 1920, endSamp: 192 }],
+        startTime: '15/03/2024,14:23:11.482000',
+        trigTime:  '15/03/2024,14:23:11.582000',
+        dataType: 'BINARY',
+      };
+
+      var Fs       = 1920;  // Sa/s (32 amostras/ciclo @ 60 Hz)
+      var fN       = 60;    // Hz
+      var dur      = 500;   // ms total
+      var trigAt   = 100;   // ms do inicio
+      var nSamples = Math.round(Fs * dur / 1000);
+
+      var timestamps  = new Float64Array(nSamples);
+      var analogData  = [];
+      var digitalData = [];
+      for (var a = 0; a < 9; a++) analogData.push(new Float32Array(nSamples));
+      for (var d = 0; d < 4; d++) digitalData.push(new Uint8Array(nSamples));
+
+      var PI2 = 2 * Math.PI;
+      var noise = function(amp){ return (Math.random() - 0.5) * amp; };
+
+      for (var s = 0; s < nSamples; s++) {
+        var t  = (s / Fs) * 1000 - trigAt; // ms, relativo ao trigger
+        var wt = PI2 * fN * t / 1000;
+        timestamps[s] = t;
+
+        // Curto bifasico A-B: ocorre de 0 a 150ms pos-trigger
+        var inFault = (t > 0 && t < 150);
+        var faultI  = inFault ? 2.2  : 1.0;  // sobrecorrente fases A e B
+        var faultV  = inFault ? 0.25 : 1.0;  // afundamento tensao A e B
+
+        var Ipk = 3000;   // A pico nominal
+        var Vpk = 11270;  // V pico (13.8 kV / sqrt(3) * sqrt(2))  em V -> dividimos por 1000 para kV
+
+        // G1 correntes
+        analogData[0][s] = Ipk * faultI * Math.sin(wt + 0)           + noise(30);
+        analogData[1][s] = Ipk * faultI * Math.sin(wt - PI2/3)       + noise(30);
+        analogData[2][s] = Ipk          * Math.sin(wt + PI2/3)        + noise(30);
+        // G1 tensoes (kV)
+        analogData[3][s] = (Vpk * faultV * Math.sin(wt + 0)          + noise(100)) / 1000;
+        analogData[4][s] = (Vpk * faultV * Math.sin(wt - PI2/3)      + noise(100)) / 1000;
+        analogData[5][s] = (Vpk          * Math.sin(wt + PI2/3)      + noise(100)) / 1000;
+        // G2 correntes (menos afetado)
+        analogData[6][s] = Ipk * 0.9 * Math.sin(wt + 0)              + noise(20);
+        analogData[7][s] = Ipk * 0.9 * Math.sin(wt - PI2/3)          + noise(20);
+        analogData[8][s] = Ipk * 0.9 * Math.sin(wt + PI2/3)          + noise(20);
+
+        // Digitais
+        digitalData[0][s] = (t > 30  && t < 200) ? 1 : 0;  // 87G trip
+        digitalData[1][s] = (t > 25  && t < 200) ? 1 : 0;  // 21 distancia
+        digitalData[2][s] = (t > 80) ? 1 : 0;               // DJ aberto
+        digitalData[3][s] = 1;                               // Protecao ativa
+      }
+
+      STATE.cfg = cfg;
+      STATE.dat = { timestamps: timestamps, analogData: analogData, digitalData: digitalData, nSamples: nSamples };
+      STATE.fileName = 'Demo - Curto Bifasico A-B 13.8kV G1';
+      STATE.channelColors  = cfg.analogChannels.map(function(_, i){ return CHANNEL_COLORS[i % CHANNEL_COLORS.length]; });
+      STATE.channelVisible = cfg.analogChannels.map(function(){ return true; });
+      STATE.channelScale   = cfg.analogChannels.map(function(){ return 1.0; });
+
+      renderMeta();
+      renderChannelList();
+      updatePlot();
+      updateStatusBar();
+
+      document.getElementById('empty-state').classList.add('hidden');
+      document.getElementById('x-controls').classList.remove('hidden');
+      hideLoading();
+
+    } catch (err) {
+      hideLoading();
+      alert('Erro no demo: ' + err.message);
+      console.error(err);
+    }
+  }, 60);
+}
 </script>
 </body>
 </html>
