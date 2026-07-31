@@ -468,7 +468,7 @@
       <div id="empty-state">
         <div class="empty-icon">&#128202;</div>
         <h2>Nenhum arquivo carregado</h2>
-        <p>Faca upload de um arquivo <b>.zic</b> ou <b>.zip</b> (COMTRADE), ou de um par <b>.cfg</b> + <b>.dat</b> para visualizar os sinais de oscilografia.<br><br>
+        <p>Faca upload de um arquivo <b>.zic</b> ou <b>.zip</b> (COMTRADE), de um par <b>.cfg</b> + <b>.dat</b>, ou de um par <b>.cfg</b> + <b>.asc</b> (ASCII) para visualizar os sinais de oscilografia.<br><br>
         Suporte a formato <b>BINARY</b> (int16) e <b>ASCII</b>, com extracao automatica via JSZip.</p>
         <button class="btn primary" onclick="loadDemo()">&#9889; Carregar Demo Interativo</button>
       </div>
@@ -688,6 +688,19 @@ function parseDATAscii(text, cfg) {
     }
     for (var d = 0; d < nD; d++) {
       digitalData[d][s] = parseInt(pts[2 + nA + d]) || 0;
+    }
+  }
+
+  // Proteção SIPROTEC: se todos os timestamps são zero, reconstruir por posição
+  var allZero = true;
+  for (var s = 0; s < nSamples && allZero; s++) {
+    if (timestamps[s] !== 0) allZero = false;
+  }
+  if (allZero && nSamples > 1) {
+    var sampRate = (cfg.rates && cfg.rates[0] && cfg.rates[0].samp > 0) ? cfg.rates[0].samp : 60.0;
+    var msPerSample = 1000.0 / sampRate;
+    for (var s = 0; s < nSamples; s++) {
+      timestamps[s] = s * msPerSample;
     }
   }
 
@@ -1238,6 +1251,7 @@ async function handleFiles(files) {
     var cfgText = null;
     var datBuffer = null;
     var fileName = '';
+    var dataFileName = ''; // nome do arquivo de dados (para detecção .asc)
 
     var fileArray = Array.from(files);
     var zicFile  = fileArray.find(function(f){ return /\.(zic|zip)$/i.test(f.name); });
@@ -1301,28 +1315,35 @@ async function handleFiles(files) {
       var cfgEntry = null, datEntry = null;
       Object.values(zip.files).forEach(function(f) {
         if (!cfgEntry && /\.cfg$/i.test(f.name)) cfgEntry = f;
-        if (!datEntry && /\.dat$/i.test(f.name)) datEntry = f;
+        // aceita .dat ou .asc como arquivo de dados COMTRADE
+        if (!datEntry && /\.(dat|asc)$/i.test(f.name)) datEntry = f;
       });
 
       if (!cfgEntry) throw new Error('Arquivo .cfg nao encontrado no ZIP/ZIC');
-      if (!datEntry) throw new Error('Arquivo .dat nao encontrado no ZIP/ZIC');
+      if (!datEntry) throw new Error('Arquivo .dat/.asc nao encontrado no ZIP/ZIC');
 
       showLoading('Parsing CFG...');
       cfgText   = await cfgEntry.async('string');
       showLoading('Lendo DAT...');
       datBuffer = await datEntry.async('arraybuffer');
+      // Guardar nome para detecção de formato (.asc = ASCII)
+      fileName = cfgEntry.name.replace(/\.cfg$/i, '');
+      dataFileName = datEntry.name;
 
-    } else if (cfgFile && datFile) {
-      fileName  = cfgFile.name.replace(/\.cfg$/i, '');
-      cfgText   = await cfgFile.text();
-      datBuffer = await datFile.arrayBuffer();
+    } else if (cfgFile && (datFile || ascFiles.length > 0)) {
+      // Par CFG + DAT  **ou**  CFG + ASC (COMTRADE ASCII com extensão .asc)
+      var dataFile = datFile || ascFiles[0];
+      fileName     = cfgFile.name.replace(/\.cfg$/i, '');
+      dataFileName = dataFile.name;
+      cfgText      = await cfgFile.text();
+      datBuffer    = await dataFile.arrayBuffer();
 
     } else if (cfgFile) {
-      throw new Error('Arquivo .dat nao encontrado. Envie o par .cfg + .dat juntos.');
+      throw new Error('Arquivo de dados nao encontrado. Envie o par .cfg + .dat (ou .cfg + .asc) juntos.');
     } else if (datFile) {
       throw new Error('Arquivo .cfg nao encontrado. Envie o par .cfg + .dat juntos.');
     } else {
-      throw new Error('Formato nao reconhecido. Use .zic, .zip, par .cfg + .dat, ou arquivo(s) .asc do REASON.');
+      throw new Error('Formato nao reconhecido. Use .zic, .zip, par .cfg + .dat/.asc, ou arquivo(s) .asc do REASON.');
     }
 
     STATE.fileName = fileName;
@@ -1330,9 +1351,14 @@ async function handleFiles(files) {
     var cfg = parseCFG(cfgText);
     initState(cfg);
 
-    showLoading('Parseando DAT ' + cfg.dataType + '...');
+    // Se o arquivo de dados tem extensão .asc, forçar modo ASCII
+    // independente do que o CFG declare (alguns exportadores geram CFG errado)
+    var forceAscii = /\.asc$/i.test(dataFileName);
+    var effectiveType = forceAscii ? 'ASCII' : (cfg.dataType || 'BINARY');
+
+    showLoading('Parseando DAT ' + effectiveType + '...');
     var dat;
-    if (cfg.dataType === 'BINARY') {
+    if (effectiveType === 'BINARY') {
       dat = parseDATBinary(datBuffer, cfg);
     } else {
       dat = parseDATAscii(new TextDecoder().decode(datBuffer), cfg);
