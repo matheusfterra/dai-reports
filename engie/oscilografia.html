@@ -391,10 +391,10 @@
           <div class="upload-icon">&#128194;</div>
           <div class="upload-text">
             <b>Clique ou arraste</b> um arquivo<br>
-            .zic &middot; .zip &middot; .cfg &middot; .dat
+            .zic &middot; .zip &middot; .cfg &middot; .dat &middot; .asc
           </div>
         </div>
-        <input type="file" id="file-input" accept=".zic,.zip,.cfg,.dat,.CFG,.DAT" multiple>
+        <input type="file" id="file-input" accept=".zic,.zip,.cfg,.dat,.asc,.CFG,.DAT,.ASC" multiple>
         <div id="demo-hint">
           <button class="btn small" onclick="loadDemo()" style="margin-top:8px;width:100%;justify-content:center">&#9889; Carregar Demo</button>
           Simula curto bifasico 13.8kV / G1
@@ -692,6 +692,129 @@ function parseDATAscii(text, cfg) {
   }
 
   return { timestamps: timestamps, analogData: analogData, digitalData: digitalData, nSamples: nSamples };
+}
+
+// ============================================================
+// PARSER REASON ASC (Siemens SIPROTEC — canal individual)
+// Formato: linhas ":" no header, ";" comentários, "tempo  valor" nos dados
+// Suporta múltiplos arquivos .asc ao mesmo tempo (multi-canal)
+// ============================================================
+function parseReasonASC(text, fileName) {
+  var lines = text.split(/\r?\n/);
+  var channelName = fileName.replace(/\.asc$/i, '');
+  var unit = '';
+  var dateStr = '';
+  var colorDec = 0;
+  var dataLines = [];
+  var headerDone = false;
+
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i].trim();
+    if (line === '') continue;
+
+    if (line.charAt(0) === ':') {
+      var val = line.substring(1).trim();
+      if (i === 0 && val !== '') channelName = val || channelName;
+      else if (i === 1) unit = val;
+      else if (i === 3 && val !== '') dateStr = val;
+      else if (i === 5 && val !== '') colorDec = parseInt(val) || 0;
+      continue;
+    }
+
+    if (line.charAt(0) === ';') continue; // comentário
+
+    headerDone = true;
+    dataLines.push(line);
+  }
+
+  if (dataLines.length === 0) throw new Error('Arquivo .asc sem dados: ' + fileName);
+
+  var nSamples = dataLines.length;
+  var timestamps = new Float64Array(nSamples);
+  var values     = new Float32Array(nSamples);
+
+  // Detectar separador: espaço duplo, tab ou vírgula
+  for (var s = 0; s < nSamples; s++) {
+    var pts = dataLines[s].split(/[\s,]+/);
+    // Tempo em segundos → converter para ms
+    timestamps[s] = (parseFloat(pts[0]) || 0) * 1000.0;
+    values[s]     = parseFloat(pts[1]) || 0;
+  }
+
+  // Metadados sintéticos para compatibilidade com o STATE
+  var dt = timestamps.length > 1 ? (timestamps[1] - timestamps[0]) : 100.0;
+  var sampRate = dt > 0 ? 1000.0 / dt : 10.0;
+
+  var cfg = {
+    stationName: 'REASON Export',
+    devId: channelName,
+    revYear: '1999',
+    nA: 1,
+    nD: 0,
+    analogChannels: [{
+      n: 1,
+      name: channelName,
+      phase: '',
+      ccbm: '',
+      unit: unit,
+      a: 1,
+      b: 0,
+    }],
+    digitalChannels: [],
+    lf: 60.0,
+    rates: [{ samp: sampRate, endSamp: 0 }],
+    startTime: dateStr,
+    trigTime: '',
+    dataType: 'REASON_ASC',
+    _reasonColor: colorDec,
+  };
+
+  var dat = {
+    timestamps: timestamps,
+    analogData:  [values],
+    digitalData: [],
+    nSamples: nSamples,
+  };
+
+  return { cfg: cfg, dat: dat };
+}
+
+function mergeReasonChannels(results) {
+  // Combina múltiplos arquivos .asc em um único STATE (multi-canal)
+  var nA = results.length;
+  // Usar timestamps do primeiro arquivo como base
+  var timestamps = results[0].dat.timestamps;
+  var nSamples   = results[0].dat.nSamples;
+
+  var analogChannels = results.map(function(r){ return r.cfg.analogChannels[0]; });
+  var analogData     = results.map(function(r){ return r.dat.analogData[0]; });
+
+  var colorDecs = results.map(function(r){ return r.cfg._reasonColor || 0; });
+
+  var cfg = {
+    stationName: 'REASON Export',
+    devId: results.map(function(r){ return r.cfg.devId; }).join(', '),
+    revYear: '1999',
+    nA: nA,
+    nD: 0,
+    analogChannels: analogChannels,
+    digitalChannels: [],
+    lf: 60.0,
+    rates: results[0].cfg.rates,
+    startTime: results[0].cfg.startTime,
+    trigTime: '',
+    dataType: 'REASON_ASC',
+    _reasonColors: colorDecs,
+  };
+
+  var dat = {
+    timestamps: timestamps,
+    analogData:  analogData,
+    digitalData: [],
+    nSamples: nSamples,
+  };
+
+  return { cfg: cfg, dat: dat };
 }
 
 // ============================================================
@@ -1027,7 +1150,8 @@ function renderMeta() {
   document.getElementById('m-format').textContent  = cfg.dataType || '-';
   if (dat && dat.nSamples > 1) {
     var dur = dat.timestamps[dat.nSamples-1] - dat.timestamps[0];
-    document.getElementById('m-duration').textContent = dur.toFixed(1) + ' ms';
+    var durTxt = dur >= 5000 ? (dur/1000).toFixed(1) + ' s' : dur.toFixed(1) + ' ms';
+    document.getElementById('m-duration').textContent = durTxt;
   }
   document.getElementById('meta-card').classList.remove('hidden');
 }
@@ -1116,10 +1240,58 @@ async function handleFiles(files) {
     var fileName = '';
 
     var fileArray = Array.from(files);
-    var zicFile = fileArray.find(function(f){ return /\.(zic|zip)$/i.test(f.name); });
-    var cfgFile = fileArray.find(function(f){ return /\.cfg$/i.test(f.name); });
-    var datFile = fileArray.find(function(f){ return /\.dat$/i.test(f.name); });
+    var zicFile  = fileArray.find(function(f){ return /\.(zic|zip)$/i.test(f.name); });
+    var cfgFile  = fileArray.find(function(f){ return /\.cfg$/i.test(f.name); });
+    var datFile  = fileArray.find(function(f){ return /\.dat$/i.test(f.name); });
+    var ascFiles = fileArray.filter(function(f){ return /\.asc$/i.test(f.name); });
 
+    // ── REASON ASC: canais individuais exportados pelo software REASON/SIPROTEC ──
+    if (ascFiles.length > 0 && !zicFile && !cfgFile) {
+      showLoading('Lendo ' + ascFiles.length + ' arquivo(s) REASON ASC...');
+      var ascResults = [];
+      for (var ai = 0; ai < ascFiles.length; ai++) {
+        var ascText = await ascFiles[ai].text();
+        ascResults.push(parseReasonASC(ascText, ascFiles[ai].name));
+      }
+
+      var merged = ascFiles.length === 1 ? ascResults[0] : mergeReasonChannels(ascResults);
+      var cfg = merged.cfg;
+      var dat = merged.dat;
+
+      STATE.fileName = ascFiles.map(function(f){ return f.name; }).join(', ');
+      STATE.cfg = cfg;
+      STATE.dat = dat;
+
+      // Cores: usar as cores REASON (decimal RGB) se disponíveis
+      var reasonColors = cfg._reasonColors || (cfg._reasonColor ? [cfg._reasonColor] : []);
+      STATE.channelColors = cfg.analogChannels.map(function(_, i){
+        if (reasonColors[i]) {
+          var c = reasonColors[i];
+          var r = (c >> 16) & 0xFF;
+          var g = (c >> 8)  & 0xFF;
+          var b = c & 0xFF;
+          return 'rgb(' + r + ',' + g + ',' + b + ')';
+        }
+        return CHANNEL_COLORS[i % CHANNEL_COLORS.length];
+      });
+      STATE.channelVisible = cfg.analogChannels.map(function(){ return true; });
+      STATE.channelScale   = cfg.analogChannels.map(function(){ return 1.0; });
+
+      // Sem trigger definido em REASON ASC — não normalizar (deixar t=0 no início)
+
+      showLoading('Renderizando...');
+      renderMeta();
+      renderChannelList();
+      updatePlot();
+      updateStatusBar();
+
+      document.getElementById('empty-state').classList.add('hidden');
+      document.getElementById('x-controls').classList.remove('hidden');
+      hideLoading();
+      return;
+    }
+
+    // ── COMTRADE: ZIC/ZIP ou par CFG+DAT ──
     if (zicFile) {
       fileName = zicFile.name;
       showLoading('Extraindo ZIC/ZIP com JSZip...');
@@ -1150,7 +1322,7 @@ async function handleFiles(files) {
     } else if (datFile) {
       throw new Error('Arquivo .cfg nao encontrado. Envie o par .cfg + .dat juntos.');
     } else {
-      throw new Error('Formato nao reconhecido. Use .zic, .zip ou par .cfg + .dat');
+      throw new Error('Formato nao reconhecido. Use .zic, .zip, par .cfg + .dat, ou arquivo(s) .asc do REASON.');
     }
 
     STATE.fileName = fileName;
