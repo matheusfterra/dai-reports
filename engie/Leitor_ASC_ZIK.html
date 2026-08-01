@@ -6,107 +6,43 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 20px;
-      background-color: #f5f6f8;
-      color: #333;
-    }
-    h2 { color: #005a9c; margin-bottom: 5px; }
-    p.subtitle { margin-top: 0; color: #666; font-size: 0.9em; }
-    .card {
-      background: #fff;
-      border: 1px solid #e1e4e8;
-      border-radius: 6px;
-      padding: 15px;
-      margin-bottom: 15px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-    }
-    .flex-container { display: flex; gap: 15px; flex-wrap: wrap; }
-    .flex-col { flex: 1; min-width: 220px; }
-    label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 0.9em; }
-    input[type="file"], input[type="number"], input[type="text"], select {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-    button {
-      background-color: #005a9c;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 600;
-      margin-top: 10px;
-    }
-    button:hover { background-color: #004070; }
-    button.secondary { background-color: #28a745; }
-    button.secondary:hover { background-color: #218838; }
-    button.danger { background-color: #d9534f; padding: 4px 10px; font-size: 0.8em; margin-top:0; }
-    button.danger:hover { background-color: #c9302c; }
-    .mode-switch {
-      display: flex;
-      border: 2px solid #005a9c;
-      border-radius: 6px;
-      overflow: hidden;
-      width: fit-content;
-      margin: 10px 0;
-    }
-    .mode-switch button {
-      margin: 0; border-radius: 0; background: #fff; color: #005a9c;
-      padding: 10px 25px; font-size: 0.95em;
-    }
-    .mode-switch button.active { background: #005a9c; color: #fff; }
-    .mode-switch button:hover { background: #e3f2fd; }
-    .mode-switch button.active:hover { background: #004070; }
-    .bg-switch {
-      display: flex;
-      border: 2px solid #005a9c;
-      border-radius: 6px;
-      overflow: hidden;
-      width: fit-content;
-      margin: 0 0 12px 0;
-    }
-    .bg-switch button {
-      margin: 0; border-radius: 0; background: #fff; color: #005a9c;
-      padding: 8px 20px; font-size: 0.9em;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .bg-switch button.active { background: #005a9c; color: #fff; }
-    .bg-switch button:hover { background: #e3f2fd; }
-    .bg-switch button.active:hover { background: #004070; }
+    body { font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; margin:20px; background-color:#f5f6f8; color:#333; }
+    h2 { color:#005a9c; margin-bottom:5px; }
+    p.subtitle { margin-top:0; color:#666; font-size:0.9em; }
+    .card { background:#fff; border:1px solid #e1e4e8; border-radius:6px; padding:15px; margin-bottom:15px; box-shadow:0 2px 4px rgba(0,0,0,0.02); }
+    .flex-container { display:flex; gap:15px; flex-wrap:wrap; }
+    .flex-col { flex:1; min-width:220px; }
+    label { display:block; font-weight:600; margin-bottom:5px; font-size:0.9em; }
+    input[type="file"],input[type="number"],input[type="text"],select { width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box; }
+    button { background-color:#005a9c; color:white; border:none; padding:10px 15px; border-radius:4px; cursor:pointer; font-weight:600; margin-top:10px; }
+    button:hover { background-color:#004070; }
+    button.secondary { background-color:#28a745; }
+    button.secondary:hover { background-color:#218838; }
+    button.danger { background-color:#d9534f; padding:4px 10px; font-size:0.8em; margin-top:0; }
+    button.danger:hover { background-color:#c9302c; }
+    .mode-switch { display:flex; border:2px solid #005a9c; border-radius:6px; overflow:hidden; width:fit-content; margin:10px 0; }
+    .mode-switch button { margin:0; border-radius:0; background:#fff; color:#005a9c; padding:10px 25px; font-size:0.95em; }
+    .mode-switch button.active { background:#005a9c; color:#fff; }
+    .mode-switch button:hover { background:#e3f2fd; }
+    .mode-switch button.active:hover { background:#004070; }
+    .bg-switch { display:flex; border:2px solid #005a9c; border-radius:6px; overflow:hidden; width:fit-content; margin:0 0 12px 0; }
+    .bg-switch button { margin:0; border-radius:0; background:#fff; color:#005a9c; padding:8px 20px; font-size:0.9em; display:flex; align-items:center; gap:6px; }
+    .bg-switch button.active { background:#005a9c; color:#fff; }
+    .bg-switch button:hover { background:#e3f2fd; }
+    .bg-switch button.active:hover { background:#004070; }
     .bg-swatch { width:14px; height:14px; border-radius:3px; border:1px solid #999; display:inline-block; }
-    .bg-swatch.black { background: #000000; }
-    .bg-swatch.white { background: #ffffff; }
-    #status {
-      padding: 10px; border-radius: 4px; background: #eef5fc;
-      border-left: 4px solid #005a9c; margin-top: 10px;
-      font-family: monospace; font-size: 0.82em;
-      white-space: pre-wrap; word-break: break-word;
-      max-height: 150px; overflow-y: auto;
-    }
+    .bg-swatch.black { background:#000; }
+    .bg-swatch.white { background:#fff; }
+    #status { padding:10px; border-radius:4px; background:#eef5fc; border-left:4px solid #005a9c; margin-top:10px; font-family:monospace; font-size:0.82em; white-space:pre-wrap; word-break:break-word; max-height:150px; overflow-y:auto; }
     .file-card { border:1px solid #ddd; border-radius:6px; padding:10px; margin-bottom:10px; background:#fafbfc; }
     .file-card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
     .file-card-header strong { font-size:0.95em; }
     .mini-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
     .mini-grid label { font-size:0.75em; margin-bottom:2px; }
     .mini-grid input { padding:5px; font-size:0.85em; }
-    .channel-group-title {
-      font-weight:600; font-size:0.85em; margin:10px 0 4px 0;
-      color:#005a9c; border-bottom:1px solid #e1e4e8; padding-bottom:3px;
-    }
-    .channel-list {
-      max-height:340px; overflow-y:auto; border:1px solid #ddd;
-      padding:8px; border-radius:4px; background:#fafafa; margin-bottom:12px;
-    }
-    .channel-item {
-      display:flex; align-items:flex-end; font-size:0.85em;
-      margin-bottom:8px; padding-bottom:8px; border-bottom:1px dashed #e5e5e5;
-      flex-wrap:wrap; gap:6px;
-    }
+    .channel-group-title { font-weight:600; font-size:0.85em; margin:10px 0 4px 0; color:#005a9c; border-bottom:1px solid #e1e4e8; padding-bottom:3px; }
+    .channel-list { max-height:340px; overflow-y:auto; border:1px solid #ddd; padding:8px; border-radius:4px; background:#fafafa; margin-bottom:12px; }
+    .channel-item { display:flex; align-items:flex-end; font-size:0.85em; margin-bottom:8px; padding-bottom:8px; border-bottom:1px dashed #e5e5e5; flex-wrap:wrap; gap:6px; }
     .channel-item:last-child { border-bottom:none; }
     .channel-item input[type="checkbox"] { margin-right:4px; margin-bottom:6px; }
     .channel-item label.channel-name-label { font-weight:normal; margin-bottom:6px; flex:1; min-width:130px; }
@@ -114,35 +50,22 @@
     .y-adjust-group label { font-weight:normal; margin:0; color:#666; font-size:0.72em; }
     .y-adjust-group input { width:80px; padding:3px 5px; font-size:0.8em; }
     .y-adjust-group.pu-field input { border-color:#ffb300; }
-    .chart-container {
-      position:relative; height:450px; width:100%; border-radius:4px;
-      padding:10px; box-sizing:border-box; transition:background-color 0.2s ease;
-    }
-    #selectionCounter {
-      font-weight:600; padding:6px 10px; border-radius:4px;
-      background:#eef5fc; display:inline-block; margin-bottom:10px; font-size:0.85em;
-    }
+    .chart-container { position:relative; height:450px; width:100%; border-radius:4px; padding:10px; box-sizing:border-box; transition:background-color 0.2s ease; }
+    #selectionCounter { font-weight:600; padding:6px 10px; border-radius:4px; background:#eef5fc; display:inline-block; margin-bottom:10px; font-size:0.85em; }
     #selectionCounter.limit-reached { background:#fdecea; color:#d9534f; }
-    .info-box {
-      background:#fff8e1; border-left:4px solid #ffb300;
-      padding:10px; font-size:0.85em; margin-bottom:10px; border-radius:4px;
-    }
-    .fmt-badge {
-      display:inline-block; font-size:0.68em; font-weight:700;
-      padding:2px 6px; border-radius:3px; margin-left:6px;
-      vertical-align:middle; letter-spacing:0.03em;
-    }
+    .info-box { background:#fff8e1; border-left:4px solid #ffb300; padding:10px; font-size:0.85em; margin-bottom:10px; border-radius:4px; }
+    .fmt-badge { display:inline-block; font-size:0.68em; font-weight:700; padding:2px 6px; border-radius:3px; margin-left:6px; vertical-align:middle; }
     .fmt-badge.asc { background:#e3f2fd; color:#005a9c; }
-    .fmt-badge.zik, .fmt-badge.zic { background:#e8f5e9; color:#2e7d32; }
+    .fmt-badge.zik,.fmt-badge.zic { background:#e8f5e9; color:#2e7d32; }
   </style>
 </head>
 <body>
 
   <h2>Leitor de Oscilografia — Reivax (.ASC) + COMTRADE (.ZIK/.ZIC)</h2>
-  <p class="subtitle">Até 10 arquivos e 10 canais simultâneos, com ajuste de eixo X, eixo Y e conversão Engenharia/PU</p>
+  <p class="subtitle">Ate 10 arquivos e 10 canais simultaneos, com ajuste de eixo X, eixo Y e conversao Engenharia/PU</p>
 
   <div class="card">
-    <label for="fileInput">Selecione até 10 arquivos .asc, .zik ou .zic</label>
+    <label for="fileInput">Selecione ate 10 arquivos .asc, .zik ou .zic</label>
     <input type="file" id="fileInput" accept=".asc,.zik,.zic" multiple>
     <div id="status">Aguardando arquivo(s)...</div>
   </div>
@@ -154,26 +77,26 @@
       <button id="btnModePu" onclick="setGlobalMode('pu')">PU (Por Unidade)</button>
     </div>
     <div class="info-box" id="engInfoBox">
-      <strong>Engenharia:</strong> Valor Exibido = (Valor Original × Escala Y) + Offset Y. Ajuste Escala/Offset por canal para calibrar na unidade real (V, A, Hz, MW...).
+      <strong>Engenharia:</strong> Valor Exibido = (Valor Original x Escala Y) + Offset Y. Ajuste Escala/Offset por canal para calibrar na unidade real (V, A, Hz, MW...).
     </div>
     <div class="info-box" id="puInfoBox" style="display:none;">
-      <strong>PU:</strong> Valor Exibido = [(Valor Original × Escala Y) + Offset Y] ÷ Valor Base. Defina o Valor Base de cada canal (mesma unidade após calibração).
+      <strong>PU:</strong> Valor Exibido = [(Valor Original x Escala Y) + Offset Y] / Valor Base. Defina o Valor Base de cada canal (mesma unidade apos calibracao).
     </div>
   </div>
 
   <div class="card">
-    <h3>Ajustes do Eixo de Tempo — X (padrão para novos arquivos)</h3>
+    <h3>Ajustes do Eixo de Tempo - X (padrao para novos arquivos)</h3>
     <div class="flex-container">
       <div class="flex-col">
-        <label for="defaultOffsetX">Offset padrão (X):</label>
+        <label for="defaultOffsetX">Offset padrao (X):</label>
         <input type="number" id="defaultOffsetX" value="0" step="any">
       </div>
       <div class="flex-col">
-        <label for="defaultScaleX">Fator de escala padrão (X):</label>
+        <label for="defaultScaleX">Fator de escala padrao (X):</label>
         <input type="number" id="defaultScaleX" value="1" step="any">
       </div>
       <div class="flex-col">
-        <label for="timeUnit">Rótulo da unidade (eixo X):</label>
+        <label for="timeUnit">Rotulo da unidade (eixo X):</label>
         <select id="timeUnit" onchange="updateChart()">
           <option value="s">Segundos (s)</option>
           <option value="ms" selected>Milisegundos (ms)</option>
@@ -181,25 +104,25 @@
         </select>
       </div>
     </div>
-    <p style="font-size:0.8em; color:#777; margin-top:8px;">
-      Aplicado a novos arquivos ao carregar; cada arquivo pode ser ajustado individualmente na lista abaixo.
-      <strong>Arquivos ZIK/ZIC</strong> têm tempo em µs — Escala X = 0,001 (µs→ms) é aplicada automaticamente.
+    <p style="font-size:0.8em;color:#777;margin-top:8px;">
+      Arquivos .asc: tempo no formato do arquivo (ajuste Escala X conforme necessidade).<br>
+      Arquivos .zik/.zic: tempo reconstruido em ms (Escala X = 0,001 aplicada automaticamente para converter us -> ms).
     </p>
   </div>
 
   <div class="card">
-    <h3>Ajustes do Eixo de Valores — Y (padrão para novos canais)</h3>
+    <h3>Ajustes do Eixo de Valores - Y (padrao para novos canais)</h3>
     <div class="flex-container">
       <div class="flex-col">
-        <label for="defaultOffsetY">Offset Y padrão:</label>
+        <label for="defaultOffsetY">Offset Y padrao:</label>
         <input type="number" id="defaultOffsetY" value="0" step="any">
       </div>
       <div class="flex-col">
-        <label for="defaultScaleY">Fator de Escala Y padrão:</label>
+        <label for="defaultScaleY">Fator de Escala Y padrao:</label>
         <input type="number" id="defaultScaleY" value="1" step="any">
       </div>
       <div class="flex-col">
-        <label for="defaultBaseValue">Valor Base padrão (uso em PU):</label>
+        <label for="defaultBaseValue">Valor Base padrao (uso em PU):</label>
         <input type="number" id="defaultBaseValue" value="1" step="any">
       </div>
     </div>
@@ -208,22 +131,22 @@
   <div class="card">
     <h3>Arquivos Carregados (<span id="fileCountLabel">0</span>/10)</h3>
     <div id="fileListContainer">
-      <p style="font-size:0.85em; color:#888;">Nenhum arquivo carregado ainda.</p>
+      <p style="font-size:0.85em;color:#888;">Nenhum arquivo carregado ainda.</p>
     </div>
   </div>
 
   <div class="card">
-    <h3>Seleção de Canais e Ajuste Individual</h3>
+    <h3>Selecao de Canais e Ajuste Individual</h3>
     <div id="selectionCounter">0/10 canais selecionados</div>
     <div id="channelSelectionContainer">
-      <p style="font-size:0.85em; color:#888;">Carregue arquivos para visualizar os canais disponíveis.</p>
+      <p style="font-size:0.85em;color:#888;">Carregue arquivos para visualizar os canais disponiveis.</p>
     </div>
-    <button onclick="updateChart()">Atualizar Gráfico</button>
+    <button onclick="updateChart()">Atualizar Grafico</button>
     <button class="secondary" onclick="exportToCSV()">Exportar para Excel (.CSV)</button>
   </div>
 
   <div class="card">
-    <h3>Área de Plotagem</h3>
+    <h3>Area de Plotagem</h3>
     <div class="bg-switch">
       <button id="btnBgBlack" class="active" onclick="setPlotBackground('black')">
         <span class="bg-swatch black"></span> Fundo Preto
@@ -247,6 +170,7 @@
   let globalMode = 'eng';
   let plotBgColor = 'black';
 
+  /* === MODO E FUNDO === */
   function setGlobalMode(mode) {
     globalMode = mode;
     document.getElementById('btnModeEng').classList.toggle('active', mode === 'eng');
@@ -261,13 +185,13 @@
     plotBgColor = color;
     document.getElementById('btnBgBlack').classList.toggle('active', color === 'black');
     document.getElementById('btnBgWhite').classList.toggle('active', color === 'white');
-    document.getElementById('chartContainer').style.backgroundColor = (color === 'black') ? '#000000' : '#ffffff';
+    document.getElementById('chartContainer').style.backgroundColor = (color === 'black') ? '#000' : '#fff';
     updateChart();
   }
 
+  /* === ENTRADA DE ARQUIVOS === */
   document.getElementById('fileInput').addEventListener('change', function(e) {
-    const incoming = Array.from(e.target.files);
-    handleIncomingFiles(incoming);
+    handleIncomingFiles(Array.from(e.target.files));
     e.target.value = '';
   });
 
@@ -296,13 +220,15 @@
 
         if (ext === 'asc') {
           result = await parseAscFile(file);
+          // ASC: tempo ja em segundos (Reivax), usuario ajusta conforme necessidade
         } else {
           result = await parseZikFile(file);
-          fileScaleX = 0.001; // tempo ZIK em us -> converte para ms automaticamente
+          // ZIK/ZIC: tempo reconstruido em us, converter para ms
+          fileScaleX = 0.001;
         }
 
         if (!result.rawTime || result.rawTime.length === 0) {
-          setStatus('Nenhuma amostra encontrada em "' + file.name + '".');
+          setStatus('"' + file.name + '": nenhuma amostra encontrada.');
           continue;
         }
 
@@ -327,9 +253,10 @@
           trimEnd: -1
         });
 
-        setStatus('[' + ext.toUpperCase() + '] "' + file.name + '" carregado: ' + result.rawTime.length + ' amostras, ' + result.channels.length + ' canais.');
+        setStatus('[' + ext.toUpperCase() + '] "' + file.name + '" carregado: ' + result.rawTime.length + ' amostras, ' + result.channels.length + ' canais.' + (result.note ? ' ' + result.note : ''));
       } catch (err) {
         setStatus('Erro em "' + file.name + '": ' + err.message);
+        console.error(err);
       }
     }
     renderAll();
@@ -346,7 +273,7 @@
     renderAll();
   }
 
-  /* ======= PARSER ASC (REIVAX) ======= */
+  /* === PARSER ASC (REIVAX) === */
   function parseAscFile(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -357,9 +284,14 @@
   }
 
   function parseReivaxAscCore(text) {
-    const rawLines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l !== '');
-    if (rawLines.length < 2) throw new Error('Arquivo vazio.');
+    const allLines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l !== '');
+    if (allLines.length < 2) throw new Error('Arquivo vazio.');
 
+    // Remove linhas de metadata: comecam com ':' (header Reivax) ou ';' (comentarios)
+    const rawLines = allLines.filter(l => !l.startsWith(':') && !l.startsWith(';'));
+    if (rawLines.length === 0) throw new Error('Nenhuma linha de dados apos remover metadata.');
+
+    // Detecta separador usando uma linha de dados real (nao metadata)
     const sampleLine = rawLines[Math.min(5, rawLines.length - 1)];
     let sep, decimalComma;
     if (sampleLine.includes(';')) { sep = ';'; decimalComma = true; }
@@ -371,16 +303,24 @@
 
     let headerTokens = null;
     let dataStartIndex = -1;
+
+    // Encontra inicio dos dados: primeira linha onde AMBOS tokens[0] e tokens[1] sao numericos
     for (let i = 0; i < rawLines.length; i++) {
       const tokens = tokenize(rawLines[i]);
       if (tokens.length < 2) continue;
-      if (!isNaN(toNumber(tokens[1]))) { dataStartIndex = i; break; }
-      else { headerTokens = tokens; }
+      if (!isNaN(toNumber(tokens[0])) && !isNaN(toNumber(tokens[1]))) {
+        dataStartIndex = i;
+        break;
+      } else {
+        headerTokens = tokens;
+      }
     }
-    if (dataStartIndex === -1) throw new Error('Dados numericos nao encontrados.');
+
+    if (dataStartIndex === -1) throw new Error('Dados numericos nao encontrados (nenhuma linha com tempo + valor numerico).');
 
     const firstDataTokens = tokenize(rawLines[dataStartIndex]);
     const numChannels = firstDataTokens.length - 1;
+
     let channelNames = (headerTokens && headerTokens.length === firstDataTokens.length)
       ? headerTokens.slice(1)
       : Array.from({length: numChannels}, (_, c) => 'Canal ' + (c + 1));
@@ -402,14 +342,14 @@
 
     const channels = channelNames.map((name, idx) => ({
       index: idx,
-      name: name.replace(/[";]/g, '').trim() || 'Canal ' + (idx + 1),
+      name: name.replace(/[";:]/g, '').trim() || 'Canal ' + (idx + 1),
       unit: ''
     }));
 
     return { channels, rawTime, channelData };
   }
 
-  /* ======= PARSER ZIK/ZIC (COMTRADE dentro de ZIP) ======= */
+  /* === PARSER ZIK/ZIC (COMTRADE dentro de ZIP) === */
   function parseZikFile(file) {
     return new Promise((resolve, reject) => {
       const zip = new JSZip();
@@ -434,10 +374,12 @@
     const lines = cfgText.split(/\r?\n/).map(l => l.trim()).filter(l => l !== '');
     if (lines.length < 4) throw new Error('CFG corrompido ou incompleto.');
 
+    // Linha 2: contagem de canais — formato "total,NNNa,MMMd" ou "NNNa,MMMd"
     const chInfo = lines[1].split(',');
-    const analogCount  = parseInt(chInfo[1]) || 0;
-    const digitalCount = parseInt(chInfo[2]) || 0;
+    const analogCount  = parseInt(chInfo[chInfo.length >= 3 ? 1 : 0]) || 0;
+    const digitalCount = parseInt(chInfo[chInfo.length >= 3 ? 2 : 1]) || 0;
 
+    // Canais analogicos
     const analogs = [];
     for (let i = 0; i < analogCount; i++) {
       const p = lines[2 + i].split(',');
@@ -452,66 +394,106 @@
       });
     }
 
+    // Canais digitais
     const digitals = [];
     for (let i = 0; i < digitalCount; i++) {
       const p = lines[2 + analogCount + i].split(',');
       digitals.push({ index: analogCount + i, name: (p[1] || ('D' + (i+1))).trim(), unit: 'digital' });
     }
 
+    // Metadados pos-canais
     let idx = 2 + analogCount + digitalCount;
-    idx++; // freq
+    idx++; // frequencia de rede (grid Hz)
+
     const numRates = parseInt(lines[idx++]) || 1;
-    idx += numRates; // sample rates
-    idx++; idx++; // start + trigger timestamps
+    let sampleRate = 0;
+    for (let r = 0; r < numRates; r++) {
+      const rp = (lines[idx + r] || '').split(',');
+      const sr = parseFloat(rp[0]);
+      if (r === 0 && !isNaN(sr)) sampleRate = sr; // taxa da primeira (e geralmente unica) secao
+    }
+    idx += numRates;
+
+    idx++; // data/hora de inicio
+    idx++; // data/hora de trigger
+
     const fileType = (lines[idx] || 'ASCII').toUpperCase().trim(); idx++;
     const timeMult = (lines[idx] && !isNaN(parseFloat(lines[idx]))) ? parseFloat(lines[idx]) : 1.0;
 
     const rawTime    = [];
+    const sampleNums = [];
     const channelData = [...analogs.map(() => []), ...digitals.map(() => [])];
 
     if (fileType === 'BINARY' || fileType === 'BIN32') {
-      const view = new DataView(datBuffer);
-      const isBin32     = fileType === 'BIN32';
-      const analogBytes = isBin32 ? 4 : 2;
-      const numWords    = Math.ceil(digitalCount / 16);
-      const rowSize     = 4 + 4 + (analogCount * analogBytes) + numWords * 2;
+      const view      = new DataView(datBuffer);
+      const isBin32   = fileType === 'BIN32';
+      const aBytes    = isBin32 ? 4 : 2;
+      const numWords  = Math.ceil(digitalCount / 16);
+      const rowSize   = 4 + 4 + (analogCount * aBytes) + (numWords * 2);
+
+      if (rowSize === 0) throw new Error('rowSize calculado como zero — CFG pode estar incorreto.');
+
       const totalSamples = Math.floor(datBuffer.byteLength / rowSize);
 
       let offset = 0;
       for (let s = 0; s < totalSamples; s++) {
         if (offset + rowSize > datBuffer.byteLength) break;
-        rawTime.push(view.getUint32(offset + 4, true) * timeMult);
 
-        let rowOffset = offset + 8;
+        const sn = view.getUint32(offset, true);
+        const ts = view.getUint32(offset + 4, true) * timeMult;
+        sampleNums.push(sn);
+        rawTime.push(ts);
+
+        let ro = offset + 8;
         for (let i = 0; i < analogCount; i++) {
-          const rawVal = isBin32 ? view.getInt32(rowOffset, true) : view.getInt16(rowOffset, true);
-          channelData[i].push(rawVal * analogs[i].a + analogs[i].b);
-          rowOffset += analogBytes;
+          const rv = isBin32 ? view.getInt32(ro, true) : view.getInt16(ro, true);
+          channelData[i].push(rv * analogs[i].a + analogs[i].b);
+          ro += aBytes;
         }
 
-        const digitalStates = [];
+        const dstates = [];
         for (let w = 0; w < numWords; w++) {
-          const word = view.getUint16(rowOffset, true); rowOffset += 2;
-          for (let b = 0; b < 16; b++) digitalStates.push((word >> b) & 1);
+          const word = view.getUint16(ro, true); ro += 2;
+          for (let b = 0; b < 16; b++) dstates.push((word >> b) & 1);
         }
-        for (let i = 0; i < digitalCount; i++) channelData[analogCount + i].push(digitalStates[i] || 0);
+        for (let i = 0; i < digitalCount; i++) channelData[analogCount + i].push(dstates[i] || 0);
 
         offset += rowSize;
       }
     } else {
+      // ASCII / texto
       const datText  = new TextDecoder('utf-8').decode(datBuffer);
       const datLines = datText.split(/\r?\n/).map(l => l.trim()).filter(l => l !== '');
+      let sn = 0;
       datLines.forEach(line => {
-        const parts = line.split(',');
-        if (parts.length < 2) return;
-        rawTime.push(parseFloat(parts[1]) * timeMult);
+        const p = line.split(',');
+        if (p.length < 2) return;
+        sn++;
+        sampleNums.push(parseInt(p[0]) || sn);
+        rawTime.push(parseFloat(p[1]) * timeMult);
         for (let i = 0; i < analogCount; i++) {
-          channelData[i].push((parseFloat(parts[2 + i]) || 0) * analogs[i].a + analogs[i].b);
+          channelData[i].push((parseFloat(p[2 + i]) || 0) * analogs[i].a + analogs[i].b);
         }
         for (let i = 0; i < digitalCount; i++) {
-          channelData[analogCount + i].push(parseInt(parts[2 + analogCount + i]) || 0);
+          channelData[analogCount + i].push(parseInt(p[2 + analogCount + i]) || 0);
         }
       });
+    }
+
+    // Correcao de timestamps zeros (bug SIPROTEC/Reason/GE):
+    // Reconstroi a partir do numero de amostra e taxa de amostragem
+    let note = '';
+    const allZero = rawTime.length > 0 && rawTime.every(t => t === 0);
+    if (allZero && sampleRate > 0) {
+      const dtUs = 1000000 / sampleRate; // intervalo entre amostras em microsegundos
+      for (let s = 0; s < rawTime.length; s++) {
+        rawTime[s] = (sampleNums[s] > 0 ? sampleNums[s] - 1 : s) * dtUs;
+      }
+      note = '[Timestamps reconstruidos a ' + sampleRate + ' sps]';
+    } else if (allZero) {
+      // Fallback: indice sequencial em us
+      for (let s = 0; s < rawTime.length; s++) rawTime[s] = s;
+      note = '[Timestamps zeros: usando indice sequencial]';
     }
 
     const channels = [
@@ -519,10 +501,10 @@
       ...digitals.map(d => ({ index: d.index, name: d.name, unit: 'digital' }))
     ];
 
-    return { channels, rawTime, channelData };
+    return { channels, rawTime, channelData, note };
   }
 
-  /* ======= RENDERIZACAO ======= */
+  /* === RENDERIZACAO === */
   function renderAll() {
     renderFileList();
     renderChannelSelectors();
@@ -534,47 +516,41 @@
     document.getElementById('fileCountLabel').innerText = fileStore.length;
     const container = document.getElementById('fileListContainer');
     if (fileStore.length === 0) {
-      container.innerHTML = '<p style="font-size:0.85em; color:#888;">Nenhum arquivo carregado ainda.</p>';
+      container.innerHTML = '<p style="font-size:0.85em;color:#888;">Nenhum arquivo carregado ainda.</p>';
       return;
     }
     container.innerHTML = fileStore.map(f => {
       const fc = (f.format || 'ASC').toLowerCase();
       return '<div class="file-card">' +
         '<div class="file-card-header">' +
-          '<div>' +
-            '<strong>' + f.filename + '</strong>' +
-            '<span class="fmt-badge ' + fc + '">' + (f.format||'ASC') + '</span>' +
-            '<span style="font-size:0.75em;color:#777;"> &middot; ' + f.rawTime.length + ' amostras &middot; ' + f.channels.length + ' canais</span>' +
-          '</div>' +
+          '<div><strong>' + f.filename + '</strong>' +
+          '<span class="fmt-badge ' + fc + '">' + (f.format||'ASC') + '</span>' +
+          '<span style="font-size:0.75em;color:#777;"> &middot; ' + f.rawTime.length + ' amostras &middot; ' + f.channels.length + ' canais</span></div>' +
           '<button class="danger" onclick="removeFile(' + f.id + ')">Remover</button>' +
         '</div>' +
         '<div class="mini-grid">' +
-          '<div><label>Offset X (tempo)</label><input type="number" step="any" value="' + f.offsetX + '" onchange="onFileSettingChange(' + f.id + ', \'offsetX\', this)"></div>' +
-          '<div><label>Fator Escala X</label><input type="number" step="any" value="' + f.scaleX + '" onchange="onFileSettingChange(' + f.id + ', \'scaleX\', this)"></div>' +
-          '<div><label>Inicio (amostra)</label><input type="number" value="' + f.trimStart + '" onchange="onFileSettingChange(' + f.id + ', \'trimStart\', this)"></div>' +
-          '<div><label>Fim (-1=todas)</label><input type="number" value="' + f.trimEnd + '" onchange="onFileSettingChange(' + f.id + ', \'trimEnd\', this)"></div>' +
-        '</div>' +
-        '</div>';
+          '<div><label>Offset X (tempo)</label><input type="number" step="any" value="' + f.offsetX + '" onchange="onFileSettingChange(' + f.id + ',\'offsetX\',this)"></div>' +
+          '<div><label>Fator Escala X</label><input type="number" step="any" value="' + f.scaleX + '" onchange="onFileSettingChange(' + f.id + ',\'scaleX\',this)"></div>' +
+          '<div><label>Inicio (amostra)</label><input type="number" value="' + f.trimStart + '" onchange="onFileSettingChange(' + f.id + ',\'trimStart\',this)"></div>' +
+          '<div><label>Fim (-1=todas)</label><input type="number" value="' + f.trimEnd + '" onchange="onFileSettingChange(' + f.id + ',\'trimEnd\',this)"></div>' +
+        '</div></div>';
     }).join('');
   }
 
   function onFileSettingChange(fileId, key, inputEl) {
-    const fileObj = fileStore.find(f => f.id === fileId);
-    if (!fileObj) return;
+    const f = fileStore.find(f => f.id === fileId);
+    if (!f) return;
     let val = parseFloat(inputEl.value);
-    if (key === 'trimStart' || key === 'trimEnd') {
-      val = isNaN(val) ? (key === 'trimEnd' ? -1 : 0) : parseInt(val);
-    } else if (isNaN(val)) {
-      val = (key === 'scaleX') ? 1 : 0;
-    }
-    fileObj[key] = val;
+    if (key === 'trimStart' || key === 'trimEnd') val = isNaN(val) ? (key === 'trimEnd' ? -1 : 0) : parseInt(val);
+    else if (isNaN(val)) val = (key === 'scaleX') ? 1 : 0;
+    f[key] = val;
     updateChart();
   }
 
   function renderChannelSelectors() {
     const container = document.getElementById('channelSelectionContainer');
     if (fileStore.length === 0) {
-      container.innerHTML = '<p style="font-size:0.85em; color:#888;">Carregue arquivos para visualizar os canais disponiveis.</p>';
+      container.innerHTML = '<p style="font-size:0.85em;color:#888;">Carregue arquivos para visualizar os canais disponiveis.</p>';
       return;
     }
     let html = '';
@@ -587,11 +563,10 @@
           : '<div class="y-adjust-group pu-field"><label>Valor Base (PU)</label><input type="number" step="any" value="' + ch.baseValue + '" onchange="onChannelYSettingChange(' + f.id + ',' + idx + ',\'baseValue\',this)"></div>';
         html += '<div class="channel-item">' +
           '<input type="checkbox" class="channel-checkbox" id="sel_' + f.id + '_' + idx + '" onchange="onChannelCheckboxChange(this)">' +
-          '<label class="channel-name-label" for="sel_' + f.id + '_' + idx + '">' + ch.name + '</label>' +
+          '<label class="channel-name-label" for="sel_' + f.id + '_' + idx + '">' + ch.name + (ch.unit && ch.unit !== 'digital' ? ' (' + ch.unit + ')' : '') + '</label>' +
           '<div class="y-adjust-group"><label>Offset Y</label><input type="number" step="any" value="' + ch.yOffset + '" onchange="onChannelYSettingChange(' + f.id + ',' + idx + ',\'yOffset\',this)"></div>' +
           '<div class="y-adjust-group"><label>Escala Y</label><input type="number" step="any" value="' + ch.yScale + '" onchange="onChannelYSettingChange(' + f.id + ',' + idx + ',\'yScale\',this)"></div>' +
-          puField +
-          '</div>';
+          puField + '</div>';
       });
       html += '</div>';
     });
@@ -599,25 +574,25 @@
   }
 
   function onChannelYSettingChange(fileId, idx, key, inputEl) {
-    const fileObj = fileStore.find(f => f.id === fileId);
-    if (!fileObj) return;
+    const f = fileStore.find(f => f.id === fileId);
+    if (!f) return;
     let val = parseFloat(inputEl.value);
     if (isNaN(val)) val = (key === 'yScale' || key === 'baseValue') ? 1 : 0;
     if (key === 'baseValue' && val === 0) val = 1;
-    fileObj.channels[idx][key] = val;
+    f.channels[idx][key] = val;
     updateChart();
   }
 
   function onChannelTextSettingChange(fileId, idx, key, inputEl) {
-    const fileObj = fileStore.find(f => f.id === fileId);
-    if (!fileObj) return;
-    fileObj.channels[idx][key] = inputEl.value.trim();
+    const f = fileStore.find(f => f.id === fileId);
+    if (!f) return;
+    f.channels[idx][key] = inputEl.value.trim();
     updateChart();
   }
 
   function onChannelCheckboxChange(cb) {
-    const checkedCount = document.querySelectorAll('.channel-checkbox:checked').length;
-    if (cb.checked && checkedCount > MAX_CHANNELS) {
+    const count = document.querySelectorAll('.channel-checkbox:checked').length;
+    if (cb.checked && count > MAX_CHANNELS) {
       cb.checked = false;
       alert('Limite de ' + MAX_CHANNELS + ' canais simultaneos atingido.');
       return;
@@ -633,63 +608,56 @@
     el.classList.toggle('limit-reached', count >= MAX_CHANNELS);
   }
 
-  function getAdjustedTime(fileObj) {
-    const start = fileObj.trimStart || 0;
-    const end = (fileObj.trimEnd === -1 || fileObj.trimEnd == null) ? fileObj.rawTime.length : fileObj.trimEnd;
-    return fileObj.rawTime.slice(start, end).map(t => t * fileObj.scaleX + fileObj.offsetX);
+  /* === CALCULO DE SERIES === */
+  function getAdjustedTime(f) {
+    const start = f.trimStart || 0;
+    const end = (f.trimEnd === -1 || f.trimEnd == null) ? f.rawTime.length : f.trimEnd;
+    return f.rawTime.slice(start, end).map(t => t * f.scaleX + f.offsetX);
   }
 
-  function getAdjustedChannel(fileObj, idx) {
-    const start = fileObj.trimStart || 0;
-    const end = (fileObj.trimEnd === -1 || fileObj.trimEnd == null) ? fileObj.channelData[idx].length : fileObj.trimEnd;
-    const rawSlice = fileObj.channelData[idx].slice(start, end);
-    const ch = fileObj.channels[idx];
-    const yOffset = ch.yOffset || 0;
+  function getAdjustedChannel(f, idx) {
+    const start = f.trimStart || 0;
+    const end = (f.trimEnd === -1 || f.trimEnd == null) ? f.channelData[idx].length : f.trimEnd;
+    const slice = f.channelData[idx].slice(start, end);
+    const ch = f.channels[idx];
     const yScale = (!ch.yScale || ch.yScale === 0) ? 1 : ch.yScale;
-    const baseValue = (!ch.baseValue || ch.baseValue === 0) ? 1 : ch.baseValue;
-    return rawSlice.map(v => {
+    const yOffset = ch.yOffset || 0;
+    const base = (!ch.baseValue || ch.baseValue === 0) ? 1 : ch.baseValue;
+    return slice.map(v => {
       if (v === null || v === undefined) return null;
       const eng = v * yScale + yOffset;
-      return (globalMode === 'pu') ? (eng / baseValue) : eng;
+      return (globalMode === 'pu') ? (eng / base) : eng;
     });
   }
 
   function buildSelectedSeries() {
-    const checkboxes = document.querySelectorAll('.channel-checkbox:checked');
     const series = [];
-    checkboxes.forEach(cb => {
+    document.querySelectorAll('.channel-checkbox:checked').forEach(cb => {
       const parts = cb.id.split('_');
-      const fileId = parseInt(parts[1]);
-      const idx = parseInt(parts[2]);
-      const fileObj = fileStore.find(f => f.id === fileId);
-      if (!fileObj) return;
-      const ch = fileObj.channels[idx];
-      const unitSuffix = (globalMode === 'pu') ? ' (pu)' : (ch.unit ? ' (' + ch.unit + ')' : '');
-      series.push({
-        label: fileObj.filename + ' \u00b7 ' + ch.name + unitSuffix,
-        times: getAdjustedTime(fileObj),
-        values: getAdjustedChannel(fileObj, idx)
-      });
+      const fileId = parseInt(parts[1]), idx = parseInt(parts[2]);
+      const f = fileStore.find(f => f.id === fileId);
+      if (!f) return;
+      const ch = f.channels[idx];
+      const unitSuffix = (globalMode === 'pu') ? ' (pu)' : (ch.unit && ch.unit !== 'digital' ? ' (' + ch.unit + ')' : '');
+      series.push({ label: f.filename + ' \u00b7 ' + ch.name + unitSuffix, times: getAdjustedTime(f), values: getAdjustedChannel(f, idx) });
     });
     return series;
   }
 
+  /* === GRAFICO === */
   function updateChart() {
     const series = buildSelectedSeries();
     const ctx = document.getElementById('osciloChart').getContext('2d');
-    const timeUnitLabel = document.getElementById('timeUnit').value;
-    const yAxisLabel = (globalMode === 'pu') ? 'Valores (PU)' : 'Valores (Engenharia)';
+    const tuLabel = document.getElementById('timeUnit').value;
+    const yLabel = (globalMode === 'pu') ? 'Valores (PU)' : 'Valores (Engenharia)';
     const isDark = (plotBgColor === 'black');
-    const textColor = isDark ? '#ffffff' : '#222222';
-    const tickColor = isDark ? '#cccccc' : '#444444';
-    const gridColor = isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)';
+    const tc = isDark ? '#fff' : '#222';
+    const gc = isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)';
+    const tkc = isDark ? '#ccc' : '#444';
 
     const datasets = series.map(s => ({
       label: s.label,
-      data: s.times.map((t, i) => {
-        const v = s.values[i];
-        return { x: t, y: (v === null || isNaN(v)) ? null : v };
-      }),
+      data: s.times.map((t, i) => { const v = s.values[i]; return { x: t, y: (v === null || isNaN(v)) ? null : v }; }),
       borderWidth: 1.5, pointRadius: 0, fill: false, spanGaps: true
     }));
 
@@ -700,35 +668,27 @@
       options: {
         responsive: true, maintainAspectRatio: false, animation: false, parsing: false,
         scales: {
-          x: {
-            type: 'linear',
-            title: { display: true, text: 'Tempo (' + timeUnitLabel + ')', color: textColor },
-            ticks: { maxTicksLimit: 12, color: tickColor },
-            grid: { color: gridColor }
-          },
-          y: {
-            title: { display: true, text: yAxisLabel, color: textColor },
-            ticks: { color: tickColor },
-            grid: { color: gridColor }
-          }
+          x: { type: 'linear', title: { display: true, text: 'Tempo (' + tuLabel + ')', color: tc }, ticks: { maxTicksLimit: 12, color: tkc }, grid: { color: gc } },
+          y: { title: { display: true, text: yLabel, color: tc }, ticks: { color: tkc }, grid: { color: gc } }
         },
-        plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 }, color: textColor } } }
+        plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 }, color: tc } } }
       }
     });
   }
 
+  /* === EXPORTACAO CSV === */
   function exportToCSV() {
     const series = buildSelectedSeries();
     if (series.length === 0) { alert('Selecione ao menos um canal antes de exportar.'); return; }
-    const timeUnitLabel = document.getElementById('timeUnit').value;
-    const formatNum = (v) => (v === undefined || v === null || isNaN(v)) ? '' : v.toString().replace('.', ',');
+    const tuLabel = document.getElementById('timeUnit').value;
+    const fn = (v) => (v === undefined || v === null || isNaN(v)) ? '' : v.toString().replace('.', ',');
     let headers = [];
-    series.forEach(s => { headers.push('Tempo (' + timeUnitLabel + ') - ' + s.label); headers.push(s.label); });
+    series.forEach(s => { headers.push('Tempo (' + tuLabel + ') - ' + s.label); headers.push(s.label); });
     let csvLines = [headers.join(';')];
     const maxRows = Math.max(...series.map(s => s.times.length), 0);
     for (let r = 0; r < maxRows; r++) {
       const row = [];
-      series.forEach(s => { row.push(formatNum(s.times[r])); row.push(formatNum(s.values[r])); });
+      series.forEach(s => { row.push(fn(s.times[r])); row.push(fn(s.values[r])); });
       csvLines.push(row.join(';'));
     }
     const blob = new Blob(['\ufeff' + csvLines.join('\n')], { type: 'text/csv;charset=utf-8;' });
@@ -738,6 +698,5 @@
     link.click();
   }
 </script>
-
 </body>
 </html>
