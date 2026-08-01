@@ -57,16 +57,17 @@
     .fmt-badge { display:inline-block; font-size:0.68em; font-weight:700; padding:2px 6px; border-radius:3px; margin-left:6px; vertical-align:middle; }
     .fmt-badge.asc { background:#e3f2fd; color:#005a9c; }
     .fmt-badge.zik,.fmt-badge.zic { background:#e8f5e9; color:#2e7d32; }
+    .fmt-badge.csv { background:#fff3e0; color:#e65100; }
   </style>
 </head>
 <body>
 
   <h2>Leitor de Oscilografia - ASC_ZIC</h2>
-  <p class="subtitle">Ate 10 arquivos e 10 canais simultaneos, com ajuste de eixo X, eixo Y e conversao Engenharia/PU</p>
+  <p class="subtitle">Suporta .asc (Reivax), .zik/.zic (COMTRADE) e .csv (exportacao). Ate 10 arquivos e 10 canais simultaneos.</p>
 
   <div class="card">
-    <label for="fileInput">Selecione ate 10 arquivos .asc, .zik ou .zic</label>
-    <input type="file" id="fileInput" accept=".asc,.zik,.zic" multiple>
+    <label for="fileInput">Selecione ate 10 arquivos .asc, .zik, .zic ou .csv</label>
+    <input type="file" id="fileInput" accept=".asc,.zik,.zic,.csv" multiple>
     <div id="status">Aguardando arquivo(s)...</div>
   </div>
 
@@ -106,7 +107,8 @@
     </div>
     <p style="font-size:0.8em;color:#777;margin-top:8px;">
       Arquivos .asc: tempo no formato do arquivo (ajuste Escala X conforme necessidade).<br>
-      Arquivos .zik/.zic: tempo reconstruido em ms (Escala X = 0,001 aplicada automaticamente para converter us -> ms).
+      Arquivos .zik/.zic: tempo reconstruido em ms (Escala X = 0,001 aplicada automaticamente para converter us -> ms).<br>
+      Arquivos .csv: tempo ja em ms, configuracao automatica de canais a partir dos cabecalhos.
     </p>
   </div>
 
@@ -209,8 +211,8 @@
     for (const file of toProcess) {
       const ext = file.name.split('.').pop().toLowerCase();
 
-      if (!['asc','zik','zic'].includes(ext)) {
-        setStatus('Formato nao suportado: "' + file.name + '". Use .asc, .zik ou .zic.');
+      if (!['asc','zik','zic','csv'].includes(ext)) {
+        setStatus('Formato nao suportado: "' + file.name + '". Use .asc, .zik, .zic ou .csv.');
         continue;
       }
 
@@ -221,6 +223,10 @@
         if (ext === 'asc') {
           result = await parseAscFile(file);
           // ASC: tempo ja em segundos (Reivax), usuario ajusta conforme necessidade
+        } else if (ext === 'csv') {
+          result = await parseCsvFile(file);
+          // CSV: tempo ja em ms, sem conversao necessaria
+          fileScaleX = 1;
         } else {
           result = await parseZikFile(file);
           // ZIK/ZIC: tempo reconstruido em us, converter para ms
@@ -243,7 +249,7 @@
         fileStore.push({
           id: nextFileId++,
           filename: file.name,
-          format: ext.toUpperCase(),
+          format: (ext === 'csv') ? 'CSV' : ext.toUpperCase(),
           channels: channelsWithSettings,
           rawTime: result.rawTime,
           channelData: result.channelData,
@@ -347,6 +353,77 @@
     }));
 
     return { channels, rawTime, channelData };
+  }
+
+  /* === PARSER CSV (exportacao de oscilografia) === */
+  function parseCsvFile(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = e => { try { resolve(parseCsvCore(e.target.result)); } catch(err) { reject(err); } };
+      reader.onerror = () => reject(new Error('Falha ao ler o arquivo.'));
+      reader.readAsText(file, 'utf-8');
+    });
+  }
+
+  function parseCsvCore(text) {
+    // Remove BOM
+    const clean = text.replace(/^\uFEFF/, '');
+    const lines = clean.split(/\r?\n/).filter(l => l.trim() !== '');
+    if (lines.length < 2) throw new Error('CSV vazio ou sem dados.');
+
+    // Header: pares de colunas "Tempo (ms) - ..." / "<arquivo> · <sinal> (unidade)"
+    const headers = lines[0].split(';').map(h => h.trim());
+
+    const channels = [];
+    const channelColIndices = []; // indice da coluna de valor de cada canal
+
+    for (let i = 0; i + 1 < headers.length; i += 2) {
+      const valueHeader = headers[i + 1] || '';
+
+      // Extrai nome do sinal: parte apos '·' se existir, senao usa o header inteiro
+      let chName = valueHeader;
+      const midDot = valueHeader.indexOf('\u00b7'); // ·
+      if (midDot !== -1) chName = valueHeader.substring(midDot + 1).trim();
+
+      // Extrai unidade do padrao "(unidade)" no final
+      let unit = '';
+      const unitMatch = chName.match(/\s*\(([^)]+)\)\s*$/);
+      if (unitMatch) {
+        unit = unitMatch[1];
+        chName = chName.replace(/\s*\([^)]+\)\s*$/, '').trim();
+      }
+
+      // Limpa nome residual
+      chName = chName.replace(/^[\s·]+/, '').trim() || ('Canal ' + (channels.length + 1));
+
+      channels.push({ index: channels.length, name: chName, unit: unit });
+      channelColIndices.push(i + 1);
+    }
+
+    if (channels.length === 0) throw new Error('Nenhum canal encontrado no cabecalho CSV.');
+
+    // Parse dados: separador ";" decimal ","
+    const rawTime = [];
+    const channelData = channels.map(() => []);
+
+    for (let r = 1; r < lines.length; r++) {
+      const cols = lines[r].split(';');
+      if (cols.length < 2) continue;
+      const t = parseFloat(cols[0].trim().replace(',', '.'));
+      if (isNaN(t)) continue;
+      rawTime.push(t);
+      channels.forEach((ch, ci) => {
+        const vi = channelColIndices[ci];
+        const raw = vi < cols.length ? cols[vi].trim().replace(',', '.') : '';
+        const v = parseFloat(raw);
+        channelData[ci].push(isNaN(v) ? null : v);
+      });
+    }
+
+    if (rawTime.length === 0) throw new Error('Nenhuma linha de dados numericos encontrada no CSV.');
+
+    return { channels, rawTime, channelData,
+      note: channels.length + ' canais detectados automaticamente pelo cabecalho.' };
   }
 
   /* === PARSER ZIK/ZIC (COMTRADE dentro de ZIP) === */
