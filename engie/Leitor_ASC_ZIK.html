@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Leitor de Oscilografia — ASC (Reivax) + ZIK/ZIC (COMTRADE)</title>
+  <title>Leitor de Oscilografia — Reivax (.ASC) + COMTRADE (.ZIK/.ZIC)</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
@@ -47,7 +47,6 @@
     button.secondary:hover { background-color: #218838; }
     button.danger { background-color: #d9534f; padding: 4px 10px; font-size: 0.8em; margin-top:0; }
     button.danger:hover { background-color: #c9302c; }
-
     .mode-switch {
       display: flex;
       border: 2px solid #005a9c;
@@ -57,20 +56,12 @@
       margin: 10px 0;
     }
     .mode-switch button {
-      margin: 0;
-      border-radius: 0;
-      background: #fff;
-      color: #005a9c;
-      padding: 10px 25px;
-      font-size: 0.95em;
+      margin: 0; border-radius: 0; background: #fff; color: #005a9c;
+      padding: 10px 25px; font-size: 0.95em;
     }
-    .mode-switch button.active {
-      background: #005a9c;
-      color: #fff;
-    }
+    .mode-switch button.active { background: #005a9c; color: #fff; }
     .mode-switch button:hover { background: #e3f2fd; }
     .mode-switch button.active:hover { background: #004070; }
-
     .bg-switch {
       display: flex;
       border: 2px solid #005a9c;
@@ -80,166 +71,82 @@
       margin: 0 0 12px 0;
     }
     .bg-switch button {
-      margin: 0;
-      border-radius: 0;
-      background: #fff;
-      color: #005a9c;
-      padding: 8px 20px;
-      font-size: 0.9em;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      margin: 0; border-radius: 0; background: #fff; color: #005a9c;
+      padding: 8px 20px; font-size: 0.9em;
+      display: flex; align-items: center; gap: 6px;
     }
     .bg-switch button.active { background: #005a9c; color: #fff; }
     .bg-switch button:hover { background: #e3f2fd; }
     .bg-switch button.active:hover { background: #004070; }
-    .bg-swatch {
-      width: 14px; height: 14px;
-      border-radius: 3px; border: 1px solid #999;
-      display: inline-block;
-    }
+    .bg-swatch { width:14px; height:14px; border-radius:3px; border:1px solid #999; display:inline-block; }
     .bg-swatch.black { background: #000000; }
     .bg-swatch.white { background: #ffffff; }
-
-    /* Badge de formato */
-    .fmt-badge {
-      display: inline-block;
-      font-size: 0.7em;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 3px;
-      vertical-align: middle;
-      margin-left: 6px;
-      letter-spacing: 0.5px;
-    }
-    .fmt-asc  { background: #d1ecf1; color: #0c5460; }
-    .fmt-zik  { background: #d4edda; color: #155724; }
-
     #status {
-      padding: 10px;
-      border-radius: 4px;
-      background: #eef5fc;
-      border-left: 4px solid #005a9c;
-      margin-top: 10px;
-      font-family: monospace;
-      font-size: 0.82em;
-      white-space: pre-wrap;
-      word-break: break-word;
-      max-height: 150px;
-      overflow-y: auto;
+      padding: 10px; border-radius: 4px; background: #eef5fc;
+      border-left: 4px solid #005a9c; margin-top: 10px;
+      font-family: monospace; font-size: 0.82em;
+      white-space: pre-wrap; word-break: break-word;
+      max-height: 150px; overflow-y: auto;
     }
-    .file-card {
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      padding: 10px;
-      margin-bottom: 10px;
-      background: #fafbfc;
-    }
-    .file-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    .file-card-header strong { font-size: 0.95em; }
-    .mini-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-    }
-    .mini-grid label { font-size: 0.75em; margin-bottom: 2px; }
-    .mini-grid input { padding: 5px; font-size: 0.85em; }
+    .file-card { border:1px solid #ddd; border-radius:6px; padding:10px; margin-bottom:10px; background:#fafbfc; }
+    .file-card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+    .file-card-header strong { font-size:0.95em; }
+    .mini-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+    .mini-grid label { font-size:0.75em; margin-bottom:2px; }
+    .mini-grid input { padding:5px; font-size:0.85em; }
     .channel-group-title {
-      font-weight: 600;
-      font-size: 0.85em;
-      margin: 10px 0 4px 0;
-      color: #005a9c;
-      border-bottom: 1px solid #e1e4e8;
-      padding-bottom: 3px;
+      font-weight:600; font-size:0.85em; margin:10px 0 4px 0;
+      color:#005a9c; border-bottom:1px solid #e1e4e8; padding-bottom:3px;
     }
     .channel-list {
-      max-height: 340px;
-      overflow-y: auto;
-      border: 1px solid #ddd;
-      padding: 8px;
-      border-radius: 4px;
-      background: #fafafa;
-      margin-bottom: 12px;
+      max-height:340px; overflow-y:auto; border:1px solid #ddd;
+      padding:8px; border-radius:4px; background:#fafafa; margin-bottom:12px;
     }
     .channel-item {
-      display: flex;
-      align-items: flex-end;
-      font-size: 0.85em;
-      margin-bottom: 8px;
-      padding-bottom: 8px;
-      border-bottom: 1px dashed #e5e5e5;
-      flex-wrap: wrap;
-      gap: 6px;
+      display:flex; align-items:flex-end; font-size:0.85em;
+      margin-bottom:8px; padding-bottom:8px; border-bottom:1px dashed #e5e5e5;
+      flex-wrap:wrap; gap:6px;
     }
-    .channel-item:last-child { border-bottom: none; }
-    .channel-item input[type="checkbox"] { margin-right: 4px; margin-bottom: 6px; }
-    .channel-item label.channel-name-label {
-      font-weight: normal;
-      margin-bottom: 6px;
-      flex: 1;
-      min-width: 130px;
-    }
-    .y-adjust-group {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      font-size: 0.75em;
-    }
-    .y-adjust-group label {
-      font-weight: normal;
-      margin: 0;
-      color: #666;
-      font-size: 0.72em;
-    }
-    .y-adjust-group input { width: 80px; padding: 3px 5px; font-size: 0.8em; }
-    .y-adjust-group.pu-field input { border-color: #ffb300; }
+    .channel-item:last-child { border-bottom:none; }
+    .channel-item input[type="checkbox"] { margin-right:4px; margin-bottom:6px; }
+    .channel-item label.channel-name-label { font-weight:normal; margin-bottom:6px; flex:1; min-width:130px; }
+    .y-adjust-group { display:flex; flex-direction:column; gap:2px; font-size:0.75em; }
+    .y-adjust-group label { font-weight:normal; margin:0; color:#666; font-size:0.72em; }
+    .y-adjust-group input { width:80px; padding:3px 5px; font-size:0.8em; }
+    .y-adjust-group.pu-field input { border-color:#ffb300; }
     .chart-container {
-      position: relative;
-      height: 450px;
-      width: 100%;
-      border-radius: 4px;
-      padding: 10px;
-      box-sizing: border-box;
-      transition: background-color 0.2s ease;
+      position:relative; height:450px; width:100%; border-radius:4px;
+      padding:10px; box-sizing:border-box; transition:background-color 0.2s ease;
     }
     #selectionCounter {
-      font-weight: 600;
-      padding: 6px 10px;
-      border-radius: 4px;
-      background: #eef5fc;
-      display: inline-block;
-      margin-bottom: 10px;
-      font-size: 0.85em;
+      font-weight:600; padding:6px 10px; border-radius:4px;
+      background:#eef5fc; display:inline-block; margin-bottom:10px; font-size:0.85em;
     }
-    #selectionCounter.limit-reached { background: #fdecea; color: #d9534f; }
+    #selectionCounter.limit-reached { background:#fdecea; color:#d9534f; }
     .info-box {
-      background: #fff8e1;
-      border-left: 4px solid #ffb300;
-      padding: 10px;
-      font-size: 0.85em;
-      margin-bottom: 10px;
-      border-radius: 4px;
+      background:#fff8e1; border-left:4px solid #ffb300;
+      padding:10px; font-size:0.85em; margin-bottom:10px; border-radius:4px;
     }
+    .fmt-badge {
+      display:inline-block; font-size:0.68em; font-weight:700;
+      padding:2px 6px; border-radius:3px; margin-left:6px;
+      vertical-align:middle; letter-spacing:0.03em;
+    }
+    .fmt-badge.asc { background:#e3f2fd; color:#005a9c; }
+    .fmt-badge.zik, .fmt-badge.zic { background:#e8f5e9; color:#2e7d32; }
   </style>
 </head>
 <body>
 
-  <h2>Leitor de Oscilografia — ASC (Reivax) + ZIK/ZIC (COMTRADE)</h2>
-  <p class="subtitle">Suporte multi-formato: .asc (Reivax), .zik e .zic (Reason/GE — COMTRADE) — até 10 arquivos e 10 canais simultâneos, com ajuste de eixo X, eixo Y e conversão Engenharia/PU</p>
+  <h2>Leitor de Oscilografia — Reivax (.ASC) + COMTRADE (.ZIK/.ZIC)</h2>
+  <p class="subtitle">Até 10 arquivos e 10 canais simultâneos, com ajuste de eixo X, eixo Y e conversão Engenharia/PU</p>
 
-  <!-- Upload -->
   <div class="card">
-    <label for="fileInput">Selecione até 10 arquivos (.asc, .zik ou .zic)</label>
+    <label for="fileInput">Selecione até 10 arquivos .asc, .zik ou .zic</label>
     <input type="file" id="fileInput" accept=".asc,.zik,.zic" multiple>
     <div id="status">Aguardando arquivo(s)...</div>
   </div>
 
-  <!-- SELETOR ÚNICO DE MODO -->
   <div class="card">
     <h3>Modo de Grandeza (aplica-se a todos os canais e arquivos)</h3>
     <div class="mode-switch">
@@ -254,7 +161,6 @@
     </div>
   </div>
 
-  <!-- Configuração padrão de tempo (eixo X) -->
   <div class="card">
     <h3>Ajustes do Eixo de Tempo — X (padrão para novos arquivos)</h3>
     <div class="flex-container">
@@ -276,12 +182,11 @@
       </div>
     </div>
     <p style="font-size:0.8em; color:#777; margin-top:8px;">
-      Para arquivos <strong>.asc</strong>: tempo geralmente em segundos — ajuste rótulo e escala conforme necessário.<br>
-      Para arquivos <strong>.zik/.zic</strong>: tempo já convertido para <strong>milissegundos</strong> automaticamente (t=0 no instante do disparo).
+      Aplicado a novos arquivos ao carregar; cada arquivo pode ser ajustado individualmente na lista abaixo.
+      <strong>Arquivos ZIK/ZIC</strong> têm tempo em µs — Escala X = 0,001 (µs→ms) é aplicada automaticamente.
     </p>
   </div>
 
-  <!-- Configuração padrão do eixo Y -->
   <div class="card">
     <h3>Ajustes do Eixo de Valores — Y (padrão para novos canais)</h3>
     <div class="flex-container">
@@ -300,7 +205,6 @@
     </div>
   </div>
 
-  <!-- Lista de arquivos -->
   <div class="card">
     <h3>Arquivos Carregados (<span id="fileCountLabel">0</span>/10)</h3>
     <div id="fileListContainer">
@@ -308,7 +212,6 @@
     </div>
   </div>
 
-  <!-- Seleção de canais -->
   <div class="card">
     <h3>Seleção de Canais e Ajuste Individual</h3>
     <div id="selectionCounter">0/10 canais selecionados</div>
@@ -319,7 +222,6 @@
     <button class="secondary" onclick="exportToCSV()">Exportar para Excel (.CSV)</button>
   </div>
 
-  <!-- Gráfico -->
   <div class="card">
     <h3>Área de Plotagem</h3>
     <div class="bg-switch">
@@ -345,7 +247,6 @@
   let globalMode = 'eng';
   let plotBgColor = 'black';
 
-  /* ================= SELETOR ÚNICO DE MODO ================= */
   function setGlobalMode(mode) {
     globalMode = mode;
     document.getElementById('btnModeEng').classList.toggle('active', mode === 'eng');
@@ -356,7 +257,6 @@
     updateChart();
   }
 
-  /* ================= SELETOR DE COR DE FUNDO ================= */
   function setPlotBackground(color) {
     plotBgColor = color;
     document.getElementById('btnBgBlack').classList.toggle('active', color === 'black');
@@ -365,7 +265,6 @@
     updateChart();
   }
 
-  /* ================= ENTRADA DE ARQUIVOS ================= */
   document.getElementById('fileInput').addEventListener('change', function(e) {
     const incoming = Array.from(e.target.files);
     handleIncomingFiles(incoming);
@@ -374,59 +273,63 @@
 
   async function handleIncomingFiles(files) {
     const availableSlots = MAX_FILES - fileStore.length;
-    if (availableSlots <= 0) {
-      setStatus(`Limite de ${MAX_FILES} arquivos atingido.`);
-      return;
-    }
+    if (availableSlots <= 0) { setStatus('Limite de ' + MAX_FILES + ' arquivos atingido.'); return; }
 
     const toProcess = files.slice(0, availableSlots);
-    const defOffsetX  = parseFloat(document.getElementById('defaultOffsetX').value) || 0;
-    const defScaleX   = parseFloat(document.getElementById('defaultScaleX').value) || 1;
-    const defOffsetY  = parseFloat(document.getElementById('defaultOffsetY').value) || 0;
-    const defScaleY   = parseFloat(document.getElementById('defaultScaleY').value) || 1;
+    const defOffsetX   = parseFloat(document.getElementById('defaultOffsetX').value) || 0;
+    const defScaleX    = parseFloat(document.getElementById('defaultScaleX').value)  || 1;
+    const defOffsetY   = parseFloat(document.getElementById('defaultOffsetY').value) || 0;
+    const defScaleY    = parseFloat(document.getElementById('defaultScaleY').value)  || 1;
     const defBaseValue = parseFloat(document.getElementById('defaultBaseValue').value) || 1;
 
     for (const file of toProcess) {
-      try {
-        const ext = file.name.split('.').pop().toLowerCase();
-        let result;
+      const ext = file.name.split('.').pop().toLowerCase();
 
-        if (ext === 'zik' || ext === 'zic') {
-          result = await parseZikFile(file);
-        } else {
+      if (!['asc','zik','zic'].includes(ext)) {
+        setStatus('Formato nao suportado: "' + file.name + '". Use .asc, .zik ou .zic.');
+        continue;
+      }
+
+      try {
+        let result;
+        let fileScaleX = defScaleX;
+
+        if (ext === 'asc') {
           result = await parseAscFile(file);
+        } else {
+          result = await parseZikFile(file);
+          fileScaleX = 0.001; // tempo ZIK em us -> converte para ms automaticamente
         }
 
         if (!result.rawTime || result.rawTime.length === 0) {
-          setStatus(`⚠ "${file.name}": nenhuma amostra encontrada.`);
+          setStatus('Nenhuma amostra encontrada em "' + file.name + '".');
           continue;
         }
 
         const channelsWithSettings = result.channels.map(ch => ({
           ...ch,
-          yOffset:    defOffsetY,
-          yScale:     defScaleY,
-          baseValue:  defBaseValue,
-          unit:       ch.unit || ''   // preserva unidade do CFG para arquivos ZIK/ZIC
+          yOffset: defOffsetY,
+          yScale: defScaleY,
+          baseValue: defBaseValue,
+          unit: ch.unit || ''
         }));
 
         fileStore.push({
-          id:        nextFileId++,
-          filename:  file.name,
-          fmt:       (ext === 'zik' || ext === 'zic') ? 'zik' : 'asc',
-          channels:  channelsWithSettings,
-          rawTime:   result.rawTime,
+          id: nextFileId++,
+          filename: file.name,
+          format: ext.toUpperCase(),
+          channels: channelsWithSettings,
+          rawTime: result.rawTime,
           channelData: result.channelData,
-          offsetX:   defOffsetX,
-          scaleX:    defScaleX,
+          offsetX: defOffsetX,
+          scaleX: fileScaleX,
           trimStart: 0,
-          trimEnd:   -1
+          trimEnd: -1
         });
 
-        setStatus(`✓ "${file.name}" carregado: ${result.rawTime.length} amostras · ${result.channels.length} canais.`);
+        setStatus('[' + ext.toUpperCase() + '] "' + file.name + '" carregado: ' + result.rawTime.length + ' amostras, ' + result.channels.length + ' canais.');
       } catch (err) {
-        setStatus(`✗ Erro em "${file.name}": ${err.message}`);
-        console.error(err);
+        setStatus('Erro em "' + file.name + '": ' + err.message);
       }
     }
     renderAll();
@@ -443,16 +346,11 @@
     renderAll();
   }
 
-  /* ====================================================
-     PARSER .ASC (REIVAX) — inalterado
-  ==================================================== */
+  /* ======= PARSER ASC (REIVAX) ======= */
   function parseAscFile(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = e => {
-        try { resolve(parseReivaxAscCore(e.target.result)); }
-        catch (err) { reject(err); }
-      };
+      reader.onload = e => { try { resolve(parseReivaxAscCore(e.target.result)); } catch(err) { reject(err); } };
       reader.onerror = () => reject(new Error('Falha ao ler o arquivo.'));
       reader.readAsText(file);
     });
@@ -469,33 +367,23 @@
     else { sep = /\s+/; decimalComma = false; }
 
     function tokenize(line) { return line.split(sep).map(t => t.trim()).filter(t => t !== ''); }
-    function toNumber(tok) {
-      if (decimalComma) tok = tok.replace(',', '.');
-      return parseFloat(tok);
-    }
+    function toNumber(tok) { if (decimalComma) tok = tok.replace(',', '.'); return parseFloat(tok); }
 
     let headerTokens = null;
     let dataStartIndex = -1;
-
     for (let i = 0; i < rawLines.length; i++) {
       const tokens = tokenize(rawLines[i]);
       if (tokens.length < 2) continue;
-      if (!isNaN(toNumber(tokens[1]))) {
-        dataStartIndex = i;
-        break;
-      } else {
-        headerTokens = tokens;
-      }
+      if (!isNaN(toNumber(tokens[1]))) { dataStartIndex = i; break; }
+      else { headerTokens = tokens; }
     }
-
-    if (dataStartIndex === -1) throw new Error('Dados numéricos não encontrados.');
+    if (dataStartIndex === -1) throw new Error('Dados numericos nao encontrados.');
 
     const firstDataTokens = tokenize(rawLines[dataStartIndex]);
     const numChannels = firstDataTokens.length - 1;
-
     let channelNames = (headerTokens && headerTokens.length === firstDataTokens.length)
       ? headerTokens.slice(1)
-      : Array.from({length: numChannels}, (_, c) => `Canal ${c + 1}`);
+      : Array.from({length: numChannels}, (_, c) => 'Canal ' + (c + 1));
 
     const rawTime = [];
     const channelData = channelNames.map(() => []);
@@ -505,7 +393,6 @@
       if (tokens.length < 2) continue;
       const t = toNumber(tokens[0]);
       if (isNaN(t)) continue;
-
       rawTime.push(t);
       for (let c = 0; c < numChannels; c++) {
         const v = tokens[c + 1] !== undefined ? toNumber(tokens[c + 1]) : NaN;
@@ -515,207 +402,127 @@
 
     const channels = channelNames.map((name, idx) => ({
       index: idx,
-      name: name.replace(/[";]/g, '').trim() || `Canal ${idx + 1}`,
+      name: name.replace(/[";]/g, '').trim() || 'Canal ' + (idx + 1),
       unit: ''
     }));
 
     return { channels, rawTime, channelData };
   }
 
-  /* ====================================================
-     PARSER .ZIK / .ZIC (ZIP-COMTRADE — Reason / GE)
-     Retorna a mesma estrutura que o parser ASC:
-       { channels: [{index, name, unit}], rawTime, channelData }
-     Tempo em milissegundos, t=0 no instante do disparo.
-  ==================================================== */
+  /* ======= PARSER ZIK/ZIC (COMTRADE dentro de ZIP) ======= */
   function parseZikFile(file) {
     return new Promise((resolve, reject) => {
-      file.arrayBuffer().then(buf => {
-        return new JSZip().loadAsync(buf);
-      }).then(async contents => {
-        let cfgFile = null, datFile = null;
-
-        for (const filename in contents.files) {
-          const lc = filename.toLowerCase();
-          if (lc.endsWith('.cfg')) cfgFile = contents.files[filename];
-          else if (lc.endsWith('.dat')) datFile = contents.files[filename];
-        }
-
-        if (!cfgFile || !datFile) {
-          throw new Error('Não foi possível encontrar .cfg e .dat dentro do arquivo.');
-        }
-
-        const cfgText   = await cfgFile.async('string');
-        const datBuffer = await datFile.async('arraybuffer');
-
-        resolve(parseComtradeToAscFormat(cfgText, datBuffer));
-      }).catch(reject);
+      const zip = new JSZip();
+      zip.loadAsync(file)
+        .then(async (contents) => {
+          let cfgFile = null, datFile = null;
+          for (const fn in contents.files) {
+            const fl = fn.toLowerCase();
+            if (fl.endsWith('.cfg')) cfgFile = contents.files[fn];
+            else if (fl.endsWith('.dat')) datFile = contents.files[fn];
+          }
+          if (!cfgFile || !datFile) throw new Error('Arquivos .cfg e/ou .dat nao encontrados dentro do ZIP.');
+          const cfgText   = await cfgFile.async('string');
+          const datBuffer = await datFile.async('arraybuffer');
+          resolve(parseComtradeToUnified(cfgText, datBuffer));
+        })
+        .catch(reject);
     });
   }
 
-  function parseComtradeToAscFormat(cfgText, datBuffer) {
+  function parseComtradeToUnified(cfgText, datBuffer) {
     const lines = cfgText.split(/\r?\n/).map(l => l.trim()).filter(l => l !== '');
-    if (lines.length < 4) throw new Error('Arquivo .cfg corrompido ou incompleto.');
+    if (lines.length < 4) throw new Error('CFG corrompido ou incompleto.');
 
-    /* --- cabeçalho: número de canais --- */
-    const chInfo      = lines[1].split(',');
-    const analogCount   = parseInt(chInfo[1]) || 0;
-    const digitalCount  = parseInt(chInfo[2]) || 0;
+    const chInfo = lines[1].split(',');
+    const analogCount  = parseInt(chInfo[1]) || 0;
+    const digitalCount = parseInt(chInfo[2]) || 0;
 
-    /* --- canais analógicos ---
-       layout: An,ch_id,ph,ccbm,uu,a,b,skew,min,max,primary,secondary,PS */
     const analogs = [];
     for (let i = 0; i < analogCount; i++) {
-      const parts = lines[2 + i].split(',');
-      const a       = parseFloat(parts[5]);
-      const b       = parseFloat(parts[6]);
-      const primary = parseFloat(parts[10]);
+      const p = lines[2 + i].split(',');
+      const a = parseFloat(p[5]), b = parseFloat(p[6]), primary = parseFloat(p[10]);
       analogs.push({
-        name:    (parts[1] || `A${i+1}`).trim(),
-        unit:    (parts[4] || '').trim(),
-        a:       isNaN(a) ? 1.0 : a,
-        b:       isNaN(b) ? 0.0 : b,
-        primary: (isNaN(primary) || primary === 0) ? 1.0 : primary
+        index: i,
+        name:  (p[1] || ('A' + (i+1))).trim(),
+        unit:  (p[4] || '').trim(),
+        a:       (!isNaN(a))                        ? a       : 1.0,
+        b:       (!isNaN(b))                        ? b       : 0.0,
+        primary: (!isNaN(primary) && primary !== 0) ? primary : 1.0
       });
     }
 
-    /* --- canais digitais --- */
     const digitals = [];
     for (let i = 0; i < digitalCount; i++) {
-      const parts = lines[2 + analogCount + i].split(',');
-      digitals.push({
-        name: (parts[1] || `D${i+1}`).trim(),
-        unit: 'digital'
-      });
+      const p = lines[2 + analogCount + i].split(',');
+      digitals.push({ index: analogCount + i, name: (p[1] || ('D' + (i+1))).trim(), unit: 'digital' });
     }
 
-    /* --- frequência e taxas de amostragem --- */
-    let idx     = 2 + analogCount + digitalCount;
-    /* gridFreq */ idx++;
+    let idx = 2 + analogCount + digitalCount;
+    idx++; // freq
     const numRates = parseInt(lines[idx++]) || 1;
+    idx += numRates; // sample rates
+    idx++; idx++; // start + trigger timestamps
+    const fileType = (lines[idx] || 'ASCII').toUpperCase().trim(); idx++;
+    const timeMult = (lines[idx] && !isNaN(parseFloat(lines[idx]))) ? parseFloat(lines[idx]) : 1.0;
 
-    let sampRate = 60.0;
-    let endSamp  = 0;
-
-    for (let r = 0; r < numRates; r++) {
-      const rateLine = lines[idx++];
-      if (rateLine && r === 0) {
-        const parts = rateLine.split(',');
-        sampRate = parseFloat(parts[0]) || 60.0;
-        endSamp  = parseInt(parts[1]) || 0;
-      }
-    }
-
-    const msPerSample = 1000.0 / sampRate;
-
-    /* --- pular timestamps de início/disparo; ler tipo de arquivo --- */
-    idx += 2; // start timestamp + trigger timestamp
-    const fileType = (lines[idx] || 'ASCII').toUpperCase().trim();
-    idx++;
-    const timeMult = parseFloat(lines[idx]) || 1.0; // multiplica ts raw -> microssegundos
-
-    /* --- leitura dos dados --- */
     const rawTime    = [];
-    const analogData  = analogs.map(() => []);
-    const digitalData = digitals.map(() => []);
+    const channelData = [...analogs.map(() => []), ...digitals.map(() => [])];
 
     if (fileType === 'BINARY' || fileType === 'BIN32') {
-      const view         = new DataView(datBuffer);
-      const isBin32      = (fileType === 'BIN32');
-      const analogBytes  = isBin32 ? 4 : 2;
-      const digitalWords = Math.ceil(digitalCount / 16);
-      const rowSize      = 4 + 4 + (analogCount * analogBytes) + digitalWords * 2;
-      const nSamples     = Math.floor(datBuffer.byteLength / rowSize);
+      const view = new DataView(datBuffer);
+      const isBin32     = fileType === 'BIN32';
+      const analogBytes = isBin32 ? 4 : 2;
+      const numWords    = Math.ceil(digitalCount / 16);
+      const rowSize     = 4 + 4 + (analogCount * analogBytes) + numWords * 2;
+      const totalSamples = Math.floor(datBuffer.byteLength / rowSize);
 
       let offset = 0;
-      for (let s = 0; s < nSamples; s++) {
+      for (let s = 0; s < totalSamples; s++) {
         if (offset + rowSize > datBuffer.byteLength) break;
-
-        const sampleNum = view.getUint32(offset, true);
-        const tsRaw     = view.getUint32(offset + 4, true);
-
-        /* SIPROTEC / UHPP_CF: campo timestamp permanece 0 no binário.
-           Reconstruímos a partir do número de amostra. */
-        const timeMs = (tsRaw > 0)
-          ? (tsRaw * timeMult) / 1000.0        // us → ms
-          : (sampleNum - 1) * msPerSample;     // reconstituição
-
-        rawTime.push(timeMs);
+        rawTime.push(view.getUint32(offset + 4, true) * timeMult);
 
         let rowOffset = offset + 8;
-
         for (let i = 0; i < analogCount; i++) {
-          const rawVal = isBin32
-            ? view.getInt32(rowOffset, true)
-            : view.getInt16(rowOffset, true);
-          analogData[i].push(rawVal * analogs[i].a + analogs[i].b);
+          const rawVal = isBin32 ? view.getInt32(rowOffset, true) : view.getInt16(rowOffset, true);
+          channelData[i].push(rawVal * analogs[i].a + analogs[i].b);
           rowOffset += analogBytes;
         }
 
-        for (let w = 0; w < digitalWords; w++) {
-          const word = view.getUint16(rowOffset, true);
-          rowOffset += 2;
-          for (let b = 0; b < 16; b++) {
-            const dIdx = w * 16 + b;
-            if (dIdx < digitalCount) {
-              digitalData[dIdx].push((word >> b) & 1);
-            }
-          }
+        const digitalStates = [];
+        for (let w = 0; w < numWords; w++) {
+          const word = view.getUint16(rowOffset, true); rowOffset += 2;
+          for (let b = 0; b < 16; b++) digitalStates.push((word >> b) & 1);
         }
+        for (let i = 0; i < digitalCount; i++) channelData[analogCount + i].push(digitalStates[i] || 0);
 
         offset += rowSize;
       }
     } else {
-      /* ASCII / BINARY não reconhecido → trata como ASCII */
       const datText  = new TextDecoder('utf-8').decode(datBuffer);
       const datLines = datText.split(/\r?\n/).map(l => l.trim()).filter(l => l !== '');
-
-      for (const line of datLines) {
+      datLines.forEach(line => {
         const parts = line.split(',');
-        if (parts.length < 2) continue;
-
-        const sampleNum = parseInt(parts[0]) || 0;
-        const tsRaw     = parseFloat(parts[1]) || 0;
-
-        const timeMs = (tsRaw > 0)
-          ? (tsRaw * timeMult) / 1000.0
-          : (sampleNum - 1) * msPerSample;
-
-        rawTime.push(timeMs);
-
+        if (parts.length < 2) return;
+        rawTime.push(parseFloat(parts[1]) * timeMult);
         for (let i = 0; i < analogCount; i++) {
-          const rawVal = parseFloat(parts[2 + i]) || 0;
-          analogData[i].push(rawVal * analogs[i].a + analogs[i].b);
+          channelData[i].push((parseFloat(parts[2 + i]) || 0) * analogs[i].a + analogs[i].b);
         }
         for (let i = 0; i < digitalCount; i++) {
-          digitalData[i].push(parseInt(parts[2 + analogCount + i]) || 0);
+          channelData[analogCount + i].push(parseInt(parts[2 + analogCount + i]) || 0);
         }
-      }
+      });
     }
 
-    /* --- normalizar trigger: t=0 no instante do disparo (IEEE C37.111)
-         endSamp é o número da última amostra PRÉ-disparo → índice 0-based = endSamp-1 */
-    if (rawTime.length > 0 && endSamp > 0) {
-      const trigIdx = Math.min(Math.max(endSamp - 1, 0), rawTime.length - 1);
-      const tOffset = rawTime[trigIdx];
-      if (tOffset !== 0) {
-        for (let s = 0; s < rawTime.length; s++) rawTime[s] -= tOffset;
-      }
-    }
-
-    /* --- unificar canais analógicos + digitais no formato ASC --- */
     const channels = [
-      ...analogs.map((a, i) => ({ index: i,                 name: a.name, unit: a.unit })),
-      ...digitals.map((d, i) => ({ index: analogCount + i,  name: d.name, unit: 'digital' }))
+      ...analogs.map(a => ({ index: a.index, name: a.name, unit: a.unit })),
+      ...digitals.map(d => ({ index: d.index, name: d.name, unit: 'digital' }))
     ];
-    const channelData = [...analogData, ...digitalData];
-
-    if (rawTime.length === 0) throw new Error('Nenhuma amostra encontrada no arquivo .dat.');
 
     return { channels, rawTime, channelData };
   }
 
-  /* ================= RENDERIZAÇÃO GERAL ================= */
+  /* ======= RENDERIZACAO ======= */
   function renderAll() {
     renderFileList();
     renderChannelSelectors();
@@ -730,28 +537,24 @@
       container.innerHTML = '<p style="font-size:0.85em; color:#888;">Nenhum arquivo carregado ainda.</p>';
       return;
     }
-
     container.innerHTML = fileStore.map(f => {
-      const badge = f.fmt === 'zik'
-        ? '<span class="fmt-badge fmt-zik">ZIK/ZIC</span>'
-        : '<span class="fmt-badge fmt-asc">ASC</span>';
-      return `
-        <div class="file-card">
-          <div class="file-card-header">
-            <div>
-              <strong>${f.filename}</strong>${badge}
-              <span style="font-size:0.75em; color:#777;"> · ${f.rawTime.length} amostras · ${f.channels.length} canais</span>
-            </div>
-            <button class="danger" onclick="removeFile(${f.id})">Remover</button>
-          </div>
-          <div class="mini-grid">
-            <div><label>Offset X (tempo)</label><input type="number" step="any" value="${f.offsetX}" onchange="onFileSettingChange(${f.id}, 'offsetX', this)"></div>
-            <div><label>Fator Escala X</label><input type="number" step="any" value="${f.scaleX}" onchange="onFileSettingChange(${f.id}, 'scaleX', this)"></div>
-            <div><label>Início (amostra)</label><input type="number" value="${f.trimStart}" onchange="onFileSettingChange(${f.id}, 'trimStart', this)"></div>
-            <div><label>Fim (-1=todas)</label><input type="number" value="${f.trimEnd}" onchange="onFileSettingChange(${f.id}, 'trimEnd', this)"></div>
-          </div>
-        </div>
-      `;
+      const fc = (f.format || 'ASC').toLowerCase();
+      return '<div class="file-card">' +
+        '<div class="file-card-header">' +
+          '<div>' +
+            '<strong>' + f.filename + '</strong>' +
+            '<span class="fmt-badge ' + fc + '">' + (f.format||'ASC') + '</span>' +
+            '<span style="font-size:0.75em;color:#777;"> &middot; ' + f.rawTime.length + ' amostras &middot; ' + f.channels.length + ' canais</span>' +
+          '</div>' +
+          '<button class="danger" onclick="removeFile(' + f.id + ')">Remover</button>' +
+        '</div>' +
+        '<div class="mini-grid">' +
+          '<div><label>Offset X (tempo)</label><input type="number" step="any" value="' + f.offsetX + '" onchange="onFileSettingChange(' + f.id + ', \'offsetX\', this)"></div>' +
+          '<div><label>Fator Escala X</label><input type="number" step="any" value="' + f.scaleX + '" onchange="onFileSettingChange(' + f.id + ', \'scaleX\', this)"></div>' +
+          '<div><label>Inicio (amostra)</label><input type="number" value="' + f.trimStart + '" onchange="onFileSettingChange(' + f.id + ', \'trimStart\', this)"></div>' +
+          '<div><label>Fim (-1=todas)</label><input type="number" value="' + f.trimEnd + '" onchange="onFileSettingChange(' + f.id + ', \'trimEnd\', this)"></div>' +
+        '</div>' +
+        '</div>';
     }).join('');
   }
 
@@ -770,46 +573,25 @@
 
   function renderChannelSelectors() {
     const container = document.getElementById('channelSelectionContainer');
-
     if (fileStore.length === 0) {
-      container.innerHTML = '<p style="font-size:0.85em; color:#888;">Carregue arquivos para visualizar os canais disponíveis.</p>';
+      container.innerHTML = '<p style="font-size:0.85em; color:#888;">Carregue arquivos para visualizar os canais disponiveis.</p>';
       return;
     }
-
     let html = '';
     fileStore.forEach(f => {
-      const badge = f.fmt === 'zik'
-        ? '<span class="fmt-badge fmt-zik">ZIK/ZIC</span>'
-        : '<span class="fmt-badge fmt-asc">ASC</span>';
-      html += `<div class="channel-group-title">${f.filename}${badge}</div><div class="channel-list">`;
+      const fc = (f.format || 'ASC').toLowerCase();
+      html += '<div class="channel-group-title">' + f.filename + ' <span class="fmt-badge ' + fc + '">' + (f.format||'ASC') + '</span></div><div class="channel-list">';
       f.channels.forEach((ch, idx) => {
-        html += `
-          <div class="channel-item">
-            <input type="checkbox" class="channel-checkbox" id="sel_${f.id}_${idx}" onchange="onChannelCheckboxChange(this)">
-            <label class="channel-name-label" for="sel_${f.id}_${idx}">${ch.name}${ch.unit ? ' (' + ch.unit + ')' : ''}</label>
-
-            <div class="y-adjust-group">
-              <label>Offset Y</label>
-              <input type="number" step="any" value="${ch.yOffset}" onchange="onChannelYSettingChange(${f.id}, ${idx}, 'yOffset', this)">
-            </div>
-
-            <div class="y-adjust-group">
-              <label>Escala Y</label>
-              <input type="number" step="any" value="${ch.yScale}" onchange="onChannelYSettingChange(${f.id}, ${idx}, 'yScale', this)">
-            </div>
-
-            ${ globalMode === 'eng' ? `
-              <div class="y-adjust-group">
-                <label>Unidade</label>
-                <input type="text" value="${ch.unit}" placeholder="V, A, Hz..." onchange="onChannelTextSettingChange(${f.id}, ${idx}, 'unit', this)">
-              </div>
-            ` : `
-              <div class="y-adjust-group pu-field">
-                <label>Valor Base (PU)</label>
-                <input type="number" step="any" value="${ch.baseValue}" onchange="onChannelYSettingChange(${f.id}, ${idx}, 'baseValue', this)">
-              </div>
-            `}
-          </div>`;
+        const puField = globalMode === 'eng'
+          ? '<div class="y-adjust-group"><label>Unidade</label><input type="text" value="' + ch.unit + '" placeholder="V, A, Hz..." onchange="onChannelTextSettingChange(' + f.id + ',' + idx + ',\'unit\',this)"></div>'
+          : '<div class="y-adjust-group pu-field"><label>Valor Base (PU)</label><input type="number" step="any" value="' + ch.baseValue + '" onchange="onChannelYSettingChange(' + f.id + ',' + idx + ',\'baseValue\',this)"></div>';
+        html += '<div class="channel-item">' +
+          '<input type="checkbox" class="channel-checkbox" id="sel_' + f.id + '_' + idx + '" onchange="onChannelCheckboxChange(this)">' +
+          '<label class="channel-name-label" for="sel_' + f.id + '_' + idx + '">' + ch.name + '</label>' +
+          '<div class="y-adjust-group"><label>Offset Y</label><input type="number" step="any" value="' + ch.yOffset + '" onchange="onChannelYSettingChange(' + f.id + ',' + idx + ',\'yOffset\',this)"></div>' +
+          '<div class="y-adjust-group"><label>Escala Y</label><input type="number" step="any" value="' + ch.yScale + '" onchange="onChannelYSettingChange(' + f.id + ',' + idx + ',\'yScale\',this)"></div>' +
+          puField +
+          '</div>';
       });
       html += '</div>';
     });
@@ -837,7 +619,7 @@
     const checkedCount = document.querySelectorAll('.channel-checkbox:checked').length;
     if (cb.checked && checkedCount > MAX_CHANNELS) {
       cb.checked = false;
-      alert(`Limite de ${MAX_CHANNELS} canais simultâneos atingido.`);
+      alert('Limite de ' + MAX_CHANNELS + ' canais simultaneos atingido.');
       return;
     }
     updateSelectedCounter();
@@ -847,142 +629,108 @@
   function updateSelectedCounter() {
     const count = document.querySelectorAll('.channel-checkbox:checked').length;
     const el = document.getElementById('selectionCounter');
-    el.innerText = `${count}/${MAX_CHANNELS} canais selecionados`;
+    el.innerText = count + '/' + MAX_CHANNELS + ' canais selecionados';
     el.classList.toggle('limit-reached', count >= MAX_CHANNELS);
   }
 
-  /* ================= CÁLCULO DE SÉRIES AJUSTADAS ================= */
   function getAdjustedTime(fileObj) {
     const start = fileObj.trimStart || 0;
-    const end   = (fileObj.trimEnd === -1 || fileObj.trimEnd == null)
-      ? fileObj.rawTime.length : fileObj.trimEnd;
+    const end = (fileObj.trimEnd === -1 || fileObj.trimEnd == null) ? fileObj.rawTime.length : fileObj.trimEnd;
     return fileObj.rawTime.slice(start, end).map(t => t * fileObj.scaleX + fileObj.offsetX);
   }
 
   function getAdjustedChannel(fileObj, idx) {
     const start = fileObj.trimStart || 0;
-    const end   = (fileObj.trimEnd === -1 || fileObj.trimEnd == null)
-      ? fileObj.channelData[idx].length : fileObj.trimEnd;
+    const end = (fileObj.trimEnd === -1 || fileObj.trimEnd == null) ? fileObj.channelData[idx].length : fileObj.trimEnd;
     const rawSlice = fileObj.channelData[idx].slice(start, end);
     const ch = fileObj.channels[idx];
-
-    const yOffset   = ch.yOffset || 0;
-    const yScale    = (ch.yScale === undefined || ch.yScale === null || ch.yScale === 0) ? 1 : ch.yScale;
-    const baseValue = (ch.baseValue === undefined || ch.baseValue === null || ch.baseValue === 0) ? 1 : ch.baseValue;
-
+    const yOffset = ch.yOffset || 0;
+    const yScale = (!ch.yScale || ch.yScale === 0) ? 1 : ch.yScale;
+    const baseValue = (!ch.baseValue || ch.baseValue === 0) ? 1 : ch.baseValue;
     return rawSlice.map(v => {
       if (v === null || v === undefined) return null;
-      const engValue = (v * yScale) + yOffset;
-      return (globalMode === 'pu') ? (engValue / baseValue) : engValue;
+      const eng = v * yScale + yOffset;
+      return (globalMode === 'pu') ? (eng / baseValue) : eng;
     });
   }
 
   function buildSelectedSeries() {
     const checkboxes = document.querySelectorAll('.channel-checkbox:checked');
     const series = [];
-
     checkboxes.forEach(cb => {
-      const parts  = cb.id.split('_');
+      const parts = cb.id.split('_');
       const fileId = parseInt(parts[1]);
-      const idx    = parseInt(parts[2]);
+      const idx = parseInt(parts[2]);
       const fileObj = fileStore.find(f => f.id === fileId);
       if (!fileObj) return;
-
       const ch = fileObj.channels[idx];
-      const unitSuffix = (globalMode === 'pu') ? ' (pu)' : (ch.unit ? ` (${ch.unit})` : '');
-
+      const unitSuffix = (globalMode === 'pu') ? ' (pu)' : (ch.unit ? ' (' + ch.unit + ')' : '');
       series.push({
-        label:  `${fileObj.filename} · ${ch.name}${unitSuffix}`,
-        times:  getAdjustedTime(fileObj),
+        label: fileObj.filename + ' \u00b7 ' + ch.name + unitSuffix,
+        times: getAdjustedTime(fileObj),
         values: getAdjustedChannel(fileObj, idx)
       });
     });
     return series;
   }
 
-  /* ================= GRÁFICO ================= */
   function updateChart() {
     const series = buildSelectedSeries();
-    const ctx    = document.getElementById('osciloChart').getContext('2d');
+    const ctx = document.getElementById('osciloChart').getContext('2d');
     const timeUnitLabel = document.getElementById('timeUnit').value;
-    const yAxisLabel    = (globalMode === 'pu') ? 'Valores (PU)' : 'Valores (Engenharia)';
-
-    const isDark    = (plotBgColor === 'black');
+    const yAxisLabel = (globalMode === 'pu') ? 'Valores (PU)' : 'Valores (Engenharia)';
+    const isDark = (plotBgColor === 'black');
     const textColor = isDark ? '#ffffff' : '#222222';
     const tickColor = isDark ? '#cccccc' : '#444444';
     const gridColor = isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)';
 
     const datasets = series.map(s => ({
-      label:       s.label,
-      data:        s.times.map((t, i) => {
+      label: s.label,
+      data: s.times.map((t, i) => {
         const v = s.values[i];
         return { x: t, y: (v === null || isNaN(v)) ? null : v };
       }),
-      borderWidth: 1.5,
-      pointRadius: 0,
-      fill:        false,
-      spanGaps:    true
+      borderWidth: 1.5, pointRadius: 0, fill: false, spanGaps: true
     }));
 
     if (chartInstance) chartInstance.destroy();
-
     chartInstance = new Chart(ctx, {
       type: 'line',
       data: { datasets },
       options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: false,
-        parsing: false,
+        responsive: true, maintainAspectRatio: false, animation: false, parsing: false,
         scales: {
           x: {
-            type:  'linear',
-            title: { display: true, text: `Tempo (${timeUnitLabel})`, color: textColor },
+            type: 'linear',
+            title: { display: true, text: 'Tempo (' + timeUnitLabel + ')', color: textColor },
             ticks: { maxTicksLimit: 12, color: tickColor },
-            grid:  { color: gridColor }
+            grid: { color: gridColor }
           },
           y: {
             title: { display: true, text: yAxisLabel, color: textColor },
             ticks: { color: tickColor },
-            grid:  { color: gridColor }
+            grid: { color: gridColor }
           }
         },
-        plugins: {
-          legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 }, color: textColor } }
-        }
+        plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 }, color: textColor } } }
       }
     });
   }
 
-  /* ================= EXPORTAÇÃO CSV ================= */
   function exportToCSV() {
     const series = buildSelectedSeries();
-    if (series.length === 0) {
-      alert('Selecione ao menos um canal antes de exportar.');
-      return;
-    }
-
+    if (series.length === 0) { alert('Selecione ao menos um canal antes de exportar.'); return; }
     const timeUnitLabel = document.getElementById('timeUnit').value;
-    const formatNum = v => (v === undefined || v === null || isNaN(v)) ? '' : v.toString().replace('.', ',');
-
-    const headers = [];
-    series.forEach(s => {
-      headers.push(`Tempo (${timeUnitLabel}) - ${s.label}`);
-      headers.push(s.label);
-    });
-
+    const formatNum = (v) => (v === undefined || v === null || isNaN(v)) ? '' : v.toString().replace('.', ',');
+    let headers = [];
+    series.forEach(s => { headers.push('Tempo (' + timeUnitLabel + ') - ' + s.label); headers.push(s.label); });
     let csvLines = [headers.join(';')];
     const maxRows = Math.max(...series.map(s => s.times.length), 0);
-
     for (let r = 0; r < maxRows; r++) {
       const row = [];
-      series.forEach(s => {
-        row.push(formatNum(s.times[r]));
-        row.push(formatNum(s.values[r]));
-      });
+      series.forEach(s => { row.push(formatNum(s.times[r])); row.push(formatNum(s.values[r])); });
       csvLines.push(row.join(';'));
     }
-
     const blob = new Blob(['\ufeff' + csvLines.join('\n')], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
