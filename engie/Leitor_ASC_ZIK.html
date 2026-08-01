@@ -374,31 +374,41 @@
     // Header: pares de colunas "Tempo (ms) - ..." / "<arquivo> · <sinal> (unidade)"
     const headers = lines[0].split(';').map(h => h.trim());
 
-    const channels = [];
-    const channelColIndices = []; // indice da coluna de valor de cada canal
-
+    // Primeira passagem: extrai tanto a parte do arquivo quanto do sinal
+    const raw = [];
     for (let i = 0; i + 1 < headers.length; i += 2) {
-      const valueHeader = headers[i + 1] || '';
+      const vh = headers[i + 1] || '';
+      const mid = vh.indexOf('\u00b7');
+      const filePart = mid !== -1 ? vh.substring(0, mid).trim() : '';
+      const sigPart  = mid !== -1 ? vh.substring(mid + 1).trim() : vh;
 
-      // Extrai nome do sinal: parte apos '·' se existir, senao usa o header inteiro
-      let chName = valueHeader;
-      const midDot = valueHeader.indexOf('\u00b7'); // ·
-      if (midDot !== -1) chName = valueHeader.substring(midDot + 1).trim();
+      // Extrai unidade do sinal
+      let unit = '', sigName = sigPart;
+      const um = sigPart.match(/\s*\(([^)]+)\)\s*$/);
+      if (um) { unit = um[1]; sigName = sigPart.replace(/\s*\([^)]+\)\s*$/, '').trim(); }
 
-      // Extrai unidade do padrao "(unidade)" no final
-      let unit = '';
-      const unitMatch = chName.match(/\s*\(([^)]+)\)\s*$/);
-      if (unitMatch) {
-        unit = unitMatch[1];
-        chName = chName.replace(/\s*\([^)]+\)\s*$/, '').trim();
-      }
+      // Nome do arquivo sem extensao (ex: "Canal 1 - Vt.asc" -> "Canal 1 - Vt")
+      const fileName = filePart.replace(/\.[a-z]+$/i, '').trim();
 
-      // Limpa nome residual
-      chName = chName.replace(/^[\s·]+/, '').trim() || ('Canal ' + (channels.length + 1));
-
-      channels.push({ index: channels.length, name: chName, unit: unit });
-      channelColIndices.push(i + 1);
+      raw.push({ fileName, sigName, unit, colIdx: i + 1 });
     }
+
+    if (raw.length === 0) throw new Error('Nenhum canal encontrado no cabecalho CSV.');
+
+    // Decide qual parte usar como nome:
+    // se os nomes de sinal sao todos unicos -> usa sinal; senao -> usa nome do arquivo
+    const sigNames = raw.map(r => r.sigName);
+    const uniqueSigs = new Set(sigNames).size === sigNames.length && sigNames.every(s => s.length > 0);
+
+    const channels = [];
+    const channelColIndices = [];
+    raw.forEach((r, i) => {
+      const name = uniqueSigs
+        ? (r.sigName  || r.fileName || ('Canal ' + (i + 1)))
+        : (r.fileName || r.sigName  || ('Canal ' + (i + 1)));
+      channels.push({ index: i, name, unit: r.unit });
+      channelColIndices.push(r.colIdx);
+    });
 
     if (channels.length === 0) throw new Error('Nenhum canal encontrado no cabecalho CSV.');
 
