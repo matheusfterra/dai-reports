@@ -1,980 +1,1077 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Leitor de Oscilografia - ASC_ZIC</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body { font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; margin:20px; background-color:#f5f6f8; color:#333; }
-    h2 { color:#005a9c; margin-bottom:5px; }
-    p.subtitle { margin-top:0; color:#666; font-size:0.9em; }
-    .card { background:#fff; border:1px solid #e1e4e8; border-radius:6px; padding:15px; margin-bottom:15px; box-shadow:0 2px 4px rgba(0,0,0,0.02); }
-    .flex-container { display:flex; gap:15px; flex-wrap:wrap; }
-    .flex-col { flex:1; min-width:220px; }
-    label { display:block; font-weight:600; margin-bottom:5px; font-size:0.9em; }
-    input[type="file"],input[type="number"],input[type="text"],select { width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box; }
-    button { background-color:#005a9c; color:white; border:none; padding:10px 15px; border-radius:4px; cursor:pointer; font-weight:600; margin-top:10px; }
-    button:hover { background-color:#004070; }
-    button.secondary { background-color:#28a745; }
-    button.secondary:hover { background-color:#218838; }
-    button.danger { background-color:#d9534f; padding:4px 10px; font-size:0.8em; margin-top:0; }
-    button.danger:hover { background-color:#c9302c; }
-    .mode-switch { display:flex; border:2px solid #005a9c; border-radius:6px; overflow:hidden; width:fit-content; margin:10px 0; }
-    .mode-switch button { margin:0; border-radius:0; background:#fff; color:#005a9c; padding:10px 25px; font-size:0.95em; }
-    .mode-switch button.active { background:#005a9c; color:#fff; }
-    .mode-switch button:hover { background:#e3f2fd; }
-    .mode-switch button.active:hover { background:#004070; }
-    .bg-switch { display:flex; border:2px solid #005a9c; border-radius:6px; overflow:hidden; width:fit-content; margin:0 0 12px 0; }
-    .bg-switch button { margin:0; border-radius:0; background:#fff; color:#005a9c; padding:8px 20px; font-size:0.9em; display:flex; align-items:center; gap:6px; }
-    .bg-switch button.active { background:#005a9c; color:#fff; }
-    .bg-switch button:hover { background:#e3f2fd; }
-    .bg-switch button.active:hover { background:#004070; }
-    .bg-swatch { width:14px; height:14px; border-radius:3px; border:1px solid #999; display:inline-block; }
-    .bg-swatch.black { background:#000; }
-    .bg-swatch.white { background:#fff; }
-    #status { padding:10px; border-radius:4px; background:#eef5fc; border-left:4px solid #005a9c; margin-top:10px; font-family:monospace; font-size:0.82em; white-space:pre-wrap; word-break:break-word; max-height:150px; overflow-y:auto; }
-    .file-card { border:1px solid #ddd; border-radius:6px; padding:10px; margin-bottom:10px; background:#fafbfc; }
-    .file-card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
-    .file-card-header strong { font-size:0.95em; }
-    .mini-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
-    .mini-grid label { font-size:0.75em; margin-bottom:2px; }
-    .mini-grid input { padding:5px; font-size:0.85em; }
-    .channel-group-title { font-weight:600; font-size:0.85em; margin:10px 0 4px 0; color:#005a9c; border-bottom:1px solid #e1e4e8; padding-bottom:3px; }
-    .channel-list { max-height:340px; overflow-y:auto; border:1px solid #ddd; padding:8px; border-radius:4px; background:#fafafa; margin-bottom:12px; }
-    .channel-item { display:flex; align-items:flex-end; font-size:0.85em; margin-bottom:8px; padding-bottom:8px; border-bottom:1px dashed #e5e5e5; flex-wrap:wrap; gap:6px; }
-    .channel-item:last-child { border-bottom:none; }
-    .channel-item input[type="checkbox"] { margin-right:4px; margin-bottom:6px; }
-    .channel-item label.channel-name-label { font-weight:normal; margin-bottom:6px; flex:1; min-width:130px; }
-    .y-adjust-group { display:flex; flex-direction:column; gap:2px; font-size:0.75em; }
-    .y-adjust-group label { font-weight:normal; margin:0; color:#666; font-size:0.72em; }
-    .y-adjust-group input { width:80px; padding:3px 5px; font-size:0.8em; }
-    .y-adjust-group.pu-field input { border-color:#ffb300; }
-    .chart-container { position:relative; height:450px; width:100%; border-radius:4px; padding:10px; box-sizing:border-box; transition:background-color 0.2s ease; }
-    #selectionCounter { font-weight:600; padding:6px 10px; border-radius:4px; background:#eef5fc; display:inline-block; margin-bottom:10px; font-size:0.85em; }
-    #selectionCounter.limit-reached { background:#fdecea; color:#d9534f; }
-    .info-box { background:#fff8e1; border-left:4px solid #ffb300; padding:10px; font-size:0.85em; margin-bottom:10px; border-radius:4px; }
-    .fmt-badge { display:inline-block; font-size:0.68em; font-weight:700; padding:2px 6px; border-radius:3px; margin-left:6px; vertical-align:middle; }
-    .fmt-badge.asc { background:#e3f2fd; color:#005a9c; }
-    .fmt-badge.zik,.fmt-badge.zic { background:#e8f5e9; color:#2e7d32; }
-    .fmt-badge.csv { background:#fff3e0; color:#e65100; }
-    .fmt-badge.ttrecx { background:#f3e5f5; color:#6a1b9a; }
-  </style>
+<meta charset="UTF-8">
+<title>Leitor de Oscilografia - ASC | ZIC</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<style>
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;margin:20px;background-color:#f5f6f8;color:#333;}
+h2{color:#005a9c;margin-bottom:5px;}
+p.subtitle{margin-top:0;color:#666;font-size:.9em;}
+.card{background:#fff;border:1px solid #e1e4e8;border-radius:6px;padding:15px;margin-bottom:15px;box-shadow:0 2px 4px rgba(0,0,0,.02);}
+.flex-container{display:flex;gap:15px;flex-wrap:wrap;}
+.flex-col{flex:1;min-width:220px;}
+label{display:block;font-weight:600;margin-bottom:5px;font-size:.9em;}
+input[type="file"],input[type="number"],input[type="text"],select{width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;box-sizing:border-box;}
+button{background-color:#005a9c;color:#fff;border:none;padding:10px 15px;border-radius:4px;cursor:pointer;font-weight:600;margin-top:10px;}
+button:hover{background-color:#004070;}
+button.secondary{background-color:#28a745;}
+button.secondary:hover{background-color:#218838;}
+button.danger{background-color:#d9534f;padding:4px 10px;font-size:.8em;margin-top:0;}
+button.danger:hover{background-color:#c9302c;}
+.mode-switch{display:flex;border:2px solid #005a9c;border-radius:6px;overflow:hidden;width:fit-content;margin:10px 0;}
+.mode-switch button{margin:0;border-radius:0;background:#fff;color:#005a9c;padding:10px 25px;font-size:.95em;}
+.mode-switch button.active{background:#005a9c;color:#fff;}
+.mode-switch button:hover{background:#e3f2fd;}
+.mode-switch button.active:hover{background:#004070;}
+.bg-switch{display:flex;border:2px solid #005a9c;border-radius:6px;overflow:hidden;width:fit-content;margin:0 0 12px 0;}
+.bg-switch button{margin:0;border-radius:0;background:#fff;color:#005a9c;padding:8px 20px;font-size:.9em;display:flex;align-items:center;gap:6px;}
+.bg-switch button.active{background:#005a9c;color:#fff;}
+.bg-switch button:hover{background:#e3f2fd;}
+.bg-switch button.active:hover{background:#004070;}
+.bg-swatch{width:14px;height:14px;border-radius:3px;border:1px solid #999;display:inline-block;}
+.bg-swatch.black{background:#000;}
+.bg-swatch.white{background:#fff;}
+#status{padding:10px;border-radius:4px;background:#eef5fc;border-left:4px solid #005a9c;margin-top:10px;font-family:monospace;font-size:.82em;white-space:pre-wrap;word-break:break-word;max-height:150px;overflow-y:auto;}
+.file-card{border:1px solid #ddd;border-radius:6px;padding:10px;margin-bottom:10px;background:#fafbfc;}
+.file-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.file-card-header strong{font-size:.95em;}
+.mini-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.mini-grid label{font-size:.75em;margin-bottom:2px;}
+.mini-grid input{padding:5px;font-size:.85em;}
+.channel-group-title{font-weight:600;font-size:.85em;margin:10px 0 4px 0;color:#005a9c;border-bottom:1px solid #e1e4e8;padding-bottom:3px;}
+.channel-list{max-height:340px;overflow-y:auto;border:1px solid #ddd;padding:8px;border-radius:4px;background:#fafafa;margin-bottom:12px;}
+.channel-item{display:flex;align-items:flex-end;font-size:.85em;margin-bottom:8px;padding-bottom:8px;border-bottom:1px dashed #e5e5e5;flex-wrap:wrap;gap:6px;}
+.channel-item:last-child{border-bottom:none;}
+.channel-item input[type="checkbox"]{margin-right:4px;margin-bottom:6px;}
+.channel-item label.channel-name-label{font-weight:normal;margin-bottom:6px;flex:1;min-width:130px;}
+.y-adjust-group{display:flex;flex-direction:column;gap:2px;font-size:.75em;}
+.y-adjust-group label{font-weight:normal;margin:0;color:#666;font-size:.72em;}
+.y-adjust-group input{width:80px;padding:3px 5px;font-size:.8em;}
+.y-adjust-group.pu-field input{border-color:#ffb300;}
+.chart-container{position:relative;height:450px;width:100%;border-radius:4px;padding:10px;box-sizing:border-box;transition:background-color .2s ease;cursor:crosshair;user-select:none;}
+#selectionCounter{font-weight:600;padding:6px 10px;border-radius:4px;background:#eef5fc;display:inline-block;margin-bottom:10px;font-size:.85em;}
+#selectionCounter.limit-reached{background:#fdecea;color:#d9534f;}
+.info-box{background:#fff8e1;border-left:4px solid #ffb300;padding:10px;font-size:.85em;margin-bottom:10px;border-radius:4px;}
+.fmt-badge{display:inline-block;font-size:.68em;font-weight:700;padding:2px 6px;border-radius:3px;margin-left:6px;vertical-align:middle;}
+.fmt-badge.asc{background:#e3f2fd;color:#005a9c;}
+.fmt-badge.zik,.fmt-badge.zic{background:#e8f5e9;color:#2e7d32;}
+.fmt-badge.csv{background:#fff3e0;color:#e65100;}
+.fmt-badge.ttrecx{background:#f3e5f5;color:#6a1b9a;}
+#loginOverlay{position:fixed;inset:0;background:linear-gradient(135deg,#003b6f,#005a9c,#0078d4);display:flex;justify-content:center;align-items:center;z-index:999999;}
+.login-card{width:400px;max-width:90%;background:#fff;border-radius:14px;padding:35px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.25);}
+.login-logo{font-size:60px;margin-bottom:10px;}
+.login-card h1{margin:0;color:#005a9c;font-size:28px;}
+.login-card p{color:#666;margin:10px 0 25px 0;}
+.login-card input{width:100%;padding:12px;margin-bottom:15px;border:1px solid #ccc;border-radius:6px;font-size:16px;box-sizing:border-box;}
+.login-card button{width:100%;padding:12px;border:none;border-radius:6px;background:#005a9c;color:#fff;font-size:16px;font-weight:600;cursor:pointer;}
+#erroSenha{color:#d9534f;margin-top:12px;min-height:20px;font-size:14px;}
+#selectionHint{font-size:.8em;color:#666;margin:0 0 8px 0;}
+#selectionInfo{font-size:.82em;color:#005a9c;font-weight:600;margin:6px 0 0 0;min-height:18px;}
+.cursor-readout{position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.98);border:2px solid #005a9c;border-radius:6px;padding:10px 12px;font-size:.78em;max-width:280px;max-height:400px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,0.3);display:none;z-index:50;pointer-events:none;}
+.cursor-readout.dark-bg{background:rgba(20,20,20,0.97);border-color:#4fc3f7;color:#eee;}
+.cursor-time{font-weight:700;color:#005a9c;margin-bottom:8px;border-bottom:2px solid #005a9c;padding-bottom:6px;}
+.cursor-readout.dark-bg .cursor-time{color:#4fc3f7;border-bottom-color:#4fc3f7;}
+.cursor-item{display:flex;align-items:center;gap:6px;margin-bottom:5px;}
+.cursor-swatch{width:11px;height:11px;border-radius:2px;flex-shrink:0;border:1px solid rgba(0,0,0,0.25);}
+.cursor-label{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px;}
+.cursor-value{font-weight:700;font-family:monospace;white-space:nowrap;margin-left:8px;}
+</style>
 </head>
 <body>
 
-  <h2>Leitor de Oscilografia - ASC_ZIC</h2>
-  <p class="subtitle">Suporta .asc (Reivax), .zik/.zic (COMTRADE), .csv (exportacao) e .ttrecx (Siemens TechTrace). Ate 10 arquivos e 10 canais simultaneos.</p>
+<div id="loginOverlay">
+<div class="login-card">
+<div class="login-logo">&#9889;</div>
+<h1>Leitor de Oscilografia</h1>
+<p>ASC &bull; ZIC &bull; COMTRADE &bull; CSV &bull; TTRECX</p>
+<input type="password" id="passwordInput" placeholder="Digite a senha">
+<button onclick="validarSenha()">Entrar</button>
+<div id="erroSenha"></div>
+</div></div>
 
-  <div class="card">
-    <label for="fileInput">Selecione ate 10 arquivos .asc, .zik, .zic, .csv ou .ttrecx</label>
-    <input type="file" id="fileInput" accept=".asc,.zik,.zic,.csv,.ttrecx" multiple>
-    <div id="status">Aguardando arquivo(s)...</div>
-  </div>
+<h2>Leitor de Oscilografia - ASC | ZIC</h2>
+<p class="subtitle">Suporta .asc (Reivax), .zik/.zic (COMTRADE), .csv (exportacao) e .ttrecx (Siemens TechTrace). Ate 10 arquivos e 10 canais simultaneos.</p>
 
-  <div class="card">
-    <h3>Modo de Grandeza (aplica-se a todos os canais e arquivos)</h3>
-    <div class="mode-switch">
-      <button id="btnModeEng" class="active" onclick="setGlobalMode('eng')">Grandezas de Engenharia</button>
-      <button id="btnModePu" onclick="setGlobalMode('pu')">PU (Por Unidade)</button>
-    </div>
-    <div class="info-box" id="engInfoBox">
-      <strong>Engenharia:</strong> Valor Exibido = (Valor Original x Escala Y) + Offset Y. Ajuste Escala/Offset por canal para calibrar na unidade real (V, A, Hz, MW...).
-    </div>
-    <div class="info-box" id="puInfoBox" style="display:none;">
-      <strong>PU:</strong> Valor Exibido = [(Valor Original x Escala Y) + Offset Y] / Valor Base. Defina o Valor Base de cada canal (mesma unidade apos calibracao).
-    </div>
-  </div>
+<div class="card">
+<label for="fileInput">Selecione ate 10 arquivos .asc, .zik, .zic, .csv ou .ttrecx</label>
+<input type="file" id="fileInput" accept=".asc,.zik,.zic,.csv,.ttrecx" multiple>
+<div id="status">Aguardando arquivo(s)...</div>
+</div>
 
-  <div class="card">
-    <h3>Ajustes do Eixo de Tempo - X (padrao para novos arquivos)</h3>
-    <div class="flex-container">
-      <div class="flex-col">
-        <label for="defaultOffsetX">Offset padrao (X):</label>
-        <input type="number" id="defaultOffsetX" value="0" step="any">
-      </div>
-      <div class="flex-col">
-        <label for="defaultScaleX">Fator de escala padrao (X):</label>
-        <input type="number" id="defaultScaleX" value="1" step="any">
-      </div>
-      <div class="flex-col">
-        <label for="timeUnit">Rotulo da unidade (eixo X):</label>
-        <select id="timeUnit" onchange="updateChart()">
-          <option value="s">Segundos (s)</option>
-          <option value="ms" selected>Milisegundos (ms)</option>
-          <option value="us">Microsegundos (us)</option>
-        </select>
-      </div>
-    </div>
-    <p style="font-size:0.8em;color:#777;margin-top:8px;">
-      Arquivos .asc: tempo no formato do arquivo (ajuste Escala X conforme necessidade).<br>
-      Arquivos .zik/.zic: tempo reconstruido em ms (Escala X = 0,001 aplicada automaticamente para converter us -> ms).<br>
-      Arquivos .csv: tempo ja em ms, configuracao automatica de canais a partir dos cabecalhos.<br>
-      Arquivos .ttrecx: tempo ja em ms (relativo ao inicio da gravacao), sinais nomeados automaticamente.
-    </p>
-  </div>
+<div class="card">
+<h3>Modo de Grandeza (aplica-se a todos os canais e arquivos)</h3>
+<div class="mode-switch">
+<button id="btnModeEng" class="active" onclick="setGlobalMode('eng')">Grandezas de Engenharia</button>
+<button id="btnModePu" onclick="setGlobalMode('pu')">PU (Por Unidade)</button>
+</div>
+<div class="info-box" id="engInfoBox"><strong>Engenharia:</strong> Valor Exibido = (Valor Original x Escala Y) + Offset Y. Ajuste Escala/Offset por canal para calibrar na unidade real (V, A, Hz, MW...).</div>
+<div class="info-box" id="puInfoBox" style="display:none;"><strong>PU:</strong> Valor Exibido = [(Valor Original x Escala Y) + Offset Y] / Valor Base. Defina o Valor Base de cada canal (mesma unidade apos calibracao).</div>
+</div>
 
-  <div class="card">
-    <h3>Ajustes do Eixo de Valores - Y (padrao para novos canais)</h3>
-    <div class="flex-container">
-      <div class="flex-col">
-        <label for="defaultOffsetY">Offset Y padrao:</label>
-        <input type="number" id="defaultOffsetY" value="0" step="any">
-      </div>
-      <div class="flex-col">
-        <label for="defaultScaleY">Fator de Escala Y padrao:</label>
-        <input type="number" id="defaultScaleY" value="1" step="any">
-      </div>
-      <div class="flex-col">
-        <label for="defaultBaseValue">Valor Base padrao (uso em PU):</label>
-        <input type="number" id="defaultBaseValue" value="1" step="any">
-      </div>
-    </div>
-  </div>
+<div class="card">
+<h3>Ajustes do Eixo de Tempo - X (padrao para novos arquivos)</h3>
+<div class="flex-container">
+<div class="flex-col"><label for="defaultOffsetX">Offset padrao (X):</label><input type="number" id="defaultOffsetX" value="0" step="any"></div>
+<div class="flex-col"><label for="defaultScaleX">Fator de escala padrao (X):</label><input type="number" id="defaultScaleX" value="1" step="any"></div>
+<div class="flex-col"><label for="timeUnit">Rotulo da unidade (eixo X):</label>
+<select id="timeUnit" onchange="updateChart()">
+<option value="s">Segundos (s)</option>
+<option value="ms" selected>Milisegundos (ms)</option>
+<option value="us">Microsegundos (us)</option>
+</select></div>
+</div>
+<p style="font-size:.8em;color:#777;margin-top:8px;">
+Arquivos .asc: tempo no formato do arquivo (ajuste Escala X conforme necessidade).<br>
+Arquivos .zik/.zic: tempo reconstruido em ms (Escala X = 0,001 aplicada automaticamente para converter us -> ms).<br>
+Arquivos .csv: tempo ja em ms, configuracao automatica de canais a partir dos cabecalhos.<br>
+Arquivos .ttrecx: tempo ja em ms (relativo ao inicio da gravacao), sinais nomeados automaticamente.
+</p>
+</div>
 
-  <div class="card">
-    <h3>Arquivos Carregados (<span id="fileCountLabel">0</span>/10)</h3>
-    <div id="fileListContainer">
-      <p style="font-size:0.85em;color:#888;">Nenhum arquivo carregado ainda.</p>
-    </div>
-  </div>
+<div class="card">
+<h3>Ajustes do Eixo de Valores - Y (padrao para novos canais)</h3>
+<div class="flex-container">
+<div class="flex-col"><label for="defaultOffsetY">Offset Y padrao:</label><input type="number" id="defaultOffsetY" value="0" step="any"></div>
+<div class="flex-col"><label for="defaultScaleY">Fator de Escala Y padrao:</label><input type="number" id="defaultScaleY" value="1" step="any"></div>
+<div class="flex-col"><label for="defaultBaseValue">Valor Base padrao (uso em PU):</label><input type="number" id="defaultBaseValue" value="1" step="any"></div>
+</div>
+</div>
 
-  <div class="card">
-    <h3>Selecao de Canais e Ajuste Individual</h3>
-    <div id="selectionCounter">0/10 canais selecionados</div>
-    <div id="channelSelectionContainer">
-      <p style="font-size:0.85em;color:#888;">Carregue arquivos para visualizar os canais disponiveis.</p>
-    </div>
-    <button onclick="updateChart()">Atualizar Grafico</button>
-    <button class="secondary" onclick="exportToCSV()">Exportar para Excel (.CSV)</button>
-  </div>
+<div class="card">
+<h3>Arquivos Carregados (<span id="fileCountLabel">0</span>/10)</h3>
+<div id="fileListContainer"><p style="font-size:.85em;color:#888;">Nenhum arquivo carregado ainda.</p></div>
+</div>
 
-  <div class="card">
-    <h3>Area de Plotagem</h3>
-    <div class="bg-switch">
-      <button id="btnBgBlack" class="active" onclick="setPlotBackground('black')">
-        <span class="bg-swatch black"></span> Fundo Preto
-      </button>
-      <button id="btnBgWhite" onclick="setPlotBackground('white')">
-        <span class="bg-swatch white"></span> Fundo Branco
-      </button>
-    </div>
-    <div class="chart-container" id="chartContainer">
-      <canvas id="osciloChart"></canvas>
-    </div>
-  </div>
+<div class="card">
+<h3>Selecao de Canais e Ajuste Individual</h3>
+<div id="selectionCounter">0/10 canais selecionados</div>
+<div id="channelSelectionContainer"><p style="font-size:.85em;color:#888;">Carregue arquivos para visualizar os canais disponiveis.</p></div>
+<button onclick="updateChart()">Atualizar Grafico</button>
+<button class="secondary" onclick="exportToCSV()">Exportar para Excel (.CSV)</button>
+</div>
+
+<div class="card">
+<h3>Area de Plotagem</h3>
+<p id="selectionHint">Arraste o mouse sobre o gr&aacute;fico para selecionar um intervalo de tempo (define a amostragem de todos os arquivos). Passe o mouse sem arrastar para ver, via linha de cursor, o valor instant&acirc;neo de cada canal exibido.</p>
+<button type="button" onclick="resetAllTrims()">Resetar Amostragem (Todos os Arquivos)</button>
+<div id="selectionInfo"></div>
+<div class="bg-switch">
+<button id="btnBgBlack" class="active" onclick="setPlotBackground('black')"><span class="bg-swatch black"></span> Fundo Preto</button>
+<button id="btnBgWhite" onclick="setPlotBackground('white')"><span class="bg-swatch white"></span> Fundo Branco</button>
+</div>
+<div class="chart-container" id="chartContainer">
+<canvas id="osciloChart"></canvas>
+<div id="cursorReadout" class="cursor-readout"></div>
+</div>
+</div>
 
 <script>
-  const MAX_FILES = 10;
-  const MAX_CHANNELS = 10;
+/* ===== LOGIN ===== */
+const SENHA_CORRETA="Terra";
+function validarSenha(){const senha=document.getElementById("passwordInput").value;if(senha===SENHA_CORRETA){document.getElementById("loginOverlay").style.display="none";}else{document.getElementById("erroSenha").innerText="Senha incorreta.";document.getElementById("passwordInput").value="";}}
+document.addEventListener("keydown",function(e){if(e.key==="Enter"){const ov=document.getElementById("loginOverlay");if(ov&&ov.style.display!=="none")validarSenha();}});
 
-  let fileStore = [];
-  let nextFileId = 1;
-  let chartInstance = null;
-  let globalMode = 'eng';
-  let plotBgColor = 'black';
+const MAX_FILES=10, MAX_CHANNELS=10;
+let fileStore=[], nextFileId=1, chartInstance=null, globalMode='eng', plotBgColor='black';
 
-  /* === MODO E FUNDO === */
-  function setGlobalMode(mode) {
-    globalMode = mode;
-    document.getElementById('btnModeEng').classList.toggle('active', mode === 'eng');
-    document.getElementById('btnModePu').classList.toggle('active', mode === 'pu');
-    document.getElementById('engInfoBox').style.display = (mode === 'eng') ? 'block' : 'none';
-    document.getElementById('puInfoBox').style.display = (mode === 'pu') ? 'block' : 'none';
-    renderChannelSelectors();
-    updateChart();
+const CHART_COLORS = [
+  '#2196F3', '#FF9800', '#4CAF50', '#E91E63', '#9C27B0',
+  '#00BCD4', '#8BC34A', '#FFEB3B', '#FF5722', '#795548',
+  '#3F51B5', '#009688', '#CDDC39', '#FFC107', '#607D8B'
+];
+
+/* ===== SELECAO POR ARRASTE (AMOSTRAGEM) ===== */
+let isDragSelecting=false, dragStartPixelX=null, dragCurrentPixelX=null;
+
+/* ===== CURSOR VERTICAL (LEITURA INSTANTANEA) ===== */
+let cursorPixelX=null;
+
+const dragSelectionPlugin={
+  id:'dragSelectionPlugin',
+  afterDraw(chart){
+    if(!isDragSelecting||dragStartPixelX===null||dragCurrentPixelX===null) return;
+    const {ctx,chartArea:area}=chart;
+    const x1=Math.min(dragStartPixelX,dragCurrentPixelX);
+    const x2=Math.max(dragStartPixelX,dragCurrentPixelX);
+    ctx.save();
+    ctx.fillStyle='rgba(0,90,156,0.25)';
+    ctx.fillRect(x1,area.top,x2-x1,area.bottom-area.top);
+    ctx.strokeStyle='#005a9c';
+    ctx.lineWidth=1;
+    ctx.strokeRect(x1,area.top,x2-x1,area.bottom-area.top);
+    ctx.restore();
   }
+};
 
-  function setPlotBackground(color) {
-    plotBgColor = color;
-    document.getElementById('btnBgBlack').classList.toggle('active', color === 'black');
-    document.getElementById('btnBgWhite').classList.toggle('active', color === 'white');
-    document.getElementById('chartContainer').style.backgroundColor = (color === 'black') ? '#000' : '#fff';
-    updateChart();
+const cursorPlugin={
+  id:'cursorPlugin',
+  afterDraw(chart){
+    if(isDragSelecting||cursorPixelX===null) return;
+    const {ctx,chartArea:area}=chart;
+    if(cursorPixelX<area.left||cursorPixelX>area.right) return;
+    ctx.save();
+    ctx.strokeStyle=(plotBgColor==='black')?'rgba(255,255,255,0.65)':'rgba(0,0,0,0.65)';
+    ctx.lineWidth=1.2;
+    ctx.setLineDash([4,3]);
+    ctx.beginPath();
+    ctx.moveTo(cursorPixelX,area.top);
+    ctx.lineTo(cursorPixelX,area.bottom);
+    ctx.stroke();
+    ctx.restore();
   }
+};
 
-  /* === ENTRADA DE ARQUIVOS === */
-  document.getElementById('fileInput').addEventListener('change', function(e) {
-    handleIncomingFiles(Array.from(e.target.files));
-    e.target.value = '';
+Chart.register(dragSelectionPlugin, cursorPlugin);
+
+function getCanvasRelativeX(e){
+  const rect=document.getElementById('osciloChart').getBoundingClientRect();
+  return e.clientX-rect.left;
+}
+
+function findNearestPoint(data, target){
+  if(!data||data.length===0) return null;
+  let lo=0, hi=data.length-1;
+  if(target<=data[0].x) return data[0];
+  if(target>=data[hi].x) return data[hi];
+  while(lo<hi){
+    const mid=(lo+hi)>>1;
+    if(data[mid].x<target) lo=mid+1; else hi=mid;
+  }
+  const a=data[lo-1], b=data[lo];
+  if(!a) return b;
+  if(!b) return a;
+  return (Math.abs(a.x-target)<=Math.abs(b.x-target)) ? a : b;
+}
+
+function updateCursorReadout(xPix){
+  const box=document.getElementById('cursorReadout');
+  if(!chartInstance||!chartInstance.data.datasets.length){box.style.display='none';return;}
+  const xScale=chartInstance.scales.x;
+  const tVal=xScale.getValueForPixel(xPix);
+  const tuLabel=document.getElementById('timeUnit').value;
+  let html='<div class="cursor-time">t = '+tVal.toFixed(4)+' '+tuLabel+'</div>';
+  chartInstance.data.datasets.forEach(ds=>{
+    if(!ds.data||ds.data.length===0) return;
+    const nearest=findNearestPoint(ds.data, tVal);
+    const val=(nearest&&nearest.y!==null&&!isNaN(nearest.y))?nearest.y.toFixed(5):'&#8212;';
+    const color=ds.borderColor||'#888';
+    html+='<div class="cursor-item">'+
+      '<span class="cursor-swatch" style="background:'+color+'"></span>'+
+      '<span class="cursor-label" title="'+ds.label+'">'+ds.label+'</span>'+
+      '<span class="cursor-value">'+val+'</span></div>';
   });
+  box.innerHTML=html;
+  box.classList.toggle('dark-bg', plotBgColor==='black');
+  box.style.display='block';
+}
 
-  async function handleIncomingFiles(files) {
-    const availableSlots = MAX_FILES - fileStore.length;
-    if (availableSlots <= 0) { setStatus('Limite de ' + MAX_FILES + ' arquivos atingido.'); return; }
+function hideCursorReadout(){
+  const box=document.getElementById('cursorReadout');
+  if(box) box.style.display='none';
+}
 
-    const toProcess = files.slice(0, availableSlots);
-    const defOffsetX   = parseFloat(document.getElementById('defaultOffsetX').value) || 0;
-    const defScaleX    = parseFloat(document.getElementById('defaultScaleX').value)  || 1;
-    const defOffsetY   = parseFloat(document.getElementById('defaultOffsetY').value) || 0;
-    const defScaleY    = parseFloat(document.getElementById('defaultScaleY').value)  || 1;
-    const defBaseValue = parseFloat(document.getElementById('defaultBaseValue').value) || 1;
+function attachChartEvents(){
+  const canvas=document.getElementById('osciloChart');
+  canvas.onmousedown=function(e){
+    if(!chartInstance||!chartInstance.chartArea) return;
+    const area=chartInstance.chartArea;
+    const xPix=getCanvasRelativeX(e);
+    if(xPix<area.left||xPix>area.right) return;
+    isDragSelecting=true;
+    dragStartPixelX=xPix;
+    dragCurrentPixelX=xPix;
+    cursorPixelX=null;
+    hideCursorReadout();
+    e.preventDefault();
+  };
+  canvas.onmousemove=function(e){
+    if(!chartInstance||!chartInstance.chartArea) return;
+    const area=chartInstance.chartArea;
+    const xPix=getCanvasRelativeX(e);
+    if(isDragSelecting){
+      dragCurrentPixelX=Math.max(area.left,Math.min(area.right,xPix));
+      chartInstance.draw();
+      return;
+    }
+    if(xPix<area.left||xPix>area.right){
+      cursorPixelX=null;
+      hideCursorReadout();
+    } else {
+      cursorPixelX=xPix;
+      updateCursorReadout(xPix);
+    }
+    chartInstance.draw();
+  };
+  canvas.onmouseleave=function(){
+    if(isDragSelecting) return;
+    cursorPixelX=null;
+    hideCursorReadout();
+    if(chartInstance) chartInstance.draw();
+  };
+}
 
-    for (const file of toProcess) {
-      const ext = file.name.split('.').pop().toLowerCase();
+document.addEventListener('mouseup',function(){
+  if(!isDragSelecting) return;
+  isDragSelecting=false;
+  if(!chartInstance||dragStartPixelX===null||dragCurrentPixelX===null){
+    dragStartPixelX=null;dragCurrentPixelX=null;return;
+  }
+  const pixelDiff=Math.abs(dragCurrentPixelX-dragStartPixelX);
+  if(pixelDiff<4){
+    dragStartPixelX=null;dragCurrentPixelX=null;
+    chartInstance.draw();
+    return;
+  }
+  const xScale=chartInstance.scales.x;
+  const t1=xScale.getValueForPixel(dragStartPixelX);
+  const t2=xScale.getValueForPixel(dragCurrentPixelX);
+  dragStartPixelX=null;dragCurrentPixelX=null;
+  applyTimeSelectionToFiles(Math.min(t1,t2),Math.max(t1,t2));
+});
 
-      if (!['asc','zik','zic','csv','ttrecx'].includes(ext)) {
-        setStatus('Formato nao suportado: "' + file.name + '". Use .asc, .zik, .zic, .csv ou .ttrecx.');
+function applyTimeSelectionToFiles(tMin,tMax){
+  if(fileStore.length===0||!(tMax>tMin)) return;
+  let anyChanged=false;
+  fileStore.forEach(f=>{
+    let minIdx=null,maxIdx=null;
+    for(let i=0;i<f.rawTime.length;i++){
+      const adjT=f.rawTime[i]*f.scaleX+f.offsetX;
+      if(adjT>=tMin&&adjT<=tMax){
+        if(minIdx===null) minIdx=i;
+        maxIdx=i;
+      }
+    }
+    if(minIdx!==null){f.trimStart=minIdx;f.trimEnd=maxIdx+1;anyChanged=true;}
+  });
+  const tuLabel=document.getElementById('timeUnit').value;
+  document.getElementById('selectionInfo').innerText=
+    'Intervalo selecionado: '+tMin.toFixed(3)+' a '+tMax.toFixed(3)+' '+tuLabel+
+    ' \u2014 amostragem atualizada em '+fileStore.length+' arquivo(s).';
+  if(anyChanged){renderFileList();updateChart();}
+}
+
+function resetAllTrims(){
+  fileStore.forEach(f=>{f.trimStart=0;f.trimEnd=-1;});
+  document.getElementById('selectionInfo').innerText='';
+  renderFileList();updateChart();
+}
+
+/* === MODO E FUNDO === */
+function setGlobalMode(mode){
+  globalMode=mode;
+  document.getElementById('btnModeEng').classList.toggle('active',mode==='eng');
+  document.getElementById('btnModePu').classList.toggle('active',mode==='pu');
+  document.getElementById('engInfoBox').style.display=(mode==='eng')?'block':'none';
+  document.getElementById('puInfoBox').style.display=(mode==='pu')?'block':'none';
+  renderChannelSelectors();updateChart();
+}
+
+function setPlotBackground(color){
+  plotBgColor=color;
+  document.getElementById('btnBgBlack').classList.toggle('active',color==='black');
+  document.getElementById('btnBgWhite').classList.toggle('active',color==='white');
+  document.getElementById('chartContainer').style.backgroundColor=(color==='black')?'#000':'#fff';
+  updateChart();
+}
+
+/* === ENTRADA DE ARQUIVOS === */
+document.getElementById('fileInput').addEventListener('change',function(e){
+  handleIncomingFiles(Array.from(e.target.files));
+  e.target.value='';
+});
+
+async function handleIncomingFiles(files){
+  const availableSlots=MAX_FILES-fileStore.length;
+  if(availableSlots<=0){setStatus('Limite de '+MAX_FILES+' arquivos atingido.');return;}
+  const toProcess=files.slice(0,availableSlots);
+  const defOffsetX=parseFloat(document.getElementById('defaultOffsetX').value)||0;
+  const defScaleX=parseFloat(document.getElementById('defaultScaleX').value)||1;
+  const defOffsetY=parseFloat(document.getElementById('defaultOffsetY').value)||0;
+  const defScaleY=parseFloat(document.getElementById('defaultScaleY').value)||1;
+  const defBaseValue=parseFloat(document.getElementById('defaultBaseValue').value)||1;
+
+  for(const file of toProcess){
+    const ext=file.name.split('.').pop().toLowerCase();
+    if(!['asc','zik','zic','csv','ttrecx'].includes(ext)){
+      setStatus('Formato nao suportado: "'+file.name+'". Use .asc, .zik, .zic, .csv ou .ttrecx.');
+      continue;
+    }
+    try{
+      let result, fileScaleX=defScaleX;
+      if(ext==='asc'){
+        result=await parseAscFile(file);
+      } else if(ext==='csv'){
+        result=await parseCsvFile(file);
+        fileScaleX=1;
+      } else if(ext==='ttrecx'){
+        result=await parseTtrecxFile(file);
+        fileScaleX=1; // tempo ja em ms relativo
+      } else {
+        result=await parseZikFile(file);
+        fileScaleX=0.001; // us -> ms
+      }
+
+      if(!result.rawTime||result.rawTime.length===0){
+        setStatus('"'+file.name+'": nenhuma amostra encontrada.');
         continue;
       }
+      const channelsWithSettings=result.channels.map(ch=>({...ch,yOffset:defOffsetY,yScale:defScaleY,baseValue:defBaseValue,unit:ch.unit||''}));
 
-      try {
-        let result;
-        let fileScaleX = defScaleX;
-
-        if (ext === 'asc') {
-          result = await parseAscFile(file);
-          // ASC: tempo ja em segundos (Reivax), usuario ajusta conforme necessidade
-        } else if (ext === 'csv') {
-          result = await parseCsvFile(file);
-          // CSV: tempo ja em ms, sem conversao necessaria
-          fileScaleX = 1;
-        } else if (ext === 'ttrecx') {
-          result = await parseTtrecxFile(file);
-          // TTRECX: tempo ja em ms (relativo ao primeiro timestamp)
-          fileScaleX = 1;
-        } else {
-          result = await parseZikFile(file);
-          // ZIK/ZIC: tempo reconstruido em us, converter para ms
-          fileScaleX = 0.001;
-        }
-
-        if (!result.rawTime || result.rawTime.length === 0) {
-          setStatus('"' + file.name + '": nenhuma amostra encontrada.');
-          continue;
-        }
-
-        const channelsWithSettings = result.channels.map(ch => ({
-          ...ch,
-          yOffset: defOffsetY,
-          yScale: defScaleY,
-          baseValue: defBaseValue,
-          unit: ch.unit || ''
-        }));
-
-        fileStore.push({
-          id: nextFileId++,
-          filename: file.name,
-          format: (ext === 'csv') ? 'CSV' : (ext === 'ttrecx') ? 'TTRECX' : ext.toUpperCase(),
-          channels: channelsWithSettings,
-          rawTime: result.rawTime,
-          channelData: result.channelData,
-          offsetX: defOffsetX,
-          scaleX: fileScaleX,
-          trimStart: 0,
-          trimEnd: -1
-        });
-
-        setStatus('[' + ext.toUpperCase() + '] "' + file.name + '" carregado: ' + result.rawTime.length + ' amostras, ' + result.channels.length + ' canais.' + (result.note ? ' ' + result.note : ''));
-      } catch (err) {
-        setStatus('Erro em "' + file.name + '": ' + err.message);
-        console.error(err);
-      }
+      const fmt=(ext==='csv')?'CSV':(ext==='ttrecx')?'TTRECX':ext.toUpperCase();
+      fileStore.push({
+        id:nextFileId++, filename:file.name, format:fmt,
+        channels:channelsWithSettings, rawTime:result.rawTime, channelData:result.channelData,
+        offsetX:defOffsetX, scaleX:fileScaleX, trimStart:0, trimEnd:-1
+      });
+      setStatus('['+fmt+'] "'+file.name+'" carregado: '+result.rawTime.length+' amostras, '+result.channels.length+' canais.'+(result.note?' '+result.note:''));
+    }catch(err){
+      setStatus('Erro em "'+file.name+'": '+err.message);
+      console.error(err);
     }
-    renderAll();
   }
+  renderAll();
+}
 
-  function setStatus(msg) {
-    const el = document.getElementById('status');
-    el.innerText = (el.innerText === 'Aguardando arquivo(s)...' ? '' : el.innerText + '\n') + msg;
-    el.scrollTop = el.scrollHeight;
+function setStatus(msg){
+  const el=document.getElementById('status');
+  el.innerText=(el.innerText==='Aguardando arquivo(s)...'?'':el.innerText+'\n')+msg;
+  el.scrollTop=el.scrollHeight;
+}
+
+function removeFile(fileId){
+  fileStore=fileStore.filter(f=>f.id!==fileId);
+  renderAll();
+}
+
+/* === PARSER ASC (REIVAX) === */
+function parseAscFile(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=e=>{ try{ resolve(parseReivaxAscCore(e.target.result)); }catch(err){ reject(err); } };
+    reader.onerror=()=>reject(new Error('Falha ao ler o arquivo.'));
+    reader.readAsText(file);
+  });
+}
+
+function parseReivaxAscCore(text){
+  const allLines=text.split(/\r?\n/).map(l=>l.trim()).filter(l=>l!=='');
+  if(allLines.length<2) throw new Error('Arquivo vazio.');
+  const rawLines=allLines.filter(l=>!l.startsWith(':')&&!l.startsWith(';'));
+  if(rawLines.length===0) throw new Error('Nenhuma linha de dados apos remover metadata.');
+  const sampleLine=rawLines[Math.min(5,rawLines.length-1)];
+  let sep,decimalComma;
+  if(sampleLine.includes(';')){ sep=';'; decimalComma=true; }
+  else if(sampleLine.includes('\t')){ sep='\t'; decimalComma=false; }
+  else { sep=/\s+/; decimalComma=false; }
+  function tokenize(line){ return line.split(sep).map(t=>t.trim()).filter(t=>t!==''); }
+  function toNumber(tok){ if(decimalComma) tok=tok.replace(',','.'); return parseFloat(tok); }
+  let headerTokens=null, dataStartIndex=-1;
+  for(let i=0;i<rawLines.length;i++){
+    const tokens=tokenize(rawLines[i]);
+    if(tokens.length<2) continue;
+    if(!isNaN(toNumber(tokens[0]))&&!isNaN(toNumber(tokens[1]))){ dataStartIndex=i; break; }
+    else { headerTokens=tokens; }
   }
-
-  function removeFile(fileId) {
-    fileStore = fileStore.filter(f => f.id !== fileId);
-    renderAll();
+  if(dataStartIndex===-1) throw new Error('Dados numericos nao encontrados.');
+  const firstDataTokens=tokenize(rawLines[dataStartIndex]);
+  const numChannels=firstDataTokens.length-1;
+  let channelNames=(headerTokens&&headerTokens.length===firstDataTokens.length)
+    ? headerTokens.slice(1)
+    : Array.from({length:numChannels},(_,c)=>'Canal '+(c+1));
+  const rawTime=[];
+  const channelData=channelNames.map(()=>[]);
+  for(let i=dataStartIndex;i<rawLines.length;i++){
+    const tokens=tokenize(rawLines[i]);
+    if(tokens.length<2) continue;
+    const t=toNumber(tokens[0]);
+    if(isNaN(t)) continue;
+    rawTime.push(t);
+    for(let c=0;c<numChannels;c++){
+      const v=tokens[c+1]!==undefined?toNumber(tokens[c+1]):NaN;
+      channelData[c].push(isNaN(v)?null:v);
+    }
   }
+  const channels=channelNames.map((name,idx)=>({index:idx,name:name.replace(/[";:]/g,'').trim()||'Canal '+(idx+1),unit:''}));
+  return {channels,rawTime,channelData};
+}
 
-  /* === PARSER ASC (REIVAX) === */
-  function parseAscFile(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = e => { try { resolve(parseReivaxAscCore(e.target.result)); } catch(err) { reject(err); } };
-      reader.onerror = () => reject(new Error('Falha ao ler o arquivo.'));
-      reader.readAsText(file);
+/* === PARSER CSV (auto-detecao de formato) === */
+function parseCsvFile(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=e=>{ try{ resolve(parseCsvCore(e.target.result)); }catch(err){ reject(err); } };
+    reader.onerror=()=>reject(new Error('Falha ao ler o arquivo.'));
+    reader.readAsText(file,'utf-8');
+  });
+}
+
+function parseCsvCore(text){
+  const clean=text.replace(/^\uFEFF/,'');
+  const lines=clean.split(/\r?\n/).filter(l=>l.trim()!=='');
+  if(lines.length<2) throw new Error('CSV vazio ou sem dados.');
+  // Detecta formato: se primeira coluna do header for "sample" -> formato PLC (TIA Portal)
+  const firstField=lines[0].split(',')[0].replace(/"/g,'').trim().toLowerCase();
+  if(firstField==='sample') return parsePlcCsvCore(lines);
+  return parseOsciloCsvCore(lines);
+}
+
+/* Formato antigo: separador ";", cabecalho "arquivo · sinal (unidade)" */
+function parseOsciloCsvCore(lines){
+  const headers=lines[0].split(';').map(h=>h.trim());
+  const raw=[];
+  for(let i=0;i+1<headers.length;i+=2){
+    const vh=headers[i+1]||'';
+    const mid=vh.indexOf('\u00b7');
+    const filePart=mid!==-1?vh.substring(0,mid).trim():'';
+    const sigPart=mid!==-1?vh.substring(mid+1).trim():vh;
+    let unit='',sigName=sigPart;
+    const um=sigPart.match(/\s*\(([^)]+)\)\s*$/);
+    if(um){ unit=um[1]; sigName=sigPart.replace(/\s*\([^)]+\)\s*$/,'').trim(); }
+    const fileName=filePart.replace(/\.[a-z]+$/i,'').trim();
+    raw.push({fileName,sigName,unit,colIdx:i+1});
+  }
+  if(raw.length===0) throw new Error('Nenhum canal encontrado no cabecalho CSV.');
+  const sigNames=raw.map(r=>r.sigName);
+  const uniqueSigs=new Set(sigNames).size===sigNames.length&&sigNames.every(s=>s.length>0);
+  const channels=[]; const channelColIndices=[];
+  raw.forEach((r,i)=>{
+    const name=uniqueSigs?(r.sigName||r.fileName||('Canal '+(i+1))):(r.fileName||r.sigName||('Canal '+(i+1)));
+    channels.push({index:i,name,unit:r.unit});
+    channelColIndices.push(r.colIdx);
+  });
+  if(channels.length===0) throw new Error('Nenhum canal encontrado no cabecalho CSV.');
+  const rawTime=[]; const channelData=channels.map(()=>[]);
+  for(let r=1;r<lines.length;r++){
+    const cols=lines[r].split(';');
+    if(cols.length<2) continue;
+    const t=parseFloat(cols[0].trim().replace(',','.'));
+    if(isNaN(t)) continue;
+    rawTime.push(t);
+    channels.forEach((ch,ci)=>{
+      const vi=channelColIndices[ci];
+      const rawv=vi<cols.length?cols[vi].trim().replace(',','.'):'';
+      const v=parseFloat(rawv);
+      channelData[ci].push(isNaN(v)?null:v);
     });
   }
+  if(rawTime.length===0) throw new Error('Nenhuma linha de dados numericos encontrada no CSV.');
+  return {channels,rawTime,channelData,note:channels.length+' canais detectados automaticamente pelo cabecalho.'};
+}
 
-  function parseReivaxAscCore(text) {
-    const allLines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l !== '');
-    if (allLines.length < 2) throw new Error('Arquivo vazio.');
+/* Formato novo PLC (TIA Portal): separador ",", col0=Sample(ignorar), col1=X(ms) absoluto, col2+=sinais */
+function parsePlcCsvCore(lines){
+  // Tokenizador CSV com suporte a campos entre aspas
+  function csvRow(line){
+    const cols=[]; let inQ=false, cur='';
+    for(const ch of line){
+      if(ch==='"'){ inQ=!inQ; }
+      else if(ch===','&&!inQ){ cols.push(cur); cur=''; }
+      else { cur+=ch; }
+    }
+    cols.push(cur);
+    return cols;
+  }
+  // Extrai nome curto de path PLC: ultimo segmento antes de "["
+  function plcName(h){
+    h=h.replace(/^"|"$/g,'').trim();
+    const bi=h.indexOf('[');
+    const sub=bi!==-1?h.substring(0,bi):h;
+    const di=sub.lastIndexOf('.');
+    let name=di!==-1?sub.substring(di+1):sub;
+    return name.replace(/"/g,'').trim()||h;
+  }
+  const headerCols=csvRow(lines[0]);
+  const sigHeaders=headerCols.slice(2); // pula Sample e X(ms)
+  if(sigHeaders.length===0) throw new Error('Nenhum canal de sinal encontrado no CSV PLC.');
+  const channels=sigHeaders.map((h,i)=>({index:i,name:plcName(h),unit:''}));
+  const rawTime=[]; const channelData=channels.map(()=>[]);
+  let t0=null;
+  for(let r=1;r<lines.length;r++){
+    const cols=csvRow(lines[r]);
+    if(cols.length<3) continue;
+    const tAbs=parseFloat(cols[1]); // tempo absoluto Unix ms
+    if(isNaN(tAbs)) continue;
+    if(t0===null) t0=tAbs;
+    rawTime.push(tAbs-t0); // relativo em ms
+    channels.forEach((ch,ci)=>{
+      const v=parseFloat(cols[ci+2]);
+      channelData[ci].push(isNaN(v)?null:v);
+    });
+  }
+  if(rawTime.length===0) throw new Error('Nenhuma linha de dados numericos encontrada no CSV PLC.');
+  return {channels,rawTime,channelData,note:channels.length+' canais PLC detectados automaticamente.'};
+}
 
-    // Remove linhas de metadata: comecam com ':' (header Reivax) ou ';' (comentarios)
-    const rawLines = allLines.filter(l => !l.startsWith(':') && !l.startsWith(';'));
-    if (rawLines.length === 0) throw new Error('Nenhuma linha de dados apos remover metadata.');
+/* === PARSER TTRECX (Siemens TechTrace) === */
+function parseTtrecxFile(file){
+  return new Promise((resolve,reject)=>{
+    const zip=new JSZip();
+    zip.loadAsync(file)
+      .then(async(contents)=>{
+        let signalsFile=null, samplesFile=null;
+        for(const fn in contents.files){
+          if(fn==='Signals') signalsFile=contents.files[fn];
+          if(fn==='Samples') samplesFile=contents.files[fn];
+        }
+        if(!signalsFile||!samplesFile) throw new Error('Arquivos Signals/Samples nao encontrados no .ttrecx');
+        const signalsXml=await signalsFile.async('string');
+        const samplesBuffer=await samplesFile.async('arraybuffer');
+        resolve(parseTtrecxCore(signalsXml,samplesBuffer));
+      })
+      .catch(reject);
+  });
+}
 
-    // Detecta separador usando uma linha de dados real (nao metadata)
-    const sampleLine = rawLines[Math.min(5, rawLines.length - 1)];
-    let sep, decimalComma;
-    if (sampleLine.includes(';')) { sep = ';'; decimalComma = true; }
-    else if (sampleLine.includes('\t')) { sep = '\t'; decimalComma = false; }
-    else { sep = /\s+/; decimalComma = false; }
+function parseTtrecxCore(signalsXml, samplesBuffer){
+  // Extrai mapa signalId -> nome curto do XML
+  const sigMap={};
+  // Atributo group="..." em RecordSignal (nome curto direto)
+  const groupRe=/<RecordSignal\s[^>]*?signalId="(\d+)"[^>]*?group="([^"]+)"/g;
+  let m;
+  while((m=groupRe.exec(signalsXml))!==null) sigMap[parseInt(m[1])]=m[2];
+  // Fallback: ultimo segmento do elemento <Name>
+  const nameRe=/<ConfigurationSignal\s[^>]*?signalId="(\d+)"[^>]*?>[\s\S]*?<Name>([^<]+)<\/Name>/g;
+  while((m=nameRe.exec(signalsXml))!==null){
+    const sid=parseInt(m[1]);
+    if(sid in sigMap) continue;
+    let name=m[2];
+    const bi=name.indexOf('['); if(bi!==-1) name=name.substring(0,bi);
+    const di=name.lastIndexOf('.'); if(di!==-1) name=name.substring(di+1);
+    sigMap[sid]=name.replace(/"/g,'').trim()||('Signal'+sid);
+  }
 
-    function tokenize(line) { return line.split(sep).map(t => t.trim()).filter(t => t !== ''); }
-    function toNumber(tok) { if (decimalComma) tok = tok.replace(',', '.'); return parseFloat(tok); }
+  const view=new DataView(samplesBuffer);
+  const bytes=new Uint8Array(samplesBuffer);
 
-    let headerTokens = null;
-    let dataStartIndex = -1;
+  // Verifica magic: byte 0 = 0x07, bytes 1-7 = "TSP:1.0"
+  if(bytes[0]!==0x07){
+    throw new Error('Arquivo .ttrecx: magic invalido em Samples (esperado 0x07 TSP:1.0)');
+  }
+  const magicStr=String.fromCharCode(...bytes.slice(1,8));
+  if(magicStr!=='TSP:1.0'){
+    throw new Error('Arquivo .ttrecx: magic invalido ("'+magicStr+'" != "TSP:1.0")');
+  }
 
-    // Encontra inicio dos dados: primeira linha onde AMBOS tokens[0] e tokens[1] sao numericos
-    for (let i = 0; i < rawLines.length; i++) {
-      const tokens = tokenize(rawLines[i]);
-      if (tokens.length < 2) continue;
-      if (!isNaN(toNumber(tokens[0])) && !isNaN(toNumber(tokens[1]))) {
-        dataStartIndex = i;
-        break;
+  // Cabecalho: n_signals em offset 33, IDs dos sinais a partir de offset 49
+  const nSigsTotal=view.getUint32(33,true);
+  const sigIds=[];
+  for(let i=0;i<nSigsTotal;i++) sigIds.push(view.getUint32(49+i*4,true));
+  const sigNames=sigIds.map(sid=>sigMap[sid]||('Signal'+sid));
+
+  // Faixa valida de timestamps (nanosegundos, aprox 2025-2026)
+  const TS_MIN=BigInt('1754000000000000000');
+  const TS_MAX=BigInt('1756000000000000000');
+
+  function readUint64(off){
+    // Le uint64 LE usando BigInt para evitar perda de precisao
+    const lo=BigInt(view.getUint32(off,true));
+    const hi=BigInt(view.getUint32(off+4,true));
+    return hi*BigInt(0x100000000)+lo;
+  }
+
+  function readTag(off,len){
+    let s='';
+    for(let i=0;i<len;i++) s+=String.fromCharCode(bytes[off+i]);
+    return s;
+  }
+
+  // Itera blocos de dados a partir do offset 46472
+  let off=46472;
+  const allTs=[];
+  const allSigs=Array.from({length:nSigsTotal},()=>[]);
+
+  while(off+32<samplesBuffer.byteLength){
+    // Le timestamps ate encontrar valor fora da faixa valida
+    const blockTs=[];
+    while(off+8<=samplesBuffer.byteLength){
+      const ts=readUint64(off);
+      if(ts<=TS_MIN||ts>=TS_MAX) break;
+      blockTs.push(ts);
+      off+=8;
+    }
+    if(blockTs.length===0) break;
+    allTs.push(...blockTs);
+
+    // n_signals no bloco
+    if(off+4>samplesBuffer.byteLength) break;
+    const nSigsBlock=view.getUint32(off,true); off+=4;
+    if(nSigsBlock>100) break;
+
+    // Sub-blocos de sinal
+    let parseOk=true;
+    for(let s=0;s<nSigsBlock;s++){
+      if(off+6>samplesBuffer.byteLength){ parseOk=false; break; }
+      off+=4; // type_m (ignorado)
+      const strLen=bytes[off]; off+=1;
+      if(off+strLen>samplesBuffer.byteLength){ parseOk=false; break; }
+      const tag=readTag(off,strLen); off+=strLen;
+
+      if(tag==='TSSG:1.0'){
+        // Float64: flags(4) + n(4) + n*float64
+        if(off+8>samplesBuffer.byteLength){ parseOk=false; break; }
+        off+=4; // flags
+        const n=view.getUint32(off,true); off+=4;
+        if(n>10000||off+n*8>samplesBuffer.byteLength){ parseOk=false; break; }
+        for(let i=0;i<n;i++){ allSigs[s].push(view.getFloat64(off,true)); off+=8; }
+      } else if(tag==='TSSB:1.0'){
+        // Bool: n(4) + n*uint8 (sem flags)
+        if(off+4>samplesBuffer.byteLength){ parseOk=false; break; }
+        const n=view.getUint32(off,true); off+=4;
+        if(n>10000||off+n>samplesBuffer.byteLength){ parseOk=false; break; }
+        for(let i=0;i<n;i++) allSigs[s].push(bytes[off+i]);
+        off+=n;
       } else {
-        headerTokens = tokens;
+        parseOk=false; break;
       }
     }
+    if(!parseOk) break;
 
-    if (dataStartIndex === -1) throw new Error('Dados numericos nao encontrados (nenhuma linha com tempo + valor numerico).');
-
-    const firstDataTokens = tokenize(rawLines[dataStartIndex]);
-    const numChannels = firstDataTokens.length - 1;
-
-    let channelNames = (headerTokens && headerTokens.length === firstDataTokens.length)
-      ? headerTokens.slice(1)
-      : Array.from({length: numChannels}, (_, c) => 'Canal ' + (c + 1));
-
-    const rawTime = [];
-    const channelData = channelNames.map(() => []);
-
-    for (let i = dataStartIndex; i < rawLines.length; i++) {
-      const tokens = tokenize(rawLines[i]);
-      if (tokens.length < 2) continue;
-      const t = toNumber(tokens[0]);
-      if (isNaN(t)) continue;
-      rawTime.push(t);
-      for (let c = 0; c < numChannels; c++) {
-        const v = tokens[c + 1] !== undefined ? toNumber(tokens[c + 1]) : NaN;
-        channelData[c].push(isNaN(v) ? null : v);
+    // Pula estrutura TSSBL inter-bloco se presente
+    // Formato: uint8(9) + "TSSBL:1.0" + uint32(n) + n*uint32 + uint32(extra)
+    if(off<samplesBuffer.byteLength&&bytes[off]===9&&off+10<=samplesBuffer.byteLength){
+      if(readTag(off+1,9)==='TSSBL:1.0'){
+        off+=10; // uint8(9) + "TSSBL:1.0"
+        if(off+4>samplesBuffer.byteLength) break;
+        const nIdx=view.getUint32(off,true); off+=4;
+        off+=nIdx*4+4; // n*uint32 + uint32 extra
       }
     }
-
-    const channels = channelNames.map((name, idx) => ({
-      index: idx,
-      name: name.replace(/[";:]/g, '').trim() || 'Canal ' + (idx + 1),
-      unit: ''
-    }));
-
-    return { channels, rawTime, channelData };
   }
 
-  /* === PARSER CSV (auto-detecao de formato) === */
-  function parseCsvFile(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = e => { try { resolve(parseCsvCore(e.target.result)); } catch(err) { reject(err); } };
-      reader.onerror = () => reject(new Error('Falha ao ler o arquivo.'));
-      reader.readAsText(file, 'utf-8');
-    });
-  }
+  if(allTs.length===0) throw new Error('Nenhuma amostra encontrada no .ttrecx');
 
-  function parseCsvCore(text) {
-    const clean = text.replace(/^\uFEFF/, '');
-    const lines = clean.split(/\r?\n/).filter(l => l.trim() !== '');
-    if (lines.length < 2) throw new Error('CSV vazio ou sem dados.');
-    // Detecta formato: novo (PLC, separador virgula, primeira coluna "Sample")
-    // vs antigo (separador ponto-e-virgula, cabecalho com "·")
-    const firstField = lines[0].split(',')[0].replace(/"/g, '').trim().toLowerCase();
-    if (firstField === 'sample') {
-      return parsePlcCsvCore(lines);
-    }
-    return parseOsciloCsvCore(lines);
-  }
+  // Converte timestamps BigInt para ms relativos ao primeiro
+  const t0=allTs[0];
+  const rawTime=allTs.map(ts=>Number(ts-t0)/1e6);
 
-  /* Formato antigo: separador ";", cabecalho "arquivo · sinal (unidade)" */
-  function parseOsciloCsvCore(lines) {
-    const headers = lines[0].split(';').map(h => h.trim());
-    const raw = [];
-    for (let i = 0; i + 1 < headers.length; i += 2) {
-      const vh = headers[i + 1] || '';
-      const mid = vh.indexOf('\u00b7');
-      const filePart = mid !== -1 ? vh.substring(0, mid).trim() : '';
-      const sigPart  = mid !== -1 ? vh.substring(mid + 1).trim() : vh;
-      let unit = '', sigName = sigPart;
-      const um = sigPart.match(/\s*\(([^)]+)\)\s*$/);
-      if (um) { unit = um[1]; sigName = sigPart.replace(/\s*\([^)]+\)\s*$/, '').trim(); }
-      const fileName = filePart.replace(/\.[a-z]+$/i, '').trim();
-      raw.push({ fileName, sigName, unit, colIdx: i + 1 });
-    }
-    if (raw.length === 0) throw new Error('Nenhum canal encontrado no cabecalho CSV.');
-    const sigNames = raw.map(r => r.sigName);
-    const uniqueSigs = new Set(sigNames).size === sigNames.length && sigNames.every(s => s.length > 0);
-    const channels = [];
-    const channelColIndices = [];
-    raw.forEach((r, i) => {
-      const name = uniqueSigs
-        ? (r.sigName  || r.fileName || ('Canal ' + (i + 1)))
-        : (r.fileName || r.sigName  || ('Canal ' + (i + 1)));
-      channels.push({ index: i, name, unit: r.unit });
-      channelColIndices.push(r.colIdx);
-    });
-    if (channels.length === 0) throw new Error('Nenhum canal encontrado no cabecalho CSV.');
-    const rawTime = [];
-    const channelData = channels.map(() => []);
-    for (let r = 1; r < lines.length; r++) {
-      const cols = lines[r].split(';');
-      if (cols.length < 2) continue;
-      const t = parseFloat(cols[0].trim().replace(',', '.'));
-      if (isNaN(t)) continue;
-      rawTime.push(t);
-      channels.forEach((ch, ci) => {
-        const vi = channelColIndices[ci];
-        const raw = vi < cols.length ? cols[vi].trim().replace(',', '.') : '';
-        channelData[ci].push(isNaN(parseFloat(raw)) ? null : parseFloat(raw));
-      });
-    }
-    if (rawTime.length === 0) throw new Error('Nenhuma linha de dados numericos encontrada no CSV.');
-    return { channels, rawTime, channelData,
-      note: channels.length + ' canais detectados automaticamente pelo cabecalho.' };
-  }
+  const channels=sigNames.map((name,idx)=>({index:idx,name,unit:''}));
+  const durS=rawTime.length>1?(rawTime[rawTime.length-1]/1000).toFixed(1):'0';
 
-  /* Formato novo: separador ",", col0=Sample(ignorar), col1=X(ms) absoluto, col2+=PLC paths */
-  function parsePlcCsvCore(lines) {
-    // Tokenizador CSV simples com suporte a campos entre aspas
-    function csvRow(line) {
-      const cols = [];
-      let inQ = false, cur = '';
-      for (const ch of line) {
-        if (ch === '"') { inQ = !inQ; }
-        else if (ch === ',' && !inQ) { cols.push(cur); cur = ''; }
-        else { cur += ch; }
+  return {
+    channels,
+    rawTime,
+    channelData:allSigs,
+    note:'TechTrace: '+nSigsTotal+' sinais, '+rawTime.length+' amostras, '+durS+'s'
+  };
+}
+
+/* === PARSER ZIK/ZIC (COMTRADE) === */
+function parseZikFile(file){
+  return new Promise((resolve,reject)=>{
+    const zip=new JSZip();
+    zip.loadAsync(file).then(async(contents)=>{
+      let cfgFile=null,datFile=null;
+      for(const fn in contents.files){
+        const fl=fn.toLowerCase();
+        if(fl.endsWith('.cfg')) cfgFile=contents.files[fn];
+        else if(fl.endsWith('.dat')) datFile=contents.files[fn];
       }
-      cols.push(cur);
-      return cols;
-    }
-    // Extrai nome curto de path PLC: ultimo segmento antes de "["
-    function plcName(h) {
-      h = h.replace(/^"|"$/g, '').trim();
-      const bi = h.indexOf('[');
-      const sub = bi !== -1 ? h.substring(0, bi) : h;
-      const di = sub.lastIndexOf('.');
-      let name = di !== -1 ? sub.substring(di + 1) : sub;
-      return name.replace(/"/g, '').trim() || h;
-    }
-    const headerCols = csvRow(lines[0]);
-    // col0=Sample, col1=X(ms) [...], col2..N = sinais
-    const sigHeaders = headerCols.slice(2);
-    if (sigHeaders.length === 0) throw new Error('Nenhum canal de sinal encontrado no CSV PLC.');
-    const channels = sigHeaders.map((h, i) => ({ index: i, name: plcName(h), unit: '' }));
-    const rawTime = [];
-    const channelData = channels.map(() => []);
-    let t0 = null;
-    for (let r = 1; r < lines.length; r++) {
-      const cols = csvRow(lines[r]);
-      if (cols.length < 3) continue;
-      const tAbs = parseFloat(cols[1]);  // tempo absoluto Unix ms
-      if (isNaN(tAbs)) continue;
-      if (t0 === null) t0 = tAbs;
-      rawTime.push(tAbs - t0);  // tempo relativo em ms
-      channels.forEach((ch, ci) => {
-        const v = parseFloat(cols[ci + 2]);
-        channelData[ci].push(isNaN(v) ? null : v);
-      });
-    }
-    if (rawTime.length === 0) throw new Error('Nenhuma linha de dados numericos encontrada no CSV PLC.');
-    return { channels, rawTime, channelData,
-      note: channels.length + ' canais PLC detectados automaticamente.' };
+      if(!cfgFile||!datFile) throw new Error('Arquivos .cfg e/ou .dat nao encontrados dentro do ZIP.');
+      const cfgText=await cfgFile.async('string');
+      const datBuffer=await datFile.async('arraybuffer');
+      resolve(parseContradeToUnified(cfgText,datBuffer));
+    }).catch(reject);
+  });
+}
+
+function parseContradeToUnified(cfgText,datBuffer){
+  const lines=cfgText.split(/\r?\n/).map(l=>l.trim()).filter(l=>l!=='');
+  if(lines.length<4) throw new Error('CFG corrompido ou incompleto.');
+  const chInfo=lines[1].split(',');
+  const analogCount=parseInt(chInfo[chInfo.length>=3?1:0])||0;
+  const digitalCount=parseInt(chInfo[chInfo.length>=3?2:1])||0;
+  const analogs=[];
+  for(let i=0;i<analogCount;i++){
+    const p=lines[2+i].split(',');
+    const a=parseFloat(p[5]),b=parseFloat(p[6]),primary=parseFloat(p[10]);
+    analogs.push({index:i,name:(p[1]||('A'+(i+1))).trim(),unit:(p[4]||'').trim(),
+      a:(!isNaN(a))?a:1.0, b:(!isNaN(b))?b:0.0, primary:(!isNaN(primary)&&primary!==0)?primary:1.0});
   }
-
-  /* === PARSER TTRECX (Siemens TechTrace) === */
-  function parseTtrecxFile(file) {
-    return new Promise((resolve, reject) => {
-      const zip = new JSZip();
-      zip.loadAsync(file)
-        .then(async (contents) => {
-          let signalsFile = null, samplesFile = null;
-          for (const fn in contents.files) {
-            if (fn === 'Signals') signalsFile = contents.files[fn];
-            if (fn === 'Samples') samplesFile = contents.files[fn];
-          }
-          if (!signalsFile || !samplesFile) throw new Error('Arquivos Signals/Samples nao encontrados no .ttrecx');
-          const signalsXml = await signalsFile.async('string');
-          const samplesBuffer = await samplesFile.async('arraybuffer');
-          resolve(parseTtrecxCore(signalsXml, samplesBuffer));
-        })
-        .catch(reject);
-    });
+  const digitals=[];
+  for(let i=0;i<digitalCount;i++){
+    const p=lines[2+analogCount+i].split(',');
+    digitals.push({index:analogCount+i,name:(p[1]||('D'+(i+1))).trim(),unit:'digital'});
   }
+  let idx=2+analogCount+digitalCount; idx++;
+  const numRates=parseInt(lines[idx++])||1;
+  let sampleRate=0;
+  for(let r=0;r<numRates;r++){
+    const rp=(lines[idx+r]||'').split(',');
+    const sr=parseFloat(rp[0]);
+    if(r===0&&!isNaN(sr)) sampleRate=sr;
+  }
+  idx+=numRates; idx++; idx++;
+  const fileType=(lines[idx]||'ASCII').toUpperCase().trim(); idx++;
+  const timeMult=(lines[idx]&&!isNaN(parseFloat(lines[idx])))?parseFloat(lines[idx]):1.0;
 
-  function parseTtrecxCore(signalsXml, samplesBuffer) {
-    // Extrai mapa signalId -> nome curto do XML de sinais
-    const sigMap = {};
-    // Tenta atributo group="..." em RecordSignal (nome curto direto)
-    const groupRe = /<RecordSignal\s[^>]*?signalId="(\d+)"[^>]*?group="([^"]+)"/g;
-    let m;
-    while ((m = groupRe.exec(signalsXml)) !== null) sigMap[parseInt(m[1])] = m[2];
-    // Fallback: extrai ultimo segmento do elemento Name
-    const nameRe = /<ConfigurationSignal\s[^>]*?signalId="(\d+)"[^>]*?>[\s\S]*?<Name>([^<]+)<\/Name>/g;
-    while ((m = nameRe.exec(signalsXml)) !== null) {
-      const sid = parseInt(m[1]);
-      if (sid in sigMap) continue;
-      let name = m[2];
-      const bi = name.indexOf('[');
-      if (bi !== -1) name = name.substring(0, bi);
-      const di = name.lastIndexOf('.');
-      if (di !== -1) name = name.substring(di + 1);
-      sigMap[sid] = name.replace(/"/g, '').trim() || ('Signal' + sid);
-    }
+  const rawTime=[]; const sampleNums=[];
+  const channelData=[...analogs.map(()=>[]),...digitals.map(()=>[])];
 
-    const view = new DataView(samplesBuffer);
-    const bytes = new Uint8Array(samplesBuffer);
-
-    // Verifica magic "\x07TSP:1.0"
-    if (bytes[0] !== 0x07 || String.fromCharCode(...bytes.slice(1,8)) !== 'TSP:1.0') {
-      throw new Error('Arquivo .ttrecx: formato Samples nao reconhecido');
-    }
-
-    // Le n_signals e IDs do cabecalho
-    const nSigsTotal = view.getUint32(33, true);
-    const sigIds = [];
-    for (let i = 0; i < nSigsTotal; i++) sigIds.push(view.getUint32(49 + i * 4, true));
-    const sigNames = sigIds.map(sid => sigMap[sid] || ('Signal' + sid));
-
-    // Faixa valida de timestamps (nanosegundos para 2025-2026)
-    const TS_MIN = 1754000000000000000n;
-    const TS_MAX = 1756000000000000000n;
-
-    function readInt64(off) {
-      // Lê uint64 LE usando BigInt (evita perda de precisao)
-      const lo = BigInt(view.getUint32(off, true));
-      const hi = BigInt(view.getUint32(off + 4, true));
-      return hi * 0x100000000n + lo;
-    }
-
-    function readTag(off, len) {
-      let s = '';
-      for (let i = 0; i < len; i++) s += String.fromCharCode(bytes[off + i]);
-      return s;
-    }
-
-    // Itera blocos de dados a partir do offset 46472
-    let off = 46472;
-    const allTs = [];   // BigInt timestamps
-    const allSigs = Array.from({ length: nSigsTotal }, () => []);
-
-    while (off + 32 < samplesBuffer.byteLength) {
-      // Le timestamps ate encontrar valor fora da faixa
-      const blockTs = [];
-      while (off + 8 <= samplesBuffer.byteLength) {
-        const ts = readInt64(off);
-        if (ts <= TS_MIN || ts >= TS_MAX) break;
-        blockTs.push(ts);
-        off += 8;
+  if(fileType==='BINARY'||fileType==='BIN32'){
+    const view=new DataView(datBuffer);
+    const isBin32=fileType==='BIN32';
+    const aBytes=isBin32?4:2;
+    const numWords=Math.ceil(digitalCount/16);
+    const rowSize=4+4+(analogCount*aBytes)+(numWords*2);
+    if(rowSize===0) throw new Error('rowSize calculado como zero.');
+    const totalSamples=Math.floor(datBuffer.byteLength/rowSize);
+    let offset=0;
+    for(let s=0;s<totalSamples;s++){
+      if(offset+rowSize>datBuffer.byteLength) break;
+      const sn=view.getUint32(offset,true);
+      const ts=view.getUint32(offset+4,true)*timeMult;
+      sampleNums.push(sn); rawTime.push(ts);
+      let ro=offset+8;
+      for(let i=0;i<analogCount;i++){
+        const rv=isBin32?view.getInt32(ro,true):view.getInt16(ro,true);
+        channelData[i].push(rv*analogs[i].a+analogs[i].b);
+        ro+=aBytes;
       }
-      if (blockTs.length === 0) break;
-      allTs.push(...blockTs);
-
-      // n_signals no bloco
-      if (off + 4 > samplesBuffer.byteLength) break;
-      const nSigsBlock = view.getUint32(off, true); off += 4;
-      if (nSigsBlock > 100) break;
-
-      // Sub-blocos de sinal
-      for (let s = 0; s < nSigsBlock; s++) {
-        if (off + 6 > samplesBuffer.byteLength) break;
-        const typeM = view.getUint32(off, true); off += 4;
-        const strLen = bytes[off]; off += 1;
-        if (off + strLen > samplesBuffer.byteLength) break;
-        const tag = readTag(off, strLen); off += strLen;
-
-        if (tag === 'TSSG:1.0') {
-          // Float64: flags(4) + n(4) + n*float64
-          if (off + 8 > samplesBuffer.byteLength) break;
-          off += 4; // flags
-          const n = view.getUint32(off, true); off += 4;
-          if (n > 10000 || off + n * 8 > samplesBuffer.byteLength) break;
-          for (let i = 0; i < n; i++) { allSigs[s].push(view.getFloat64(off, true)); off += 8; }
-        } else if (tag === 'TSSB:1.0') {
-          // Bool: n(4) + n*uint8 (sem campo flags!)
-          if (off + 4 > samplesBuffer.byteLength) break;
-          const n = view.getUint32(off, true); off += 4;
-          if (n > 10000 || off + n > samplesBuffer.byteLength) break;
-          for (let i = 0; i < n; i++) allSigs[s].push(bytes[off + i]);
-          off += n;
-        } else {
-          break; // tag desconhecida
-        }
+      const dstates=[];
+      for(let w=0;w<numWords;w++){
+        const word=view.getUint16(ro,true); ro+=2;
+        for(let b=0;b<16;b++) dstates.push((word>>b)&1);
       }
-
-      // Pula estrutura TSSBL inter-bloco (indice de amostras)
-      if (off < samplesBuffer.byteLength && bytes[off] === 9) {
-        if (off + 10 <= samplesBuffer.byteLength && readTag(off + 1, 9) === 'TSSBL:1.0') {
-          off += 10; // uint8(9) + "TSSBL:1.0"
-          if (off + 4 > samplesBuffer.byteLength) break;
-          const nIdx = view.getUint32(off, true); off += 4;
-          off += nIdx * 4 + 4; // n valores uint32 + uint32 extra
-        }
+      for(let i=0;i<digitalCount;i++) channelData[analogCount+i].push(dstates[i]||0);
+      offset+=rowSize;
+    }
+  } else {
+    const datText=new TextDecoder('utf-8').decode(datBuffer);
+    const datLines=datText.split(/\r?\n/).map(l=>l.trim()).filter(l=>l!=='');
+    let sn=0;
+    datLines.forEach(line=>{
+      const p=line.split(',');
+      if(p.length<2) return;
+      sn++;
+      sampleNums.push(parseInt(p[0])||sn);
+      rawTime.push(parseFloat(p[1])*timeMult);
+      for(let i=0;i<analogCount;i++){
+        channelData[i].push((parseFloat(p[2+i])||0)*analogs[i].a+analogs[i].b);
       }
-    }
-
-    if (allTs.length === 0) throw new Error('Nenhuma amostra encontrada no .ttrecx');
-
-    // Converte timestamps para ms relativos ao primeiro
-    const t0 = allTs[0];
-    const rawTime = allTs.map(ts => Number(ts - t0) / 1e6);
-
-    const channels = sigNames.map((name, idx) => ({ index: idx, name, unit: '' }));
-    const durS = rawTime.length > 1 ? (rawTime[rawTime.length - 1] / 1000).toFixed(1) : '0';
-
-    return {
-      channels,
-      rawTime,
-      channelData: allSigs,
-      note: 'TechTrace: ' + nSigsTotal + ' sinais, ' + rawTime.length + ' amostras, ' + durS + 's'
-    };
-  }
-
-  /* === PARSER ZIK/ZIC (COMTRADE dentro de ZIP) === */
-  function parseZikFile(file) {
-    return new Promise((resolve, reject) => {
-      const zip = new JSZip();
-      zip.loadAsync(file)
-        .then(async (contents) => {
-          let cfgFile = null, datFile = null;
-          for (const fn in contents.files) {
-            const fl = fn.toLowerCase();
-            if (fl.endsWith('.cfg')) cfgFile = contents.files[fn];
-            else if (fl.endsWith('.dat')) datFile = contents.files[fn];
-          }
-          if (!cfgFile || !datFile) throw new Error('Arquivos .cfg e/ou .dat nao encontrados dentro do ZIP.');
-          const cfgText   = await cfgFile.async('string');
-          const datBuffer = await datFile.async('arraybuffer');
-          resolve(parseComtradeToUnified(cfgText, datBuffer));
-        })
-        .catch(reject);
-    });
-  }
-
-  function parseComtradeToUnified(cfgText, datBuffer) {
-    const lines = cfgText.split(/\r?\n/).map(l => l.trim()).filter(l => l !== '');
-    if (lines.length < 4) throw new Error('CFG corrompido ou incompleto.');
-
-    // Linha 2: contagem de canais — formato "total,NNNa,MMMd" ou "NNNa,MMMd"
-    const chInfo = lines[1].split(',');
-    const analogCount  = parseInt(chInfo[chInfo.length >= 3 ? 1 : 0]) || 0;
-    const digitalCount = parseInt(chInfo[chInfo.length >= 3 ? 2 : 1]) || 0;
-
-    // Canais analogicos
-    const analogs = [];
-    for (let i = 0; i < analogCount; i++) {
-      const p = lines[2 + i].split(',');
-      const a = parseFloat(p[5]), b = parseFloat(p[6]), primary = parseFloat(p[10]);
-      analogs.push({
-        index: i,
-        name:  (p[1] || ('A' + (i+1))).trim(),
-        unit:  (p[4] || '').trim(),
-        a:       (!isNaN(a))                        ? a       : 1.0,
-        b:       (!isNaN(b))                        ? b       : 0.0,
-        primary: (!isNaN(primary) && primary !== 0) ? primary : 1.0
-      });
-    }
-
-    // Canais digitais
-    const digitals = [];
-    for (let i = 0; i < digitalCount; i++) {
-      const p = lines[2 + analogCount + i].split(',');
-      digitals.push({ index: analogCount + i, name: (p[1] || ('D' + (i+1))).trim(), unit: 'digital' });
-    }
-
-    // Metadados pos-canais
-    let idx = 2 + analogCount + digitalCount;
-    idx++; // frequencia de rede (grid Hz)
-
-    const numRates = parseInt(lines[idx++]) || 1;
-    let sampleRate = 0;
-    for (let r = 0; r < numRates; r++) {
-      const rp = (lines[idx + r] || '').split(',');
-      const sr = parseFloat(rp[0]);
-      if (r === 0 && !isNaN(sr)) sampleRate = sr; // taxa da primeira (e geralmente unica) secao
-    }
-    idx += numRates;
-
-    idx++; // data/hora de inicio
-    idx++; // data/hora de trigger
-
-    const fileType = (lines[idx] || 'ASCII').toUpperCase().trim(); idx++;
-    const timeMult = (lines[idx] && !isNaN(parseFloat(lines[idx]))) ? parseFloat(lines[idx]) : 1.0;
-
-    const rawTime    = [];
-    const sampleNums = [];
-    const channelData = [...analogs.map(() => []), ...digitals.map(() => [])];
-
-    if (fileType === 'BINARY' || fileType === 'BIN32') {
-      const view      = new DataView(datBuffer);
-      const isBin32   = fileType === 'BIN32';
-      const aBytes    = isBin32 ? 4 : 2;
-      const numWords  = Math.ceil(digitalCount / 16);
-      const rowSize   = 4 + 4 + (analogCount * aBytes) + (numWords * 2);
-
-      if (rowSize === 0) throw new Error('rowSize calculado como zero — CFG pode estar incorreto.');
-
-      const totalSamples = Math.floor(datBuffer.byteLength / rowSize);
-
-      let offset = 0;
-      for (let s = 0; s < totalSamples; s++) {
-        if (offset + rowSize > datBuffer.byteLength) break;
-
-        const sn = view.getUint32(offset, true);
-        const ts = view.getUint32(offset + 4, true) * timeMult;
-        sampleNums.push(sn);
-        rawTime.push(ts);
-
-        let ro = offset + 8;
-        for (let i = 0; i < analogCount; i++) {
-          const rv = isBin32 ? view.getInt32(ro, true) : view.getInt16(ro, true);
-          channelData[i].push(rv * analogs[i].a + analogs[i].b);
-          ro += aBytes;
-        }
-
-        const dstates = [];
-        for (let w = 0; w < numWords; w++) {
-          const word = view.getUint16(ro, true); ro += 2;
-          for (let b = 0; b < 16; b++) dstates.push((word >> b) & 1);
-        }
-        for (let i = 0; i < digitalCount; i++) channelData[analogCount + i].push(dstates[i] || 0);
-
-        offset += rowSize;
-      }
-    } else {
-      // ASCII / texto
-      const datText  = new TextDecoder('utf-8').decode(datBuffer);
-      const datLines = datText.split(/\r?\n/).map(l => l.trim()).filter(l => l !== '');
-      let sn = 0;
-      datLines.forEach(line => {
-        const p = line.split(',');
-        if (p.length < 2) return;
-        sn++;
-        sampleNums.push(parseInt(p[0]) || sn);
-        rawTime.push(parseFloat(p[1]) * timeMult);
-        for (let i = 0; i < analogCount; i++) {
-          channelData[i].push((parseFloat(p[2 + i]) || 0) * analogs[i].a + analogs[i].b);
-        }
-        for (let i = 0; i < digitalCount; i++) {
-          channelData[analogCount + i].push(parseInt(p[2 + analogCount + i]) || 0);
-        }
-      });
-    }
-
-    // Correcao de timestamps zeros (bug SIPROTEC/Reason/GE):
-    // Reconstroi a partir do numero de amostra e taxa de amostragem
-    let note = '';
-    const allZero = rawTime.length > 0 && rawTime.every(t => t === 0);
-    if (allZero && sampleRate > 0) {
-      const dtUs = 1000000 / sampleRate; // intervalo entre amostras em microsegundos
-      for (let s = 0; s < rawTime.length; s++) {
-        rawTime[s] = (sampleNums[s] > 0 ? sampleNums[s] - 1 : s) * dtUs;
-      }
-      note = '[Timestamps reconstruidos a ' + sampleRate + ' sps]';
-    } else if (allZero) {
-      // Fallback: indice sequencial em us
-      for (let s = 0; s < rawTime.length; s++) rawTime[s] = s;
-      note = '[Timestamps zeros: usando indice sequencial]';
-    }
-
-    const channels = [
-      ...analogs.map(a => ({ index: a.index, name: a.name, unit: a.unit })),
-      ...digitals.map(d => ({ index: d.index, name: d.name, unit: 'digital' }))
-    ];
-
-    return { channels, rawTime, channelData, note };
-  }
-
-  /* === RENDERIZACAO === */
-  function renderAll() {
-    renderFileList();
-    renderChannelSelectors();
-    updateSelectedCounter();
-    updateChart();
-  }
-
-  function renderFileList() {
-    document.getElementById('fileCountLabel').innerText = fileStore.length;
-    const container = document.getElementById('fileListContainer');
-    if (fileStore.length === 0) {
-      container.innerHTML = '<p style="font-size:0.85em;color:#888;">Nenhum arquivo carregado ainda.</p>';
-      return;
-    }
-    container.innerHTML = fileStore.map(f => {
-      const fc = (f.format || 'ASC').toLowerCase();
-      return '<div class="file-card">' +
-        '<div class="file-card-header">' +
-          '<div><strong>' + f.filename + '</strong>' +
-          '<span class="fmt-badge ' + fc + '">' + (f.format||'ASC') + '</span>' +
-          '<span style="font-size:0.75em;color:#777;"> &middot; ' + f.rawTime.length + ' amostras &middot; ' + f.channels.length + ' canais</span></div>' +
-          '<button class="danger" onclick="removeFile(' + f.id + ')">Remover</button>' +
-        '</div>' +
-        '<div class="mini-grid">' +
-          '<div><label>Offset X (tempo)</label><input type="number" step="any" value="' + f.offsetX + '" onchange="onFileSettingChange(' + f.id + ',\'offsetX\',this)"></div>' +
-          '<div><label>Fator Escala X</label><input type="number" step="any" value="' + f.scaleX + '" onchange="onFileSettingChange(' + f.id + ',\'scaleX\',this)"></div>' +
-          '<div><label>Inicio (amostra)</label><input type="number" value="' + f.trimStart + '" onchange="onFileSettingChange(' + f.id + ',\'trimStart\',this)"></div>' +
-          '<div><label>Fim (-1=todas)</label><input type="number" value="' + f.trimEnd + '" onchange="onFileSettingChange(' + f.id + ',\'trimEnd\',this)"></div>' +
-        '</div></div>';
-    }).join('');
-  }
-
-  function onFileSettingChange(fileId, key, inputEl) {
-    const f = fileStore.find(f => f.id === fileId);
-    if (!f) return;
-    let val = parseFloat(inputEl.value);
-    if (key === 'trimStart' || key === 'trimEnd') val = isNaN(val) ? (key === 'trimEnd' ? -1 : 0) : parseInt(val);
-    else if (isNaN(val)) val = (key === 'scaleX') ? 1 : 0;
-    f[key] = val;
-    updateChart();
-  }
-
-  function renderChannelSelectors() {
-    const container = document.getElementById('channelSelectionContainer');
-    if (fileStore.length === 0) {
-      container.innerHTML = '<p style="font-size:0.85em;color:#888;">Carregue arquivos para visualizar os canais disponiveis.</p>';
-      return;
-    }
-    let html = '';
-    fileStore.forEach(f => {
-      const fc = (f.format || 'ASC').toLowerCase();
-      html += '<div class="channel-group-title">' + f.filename + ' <span class="fmt-badge ' + fc + '">' + (f.format||'ASC') + '</span></div><div class="channel-list">';
-      f.channels.forEach((ch, idx) => {
-        const puField = globalMode === 'eng'
-          ? '<div class="y-adjust-group"><label>Unidade</label><input type="text" value="' + ch.unit + '" placeholder="V, A, Hz..." onchange="onChannelTextSettingChange(' + f.id + ',' + idx + ',\'unit\',this)"></div>'
-          : '<div class="y-adjust-group pu-field"><label>Valor Base (PU)</label><input type="number" step="any" value="' + ch.baseValue + '" onchange="onChannelYSettingChange(' + f.id + ',' + idx + ',\'baseValue\',this)"></div>';
-        html += '<div class="channel-item">' +
-          '<input type="checkbox" class="channel-checkbox" id="sel_' + f.id + '_' + idx + '" onchange="onChannelCheckboxChange(this)">' +
-          '<label class="channel-name-label" for="sel_' + f.id + '_' + idx + '">' + ch.name + (ch.unit && ch.unit !== 'digital' ? ' (' + ch.unit + ')' : '') + '</label>' +
-          '<div class="y-adjust-group"><label>Offset Y</label><input type="number" step="any" value="' + ch.yOffset + '" onchange="onChannelYSettingChange(' + f.id + ',' + idx + ',\'yOffset\',this)"></div>' +
-          '<div class="y-adjust-group"><label>Escala Y</label><input type="number" step="any" value="' + ch.yScale + '" onchange="onChannelYSettingChange(' + f.id + ',' + idx + ',\'yScale\',this)"></div>' +
-          puField + '</div>';
-      });
-      html += '</div>';
-    });
-    container.innerHTML = html;
-  }
-
-  function onChannelYSettingChange(fileId, idx, key, inputEl) {
-    const f = fileStore.find(f => f.id === fileId);
-    if (!f) return;
-    let val = parseFloat(inputEl.value);
-    if (isNaN(val)) val = (key === 'yScale' || key === 'baseValue') ? 1 : 0;
-    if (key === 'baseValue' && val === 0) val = 1;
-    f.channels[idx][key] = val;
-    updateChart();
-  }
-
-  function onChannelTextSettingChange(fileId, idx, key, inputEl) {
-    const f = fileStore.find(f => f.id === fileId);
-    if (!f) return;
-    f.channels[idx][key] = inputEl.value.trim();
-    updateChart();
-  }
-
-  function onChannelCheckboxChange(cb) {
-    const count = document.querySelectorAll('.channel-checkbox:checked').length;
-    if (cb.checked && count > MAX_CHANNELS) {
-      cb.checked = false;
-      alert('Limite de ' + MAX_CHANNELS + ' canais simultaneos atingido.');
-      return;
-    }
-    updateSelectedCounter();
-    updateChart();
-  }
-
-  function updateSelectedCounter() {
-    const count = document.querySelectorAll('.channel-checkbox:checked').length;
-    const el = document.getElementById('selectionCounter');
-    el.innerText = count + '/' + MAX_CHANNELS + ' canais selecionados';
-    el.classList.toggle('limit-reached', count >= MAX_CHANNELS);
-  }
-
-  /* === CALCULO DE SERIES === */
-  function getAdjustedTime(f) {
-    const start = f.trimStart || 0;
-    const end = (f.trimEnd === -1 || f.trimEnd == null) ? f.rawTime.length : f.trimEnd;
-    return f.rawTime.slice(start, end).map(t => t * f.scaleX + f.offsetX);
-  }
-
-  function getAdjustedChannel(f, idx) {
-    const start = f.trimStart || 0;
-    const end = (f.trimEnd === -1 || f.trimEnd == null) ? f.channelData[idx].length : f.trimEnd;
-    const slice = f.channelData[idx].slice(start, end);
-    const ch = f.channels[idx];
-    const yScale = (!ch.yScale || ch.yScale === 0) ? 1 : ch.yScale;
-    const yOffset = ch.yOffset || 0;
-    const base = (!ch.baseValue || ch.baseValue === 0) ? 1 : ch.baseValue;
-    return slice.map(v => {
-      if (v === null || v === undefined) return null;
-      const eng = v * yScale + yOffset;
-      return (globalMode === 'pu') ? (eng / base) : eng;
-    });
-  }
-
-  function buildSelectedSeries() {
-    const series = [];
-    document.querySelectorAll('.channel-checkbox:checked').forEach(cb => {
-      const parts = cb.id.split('_');
-      const fileId = parseInt(parts[1]), idx = parseInt(parts[2]);
-      const f = fileStore.find(f => f.id === fileId);
-      if (!f) return;
-      const ch = f.channels[idx];
-      const unitSuffix = (globalMode === 'pu') ? ' (pu)' : (ch.unit && ch.unit !== 'digital' ? ' (' + ch.unit + ')' : '');
-      series.push({ label: f.filename + ' \u00b7 ' + ch.name + unitSuffix, times: getAdjustedTime(f), values: getAdjustedChannel(f, idx) });
-    });
-    return series;
-  }
-
-  /* === GRAFICO === */
-  function updateChart() {
-    const series = buildSelectedSeries();
-    const ctx = document.getElementById('osciloChart').getContext('2d');
-    const tuLabel = document.getElementById('timeUnit').value;
-    const yLabel = (globalMode === 'pu') ? 'Valores (PU)' : 'Valores (Engenharia)';
-    const isDark = (plotBgColor === 'black');
-    const tc = isDark ? '#fff' : '#222';
-    const gc = isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)';
-    const tkc = isDark ? '#ccc' : '#444';
-
-    const datasets = series.map(s => ({
-      label: s.label,
-      data: s.times.map((t, i) => { const v = s.values[i]; return { x: t, y: (v === null || isNaN(v)) ? null : v }; }),
-      borderWidth: 1.5, pointRadius: 0, fill: false, spanGaps: true
-    }));
-
-    if (chartInstance) chartInstance.destroy();
-    chartInstance = new Chart(ctx, {
-      type: 'line',
-      data: { datasets },
-      options: {
-        responsive: true, maintainAspectRatio: false, animation: false, parsing: false,
-        scales: {
-          x: { type: 'linear', title: { display: true, text: 'Tempo (' + tuLabel + ')', color: tc }, ticks: { maxTicksLimit: 12, color: tkc }, grid: { color: gc } },
-          y: { title: { display: true, text: yLabel, color: tc }, ticks: { color: tkc }, grid: { color: gc } }
-        },
-        plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 }, color: tc } } }
+      for(let i=0;i<digitalCount;i++){
+        channelData[analogCount+i].push(parseInt(p[2+analogCount+i])||0);
       }
     });
   }
 
-  /* === EXPORTACAO CSV === */
-  function exportToCSV() {
-    const series = buildSelectedSeries();
-    if (series.length === 0) { alert('Selecione ao menos um canal antes de exportar.'); return; }
-    const tuLabel = document.getElementById('timeUnit').value;
-    const fn = (v) => (v === undefined || v === null || isNaN(v)) ? '' : v.toString().replace('.', ',');
-    let headers = [];
-    series.forEach(s => { headers.push('Tempo (' + tuLabel + ') - ' + s.label); headers.push(s.label); });
-    let csvLines = [headers.join(';')];
-    const maxRows = Math.max(...series.map(s => s.times.length), 0);
-    for (let r = 0; r < maxRows; r++) {
-      const row = [];
-      series.forEach(s => { row.push(fn(s.times[r])); row.push(fn(s.values[r])); });
-      csvLines.push(row.join(';'));
-    }
-    const blob = new Blob(['\ufeff' + csvLines.join('\n')], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'oscilografia_export.csv';
-    link.click();
+  let note='';
+  const allZero=rawTime.length>0&&rawTime.every(t=>t===0);
+  if(allZero&&sampleRate>0){
+    const dtUs=1000000/sampleRate;
+    for(let s=0;s<rawTime.length;s++){ rawTime[s]=(sampleNums[s]>0?sampleNums[s]-1:s)*dtUs; }
+    note='[Timestamps reconstruidos a '+sampleRate+' sps]';
+  } else if(allZero){
+    for(let s=0;s<rawTime.length;s++) rawTime[s]=s;
+    note='[Timestamps zeros: usando indice sequencial]';
   }
+
+  const channels=[
+    ...analogs.map(a=>({index:a.index,name:a.name,unit:a.unit})),
+    ...digitals.map(d=>({index:d.index,name:d.name,unit:'digital'}))
+  ];
+  return {channels,rawTime,channelData,note};
+}
+
+/* === RENDERIZACAO === */
+function renderAll(){
+  renderFileList();
+  renderChannelSelectors();
+  updateSelectedCounter();
+  updateChart();
+}
+
+function renderFileList(){
+  document.getElementById('fileCountLabel').innerText=fileStore.length;
+  const container=document.getElementById('fileListContainer');
+  if(fileStore.length===0){
+    container.innerHTML='<p style="font-size:.85em;color:#888;">Nenhum arquivo carregado ainda.</p>';
+    return;
+  }
+  container.innerHTML=fileStore.map(f=>{
+    const fc=(f.format||'ASC').toLowerCase();
+    return '<div class="file-card">'+
+      '<div class="file-card-header">'+
+        '<div><strong>'+f.filename+'</strong>'+
+        '<span class="fmt-badge '+fc+'">'+(f.format||'ASC')+'</span>'+
+        '<span style="font-size:.75em;color:#777;"> &middot; '+f.rawTime.length+' amostras &middot; '+f.channels.length+' canais</span></div>'+
+        '<button class="danger" onclick="removeFile('+f.id+')">Remover</button>'+
+      '</div>'+
+      '<div class="mini-grid">'+
+        '<div><label>Offset X (tempo)</label><input type="number" step="any" value="'+f.offsetX+'" onchange="onFileSettingChange('+f.id+',\'offsetX\',this)"></div>'+
+        '<div><label>Fator Escala X</label><input type="number" step="any" value="'+f.scaleX+'" onchange="onFileSettingChange('+f.id+',\'scaleX\',this)"></div>'+
+        '<div><label>Inicio (amostra)</label><input type="number" value="'+f.trimStart+'" onchange="onFileSettingChange('+f.id+',\'trimStart\',this)"></div>'+
+        '<div><label>Fim (-1=todas)</label><input type="number" value="'+f.trimEnd+'" onchange="onFileSettingChange('+f.id+',\'trimEnd\',this)"></div>'+
+      '</div></div>';
+  }).join('');
+}
+
+function onFileSettingChange(fileId,key,inputEl){
+  const f=fileStore.find(f=>f.id===fileId);
+  if(!f) return;
+  let val=parseFloat(inputEl.value);
+  if(key==='trimStart'||key==='trimEnd') val=isNaN(val)?(key==='trimEnd'?-1:0):parseInt(val);
+  else if(isNaN(val)) val=(key==='scaleX')?1:0;
+  f[key]=val;
+  updateChart();
+}
+
+function renderChannelSelectors(){
+  const container=document.getElementById('channelSelectionContainer');
+  if(fileStore.length===0){
+    container.innerHTML='<p style="font-size:.85em;color:#888;">Carregue arquivos para visualizar os canais disponiveis.</p>';
+    return;
+  }
+  let html='';
+  fileStore.forEach(f=>{
+    const fc=(f.format||'ASC').toLowerCase();
+    html+='<div class="channel-group-title">'+f.filename+' <span class="fmt-badge '+fc+'">'+(f.format||'ASC')+'</span></div><div class="channel-list">';
+    f.channels.forEach((ch,idx)=>{
+      const puField=globalMode==='eng'
+        ? '<div class="y-adjust-group"><label>Unidade</label><input type="text" value="'+ch.unit+'" placeholder="V, A, Hz..." onchange="onChannelTextSettingChange('+f.id+','+idx+',\'unit\',this)"></div>'
+        : '<div class="y-adjust-group pu-field"><label>Valor Base (PU)</label><input type="number" step="any" value="'+ch.baseValue+'" onchange="onChannelYSettingChange('+f.id+','+idx+',\'baseValue\',this)"></div>';
+      html+='<div class="channel-item">'+
+        '<input type="checkbox" class="channel-checkbox" id="sel_'+f.id+'_'+idx+'" onchange="onChannelCheckboxChange(this)">'+
+        '<label class="channel-name-label" for="sel_'+f.id+'_'+idx+'">'+ch.name+(ch.unit&&ch.unit!=='digital'?' ('+ch.unit+')':'')+'</label>'+
+        '<div class="y-adjust-group"><label>Offset Y</label><input type="number" step="any" value="'+ch.yOffset+'" onchange="onChannelYSettingChange('+f.id+','+idx+',\'yOffset\',this)"></div>'+
+        '<div class="y-adjust-group"><label>Escala Y</label><input type="number" step="any" value="'+ch.yScale+'" onchange="onChannelYSettingChange('+f.id+','+idx+',\'yScale\',this)"></div>'+
+        puField+'</div>';
+    });
+    html+='</div>';
+  });
+  container.innerHTML=html;
+}
+
+function onChannelYSettingChange(fileId,idx,key,inputEl){
+  const f=fileStore.find(f=>f.id===fileId);
+  if(!f) return;
+  let val=parseFloat(inputEl.value);
+  if(isNaN(val)) val=(key==='yScale'||key==='baseValue')?1:0;
+  if(key==='baseValue'&&val===0) val=1;
+  f.channels[idx][key]=val;
+  updateChart();
+}
+
+function onChannelTextSettingChange(fileId,idx,key,inputEl){
+  const f=fileStore.find(f=>f.id===fileId);
+  if(!f) return;
+  f.channels[idx][key]=inputEl.value.trim();
+  updateChart();
+}
+
+function onChannelCheckboxChange(cb){
+  const count=document.querySelectorAll('.channel-checkbox:checked').length;
+  if(cb.checked&&count>MAX_CHANNELS){
+    cb.checked=false;
+    alert('Limite de '+MAX_CHANNELS+' canais simultaneos atingido.');
+    return;
+  }
+  updateSelectedCounter();
+  updateChart();
+}
+
+function updateSelectedCounter(){
+  const count=document.querySelectorAll('.channel-checkbox:checked').length;
+  const el=document.getElementById('selectionCounter');
+  el.innerText=count+'/'+MAX_CHANNELS+' canais selecionados';
+  el.classList.toggle('limit-reached',count>=MAX_CHANNELS);
+}
+
+/* === CALCULO DE SERIES === */
+function getAdjustedTime(f){
+  const start=f.trimStart||0;
+  const end=(f.trimEnd===-1||f.trimEnd==null)?f.rawTime.length:f.trimEnd;
+  return f.rawTime.slice(start,end).map(t=>t*f.scaleX+f.offsetX);
+}
+
+function getAdjustedChannel(f,idx){
+  const start=f.trimStart||0;
+  const end=(f.trimEnd===-1||f.trimEnd==null)?f.channelData[idx].length:f.trimEnd;
+  const slice=f.channelData[idx].slice(start,end);
+  const ch=f.channels[idx];
+  const yScale=(!ch.yScale||ch.yScale===0)?1:ch.yScale;
+  const yOffset=ch.yOffset||0;
+  const base=(!ch.baseValue||ch.baseValue===0)?1:ch.baseValue;
+  return slice.map(v=>{
+    if(v===null||v===undefined) return null;
+    const eng=v*yScale+yOffset;
+    return (globalMode==='pu')?(eng/base):eng;
+  });
+}
+
+function buildSelectedSeries(){
+  const series=[];
+  document.querySelectorAll('.channel-checkbox:checked').forEach(cb=>{
+    const parts=cb.id.split('_');
+    const fileId=parseInt(parts[1]), idx=parseInt(parts[2]);
+    const f=fileStore.find(f=>f.id===fileId);
+    if(!f) return;
+    const ch=f.channels[idx];
+    const unitSuffix=(globalMode==='pu')?' (pu)':(ch.unit&&ch.unit!=='digital'?' ('+ch.unit+')':'');
+    series.push({label:f.filename+' \u00b7 '+ch.name+unitSuffix, times:getAdjustedTime(f), values:getAdjustedChannel(f,idx)});
+  });
+  return series;
+}
+
+/* === GRAFICO === */
+function updateChart(){
+  const series=buildSelectedSeries();
+  const ctx=document.getElementById('osciloChart').getContext('2d');
+  const tuLabel=document.getElementById('timeUnit').value;
+  const yLabel=(globalMode==='pu')?'Valores (PU)':'Valores (Engenharia)';
+  const isDark=(plotBgColor==='black');
+  const tc=isDark?'#fff':'#222';
+  const gc=isDark?'rgba(255,255,255,0.15)':'rgba(0,0,0,0.12)';
+  const tkc=isDark?'#ccc':'#444';
+
+  const datasets=series.map((s,idx)=>({
+    label:s.label,
+    data:s.times.map((t,i)=>{const v=s.values[i];return {x:t,y:(v===null||isNaN(v))?null:v};}),
+    borderColor:CHART_COLORS[idx%CHART_COLORS.length],
+    backgroundColor:CHART_COLORS[idx%CHART_COLORS.length],
+    borderWidth:1.5, pointRadius:0, fill:false, spanGaps:true
+  }));
+
+  if(chartInstance) chartInstance.destroy();
+  chartInstance=new Chart(ctx,{
+    type:'line',
+    data:{datasets},
+    options:{
+      responsive:true, maintainAspectRatio:false, animation:false, parsing:false,
+      scales:{
+        x:{type:'linear',title:{display:true,text:'Tempo ('+tuLabel+')',color:tc},ticks:{maxTicksLimit:12,color:tkc},grid:{color:gc}},
+        y:{title:{display:true,text:yLabel,color:tc},ticks:{color:tkc},grid:{color:gc}}
+      },
+      plugins:{legend:{position:'top',labels:{boxWidth:12,font:{size:10},color:tc}}}
+    }
+  });
+
+  attachChartEvents();
+  hideCursorReadout();
+}
+
+/* === EXPORTACAO CSV === */
+function exportToCSV(){
+  const series=buildSelectedSeries();
+  if(series.length===0){alert('Selecione ao menos um canal antes de exportar.');return;}
+  const tuLabel=document.getElementById('timeUnit').value;
+  const fn=(v)=>(v===undefined||v===null||isNaN(v))?'':v.toString().replace('.',',');
+  let headers=[];
+  series.forEach(s=>{headers.push('Tempo ('+tuLabel+') - '+s.label);headers.push(s.label);});
+  let csvLines=[headers.join(';')];
+  const maxRows=Math.max(...series.map(s=>s.times.length),0);
+  for(let r=0;r<maxRows;r++){
+    const row=[];
+    series.forEach(s=>{row.push(fn(s.times[r]));row.push(fn(s.values[r]));});
+    csvLines.push(row.join(';'));
+  }
+  const blob=new Blob(['\ufeff'+csvLines.join('\n')],{type:'text/csv;charset=utf-8;'});
+  const link=document.createElement('a');
+  link.href=URL.createObjectURL(blob);
+  link.download='oscilografia_export.csv';
+  link.click();
+}
 </script>
 </body>
 </html>
