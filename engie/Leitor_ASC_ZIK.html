@@ -58,16 +58,17 @@
     .fmt-badge.asc { background:#e3f2fd; color:#005a9c; }
     .fmt-badge.zik,.fmt-badge.zic { background:#e8f5e9; color:#2e7d32; }
     .fmt-badge.csv { background:#fff3e0; color:#e65100; }
+    .fmt-badge.ttrecx { background:#f3e5f5; color:#6a1b9a; }
   </style>
 </head>
 <body>
 
   <h2>Leitor de Oscilografia - ASC_ZIC</h2>
-  <p class="subtitle">Suporta .asc (Reivax), .zik/.zic (COMTRADE) e .csv (exportacao). Ate 10 arquivos e 10 canais simultaneos.</p>
+  <p class="subtitle">Suporta .asc (Reivax), .zik/.zic (COMTRADE), .csv (exportacao) e .ttrecx (Siemens TechTrace). Ate 10 arquivos e 10 canais simultaneos.</p>
 
   <div class="card">
-    <label for="fileInput">Selecione ate 10 arquivos .asc, .zik, .zic ou .csv</label>
-    <input type="file" id="fileInput" accept=".asc,.zik,.zic,.csv" multiple>
+    <label for="fileInput">Selecione ate 10 arquivos .asc, .zik, .zic, .csv ou .ttrecx</label>
+    <input type="file" id="fileInput" accept=".asc,.zik,.zic,.csv,.ttrecx" multiple>
     <div id="status">Aguardando arquivo(s)...</div>
   </div>
 
@@ -108,7 +109,8 @@
     <p style="font-size:0.8em;color:#777;margin-top:8px;">
       Arquivos .asc: tempo no formato do arquivo (ajuste Escala X conforme necessidade).<br>
       Arquivos .zik/.zic: tempo reconstruido em ms (Escala X = 0,001 aplicada automaticamente para converter us -> ms).<br>
-      Arquivos .csv: tempo ja em ms, configuracao automatica de canais a partir dos cabecalhos.
+      Arquivos .csv: tempo ja em ms, configuracao automatica de canais a partir dos cabecalhos.<br>
+      Arquivos .ttrecx: tempo ja em ms (relativo ao inicio da gravacao), sinais nomeados automaticamente.
     </p>
   </div>
 
@@ -211,8 +213,8 @@
     for (const file of toProcess) {
       const ext = file.name.split('.').pop().toLowerCase();
 
-      if (!['asc','zik','zic','csv'].includes(ext)) {
-        setStatus('Formato nao suportado: "' + file.name + '". Use .asc, .zik, .zic ou .csv.');
+      if (!['asc','zik','zic','csv','ttrecx'].includes(ext)) {
+        setStatus('Formato nao suportado: "' + file.name + '". Use .asc, .zik, .zic, .csv ou .ttrecx.');
         continue;
       }
 
@@ -226,6 +228,10 @@
         } else if (ext === 'csv') {
           result = await parseCsvFile(file);
           // CSV: tempo ja em ms, sem conversao necessaria
+          fileScaleX = 1;
+        } else if (ext === 'ttrecx') {
+          result = await parseTtrecxFile(file);
+          // TTRECX: tempo ja em ms (relativo ao primeiro timestamp)
           fileScaleX = 1;
         } else {
           result = await parseZikFile(file);
@@ -249,7 +255,7 @@
         fileStore.push({
           id: nextFileId++,
           filename: file.name,
-          format: (ext === 'csv') ? 'CSV' : ext.toUpperCase(),
+          format: (ext === 'csv') ? 'CSV' : (ext === 'ttrecx') ? 'TTRECX' : ext.toUpperCase(),
           channels: channelsWithSettings,
           rawTime: result.rawTime,
           channelData: result.channelData,
@@ -355,7 +361,7 @@
     return { channels, rawTime, channelData };
   }
 
-  /* === PARSER CSV (exportacao de oscilografia) === */
+  /* === PARSER CSV (auto-detecao de formato) === */
   function parseCsvFile(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -366,40 +372,36 @@
   }
 
   function parseCsvCore(text) {
-    // Remove BOM
     const clean = text.replace(/^\uFEFF/, '');
     const lines = clean.split(/\r?\n/).filter(l => l.trim() !== '');
     if (lines.length < 2) throw new Error('CSV vazio ou sem dados.');
+    // Detecta formato: novo (PLC, separador virgula, primeira coluna "Sample")
+    // vs antigo (separador ponto-e-virgula, cabecalho com "·")
+    const firstField = lines[0].split(',')[0].replace(/"/g, '').trim().toLowerCase();
+    if (firstField === 'sample') {
+      return parsePlcCsvCore(lines);
+    }
+    return parseOsciloCsvCore(lines);
+  }
 
-    // Header: pares de colunas "Tempo (ms) - ..." / "<arquivo> · <sinal> (unidade)"
+  /* Formato antigo: separador ";", cabecalho "arquivo · sinal (unidade)" */
+  function parseOsciloCsvCore(lines) {
     const headers = lines[0].split(';').map(h => h.trim());
-
-    // Primeira passagem: extrai tanto a parte do arquivo quanto do sinal
     const raw = [];
     for (let i = 0; i + 1 < headers.length; i += 2) {
       const vh = headers[i + 1] || '';
       const mid = vh.indexOf('\u00b7');
       const filePart = mid !== -1 ? vh.substring(0, mid).trim() : '';
       const sigPart  = mid !== -1 ? vh.substring(mid + 1).trim() : vh;
-
-      // Extrai unidade do sinal
       let unit = '', sigName = sigPart;
       const um = sigPart.match(/\s*\(([^)]+)\)\s*$/);
       if (um) { unit = um[1]; sigName = sigPart.replace(/\s*\([^)]+\)\s*$/, '').trim(); }
-
-      // Nome do arquivo sem extensao (ex: "Canal 1 - Vt.asc" -> "Canal 1 - Vt")
       const fileName = filePart.replace(/\.[a-z]+$/i, '').trim();
-
       raw.push({ fileName, sigName, unit, colIdx: i + 1 });
     }
-
     if (raw.length === 0) throw new Error('Nenhum canal encontrado no cabecalho CSV.');
-
-    // Decide qual parte usar como nome:
-    // se os nomes de sinal sao todos unicos -> usa sinal; senao -> usa nome do arquivo
     const sigNames = raw.map(r => r.sigName);
     const uniqueSigs = new Set(sigNames).size === sigNames.length && sigNames.every(s => s.length > 0);
-
     const channels = [];
     const channelColIndices = [];
     raw.forEach((r, i) => {
@@ -409,13 +411,9 @@
       channels.push({ index: i, name, unit: r.unit });
       channelColIndices.push(r.colIdx);
     });
-
     if (channels.length === 0) throw new Error('Nenhum canal encontrado no cabecalho CSV.');
-
-    // Parse dados: separador ";" decimal ","
     const rawTime = [];
     const channelData = channels.map(() => []);
-
     for (let r = 1; r < lines.length; r++) {
       const cols = lines[r].split(';');
       if (cols.length < 2) continue;
@@ -425,15 +423,208 @@
       channels.forEach((ch, ci) => {
         const vi = channelColIndices[ci];
         const raw = vi < cols.length ? cols[vi].trim().replace(',', '.') : '';
-        const v = parseFloat(raw);
+        channelData[ci].push(isNaN(parseFloat(raw)) ? null : parseFloat(raw));
+      });
+    }
+    if (rawTime.length === 0) throw new Error('Nenhuma linha de dados numericos encontrada no CSV.');
+    return { channels, rawTime, channelData,
+      note: channels.length + ' canais detectados automaticamente pelo cabecalho.' };
+  }
+
+  /* Formato novo: separador ",", col0=Sample(ignorar), col1=X(ms) absoluto, col2+=PLC paths */
+  function parsePlcCsvCore(lines) {
+    // Tokenizador CSV simples com suporte a campos entre aspas
+    function csvRow(line) {
+      const cols = [];
+      let inQ = false, cur = '';
+      for (const ch of line) {
+        if (ch === '"') { inQ = !inQ; }
+        else if (ch === ',' && !inQ) { cols.push(cur); cur = ''; }
+        else { cur += ch; }
+      }
+      cols.push(cur);
+      return cols;
+    }
+    // Extrai nome curto de path PLC: ultimo segmento antes de "["
+    function plcName(h) {
+      h = h.replace(/^"|"$/g, '').trim();
+      const bi = h.indexOf('[');
+      const sub = bi !== -1 ? h.substring(0, bi) : h;
+      const di = sub.lastIndexOf('.');
+      let name = di !== -1 ? sub.substring(di + 1) : sub;
+      return name.replace(/"/g, '').trim() || h;
+    }
+    const headerCols = csvRow(lines[0]);
+    // col0=Sample, col1=X(ms) [...], col2..N = sinais
+    const sigHeaders = headerCols.slice(2);
+    if (sigHeaders.length === 0) throw new Error('Nenhum canal de sinal encontrado no CSV PLC.');
+    const channels = sigHeaders.map((h, i) => ({ index: i, name: plcName(h), unit: '' }));
+    const rawTime = [];
+    const channelData = channels.map(() => []);
+    let t0 = null;
+    for (let r = 1; r < lines.length; r++) {
+      const cols = csvRow(lines[r]);
+      if (cols.length < 3) continue;
+      const tAbs = parseFloat(cols[1]);  // tempo absoluto Unix ms
+      if (isNaN(tAbs)) continue;
+      if (t0 === null) t0 = tAbs;
+      rawTime.push(tAbs - t0);  // tempo relativo em ms
+      channels.forEach((ch, ci) => {
+        const v = parseFloat(cols[ci + 2]);
         channelData[ci].push(isNaN(v) ? null : v);
       });
     }
-
-    if (rawTime.length === 0) throw new Error('Nenhuma linha de dados numericos encontrada no CSV.');
-
+    if (rawTime.length === 0) throw new Error('Nenhuma linha de dados numericos encontrada no CSV PLC.');
     return { channels, rawTime, channelData,
-      note: channels.length + ' canais detectados automaticamente pelo cabecalho.' };
+      note: channels.length + ' canais PLC detectados automaticamente.' };
+  }
+
+  /* === PARSER TTRECX (Siemens TechTrace) === */
+  function parseTtrecxFile(file) {
+    return new Promise((resolve, reject) => {
+      const zip = new JSZip();
+      zip.loadAsync(file)
+        .then(async (contents) => {
+          let signalsFile = null, samplesFile = null;
+          for (const fn in contents.files) {
+            if (fn === 'Signals') signalsFile = contents.files[fn];
+            if (fn === 'Samples') samplesFile = contents.files[fn];
+          }
+          if (!signalsFile || !samplesFile) throw new Error('Arquivos Signals/Samples nao encontrados no .ttrecx');
+          const signalsXml = await signalsFile.async('string');
+          const samplesBuffer = await samplesFile.async('arraybuffer');
+          resolve(parseTtrecxCore(signalsXml, samplesBuffer));
+        })
+        .catch(reject);
+    });
+  }
+
+  function parseTtrecxCore(signalsXml, samplesBuffer) {
+    // Extrai mapa signalId -> nome curto do XML de sinais
+    const sigMap = {};
+    // Tenta atributo group="..." em RecordSignal (nome curto direto)
+    const groupRe = /<RecordSignal\s[^>]*?signalId="(\d+)"[^>]*?group="([^"]+)"/g;
+    let m;
+    while ((m = groupRe.exec(signalsXml)) !== null) sigMap[parseInt(m[1])] = m[2];
+    // Fallback: extrai ultimo segmento do elemento Name
+    const nameRe = /<ConfigurationSignal\s[^>]*?signalId="(\d+)"[^>]*?>[\s\S]*?<Name>([^<]+)<\/Name>/g;
+    while ((m = nameRe.exec(signalsXml)) !== null) {
+      const sid = parseInt(m[1]);
+      if (sid in sigMap) continue;
+      let name = m[2];
+      const bi = name.indexOf('[');
+      if (bi !== -1) name = name.substring(0, bi);
+      const di = name.lastIndexOf('.');
+      if (di !== -1) name = name.substring(di + 1);
+      sigMap[sid] = name.replace(/"/g, '').trim() || ('Signal' + sid);
+    }
+
+    const view = new DataView(samplesBuffer);
+    const bytes = new Uint8Array(samplesBuffer);
+
+    // Verifica magic "\x07TSP:1.0"
+    if (bytes[0] !== 0x07 || String.fromCharCode(...bytes.slice(1,8)) !== 'TSP:1.0') {
+      throw new Error('Arquivo .ttrecx: formato Samples nao reconhecido');
+    }
+
+    // Le n_signals e IDs do cabecalho
+    const nSigsTotal = view.getUint32(33, true);
+    const sigIds = [];
+    for (let i = 0; i < nSigsTotal; i++) sigIds.push(view.getUint32(49 + i * 4, true));
+    const sigNames = sigIds.map(sid => sigMap[sid] || ('Signal' + sid));
+
+    // Faixa valida de timestamps (nanosegundos para 2025-2026)
+    const TS_MIN = 1754000000000000000n;
+    const TS_MAX = 1756000000000000000n;
+
+    function readInt64(off) {
+      // Lê uint64 LE usando BigInt (evita perda de precisao)
+      const lo = BigInt(view.getUint32(off, true));
+      const hi = BigInt(view.getUint32(off + 4, true));
+      return hi * 0x100000000n + lo;
+    }
+
+    function readTag(off, len) {
+      let s = '';
+      for (let i = 0; i < len; i++) s += String.fromCharCode(bytes[off + i]);
+      return s;
+    }
+
+    // Itera blocos de dados a partir do offset 46472
+    let off = 46472;
+    const allTs = [];   // BigInt timestamps
+    const allSigs = Array.from({ length: nSigsTotal }, () => []);
+
+    while (off + 32 < samplesBuffer.byteLength) {
+      // Le timestamps ate encontrar valor fora da faixa
+      const blockTs = [];
+      while (off + 8 <= samplesBuffer.byteLength) {
+        const ts = readInt64(off);
+        if (ts <= TS_MIN || ts >= TS_MAX) break;
+        blockTs.push(ts);
+        off += 8;
+      }
+      if (blockTs.length === 0) break;
+      allTs.push(...blockTs);
+
+      // n_signals no bloco
+      if (off + 4 > samplesBuffer.byteLength) break;
+      const nSigsBlock = view.getUint32(off, true); off += 4;
+      if (nSigsBlock > 100) break;
+
+      // Sub-blocos de sinal
+      for (let s = 0; s < nSigsBlock; s++) {
+        if (off + 6 > samplesBuffer.byteLength) break;
+        const typeM = view.getUint32(off, true); off += 4;
+        const strLen = bytes[off]; off += 1;
+        if (off + strLen > samplesBuffer.byteLength) break;
+        const tag = readTag(off, strLen); off += strLen;
+
+        if (tag === 'TSSG:1.0') {
+          // Float64: flags(4) + n(4) + n*float64
+          if (off + 8 > samplesBuffer.byteLength) break;
+          off += 4; // flags
+          const n = view.getUint32(off, true); off += 4;
+          if (n > 10000 || off + n * 8 > samplesBuffer.byteLength) break;
+          for (let i = 0; i < n; i++) { allSigs[s].push(view.getFloat64(off, true)); off += 8; }
+        } else if (tag === 'TSSB:1.0') {
+          // Bool: n(4) + n*uint8 (sem campo flags!)
+          if (off + 4 > samplesBuffer.byteLength) break;
+          const n = view.getUint32(off, true); off += 4;
+          if (n > 10000 || off + n > samplesBuffer.byteLength) break;
+          for (let i = 0; i < n; i++) allSigs[s].push(bytes[off + i]);
+          off += n;
+        } else {
+          break; // tag desconhecida
+        }
+      }
+
+      // Pula estrutura TSSBL inter-bloco (indice de amostras)
+      if (off < samplesBuffer.byteLength && bytes[off] === 9) {
+        if (off + 10 <= samplesBuffer.byteLength && readTag(off + 1, 9) === 'TSSBL:1.0') {
+          off += 10; // uint8(9) + "TSSBL:1.0"
+          if (off + 4 > samplesBuffer.byteLength) break;
+          const nIdx = view.getUint32(off, true); off += 4;
+          off += nIdx * 4 + 4; // n valores uint32 + uint32 extra
+        }
+      }
+    }
+
+    if (allTs.length === 0) throw new Error('Nenhuma amostra encontrada no .ttrecx');
+
+    // Converte timestamps para ms relativos ao primeiro
+    const t0 = allTs[0];
+    const rawTime = allTs.map(ts => Number(ts - t0) / 1e6);
+
+    const channels = sigNames.map((name, idx) => ({ index: idx, name, unit: '' }));
+    const durS = rawTime.length > 1 ? (rawTime[rawTime.length - 1] / 1000).toFixed(1) : '0';
+
+    return {
+      channels,
+      rawTime,
+      channelData: allSigs,
+      note: 'TechTrace: ' + nSigsTotal + ' sinais, ' + rawTime.length + ' amostras, ' + durS + 's'
+    };
   }
 
   /* === PARSER ZIK/ZIC (COMTRADE dentro de ZIP) === */
