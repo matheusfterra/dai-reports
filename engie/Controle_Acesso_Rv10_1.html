@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Controle de Acesso - Usina de Jaguara | ENGIE</title>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<style>
+  :root{--azul:#00285A;--verde:#00A99D;--cinza:#f4f6f8;}
+  body{font-family:Arial,Helvetica,sans-serif;margin:0;background:var(--cinza);color:#222;}
+  header{background:var(--azul);color:#fff;padding:16px 24px;}
+  header h1{margin:0;font-size:20px;}
+  header small{opacity:.8;}
+  nav{display:flex;background:#fff;border-bottom:1px solid #ddd;flex-wrap:wrap;}
+  nav button{flex:1;padding:14px;border:none;background:#fff;cursor:pointer;font-weight:bold;color:#555;min-width:150px;}
+  nav button.active{color:var(--verde);border-bottom:3px solid var(--verde);}
+  section{display:none;padding:24px;max-width:960px;margin:0 auto;}
+  section.active{display:block;}
+  .card{background:#fff;border-radius:8px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.1);margin-bottom:16px;}
+  input[type=text]{width:100%;padding:10px;margin:6px 0 14px;border:1px solid #ccc;border-radius:6px;box-sizing:border-box;}
+  label{font-weight:bold;font-size:14px;}
+  .locais{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+  .locais button{padding:10px 14px;border:2px solid var(--azul);background:#fff;color:var(--azul);border-radius:6px;cursor:pointer;font-weight:bold;}
+  .locais button.selecionado{background:var(--azul);color:#fff;}
+  .btn{background:var(--verde);color:#fff;border:none;padding:10px 18px;border-radius:6px;cursor:pointer;font-weight:bold;margin:4px 4px 4px 0;}
+  .btn:hover{opacity:.9;}
+  .btn-secundario{background:var(--azul);}
+  .btn-alerta{background:#b3261e;}
+  .btn-mini{padding:6px 10px;font-size:12px;}
+  #qrArea{margin-top:16px;text-align:center;}
+  #qrArea img{max-width:100%;}
+  table{width:100%;border-collapse:collapse;margin-top:12px;background:#fff;}
+  th,td{border:1px solid #ddd;padding:8px;font-size:13px;vertical-align:top;}
+  th{background:var(--azul);color:#fff;}
+  .status{padding:10px;border-radius:6px;margin-top:10px;font-weight:bold;}
+  .status.ok{background:#d4edda;color:#155724;}
+  .status.erro{background:#f8d7da;color:#721c24;}
+  .status.aviso{background:#fff3cd;color:#856404;}
+  #reader{width:100%;max-width:400px;margin:auto;}
+  footer{text-align:center;padding:16px;color:#888;font-size:12px;}
+  .resumo{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;}
+  .resumo div{flex:1;min-width:140px;background:var(--azul);color:#fff;padding:12px;border-radius:8px;text-align:center;}
+  .resumo span{display:block;font-size:26px;font-weight:bold;}
+  .painel-som{background:#eef4f8;border-left:4px solid var(--verde);padding:12px 14px;border-radius:6px;margin-bottom:14px;font-size:13px;}
+  .painel-som ul{margin:8px 0 0 18px;padding:0;}
+  .flash-ok{animation:flashVerde .6s ease-out;}
+  .flash-erro{animation:flashVermelho .6s ease-out;}
+  @keyframes flashVerde{0%{background:#00A99D;}100%{background:transparent;}}
+  @keyframes flashVermelho{0%{background:#b3261e;}100%{background:transparent;}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Controle de Acesso — Usina de Jaguara</h1>
+  <small>Engie · Sistema de gestão de entrada e saída de colaboradores</small>
+</header>
+
+<nav>
+  <button class="active" onclick="mostrarAba('cadastro',this)">Cadastro</button>
+  <button onclick="mostrarAba('colaboradores',this)">Colaboradores</button>
+  <button onclick="mostrarAba('registro',this)">Registro de Acesso (QR)</button>
+  <button onclick="mostrarAba('relatorio',this)">Planilha / Relatório</button>
+</nav>
+
+<!-- ================= CADASTRO ================= -->
+<section id="cadastro" class="active">
+  <div class="card">
+    <h2>Cadastro de Colaborador</h2>
+    <label>Nome</label>
+    <input type="text" id="cadNome" placeholder="Nome completo">
+
+    <label>Empresa</label>
+    <input type="text" id="cadEmpresa" placeholder="Empresa">
+
+    <label>Local (selecione um)</label>
+    <div class="locais" id="locaisCadastro">
+      <button data-local="Usina" onclick="selecionarLocal(this)">Usina</button>
+      <button data-local="SE 345" onclick="selecionarLocal(this)">SE 345</button>
+      <button data-local="SE 500" onclick="selecionarLocal(this)">SE 500</button>
+      <button data-local="PMJA" onclick="selecionarLocal(this)">PMJA</button>
+      <button data-local="PEJA" onclick="selecionarLocal(this)">PEJA</button>
+      <button data-local="Outros" onclick="selecionarLocal(this)">Outros</button>
+    </div>
+
+    <button class="btn" onclick="cadastrarColaborador()">Gerar Cadastro + QR Code</button>
+
+    <div id="qrArea"></div>
+    <div id="qrAcoes" style="text-align:center;"></div>
+    <div id="statusCadastro"></div>
+  </div>
+</section>
+
+<!-- ================= COLABORADORES ================= -->
+<section id="colaboradores">
+  <div class="card">
+    <h2>Colaboradores Cadastrados</h2>
+    <p>Reemita o QR Code identificado (com nome e empresa) para download ou impressão.</p>
+    <table id="tabelaColaboradores">
+      <thead>
+        <tr><th>Nome</th><th>Empresa</th><th>Local</th><th>Situação</th><th>QR Code</th><th>Ações</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div id="qrTemp" style="display:none;"></div>
+  </div>
+</section>
+
+<!-- ================= REGISTRO ================= -->
+<section id="registro">
+  <div class="card">
+    <h2>Leitura de QR Code (Entrada/Saída)</h2>
+
+    <div class="painel-som">
+      <b>Sinalização sonora:</b>
+      <ul>
+        <li><b>1 bip agudo</b> — Entrada registrada</li>
+        <li><b>2 bips médios</b> — Saída registrada</li>
+        <li><b>1 bip grave longo</b> — Bloqueado (menos de 5 min desde a entrada)</li>
+        <li><b>3 bips graves rápidos</b> — QR Code inválido ou erro</li>
+      </ul>
+      <div style="margin-top:10px;">
+        <label style="font-weight:normal;">
+          <input type="checkbox" id="somAtivo" checked> Som ativado
+        </label>
+        <span style="margin-left:12px;">
+          <button class="btn btn-mini btn-secundario" onclick="desbloquearAudio();tocarEntrada()">Testar Entrada</button>
+          <button class="btn btn-mini btn-secundario" onclick="desbloquearAudio();tocarSaida()">Testar Saída</button>
+          <button class="btn btn-mini btn-secundario" onclick="desbloquearAudio();tocarBloqueio()">Testar Bloqueio</button>
+          <button class="btn btn-mini btn-secundario" onclick="desbloquearAudio();tocarErro()">Testar Erro</button>
+        </span>
+      </div>
+    </div>
+
+    <p>
+      Regra: ao registrar a <b>entrada</b>, o mesmo QR Code só poderá registrar
+      <b>saída</b> após <b>1 minuto</b>. Leituras repetidas do mesmo código em
+      menos de 3 segundos são ignoradas automaticamente.
+    </p>
+
+    <button class="btn" onclick="iniciarLeitura()">Iniciar Câmera</button>
+    <button class="btn btn-secundario" onclick="pararLeitura()">Parar Câmera</button>
+    <div id="reader" style="margin-top:14px;"></div>
+    <div id="statusLeitura"></div>
+  </div>
+</section>
+
+<!-- ================= RELATORIO ================= -->
+<section id="relatorio">
+  <div class="card">
+    <h2>Planilha de Controle</h2>
+
+    <div class="resumo">
+      <div><span id="totEntradas">0</span>Entradas</div>
+      <div><span id="totSaidas">0</span>Saídas</div>
+      <div><span id="totPermanentes">0</span>Permanentes</div>
+    </div>
+
+    <button class="btn" onclick="atualizarTabela()">Atualizar Planilha</button>
+    <button class="btn btn-secundario" onclick="exportarCSV()">Exportar CSV / Excel</button>
+    <button class="btn btn-secundario" onclick="imprimirPlanilha()">Imprimir / Salvar PDF</button>
+    <button class="btn btn-alerta" onclick="limparRegistros()">Limpar Registros do Dia</button>
+
+    <table id="tabelaPlanilha">
+      <thead>
+        <tr><th>Lista de Entrada</th><th>Lista de Saída</th><th>Permanentes (dentro atualmente)</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div id="statusRelatorio"></div>
+  </div>
+</section>
+
+<footer>Dados armazenados localmente no navegador (localStorage). Exporte a planilha periodicamente.</footer>
+
+<script>
+/* =====================================================
+   PARÂMETROS
+===================================================== */
+const INTERVALO_MINIMO_LEITURA_MS = 3000;
+const TEMPO_MINIMO_ENTRE_ENTRADA_SAIDA_MS = 1 * 60 * 1000;
+
+/* =====================================================
+   SINALIZAÇÃO SONORA (Web Audio API)
+===================================================== */
+let audioCtx = null;
+
+function desbloquearAudio(){
+  if(!audioCtx){
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(AC) audioCtx = new AC();
+  }
+  if(audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+}
+
+function somAtivado(){
+  const cb = document.getElementById("somAtivo");
+  return cb ? cb.checked : true;
+}
+
+function bip(frequencia, duracao, atraso=0, tipo="sine", volume=0.25){
+  if(!somAtivado()) return;
+  desbloquearAudio();
+  if(!audioCtx) return;
+
+  const inicio = audioCtx.currentTime + atraso;
+  const osc = audioCtx.createOscillator();
+  const ganho = audioCtx.createGain();
+
+  osc.type = tipo;
+  osc.frequency.setValueAtTime(frequencia, inicio);
+
+  ganho.gain.setValueAtTime(0, inicio);
+  ganho.gain.linearRampToValueAtTime(volume, inicio + 0.01);
+  ganho.gain.linearRampToValueAtTime(0, inicio + duracao);
+
+  osc.connect(ganho);
+  ganho.connect(audioCtx.destination);
+  osc.start(inicio);
+  osc.stop(inicio + duracao + 0.02);
+}
+
+function tocarEntrada(){ bip(880, 0.15, 0, "sine", 0.3); }
+function tocarSaida(){
+  bip(660, 0.13, 0.00, "sine", 0.3);
+  bip(660, 0.13, 0.20, "sine", 0.3);
+}
+function tocarBloqueio(){ bip(300, 0.60, 0, "square", 0.20); }
+function tocarErro(){
+  bip(200, 0.10, 0.00, "square", 0.22);
+  bip(200, 0.10, 0.16, "square", 0.22);
+  bip(200, 0.10, 0.32, "square", 0.22);
+}
+
+function piscar(elemento, classe){
+  elemento.classList.remove("flash-ok","flash-erro");
+  void elemento.offsetWidth;
+  elemento.classList.add(classe);
+}
+
+/* =====================================================
+   ARMAZENAMENTO
+===================================================== */
+function carregar(chave){ return JSON.parse(localStorage.getItem(chave) || "[]"); }
+function salvar(chave, valor){ localStorage.setItem(chave, JSON.stringify(valor)); }
+
+let colaboradores = carregar("colaboradores");
+let entradas = carregar("entradas");
+let saidas   = carregar("saidas");
+
+/* =====================================================
+   NAVEGAÇÃO
+===================================================== */
+function mostrarAba(id, botao){
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  if(botao) botao.classList.add("active");
+  if(id === "relatorio") atualizarTabela();
+  if(id === "colaboradores") atualizarTabelaColaboradores();
+}
+
+/* =====================================================
+   GERAÇÃO DO QR COM LEGENDA (NOME / EMPRESA / LOCAL)
+===================================================== */
+function gerarQRBruto(containerId, dados, tamanho){
+  const container = document.getElementById(containerId);
+  container.innerHTML = "";
+  new QRCode(container, { text: dados, width: tamanho, height: tamanho });
+}
+
+function ajustarTexto(ctx, texto, larguraMax){
+  let t = String(texto);
+  while(ctx.measureText(t).width > larguraMax && t.length > 4){
+    t = t.slice(0, -2);
+  }
+  return t === String(texto) ? t : t + "…";
+}
+
+/**
+ * Gera o QR Code e compõe uma imagem única com o código
+ * e a identificação (nome, empresa e local) abaixo.
+ * Retorna uma Promise com o dataURL PNG.
+ */
+function montarQRIdentificado(containerTemp, nome, empresa, local, tamanho=220){
+  const dados = JSON.stringify({ nome, empresa, local });
+  gerarQRBruto(containerTemp, dados, tamanho);
+
+  return new Promise((resolve)=>{
+    setTimeout(()=>{
+      const container = document.getElementById(containerTemp);
+      const origem = container.querySelector("canvas") || container.querySelector("img");
+      if(!origem){ resolve(null); return; }
+
+      const desenhar = ()=>{
+        const margem = 18;
+        const alturaLegenda = 82;
+        const largura = tamanho + margem*2;
+        const altura  = tamanho + margem + alturaLegenda;
+
+        const canvas = document.createElement("canvas");
+        canvas.width = largura;
+        canvas.height = altura;
+        const ctx = canvas.getContext("2d");
+
+        // Fundo
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, largura, altura);
+
+        // QR Code
+        ctx.drawImage(origem, margem, margem, tamanho, tamanho);
+
+        // Linha separadora
+        ctx.strokeStyle = "#dddddd";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(margem, tamanho + margem + 8);
+        ctx.lineTo(largura - margem, tamanho + margem + 8);
+        ctx.stroke();
+
+        // Legenda de identificação
+        ctx.textAlign = "center";
+        const larguraTexto = largura - 16;
+        let y = tamanho + margem + 30;
+
+        ctx.fillStyle = "#00285A";
+        ctx.font = "bold 16px Arial";
+        ctx.fillText(ajustarTexto(ctx, nome, larguraTexto), largura/2, y);
+
+        y += 21;
+        ctx.fillStyle = "#333333";
+        ctx.font = "14px Arial";
+        ctx.fillText(ajustarTexto(ctx, empresa, larguraTexto), largura/2, y);
+
+        y += 19;
+        ctx.fillStyle = "#666666";
+        ctx.font = "12px Arial";
+        ctx.fillText(ajustarTexto(ctx, "Local: " + local, larguraTexto), largura/2, y);
+
+        // Moldura
+        ctx.strokeStyle = "#00285A";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(1, 1, largura-2, altura-2);
+
+        resolve(canvas.toDataURL("image/png"));
+      };
+
+      if(origem.tagName === "IMG" && !origem.complete){
+        origem.onload = desenhar;
+      } else {
+        desenhar();
+      }
+    }, 300);
+  });
+}
+
+/* =====================================================
+   CADASTRO
+===================================================== */
+let localSelecionado = null;
+
+function selecionarLocal(botao){
+  document.querySelectorAll("#locaisCadastro button").forEach(b=>b.classList.remove("selecionado"));
+  botao.classList.add("selecionado");
+  localSelecionado = botao.dataset.local;
+}
+
+function cadastrarColaborador(){
+  const nome = document.getElementById("cadNome").value.trim();
+  const empresa = document.getElementById("cadEmpresa").value.trim();
+  const statusEl = document.getElementById("statusCadastro");
+  const localEscolhido = localSelecionado;
+
+  if(!nome || !empresa || !localEscolhido){
+    statusEl.className = "status erro";
+    statusEl.textContent = "Preencha Nome, Empresa e selecione o Local.";
+    tocarErro();
+    return;
+  }
+
+  const duplicado = colaboradores.find(c=>c.nome===nome && c.empresa===empresa);
+  if(duplicado){
+    statusEl.className = "status aviso";
+    statusEl.textContent = "Colaborador já cadastrado. QR Code identificado regerado abaixo.";
+    tocarBloqueio();
+  } else {
+    colaboradores.push({ nome, empresa, local: localEscolhido, dentro:false, horaEntradaTimestamp:null });
+    salvar("colaboradores", colaboradores);
+    statusEl.className = "status ok";
+    statusEl.textContent = `Cadastro realizado: ${nome} - ${empresa} - ${localEscolhido}.`;
+    tocarEntrada();
+  }
+
+  montarQRIdentificado("qrTemp", nome, empresa, localEscolhido, 220).then(imagem=>{
+    const qrArea = document.getElementById("qrArea");
+    if(!imagem){
+      qrArea.innerHTML = "<p>Não foi possível gerar a imagem do QR Code.</p>";
+      return;
+    }
+    qrArea.innerHTML = `<img src="${imagem}" alt="QR Code de ${nome}">`;
+    document.getElementById("qrAcoes").innerHTML = `
+      <button class="btn" onclick="baixarImagem('${escaparJS(nome)}', document.querySelector('#qrArea img').src)">Baixar QR (PNG)</button>
+      <button class="btn btn-secundario" onclick="imprimirCredencial('${escaparJS(nome)}', document.querySelector('#qrArea img').src)">Imprimir Credencial (Crachá)</button>
+    `;
+  });
+
+  document.getElementById("cadNome").value = "";
+  document.getElementById("cadEmpresa").value = "";
+  atualizarTabelaColaboradores();
+}
+
+function escaparJS(texto){
+  return String(texto).replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+}
+
+function baixarImagem(nome, imagemBase64){
+  const link = document.createElement("a");
+  link.href = imagemBase64;
+  link.download = `QR_${nome.replace(/\s+/g,"_")}.png`;
+  link.click();
+}
+
+/* =====================================================
+   IMPRESSÃO DE CREDENCIAL — tamanho crachá (54×85mm)
+===================================================== */
+function imprimirCredencial(nome, imagemBase64){
+  const janela = window.open("", "_blank");
+  janela.document.write(`
+    <!DOCTYPE html>
+    <html><head>
+    <meta charset="UTF-8">
+    <title>Credencial - ${nome}</title>
+    <style>
+      /* Remove margens do navegador na impressão */
+      @page {
+        size: 54mm 85mm;
+        margin: 0;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        width: 54mm;
+        height: 85mm;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .cracha {
+        width: 52mm;
+        height: 83mm;
+        border: 1.5px solid #00285A;
+        border-radius: 3mm;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3mm;
+        gap: 2mm;
+      }
+      .topo {
+        width: 100%;
+        background: #00285A;
+        color: #fff;
+        text-align: center;
+        font-size: 7pt;
+        font-weight: bold;
+        padding: 2mm 1mm;
+        border-radius: 1.5mm 1.5mm 0 0;
+        letter-spacing: 0.5px;
+      }
+      .qr-img {
+        width: 38mm;
+        height: 38mm;
+        display: block;
+      }
+      .separador {
+        width: 90%;
+        border: none;
+        border-top: 0.5px solid #ddd;
+      }
+      .info {
+        width: 100%;
+        text-align: center;
+      }
+      .info-nome {
+        font-size: 8pt;
+        font-weight: bold;
+        color: #00285A;
+        word-break: break-word;
+        line-height: 1.2;
+      }
+      .info-empresa {
+        font-size: 7pt;
+        color: #333;
+        margin-top: 1mm;
+        word-break: break-word;
+        line-height: 1.2;
+      }
+      .info-local {
+        font-size: 6.5pt;
+        color: #666;
+        margin-top: 1mm;
+      }
+      .rodape {
+        font-size: 5.5pt;
+        color: #888;
+        text-align: center;
+        margin-top: auto;
+      }
+    </style>
+    </head>
+    <body>
+      <div class="cracha">
+        <div class="topo">USINA DE JAGUARA · ENGIE</div>
+        <img class="qr-img" src="${imagemBase64}" alt="QR Code">
+        <hr class="separador">
+        <div class="info">
+          <div class="info-nome">${nome}</div>
+        </div>
+        <div class="rodape">Controle de Acesso</div>
+      </div>
+      <script>window.onload = () => window.print();<\/script>
+    </body></html>
+  `);
+  janela.document.close();
+}
+
+/* =====================================================
+   LISTA DE COLABORADORES
+===================================================== */
+function atualizarTabelaColaboradores(){
+  const tbody = document.querySelector("#tabelaColaboradores tbody");
+  tbody.innerHTML = "";
+
+  if(colaboradores.length === 0){
+    tbody.innerHTML = `<tr><td colspan="6">Nenhum colaborador cadastrado.</td></tr>`;
+    return;
+  }
+
+  colaboradores.forEach((c, i)=>{
+    tbody.innerHTML += `
+      <tr>
+        <td>${c.nome}</td>
+        <td>${c.empresa}</td>
+        <td>${c.local}</td>
+        <td>${c.dentro ? "Dentro" : "Fora"}</td>
+        <td>
+          <button class="btn btn-mini" onclick="reemitirQR(${i},'baixar')">Baixar</button>
+          <button class="btn btn-mini btn-secundario" onclick="reemitirQR(${i},'imprimir')">Imprimir</button>
+        </td>
+        <td>
+          <button class="btn btn-mini btn-alerta" onclick="excluirColaborador(${i})">Excluir</button>
+        </td>
+      </tr>`;
+  });
+}
+
+function reemitirQR(indice, acao){
+  const c = colaboradores[indice];
+  montarQRIdentificado("qrTemp", c.nome, c.empresa, c.local, 220).then(imagem=>{
+    if(!imagem) return;
+    if(acao === "baixar") baixarImagem(c.nome, imagem);
+    else imprimirCredencial(c.nome, imagem);
+  });
+}
+
+function excluirColaborador(indice){
+  const colaborador = colaboradores[indice];
+  if(!confirm(`Deseja excluir ${colaborador.nome}?\n\nTodos os registros de entrada e saída deste colaborador também serão removidos.`)) return;
+  entradas = entradas.filter(e => !(e.nome === colaborador.nome && e.empresa === colaborador.empresa));
+  saidas = saidas.filter(s => !(s.nome === colaborador.nome && s.empresa === colaborador.empresa));
+  colaboradores.splice(indice, 1);
+  salvar("colaboradores", colaboradores);
+  salvar("entradas", entradas);
+  salvar("saidas", saidas);
+  atualizarTabelaColaboradores();
+  atualizarTabela();
+  alert("Colaborador removido com sucesso.");
+}
+
+/* =====================================================
+   LEITURA DE QR CODE
+===================================================== */
+let html5QrCode = null;
+let ultimoTextoLido = null;
+let ultimoTimestampLeitura = 0;
+
+function iniciarLeitura(){
+  desbloquearAudio();
+  const statusEl = document.getElementById("statusLeitura");
+  html5QrCode = new Html5Qrcode("reader");
+  html5QrCode.start(
+    { facingMode: "environment" },
+    { fps: 10, qrbox: 250 },
+    onLeituraSucesso
+  ).catch(err=>{
+    statusEl.className = "status erro";
+    statusEl.textContent = "Erro ao acessar câmera: " + err;
+    tocarErro();
+  });
+}
+
+function pararLeitura(){
+  if(html5QrCode) html5QrCode.stop().catch(()=>{});
+  ultimoTextoLido = null;
+  ultimoTimestampLeitura = 0;
+}
+
+function onLeituraSucesso(texto){
+  const agora = Date.now();
+  if(texto === ultimoTextoLido && (agora - ultimoTimestampLeitura) < INTERVALO_MINIMO_LEITURA_MS) return;
+  ultimoTextoLido = texto;
+  ultimoTimestampLeitura = agora;
+
+  const statusEl = document.getElementById("statusLeitura");
+  let dados;
+  try{
+    dados = JSON.parse(texto);
+    if(!dados.nome || !dados.empresa) throw new Error("campos ausentes");
+  }catch(e){
+    statusEl.className = "status erro";
+    statusEl.textContent = "QR Code inválido ou não pertencente a este sistema.";
+    tocarErro();
+    piscar(statusEl, "flash-erro");
+    return;
+  }
+  registrarAcesso(dados);
+}
+
+function registrarAcesso({nome, empresa, local}){
+  let colaborador = colaboradores.find(c=>c.nome===nome && c.empresa===empresa);
+  if(!colaborador){
+    colaborador = { nome, empresa, local, dentro:false, horaEntradaTimestamp:null };
+    colaboradores.push(colaborador);
+  }
+
+  const statusEl = document.getElementById("statusLeitura");
+  const agora = Date.now();
+  const agoraFormatado = new Date(agora).toLocaleString("pt-BR");
+
+  if(!colaborador.dentro){
+    entradas.push({ nome, empresa, local, hora: agoraFormatado });
+    colaborador.dentro = true;
+    colaborador.horaEntradaTimestamp = agora;
+
+    salvar("entradas", entradas);
+    salvar("colaboradores", colaboradores);
+
+    statusEl.className = "status ok";
+    statusEl.textContent = `ENTRADA registrada: ${nome} - ${empresa} - ${local} (${agoraFormatado})`;
+    tocarEntrada();
+    piscar(statusEl, "flash-ok");
+    atualizarTabela();
+    return;
+  }
+
+  const decorrido = agora - (colaborador.horaEntradaTimestamp || 0);
+  if(decorrido < TEMPO_MINIMO_ENTRE_ENTRADA_SAIDA_MS){
+    const restanteMin = Math.ceil((TEMPO_MINIMO_ENTRE_ENTRADA_SAIDA_MS - decorrido)/60000);
+    statusEl.className = "status aviso";
+    statusEl.textContent =
+      `Aguarde para registrar a saída: ${nome} entrou há menos de 1 minuto. ` +
+      `Tente novamente em aproximadamente ${restanteMin} minuto(s).`;
+    tocarBloqueio();
+    piscar(statusEl, "flash-erro");
+    return;
+  }
+
+  saidas.push({ nome, empresa, local, hora: agoraFormatado });
+  colaborador.dentro = false;
+  colaborador.horaEntradaTimestamp = null;
+
+  salvar("saidas", saidas);
+  salvar("colaboradores", colaboradores);
+
+  statusEl.className = "status ok";
+  statusEl.textContent = `SAÍDA registrada: ${nome} - ${empresa} - ${local} (${agoraFormatado})`;
+  tocarSaida();
+  piscar(statusEl, "flash-ok");
+  atualizarTabela();
+}
+
+/* =====================================================
+   PLANILHA
+===================================================== */
+function linhasPlanilha(){
+  const permanentes = colaboradores.filter(c=>c.dentro);
+  const total = Math.max(entradas.length, saidas.length, permanentes.length, 1);
+  const linhas = [];
+  for(let i=0;i<total;i++){
+    linhas.push({
+      entrada: entradas[i] ? `${entradas[i].nome} - ${entradas[i].empresa} - ${entradas[i].local} (${entradas[i].hora})` : "",
+      saida:   saidas[i]   ? `${saidas[i].nome} - ${saidas[i].empresa} - ${saidas[i].local} (${saidas[i].hora})` : "",
+      permanente: permanentes[i] ? `${permanentes[i].nome} - ${permanentes[i].empresa} - ${permanentes[i].local}` : ""
+    });
+  }
+  return { linhas, permanentes };
+}
+
+function atualizarTabela(){
+  const { linhas, permanentes } = linhasPlanilha();
+  const tbody = document.querySelector("#tabelaPlanilha tbody");
+  tbody.innerHTML = linhas.map(l=>
+    `<tr><td>${l.entrada}</td><td>${l.saida}</td><td>${l.permanente}</td></tr>`
+  ).join("");
+
+  document.getElementById("totEntradas").textContent = entradas.length;
+  document.getElementById("totSaidas").textContent = saidas.length;
+  document.getElementById("totPermanentes").textContent = permanentes.length;
+  atualizarTabelaColaboradores();
+}
+
+function exportarCSV(){
+  const { linhas } = linhasPlanilha();
+  let csv = "Lista de Entrada;Lista de Saida;Permanentes\n";
+  linhas.forEach(l=>{ csv += `${l.entrada};${l.saida};${l.permanente}\n`; });
+
+  const blob = new Blob(["\ufeff"+csv], {type:"text/csv;charset=utf-8;"});
+  const link = document.createElement("a");
+  const data = new Date().toISOString().slice(0,10);
+  link.href = URL.createObjectURL(blob);
+  link.download = `controle_acesso_jaguara_${data}.csv`;
+  link.click();
+
+  const statusEl = document.getElementById("statusRelatorio");
+  statusEl.className = "status ok";
+  statusEl.textContent = "Planilha exportada com sucesso.";
+}
+
+function imprimirPlanilha(){
+  const { linhas, permanentes } = linhasPlanilha();
+  const janela = window.open("", "_blank");
+  janela.document.write(`
+    <html><head><title>Planilha de Controle de Acesso</title>
+    <style>
+      body{font-family:Arial;padding:24px;}
+      h2{color:#00285A;}
+      table{width:100%;border-collapse:collapse;font-size:12px;}
+      th,td{border:1px solid #999;padding:6px;}
+      th{background:#00285A;color:#fff;}
+    </style></head>
+    <body>
+      <h2>Controle de Acesso — Usina de Jaguara (ENGIE)</h2>
+      <p>Emitido em: ${new Date().toLocaleString("pt-BR")} |
+         Entradas: ${entradas.length} | Saídas: ${saidas.length} | Permanentes: ${permanentes.length}</p>
+      <table>
+        <tr><th>Lista de Entrada</th><th>Lista de Saída</th><th>Permanentes</th></tr>
+        ${linhas.map(l=>`<tr><td>${l.entrada}</td><td>${l.saida}</td><td>${l.permanente}</td></tr>`).join("")}
+      </table>
+      <script>window.onload=()=>window.print();<\/script>
+    </body></html>
+  `);
+  janela.document.close();
+}
+
+function limparRegistros(){
+  if(!confirm("Isto apagará todas as entradas e saídas registradas. Os cadastros serão mantidos. Confirma?")) return;
+  entradas = [];
+  saidas = [];
+  colaboradores.forEach(c=>{ c.dentro = false; c.horaEntradaTimestamp = null; });
+  salvar("entradas", entradas);
+  salvar("saidas", saidas);
+  salvar("colaboradores", colaboradores);
+  atualizarTabela();
+
+  const statusEl = document.getElementById("statusRelatorio");
+  statusEl.className = "status ok";
+  statusEl.textContent = "Registros de entrada e saída limpos.";
+}
+
+/* Inicialização */
+atualizarTabela();
+</script>
+</body>
+</html>
