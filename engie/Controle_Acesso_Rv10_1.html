@@ -5,6 +5,7 @@
 <title>Controle de Acesso - Usina de Jaguara | ENGIE</title>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
   :root{--azul:#00285A;--verde:#00A99D;--cinza:#f4f6f8;}
   body{font-family:Arial,Helvetica,sans-serif;margin:0;background:var(--cinza);color:#222;}
@@ -96,6 +97,10 @@
   <div class="card">
     <h2>Colaboradores Cadastrados</h2>
     <p>Reemita o QR Code identificado (com nome e empresa) para download ou impressão.</p>
+    <div style="margin-bottom:14px;display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-secundario" onclick="exportarXLSX()">📊 Exportar XLSX</button>
+      <button class="btn btn-alerta" onclick="limparTodosDados()">🗑️ Limpar Todos os Dados</button>
+    </div>
     <table id="tabelaColaboradores">
       <thead>
         <tr><th>Nome</th><th>Empresa</th><th>Local</th><th>Situação</th><th>QR Code</th><th>Ações</th></tr>
@@ -797,6 +802,80 @@ function limparRegistros(){
   const statusEl = document.getElementById("statusRelatorio");
   statusEl.className = "status ok";
   statusEl.textContent = "Registros de entrada e saída limpos.";
+}
+
+/* =====================================================
+   EXPORTAR XLSX (SheetJS)
+===================================================== */
+function exportarXLSX(){
+  const wb = XLSX.utils.book_new();
+
+  // Aba 1 — Colaboradores cadastrados
+  const dadosColabs = colaboradores.map(c=>({
+    "Nome": c.nome,
+    "Empresa": c.empresa,
+    "Local": c.local,
+    "Situação": c.dentro ? "Dentro" : "Fora"
+  }));
+  const wsColabs = XLSX.utils.json_to_sheet(dadosColabs.length ? dadosColabs : [{"Nome":"","Empresa":"","Local":"","Situação":""}]);
+  XLSX.utils.book_append_sheet(wb, wsColabs, "Colaboradores");
+
+  // Aba 2 — Entradas
+  const dadosEntradas = entradas.map(e=>({
+    "Nome": e.nome,
+    "Empresa": e.empresa,
+    "Local": e.local,
+    "Data / Hora Entrada": e.hora
+  }));
+  const wsEntradas = XLSX.utils.json_to_sheet(dadosEntradas.length ? dadosEntradas : [{"Nome":"","Empresa":"","Local":"","Data / Hora Entrada":""}]);
+  XLSX.utils.book_append_sheet(wb, wsEntradas, "Entradas");
+
+  // Aba 3 — Saídas
+  const dadosSaidas = saidas.map(s=>({
+    "Nome": s.nome,
+    "Empresa": s.empresa,
+    "Local": s.local,
+    "Data / Hora Saída": s.hora
+  }));
+  const wsSaidas = XLSX.utils.json_to_sheet(dadosSaidas.length ? dadosSaidas : [{"Nome":"","Empresa":"","Local":"","Data / Hora Saída":""}]);
+  XLSX.utils.book_append_sheet(wb, wsSaidas, "Saídas");
+
+  // Aba 4 — Permanentes (quem está dentro agora)
+  const permanentes = colaboradores.filter(c=>c.dentro);
+  const dadosPerm = permanentes.map(c=>({
+    "Nome": c.nome,
+    "Empresa": c.empresa,
+    "Local": c.local
+  }));
+  const wsPerm = XLSX.utils.json_to_sheet(dadosPerm.length ? dadosPerm : [{"Nome":"","Empresa":"","Local":""}]);
+  XLSX.utils.book_append_sheet(wb, wsPerm, "Permanentes");
+
+  const data = new Date().toISOString().slice(0,10);
+  XLSX.writeFile(wb, `controle_acesso_jaguara_${data}.xlsx`);
+}
+
+/* =====================================================
+   LIMPAR TODOS OS DADOS (localStorage completo)
+===================================================== */
+function limparTodosDados(){
+  if(!confirm(
+    "ATENÇÃO: Isto apagará TODOS os dados armazenados:\n\n" +
+    "• Todos os colaboradores cadastrados\n" +
+    "• Todos os registros de entrada\n" +
+    "• Todos os registros de saída\n\n" +
+    "Esta ação não pode ser desfeita. Confirma?"
+  )) return;
+
+  colaboradores = [];
+  entradas = [];
+  saidas = [];
+  localStorage.removeItem("colaboradores");
+  localStorage.removeItem("entradas");
+  localStorage.removeItem("saidas");
+
+  atualizarTabelaColaboradores();
+  atualizarTabela();
+  alert("Todos os dados foram apagados.");
 }
 
 /* Inicialização */
