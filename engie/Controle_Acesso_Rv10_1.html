@@ -140,6 +140,14 @@
 
     <button class="btn" onclick="iniciarLeitura()">Iniciar Câmera</button>
     <button class="btn btn-secundario" onclick="pararLeitura()">Parar Câmera</button>
+    <!-- Fallback para file:// local: captura foto com câmera nativa -->
+    <div id="fallbackFoto" style="display:none;margin-top:12px;background:#fff3cd;border-left:4px solid #ffb300;padding:12px;border-radius:6px;">
+      <b>📷 Câmera via foto (modo local)</b><br>
+      <small>Tire uma foto do QR Code para registrar o acesso.</small><br><br>
+      <input type="file" id="qrFotoInput" accept="image/*" capture="environment"
+             style="display:none" onchange="lerQrDeFoto(this)">
+      <button class="btn" onclick="document.getElementById('qrFotoInput').click()">📷 Tirar Foto do QR Code</button>
+    </div>
     <div id="reader" style="margin-top:14px;"></div>
     <div id="statusLeitura"></div>
   </div>
@@ -595,16 +603,38 @@ function iniciarLeitura(){
     { fps: 10, qrbox: 250 },
     onLeituraSucesso
   ).catch(err=>{
-    statusEl.className = "status erro";
-    statusEl.textContent = "Erro ao acessar câmera: " + err;
-    tocarErro();
+    // Fallback automático para file:// ou quando câmera é bloqueada
+    document.getElementById("fallbackFoto").style.display = "block";
+    statusEl.className = "status aviso";
+    statusEl.textContent = "Câmera ao vivo bloqueada (arquivo local). Use o botão abaixo para tirar foto do QR Code.";
   });
 }
 
 function pararLeitura(){
   if(html5QrCode) html5QrCode.stop().catch(()=>{});
+  document.getElementById("fallbackFoto").style.display = "none";
   ultimoTextoLido = null;
   ultimoTimestampLeitura = 0;
+}
+
+function lerQrDeFoto(input){
+  const file = input.files[0];
+  if(!file) return;
+  const statusEl = document.getElementById("statusLeitura");
+  statusEl.className = "status aviso";
+  statusEl.textContent = "Lendo QR Code da foto...";
+  const scanner = new Html5Qrcode("reader");
+  scanner.scanFile(file, true)
+    .then(texto => {
+      input.value = ""; // reset para permitir nova leitura
+      onLeituraSucesso(texto);
+    })
+    .catch(err => {
+      input.value = "";
+      statusEl.className = "status erro";
+      statusEl.textContent = "QR Code não encontrado na foto. Tente novamente mais perto.";
+      tocarErro();
+    });
 }
 
 function onLeituraSucesso(texto){
