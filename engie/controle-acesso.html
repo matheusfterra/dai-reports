@@ -97,10 +97,15 @@
   <div class="card">
     <h2>Colaboradores Cadastrados</h2>
     <p>Reemita o QR Code identificado (com nome e empresa) para download ou impressão.</p>
-    <div style="margin-bottom:14px;display:flex;gap:8px;flex-wrap:wrap;">
+    <div style="margin-bottom:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
       <button class="btn btn-secundario" onclick="exportarXLSX()">📊 Exportar XLSX</button>
+      <label class="btn" style="background:#6a1b9a;cursor:pointer;margin:4px 4px 4px 0;">
+        📥 Importar XLSX
+        <input type="file" id="inputImportXLSX" accept=".xlsx" style="display:none;" onchange="importarXLSX(event)">
+      </label>
       <button class="btn btn-alerta" onclick="limparTodosDados()">🗑️ Limpar Todos os Dados</button>
     </div>
+    <div id="statusImport" style="display:none;"></div>
     <table id="tabelaColaboradores">
       <thead>
         <tr><th>Nome</th><th>Empresa</th><th>Local</th><th>Situação</th><th>QR Code</th><th>Ações</th></tr>
@@ -852,6 +857,113 @@ function exportarXLSX(){
 
   const data = new Date().toISOString().slice(0,10);
   XLSX.writeFile(wb, `controle_acesso_jaguara_${data}.xlsx`);
+}
+
+/* =====================================================
+   IMPORTAR XLSX (restaurar registros)
+===================================================== */
+function importarXLSX(event){
+  const file = event.target.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try{
+      const wb = XLSX.read(e.target.result, {type:'array'});
+
+      // Ler aba Colaboradores
+      const wsColabs = wb.Sheets["Colaboradores"];
+      const rowsColabs = wsColabs ? XLSX.utils.sheet_to_json(wsColabs) : [];
+
+      // Ler aba Entradas
+      const wsEntradas = wb.Sheets["Entradas"];
+      const rowsEntradas = wsEntradas ? XLSX.utils.sheet_to_json(wsEntradas) : [];
+
+      // Ler aba Saídas
+      const wsSaidas = wb.Sheets["Saídas"];
+      const rowsSaidas = wsSaidas ? XLSX.utils.sheet_to_json(wsSaidas) : [];
+
+      // Converter colaboradores — preservar estado "dentro" e gerar id único
+      const novosColabs = rowsColabs
+        .filter(r => r["Nome"] && r["Nome"].toString().trim())
+        .map(r => ({
+          id: Date.now() + Math.random(),
+          nome: r["Nome"] || "",
+          empresa: r["Empresa"] || "",
+          local: r["Local"] || "",
+          dentro: (r["Situação"] || "").toLowerCase() === "dentro"
+        }));
+
+      // Converter entradas
+      const novasEntradas = rowsEntradas
+        .filter(r => r["Nome"] && r["Nome"].toString().trim())
+        .map(r => ({
+          nome: r["Nome"] || "",
+          empresa: r["Empresa"] || "",
+          local: r["Local"] || "",
+          hora: r["Data / Hora Entrada"] || "",
+          tipo: "entrada",
+          ts: 0
+        }));
+
+      // Converter saídas
+      const novasSaidas = rowsSaidas
+        .filter(r => r["Nome"] && r["Nome"].toString().trim())
+        .map(r => ({
+          nome: r["Nome"] || "",
+          empresa: r["Empresa"] || "",
+          local: r["Local"] || "",
+          hora: r["Data / Hora Saída"] || "",
+          tipo: "saida",
+          ts: 0
+        }));
+
+      const modo = confirm(
+        `Importação encontrou:\n` +
+        `• ${novosColabs.length} colaboradores\n` +
+        `• ${novasEntradas.length} entradas\n` +
+        `• ${novasSaidas.length} saídas\n\n` +
+        `Clique OK para MESCLAR com os dados atuais.\n` +
+        `Clique Cancelar para SUBSTITUIR todos os dados atuais.`
+      );
+
+      if(modo === true){
+        // MESCLAR — adiciona apenas colaboradores que não existem ainda (nome+empresa)
+        const chaveExistente = new Set(colaboradores.map(c => c.nome+'|'+c.empresa));
+        novosColabs.forEach(c => {
+          if(!chaveExistente.has(c.nome+'|'+c.empresa)) colaboradores.push(c);
+        });
+        entradas.push(...novasEntradas);
+        saidas.push(...novasSaidas);
+      } else {
+        // SUBSTITUIR
+        colaboradores = novosColabs;
+        entradas = novasEntradas;
+        saidas = novasSaidas;
+      }
+
+      salvar("colaboradores", colaboradores);
+      salvar("entradas", entradas);
+      salvar("saidas", saidas);
+      renderColaboradores();
+      atualizarResumo();
+
+      const statusDiv = document.getElementById("statusImport");
+      statusDiv.style.display = "block";
+      statusDiv.className = "status ok";
+      statusDiv.textContent = `✅ Importação concluída: ${novosColabs.length} colaboradores, ${novasEntradas.length} entradas, ${novasSaidas.length} saídas (modo: ${modo ? 'mesclar' : 'substituir'}).`;
+      setTimeout(() => { statusDiv.style.display = "none"; }, 5000);
+
+    } catch(err){
+      const statusDiv = document.getElementById("statusImport");
+      statusDiv.style.display = "block";
+      statusDiv.className = "status erro";
+      statusDiv.textContent = "❌ Erro ao importar: " + err.message;
+    }
+    // Limpar input para permitir reimportar o mesmo arquivo
+    event.target.value = "";
+  };
+  reader.readAsArrayBuffer(file);
 }
 
 /* =====================================================
