@@ -38,7 +38,17 @@
   .status.erro{background:#f8d7da;color:#721c24;}
   .status.aviso{background:#fff3cd;color:#856404;}
   #reader{width:100%;max-width:400px;margin:auto;}
-  footer{text-align:center;padding:16px;color:#888;font-size:12px;}
+  footer{text-align:center;padding:16px 24px;color:#888;font-size:12px;background:#fff;border-top:1px solid #e1e4e8;margin-top:8px;}
+  footer a{color:var(--azul);text-decoration:none;font-weight:bold;}
+  footer a:hover{text-decoration:underline;}
+  .footer-inner{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;}
+  .footer-dai{display:flex;align-items:center;gap:6px;font-size:11px;color:#555;}
+  th.sortable{cursor:pointer;user-select:none;}
+  th.sortable:hover{background:#004080;}
+  th.sortable::after{content:" ↕";opacity:.5;font-size:.85em;}
+  th.sort-asc::after{content:" ↑";opacity:1;}
+  th.sort-desc::after{content:" ↓";opacity:1;}
+  #buscaColaborador{max-width:360px;margin:0 0 10px 0;}
   .resumo{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;}
   .resumo div{flex:1;min-width:140px;background:var(--azul);color:#fff;padding:12px;border-radius:8px;text-align:center;}
   .resumo span{display:block;font-size:26px;font-weight:bold;}
@@ -52,9 +62,24 @@
 </head>
 <body>
 
-<header>
-  <h1>Controle de Acesso — Usina de Jaguara</h1>
-  <small>Engie · Sistema de gestão de entrada e saída de colaboradores</small>
+<header style="padding:12px 24px;">
+  <div style="display:flex;align-items:center;gap:16px;">
+    <!-- ENGIE Logo -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 52" width="160" height="52" aria-label="ENGIE">
+      <!-- Anel exterior -->
+      <circle cx="26" cy="26" r="24" fill="none" stroke="#00A99D" stroke-width="3.5"/>
+      <!-- Anel interior -->
+      <circle cx="26" cy="26" r="16" fill="none" stroke="#00A99D" stroke-width="2.5"/>
+      <!-- Arco cortado (estilo ENGIE) -->
+      <path d="M26 10 A16 16 0 1 1 10.5 34" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+      <!-- Wordmark -->
+      <text x="58" y="33" font-family="Arial,sans-serif" font-size="26" font-weight="900" fill="#ffffff" letter-spacing="3">ENGIE</text>
+    </svg>
+    <div style="border-left:1px solid rgba(255,255,255,.3);padding-left:16px;">
+      <h1 style="margin:0;font-size:17px;line-height:1.2;">Controle de Acesso — Usina de Jaguara</h1>
+      <small style="opacity:.8;font-size:12px;">Sistema de gestão de entrada e saída de colaboradores</small>
+    </div>
+  </div>
 </header>
 
 <nav>
@@ -106,9 +131,17 @@
       <button class="btn btn-alerta" onclick="limparTodosDados()">🗑️ Limpar Todos os Dados</button>
     </div>
     <div id="statusImport" style="display:none;"></div>
+    <input type="text" id="buscaColaborador" placeholder="🔍 Buscar por nome, empresa ou local..." oninput="atualizarTabelaColaboradores()" style="max-width:400px;margin-bottom:10px;">
     <table id="tabelaColaboradores">
       <thead>
-        <tr><th>Nome</th><th>Empresa</th><th>Local</th><th>Situação</th><th>QR Code</th><th>Ações</th></tr>
+        <tr>
+          <th class="sortable sort-asc" data-col="nome" onclick="ordenarTabela('nome')">Nome</th>
+          <th class="sortable" data-col="empresa" onclick="ordenarTabela('empresa')">Empresa</th>
+          <th class="sortable" data-col="local" onclick="ordenarTabela('local')">Local</th>
+          <th>Situação</th>
+          <th>QR Code</th>
+          <th>Ações</th>
+        </tr>
       </thead>
       <tbody></tbody>
     </table>
@@ -189,7 +222,18 @@
   </div>
 </section>
 
-<footer>Dados armazenados localmente no navegador (localStorage). Exporte a planilha periodicamente.</footer>
+<footer>
+  <div class="footer-inner">
+    <span>Dados armazenados localmente no navegador (localStorage). Exporte a planilha periodicamente.</span>
+    <div class="footer-dai">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="22" height="22">
+        <rect width="32" height="32" rx="6" fill="#00285A"/>
+        <text x="16" y="22" font-family="Arial" font-size="14" font-weight="bold" fill="#00A99D" text-anchor="middle">AI</text>
+      </svg>
+      <span>Desenvolvido por <a href="https://digital-ai.tech" target="_blank" rel="noopener">digital-ai.tech</a></span>
+    </div>
+  </div>
+</footer>
 
 <script>
 /* =====================================================
@@ -449,83 +493,84 @@ function imprimirCredencial(nome, imagemBase64){
     <meta charset="UTF-8">
     <title>Credencial - ${nome}</title>
     <style>
-      /* Remove margens do navegador na impressão */
       @page {
-        size: 54mm 85mm;
+        size: 27mm 42.5mm;
         margin: 0;
       }
       * { box-sizing: border-box; margin: 0; padding: 0; }
       body {
         font-family: Arial, Helvetica, sans-serif;
-        width: 54mm;
-        height: 85mm;
+        width: 27mm;
+        height: 42.5mm;
         background: #fff;
         display: flex;
         align-items: center;
         justify-content: center;
       }
       .cracha {
-        width: 52mm;
-        height: 83mm;
-        border: 1.5px solid #00285A;
-        border-radius: 3mm;
+        width: 25.5mm;
+        height: 41mm;
+        border: 1px solid #00285A;
+        border-radius: 1.5mm;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        padding: 3mm;
-        gap: 2mm;
+        justify-content: flex-start;
+        padding: 0;
+        overflow: hidden;
       }
       .topo {
         width: 100%;
         background: #00285A;
         color: #fff;
         text-align: center;
-        font-size: 7pt;
+        font-size: 4pt;
         font-weight: bold;
-        padding: 2mm 1mm;
-        border-radius: 1.5mm 1.5mm 0 0;
-        letter-spacing: 0.5px;
+        padding: 1mm 0.5mm;
+        letter-spacing: 0.3px;
+        flex-shrink: 0;
       }
       .qr-img {
-        width: 38mm;
-        height: 38mm;
+        width: 19mm;
+        height: 19mm;
         display: block;
+        margin: 1.5mm auto 0;
       }
       .separador {
-        width: 90%;
+        width: 88%;
         border: none;
-        border-top: 0.5px solid #ddd;
+        border-top: 0.4px solid #ddd;
+        margin: 1mm auto;
+        flex-shrink: 0;
       }
       .info {
         width: 100%;
         text-align: center;
+        padding: 0 1mm;
       }
       .info-nome {
-        font-size: 8pt;
+        font-size: 4.5pt;
         font-weight: bold;
         color: #00285A;
         word-break: break-word;
         line-height: 1.2;
       }
       .info-empresa {
-        font-size: 7pt;
+        font-size: 3.8pt;
         color: #333;
-        margin-top: 1mm;
+        margin-top: 0.5mm;
         word-break: break-word;
         line-height: 1.2;
       }
-      .info-local {
-        font-size: 6.5pt;
-        color: #666;
-        margin-top: 1mm;
-      }
       .rodape {
-        font-size: 5.5pt;
+        font-size: 3pt;
         color: #888;
         text-align: center;
         margin-top: auto;
+        padding-bottom: 1mm;
+        width: 100%;
       }
+      .rodape a { color: #00A99D; text-decoration: none; }
     </style>
     </head>
     <body>
@@ -536,7 +581,7 @@ function imprimirCredencial(nome, imagemBase64){
         <div class="info">
           <div class="info-nome">${nome}</div>
         </div>
-        <div class="rodape">Controle de Acesso</div>
+        <div class="rodape">Controle de Acesso · <a href="https://digital-ai.tech">digital-ai.tech</a></div>
       </div>
       <script>window.onload = () => window.print();<\/script>
     </body></html>
@@ -545,24 +590,64 @@ function imprimirCredencial(nome, imagemBase64){
 }
 
 /* =====================================================
-   LISTA DE COLABORADORES
+   LISTA DE COLABORADORES (com busca e ordenação)
 ===================================================== */
+let sortCol = "nome";
+let sortDir = "asc";
+
+function ordenarTabela(col){
+  if(sortCol === col){
+    sortDir = sortDir === "asc" ? "desc" : "asc";
+  } else {
+    sortCol = col;
+    sortDir = "asc";
+  }
+  // Atualiza classes dos cabeçalhos
+  document.querySelectorAll("#tabelaColaboradores th.sortable").forEach(th=>{
+    th.classList.remove("sort-asc","sort-desc");
+    if(th.dataset.col === col) th.classList.add(sortDir === "asc" ? "sort-asc" : "sort-desc");
+  });
+  atualizarTabelaColaboradores();
+}
+
 function atualizarTabelaColaboradores(){
   const tbody = document.querySelector("#tabelaColaboradores tbody");
   tbody.innerHTML = "";
 
-  if(colaboradores.length === 0){
-    tbody.innerHTML = `<tr><td colspan="6">Nenhum colaborador cadastrado.</td></tr>`;
+  const busca = (document.getElementById("buscaColaborador")?.value || "").toLowerCase().trim();
+
+  // Filtrar
+  let lista = colaboradores
+    .map((c, i) => ({...c, _idx: i}))
+    .filter(c => {
+      if(!busca) return true;
+      return (c.nome||"").toLowerCase().includes(busca)
+          || (c.empresa||"").toLowerCase().includes(busca)
+          || (c.local||"").toLowerCase().includes(busca);
+    });
+
+  // Ordenar
+  lista.sort((a, b) => {
+    const va = (a[sortCol] || "").toLowerCase();
+    const vb = (b[sortCol] || "").toLowerCase();
+    if(va < vb) return sortDir === "asc" ? -1 : 1;
+    if(va > vb) return sortDir === "asc" ? 1 : -1;
+    return 0;
+  });
+
+  if(lista.length === 0){
+    tbody.innerHTML = `<tr><td colspan="6">${busca ? "Nenhum colaborador encontrado para \""+busca+"\"." : "Nenhum colaborador cadastrado."}</td></tr>`;
     return;
   }
 
-  colaboradores.forEach((c, i)=>{
+  lista.forEach(c => {
+    const i = c._idx;
     tbody.innerHTML += `
       <tr>
         <td>${c.nome}</td>
         <td>${c.empresa}</td>
         <td>${c.local}</td>
-        <td>${c.dentro ? "Dentro" : "Fora"}</td>
+        <td>${c.dentro ? "✅ Dentro" : "⬜ Fora"}</td>
         <td>
           <button class="btn btn-mini" onclick="reemitirQR(${i},'baixar')">Baixar</button>
           <button class="btn btn-mini btn-secundario" onclick="reemitirQR(${i},'imprimir')">Imprimir</button>
