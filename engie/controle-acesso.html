@@ -110,6 +110,17 @@
   @keyframes flashVerde{0%{background:#00A99D;}100%{background:transparent;}}
   @keyframes flashVermelho{0%{background:#b3261e;}100%{background:transparent;}}
 
+  /* === BADGES TIPO === */
+  .badge-qr{display:inline-block;background:#d1e7dd;color:#0a5741;border-radius:3px;padding:1px 6px;font-size:11px;font-weight:bold;margin-left:5px;white-space:nowrap;}
+  .badge-portaria{display:inline-block;background:#cfe2ff;color:#084298;border-radius:3px;padding:1px 6px;font-size:11px;font-weight:bold;margin-left:5px;white-space:nowrap;}
+
+  /* === FILTROS TIPO === */
+  .filtros-tipo{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:12px;}
+  .filtros-tipo span{font-size:13px;color:#555;font-weight:bold;margin-right:4px;}
+  .btn-ftipo{padding:7px 13px;border:2px solid var(--azul);background:#fff;color:var(--azul);border-radius:6px;cursor:pointer;font-size:13px;font-weight:bold;min-height:36px;transition:background .15s,color .15s;}
+  .btn-ftipo.ativo{background:var(--azul);color:#fff;}
+  .btn-ftipo:active{opacity:.85;}
+
   /* === TABLET (≥600px) === */
   @media(min-width:600px){
     header{padding:14px 24px;}
@@ -288,6 +299,13 @@
       <button class="btn btn-secundario" onclick="exportarCSV()">📥 Exportar CSV</button>
       <button class="btn btn-secundario" onclick="imprimirPlanilha()">🖨️ Imprimir PDF</button>
       <button class="btn btn-alerta" onclick="limparRegistros()">🗑️ Limpar Dia</button>
+    </div>
+
+    <div class="filtros-tipo">
+      <span>Filtrar:</span>
+      <button class="btn-ftipo ativo" id="ftTodos" onclick="setFiltroTipo('todos')">Todos</button>
+      <button class="btn-ftipo" id="ftQR" onclick="setFiltroTipo('qr')">📱 QR Code (Crachá)</button>
+      <button class="btn-ftipo" id="ftPortaria" onclick="setFiltroTipo('portaria')">🔑 Portaria (Manual)</button>
     </div>
 
     <div class="table-scroll">
@@ -777,13 +795,13 @@ function toggleManual(indice, checkbox){
     // Registrar ENTRADA manual
     c.dentro = true;
     c.horaEntradaTimestamp = agora;
-    entradas.push({ nome: c.nome, empresa: c.empresa, local: c.local, hora: agoraFormatado, manual: true });
+    entradas.push({ nome: c.nome, empresa: c.empresa, local: c.local, hora: agoraFormatado, tipo: "Portaria" });
     tocarEntrada();
   } else {
     // Registrar SAÍDA manual (sem verificar tempo mínimo — é manual, operador decide)
     c.dentro = false;
     c.horaEntradaTimestamp = null;
-    saidas.push({ nome: c.nome, empresa: c.empresa, local: c.local, hora: agoraFormatado, manual: true });
+    saidas.push({ nome: c.nome, empresa: c.empresa, local: c.local, hora: agoraFormatado, tipo: "Portaria" });
     tocarSaida();
   }
 
@@ -883,7 +901,7 @@ function registrarAcesso({nome, empresa, local}){
   const agoraFormatado = new Date(agora).toLocaleString("pt-BR");
 
   if(!colaborador.dentro){
-    entradas.push({ nome, empresa, local, hora: agoraFormatado });
+    entradas.push({ nome, empresa, local, hora: agoraFormatado, tipo: "QR Code" });
     colaborador.dentro = true;
     colaborador.horaEntradaTimestamp = agora;
 
@@ -910,7 +928,7 @@ function registrarAcesso({nome, empresa, local}){
     return;
   }
 
-  saidas.push({ nome, empresa, local, hora: agoraFormatado });
+  saidas.push({ nome, empresa, local, hora: agoraFormatado, tipo: "QR Code" });
   colaborador.dentro = false;
   colaborador.horaEntradaTimestamp = null;
 
@@ -927,25 +945,65 @@ function registrarAcesso({nome, empresa, local}){
 /* =====================================================
    PLANILHA
 ===================================================== */
-function linhasPlanilha(){
+function linhasPlanilha(entradasArr, saidasArr){
+  entradasArr = entradasArr || entradas;
+  saidasArr   = saidasArr   || saidas;
   const permanentes = colaboradores.filter(c=>c.dentro);
-  const total = Math.max(entradas.length, saidas.length, permanentes.length, 1);
+  const total = Math.max(entradasArr.length, saidasArr.length, permanentes.length, 1);
   const linhas = [];
   for(let i=0;i<total;i++){
+    const e = entradasArr[i];
+    const s = saidasArr[i];
     linhas.push({
-      entrada: entradas[i] ? `${entradas[i].nome} - ${entradas[i].empresa} - ${entradas[i].local} (${entradas[i].hora})` : "",
-      saida:   saidas[i]   ? `${saidas[i].nome} - ${saidas[i].empresa} - ${saidas[i].local} (${saidas[i].hora})` : "",
-      permanente: permanentes[i] ? `${permanentes[i].nome} - ${permanentes[i].empresa} - ${permanentes[i].local}` : ""
+      entrada:     e ? `${e.nome} - ${e.empresa} - ${e.local} (${e.hora})` : "",
+      entradaTipo: e ? (e.tipo || (e.manual ? "Portaria" : "")) : "",
+      saida:       s ? `${s.nome} - ${s.empresa} - ${s.local} (${s.hora})` : "",
+      saidaTipo:   s ? (s.tipo || (s.manual ? "Portaria" : "")) : "",
+      permanente:  permanentes[i] ? `${permanentes[i].nome} - ${permanentes[i].empresa} - ${permanentes[i].local}` : ""
     });
   }
   return { linhas, permanentes };
 }
 
+/* =====================================================
+   FILTRO DE TIPO (QR Code vs Portaria)
+===================================================== */
+let filtroTipo = "todos";
+
+function setFiltroTipo(tipo){
+  filtroTipo = tipo;
+  document.querySelectorAll(".btn-ftipo").forEach(b=>b.classList.remove("ativo"));
+  const ids = {todos:"ftTodos", qr:"ftQR", portaria:"ftPortaria"};
+  document.getElementById(ids[tipo]).classList.add("ativo");
+  atualizarTabela();
+}
+
+function badgeTipo(tipo){
+  if(tipo === "QR Code")  return '<span class="badge-qr">📱 QR</span>';
+  if(tipo === "Portaria") return '<span class="badge-portaria">🔑 Portaria</span>';
+  return "";
+}
+
 function atualizarTabela(){
-  const { linhas, permanentes } = linhasPlanilha();
+  // Aplicar filtro
+  let entradasFilt = entradas;
+  let saidasFilt   = saidas;
+  if(filtroTipo === "qr"){
+    entradasFilt = entradas.filter(e => e.tipo === "QR Code");
+    saidasFilt   = saidas.filter(s   => s.tipo === "QR Code");
+  } else if(filtroTipo === "portaria"){
+    entradasFilt = entradas.filter(e => e.tipo === "Portaria" || e.manual);
+    saidasFilt   = saidas.filter(s   => s.tipo === "Portaria" || s.manual);
+  }
+
+  const { linhas, permanentes } = linhasPlanilha(entradasFilt, saidasFilt);
   const tbody = document.querySelector("#tabelaPlanilha tbody");
   tbody.innerHTML = linhas.map(l=>
-    `<tr><td>${l.entrada}</td><td>${l.saida}</td><td>${l.permanente}</td></tr>`
+    `<tr>
+      <td>${l.entrada}${badgeTipo(l.entradaTipo)}</td>
+      <td>${l.saida}${badgeTipo(l.saidaTipo)}</td>
+      <td>${l.permanente}</td>
+    </tr>`
   ).join("");
 
   document.getElementById("totEntradas").textContent = entradas.length;
@@ -1033,9 +1091,10 @@ function exportarXLSX(){
     "Nome": e.nome,
     "Empresa": e.empresa,
     "Local": e.local,
-    "Data / Hora Entrada": e.hora
+    "Data / Hora Entrada": e.hora,
+    "Tipo": e.tipo || (e.manual ? "Portaria" : "")
   }));
-  const wsEntradas = XLSX.utils.json_to_sheet(dadosEntradas.length ? dadosEntradas : [{"Nome":"","Empresa":"","Local":"","Data / Hora Entrada":""}]);
+  const wsEntradas = XLSX.utils.json_to_sheet(dadosEntradas.length ? dadosEntradas : [{"Nome":"","Empresa":"","Local":"","Data / Hora Entrada":"","Tipo":""}]);
   XLSX.utils.book_append_sheet(wb, wsEntradas, "Entradas");
 
   // Aba 3 — Saídas
@@ -1043,9 +1102,10 @@ function exportarXLSX(){
     "Nome": s.nome,
     "Empresa": s.empresa,
     "Local": s.local,
-    "Data / Hora Saída": s.hora
+    "Data / Hora Saída": s.hora,
+    "Tipo": s.tipo || (s.manual ? "Portaria" : "")
   }));
-  const wsSaidas = XLSX.utils.json_to_sheet(dadosSaidas.length ? dadosSaidas : [{"Nome":"","Empresa":"","Local":"","Data / Hora Saída":""}]);
+  const wsSaidas = XLSX.utils.json_to_sheet(dadosSaidas.length ? dadosSaidas : [{"Nome":"","Empresa":"","Local":"","Data / Hora Saída":"","Tipo":""}]);
   XLSX.utils.book_append_sheet(wb, wsSaidas, "Saídas");
 
   // Aba 4 — Permanentes (quem está dentro agora)
@@ -1105,8 +1165,7 @@ function importarXLSX(event){
           empresa: r["Empresa"] || "",
           local: r["Local"] || "",
           hora: r["Data / Hora Entrada"] || "",
-          tipo: "entrada",
-          ts: 0
+          tipo: r["Tipo"] || ""
         }));
 
       // Converter saídas
@@ -1117,8 +1176,7 @@ function importarXLSX(event){
           empresa: r["Empresa"] || "",
           local: r["Local"] || "",
           hora: r["Data / Hora Saída"] || "",
-          tipo: "saida",
-          ts: 0
+          tipo: r["Tipo"] || ""
         }));
 
       const modo = confirm(
