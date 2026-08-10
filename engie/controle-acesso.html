@@ -721,11 +721,16 @@ function atualizarTabelaColaboradores(){
   lista.forEach(c => {
     const i = c._idx;
     tbody.innerHTML += `
-      <tr>
+      <tr id="tr-colab-${i}">
         <td>${c.nome}</td>
         <td>${c.empresa}</td>
         <td>${c.local}</td>
-        <td>${c.dentro ? "✅ Dentro" : "⬜ Fora"}</td>
+        <td style="text-align:center;">
+          <label class="toggle-situacao" title="${c.dentro ? 'Clique para registrar SAÍDA' : 'Clique para registrar ENTRADA'}" style="cursor:pointer;display:inline-flex;flex-direction:column;align-items:center;gap:3px;user-select:none;">
+            <input type="checkbox" ${c.dentro ? "checked" : ""} onchange="toggleManual(${i},this)" style="width:22px;height:22px;cursor:pointer;accent-color:var(--verde);">
+            <span style="font-size:11px;font-weight:bold;color:${c.dentro ? '#155724' : '#555'};">${c.dentro ? "✅ Dentro" : "⬜ Fora"}</span>
+          </label>
+        </td>
         <td>
           <button class="btn btn-mini" onclick="reemitirQR(${i},'baixar')">Baixar</button>
           <button class="btn btn-mini btn-secundario" onclick="reemitirQR(${i},'imprimir')">Imprimir</button>
@@ -758,6 +763,41 @@ function excluirColaborador(indice){
   atualizarTabelaColaboradores();
   atualizarTabela();
   alert("Colaborador removido com sucesso.");
+}
+
+/* =====================================================
+   TOGGLE MANUAL ENTRADA / SAÍDA (via checkbox no painel)
+===================================================== */
+function toggleManual(indice, checkbox){
+  const c = colaboradores[indice];
+  const agora = Date.now();
+  const agoraFormatado = new Date(agora).toLocaleString("pt-BR");
+
+  if(checkbox.checked){
+    // Registrar ENTRADA manual
+    c.dentro = true;
+    c.horaEntradaTimestamp = agora;
+    entradas.push({ nome: c.nome, empresa: c.empresa, local: c.local, hora: agoraFormatado, manual: true });
+    tocarEntrada();
+  } else {
+    // Registrar SAÍDA manual (sem verificar tempo mínimo — é manual, operador decide)
+    c.dentro = false;
+    c.horaEntradaTimestamp = null;
+    saidas.push({ nome: c.nome, empresa: c.empresa, local: c.local, hora: agoraFormatado, manual: true });
+    tocarSaida();
+  }
+
+  salvar("colaboradores", colaboradores);
+  salvar("entradas", entradas);
+  salvar("saidas", saidas);
+  atualizarTabela();
+  // Atualiza apenas o label da linha sem re-renderizar a tabela toda (evita perda do foco)
+  const labelSpan = checkbox.closest("label").querySelector("span");
+  if(labelSpan){
+    labelSpan.textContent = c.dentro ? "✅ Dentro" : "⬜ Fora";
+    labelSpan.style.color = c.dentro ? "#155724" : "#555";
+    checkbox.closest("label").title = c.dentro ? "Clique para registrar SAÍDA" : "Clique para registrar ENTRADA";
+  }
 }
 
 /* =====================================================
