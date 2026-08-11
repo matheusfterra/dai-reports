@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Process Studio — Documentação Técnica</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:   #2D52EF;
+      --secondary: #3B2FC9;
+      --bg:        #080E2A;
+      --surface:   #0D1736;
+      --surface2:  #111E42;
+      --surface3:  #172350;
+      --border:    rgba(45,82,239,.18);
+      --border2:   rgba(45,82,239,.10);
+      --text:      #F0F3FF;
+      --text-muted:#9AAAD4;
+      --text-dim:  #5B6FA4;
+      --green:  #34D399;
+      --amber:  #FBBF24;
+      --red:    #F87171;
+      --font-head: 'Plus Jakarta Sans', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --r: 10px; --rs: 6px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.65; }
+
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .layout { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: 268px; flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      position: sticky; top: 0; height: 100vh;
+      overflow-y: auto; padding: 0 0 32px;
+      display: flex; flex-direction: column;
+    }
+
+    .content { flex: 1; max-width: 860px; padding: 52px 60px; min-width: 0; }
+
+    .sidebar-top { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+    .back-link {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--text-dim);
+      text-decoration: none; margin-bottom: 16px;
+      transition: color .15s;
+    }
+    .back-link:hover { color: var(--primary); }
+    .logo-row { display: flex; align-items: center; gap: 10px; }
+    .logo-mark {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .logo-name { font-family: var(--font-head); font-size: 13px; font-weight: 700; color: var(--text); }
+    .logo-sub  { font-size: 11px; color: var(--text-dim); margin-top: 1px; }
+
+    .nav-section { padding: 0 14px; margin-top: 6px; }
+    .nav-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.1px;
+      text-transform: uppercase; color: var(--text-dim);
+      padding: 8px 8px 4px;
+    }
+    .nav-link {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 8px;
+      font-size: 12.5px; color: var(--text-muted);
+      text-decoration: none; border-radius: var(--rs);
+      transition: color .15s, background .15s;
+      line-height: 1.3;
+    }
+    .nav-link:hover { color: var(--text); background: var(--surface3); }
+    .nav-link.active { color: #fff; background: rgba(45,82,239,.18); }
+    .nav-link.active::before {
+      content: ''; width: 3px; height: 14px;
+      background: var(--primary); border-radius: 2px; flex-shrink: 0;
+    }
+
+    .meta-bar {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border2);
+      margin-bottom: 0;
+    }
+    .meta-chip {
+      font-size: 11px; font-weight: 600;
+      padding: 3px 9px; border-radius: 100px;
+      background: var(--surface2); color: var(--text-muted);
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+    }
+    .meta-chip.wip { background: rgba(251,191,36,.1); color: var(--amber); border-color: rgba(251,191,36,.3); }
+    .meta-chip.done { background: rgba(52,211,153,.1); color: var(--green); border-color: rgba(52,211,153,.25); }
+
+    h1 {
+      font-family: var(--font-head);
+      font-size: 34px; font-weight: 800; letter-spacing: -.6px;
+      color: var(--text); margin-bottom: 10px; line-height: 1.2;
+    }
+    h1 span { color: var(--amber); }
+    h2 {
+      font-family: var(--font-head);
+      font-size: 20px; font-weight: 700;
+      margin: 52px 0 16px; padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    h2 .sec-num { color: var(--primary); font-size: 12px; font-weight: 600; letter-spacing: .5px; margin-right: 8px; }
+    h3 {
+      font-family: var(--font-head);
+      font-size: 14px; font-weight: 700;
+      margin: 28px 0 10px; color: var(--text);
+    }
+    h3::before { content: '▸ '; color: var(--amber); }
+    p { font-size: 14px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.75; }
+    p strong { color: var(--text); }
+    .lead { font-size: 15px; color: var(--text-muted); margin-bottom: 28px; line-height: 1.75; }
+
+    section { padding-top: 8px; }
+    .anchor { color: var(--text-dim); text-decoration: none; margin-left: 8px; font-size: 14px; opacity: 0; }
+    h2:hover .anchor { opacity: 1; }
+
+    .tbl-wrap { overflow-x: auto; margin: 12px 0 22px; border-radius: var(--r); border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead tr { background: var(--surface2); }
+    th {
+      text-align: left; padding: 9px 14px;
+      color: var(--text-dim); font-size: 10.5px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .8px;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-head);
+    }
+    td {
+      padding: 9px 14px; border-bottom: 1px solid var(--border2);
+      color: var(--text-muted); vertical-align: top; line-height: 1.55;
+    }
+    tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: var(--surface2); }
+    td code { font-family: var(--font-mono); font-size: 11.5px; color: #93C5FD; background: rgba(147,197,253,.08); padding: 1px 6px; border-radius: 4px; }
+    td strong { color: var(--text); }
+    .pill { display: inline-block; padding: 1px 8px; border-radius: 100px; font-size: 10.5px; font-weight: 700; white-space: nowrap; }
+    .pill-blue   { background: rgba(45,82,239,.15); color: #93C5FD; }
+    .pill-green  { background: rgba(52,211,153,.12); color: #34D399; }
+    .pill-amber  { background: rgba(251,191,36,.12); color: #FBBF24; }
+    .pill-red    { background: rgba(248,113,113,.12); color: #F87171; }
+    .pill-gray   { background: var(--surface2); color: var(--text-dim); }
+
+    .code-wrap { position: relative; margin: 14px 0 22px; border-radius: var(--r); overflow: hidden; border: 1px solid var(--border); }
+    .code-header {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--surface2); padding: 8px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .code-lang { font-family: var(--font-mono); font-size: 10.5px; color: var(--primary); }
+    pre {
+      background: var(--surface); padding: 16px 18px; overflow-x: auto;
+      font-family: var(--font-mono); font-size: 12.5px; line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    .callout {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 14px 16px; border-radius: var(--r); margin: 14px 0;
+      font-size: 13px; line-height: 1.65;
+    }
+    .callout-info    { background: rgba(45,82,239,.09);  border: 1px solid rgba(45,82,239,.25); }
+    .callout-warn    { background: rgba(251,191,36,.08);  border: 1px solid rgba(251,191,36,.25); }
+    .callout-success { background: rgba(52,211,153,.08);  border: 1px solid rgba(52,211,153,.25); }
+    .callout-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+    .callout p { margin: 0; color: var(--text-muted); }
+    .callout strong { color: var(--text); }
+    .callout code { font-family: var(--font-mono); font-size: 12px; color: #93C5FD; }
+
+    .flow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 18px 0; }
+    .flow-node {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--rs); padding: 7px 13px;
+      font-size: 12px; font-weight: 600; color: var(--text-muted); white-space: nowrap;
+    }
+    .flow-node.hi { border-color: rgba(45,82,239,.5); color: #93C5FD; background: rgba(45,82,239,.12); }
+    .flow-node.ok { border-color: rgba(52,211,153,.4); color: #34D399; background: rgba(52,211,153,.08); }
+    .flow-node.amber { border-color: rgba(251,191,36,.4); color: #FBBF24; background: rgba(251,191,36,.08); }
+    .flow-node.warn { border-color: rgba(248,113,113,.4); color: #F87171; background: rgba(248,113,113,.08); }
+    .flow-arrow { color: var(--text-dim); font-size: 15px; }
+
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 10px; margin: 14px 0 22px; }
+    .kpi-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; }
+    .kpi-card.blue  { border-top: 2px solid var(--primary); }
+    .kpi-card.green { border-top: 2px solid var(--green); }
+    .kpi-card.amber { border-top: 2px solid var(--amber); }
+    .kpi-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; color: var(--text-dim); margin-bottom: 6px; }
+    .kpi-value { font-family: var(--font-head); font-size: 26px; font-weight: 800; color: var(--text); line-height: 1.1; }
+    .kpi-sub   { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+
+    .hero-banner {
+      background: linear-gradient(135deg, var(--surface2) 0%, rgba(251,191,36,.1) 100%);
+      border: 1px solid rgba(251,191,36,.25);
+      border-radius: 14px; padding: 28px 32px;
+      margin-bottom: 36px; position: relative; overflow: hidden;
+    }
+    .hero-banner::before {
+      content: '';
+      position: absolute; top: -40px; right: -40px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(251,191,36,.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block; font-size: 10.5px; font-weight: 700;
+      padding: 3px 10px; border-radius: 100px;
+      background: rgba(251,191,36,.15); color: var(--amber);
+      border: 1px solid rgba(251,191,36,.3);
+      margin-bottom: 12px; font-family: var(--font-head); letter-spacing: .5px;
+    }
+
+    .phase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0 22px; }
+    .phase-card {
+      background: var(--surface2); border: 1px solid var(--border2);
+      border-radius: var(--rs); padding: 14px 16px;
+    }
+    .phase-card.done { border-left: 3px solid var(--green); }
+    .phase-card.wip  { border-left: 3px solid var(--amber); }
+    .phase-card.pend { border-left: 3px solid var(--text-dim); }
+    .phase-label { font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); margin-bottom: 4px; }
+    .phase-name { font-family: var(--font-head); font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .phase-desc { font-size: 11.5px; color: var(--text-dim); line-height: 1.5; }
+    .phase-status { font-size: 10.5px; font-weight: 700; margin-top: 8px; }
+    .phase-card.done .phase-status { color: var(--green); }
+    .phase-card.wip  .phase-status { color: var(--amber); }
+    .phase-card.pend .phase-status { color: var(--text-dim); }
+
+    .file-list { display: flex; flex-direction: column; gap: 4px; margin: 12px 0 22px; }
+    .file-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 8px 12px; border-radius: var(--rs);
+      border: 1px solid var(--border2);
+      font-size: 12.5px; background: var(--surface2);
+      transition: border-color .15s;
+    }
+    .file-row:hover { border-color: var(--border); }
+    .file-name { font-family: var(--font-mono); color: #93C5FD; flex: 1; }
+    .file-size { font-size: 11px; color: var(--text-dim); white-space: nowrap; }
+    .file-desc { font-size: 11.5px; color: var(--text-muted); flex: 2; }
+
+    .principle-list { display: flex; flex-direction: column; gap: 6px; margin: 14px 0 22px; }
+    .principle-row {
+      display: flex; gap: 0; border-radius: var(--r);
+      overflow: hidden; border: 1px solid var(--border);
+    }
+    .principle-num {
+      width: 44px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-head); font-size: 11px; font-weight: 800;
+      background: linear-gradient(180deg, rgba(251,191,36,.3) 0%, rgba(245,158,11,.3) 100%);
+      color: var(--amber);
+    }
+    .principle-body { flex: 1; padding: 12px 16px; background: var(--surface2); }
+    .principle-title { font-family: var(--font-head); font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .principle-desc { font-size: 12.5px; color: var(--text-muted); }
+    .principle-tag {
+      display: inline-block; margin-top: 6px;
+      font-size: 10px; font-weight: 700; padding: 1px 8px; border-radius: 100px;
+      background: rgba(248,113,113,.12); color: #F87171; border: 1px solid rgba(248,113,113,.2);
+    }
+
+    ul { padding-left: 20px; margin-bottom: 12px; }
+    li { font-size: 14px; color: var(--text-muted); margin-bottom: 4px; line-height: 1.65; }
+    li strong { color: var(--text); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- ─── SIDEBAR ─── -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <a href="index.html" class="back-link">← EVOPE Docs</a>
+      <div class="logo-row">
+        <div class="logo-mark">🎬</div>
+        <div>
+          <div class="logo-name">Process Studio</div>
+          <div class="logo-sub">Documentação Técnica</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">Visão Geral</div>
+      <a href="#overview"      class="nav-link active">O que é</a>
+      <a href="#posicionamento" class="nav-link">Posicionamento</a>
+      <a href="#funcionalidades" class="nav-link">Funcionalidades</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">Arquitetura</div>
+      <a href="#arquitetura"   class="nav-link">Visão Geral</a>
+      <a href="#camadas"       class="nav-link">Camadas do Sistema</a>
+      <a href="#comunicacao"   class="nav-link">Shell ↔ Sidecar</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">Stack Técnica</div>
+      <a href="#rust"          class="nav-link">Shell Rust / Tauri v2</a>
+      <a href="#sidecar"       class="nav-link">Sidecar Node.js</a>
+      <a href="#ui"            class="nav-link">UI React</a>
+      <a href="#ia"            class="nav-link">IA — OpenAI</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">Dados & Segurança</div>
+      <a href="#dados"         class="nav-link">Dados Locais</a>
+      <a href="#principios"    class="nav-link">Princípios (Constitution)</a>
+      <a href="#custos"        class="nav-link">Custos de IA</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">Roadmap</div>
+      <a href="#fases"         class="nav-link">Fases F0 → F3</a>
+      <a href="#build"         class="nav-link">Build & Deploy</a>
+    </div>
+  </aside>
+
+  <!-- ─── CONTENT ─── -->
+  <main class="content">
+
+    <!-- META BAR -->
+    <div class="meta-bar">
+      <span class="meta-chip wip">● Em desenvolvimento</span>
+      <span class="meta-chip">Tauri v2 · Rust</span>
+      <span class="meta-chip">Node.js + Playwright</span>
+      <span class="meta-chip">GPT-4.1-mini · Whisper-1</span>
+      <span class="meta-chip">Windows · Local-first</span>
+    </div>
+
+    <!-- HERO -->
+    <section id="overview" style="padding-top: 40px;">
+      <div class="hero-banner">
+        <div class="hero-badge">🎬 PROCESS STUDIO</div>
+        <h1>Grava, documenta e <span>re-executa</span> processos</h1>
+        <p class="lead">
+          App desktop <strong>100% local e individual</strong> (Windows, via Tauri) que transforma processos de trabalho no browser em documentação automática com IA — e, futuramente, em automação re-executável com variáveis editáveis.
+        </p>
+      </div>
+
+      <p>
+        O Process Studio é desenvolvido pela <strong>Digital AI</strong> e roda inteiramente no PC do usuário.
+        Não há servidor próprio, conta, nem multi-tenant. A única saída de dados permitida é a chamada à API da OpenAI,
+        usando a chave do próprio usuário armazenada localmente.
+      </p>
+    </section>
+
+    <!-- POSICIONAMENTO -->
+    <section id="posicionamento">
+      <h2><span class="sec-num">1</span>Posicionamento de Mercado <a class="anchor" href="#posicionamento">#</a></h2>
+
+      <p><strong>"Uma Scribe que executa."</strong> A Scribe (avaliada em US$ 1,3 bilhão) lidera o segmento de documentação automática de processos — mas só documenta, nunca re-executa. O Process Studio fecha essa lacuna.</p>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Funcionalidade</th>
+              <th>Scribe</th>
+              <th>Process Studio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Documentação automática com IA</td><td><span class="pill pill-green">✅ Sim</span></td><td><span class="pill pill-green">✅ Sim</span></td></tr>
+            <tr><td>Exportação Markdown / HTML / PDF</td><td><span class="pill pill-amber">⚠️ Parcial</span></td><td><span class="pill pill-green">✅ Sim</span></td></tr>
+            <tr><td>Re-execução do processo gravado</td><td><span class="pill pill-red">❌ Não</span></td><td><span class="pill pill-amber">⏳ F2/F3</span></td></tr>
+            <tr><td>Variáveis editáveis na re-execução</td><td><span class="pill pill-red">❌ Não</span></td><td><span class="pill pill-amber">⏳ F2/F3</span></td></tr>
+            <tr><td>Self-healing por LLM</td><td><span class="pill pill-red">❌ Não</span></td><td><span class="pill pill-amber">⏳ F3</span></td></tr>
+            <tr><td>Local-first (sem servidor)</td><td><span class="pill pill-red">❌ Não</span></td><td><span class="pill pill-green">✅ Sim</span></td></tr>
+            <tr><td>Correlação passo ↔ request de rede</td><td><span class="pill pill-red">❌ Não</span></td><td><span class="pill pill-green">✅ Sim</span></td></tr>
+            <tr><td>Documentação por vídeo local</td><td><span class="pill pill-red">❌ Não</span></td><td><span class="pill pill-green">✅ Sim</span></td></tr>
+            <tr><td>Gravação de tela nativa</td><td><span class="pill pill-red">❌ Não</span></td><td><span class="pill pill-green">✅ Sim</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">ℹ️</span>
+        <p><strong>Outros competidores monitorados:</strong> Codex Record &amp; Replay (OpenAI) e <code>workflow-use</code> (open-source).</p>
+      </div>
+    </section>
+
+    <!-- FUNCIONALIDADES -->
+    <section id="funcionalidades">
+      <h2><span class="sec-num">2</span>Funcionalidades Atuais <a class="anchor" href="#funcionalidades">#</a></h2>
+
+      <h3>Gravação de Browser (via CDP)</h3>
+      <ul>
+        <li>Conecta ao Chrome via <strong>Chrome DevTools Protocol (CDP)</strong></li>
+        <li>Cria um <strong>perfil isolado</strong> para o Chrome com auto-detecção e relançamento automático quando a porta CDP morre</li>
+        <li>Captura por evento: clicks, digitação, navegação, screenshots</li>
+        <li>Captura <strong>requisições de rede correlacionadas</strong> — cada request carrega <code>afterStepSeq</code> para rastreabilidade passo a passo</li>
+        <li>Trace salvo em <strong>NDJSON append-only</strong> (nunca alterado após fechado)</li>
+      </ul>
+
+      <h3>Gravação de Tela Nativa</h3>
+      <ul>
+        <li>Usa <strong>ffmpeg empacotado</strong> (<code>gdigrab</code> + <code>dshow</code> — Windows)</li>
+        <li>Seleção de monitor e microfone na UI</li>
+        <li>Pílula flutuante clicável com tempo decorrido</li>
+        <li>Borda vermelha <code>WDA_EXCLUDEFROMCAPTURE</code> no monitor gravado</li>
+        <li>Saída em <code>.mkv</code> local</li>
+        <li>Recuperação de gravações órfãs após crash no boot</li>
+      </ul>
+
+      <h3>Documentação Automática por IA (F1)</h3>
+      <ul>
+        <li>Botão "Documentar" compila o trace em <code>workflow.json</code> + documento estruturado</li>
+        <li><strong>GPT-4.1-mini</strong> com structured outputs estritos — fatos técnicos 100% do trace, sem invenção de dados</li>
+        <li><code>stripSecrets()</code> remove dados sensíveis antes de qualquer prompt de LLM</li>
+        <li>Exportação em <strong>Markdown, HTML autocontido e PDF</strong> (Chrome headless)</li>
+        <li>Log auditável com tokens e custo USD por compilação</li>
+      </ul>
+
+      <h3>Documentação por Vídeo Local (FV)</h3>
+      <ul>
+        <li>Aceita qualquer vídeo local: <code>.mp4 .mkv .webm .mov .avi</code></li>
+        <li>Extração local de frames e áudio via ffmpeg</li>
+        <li>Transcrição via <strong>Whisper-1</strong> (OpenAI)</li>
+        <li>Chamadas de visão em <strong>janelas</strong> — suporta vídeos longos (até 120 min)</li>
+        <li>Aviso de privacidade obrigatório com confirmação antes de qualquer upload</li>
+      </ul>
+
+      <h3>Interface — 4 Abas</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Aba</th><th>Conteúdo</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Gravações</strong></td><td>Traces NDJSON com visualizador paginado</td></tr>
+            <tr><td><strong>Processos</strong></td><td>Docs compilados, exportação, gravador de tela</td></tr>
+            <tr><td><strong>Config</strong></td><td>Chave OpenAI, path Chrome, porta CDP, retenção, vídeo</td></tr>
+            <tr><td><strong>Histórico</strong></td><td>Logs de compilações com custo</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Bandeja do sistema: fechar a janela <strong>minimiza para tray</strong> — o app continua rodando em background.</p>
+    </section>
+
+    <!-- ARQUITETURA -->
+    <section id="arquitetura">
+      <h2><span class="sec-num">3</span>Arquitetura <a class="anchor" href="#arquitetura">#</a></h2>
+
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">DIAGRAMA</span></div>
+        <pre>┌─────────────────────────────────────────────────────────┐
+│  Tauri v2 (Rust)  —  janela principal, tray, overlays   │
+│  comandos: capturas, workflows, gravações, config        │
+│         │ JSON-RPC (NDJSON via stdio)                    │
+│  ┌──────▼───────────────────────────────────────────┐    │
+│  │  Sidecar Node 20 + Playwright (exe via pkg)      │    │
+│  │  • chrome-connect  → CDP no Chrome isolado       │    │
+│  │  • capture-store   → traces NDJSON               │    │
+│  │  • compiler        → GPT-4.1-mini (browser)      │    │
+│  │  • video-compiler  → Whisper + GPT-4.1-mini      │    │
+│  │  • exporter        → md / html / pdf             │    │
+│  │  • screen-recorder → ffmpeg empacotado           │    │
+│  └──────────────────────────────────────────────────┘    │
+│  UI React + Vite (sem router; abas por estado)           │
+└─────────────────────────────────────────────────────────┘
+        │                                   │
+   Chrome do usuário                 API OpenAI (única
+   (perfil isolado, CDP)             saída de dados)</pre>
+      </div>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">🔐</span>
+        <p><strong>Local-first absoluto:</strong> não há servidor Digital AI no loop. A única chamada externa sai do PC do usuário diretamente para a API da OpenAI, usando a chave do próprio usuário.</p>
+      </div>
+    </section>
+
+    <!-- CAMADAS -->
+    <section id="camadas">
+      <h2><span class="sec-num">3.1</span>Camadas do Sistema <a class="anchor" href="#camadas">#</a></h2>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Camada</th><th>Tecnologia</th><th>Responsabilidade</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Shell</strong></td><td><code>Tauri v2 (Rust)</code></td><td>Janela, tray, overlays de gravação, supervisor do sidecar, comandos FS</td></tr>
+            <tr><td><strong>Sidecar</strong></td><td><code>Node.js 20 + Playwright 1.59.1</code></td><td>CDP, gravação, compilação IA, exportação, gravador de tela</td></tr>
+            <tr><td><strong>UI</strong></td><td><code>React 18 + Vite</code></td><td>Interface das 4 abas — sem router, abas por estado</td></tr>
+            <tr><td><strong>IA</strong></td><td><code>GPT-4.1-mini + Whisper-1</code></td><td>Compilação de documentos e transcrição de áudio</td></tr>
+            <tr><td><strong>Dados</strong></td><td>Arquivos locais (NDJSON + JSON)</td><td>Sem banco de dados — tudo em <code>%APPDATA%</code></td></tr>
+            <tr><td><strong>Mídia</strong></td><td><code>ffmpeg LGPL empacotado</code></td><td>Gravação de tela e extração de frames/áudio</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- COMUNICAÇÃO -->
+    <section id="comunicacao">
+      <h2><span class="sec-num">3.2</span>Comunicação Shell ↔ Sidecar <a class="anchor" href="#comunicacao">#</a></h2>
+
+      <div class="flow">
+        <div class="flow-node hi">Tauri (Rust)</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node">JSON-RPC / NDJSON via stdio</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node hi">Sidecar Node.js (.exe)</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node">Chrome CDP</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node amber">API OpenAI</div>
+      </div>
+
+      <ul>
+        <li>Protocolo: <strong>JSON-RPC via NDJSON pelo stdio</strong></li>
+        <li>Sidecar empacotado como <code>.exe</code> com <code>@yao-pkg/pkg</code></li>
+        <li>Playwright pinado em <strong>1.59.1</strong> (compatível com pkg)</li>
+        <li>Supervisor com <strong>backoff exponencial</strong> — máx. 3 crashes antes de alertar o usuário</li>
+        <li>Relançamento automático do Chrome quando a porta CDP morre (<code>CDP_PORT_DEAD</code>)</li>
+      </ul>
+    </section>
+
+    <!-- RUST -->
+    <section id="rust">
+      <h2><span class="sec-num">4</span>Shell Rust / Tauri v2 <a class="anchor" href="#rust">#</a></h2>
+
+      <div class="file-list">
+        <div class="file-row">
+          <span class="file-name">captures.rs</span>
+          <span class="file-size">40 KB</span>
+          <span class="file-desc">Comandos FS de capturas (leitura, listagem, exclusão de traces)</span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">sidecar.rs</span>
+          <span class="file-size">23 KB</span>
+          <span class="file-desc">Supervisor do sidecar com backoff + protocolo JSON-RPC via stdio</span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">chrome_detect.rs</span>
+          <span class="file-size">11 KB</span>
+          <span class="file-desc">Detecção automática e relançamento do Chrome com porta CDP</span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">workflows.rs</span>
+          <span class="file-size">10 KB</span>
+          <span class="file-desc">Gerenciamento de workflows e docs compilados</span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">recordings.rs</span>
+          <span class="file-size">10 KB</span>
+          <span class="file-desc">Gravações de tela — metadata, listagem, recuperação de órfãos</span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">main.rs</span>
+          <span class="file-size">10 KB</span>
+          <span class="file-desc">Entry point, setup Tauri, registro de comandos e plugins</span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">tray.rs</span>
+          <span class="file-size">3 KB</span>
+          <span class="file-desc">Bandeja do sistema (minimizar para tray)</span>
+        </div>
+      </div>
+
+      <h3>Dependências Rust Principais</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Crate</th><th>Versão</th><th>Uso</th></tr></thead>
+          <tbody>
+            <tr><td><code>tauri</code></td><td>2</td><td>Shell principal, plugins shell/store/notification/dialog</td></tr>
+            <tr><td><code>windows-sys</code></td><td>0.59</td><td>Win32 UI (overlays de gravação)</td></tr>
+            <tr><td><code>tokio</code></td><td>1</td><td>Async runtime completo</td></tr>
+            <tr><td><code>serde / serde_json</code></td><td>1</td><td>Serialização JSON para RPC</td></tr>
+            <tr><td><code>chrono</code></td><td>0.4</td><td>Timestamps ISO-8601</td></tr>
+            <tr><td><code>base64</code></td><td>0.22</td><td>Encoding de imagens para HTML</td></tr>
+            <tr><td><code>tracing</code></td><td>0.1</td><td>Observabilidade estruturada</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SIDECAR -->
+    <section id="sidecar">
+      <h2><span class="sec-num">5</span>Sidecar Node.js <a class="anchor" href="#sidecar">#</a></h2>
+
+      <div class="file-list">
+        <div class="file-row">
+          <span class="file-name">playwright-actions.js</span>
+          <span class="file-size">60 KB</span>
+          <span class="file-desc">Principal — gravação via CDP, todos os tipos de evento</span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">compiler.js</span>
+          <span class="file-size">19 KB</span>
+          <span class="file-desc">Trace → doc estruturado (GPT-4.1-mini structured outputs)</span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">video-compiler.js</span>
+          <span class="file-size">18 KB</span>
+          <span class="file-desc">Vídeo → doc estruturado (Whisper + GPT-4.1-mini visão em janelas)</span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">index.js</span>
+          <span class="file-size">16 KB</span>
+          <span class="file-desc">Entry point + dispatcher JSON-RPC</span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">capture-store.js</span>
+          <span class="file-size">12 KB</span>
+          <span class="file-desc">Gerenciamento de traces NDJSON (append, leitura, listagem)</span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">exporter.js</span>
+          <span class="file-size">11 KB</span>
+          <span class="file-desc">doc.json → Markdown / HTML autocontido / PDF (Chrome headless)</span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">screen-recorder.js</span>
+          <span class="file-size">10 KB</span>
+          <span class="file-desc">Gravação de tela via ffmpeg (gdigrab + dshow)</span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">openai-client.js</span>
+          <span class="file-size">7 KB</span>
+          <span class="file-desc">Cliente OpenAI com retry em 429/5xx (nunca em 401/403)</span>
+        </div>
+      </div>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">📦</span>
+        <p><strong>Empacotamento via pkg:</strong> o sidecar inteiro é empacotado como <code>.exe</code> com <code>@yao-pkg/pkg</code>. Assets incluídos: <code>playwright-core/browsers.json</code>, <code>compile-result.schema.json</code>, <code>video-compile-result.schema.json</code> e <code>templates/doc.html</code>.</p>
+      </div>
+    </section>
+
+    <!-- UI -->
+    <section id="ui">
+      <h2><span class="sec-num">6</span>UI React <a class="anchor" href="#ui">#</a></h2>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Componente</th><th>Tamanho</th><th>Função</th></tr></thead>
+          <tbody>
+            <tr><td><code>Captures.tsx</code></td><td>31 KB</td><td>Aba Gravações + visualizador NDJSON paginado</td></tr>
+            <tr><td><code>Processes.tsx</code></td><td>25 KB</td><td>Aba Processos + exportação + gravador de tela</td></tr>
+            <tr><td><code>Settings.tsx</code></td><td>8 KB</td><td>Aba Config (chave OpenAI, Chrome, retenção)</td></tr>
+            <tr><td><code>Logs.tsx</code></td><td>7 KB</td><td>Aba Histórico de compilações</td></tr>
+            <tr><td><code>RecPill.tsx</code></td><td>3 KB</td><td>Pílula flutuante de gravação em andamento</td></tr>
+            <tr><td><code>RecOverlay.tsx</code></td><td>862 B</td><td>Overlay borda vermelha do monitor gravado</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- IA -->
+    <section id="ia">
+      <h2><span class="sec-num">7</span>IA — OpenAI <a class="anchor" href="#ia">#</a></h2>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Modelo</th><th>Uso</th><th>Método</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><code>gpt-4.1-mini</code></td>
+              <td>Compilação de traces em documentação; structured outputs estritos; heal de seletores (F3)</td>
+              <td>fetch nativo, sem SDK</td>
+            </tr>
+            <tr>
+              <td><code>whisper-1</code></td>
+              <td>Transcrição de áudio de vídeos locais</td>
+              <td>fetch nativo, sem SDK</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ul>
+        <li><strong>Structured outputs estritos:</strong> o LLM nunca inventa fatos técnicos — seletores, URLs, valores e tempos vêm 100% do trace</li>
+        <li><strong>1 retry</strong> automático em erros 429/5xx; nunca em 401/403</li>
+        <li><strong>A chave nunca é logada</strong> — armazenada em storage local Tauri</li>
+        <li>Todo chamada registra <strong>tokens e custo estimado</strong> no log local</li>
+      </ul>
+    </section>
+
+    <!-- DADOS -->
+    <section id="dados">
+      <h2><span class="sec-num">8</span>Dados Locais <a class="anchor" href="#dados">#</a></h2>
+
+      <p>Tudo em <code>%APPDATA%/tech.digitalai.process-studio</code>:</p>
+
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">ESTRUTURA DE DIRETÓRIOS</span></div>
+        <pre>settings.json                      chave OpenAI, path Chrome, porta CDP, retenção
+captures/&lt;id&gt;.ndjson               trace append-only (1 JSON por linha, seq estável)
+captures/&lt;id&gt;.meta.json            metadados (schema: 1)
+workflows/&lt;wfId&gt;/meta.json         nome, origem, custo, domínios
+workflows/&lt;wfId&gt;/v&lt;N&gt;.json         workflow executável versionado
+workflows/&lt;wfId&gt;/doc.json          doc estruturado — fonte de todas as exportações
+workflows/&lt;wfId&gt;/compile-log.json  payload LLM auditável + tokens + custo
+docs/&lt;wfId&gt;/                       exportações .md (+ -assets/), .html, .pdf
+recordings/*.mkv (+ .meta.json)    gravações de tela</pre>
+      </div>
+
+      <h3>Política de Segurança de Dados</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Onde</th><th>Dados sensíveis</th><th>Comportamento</th></tr></thead>
+          <tbody>
+            <tr><td>Disco local</td><td>Cookies, senhas, headers de auth</td><td><span class="pill pill-amber">Gravados em claro</span> — decisão explícita do usuário</td></tr>
+            <tr><td>Prompt de LLM</td><td>Qualquer campo sensível</td><td><span class="pill pill-green">Removidos via stripSecrets()</span></td></tr>
+            <tr><td>Exportação HTML/PDF</td><td>Valores sensíveis</td><td><span class="pill pill-blue">Exibidos como ••••••</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Retenção configurável — padrão: <strong>14 dias / 512 MB</strong> para capturas.</p>
+    </section>
+
+    <!-- PRINCÍPIOS -->
+    <section id="principios">
+      <h2><span class="sec-num">9</span>Princípios de Design — Constitution v1.1.0 <a class="anchor" href="#principios">#</a></h2>
+      <p>Definidos em <code>.specify/memory/constitution.md</code> — imutáveis, só alteráveis por votação formal.</p>
+
+      <div class="principle-list">
+        <div class="principle-row">
+          <div class="principle-num">I</div>
+          <div class="principle-body">
+            <div class="principle-title">Local-First e Individual</div>
+            <div class="principle-desc">Sem servidor próprio, sem conta, sem multi-tenant. Única saída de dados: API OpenAI com chave do usuário.</div>
+            <span class="principle-tag">NON-NEGOTIABLE</span>
+          </div>
+        </div>
+        <div class="principle-row">
+          <div class="principle-num">II</div>
+          <div class="principle-body">
+            <div class="principle-title">Segredos Fora do LLM</div>
+            <div class="principle-desc">Dados gravados em claro no disco (decisão do usuário). <code>stripSecrets()</code> obrigatório antes de toda chamada OpenAI. Exportação exibe <code>••••••</code>.</div>
+            <span class="principle-tag">NON-NEGOTIABLE</span>
+          </div>
+        </div>
+        <div class="principle-row">
+          <div class="principle-num">III</div>
+          <div class="principle-body">
+            <div class="principle-title">Replay Determinístico Primeiro, LLM Depois</div>
+            <div class="principle-desc">Escada: seletor CSS → XPath → LLM heal → asserção de rede → intervenção humana. LLM proibido como cérebro de cada passo. Máx. 1 tentativa de heal por passo.</div>
+            <span class="principle-tag">NON-NEGOTIABLE</span>
+          </div>
+        </div>
+        <div class="principle-row">
+          <div class="principle-num">IV</div>
+          <div class="principle-body">
+            <div class="principle-title">Trace Imutável, Workflow Versionado</div>
+            <div class="principle-desc">NDJSON nunca alterado após fechado. Heals e edições geram <code>v&lt;N+1&gt;.json</code>. Recompilar gera workflow com ID novo.</div>
+            <span class="principle-tag">NON-NEGOTIABLE</span>
+          </div>
+        </div>
+        <div class="principle-row">
+          <div class="principle-num">V</div>
+          <div class="principle-body">
+            <div class="principle-title">Herança por Fork</div>
+            <div class="principle-desc">Código originado do relay (cortex-local-agent). O repositório de origem não é modificado.</div>
+          </div>
+        </div>
+        <div class="principle-row">
+          <div class="principle-num">VI</div>
+          <div class="principle-body">
+            <div class="principle-title">Correlação Explícita Passo↔Request</div>
+            <div class="principle-desc">Cada request capturada carrega <code>afterStepSeq</code>. Traces antigos sem o campo compilam sem asserções, com aviso.</div>
+          </div>
+        </div>
+        <div class="principle-row">
+          <div class="principle-num">VII</div>
+          <div class="principle-body">
+            <div class="principle-title">Transparência de Custo de IA</div>
+            <div class="principle-desc">Toda chamada LLM registra tokens e custo estimado no log local. A UI exibe esses valores. Nenhuma chamada de IA silenciosa.</div>
+            <span class="principle-tag">NON-NEGOTIABLE</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CUSTOS -->
+    <section id="custos">
+      <h2><span class="sec-num">10</span>Custos de IA (Validados) <a class="anchor" href="#custos">#</a></h2>
+
+      <div class="kpi-grid">
+        <div class="kpi-card green">
+          <div class="kpi-label">Processo browser</div>
+          <div class="kpi-value">~$0,007</div>
+          <div class="kpi-sub">~6 passos · ~17s</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">Vídeo narrado</div>
+          <div class="kpi-value">$0,0078</div>
+          <div class="kpi-sub">55 segundos · 13s proc.</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">Vídeo longo</div>
+          <div class="kpi-value">$0,074</div>
+          <div class="kpi-sub">6 minutos · janelas</div>
+        </div>
+      </div>
+
+      <p>Modelo: <strong>gpt-4.1-mini</strong> (structured outputs). Transcrição: <strong>whisper-1</strong>. Custo pago pelo usuário usando a própria chave OpenAI.</p>
+    </section>
+
+    <!-- FASES -->
+    <section id="fases">
+      <h2><span class="sec-num">11</span>Roadmap — Fases F0 → F3 <a class="anchor" href="#fases">#</a></h2>
+
+      <div class="phase-grid">
+        <div class="phase-card done">
+          <div class="phase-label">FASE F0</div>
+          <div class="phase-name">Scaffold</div>
+          <div class="phase-desc">App instalável, Chrome isolado via CDP, gravação e listagem de capturas</div>
+          <div class="phase-status">✅ Entregue</div>
+        </div>
+        <div class="phase-card done">
+          <div class="phase-label">FASE F1</div>
+          <div class="phase-name">Auto-Docs</div>
+          <div class="phase-desc">Compilador IA, exportador md/html/pdf, página Processos</div>
+          <div class="phase-status">✅ Entregue</div>
+        </div>
+        <div class="phase-card done">
+          <div class="phase-label">FASE FV</div>
+          <div class="phase-name">Docs por Vídeo</div>
+          <div class="phase-desc">Gravação de tela nativa + documentação de vídeos locais com janelas para vídeos longos</div>
+          <div class="phase-status">✅ Entregue</div>
+        </div>
+        <div class="phase-card done">
+          <div class="phase-label">FASE FG</div>
+          <div class="phase-name">Gravador de Tela</div>
+          <div class="phase-desc">ffmpeg empacotado, borda REC WDA_EXCLUDEFROMCAPTURE, pílula clicável, recuperação de órfãos</div>
+          <div class="phase-status">✅ Entregue</div>
+        </div>
+        <div class="phase-card pend">
+          <div class="phase-label">FASE F2</div>
+          <div class="phase-name">Replay Determinístico</div>
+          <div class="phase-desc">Re-execução com variáveis editáveis, formulário de preenchimento pré-gravado</div>
+          <div class="phase-status">⏳ Pendente</div>
+        </div>
+        <div class="phase-card pend">
+          <div class="phase-label">FASE F3</div>
+          <div class="phase-name">IA na Execução</div>
+          <div class="phase-desc">Self-healing por LLM quando seletor quebra, resolução de variáveis por instrução em linguagem natural</div>
+          <div class="phase-status">⏳ Pendente</div>
+        </div>
+      </div>
+
+      <h3>Escada de Replay (F2/F3 — design)</h3>
+      <div class="flow">
+        <div class="flow-node ok">Seletor CSS</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node ok">XPath</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node amber">LLM Heal</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node">Asserção de Rede</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node warn">Intervenção Humana</div>
+      </div>
+      <p>LLM só entra quando o seletor CSS e o XPath falham. Máx. 1 tentativa de heal por passo por run.</p>
+    </section>
+
+    <!-- BUILD -->
+    <section id="build">
+      <h2><span class="sec-num">12</span>Build e Deploy <a class="anchor" href="#build">#</a></h2>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">⚠️</span>
+        <p><strong>Pré-requisitos:</strong> Windows 10/11 x64 + Google Chrome + Node.js 20+ + Rust estável (MSVC Build Tools) + WebView2</p>
+      </div>
+
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">POWERSHELL</span></div>
+        <pre>npm install
+npm run fetch:ffmpeg                               # baixa ffmpeg LGPL (~110 MB)
+cd sidecar
+npm install
+npm run build:win                                  # gera sidecar .exe via pkg
+cd ..
+Copy-Item sidecar\sidecar-x86_64-pc-windows-msvc.exe src-tauri\sidecar\
+npm run tauri:dev                                  # desenvolvimento
+npm run tauri:build                                # instalador NSIS</pre>
+      </div>
+
+      <p><strong>Saída:</strong> <code>src-tauri/target/release/bundle/nsis/</code> — instalador NSIS Windows.</p>
+
+      <h3>Notas Críticas de Build</h3>
+      <ul>
+        <li><code>ffmpeg.exe</code> (~110 MB) <strong>não é versionado no git</strong> — baixar via <code>npm run fetch:ffmpeg</code></li>
+        <li>Playwright pinado em <code>1.59.1</code> para compatibilidade com <code>@yao-pkg/pkg</code></li>
+        <li>Sempre validar com o <strong>exe empacotado</strong>, não apenas <code>node index.js</code></li>
+        <li>Testes do sidecar: <code>cd sidecar &amp;&amp; npm test</code></li>
+      </ul>
+
+      <h3>Repositório</h3>
+      <p>
+        <strong>GitHub:</strong> <code>DIGITAL-AI-TECH/process-studio</code> (privado)<br/>
+        <strong>Identificador:</strong> <code>tech.digitalai.process-studio</code><br/>
+        <strong>Versão atual:</strong> <code>0.1.0</code><br/>
+        <strong>Nome:</strong> provisório — será renomeado após definição final
+      </p>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  const links = document.querySelectorAll('.nav-link');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const match = document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+        if (match) match.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  document.querySelectorAll('section[id]').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
