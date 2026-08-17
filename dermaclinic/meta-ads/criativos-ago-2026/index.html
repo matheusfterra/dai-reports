@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DermaClinic · Performance de Criativos · 01–16/08/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:   #0F172A;
+  --surf:   #1E293B;
+  --surf2:  #243347;
+  --bord:   #334155;
+  --txt:    #FFFFFF;
+  --mut:    #94A3B8;
+  --sub:    #64748B;
+  --ind:    #6366F1;
+  --ind2:   #818cf8;
+  --teal:   #10B981;
+  --amber:  #F59E0B;
+  --red:    #EF4444;
+  --bordo:  #7C3D4E;
+  --bordo2: #a0566a;
+  --gold:   #F59E0B;
+  --silver: #94A3B8;
+  --bronze: #CD7F32;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--navy);color:var(--txt);min-height:100vh;overflow-x:hidden}
+
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--navy)}
+::-webkit-scrollbar-thumb{background:var(--bord);border-radius:3px}
+
+.header{background:rgba(15,23,42,0.95);border-bottom:1px solid var(--bord);padding:0 32px;position:sticky;top:0;z-index:200;backdrop-filter:blur(16px)}
+.h-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px;gap:16px}
+.logo{display:flex;align-items:center;gap:10px}
+.h-right{display:flex;align-items:center;gap:10px}
+.badge{display:inline-flex;align-items:center;gap:5px;background:var(--surf);border:1px solid var(--bord);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:500;color:var(--mut)}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--teal)}
+
+.hero{background:linear-gradient(160deg,#1a1040 0%,var(--navy) 60%);padding:48px 32px 36px;border-bottom:1px solid var(--bord)}
+.hero-inner{max-width:1400px;margin:0 auto}
+.hero-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.25);border-radius:20px;padding:4px 14px;margin-bottom:18px;font-size:11px;font-weight:700;color:var(--ind2);letter-spacing:.5px;text-transform:uppercase}
+.hero h1{font-size:36px;font-weight:900;letter-spacing:-1.5px;line-height:1.1;margin-bottom:10px}
+.hero h1 span{background:linear-gradient(135deg,#fff 0%,var(--ind2) 55%,var(--bordo2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:15px;color:var(--mut);max-width:660px;margin-bottom:28px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kpi{background:var(--surf);border:1px solid var(--bord);border-radius:12px;padding:18px 20px;position:relative;overflow:hidden;transition:transform .2s}
+.kpi:hover{transform:translateY(-2px)}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.kpi.i::before{background:linear-gradient(90deg,var(--ind),var(--ind2))}
+.kpi.t::before{background:linear-gradient(90deg,var(--teal),#34d399)}
+.kpi.a::before{background:linear-gradient(90deg,var(--amber),#fbbf24)}
+.kpi.b::before{background:linear-gradient(90deg,var(--bordo),var(--bordo2))}
+.kpi.r::before{background:linear-gradient(90deg,var(--red),#f87171)}
+.kpi-lbl{font-size:10px;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.kpi-val{font-size:26px;font-weight:900;letter-spacing:-1px}
+.kpi-val.i{color:var(--ind2)}
+.kpi-val.t{color:var(--teal)}
+.kpi-val.a{color:var(--amber)}
+.kpi-val.b{color:var(--bordo2)}
+.kpi-val.r{color:var(--red)}
+.kpi-note{font-size:11px;color:var(--mut);margin-top:3px}
+
+.tabs{background:var(--surf);border-bottom:1px solid var(--bord);position:sticky;top:60px;z-index:100}
+.tabs-inner{max-width:1400px;margin:0 auto;display:flex;padding:0 32px;overflow-x:auto;gap:2px}
+.tab-btn{padding:14px 20px;font-size:13px;font-weight:500;color:var(--mut);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s;display:flex;align-items:center;gap:6px}
+.tab-btn.active,.tab-btn:hover{color:var(--txt);border-bottom-color:var(--ind)}
+
+.section{max-width:1400px;margin:0 auto;padding:40px 32px}
+.s-header{display:flex;align-items:center;gap:10px;margin-bottom:24px}
+.s-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.s-icon.ind{background:rgba(99,102,241,.15)}
+.s-icon.tel{background:rgba(16,185,129,.15)}
+.s-icon.amb{background:rgba(245,158,11,.15)}
+.s-icon.brd{background:rgba(124,61,78,.15)}
+.s-icon.red{background:rgba(239,68,68,.15)}
+.s-title{font-size:16px;font-weight:700}
+.s-sub{font-size:12px;color:var(--mut);margin-top:2px}
+.divider{height:1px;background:var(--bord);margin:0}
+
+.adset-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px}
+.adset-card{background:var(--surf);border:1px solid var(--bord);border-radius:14px;padding:22px;position:relative;overflow:hidden;transition:transform .2s}
+.adset-card:hover{transform:translateY(-2px)}
+.adset-card.gold{border-color:rgba(245,158,11,.35)}
+.adset-card.gold::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#F59E0B,#fbbf24)}
+.adset-card.silver{border-color:rgba(148,163,184,.3)}
+.adset-card.silver::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#94A3B8,#cbd5e1)}
+.adset-card.alert{border-color:rgba(239,68,68,.3)}
+.adset-card.alert::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--red),#f87171)}
+.adset-rank{font-size:26px;margin-bottom:8px}
+.adset-name{font-size:14px;font-weight:800;margin-bottom:4px;color:var(--txt)}
+.adset-cpa{font-size:32px;font-weight:900;letter-spacing:-1.5px;margin-bottom:2px}
+.adset-cpa.gold{color:var(--gold)}
+.adset-cpa.silver{color:var(--silver)}
+.adset-cpa.alert{color:var(--red)}
+.adset-cpa-lbl{font-size:10px;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:14px}
+.adset-stats{display:flex;gap:16px;flex-wrap:wrap}
+.adset-stat-val{font-size:14px;font-weight:700}
+.adset-stat-lbl{font-size:9px;color:var(--sub);text-transform:uppercase;letter-spacing:.3px}
+
+.rank-table-wrap{background:var(--surf);border:1px solid var(--bord);border-radius:14px;overflow:hidden;margin-bottom:24px}
+.rank-table-wrap table{width:100%;border-collapse:collapse}
+.rank-table-wrap thead{background:var(--surf2)}
+.rank-table-wrap thead th{padding:11px 14px;text-align:left;font-size:10px;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--bord);white-space:nowrap}
+.rank-table-wrap tbody tr{border-bottom:1px solid rgba(51,65,85,.5);transition:background .1s}
+.rank-table-wrap tbody tr:last-child{border-bottom:none}
+.rank-table-wrap tbody tr:hover{background:var(--surf2)}
+.rank-table-wrap tbody td{padding:10px 14px;font-size:12px;vertical-align:middle}
+
+.cr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.cr-card{background:var(--surf);border:1px solid var(--bord);border-radius:14px;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.cr-card:hover{transform:translateY(-3px);box-shadow:0 10px 32px rgba(0,0,0,.4);border-color:rgba(99,102,241,.3)}
+.cr-thumb{position:relative;width:100%;padding-top:56.25%;overflow:hidden;background:var(--surf2)}
+.cr-status{position:absolute;top:8px;right:8px;border-radius:6px;padding:2px 8px;font-size:9px;font-weight:700}
+.cr-body{padding:14px}
+.cr-name{font-family:monospace;font-size:11px;font-weight:700;margin-bottom:4px}
+.cr-conj{font-size:10px;color:var(--mut);margin-bottom:8px;line-height:1.5}
+.cr-links{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.cr-link-btn{display:inline-flex;align-items:center;gap:3px;color:var(--ind);font-size:10px;font-weight:600;text-decoration:none;padding:3px 8px;background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.15);border-radius:5px;transition:all .2s}
+.cr-link-btn:hover{background:rgba(99,102,241,.2)}
+.cr-link-btn.fb{color:var(--mut);background:rgba(100,116,139,.08);border-color:rgba(100,116,139,.2)}
+.cr-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:linear-gradient(135deg,#1a1040,#0f172a);color:var(--sub)}
+.cr-placeholder .ph-emoji{font-size:36px}
+.cr-placeholder .ph-label{font-size:11px;color:var(--sub);text-align:center;padding:0 8px}
+
+.st-top{background:rgba(16,185,129,.15);color:var(--teal)}
+.st-sc{background:rgba(99,102,241,.15);color:var(--ind2)}
+.st-wn{background:rgba(245,158,11,.15);color:var(--amber)}
+.st-ps{background:rgba(239,68,68,.15);color:var(--red)}
+.st-ot{background:rgba(100,116,139,.15);color:var(--mut)}
+
+.pattern-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.pattern-card{background:var(--surf);border:1px solid var(--bord);border-radius:14px;padding:22px}
+.pattern-title{font-size:13px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.pattern-list{display:flex;flex-direction:column;gap:10px}
+.pattern-item{display:flex;align-items:flex-start;gap:10px;padding:10px;background:var(--surf2);border-radius:8px}
+.pattern-num{width:22px;height:22px;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.25);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--ind2);flex-shrink:0}
+.pattern-num.alert{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.25);color:var(--red)}
+.pattern-num.gold{background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.25);color:var(--amber)}
+.pattern-text{font-size:12px;color:var(--mut);line-height:1.5}
+.pattern-text strong{color:var(--txt);font-weight:600}
+
+.tbl-wrap{background:var(--surf);border:1px solid var(--bord);border-radius:14px;overflow:hidden}
+table{width:100%;border-collapse:collapse}
+thead{background:var(--surf2)}
+thead th{padding:11px 14px;text-align:left;font-size:10px;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--bord);white-space:nowrap}
+tbody tr{border-bottom:1px solid rgba(51,65,85,.5);transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--surf2)}
+tbody td{padding:10px 14px;font-size:12px;vertical-align:middle}
+.rk{width:26px;height:26px;border-radius:7px;background:var(--surf2);border:1px solid var(--bord);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--mut)}
+.rk.top{background:rgba(99,102,241,.12);border-color:rgba(99,102,241,.25);color:var(--ind2)}
+.tag{display:inline-flex;background:var(--surf2);border:1px solid var(--bord);border-radius:5px;padding:2px 7px;font-size:10px;color:var(--mut)}
+.lbtn{display:inline-flex;align-items:center;gap:3px;color:var(--ind);font-size:10px;font-weight:600;text-decoration:none;padding:2px 7px;background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.15);border-radius:5px;transition:all .2s}
+.lbtn:hover{background:rgba(99,102,241,.2)}
+.lbtn.fb{color:var(--mut);background:rgba(100,116,139,.08);border-color:rgba(100,116,139,.2)}
+.metric-cell{font-weight:700}
+.metric-cell.hi{color:var(--teal)}
+.metric-cell.mid{color:var(--amber)}
+.metric-cell.lo{color:var(--mut)}
+.metric-cell.lo2{color:var(--red)}
+.metric-cell.zero{color:var(--sub)}
+
+.comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.comp-card{background:var(--surf);border:1px solid var(--bord);border-radius:14px;padding:20px}
+.comp-period{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--mut);margin-bottom:4px}
+.comp-val{font-size:28px;font-weight:900;letter-spacing:-1px;margin-bottom:2px}
+.comp-sub{font-size:11px;color:var(--sub)}
+
+.callout{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:10px;padding:16px 20px;display:flex;align-items:flex-start;gap:12px;margin-bottom:24px}
+.callout.amber{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.2)}
+.callout.ind{background:rgba(99,102,241,.08);border-color:rgba(99,102,241,.2)}
+.callout.red{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.2)}
+.callout-icon{font-size:20px;flex-shrink:0}
+.callout-title{font-size:13px;font-weight:700;color:var(--teal);margin-bottom:6px}
+.callout.amber .callout-title{color:var(--amber)}
+.callout.ind .callout-title{color:var(--ind2)}
+.callout.red .callout-title{color:var(--red)}
+.callout-body{font-size:12px;color:var(--mut);line-height:1.6}
+
+.note-box{background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.15);border-radius:8px;padding:12px 16px;font-size:11px;color:var(--mut);line-height:1.6;margin-top:16px}
+.note-box strong{color:var(--ind2)}
+
+.inversion-banner{background:linear-gradient(135deg,rgba(239,68,68,.08),rgba(16,185,129,.06));border:1px solid var(--bord);border-radius:14px;padding:24px;margin-bottom:24px}
+.inversion-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center}
+.inv-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--mut);margin-bottom:6px}
+.inv-arrow{font-size:28px;text-align:center}
+.inv-period{font-size:12px;font-weight:800;margin-bottom:14px}
+.inv-adset{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-radius:8px;margin-bottom:6px;font-size:12px;font-weight:600}
+.inv-adset.good{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.15)}
+.inv-adset.bad{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.15)}
+.inv-adset .name{color:var(--txt)}
+.inv-adset .val.g{color:var(--teal)}
+.inv-adset .val.r{color:var(--red)}
+
+.hhi-wrap{background:var(--surf);border:1px solid var(--bord);border-radius:14px;padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center;margin-bottom:24px}
+.hhi-gauge-area{display:flex;flex-direction:column;align-items:center;gap:12px}
+.gauge-svg{width:220px;height:130px}
+.hhi-val-big{font-size:40px;font-weight:900;letter-spacing:-2px;color:var(--amber)}
+.hhi-val-lbl{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.hhi-title{font-size:14px;font-weight:700;margin-bottom:8px}
+.hhi-desc{font-size:12px;color:var(--mut);line-height:1.6;margin-bottom:16px}
+.hhi-scale{display:flex;flex-direction:column;gap:6px}
+.hhi-scale-item{display:flex;align-items:center;gap:8px;font-size:11px}
+.hhi-scale-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.hhi-bar-container{background:var(--surf2);border-radius:8px;height:6px;flex:1}
+.hhi-bar-fill{height:6px;border-radius:8px}
+
+.zombie-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:20px}
+.zombie-card{background:var(--surf);border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:14px;position:relative}
+.zombie-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--red),#f87171);border-radius:10px 10px 0 0}
+.zombie-name{font-size:11px;font-weight:700;margin-bottom:6px;color:var(--txt);font-family:monospace}
+.zombie-gasto{font-size:16px;font-weight:900;color:var(--red);letter-spacing:-.5px}
+.zombie-lbl{font-size:9px;color:var(--sub);text-transform:uppercase;letter-spacing:.3px;margin-bottom:6px}
+.zombie-link{display:inline-flex;align-items:center;gap:3px;color:var(--ind);font-size:10px;font-weight:600;text-decoration:none;padding:2px 7px;background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.15);border-radius:5px;margin-top:4px}
+.zombie-link:hover{background:rgba(99,102,241,.2)}
+.zombie-link.fb{color:var(--mut);background:rgba(100,116,139,.08);border-color:rgba(100,116,139,.2)}
+
+.acao-list{display:flex;flex-direction:column;gap:12px}
+.acao-item{background:var(--surf);border:1px solid var(--bord);border-radius:12px;padding:18px 20px;display:flex;align-items:flex-start;gap:14px}
+.acao-num{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.acao-num.pri{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.25)}
+.acao-num.sec{background:rgba(245,158,11,.15);color:var(--amber);border:1px solid rgba(245,158,11,.25)}
+.acao-num.ter{background:rgba(16,185,129,.15);color:var(--teal);border:1px solid rgba(16,185,129,.25)}
+.acao-num.qua{background:rgba(99,102,241,.15);color:var(--ind2);border:1px solid rgba(99,102,241,.25)}
+.acao-title{font-size:13px;font-weight:700;margin-bottom:4px}
+.acao-body{font-size:12px;color:var(--mut);line-height:1.5}
+
+.footer{border-top:1px solid var(--bord);padding:20px 32px;text-align:center;font-size:11px;color:var(--sub)}
+.footer a{color:var(--mut);text-decoration:none}
+
+@media(max-width:900px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .adset-grid{grid-template-columns:1fr}
+  .pattern-grid{grid-template-columns:1fr}
+  .comp-grid{grid-template-columns:1fr}
+  .inversion-grid{grid-template-columns:1fr;text-align:center}
+  .inv-arrow{display:none}
+  .hhi-wrap{grid-template-columns:1fr}
+  .section{padding:28px 16px}
+  .hero{padding:32px 16px 24px}
+  .header{padding:0 16px}
+  .tabs-inner{padding:0 16px}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="h-inner">
+    <div class="logo">
+      <img src="../../../_shared/logo-negative.svg" style="height:28px;" alt="Digital AI" />
+    </div>
+    <div class="h-right">
+      <span class="badge"><span class="dot"></span>DermaClinic · 01–16/08 2026</span>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="tabs-inner">
+    <button class="tab-btn active" onclick="scrollToSection('sec-adsets',this)">📊 Por Conjunto</button>
+    <button class="tab-btn" onclick="scrollToSection('sec-portfolio',this)">📋 Portfólio</button>
+    <button class="tab-btn" onclick="scrollToSection('sec-grid',this)">🎬 Criativos</button>
+    <button class="tab-btn" onclick="scrollToSection('sec-zombies',this)">💀 Zombies</button>
+    <button class="tab-btn" onclick="scrollToSection('sec-hhi',this)">📐 HHI</button>
+    <button class="tab-btn" onclick="scrollToSection('sec-insights',this)">🧠 Diagnóstico</button>
+    <button class="tab-btn" onclick="scrollToSection('sec-comparativo',this)">📈 Comparativo Jul</button>
+    <button class="tab-btn" onclick="scrollToSection('sec-acao',this)">🛠️ Plano de Ação</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-chip">📊 Meta Ads · Performance de Criativos</div>
+    <h1><span>Performance Criativos</span><br>01 a 16 Ago 2026</h1>
+    <p class="hero-sub">Análise de performance por conjunto — 16 dias de veiculação, 2 adsets: LUXO+DERM e SITE. Dados reais do Gerenciador de Anúncios: R$444,90 investidos, 43 conversas. REJUVENESCER AS MÃOS domina com 60,5% dos leads. HHI de concentração: 0,396 — moderado-alto.</p>
+    <div class="kpis">
+      <div class="kpi t">
+        <div class="kpi-lbl">Total de Mensagens</div>
+        <div class="kpi-val t">43</div>
+        <div class="kpi-note">01/08–16/08 · 2 conjuntos ativos · 2,7/dia</div>
+      </div>
+      <div class="kpi a">
+        <div class="kpi-lbl">CPA Médio / Mensagem</div>
+        <div class="kpi-val a">R$10,35</div>
+        <div class="kpi-note">acima da meta · benchmark: &lt;R$10</div>
+      </div>
+      <div class="kpi i">
+        <div class="kpi-lbl">Total Investido</div>
+        <div class="kpi-val i">R$444,90</div>
+        <div class="kpi-note">R$27,81/dia · alcance: 12.271 pessoas</div>
+      </div>
+      <div class="kpi r">
+        <div class="kpi-lbl">CPM Médio da Conta</div>
+        <div class="kpi-val r">R$24,43</div>
+        <div class="kpi-note">18.212 impressões · alcance: 12.271 · freq ≈1,48</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SEÇÃO 1: POR CONJUNTO -->
+<div class="divider"></div>
+<div class="section" id="sec-adsets">
+  <div class="s-header">
+    <div class="s-icon amb">📊</div>
+    <div>
+      <div class="s-title">Ranking por Conjunto — 01 a 16/08</div>
+      <div class="s-sub">Performance de cada adset em 16 dias de veiculação · dados reais do Gerenciador · orçamento R$15/dia por conjunto</div>
+    </div>
+  </div>
+
+  <div class="adset-grid">
+    <div class="adset-card gold">
+      <div class="adset-rank">🥇</div>
+      <div class="adset-name">Público LUXO + DERMATOLOGIA</div>
+      <div class="adset-cpa gold">R$9,11</div>
+      <div class="adset-cpa-lbl">custo por mensagem · melhor CPA do período</div>
+      <div class="adset-stats">
+        <div>
+          <div class="adset-stat-val" style="color:var(--teal)">21</div>
+          <div class="adset-stat-lbl">mensagens</div>
+        </div>
+        <div>
+          <div class="adset-stat-val" style="color:var(--mut)">R$191,30</div>
+          <div class="adset-stat-lbl">investido</div>
+        </div>
+        <div>
+          <div class="adset-stat-val" style="color:var(--ind2)">49%</div>
+          <div class="adset-stat-lbl">do volume total</div>
+        </div>
+        <div>
+          <div class="adset-stat-val" style="color:var(--teal)">R$22,48</div>
+          <div class="adset-stat-lbl">CPM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="adset-card alert">
+      <div class="adset-rank">🥈</div>
+      <div class="adset-name">Público SITE (Visitantes)</div>
+      <div class="adset-cpa alert">R$11,53</div>
+      <div class="adset-cpa-lbl">custo por mensagem · CPA acima da meta</div>
+      <div class="adset-stats">
+        <div>
+          <div class="adset-stat-val" style="color:var(--amber)">22</div>
+          <div class="adset-stat-lbl">mensagens (líder volume)</div>
+        </div>
+        <div>
+          <div class="adset-stat-val" style="color:var(--mut)">R$253,60</div>
+          <div class="adset-stat-lbl">investido</div>
+        </div>
+        <div>
+          <div class="adset-stat-val" style="color:var(--amber)">51%</div>
+          <div class="adset-stat-lbl">do volume total</div>
+        </div>
+        <div>
+          <div class="adset-stat-val" style="color:var(--red)">R$26,14</div>
+          <div class="adset-stat-lbl">CPM</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout amber" style="margin-bottom:16px">
+    <div class="callout-icon">⚠️</div>
+    <div>
+      <div class="callout-title">CPA subiu 39,5% vs julho — ambos os conjuntos na borda ou acima da meta R$10</div>
+      <div class="callout-body">
+        O LUXO+DERM, que fechou julho em <strong style="color:var(--txt)">R$5,82/msg</strong>, chegou a agosto com <strong style="color:var(--txt)">R$9,11 (+56,5%)</strong>. O SITE saiu de R$7,42 para R$11,53. O conjunto QUENTE foi removido em agosto — a perda desse terceiro adset reduziu o volume total sem compensação. CPM caiu de R$27,97 para R$24,43 — o leilão está mais barato, mas a conversão piorou: o problema é de qualidade criativa, não de alcance.
+      </div>
+    </div>
+  </div>
+
+  <div class="rank-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Conjunto</th>
+          <th>Mensagens</th>
+          <th>CPA / Msg</th>
+          <th>CPM</th>
+          <th>Investido</th>
+          <th>% Total</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="rk top">1</span></td>
+          <td><strong>LUXO + DERM</strong></td>
+          <td><span class="metric-cell mid">21</span></td>
+          <td><span class="metric-cell mid">R$9,11</span></td>
+          <td><span style="color:var(--teal);font-weight:700">R$22,48</span></td>
+          <td>R$191,30</td>
+          <td>49%</td>
+          <td><span style="color:var(--amber);font-size:10px;font-weight:600">⚠ Na borda da meta</span></td>
+        </tr>
+        <tr>
+          <td><span class="rk">2</span></td>
+          <td><strong>SITE</strong></td>
+          <td><span class="metric-cell mid">22</span></td>
+          <td><span class="metric-cell lo2">R$11,53</span></td>
+          <td><span style="color:var(--amber);font-weight:700">R$26,14</span></td>
+          <td>R$253,60</td>
+          <td>51%</td>
+          <td><span style="color:var(--red);font-size:10px;font-weight:600">✗ Acima da meta</span></td>
+        </tr>
+        <tr style="background:var(--surf2)">
+          <td colspan="2"><strong style="font-size:11px">TOTAL / MÉDIA</strong></td>
+          <td><span class="metric-cell mid">43</span></td>
+          <td><span class="metric-cell lo2">R$10,35</span></td>
+          <td><span style="color:var(--amber);font-weight:700">R$24,43</span></td>
+          <td>R$444,90</td>
+          <td>100%</td>
+          <td><span style="color:var(--red);font-size:10px;font-weight:600">✗ CPA acima da meta</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SEÇÃO 2: PORTFÓLIO COMPLETO -->
+<div class="divider"></div>
+<div class="section" id="sec-portfolio">
+  <div class="s-header">
+    <div class="s-icon ind">📋</div>
+    <div>
+      <div class="s-title">Portfólio Completo de Criativos</div>
+      <div class="s-sub">Todos os 20 criativos com métricas individuais — ordenados por gasto · 7 com resultados, 9 zombies, 4 sem gasto · clique em 🔗 para ver o anúncio</div>
+    </div>
+  </div>
+
+  <div class="callout amber" style="margin-bottom:16px">
+    <div class="callout-icon">🎯</div>
+    <div>
+      <div class="callout-title">REJUVENESCER AS MÃOS domina: 60,5% dos leads com CPA R$8,98</div>
+      <div class="callout-body">
+        26 das 43 conversas vieram de um único criativo. O segundo melhor CPA é <strong style="color:var(--txt)">TODA HISTÓRIA QUE CRESCE com R$5,94</strong> — apenas 3 conversas mas com potencial alto de escala. MMP CAPILAR com CPA R$9,66 é o terceiro pilar emergente.
+      </div>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Criativo</th>
+          <th>Msgs</th>
+          <th>Gasto</th>
+          <th>CPA</th>
+          <th>Impressões</th>
+          <th>Alcance</th>
+          <th>% Msgs</th>
+          <th>Ver</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="rk top">1</span></td>
+          <td>
+            <div style="font-weight:700;font-size:11px;font-family:monospace">REJUVENESCER AS MÃOS | 01</div>
+            <div style="font-size:10px;color:var(--sub)">LUXO+DERM · SITE</div>
+          </td>
+          <td><span class="metric-cell hi">26</span></td>
+          <td style="font-weight:700">R$233,49</td>
+          <td><span class="metric-cell hi">R$8,98</span></td>
+          <td style="color:var(--mut)">10.226</td>
+          <td style="color:var(--mut)">7.193</td>
+          <td><strong style="color:var(--amber)">60,5%</strong></td>
+          <td><a href="https://www.instagram.com/p/DYBDm1TgDkV/" target="_blank" class="lbtn">🔗 IG</a></td>
+        </tr>
+        <tr>
+          <td><span class="rk top">2</span></td>
+          <td>
+            <div style="font-weight:700;font-size:11px;font-family:monospace">UNYQUE PRO | 01</div>
+            <div style="font-size:10px;color:var(--sub)">SITE · LUXO+DERM</div>
+          </td>
+          <td><span class="metric-cell mid">3</span></td>
+          <td style="font-weight:700">R$59,50</td>
+          <td><span class="metric-cell lo2">R$19,83</span></td>
+          <td style="color:var(--mut)">1.644</td>
+          <td style="color:var(--mut)">860</td>
+          <td style="color:var(--mut)">7,0%</td>
+          <td><a href="https://www.instagram.com/p/DavxT70Aw-l/" target="_blank" class="lbtn">🔗 IG</a></td>
+        </tr>
+        <tr>
+          <td><span class="rk top">3</span></td>
+          <td>
+            <div style="font-weight:700;font-size:11px;font-family:monospace">MMP CAPILAR | 01</div>
+            <div style="font-size:10px;color:var(--sub)">SITE · LUXO+DERM</div>
+          </td>
+          <td><span class="metric-cell mid">5</span></td>
+          <td style="font-weight:700">R$48,32</td>
+          <td><span class="metric-cell mid">R$9,66</span></td>
+          <td style="color:var(--mut)">1.702</td>
+          <td style="color:var(--mut)">982</td>
+          <td style="color:var(--mut)">11,6%</td>
+          <td><a href="https://www.instagram.com/p/DbgU8GmA98i/" target="_blank" class="lbtn">🔗 IG</a></td>
+        </tr>
+        <tr>
+          <td><span class="rk">4</span></td>
+          <td>
+            <div style="font-weight:700;font-size:11px;font-family:monospace">ESPAÇO NOVO | 01</div>
+            <div style="font-size:10px;color:var(--sub)">SITE · LUXO+DERM</div>
+          </td>
+          <td><span class="metric-cell mid">2</span></td>
+          <td style="font-weight:700">R$34,12</td>
+          <td><span class="metric-cell lo2">R$17,06</span></td>
+          <td style="color:var(--mut)">1.129</td>
+          <td style="color:var(--mut)">815</td>
+          <td style="color:var(--mut)">4,7%</td>
+          <td><a href="https://www.instagram.com/p/DbgU8FJgNOs/" target="_blank" class="lbtn">🔗 IG</a></td>
+        </tr>
+        <tr>
+          <td><span class="rk">5</span></td>
+          <td>
+            <div style="font-weight:700;font-size:11px;font-family:monospace">ESTRIAS | 01</div>
+            <div style="font-size:10px;color:var(--sub)">SITE</div>
+          </td>
+          <td><span class="metric-cell mid">3</span></td>
+          <td style="font-weight:700">R$30,53</td>
+          <td><span class="metric-cell mid">R$10,18</span></td>
+          <td style="color:var(--mut)">1.957</td>
+          <td style="color:var(--mut)">1.214</td>
+          <td style="color:var(--mut)">7,0%</td>
+          <td><a href="https://www.instagram.com/p/DWpg8KcgC-L/" target="_blank" class="lbtn">🔗 IG</a></td>
+        </tr>
+        <tr>
+          <td><span class="rk">6</span></td>
+          <td>
+            <div style="font-weight:700;font-size:11px;font-family:monospace">TODA HISTÓRIA QUE CRESCE | 01</div>
+            <div style="font-size:10px;color:var(--sub)">LUXO+DERM</div>
+          </td>
+          <td><span class="metric-cell mid">3</span></td>
+          <td style="color:var(--teal);font-weight:700">R$17,83</td>
+          <td>
+            <span class="metric-cell hi">R$5,94</span>
+            <span style="font-size:9px;background:rgba(16,185,129,.15);color:var(--teal);border-radius:4px;padding:1px 5px;font-weight:700;margin-left:4px">MELHOR CPA</span>
+          </td>
+          <td style="color:var(--mut)">733</td>
+          <td style="color:var(--mut)">493</td>
+          <td style="color:var(--mut)">7,0%</td>
+          <td><a href="https://www.instagram.com/p/DZ54aBFA_1_/" target="_blank" class="lbtn">🔗 IG</a></td>
+        </tr>
+        <tr>
+          <td><span class="rk">7</span></td>
+          <td>
+            <div style="font-weight:700;font-size:11px;font-family:monospace">PORQUE ACREDITAMOS NA DERMACLINIC</div>
+            <div style="font-size:10px;color:var(--sub)">SITE · LUXO+DERM</div>
+          </td>
+          <td><span class="metric-cell mid">1</span></td>
+          <td style="color:var(--sub)">R$0,94</td>
+          <td>
+            <span class="metric-cell hi">R$0,94</span>
+            <span style="font-size:9px;background:rgba(245,158,11,.15);color:var(--amber);border-radius:4px;padding:1px 5px;font-weight:700;margin-left:4px">AMOSTRA PEQNA</span>
+          </td>
+          <td style="color:var(--mut)">47</td>
+          <td style="color:var(--mut)">42</td>
+          <td style="color:var(--mut)">2,3%</td>
+          <td><a href="https://www.instagram.com/p/DcGiAD_AKis/" target="_blank" class="lbtn">🔗 IG</a></td>
+        </tr>
+        <!-- Linha separadora zombies -->
+        <tr style="background:rgba(239,68,68,.06)">
+          <td colspan="9" style="padding:8px 14px;font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.5px">
+            💀 Criativos Zombie — gasto sem conversão
+          </td>
+        </tr>
+        <tr style="opacity:.65">
+          <td><span class="rk">—</span></td>
+          <td>
+            <div style="font-weight:700;font-size:11px;font-family:monospace">PREENCHIMENTO LABIAL | 01</div>
+            <div style="font-size:10px;color:var(--red)">zombie · 0 msgs · LUXO+DERM</div>
+          </td>
+          <td><span class="metric-cell zero">0</span></td>
+          <td style="color:var(--red);font-weight:700">R$6,34</td>
+          <td style="color:var(--sub)">—</td>
+          <td style="color:var(--sub)">263</td>
+          <td style="color:var(--sub)">215</td>
+          <td style="color:var(--sub)">0%</td>
+          <td><a href="https://www.instagram.com/p/DZLid-4gPVk/" target="_blank" class="lbtn">🔗 IG</a></td>
+        </tr>
+        <tr style="opacity:.65">
+          <td><span class="rk">—</span></td>
+          <td>
+            <div style="font-weight:700;font-size:11px;font-family:monospace">CALVICIE TEM SOLUÇÃO | 01</div>
+            <div style="font-size:10px;color:var(--red)">zombie · 0 msgs · SITE · LUXO+DERM</div>
+          </td>
+          <td><span class="metric-cell zero">0</span></td>
+          <td style="color:var(--red);font-weight:700">R$4,72</td>
+          <td style="color:var(--sub)">—</td>
+          <td style="color:var(--sub)">143</td>
+          <td style="color:var(--sub)">129</td>
+          <td style="color:var(--sub)">0%</td>
+          <td><a href="https://www.instagram.com/p/DbgU8GmA98i/" target="_blank" class="lbtn">🔗 IG</a></td>
+        </tr>
+        <tr style="opacity:.65">
+          <td><span class="rk">—</span></td>
+          <td>
+            <div style="font-weight:700;font-size:11px;font-family:monospace">BOTOX DOS 30 É O MESMO DOS 60</div>
+            <div style="font-size:10px;color:var(--red)">zombie · 0 msgs · LUXO+DERM</div>
+          </td>
+          <td><span class="metric-cell zero">0</span></td>
+          <td style="color:var(--red);font-weight:700">R$2,23</td>
+          <td style="color:var(--sub)">—</td>
+          <td style="color:var(--sub)">61</td>
+          <td style="color:var(--sub)">57</td>
+          <td style="color:var(--sub)">0%</td>
+          <td><a href="https://www.facebook.com/reel/1488593136037744/" target="_blank" class="lbtn fb">🔗 FB</a></td>
+        </tr>
+        <tr style="opacity:.65">
+          <td><span class="rk">—</span></td>
+          <td>
+            <div style="font-weight:700;font-size:11px;font-family:monospace">NOVOS SERVIÇOS | 01</div>
+            <div style="font-size:10px;color:var(--red)">zombie · 0 msgs · SITE · LUXO+DERM</div>
+          </td>
+          <td><span class="metric-cell zero">0</span></td>
+          <td style="color:var(--red);font-weight:700">R$2,15</td>
+          <td style="color:var(--sub)">—</td>
+          <td style="color:var(--sub)">126</td>
+          <td style="color:var(--sub)">106</td>
+          <td style="color:var(--sub)">0%</td>
+          <td><a href="https://www.instagram.com/p/DcGiAikgDQ6/" target="_blank" class="lbtn">🔗 IG</a></td>
+        </tr>
+        <tr style="opacity:.65">
+          <td><span class="rk">—</span></td>
+          <td>
+            <div style="font-weight:700;font-size:11px;font-family:monospace">Dermaclinic Health Institute | 01</div>
+            <div style="font-size:10px;color:var(--red)">zombie · 0 msgs · SITE · LUXO+DERM</div>
+          </td>
+          <td><span class="metric-cell zero">0</span></td>
+          <td style="color:var(--red);font-weight:700">R$1,82</td>
+          <td style="color:var(--sub)">—</td>
+          <td style="color:var(--sub)">76</td>
+          <td style="color:var(--sub)">67</td>
+          <td style="color:var(--sub)">0%</td>
+          <td><a href="https://www.instagram.com/p/DcGhcHpAyU9/" target="_blank" class="lbtn">🔗 IG</a></td>
+        </tr>
+        <tr style="opacity:.65">
+          <td><span class="rk">—</span></td>
+          <td>
+            <div style="font-weight:700;font-size:11px;font-family:monospace">DRA EODA | 01</div>
+            <div style="font-size:10px;color:var(--red)">zombie · 0 msgs · SITE · LUXO+DERM</div>
+          </td>
+          <td><span class="metric-cell zero">0</span></td>
+          <td style="color:var(--red);font-weight:700">R$0,98</td>
+          <td style="color:var(--sub)">—</td>
+          <td style="color:var(--sub)">34</td>
+          <td style="color:var(--sub)">31</td>
+          <td style="color:var(--sub)">0%</td>
+          <td><a href="https://www.instagram.com/p/DcGhMmPAhMf/" target="_blank" class="lbtn">🔗 IG</a></td>
+        </tr>
+        <tr style="opacity:.65">
+          <td><span class="rk">—</span></td>
+          <td>
+            <div style="font-weight:700;font-size:11px;font-family:monospace">UNYQUE PRO | 02</div>
+            <div style="font-size:10px;color:var(--red)">zombie · 0 msgs · SITE · LUXO+DERM</div>
+          </td>
+          <td><span class="metric-cell zero">0</span></td>
+          <td style="color:var(--red);font-weight:700">R$0,87</td>
+          <td style="color:var(--sub)">—</td>
+          <td style="color:var(--sub)">33</td>
+          <td style="color:var(--sub)">33</td>
+          <td style="color:var(--sub)">0%</td>
+          <td><a href="https://www.instagram.com/p/DavxTdpgiSJ/" target="_blank" class="lbtn">🔗 IG</a></td>
+        </tr>
+        <tr style="opacity:.65">
+          <td><span class="rk">—</span></td>
+          <td>
+            <div style="font-weight:700;font-size:11px;font-family:monospace">CASO RITA | 01</div>
+            <div style="font-size:10px;color:var(--red)">zombie · 0 msgs · SITE · LUXO+DERM</div>
+          </td>
+          <td><span class="metric-cell zero">0</span></td>
+          <td style="color:var(--red);font-weight:700">R$0,61</td>
+          <td style="color:var(--sub)">—</td>
+          <td style="color:var(--sub)">23</td>
+          <td style="color:var(--sub)">21</td>
+          <td style="color:var(--sub)">0%</td>
+          <td><a href="https://www.instagram.com/p/DcGgwHqAVxb/" target="_blank" class="lbtn">🔗 IG</a></td>
+        </tr>
+        <tr style="opacity:.65">
+          <td><span class="rk">—</span></td>
+          <td>
+            <div style="font-weight:700;font-size:11px;font-family:monospace">CASO RENITA | 01</div>
+            <div style="font-size:10px;color:var(--red)">zombie · 0 msgs · SITE · LUXO+DERM</div>
+          </td>
+          <td><span class="metric-cell zero">0</span></td>
+          <td style="color:var(--red);font-weight:700">R$0,45</td>
+          <td style="color:var(--sub)">—</td>
+          <td style="color:var(--sub)">15</td>
+          <td style="color:var(--sub)">13</td>
+          <td style="color:var(--sub)">0%</td>
+          <td><a href="https://www.instagram.com/p/DcGgwhSg1eL/" target="_blank" class="lbtn">🔗 IG</a></td>
+        </tr>
+        <!-- Linha separadora sem gasto -->
+        <tr style="background:rgba(100,116,139,.08)">
+          <td colspan="9" style="padding:8px 14px;font-size:10px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px">
+            ⏸ Sem distribuição — 0 gasto
+          </td>
+        </tr>
+        <tr style="opacity:.4">
+          <td colspan="9" style="padding:10px 14px;font-size:11px;color:var(--sub)">
+            BOTOX | 01 &nbsp;·&nbsp; NINGUÉM FALA ABERTAMENTE &nbsp;·&nbsp; REJUVESNECER (v2) &nbsp;·&nbsp; TROCANDO O JALECO PELA MACA — não receberam entrega pelo algoritmo no período
+          </td>
+        </tr>
+        <tr style="background:var(--surf2)">
+          <td colspan="2"><strong style="font-size:11px">TOTAL GERAL</strong></td>
+          <td><span class="metric-cell mid">43</span></td>
+          <td><strong>R$444,90</strong></td>
+          <td><span class="metric-cell lo2">R$10,35</span></td>
+          <td style="color:var(--mut)">18.212</td>
+          <td style="color:var(--mut)">12.271</td>
+          <td>100%</td>
+          <td>—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SEÇÃO 3: GRID VISUAL -->
+<div class="divider"></div>
+<div class="section" id="sec-grid">
+  <div class="s-header">
+    <div class="s-icon ind">🎬</div>
+    <div>
+      <div class="s-title">Grid Visual — Criativos com Resultado</div>
+      <div class="s-sub">7 criativos que geraram conversas em agosto · clique em "Ver no IG" para abrir o anúncio</div>
+    </div>
+  </div>
+
+  <div class="cr-grid">
+    <div class="cr-card">
+      <div class="cr-thumb">
+        <div class="cr-placeholder">
+          <div class="ph-emoji">🤲</div>
+          <div class="ph-label">REJUVENESCER AS MÃOS</div>
+        </div>
+        <div class="cr-status st-sc">🏆 60,5% dos leads</div>
+      </div>
+      <div class="cr-body">
+        <div class="cr-name">REJUVENESCER AS MÃOS | 01</div>
+        <div class="cr-conj">LUXO+DERM · SITE</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+          <div><span style="color:var(--teal);font-weight:700;font-size:13px">26</span> <span style="color:var(--sub);font-size:10px">msgs</span></div>
+          <div><span style="color:var(--teal);font-weight:700;font-size:13px">R$8,98</span> <span style="color:var(--sub);font-size:10px">CPA</span></div>
+          <div><span style="color:var(--mut);font-weight:700;font-size:11px">R$233,49</span> <span style="color:var(--sub);font-size:10px">gasto</span></div>
+        </div>
+        <div class="cr-links">
+          <a href="https://www.instagram.com/p/DYBDm1TgDkV/" target="_blank" class="cr-link-btn">🔗 Ver no IG</a>
+          <a href="https://www.facebook.com/reel/1228637379345506/" target="_blank" class="cr-link-btn fb">FB</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cr-card">
+      <div class="cr-thumb">
+        <div class="cr-placeholder">
+          <div class="ph-emoji">🌱</div>
+          <div class="ph-label">TODA HISTÓRIA QUE CRESCE</div>
+        </div>
+        <div class="cr-status st-top">Melhor CPA R$5,94</div>
+      </div>
+      <div class="cr-body">
+        <div class="cr-name">TODA HISTÓRIA QUE CRESCE | 01</div>
+        <div class="cr-conj">LUXO+DERM</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+          <div><span style="color:var(--teal);font-weight:700;font-size:13px">3</span> <span style="color:var(--sub);font-size:10px">msgs</span></div>
+          <div><span style="color:var(--teal);font-weight:700;font-size:13px">R$5,94</span> <span style="color:var(--sub);font-size:10px">CPA</span></div>
+          <div><span style="color:var(--mut);font-weight:700;font-size:11px">R$17,83</span> <span style="color:var(--sub);font-size:10px">gasto</span></div>
+        </div>
+        <div class="cr-links">
+          <a href="https://www.instagram.com/p/DZ54aBFA_1_/" target="_blank" class="cr-link-btn">🔗 Ver no IG</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cr-card">
+      <div class="cr-thumb">
+        <div class="cr-placeholder">
+          <div class="ph-emoji">💇</div>
+          <div class="ph-label">MMP CAPILAR</div>
+        </div>
+        <div class="cr-status st-sc">Na meta</div>
+      </div>
+      <div class="cr-body">
+        <div class="cr-name">MMP CAPILAR | 01</div>
+        <div class="cr-conj">SITE · LUXO+DERM</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+          <div><span style="color:var(--teal);font-weight:700;font-size:13px">5</span> <span style="color:var(--sub);font-size:10px">msgs</span></div>
+          <div><span style="color:var(--amber);font-weight:700;font-size:13px">R$9,66</span> <span style="color:var(--sub);font-size:10px">CPA</span></div>
+          <div><span style="color:var(--mut);font-weight:700;font-size:11px">R$48,32</span> <span style="color:var(--sub);font-size:10px">gasto</span></div>
+        </div>
+        <div class="cr-links">
+          <a href="https://www.instagram.com/p/DbgU8GmA98i/" target="_blank" class="cr-link-btn">🔗 Ver no IG</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cr-card">
+      <div class="cr-thumb">
+        <div class="cr-placeholder">
+          <div class="ph-emoji">🩹</div>
+          <div class="ph-label">ESTRIAS</div>
+        </div>
+        <div class="cr-status st-wn">Na borda R$10,18</div>
+      </div>
+      <div class="cr-body">
+        <div class="cr-name">ESTRIAS | 01</div>
+        <div class="cr-conj">SITE</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+          <div><span style="color:var(--amber);font-weight:700;font-size:13px">3</span> <span style="color:var(--sub);font-size:10px">msgs</span></div>
+          <div><span style="color:var(--amber);font-weight:700;font-size:13px">R$10,18</span> <span style="color:var(--sub);font-size:10px">CPA</span></div>
+          <div><span style="color:var(--mut);font-weight:700;font-size:11px">R$30,53</span> <span style="color:var(--sub);font-size:10px">gasto</span></div>
+        </div>
+        <div class="cr-links">
+          <a href="https://www.instagram.com/p/DWpg8KcgC-L/" target="_blank" class="cr-link-btn">🔗 Ver no IG</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cr-card">
+      <div class="cr-thumb">
+        <div class="cr-placeholder">
+          <div class="ph-emoji">🏢</div>
+          <div class="ph-label">ESPAÇO NOVO</div>
+        </div>
+        <div class="cr-status st-ps">CPA alto R$17,06</div>
+      </div>
+      <div class="cr-body">
+        <div class="cr-name">ESPAÇO NOVO | 01</div>
+        <div class="cr-conj">SITE · LUXO+DERM</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+          <div><span style="color:var(--amber);font-weight:700;font-size:13px">2</span> <span style="color:var(--sub);font-size:10px">msgs</span></div>
+          <div><span style="color:var(--red);font-weight:700;font-size:13px">R$17,06</span> <span style="color:var(--sub);font-size:10px">CPA</span></div>
+          <div><span style="color:var(--mut);font-weight:700;font-size:11px">R$34,12</span> <span style="color:var(--sub);font-size:10px">gasto</span></div>
+        </div>
+        <div class="cr-links">
+          <a href="https://www.instagram.com/p/DbgU8FJgNOs/" target="_blank" class="cr-link-btn">🔗 Ver no IG</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cr-card">
+      <div class="cr-thumb">
+        <div class="cr-placeholder">
+          <div class="ph-emoji">💎</div>
+          <div class="ph-label">UNYQUE PRO | 01</div>
+        </div>
+        <div class="cr-status st-ps">CPA alto R$19,83</div>
+      </div>
+      <div class="cr-body">
+        <div class="cr-name">UNYQUE PRO | 01</div>
+        <div class="cr-conj">SITE · LUXO+DERM</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+          <div><span style="color:var(--amber);font-weight:700;font-size:13px">3</span> <span style="color:var(--sub);font-size:10px">msgs</span></div>
+          <div><span style="color:var(--red);font-weight:700;font-size:13px">R$19,83</span> <span style="color:var(--sub);font-size:10px">CPA</span></div>
+          <div><span style="color:var(--mut);font-weight:700;font-size:11px">R$59,50</span> <span style="color:var(--sub);font-size:10px">gasto</span></div>
+        </div>
+        <div class="cr-links">
+          <a href="https://www.instagram.com/p/DavxT70Aw-l/" target="_blank" class="cr-link-btn">🔗 Ver no IG</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cr-card">
+      <div class="cr-thumb">
+        <div class="cr-placeholder">
+          <div class="ph-emoji">💙</div>
+          <div class="ph-label">PORQUE ACREDITAMOS</div>
+        </div>
+        <div class="cr-status st-ot">Novo · 1 msg</div>
+      </div>
+      <div class="cr-body">
+        <div class="cr-name">PORQUE ACREDITAMOS NA DERMACLINIC</div>
+        <div class="cr-conj">SITE · LUXO+DERM</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px">
+          <div><span style="color:var(--amber);font-weight:700;font-size:13px">1</span> <span style="color:var(--sub);font-size:10px">msg</span></div>
+          <div><span style="color:var(--teal);font-weight:700;font-size:13px">R$0,94</span> <span style="color:var(--sub);font-size:10px">CPA</span></div>
+        </div>
+        <div style="font-size:10px;color:var(--amber);margin-bottom:4px">⚠ Amostra muito pequena</div>
+        <div class="cr-links">
+          <a href="https://www.instagram.com/p/DcGiAD_AKis/" target="_blank" class="cr-link-btn">🔗 Ver no IG</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SEÇÃO 4: ZOMBIES -->
+<div class="divider"></div>
+<div class="section" id="sec-zombies">
+  <div class="s-header">
+    <div class="s-icon red">💀</div>
+    <div>
+      <div class="s-title">Criativos Zombie — Gasto Sem Retorno</div>
+      <div class="s-sub">9 criativos consumiram orçamento sem gerar nenhuma conversa · total queimado: R$20,17</div>
+    </div>
+  </div>
+
+  <div class="callout red" style="margin-bottom:20px">
+    <div class="callout-icon">🚨</div>
+    <div>
+      <div class="callout-title">R$20,17 investidos em criativos sem nenhuma conversa gerada (4,5% do budget total)</div>
+      <div class="callout-body">
+        9 criativos novos foram testados em agosto e nenhum converteu. Ação imediata: <strong style="color:var(--txt)">pausar os com maior gasto (Preenchimento Labial R$6,34 e Calvície R$4,72)</strong> que já ultrapassaram o threshold de tolerância. Definir regra: criativo com mais de R$3 gasto e 0 conversas entra em revisão automática.
+      </div>
+    </div>
+  </div>
+
+  <div class="zombie-grid">
+    <div class="zombie-card">
+      <div class="zombie-name">PREENCHIMENTO LABIAL</div>
+      <div class="zombie-gasto">R$6,34</div>
+      <div class="zombie-lbl">gasto · 0 conversas · LUXO+DERM</div>
+      <a href="https://www.instagram.com/p/DZLid-4gPVk/" target="_blank" class="zombie-link">🔗 Ver no IG</a>
+    </div>
+    <div class="zombie-card">
+      <div class="zombie-name">CALVICIE TEM SOLUÇÃO</div>
+      <div class="zombie-gasto">R$4,72</div>
+      <div class="zombie-lbl">gasto · 0 conversas · SITE · LUXO+DERM</div>
+      <a href="https://www.instagram.com/p/DbgU8GmA98i/" target="_blank" class="zombie-link">🔗 Ver no IG</a>
+    </div>
+    <div class="zombie-card">
+      <div class="zombie-name">BOTOX DOS 30 É O MESMO DOS 60</div>
+      <div class="zombie-gasto">R$2,23</div>
+      <div class="zombie-lbl">gasto · 0 conversas · LUXO+DERM</div>
+      <a href="https://www.facebook.com/reel/1488593136037744/" target="_blank" class="zombie-link fb">🔗 Ver no FB</a>
+    </div>
+    <div class="zombie-card">
+      <div class="zombie-name">NOVOS SERVIÇOS</div>
+      <div class="zombie-gasto">R$2,15</div>
+      <div class="zombie-lbl">gasto · 0 conversas · SITE · LUXO+DERM</div>
+      <a href="https://www.instagram.com/p/DcGiAikgDQ6/" target="_blank" class="zombie-link">🔗 Ver no IG</a>
+    </div>
+    <div class="zombie-card">
+      <div class="zombie-name">DERMACLINIC HEALTH INSTITUTE</div>
+      <div class="zombie-gasto">R$1,82</div>
+      <div class="zombie-lbl">gasto · 0 conversas · SITE · LUXO+DERM</div>
+      <a href="https://www.instagram.com/p/DcGhcHpAyU9/" target="_blank" class="zombie-link">🔗 Ver no IG</a>
+    </div>
+    <div class="zombie-card">
+      <div class="zombie-name">DRA EODA</div>
+      <div class="zombie-gasto">R$0,98</div>
+      <div class="zombie-lbl">gasto · 0 conversas · SITE · LUXO+DERM</div>
+      <a href="https://www.instagram.com/p/DcGhMmPAhMf/" target="_blank" class="zombie-link">🔗 Ver no IG</a>
+    </div>
+    <div class="zombie-card">
+      <div class="zombie-name">UNYQUE PRO | 02</div>
+      <div class="zombie-gasto">R$0,87</div>
+      <div class="zombie-lbl">gasto · 0 conversas · SITE · LUXO+DERM</div>
+      <a href="https://www.instagram.com/p/DavxTdpgiSJ/" target="_blank" class="zombie-link">🔗 Ver no IG</a>
+    </div>
+    <div class="zombie-card">
+      <div class="zombie-name">CASO RITA</div>
+      <div class="zombie-gasto">R$0,61</div>
+      <div class="zombie-lbl">gasto · 0 conversas · SITE · LUXO+DERM</div>
+      <a href="https://www.instagram.com/p/DcGgwHqAVxb/" target="_blank" class="zombie-link">🔗 Ver no IG</a>
+    </div>
+    <div class="zombie-card">
+      <div class="zombie-name">CASO RENITA</div>
+      <div class="zombie-gasto">R$0,45</div>
+      <div class="zombie-lbl">gasto · 0 conversas · SITE · LUXO+DERM</div>
+      <a href="https://www.instagram.com/p/DcGgwhSg1eL/" target="_blank" class="zombie-link">🔗 Ver no IG</a>
+    </div>
+  </div>
+</div>
+
+<!-- SEÇÃO 5: HHI -->
+<div class="divider"></div>
+<div class="section" id="sec-hhi">
+  <div class="s-header">
+    <div class="s-icon amb">📐</div>
+    <div>
+      <div class="s-title">Índice HHI — Concentração do Portfólio</div>
+      <div class="s-sub">Herfindahl-Hirschman Index mede concentração de volume entre criativos · 0 = diversificado · 1 = monopólio</div>
+    </div>
+  </div>
+
+  <div class="hhi-wrap">
+    <div class="hhi-gauge-area">
+      <svg class="gauge-svg" viewBox="0 0 220 130">
+        <!-- Background arc -->
+        <path d="M 20 110 A 90 90 0 0 1 200 110" fill="none" stroke="#334155" stroke-width="16" stroke-linecap="round"/>
+        <!-- Green 0–0.15 -->
+        <path d="M 20 110 A 90 90 0 0 1 69.5 35" fill="none" stroke="#10B981" stroke-width="16" stroke-linecap="round" stroke-dasharray="47.1 235.6"/>
+        <!-- Amber 0.15–0.25 -->
+        <path d="M 20 110 A 90 90 0 0 1 110 20" fill="none" stroke="#F59E0B" stroke-width="16" stroke-linecap="round" stroke-dasharray="31.4 235.6" stroke-dashoffset="-47.1"/>
+        <!-- Orange 0.25–0.45 — HHI está aqui -->
+        <path d="M 20 110 A 90 90 0 0 1 170 47" fill="none" stroke="#F97316" stroke-width="16" stroke-linecap="round" stroke-dasharray="62.8 235.6" stroke-dashoffset="-78.5"/>
+        <!-- Red 0.45–1.0 -->
+        <path d="M 20 110 A 90 90 0 0 1 200 110" fill="none" stroke="#EF4444" stroke-width="16" stroke-linecap="round" stroke-dasharray="141.3 235.6" stroke-dashoffset="-141.3"/>
+        <!-- Needle at HHI 0.396 → angle = 0.396 × 180° = 71.3° from left -->
+        <line x1="110" y1="110" x2="56" y2="50" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="110" cy="110" r="7" fill="#F59E0B"/>
+        <!-- Labels -->
+        <text x="8" y="126" font-size="10" fill="#64748B">0</text>
+        <text x="102" y="14" font-size="10" fill="#64748B">0,5</text>
+        <text x="195" y="126" font-size="10" fill="#64748B">1</text>
+      </svg>
+      <div class="hhi-val-big">0,396</div>
+      <div class="hhi-val-lbl">Concentração Moderada-Alta</div>
+    </div>
+    <div>
+      <div class="hhi-title">O que o HHI 0,396 significa para agosto?</div>
+      <div class="hhi-desc">
+        O HHI de <strong style="color:var(--amber)">0,396</strong> indica zona de <strong style="color:var(--amber)">concentração moderada-alta</strong>. REJUVENESCER AS MÃOS com 60,5% de todas as conversas sozinho puxa o índice para esse patamar. Em julho a concentração era ainda maior (~0,60 com 77% em um criativo) — agosto melhorou, mas o risco persiste: qualquer saturação derruba toda a conta.
+      </div>
+      <div class="hhi-scale">
+        <div class="hhi-scale-item">
+          <div class="hhi-scale-dot" style="background:var(--teal)"></div>
+          <span style="color:var(--teal);font-weight:600;min-width:70px">0 – 0,15</span>
+          <div class="hhi-bar-container"><div class="hhi-bar-fill" style="width:15%;background:var(--teal)"></div></div>
+          <span style="font-size:10px;color:var(--mut)">Diversificado — ideal</span>
+        </div>
+        <div class="hhi-scale-item">
+          <div class="hhi-scale-dot" style="background:var(--amber)"></div>
+          <span style="color:var(--amber);font-weight:600;min-width:70px">0,15 – 0,25</span>
+          <div class="hhi-bar-container"><div class="hhi-bar-fill" style="width:25%;background:var(--amber)"></div></div>
+          <span style="font-size:10px;color:var(--mut)">Moderado — aceitável</span>
+        </div>
+        <div class="hhi-scale-item" style="background:rgba(249,115,22,.08);border-radius:6px;padding:4px 6px">
+          <div class="hhi-scale-dot" style="background:#F97316"></div>
+          <span style="color:#F97316;font-weight:700;min-width:70px">0,25 – 0,45</span>
+          <div class="hhi-bar-container"><div class="hhi-bar-fill" style="width:45%;background:#F97316"></div></div>
+          <span style="font-size:10px;color:#F97316;font-weight:700">Agosto: 0,396 ⬅</span>
+        </div>
+        <div class="hhi-scale-item">
+          <div class="hhi-scale-dot" style="background:var(--red)"></div>
+          <span style="color:var(--red);font-weight:600;min-width:70px">0,45 – 1,0</span>
+          <div class="hhi-bar-container"><div class="hhi-bar-fill" style="width:100%;background:var(--red)"></div></div>
+          <span style="font-size:10px;color:var(--mut)">Alta concentração — risco</span>
+        </div>
+      </div>
+      <div class="note-box" style="margin-top:14px">
+        <strong>Meta para setembro:</strong> Escalar TODA HISTÓRIA QUE CRESCE e MMP CAPILAR para diluir a dependência de REJUVENESCER AS MÃOS. Alvo HHI &lt; 0,25 — portfólio mais resiliente e sem risco de colapso por saturação de um único criativo.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SEÇÃO 6: DIAGNÓSTICO -->
+<div class="divider"></div>
+<div class="section" id="sec-insights">
+  <div class="s-header">
+    <div class="s-icon brd">🧠</div>
+    <div>
+      <div class="s-title">Diagnóstico — O Que Aconteceu em Agosto</div>
+      <div class="s-sub">Análise estratégica dos 16 primeiros dias · 01–16/08/2026</div>
+    </div>
+  </div>
+
+  <div class="callout red" style="margin-bottom:16px">
+    <div class="callout-icon">📉</div>
+    <div>
+      <div class="callout-title">CPA subiu 39,5% e volume caiu 29,5% — mês de transição com queda de orçamento e entrada massiva de novos criativos</div>
+      <div class="callout-body">
+        Agosto chegou com um duplo sinal de alerta: <strong style="color:var(--txt)">menos conversas (43 vs 61) e custo por conversa mais alto (R$10,35 vs R$7,42)</strong>. O orçamento caiu 45% (de R$808,67 para R$444,90) — mas a queda em volume foi menor (-29,5%), indicando que parte da piora no CPA tem causas além do corte de budget.
+      </div>
+    </div>
+  </div>
+
+  <div class="pattern-grid">
+    <div class="pattern-card">
+      <div class="pattern-title">📌 Causas identificadas da piora</div>
+      <div class="pattern-list">
+        <div class="pattern-item">
+          <div class="pattern-num alert">1</div>
+          <div class="pattern-text"><strong>Conjunto QUENTE removido</strong> — Em julho, QUENTE gerou 14 mensagens (23% do volume total), mesmo com CPA alto. Sua remoção tirou uma fonte de volume sem reposição equivalente nos dois adsets restantes. Cada conjunto permaneceu com orçamento de R$15/dia.</div>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-num alert">2</div>
+          <div class="pattern-text"><strong>Fase de aprendizado com 9 criativos novos simultâneos</strong> — Testar 9 peças de uma vez divide o budget de distribuição entre muitas opções. O algoritmo da Meta precisa de dados para otimizar — com budget fracionado, a fase de aprendizado é mais lenta e menos eficiente, inflando o CPA temporariamente.</div>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-num alert">3</div>
+          <div class="pattern-text"><strong>REJUVENESCER AS MÃOS iniciando saturação</strong> — Saiu de ~R$5–6/msg em julho para R$8,98 em agosto. O criativo continua sendo o maior gerador, mas a eficiência caiu 50%+. Sinal de que grande parte da audiência qualificada já foi exposta a ele — frequência alta reduz conversão.</div>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-num alert">4</div>
+          <div class="pattern-text"><strong>HHI 0,396 — portfólio sem profundidade de bancada</strong> — Com 60,5% das conversas em um único criativo, não há cushion para absorver a queda desse ativo. Em julho o risco era ainda maior (77%), mas agosto não diversificou o suficiente para proteger a conta.</div>
+        </div>
+      </div>
+    </div>
+    <div class="pattern-card">
+      <div class="pattern-title">✅ Sinais positivos em agosto</div>
+      <div class="pattern-list">
+        <div class="pattern-item">
+          <div class="pattern-num gold">1</div>
+          <div class="pattern-text"><strong>TODA HISTÓRIA QUE CRESCE: melhor CPA da conta (R$5,94)</strong> — Com apenas R$17,83 investidos e rodando somente no LUXO+DERM, gerou 3 conversas com 100% de novos contatos. É o ativo mais promissor — CPA abaixo de R$6 é raro no portfólio e indica fit alto com o público.</div>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-num gold">2</div>
+          <div class="pattern-text"><strong>CPM caiu 12,7% (R$27,97 → R$24,43)</strong> — O leilão ficou mais barato em agosto. O problema não é alcance — a conta consegue impressões mais baratas. O gargalo está na conversão por impressão: qualidade criativa e fit de mensagem com o público precisam melhorar.</div>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-num gold">3</div>
+          <div class="pattern-text"><strong>MMP CAPILAR entrou com CPA R$9,66 — pilar emergente</strong> — Novo criativo que chegou ao threshold com 5 conversas e CPA dentro da meta. Com mais budget e rodagem nos dois adsets, pode se tornar o segundo pilar da conta ao lado de REJUVENESCER.</div>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-num gold">4</div>
+          <div class="pattern-text"><strong>7 criativos com resultado em 16 dias — portfólio cresce</strong> — Mesmo com CPA pior, o número de criativos que alcançaram conversão aumentou vs julho. A diversificação está em construção — o desafio agora é otimizar os que provaram potencial e pausar os que não responderam.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout ind">
+    <div class="callout-icon">💡</div>
+    <div>
+      <div class="callout-title">Interpretação estratégica — agosto é um mês de transição e custo de aprendizado</div>
+      <div class="callout-body">
+        O período 01–16/08 coincide com a entrada massiva de novos criativos (9 peças simultâneas), a remoção do conjunto QUENTE e redução de 45% do orçamento total. A piora de CPA deve ser lida parcialmente como <strong style="color:var(--txt)">custo de aprendizado do portfólio</strong> — o algoritmo ainda estava calibrando entrega. O dado mais revelador é o CPM caindo enquanto o CPA sobe: a Meta está entregando impressões mais baratas, mas as peças novas ainda não convenceram o público a clicar e conversar. Com os zombies pausados e o budget concentrado nos criativos provados, a segunda quinzena de agosto deve mostrar melhora sensível.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SEÇÃO 7: COMPARATIVO JULHO VS AGOSTO -->
+<div class="divider"></div>
+<div class="section" id="sec-comparativo">
+  <div class="s-header">
+    <div class="s-icon tel">📈</div>
+    <div>
+      <div class="s-title">Comparativo Julho vs Agosto 2026</div>
+      <div class="s-sub">Julho: 01–17/07 (17 dias, 3 conjuntos, R$808,67) · Agosto: 01–16/08 (16 dias, 2 conjuntos, R$444,90)</div>
+    </div>
+  </div>
+
+  <div class="comp-grid">
+    <div class="comp-card">
+      <div class="comp-period">Julho 2026 — 17 dias</div>
+      <div class="comp-val" style="color:var(--teal)">61</div>
+      <div class="comp-sub">mensagens · 3,6/dia · 3 conjuntos</div>
+      <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;justify-content:space-between;font-size:12px;padding-bottom:6px;border-bottom:1px solid var(--bord)"><span style="color:var(--mut)">Investimento total</span><strong>R$808,67</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--mut)">CPA médio</span><strong style="color:var(--teal)">R$7,42</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--mut)">CPM médio</span><strong>R$27,97</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--mut)">Gasto/dia</span><strong>R$47,57</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--mut)">Melhor conjunto CPA</span><strong style="color:var(--teal)">LUXO+DERM R$5,82</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--mut)">HHI concentração</span><strong style="color:var(--red)">~0,60 (alto)</strong></div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="comp-period">Agosto 2026 — 16 dias</div>
+      <div class="comp-val" style="color:var(--amber)">43</div>
+      <div class="comp-sub">mensagens · 2,7/dia · 2 conjuntos</div>
+      <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;justify-content:space-between;font-size:12px;padding-bottom:6px;border-bottom:1px solid var(--bord)"><span style="color:var(--mut)">Investimento total</span><strong>R$444,90</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--mut)">CPA médio</span><strong style="color:var(--red)">R$10,35</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--mut)">CPM médio</span><strong style="color:var(--teal)">R$24,43</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--mut)">Gasto/dia</span><strong>R$27,81</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--mut)">Melhor conjunto CPA</span><strong style="color:var(--amber)">LUXO+DERM R$9,11</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--mut)">HHI concentração</span><strong style="color:var(--amber)">0,396 (moderado-alto)</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="inversion-banner">
+    <div class="inversion-grid">
+      <div>
+        <div class="inv-label">Julho 2026</div>
+        <div class="inv-period">01–17/07 · 3 adsets</div>
+        <div class="inv-adset good">
+          <span class="name">LUXO+DERM</span>
+          <span class="val g">R$5,82/msg</span>
+        </div>
+        <div class="inv-adset good">
+          <span class="name">SITE</span>
+          <span class="val g">R$7,42/msg</span>
+        </div>
+        <div class="inv-adset bad">
+          <span class="name">QUENTE</span>
+          <span class="val r">R$11,68/msg</span>
+        </div>
+      </div>
+      <div class="inv-arrow">→</div>
+      <div>
+        <div class="inv-label">Agosto 2026</div>
+        <div class="inv-period">01–16/08 · 2 adsets</div>
+        <div class="inv-adset bad">
+          <span class="name">LUXO+DERM</span>
+          <span class="val r">R$9,11/msg ↑56,5%</span>
+        </div>
+        <div class="inv-adset bad">
+          <span class="name">SITE</span>
+          <span class="val r">R$11,53/msg ↑55,4%</span>
+        </div>
+        <div style="padding:8px 12px;font-size:11px;color:var(--sub);font-style:italic;margin-bottom:6px">QUENTE removido em ago</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Métrica</th>
+          <th>Julho 2026</th>
+          <th>Agosto 2026</th>
+          <th>Variação</th>
+          <th>Tendência</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Mensagens totais</strong></td>
+          <td>61</td>
+          <td>43</td>
+          <td style="color:var(--red);font-weight:700">-18 (-29,5%)</td>
+          <td><span style="color:var(--red);font-size:11px">↓ Piora</span></td>
+        </tr>
+        <tr>
+          <td><strong>Msgs por dia</strong></td>
+          <td>3,6/dia</td>
+          <td>2,7/dia</td>
+          <td style="color:var(--red);font-weight:700">-0,9 (-25,0%)</td>
+          <td><span style="color:var(--red);font-size:11px">↓ Piora</span></td>
+        </tr>
+        <tr>
+          <td><strong>Investimento total</strong></td>
+          <td>R$808,67</td>
+          <td>R$444,90</td>
+          <td style="color:var(--amber);font-weight:700">-R$363,77 (-45,0%)</td>
+          <td><span style="color:var(--amber);font-size:11px">↓ Orçamento cortado</span></td>
+        </tr>
+        <tr>
+          <td><strong>CPA médio</strong></td>
+          <td style="color:var(--teal);font-weight:700">R$7,42</td>
+          <td style="color:var(--red);font-weight:700">R$10,35</td>
+          <td style="color:var(--red);font-weight:700">+R$2,93 (+39,5%)</td>
+          <td><span style="color:var(--red);font-size:11px">↓ Piora</span></td>
+        </tr>
+        <tr>
+          <td><strong>CPM médio</strong></td>
+          <td>R$27,97</td>
+          <td style="color:var(--teal)">R$24,43</td>
+          <td style="color:var(--teal);font-weight:700">-R$3,54 (-12,7%)</td>
+          <td><span style="color:var(--teal);font-size:11px">↑ Melhora</span></td>
+        </tr>
+        <tr>
+          <td><strong>Impressões totais</strong></td>
+          <td>17.008</td>
+          <td style="color:var(--teal)">18.212</td>
+          <td style="color:var(--teal);font-weight:700">+1.204 (+7,1%)</td>
+          <td><span style="color:var(--teal);font-size:11px">↑ Mais alcance</span></td>
+        </tr>
+        <tr>
+          <td><strong>Conjuntos ativos</strong></td>
+          <td>3 (LUXO+DERM, SITE, QUENTE)</td>
+          <td>2 (LUXO+DERM, SITE)</td>
+          <td style="color:var(--red);font-weight:700">-1 conjunto</td>
+          <td><span style="color:var(--red);font-size:11px">↓ Menos distribuição</span></td>
+        </tr>
+        <tr>
+          <td><strong>Criativos com resultado</strong></td>
+          <td>~5</td>
+          <td style="color:var(--teal)">7</td>
+          <td style="color:var(--teal);font-weight:700">+2 criativos</td>
+          <td><span style="color:var(--teal);font-size:11px">↑ Portfólio cresce</span></td>
+        </tr>
+        <tr>
+          <td><strong>Melhor CPA do período</strong></td>
+          <td style="color:var(--teal)">R$5,82 (LUXO+DERM)</td>
+          <td style="color:var(--teal)">R$5,94 (TODA HISTÓRIA)</td>
+          <td style="color:var(--mut)">≈ Par</td>
+          <td><span style="color:var(--mut);font-size:11px">≈ Estável no topo</span></td>
+        </tr>
+        <tr>
+          <td><strong>HHI concentração</strong></td>
+          <td style="color:var(--red)">~0,60 (77% em 1 criativo)</td>
+          <td style="color:var(--amber)">0,396 (60,5% em 1 criativo)</td>
+          <td style="color:var(--teal);font-weight:700">-0,20 (diversificou)</td>
+          <td><span style="color:var(--teal);font-size:11px">↑ Melhora</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SEÇÃO 8: PLANO DE AÇÃO -->
+<div class="divider"></div>
+<div class="section" id="sec-acao">
+  <div class="s-header">
+    <div class="s-icon tel">🛠️</div>
+    <div>
+      <div class="s-title">Plano de Ação — Setembro 2026</div>
+      <div class="s-sub">5 recomendações prioritárias baseadas nos dados de agosto · meta: CPA &lt; R$8,00 · mensagens &gt; 55 · HHI &lt; 0,25</div>
+    </div>
+  </div>
+
+  <div class="acao-list">
+    <div class="acao-item">
+      <div class="acao-num ter">P1</div>
+      <div>
+        <div class="acao-title" style="color:var(--teal)">Escalar TODA HISTÓRIA QUE CRESCE — melhor CPA do portfólio (R$5,94)</div>
+        <div class="acao-body">Ativar em ambos os adsets (hoje só roda no LUXO+DERM) e aumentar budget alocado. Testar com R$30–50 investidos antes de escalar ao máximo — com 100% de novos contatos entre as conversas geradas, é o criativo com melhor potencial de aquisição. Se o SITE responder bem, temos o segundo pilar independente da conta.</div>
+      </div>
+    </div>
+
+    <div class="acao-item">
+      <div class="acao-num pri">P2</div>
+      <div>
+        <div class="acao-title" style="color:var(--red)">Pausar zombies que ultrapassaram R$3 de gasto sem nenhuma conversa</div>
+        <div class="acao-body">PREENCHIMENTO LABIAL (R$6,34) e CALVICIE TEM SOLUÇÃO (R$4,72) já estão muito acima do threshold. Pausar imediatamente. Para os demais zombies com gasto abaixo de R$2: aguardar mais 3 dias antes de pausar — podem ainda ser otimizados pelo algoritmo. Definir regra automática de pausa: criativo com R$3+ gasto e 0 conversões entra em revisão no dia seguinte.</div>
+      </div>
+    </div>
+
+    <div class="acao-item">
+      <div class="acao-num sec">P3</div>
+      <div>
+        <div class="acao-title" style="color:var(--amber)">Reativar REJUVENESCER AS MÃOS com renovação de audiência</div>
+        <div class="acao-body">O criativo parou de rodar (inactive) mas é o maior gerador histórico de leads. A piora de CPA (R$8,98) é reversível com exclusão de audiência interagida nos últimos 60 dias e criação de variações de copy e thumbnail para combater a saturação. Meta: reativar e manter CPA abaixo de R$10 — se superar R$12 novamente, pausar e criar versão nova.</div>
+      </div>
+    </div>
+
+    <div class="acao-item">
+      <div class="acao-num sec">P4</div>
+      <div>
+        <div class="acao-title" style="color:var(--amber)">Considerar reintroduzir conjunto QUENTE com criativos renovados</div>
+        <div class="acao-body">Em julho o QUENTE gerou 14 mensagens mesmo saturado — a audiência de remarketing quente tem valor. O problema era CPM R$31,24 por criativos velhos, não o público. Testar com budget mínimo (R$10/dia) e peças novas como DRA EODA e DERMACLINIC HEALTH INSTITUTE, que ainda não foram expostos a essa audiência. Se CPA chegar a R$8–10, vale manter o terceiro adset.</div>
+      </div>
+    </div>
+
+    <div class="acao-item">
+      <div class="acao-num qua">P5</div>
+      <div>
+        <div class="acao-title" style="color:var(--ind2)">Protocolo de teste: máximo 2–3 criativos novos por ciclo com budget garantido</div>
+        <div class="acao-body">Em agosto foram 9 criativos novos simultâneos — muitos sem budget suficiente para o algoritmo aprender. Para setembro: limitar a 2–3 novas peças por ciclo de 2 semanas, cada uma com R$3/dia garantido e mínimo de 4 dias antes de avaliar. Isso evita competição interna por budget e gera dados confiáveis. Novos criativos só entram quando um anterior sair ou for escalado.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:20px">
+    <div class="callout-icon">🎯</div>
+    <div>
+      <div class="callout-title">Meta consolidada para setembro: CPA &lt; R$8,00 · 55–65 mensagens · HHI &lt; 0,25</div>
+      <div class="callout-body">
+        Com TODA HISTÓRIA QUE CRESCE escalado, REJUVENESCER reativado com audiência renovada, MMP CAPILAR ganhando mais budget e zombies pausados, a conta tem condição de voltar para R$7–8/msg com volume entre 55–65 conversas em setembro. A meta de HHI abaixo de 0,25 é o objetivo estrutural — sem diversificação real, qualquer saturação do criativo dominante coloca toda a performance em colapso.
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>Relatório gerado por <a href="https://digital-ai.tech" target="_blank">Digital AI</a> · DermaClinic Meta Ads · Agosto 2026 · Dados: Gerenciador de Anúncios Meta · período 01/08–16/08/2026</p>
+</footer>
+
+<script>
+function scrollToSection(id, btn) {
+  document.getElementById(id).scrollIntoView({behavior:'smooth', block:'start'});
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
