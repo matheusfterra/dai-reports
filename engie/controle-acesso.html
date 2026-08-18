@@ -210,6 +210,8 @@
     <label>Empresa</label>
     <input type="text" id="cadEmpresa" placeholder="Empresa">
 
+    <label>Validade ASO / Exame Periódico</label>
+    <input type="date" id="cadValidadeASO">
     <label>Local (selecione um)</label>
     <div class="locais" id="locaisCadastro">
       <button data-local="Usina" onclick="selecionarLocal(this)">Usina</button>
@@ -250,6 +252,7 @@
           <th class="sortable sort-asc" data-col="nome" onclick="ordenarTabela('nome')">Nome</th>
           <th class="sortable" data-col="empresa" onclick="ordenarTabela('empresa')">Empresa</th>
           <th class="sortable" data-col="local" onclick="ordenarTabela('local')">Local</th>
+          <th>Validade ASO</th>
           <th>Situação</th>
           <th>QR Code</th>
           <th>Ações</th>
@@ -408,6 +411,13 @@ function tocarSaida(){
 }
 function tocarBloqueio(){ bip(300, 0.60, 0, "square", 0.20); }
 function tocarErro(){
+function tocarASOVencido(){
+   bip(150,0.20,0.00,"square",0.30);
+   bip(150,0.20,0.25,"square",0.30);
+   bip(150,0.20,0.50,"square",0.30);
+   bip(150,0.60,0.80,"square",0.35);
+}
+
   bip(200, 0.10, 0.00, "square", 0.22);
   bip(200, 0.10, 0.16, "square", 0.22);
   bip(200, 0.10, 0.32, "square", 0.22);
@@ -458,8 +468,8 @@ function ajustarTexto(ctx, texto, larguraMax){
   return t === String(texto) ? t : t + "…";
 }
 
-function montarQRIdentificado(containerTemp, nome, empresa, local, tamanho=220){
-  const dados = JSON.stringify({ nome, empresa, local });
+function montarQRIdentificado(containerTemp, nome, empresa, local, validadeASO, tamanho=220){
+  const dados = JSON.stringify({ nome, empresa, local, validadeASO });
   gerarQRBruto(containerTemp, dados, tamanho);
 
   return new Promise((resolve)=>{
@@ -539,10 +549,11 @@ function selecionarLocal(botao){
 function cadastrarColaborador(){
   const nome = document.getElementById("cadNome").value.trim();
   const empresa = document.getElementById("cadEmpresa").value.trim();
+  const validadeASO = document.getElementById("cadValidadeASO").value;
   const statusEl = document.getElementById("statusCadastro");
   const localEscolhido = localSelecionado;
 
-  if(!nome || !empresa || !localEscolhido){
+  if(!nome || !empresa || !localEscolhido || !validadeASO){
     statusEl.className = "status erro";
     statusEl.textContent = "Preencha Nome, Empresa e selecione o Local.";
     tocarErro();
@@ -555,14 +566,14 @@ function cadastrarColaborador(){
     statusEl.textContent = "Colaborador já cadastrado. QR Code identificado regerado abaixo.";
     tocarBloqueio();
   } else {
-    colaboradores.push({ nome, empresa, local: localEscolhido, dentro:false, horaEntradaTimestamp:null });
+    colaboradores.push({ nome, empresa, local: localEscolhido, validadeASO, dentro:false, horaEntradaTimestamp:null });
     salvar("colaboradores", colaboradores);
     statusEl.className = "status ok";
     statusEl.textContent = `Cadastro realizado: ${nome} - ${empresa} - ${localEscolhido}.`;
     tocarEntrada();
   }
 
-  montarQRIdentificado("qrTemp", nome, empresa, localEscolhido, 220).then(imagem=>{
+  montarQRIdentificado("qrTemp", nome, empresa, localEscolhido, validadeASO, 220).then(imagem=>{
     const qrArea = document.getElementById("qrArea");
     if(!imagem){
       qrArea.innerHTML = "<p>Não foi possível gerar a imagem do QR Code.</p>";
@@ -577,6 +588,7 @@ function cadastrarColaborador(){
 
   document.getElementById("cadNome").value = "";
   document.getElementById("cadEmpresa").value = "";
+  document.getElementById("cadValidadeASO").value = "";
   atualizarTabelaColaboradores();
 }
 
@@ -695,11 +707,27 @@ function atualizarTabelaColaboradores(){
 
   lista.forEach(c => {
     const i = c._idx;
+    const hoje = new Date();
+    hoje.setHours(0,0,0,0);
+
+    let linhaCor = "";
+
+    if(c.validadeASO){
+
+      const vencimento = new Date(c.validadeASO);
+      vencimento.setHours(0,0,0,0);
+
+      if(hoje >= vencimento){
+         linhaCor = "background:#ffd6d6;";
+               }
+           }
+
     tbody.innerHTML += `
-      <tr id="tr-colab-${i}">
+      <tr id="tr-colab-${i}" style="${linhaCor}">
         <td>${c.nome}</td>
         <td>${c.empresa}</td>
         <td>${c.local}</td>
+                   <td>${c.validadeASO || "-"}</td>
         <td style="text-align:center;">
           <label class="toggle-situacao" title="${c.dentro ? 'Clique para registrar SAÍDA' : 'Clique para registrar ENTRADA'}" style="cursor:pointer;display:inline-flex;flex-direction:column;align-items:center;gap:3px;user-select:none;">
             <input type="checkbox" ${c.dentro ? "checked" : ""} onchange="toggleManual(${i},this)" style="width:22px;height:22px;cursor:pointer;accent-color:var(--verde);">
@@ -852,6 +880,29 @@ function registrarAcesso({nome, empresa, local}){
   }
 
   const statusEl = document.getElementById("statusLeitura");
+
+const hoje = new Date();
+hoje.setHours(0,0,0,0);
+
+if(colaborador.validadeASO){
+
+  const vencimento = new Date(colaborador.validadeASO);
+  vencimento.setHours(0,0,0,0);
+
+  if(hoje >= vencimento){
+
+    statusEl.className = "status erro";
+
+    statusEl.textContent =
+      "🚨 ACESSO BLOQUEADO - ASO / EXAME PERIÓDICO VENCIDO.";
+
+    tocarASOVencido();
+
+    piscar(statusEl,"flash-erro");
+
+    return;
+  }
+}
   const agora = Date.now();
   const agoraFormatado = new Date(agora).toLocaleString("pt-BR");
 
@@ -1067,12 +1118,14 @@ function limparRegistros(){
 function exportarXLSX(){
   const wb = XLSX.utils.book_new();
 
-  const dadosColabs = colaboradores.map(c=>({
-    "Nome": c.nome,
-    "Empresa": c.empresa,
-    "Local": c.local,
-    "Situação": c.dentro ? "Dentro" : "Fora"
-  }));
+ const dadosColabs = colaboradores.map(c=>({
+  "Nome": c.nome,
+  "Empresa": c.empresa,
+  "Local": c.local,
+  "Validade ASO": c.validadeASO || "",
+  "Situação": c.dentro ? "Dentro" : "Fora"
+}));
+
   const wsColabs = XLSX.utils.json_to_sheet(dadosColabs.length ? dadosColabs : [{"Nome":"","Empresa":"","Local":"","Situação":""}]);
   XLSX.utils.book_append_sheet(wb, wsColabs, "Colaboradores");
 
@@ -1137,8 +1190,9 @@ function importarXLSX(event){
         .map(r => ({
           nome: r["Nome"] || "",
           empresa: r["Empresa"] || "",
-          local: r["Local"] || "",
-          dentro: (r["Situação"] || "").toLowerCase() === "dentro",
+         local: r["Local"] || "",
+         validadeASO: r["Validade ASO"] || "",
+         dentro: (r["Situação"] || "").toLowerCase() === "dentro",
           horaEntradaTimestamp: null
         }));
 
@@ -1241,6 +1295,3 @@ atualizarTabela();
 </script>
 </body>
 </html>
-
-
-        
