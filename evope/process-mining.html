@@ -224,7 +224,11 @@
     }
     /* Process map and drilldown need explicit flex in scroll mode */
     body.dashboard-active #view-processmap {
-      display: block !important;
+      display: flex !important;
+      flex-direction: column;
+    }
+    body.dashboard-active #view-drilldown {
+      display: flex !important;
       flex-direction: column;
     }
     .upload-card {
@@ -651,7 +655,8 @@
       position: relative;
       overflow: hidden;
     }
-    #cy { width: 100%; height: 100%; }
+    #cy { width: 100%; height: 100%; position: relative; }
+    #drilldown-cy { width: 100%; height: 100%; position: relative; }
     .cy-legend {
       position: absolute;
       bottom: 12px;
@@ -864,6 +869,29 @@
     .cy-tooltip-row { color: var(--text-dim); }
     .cy-tooltip-row span { color: var(--text); }
 
+    /* ── GRAPH LOADING STATE (U1) ── */
+    .cy-loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+      color: var(--text-dim);
+      font-size: 13px;
+      gap: 10px;
+    }
+    .cy-loading-spinner {
+      width: 24px;
+      height: 24px;
+      border: 3px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: cy-spin 0.8s linear infinite;
+    }
+    @keyframes cy-spin {
+      to { transform: rotate(360deg); }
+    }
+
     /* ── EMPTY STATE ── */
     .empty-state {
       text-align: center;
@@ -897,6 +925,14 @@
       }
       .cy-legend-title { width: 100%; margin-bottom: 2px; }
       .cy-legend-item { margin-bottom: 0; }
+      /* U3: Better controls responsiveness */
+      .map-controls { gap: 8px; padding: 10px 14px; }
+      .map-controls .separator { display: none; }
+      .map-controls label { font-size: 11px; }
+      .map-controls select, .map-controls input[type="range"] { min-width: 0; }
+      .drilldown-controls { flex-wrap: wrap; gap: 8px; }
+      .drilldown-controls .separator { display: none; }
+      #drilldown-stats { margin-left: 0 !important; width: 100%; }
     }
 
     /* ── MISC ── */
@@ -1161,6 +1197,7 @@
       align-items: center;
       gap: 12px;
       margin-bottom: 16px;
+      flex-wrap: wrap;
     }
     .drilldown-controls label { font-size: 12px; color: var(--text-dim); }
     .drilldown-controls select {
@@ -1435,7 +1472,7 @@
       <span id="map-min-pct-val">0%</span>
     </div>
     <div class="cy-container" id="cy-container">
-      <div id="cy"></div>
+      <div id="cy"><div class="empty-state" style="padding:40px"><div class="empty-state-icon">🗺️</div><h3>Process Map</h3><p>Carregue um arquivo XLSX para visualizar o mapa de processos.</p></div></div>
       <div class="cy-legend" id="cy-legend"></div>
     </div>
     <p style="font-size:11px;color:var(--text-dim);margin-top:6px;text-align:center">Clique em um no para destacar conexoes. Use scroll para zoom. Arraste para mover o grafo.</p>
@@ -1601,8 +1638,8 @@
       <button onclick="drilldownCyInstance && drilldownCyInstance.zoom(drilldownCyInstance.zoom()*0.8)">- Zoom</button>
       <button onclick="drilldownCyInstance && drilldownCyInstance.fit()">Ajustar</button>
     </div>
-    <div class="cy-container" id="drilldown-cy-container" style="height:480px">
-      <div id="drilldown-cy" style="width:100%;height:100%"></div>
+    <div class="cy-container" id="drilldown-cy-container">
+      <div id="drilldown-cy"><div class="empty-state" style="padding:40px"><div class="empty-state-icon">🌐</div><h3>Detalhamento por Sistema</h3><p>Selecione um dominio para visualizar o fluxo interno.</p></div></div>
     </div>
     <p style="font-size:11px;color:var(--text-dim);margin-top:6px;text-align:center">Clique em um no para destacar conexoes. Use scroll para zoom. Top 25 paginas exibidas.</p>
     <div class="table-card" style="margin-top:16px">
@@ -3823,8 +3860,9 @@ function activateApp() {
 
   // Ensure cytoscape fits after scroll mode renders everything
   setTimeout(() => {
-    if (cyInstance) cyInstance.fit();
-  }, 400);
+    if (cyInstance) { cyInstance.resize(); cyInstance.fit(undefined, 48); }
+    if (drilldownCyInstance) { drilldownCyInstance.resize(); drilldownCyInstance.fit(undefined, 35); }
+  }, 600);
 }
 
 function applyCollaboratorFilter() {
@@ -4263,18 +4301,30 @@ function refreshProcessMap() {
   const container = document.getElementById('cy');
   if (cyInstance) { cyInstance.destroy(); cyInstance = null; }
   if (processMapResizeObserver) { processMapResizeObserver.disconnect(); processMapResizeObserver = null; }
-  container.innerHTML = '';
-  container.style.width = '100%';
-  container.style.height = '100%';
+  // U1: Loading indicator while graph initializes
+  container.innerHTML = '<div class="cy-loading"><div class="cy-loading-spinner"></div>Renderizando grafo...</div>';
 
-  cyInstance = renderCytoscape(container, transitionMatrix, nodeTime, { layout, minPercent: minPct });
+  // P2 FIX: Guard de dimensoes — se container tem height zero, defer com rAF
+  function initCyWhenReady() {
+    const rect = container.parentElement.getBoundingClientRect();
+    if (rect.width < 10 || rect.height < 10) {
+      requestAnimationFrame(initCyWhenReady);
+      return;
+    }
+    container.innerHTML = '';
+    cyInstance = renderCytoscape(container, transitionMatrix, nodeTime, { layout, minPercent: minPct });
+    setupProcessMapResizeObserver(container);
+    buildProcessMapLegend(nodeTime, minPct);
+  }
+  initCyWhenReady();
+}
 
+function setupProcessMapResizeObserver(container) {
   if (processMapResizeObserver) processMapResizeObserver.disconnect();
   if (typeof ResizeObserver !== 'undefined') {
     let resizeTimer = null;
     processMapResizeObserver = new ResizeObserver(() => {
       if (!cyInstance) return;
-      // Debounce: evita re-fit a cada frame durante resize continuo
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
         if (!cyInstance) return;
@@ -4284,8 +4334,9 @@ function refreshProcessMap() {
     });
     processMapResizeObserver.observe(container.parentElement);
   }
+}
 
-  // Build legend
+function buildProcessMapLegend(nodeTime, minPct) {
   const total = Object.values(nodeTime).reduce((s, v) => s + v, 0) || 1;
   const usedCats = Object.keys(nodeTime)
     .filter(c => (nodeTime[c] / total * 100) >= minPct)
@@ -4356,9 +4407,12 @@ function renderCytoscape(container, transitions, nodeTime, options = {}) {
 
   const maxTime = Math.max(...Object.values(nodeTime), 1);
 
+  // P4 FIX: Ensure dagre is registered before using dagre layout
+  const useDagre = layout === 'dagre' && ensureDagreRegistered();
+
   // Performance: animate desabilitado — layouts animados com muitos nos/edges
   // causam travamento perceptivel. O fit() pos-layout garante visual limpo.
-  const layoutConfig = layout === 'dagre'
+  const layoutConfig = useDagre
     ? {
         name: 'dagre', rankDir: 'LR', rankSep: 130, nodeSep: 85, edgeSep: 35,
         ranker: 'network-simplex', padding: 55, fit: true,
@@ -5050,7 +5104,8 @@ function renderDrilldownGraph() {
   if (drilldownCyInstance) { drilldownCyInstance.destroy(); drilldownCyInstance = null; }
 
   const container = document.getElementById('drilldown-cy');
-  container.innerHTML = '';
+  // U1: Loading indicator while drilldown graph initializes
+  container.innerHTML = '<div class="cy-loading"><div class="cy-loading-spinner"></div>Renderizando grafo...</div>';
 
   const maxVisits = Math.max(...Object.values(data.pages), 1);
 
@@ -5066,7 +5121,8 @@ function renderDrilldownGraph() {
       label: title.length > 35 ? title.slice(0, 33) + '...' : title,
       fullLabel: title,
       count,
-      color: `hsl(${Math.round(count / maxVisits * 120)}, 70%, 50%)`,
+      // U5 FIX: Gradiente de intensidade (mais visitas = mais destacado, azul claro→azul intenso)
+      color: `hsl(220, ${40 + Math.round(count / maxVisits * 40)}%, ${65 - Math.round(count / maxVisits * 30)}%)`,
     }
   }));
 
@@ -5090,6 +5146,17 @@ function renderDrilldownGraph() {
     return;
   }
 
+  // P2 FIX: Guard de dimensoes para drilldown
+  function initDrilldownWhenReady() {
+    const rect = container.parentElement.getBoundingClientRect();
+    if (rect.width < 10 || rect.height < 10) {
+      requestAnimationFrame(initDrilldownWhenReady);
+      return;
+    }
+    container.innerHTML = '';
+    createDrilldownCy();
+  }
+  function createDrilldownCy() {
   drilldownCyInstance = cytoscape({
     container,
     elements: [...nodes, ...edges],
@@ -5164,6 +5231,8 @@ function renderDrilldownGraph() {
       drilldownCyInstance.elements().removeClass('dimmed highlighted');
     }
   });
+  } // end createDrilldownCy
+  initDrilldownWhenReady();
 }
 
 // ─── RENDER: BENCHMARKING ────────────────────────────────────────────────────
@@ -5582,9 +5651,32 @@ function generateDemoData() {
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
 
-// Register cytoscape-dagre if both cytoscape and dagre are available
-if (typeof cytoscape !== 'undefined' && typeof dagre !== 'undefined' && typeof cytoscapeDagre !== 'undefined') {
-  cytoscape.use(cytoscapeDagre);
+// P4 FIX: Robust dagre registration — try immediately + retry on DOMContentLoaded + guard before render
+let dagreRegistered = false;
+function ensureDagreRegistered() {
+  if (dagreRegistered) return true;
+  if (typeof cytoscape !== 'undefined' && typeof dagre !== 'undefined' && typeof cytoscapeDagre !== 'undefined') {
+    try {
+      cytoscape.use(cytoscapeDagre);
+      dagreRegistered = true;
+      return true;
+    } catch (e) {
+      // Already registered — cytoscape.use throws if extension already added
+      if (e.message && e.message.includes('already')) {
+        dagreRegistered = true;
+        return true;
+      }
+      console.warn('[Process Mining] Falha ao registrar dagre:', e);
+      return false;
+    }
+  }
+  return false;
+}
+// Try immediately (scripts are sync in <head>, should be loaded)
+ensureDagreRegistered();
+// Retry on DOMContentLoaded as safety net
+if (!dagreRegistered) {
+  document.addEventListener('DOMContentLoaded', ensureDagreRegistered);
 }
 </script>
 </body>
