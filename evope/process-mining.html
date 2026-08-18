@@ -1338,20 +1338,14 @@
   <!-- VIEW: GROUPING -->
   <section id="view-grouping" class="view">
     <div class="section-header">
-      <h2>Agrupamento de Processos</h2>
-      <p>Clusterização dinâmica de atividades por similaridade</p>
+      <h2>Agrupamento de Atividades</h2>
+      <p>Categorias de atividades agrupadas por padrão de uso similar</p>
     </div>
     <div class="grouping-controls">
       <div class="slider-group">
         <label>Número de grupos:</label>
         <input type="range" id="cluster-slider" min="2" max="12" value="4" step="1" oninput="updateClusters(this.value)">
         <span class="slider-value" id="cluster-count">4</span>
-      </div>
-      <div>
-        <label>Colaborador: </label>
-        <select id="cluster-collab" onchange="updateClusters(document.getElementById('cluster-slider').value)">
-          <option value="all">Todos</option>
-        </select>
       </div>
     </div>
     <div class="cluster-grid" id="cluster-grid"></div>
@@ -1561,7 +1555,7 @@
     </div>
     <div class="table-card mb-4">
       <div class="table-card-header">
-        <h3>Arquivos Excel Utilizados</h3>
+        <h3>Arquivos de Planilha Utilizados</h3>
       </div>
       <table class="data-table" id="excel-table">
         <thead>
@@ -1939,7 +1933,19 @@ function normalizeData(rows) {
   return rows.map(r => {
     const proc = String(r.Process || r.ProcessOriginal || r.process || '').toLowerCase().trim();
     const winTitle = String(r.WindowTitle || r.windowtitle || r.window_title || '').toLowerCase();
-    const domain = String(r.DocumentDomain || r.document_domain || r.domain || '').toLowerCase();
+    let domain = String(r.DocumentDomain || r.document_domain || r.domain || '').toLowerCase();
+
+    // Fallback: extract domain from WindowTitle when DocumentDomain is empty
+    if (!domain && winTitle) {
+      const urlMatch = winTitle.match(/https?:\/\/([^\/\s]+)/i);
+      if (urlMatch) {
+        domain = urlMatch[1].replace(/^www\./, '');
+      } else {
+        const domainMatch = winTitle.match(/([a-z0-9][-a-z0-9]*\.[a-z]{2,}(?:\.[a-z]{2,})?)/i);
+        if (domainMatch) domain = domainMatch[1];
+      }
+    }
+
     const docName = String(r.DocumentName || r.document_name || '').toLowerCase();
 
     let category = PROCESS_MAP[proc] || null;
@@ -2089,10 +2095,21 @@ function computeMetrics(rows, eventLog) {
       }
     }
 
-    if (r.category === 'planilha' && r.docName && r.docName.includes('.xls')) {
-      const key = `${col}:${r.docName}`;
-      excelFiles[key] = (excelFiles[key] || { file: r.docName, collab: col, count: 0 });
-      excelFiles[key].count++;
+    if (r.category === 'planilha') {
+      // Try docName first; fall back to extracting filename from windowTitle
+      let fileName = '';
+      if (r.docName && r.docName.trim()) {
+        fileName = r.docName.trim();
+      } else if (r.windowTitle && r.windowTitle.trim()) {
+        // Strip common suffixes like "- Excel", "- LibreOffice Calc", etc.
+        const titleClean = r.windowTitle.replace(/\s*[-–—]\s*(excel|microsoft excel|libre.*calc|planilhas google|google sheets).*$/i, '').trim();
+        if (titleClean && titleClean.length > 1) fileName = titleClean;
+      }
+      if (fileName) {
+        const key = `${col}:${fileName}`;
+        excelFiles[key] = (excelFiles[key] || { file: fileName, collab: col, count: 0 });
+        excelFiles[key].count++;
+      }
     }
   }
 
@@ -2230,12 +2247,12 @@ function analyzeSequentialPatterns(rows, minLength, maxLength, minSupport) {
   maxLength = maxLength || 6;
   minSupport = minSupport || 3;
 
-  // Group by collaborator+session
+  // Group by collaborator+session, keeping {category, secs} per entry
   const sessions = {};
   for (const r of rows) {
     const sid = r.collaborator + ':' + r.sessionId;
     if (!sessions[sid]) sessions[sid] = [];
-    sessions[sid].push(r.category);
+    sessions[sid].push({ category: r.category, secs: r.secs || 0 });
   }
 
   const patternMap = {};
@@ -2244,16 +2261,14 @@ function analyzeSequentialPatterns(rows, minLength, maxLength, minSupport) {
     for (let L = minLength; L <= Math.min(maxLength, n); L++) {
       for (let i = 0; i <= n - L; i++) {
         const sub = seq.slice(i, i + L);
-        if (new Set(sub).size < 2) continue; // skip trivial all-same
-        const key = sub.join('→');
+        const cats = sub.map(s => s.category);
+        if (new Set(cats).size === 1) continue; // skip all-same-category sequences
+        const key = cats.join('→');
         if (!patternMap[key]) {
-          patternMap[key] = { sequence: sub, count: 0, totalTimeMins: 0, collabs: new Set() };
+          patternMap[key] = { sequence: cats, count: 0, totalTimeMins: 0, collabs: new Set() };
         }
         patternMap[key].count++;
-        // approximate time: sum durations of rows in this window
-        const windowRows = rows.slice(i, i + L);
-        patternMap[key].totalTimeMins += windowRows.reduce((s, r2) => s + (r2.secs || 0), 0) / 60;
-        // we can't easily track collaborators per session here without more info
+        patternMap[key].totalTimeMins += sub.reduce((s, item) => s + item.secs, 0) / 60;
       }
     }
   }
@@ -3382,11 +3397,8 @@ function activateApp() {
   // Populate collaborator filter
   const sel = document.getElementById('filter-collaborator');
   sel.innerHTML = '<option value="all">Todos os colaboradores</option>';
-  const clSel = document.getElementById('cluster-collab');
-  clSel.innerHTML = '<option value="all">Todos</option>';
   for (const col of DataStore.collaborators) {
     sel.innerHTML += `<option value="${col}">${col}</option>`;
-    clSel.innerHTML += `<option value="${col}">${col}</option>`;
   }
 
   // Update period
@@ -4001,64 +4013,65 @@ function renderCytoscape(container, transitions, nodeTime, options = {}) {
 function updateClusters(n) {
   n = parseInt(n);
   document.getElementById('cluster-count').textContent = n;
-  if (!DataStore.dendrogram) return;
 
-  const collabFilter = document.getElementById('cluster-collab').value;
-  let rows = DataStore.raw;
-  if (collabFilter !== 'all') rows = rows.filter(r => r.collaborator === collabFilter);
+  const grid = document.getElementById('cluster-grid');
 
+  if (!DataStore.dendrogram || DataStore.dendrogram.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🧩</div><h3>Dados insuficientes para agrupamento</h3><p>Carregue ao menos dois colaboradores com categorias de atividade distintas.</p></div>';
+    return;
+  }
+
+  const rows = DataStore.raw;
   const clusters = cutDendrogram(DataStore.dendrogram, n);
-  const { transitionMatrix, nodeTime } = DataStore.metrics;
 
-  // Calculate time per cluster
+  // Calculate time per category
   const categoryTotalTime = {};
   for (const r of rows) {
     categoryTotalTime[r.category] = (categoryTotalTime[r.category] || 0) + r.hours;
   }
   const totalTime = rows.reduce((s, r) => s + r.hours, 0) || 1;
 
-  // Get collaborators per cluster category
-  const catCollabs = {};
-  for (const r of rows) {
-    if (!catCollabs[r.category]) catCollabs[r.category] = new Set();
-    catCollabs[r.category].add(r.collaborator);
-  }
-
-  const grid = document.getElementById('cluster-grid');
   grid.innerHTML = clusters.map((cl, i) => {
+    const catSet = new Set(cl.categories);
+    const clusterRows = rows.filter(r => catSet.has(r.category));
     const clTime = cl.categories.reduce((s, c) => s + (categoryTotalTime[c] || 0), 0);
     const pct = (clTime / totalTime * 100).toFixed(1);
-    const collabsInCluster = new Set(cl.categories.flatMap(c => [...(catCollabs[c] || [])]));
     const clusterColor = CATEGORY_COLORS[cl.categories[0]] || '#6e7681';
 
-    // Internal transitions
-    const internalTrans = [];
-    for (const [key, val] of Object.entries(transitionMatrix)) {
-      const [from, to] = key.split('→');
-      if (cl.categories.includes(from) && cl.categories.includes(to)) {
-        internalTrans.push({ from, to, val });
-      }
-    }
-    internalTrans.sort((a, b) => b.val - a.val);
+    // Top apps within this cluster
+    const appMap = {};
+    clusterRows.forEach(r => {
+      appMap[r.processDisplay] = (appMap[r.processDisplay] || 0) + r.hours;
+    });
+    const topApps = Object.entries(appMap).sort((a, b) => b[1] - a[1]).slice(0, 5);
+
+    const catChips = cl.categories.map(c => `
+          <span class="cluster-app-chip" style="border-color:${CATEGORY_COLORS[c] || '#6e7681'}44;color:${CATEGORY_COLORS[c] || '#8b949e'}">
+            ${CATEGORY_LABELS[c] || c}
+          </span>
+        `).join('');
+
+    const appsList = topApps.length > 0
+      ? `<div style="font-size:11px;color:var(--text-dim);margin:8px 0 4px;font-weight:600">TOP APLICATIVOS</div>` +
+        topApps.map(([app, h]) =>
+          `<div style="display:flex;justify-content:space-between;font-size:12px;padding:2px 0">
+            <span style="color:var(--text-dim)">${app}</span>
+            <span>${fmtH(h)}</span>
+          </div>`
+        ).join('')
+      : '';
 
     return `
     <div class="cluster-card">
       <div class="cluster-header">
         <div class="cluster-name" style="color:${clusterColor}">Grupo ${i + 1}</div>
-        <span class="badge" style="background:${clusterColor}22;color:${clusterColor}">${pct}%</span>
+        <span class="badge" style="background:${clusterColor}22;color:${clusterColor}">${pct}% do tempo</span>
       </div>
-      <div class="cluster-apps">
-        ${cl.categories.map(c => `
-          <span class="cluster-app-chip" style="border-color:${CATEGORY_COLORS[c] || '#6e7681'}44;color:${CATEGORY_COLORS[c] || '#8b949e'}">
-            ${CATEGORY_LABELS[c] || c}
-          </span>
-        `).join('')}
-      </div>
+      <div class="cluster-apps">${catChips}</div>
       <div class="cluster-stats">
-        Tempo: <span>${fmtH(clTime)}</span> ·
-        Colaboradores: <span>${collabsInCluster.size}</span>
-        ${internalTrans.length > 0 ? ` · Top transição: <span>${CATEGORY_LABELS[internalTrans[0].from] || internalTrans[0].from} → ${CATEGORY_LABELS[internalTrans[0].to] || internalTrans[0].to} (${internalTrans[0].val}x)</span>` : ''}
+        Tempo total: <span>${fmtH(clTime)}</span>
       </div>
+      ${appsList}
     </div>`;
   }).join('');
 }
@@ -4313,7 +4326,11 @@ function renderPatterns() {
 
   const grid = document.getElementById('pattern-grid');
   if (patterns.length === 0) {
-    grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔄</div><h3>Nenhum padrão encontrado</h3><p>Ajuste os filtros de frequência mínima ou comprimento máximo.</p></div>';
+    const totalPatterns = aa.sequentialPatterns.length;
+    const msg = totalPatterns === 0
+      ? 'Nenhuma sequência multi-categoria repetida foi encontrada nas sessões. Isso pode ocorrer quando os dados possuem poucas sessões longas ou quando os registros de uma categoria dominam o período analisado.'
+      : 'Nenhum padrão corresponde aos filtros atuais. Reduza a frequência mínima ou aumente o comprimento máximo.';
+    grid.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔄</div><h3>Nenhum padrão encontrado</h3><p>${msg}</p></div>`;
     return;
   }
 
