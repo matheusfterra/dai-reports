@@ -116,10 +116,12 @@
     }
     .nav-item:hover { color: var(--text); background: var(--surface-hover); }
     .nav-item.active {
-      color: var(--primary);
+      color: #ffffff;
       border-left-color: var(--primary);
-      background: rgba(45,82,239,0.08);
+      background: rgba(45,82,239,0.18);
+      font-weight: 700;
     }
+    .nav-item:not(.disabled):hover { padding-left: 24px; }
     .nav-item.disabled {
       opacity: 0.35;
       pointer-events: none;
@@ -247,6 +249,23 @@
       font-weight: 700;
     }
     .upload-brand p { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+    .upload-explainer {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: -12px 0 24px;
+      text-align: left;
+    }
+    .upload-explainer div {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px;
+      color: var(--text-dim);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+    .upload-explainer strong { display: block; color: var(--text); margin-bottom: 2px; }
     .drop-zone {
       border: 2px dashed var(--border);
       border-radius: var(--radius-md);
@@ -383,6 +402,52 @@
       border-radius: 2px;
       transition: width 300ms ease;
     }
+    .file-progress-status {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      margin-bottom: 12px;
+      min-height: 38px;
+    }
+    .file-progress-status strong { color: var(--text); font-size: 13px; }
+    .file-progress-status span {
+      color: var(--text-dim);
+      font-size: 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* ── EXECUTIVE SUMMARY ── */
+    .executive-summary {
+      background: linear-gradient(135deg, rgba(45,82,239,0.2), rgba(188,140,255,0.08));
+      border: 1px solid rgba(45,82,239,0.55);
+      border-radius: var(--radius-md);
+      padding: 22px 24px;
+      margin-bottom: 28px;
+    }
+    .executive-summary-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .executive-summary-head span { font-size: 24px; }
+    .executive-summary-head h2 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; }
+    .executive-summary-head p { color: var(--text-dim); font-size: 12px; margin-top: 2px; }
+    .executive-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(130px, 1fr));
+      gap: 12px;
+    }
+    .executive-metric {
+      background: rgba(13,17,23,0.55);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+    }
+    .executive-metric strong { display: block; font-size: 20px; color: #fff; }
+    .executive-metric span { color: var(--text-dim); font-size: 11px; }
 
     /* ── SECTION HEADERS ── */
     .section-header {
@@ -817,6 +882,7 @@
       .main { margin-left: 0; }
       .kpi-grid { grid-template-columns: repeat(2, 1fr); }
       .chart-grid { grid-template-columns: 1fr; }
+      .upload-explainer, .executive-summary-grid { grid-template-columns: 1fr 1fr; }
     }
 
     /* ── MISC ── */
@@ -1145,24 +1211,24 @@
   </div>
   <nav class="sidebar-nav" id="sidebar-nav">
     <div class="nav-section">DADOS</div>
-    <a href="#upload" class="nav-item" data-view="upload">📤 Upload</a>
+    <a href="#upload" class="nav-item" data-view="upload">📤 Carregar arquivos</a>
     <div class="nav-section">ANÁLISE</div>
     <a href="#overview" class="nav-item disabled" data-view="overview">📊 Visão Geral</a>
-    <a href="#temporal" class="nav-item disabled" data-view="temporal">📅 Temporal</a>
-    <a href="#apps" class="nav-item disabled" data-view="apps">💻 Aplicativos</a>
+    <a href="#temporal" class="nav-item disabled" data-view="temporal">📅 Análise Temporal</a>
+    <a href="#apps" class="nav-item disabled" data-view="apps">💻 Apps e Sistemas</a>
     <div class="nav-section">PROCESSOS</div>
-    <a href="#processmap" class="nav-item disabled" data-view="processmap">🗺 Process Map</a>
-    <a href="#grouping" class="nav-item disabled" data-view="grouping">🧩 Agrupamento</a>
-    <a href="#automation" class="nav-item disabled" data-view="automation">🤖 Automação</a>
+    <a href="#processmap" class="nav-item disabled" data-view="processmap">🗺️ Mapa de Processos</a>
+    <a href="#grouping" class="nav-item disabled" data-view="grouping">🧩 Grupos de Atividades</a>
     <div class="nav-section">AVANÇADO</div>
-    <a href="#dataflows" class="nav-item disabled" data-view="dataflows">🔀 Fluxos de Dados</a>
     <a href="#patterns" class="nav-item disabled" data-view="patterns">🔄 Padrões Repetitivos</a>
+    <a href="#dataflows" class="nav-item disabled" data-view="dataflows">🔀 Fluxos Copy/Paste</a>
     <a href="#deepwork" class="nav-item disabled" data-view="deepwork">🎯 Deep Work</a>
-    <a href="#drilldown" class="nav-item disabled" data-view="drilldown">🔍 Drill-Down</a>
-    <a href="#benchmarking" class="nav-item disabled" data-view="benchmarking">📈 Benchmarking</a>
-    <a href="#documents" class="nav-item disabled" data-view="documents">📄 Documentos</a>
-    <div class="nav-section">DADOS</div>
-    <a href="#details" class="nav-item disabled" data-view="details">🗂 Tabelas</a>
+    <a href="#automation" class="nav-item disabled" data-view="automation">🤖 Oportunidades de Automação</a>
+    <a href="#benchmarking" class="nav-item disabled" data-view="benchmarking">📈 Comparativo da Equipe</a>
+    <a href="#drilldown" class="nav-item disabled" data-view="drilldown">🔍 Sistemas em Detalhe</a>
+    <a href="#documents" class="nav-item disabled" data-view="documents">📄 Ciclo de Documentos</a>
+    <div class="nav-section">DETALHES</div>
+    <a href="#details" class="nav-item disabled" data-view="details">🗂️ Tabelas Detalhadas</a>
   </nav>
   <div class="sidebar-footer">
     <button id="btn-new-analysis" class="btn-new-analysis" style="display:none" onclick="resetAnalysis()">↩ Nova Análise</button>
@@ -1200,17 +1266,27 @@
         <p>Análise interativa de processos a partir de dados Analyser</p>
       </div>
 
+      <div class="upload-explainer" aria-label="Como funciona">
+        <div><strong>1. Exporte</strong>Um XLSX do Analyser por colaborador.</div>
+        <div><strong>2. Carregue</strong>Selecione vários arquivos de uma só vez.</div>
+        <div><strong>3. Explore</strong>Veja tempo, fluxos, padrões e oportunidades.</div>
+      </div>
+
       <div class="drop-zone" id="drop-zone">
         <input type="file" id="file-input" accept=".xlsx,.zip" multiple>
-        <div class="drop-zone-icon">📂</div>
-        <h3>Arraste arquivos XLSX ou ZIP</h3>
-        <p>Arquivos exportados do Analyser (Analyser_Nome-...xlsx)</p>
+        <div class="drop-zone-icon">☁️</div>
+        <h3>Arraste seus arquivos XLSX exportados do Analyser aqui</h3>
+        <p>Cada arquivo representa um colaborador. Também aceitamos um ZIP com vários XLSX.</p>
         <span class="btn-browse">ou clique para selecionar</span>
         <div class="file-types">Suportado: .xlsx, .zip com múltiplos .xlsx</div>
       </div>
 
       <div id="upload-preview"></div>
       <div id="upload-progress" style="display:none">
+        <div class="file-progress-status" aria-live="polite">
+          <strong id="progress-file-count">Preparando arquivos...</strong>
+          <span id="progress-file-name"></span>
+        </div>
         <div class="progress-bar-wrap">
           <div class="progress-bar-fill" id="progress-bar" style="width:0%"></div>
         </div>
@@ -1224,6 +1300,7 @@
 
   <!-- VIEW: OVERVIEW -->
   <section id="view-overview" class="view">
+    <div class="executive-summary" id="executive-summary"></div>
     <div class="section-header">
       <h2>Visão Geral</h2>
       <p>Resumo consolidado da análise de processos</p>
@@ -1288,7 +1365,7 @@
     </div>
     <div class="table-card" id="domains-card">
       <div class="table-card-header">
-        <h3>Domínios Web Mais Acessados</h3>
+        <h3>Sistemas e Domínios Identificados</h3>
       </div>
       <table class="data-table" id="domains-table">
         <thead>
@@ -1339,7 +1416,7 @@
   <section id="view-grouping" class="view">
     <div class="section-header">
       <h2>Agrupamento de Atividades</h2>
-      <p>Categorias de atividades agrupadas por padrão de uso similar</p>
+      <p>Categorias usadas juntas no mesmo período ou conectadas por transições frequentes</p>
     </div>
     <div class="grouping-controls">
       <div class="slider-group">
@@ -1355,18 +1432,18 @@
   <section id="view-patterns" class="view">
     <div class="section-header">
       <h2>Padrões Repetitivos</h2>
-      <p>Sequências de categorias que se repetem — candidatos diretos a automação</p>
+      <p>Sequências de atividades e sistemas que se repetem — candidatos diretos a automação</p>
     </div>
     <div class="pattern-controls">
       <div class="slider-group">
         <label>Frequência mínima:</label>
-        <input type="range" id="pattern-min-freq" min="2" max="20" value="3" step="1"
+        <input type="range" id="pattern-min-freq" min="2" max="20" value="2" step="1"
                oninput="document.getElementById('pattern-freq-val').textContent=this.value; renderPatterns()">
-        <span class="slider-value" id="pattern-freq-val">3</span>
+        <span class="slider-value" id="pattern-freq-val">2</span>
       </div>
       <div class="slider-group">
         <label>Comprimento máx:</label>
-        <input type="range" id="pattern-max-len" min="3" max="8" value="5" step="1"
+        <input type="range" id="pattern-max-len" min="2" max="8" value="5" step="1"
                oninput="document.getElementById('pattern-len-val').textContent=this.value; renderPatterns()">
         <span class="slider-value" id="pattern-len-val">5</span>
       </div>
@@ -1555,7 +1632,7 @@
     </div>
     <div class="table-card mb-4">
       <div class="table-card-header">
-        <h3>Arquivos de Planilha Utilizados</h3>
+        <h3>Arquivos de Planilha</h3>
       </div>
       <table class="data-table" id="excel-table">
         <thead>
@@ -1633,9 +1710,38 @@ const PROCESS_MAP = {
 
 const DOMAIN_MAP = {
   'contaazul': 'web', 'dev.azure': 'web', 'sharepoint': 'web',
+  'gmail.com': 'email', 'outlook.office.com': 'email', 'office.com': 'web',
+  'drive.google.com': 'web', 'docs.google.com': 'web', 'sheets.google.com': 'planilha',
+  'teams.microsoft.com': 'chat', 'slack.com': 'chat',
   'chatgpt.com': 'ai_assistant', 'claude.ai': 'ai_assistant', 'copilot': 'ai_assistant',
   'web.whatsapp': 'whatsapp', 'whatsapp.com': 'whatsapp',
 };
+
+const SYSTEM_TITLE_PATTERNS = [
+  { pattern: /\bconta\s*azul\b/i, domain: 'contaazul.com' },
+  { pattern: /\bgmail\b/i, domain: 'gmail.com' },
+  { pattern: /\b(?:google\s+drive|meu\s+drive)\b/i, domain: 'drive.google.com' },
+  { pattern: /\b(?:google\s+sheets|planilhas\s+google)\b/i, domain: 'sheets.google.com' },
+  { pattern: /\b(?:google\s+docs|documentos\s+google)\b/i, domain: 'docs.google.com' },
+  { pattern: /\bsharepoint\b/i, domain: 'sharepoint.com' },
+  { pattern: /\b(?:outlook|office\s*365)\b/i, domain: 'outlook.office.com' },
+  { pattern: /\b(?:azure\s+devops|dev\.azure)\b/i, domain: 'dev.azure.com' },
+  { pattern: /\bgoogle\s+calendar\b/i, domain: 'calendar.google.com' },
+  { pattern: /\bpower\s*bi\b/i, domain: 'powerbi.com' },
+  { pattern: /\bsalesforce\b/i, domain: 'salesforce.com' },
+  { pattern: /\bhubspot\b/i, domain: 'hubspot.com' },
+  { pattern: /\b(?:jira|atlassian)\b/i, domain: 'atlassian.net' },
+  { pattern: /\bconfluence\b/i, domain: 'atlassian.net' },
+  { pattern: /\btrello\b/i, domain: 'trello.com' },
+  { pattern: /\bnotion\b/i, domain: 'notion.so' },
+  { pattern: /\b(?:sap|sap logon)\b/i, domain: 'sap.com' },
+  { pattern: /\btotvs\b/i, domain: 'totvs.com' },
+  { pattern: /\bmicrosoft\s+teams\b/i, domain: 'teams.microsoft.com' },
+  { pattern: /\bslack\b/i, domain: 'slack.com' },
+  { pattern: /\bwhatsapp\b/i, domain: 'web.whatsapp.com' },
+  { pattern: /\bchatgpt\b/i, domain: 'chatgpt.com' },
+  { pattern: /\bclaude\b/i, domain: 'claude.ai' },
+];
 
 const CATEGORY_COLORS = {
   web: '#2D52EF', email: '#d29922', planilha: '#3fb950', chat: '#bc8cff',
@@ -1682,19 +1788,15 @@ class Router {
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' });
       }
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      const nav = document.querySelector(`[data-view="${hash}"]`);
-      if (nav) nav.classList.add('active');
+      setActiveNav(hash);
       return;
     }
 
     // Normal tab-switching mode (upload state or pre-data)
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     const view = document.getElementById('view-' + hash);
-    const nav = document.querySelector(`[data-view="${hash}"]`);
     if (view) view.classList.add('active');
-    if (nav) nav.classList.add('active');
+    setActiveNav(hash);
     // Render view content
     if (DataStore.metrics) renderView(hash);
     // Resize cytoscape if needed
@@ -1707,24 +1809,41 @@ const router = new Router();
 // ─── SCROLL SPY & NAV SCROLL HANDLERS ────────────────────────────────────────
 
 function setupScrollSpy() {
-  // Disconnect previous observer if any
-  if (window._scrollSpyObserver) {
-    window._scrollSpyObserver.disconnect();
-  }
+  if (window._scrollSpyHandler) window.removeEventListener('scroll', window._scrollSpyHandler);
+  const sections = Array.from(document.querySelectorAll('.view:not(#view-upload)'));
+  let ticking = false;
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.id.replace('view-', '');
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        const nav = document.querySelector(`[data-view="${id}"]`);
-        if (nav) nav.classList.add('active');
-      }
-    });
-  }, { rootMargin: '-72px 0px -55% 0px', threshold: 0.05 });
+  const update = () => {
+    const marker = window.scrollY + 110;
+    let active = sections[0];
+    for (const section of sections) {
+      if (section.offsetTop <= marker) active = section;
+      else break;
+    }
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8) {
+      active = sections[sections.length - 1];
+    }
+    if (active) setActiveNav(active.id.replace('view-', ''));
+    ticking = false;
+  };
 
-  document.querySelectorAll('.view:not(#view-upload)').forEach(v => observer.observe(v));
-  window._scrollSpyObserver = observer;
+  window._scrollSpyHandler = () => {
+    if (!ticking) {
+      window.requestAnimationFrame(update);
+      ticking = true;
+    }
+  };
+  window.addEventListener('scroll', window._scrollSpyHandler, { passive: true });
+  update();
+}
+
+function setActiveNav(viewName) {
+  document.querySelectorAll('.nav-item').forEach(n => {
+    const active = n.dataset.view === viewName;
+    n.classList.toggle('active', active);
+    if (active) n.setAttribute('aria-current', 'location');
+    else n.removeAttribute('aria-current');
+  });
 }
 
 function setupNavScrollHandlers() {
@@ -1739,7 +1858,11 @@ function setupNavScrollHandlers() {
       // Only intercept when dashboard-active scroll mode is on
       // Don't intercept the upload link (it should trigger reset via hash or be ignored)
       if (!DataStore.metrics || !document.body.classList.contains('dashboard-active')) return;
-      if (n.dataset.view === 'upload') return; // let normal hash change handle it (router ignores in scroll mode for upload)
+      if (n.dataset.view === 'upload') {
+        e.preventDefault();
+        resetAnalysis();
+        return;
+      }
 
       const viewId = 'view-' + n.dataset.view;
       const el = document.getElementById(viewId);
@@ -1747,8 +1870,7 @@ function setupNavScrollHandlers() {
         e.preventDefault();
         el.scrollIntoView({ behavior: 'smooth' });
         // Update active state immediately
-        document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
-        n.classList.add('active');
+        setActiveNav(n.dataset.view);
       }
     });
   });
@@ -1776,11 +1898,11 @@ async function handleFiles(files) {
   preview.innerHTML = '';
 
   for (const file of files) {
-    if (file.name.endsWith('.zip')) {
+    if (/\.zip$/i.test(file.name)) {
       try {
         const zip = await JSZip.loadAsync(file);
         for (const [name, entry] of Object.entries(zip.files)) {
-          if (name.endsWith('.xlsx') && !name.startsWith('__MACOSX')) {
+          if (/\.xlsx$/i.test(name) && !name.startsWith('__MACOSX')) {
             const blob = await entry.async('blob');
             const xlsxFile = new File([blob], name, { type: file.type });
             pendingFiles.push(xlsxFile);
@@ -1789,7 +1911,7 @@ async function handleFiles(files) {
       } catch(e) {
         console.error('Erro ao extrair ZIP:', e);
       }
-    } else if (file.name.endsWith('.xlsx')) {
+    } else if (/\.xlsx$/i.test(file.name)) {
       pendingFiles.push(file);
     }
   }
@@ -1831,11 +1953,15 @@ const PIPELINE_STEPS = [
   'Análise de Automação',
 ];
 
-function showProgress() {
+function showProgress(totalFiles) {
   const prog = document.getElementById('upload-progress');
   const preview = document.getElementById('upload-preview');
   prog.style.display = 'block';
   preview.innerHTML = '';
+  document.getElementById('progress-file-count').textContent = totalFiles
+    ? `Preparando ${totalFiles} arquivo(s)...`
+    : 'Preparando a análise...';
+  document.getElementById('progress-file-name').textContent = '';
 
   const stepsHtml = PIPELINE_STEPS.map((s, i) =>
     `<div class="progress-step" id="pstep-${i}">
@@ -1844,6 +1970,15 @@ function showProgress() {
     </div>`
   ).join('');
   document.getElementById('progress-steps').innerHTML = stepsHtml;
+}
+
+function setFileProgress(current, total, fileName) {
+  const count = document.getElementById('progress-file-count');
+  const name = document.getElementById('progress-file-name');
+  if (count) count.textContent = `Processando arquivo ${current} de ${total}...`;
+  if (name) name.textContent = fileName || '';
+  const pct = total > 0 ? ((current - 1) / total) * (100 / PIPELINE_STEPS.length) : 0;
+  document.getElementById('progress-bar').style.width = pct + '%';
 }
 
 function setStep(i, state) {
@@ -1860,19 +1995,29 @@ function setStep(i, state) {
 
 async function startAnalysis() {
   if (!pendingFiles.length) return;
-  showProgress();
+  showProgress(pendingFiles.length);
 
   await sleep(50);
   setStep(0, 'active');
   const rawData = [];
 
-  for (const file of pendingFiles) {
+  for (let fileIndex = 0; fileIndex < pendingFiles.length; fileIndex++) {
+    const file = pendingFiles[fileIndex];
+    setFileProgress(fileIndex + 1, pendingFiles.length, file.name);
     const collabName = extractCollaboratorName(file.name);
     const rows = await readXLSX(file, collabName);
     rawData.push(...rows);
     await sleep(10);
   }
   setStep(0, 'done');
+  document.getElementById('progress-file-count').textContent = `${pendingFiles.length} arquivo(s) lido(s)`;
+  document.getElementById('progress-file-name').textContent = `${fmtNum(rawData.length)} registros encontrados`;
+
+  if (!rawData.length) {
+    document.getElementById('progress-file-count').textContent = 'Não foi possível ler os arquivos';
+    document.getElementById('progress-file-name').textContent = 'Verifique se os XLSX possuem uma planilha com cabeçalhos e registros do Analyser.';
+    return;
+  }
 
   setStep(1, 'active');
   await sleep(30);
@@ -1895,7 +2040,7 @@ async function startAnalysis() {
   DataStore.raw = enriched;
   DataStore.metrics = metrics;
   DataStore.collaborators = metrics.collaborators.map(c => c.name);
-  DataStore.dendrogram = buildDendrogram(metrics.transitionMatrix, metrics.categories);
+  DataStore.dendrogram = buildDendrogram(metrics.transitionMatrix, metrics.categories, enriched);
   setStep(4, 'done');
 
   setStep(5, 'active');
@@ -1925,6 +2070,10 @@ async function readXLSX(file, collabName) {
         resolve([]);
       }
     };
+    reader.onerror = () => {
+      console.error('Erro lendo XLSX:', reader.error);
+      resolve([]);
+    };
     reader.readAsArrayBuffer(file);
   });
 }
@@ -1932,21 +2081,11 @@ async function readXLSX(file, collabName) {
 function normalizeData(rows) {
   return rows.map(r => {
     const proc = String(r.Process || r.ProcessOriginal || r.process || '').toLowerCase().trim();
-    const winTitle = String(r.WindowTitle || r.windowtitle || r.window_title || '').toLowerCase();
-    let domain = String(r.DocumentDomain || r.document_domain || r.domain || '').toLowerCase();
+    const winTitle = String(r.WindowTitle || r.windowtitle || r.window_title || '').trim();
+    let domain = normalizeDomain(r.DocumentDomain || r.document_domain || r.domain || '');
+    if (!domain) domain = extractSystemFromTitle(winTitle);
 
-    // Fallback: extract domain from WindowTitle when DocumentDomain is empty
-    if (!domain && winTitle) {
-      const urlMatch = winTitle.match(/https?:\/\/([^\/\s]+)/i);
-      if (urlMatch) {
-        domain = urlMatch[1].replace(/^www\./, '');
-      } else {
-        const domainMatch = winTitle.match(/([a-z0-9][-a-z0-9]*\.[a-z]{2,}(?:\.[a-z]{2,})?)/i);
-        if (domainMatch) domain = domainMatch[1];
-      }
-    }
-
-    const docName = String(r.DocumentName || r.document_name || '').toLowerCase();
+    const sourceDocName = String(r.DocumentName || r.document_name || '').trim();
 
     let category = PROCESS_MAP[proc] || null;
     if (!category) {
@@ -1960,6 +2099,10 @@ function normalizeData(rows) {
       }
     }
     if (!category) category = 'outro';
+
+    // Exports do Analyser frequentemente deixam DocumentName vazio. Para planilhas,
+    // o título da janela é uma fonte confiável (ex.: "Planilha1 - Excel").
+    const docName = sourceDocName || (category === 'planilha' ? extractSpreadsheetName(winTitle) : '');
 
     const start = parseDate(r.StartDate || r.startdate || r.start_date);
     const end = parseDate(r.EndDate || r.enddate || r.end_date);
@@ -1986,11 +2129,64 @@ function normalizeData(rows) {
   }).filter(r => r.secs >= 0);
 }
 
+function normalizeDomain(value) {
+  const raw = String(value || '').trim().toLowerCase();
+  if (!raw) return '';
+  const knownSystem = SYSTEM_TITLE_PATTERNS.find(item => item.pattern.test(raw));
+  if (knownSystem && !raw.includes('.')) return knownSystem.domain;
+  const withoutProtocol = raw.replace(/^[a-z][a-z0-9+.-]*:\/\//i, '').replace(/^\/\//, '');
+  return withoutProtocol
+    .split(/[\/\s?#]/)[0]
+    .replace(/^www\./, '')
+    .replace(/:\d+$/, '')
+    .replace(/[^a-z0-9._-]+$/g, '');
+}
+
+function extractSystemFromTitle(title) {
+  const text = String(title || '').trim();
+  if (!text) return '';
+
+  // URL completa, URL sem protocolo ou domínio visível em qualquer parte do título.
+  const urlMatch = text.match(/(?:https?:\/\/|www\.)([a-z0-9.-]+\.[a-z]{2,})(?::\d+)?(?:[\/?#]|\b)/i);
+  if (urlMatch) return normalizeDomain(urlMatch[1]);
+
+  const domainMatch = text.match(/\b((?:[a-z0-9-]+\.)+(?:com\.br|com|net|org|io|ai|app|dev|cloud|gov\.br|gov|edu\.br))\b/i);
+  if (domainMatch) return normalizeDomain(domainMatch[1]);
+
+  const known = SYSTEM_TITLE_PATTERNS.find(item => item.pattern.test(text));
+  return known ? known.domain : '';
+}
+
+function extractSpreadsheetName(title) {
+  const text = String(title || '').trim();
+  if (!text) return '';
+
+  // Preserva a extensão quando ela aparece no título.
+  const withExtension = text.match(/(?:^|[\\/:])?([^\\/:*?"<>|]+?\.(?:xlsx?|xlsm|xlsb|ods|csv))(?=\s*(?:[-–—]|$))/i);
+  if (withExtension) return withExtension[1].trim();
+
+  // Formatos usuais: "Planilha1 - Excel" e "Microsoft Excel - Planilha1".
+  let cleaned = text
+    .replace(/^\s*(?:microsoft\s+)?excel\s*[-–—:]\s*/i, '')
+    .replace(/\s*[-–—]\s*(?:(?:microsoft|office)\s+)?excel(?:\s*\[[^\]]+\])?\s*$/i, '')
+    .replace(/\s*[-–—]\s*(?:libreoffice\s+calc|google\s+sheets|planilhas\s+google)\s*$/i, '')
+    .replace(/\s*\[(?:modo de compatibilidade|compatibility mode)\]\s*$/i, '')
+    .trim();
+
+  if (!cleaned || /^(?:excel|microsoft excel|libreoffice calc)$/i.test(cleaned)) return '';
+  return cleaned.slice(0, 180);
+}
+
 function parseDate(val) {
   if (!val) return null;
   if (val instanceof Date) return val;
   const s = String(val).trim();
-  // Try ISO-like
+  // Datas brasileiras são comuns nos XLSX do Analyser e não são portáveis no Date.parse.
+  const br = s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?$/);
+  if (br) {
+    const d = new Date(+br[3], +br[2] - 1, +br[1], +(br[4] || 0), +(br[5] || 0), +(br[6] || 0));
+    return isNaN(d) ? null : d;
+  }
   const d = new Date(s.replace(' ', 'T'));
   if (!isNaN(d)) return d;
   return null;
@@ -2010,7 +2206,7 @@ function enrichData(rows) {
   let sessionId = 0;
   let lastCollab = null;
   let lastEnd = null;
-  const SESSION_GAP = 5 * 60 * 1000; // 5 min
+  const SESSION_GAP = 30 * 60 * 1000; // pausa real de trabalho, não simples inatividade curta
 
   return rows.map(r => {
     const start = r.start;
@@ -2025,6 +2221,7 @@ function enrichData(rows) {
     if (r.collaborator !== lastCollab) {
       sessionId++;
       lastCollab = r.collaborator;
+      lastEnd = null;
     } else if (lastEnd && start && (start - lastEnd) > SESSION_GAP) {
       sessionId++;
     }
@@ -2087,7 +2284,7 @@ function computeMetrics(rows, eventLog) {
     appTimeMap[r.processDisplay] = (appTimeMap[r.processDisplay] || 0) + r.hours;
     categoryTimeMap[r.category] = (categoryTimeMap[r.category] || 0) + r.hours;
 
-    if (r.domain && r.category === 'web') {
+    if (r.domain) {
       const d = r.domain.replace(/^www\./, '').split('/')[0];
       if (d) {
         domainTimeMap[d] = (domainTimeMap[d] || 0) + r.hours;
@@ -2096,15 +2293,8 @@ function computeMetrics(rows, eventLog) {
     }
 
     if (r.category === 'planilha') {
-      // Try docName first; fall back to extracting filename from windowTitle
-      let fileName = '';
-      if (r.docName && r.docName.trim()) {
-        fileName = r.docName.trim();
-      } else if (r.windowTitle && r.windowTitle.trim()) {
-        // Strip common suffixes like "- Excel", "- LibreOffice Calc", etc.
-        const titleClean = r.windowTitle.replace(/\s*[-–—]\s*(excel|microsoft excel|libre.*calc|planilhas google|google sheets).*$/i, '').trim();
-        if (titleClean && titleClean.length > 1) fileName = titleClean;
-      }
+      let fileName = String(r.docName || extractSpreadsheetName(r.windowTitle)).trim();
+      fileName = fileName.split(/[\\/]/).pop().trim();
       if (fileName) {
         const key = `${col}:${fileName}`;
         excelFiles[key] = (excelFiles[key] || { file: fileName, collab: col, count: 0 });
@@ -2243,32 +2433,45 @@ function computeMetrics(rows, eventLog) {
 // ─── ADVANCED ANALYTICS ENGINE ───────────────────────────────────────────────
 
 function analyzeSequentialPatterns(rows, minLength, maxLength, minSupport) {
-  minLength = minLength || 3;
+  minLength = minLength || 2;
   maxLength = maxLength || 6;
-  minSupport = minSupport || 3;
+  minSupport = minSupport || 2;
 
-  // Group by collaborator+session, keeping {category, secs} per entry
+  // Agrupa por sessão. DocumentDomain e DocumentName não participam da chave:
+  // padrões continuam funcionando quando esses campos vêm vazios no Analyser.
   const sessions = {};
   for (const r of rows) {
     const sid = r.collaborator + ':' + r.sessionId;
     if (!sessions[sid]) sessions[sid] = [];
-    sessions[sid].push({ category: r.category, secs: r.secs || 0 });
+    sessions[sid].push({ activity: getPatternActivity(r), secs: r.secs || 0, start: r.start });
   }
 
   const patternMap = {};
-  for (const seq of Object.values(sessions)) {
+  for (const [sid, rawSeq] of Object.entries(sessions)) {
+    rawSeq.sort((a, b) => (!a.start || !b.start) ? 0 : a.start - b.start);
+
+    // Eventos do Analyser são muito granulares. Compactar repetições consecutivas
+    // evita que "web→web→web" esconda os fluxos de trabalho reais.
+    const seq = [];
+    for (const event of rawSeq) {
+      const previous = seq[seq.length - 1];
+      if (previous && previous.activity === event.activity) previous.secs += event.secs;
+      else seq.push({ activity: event.activity, secs: event.secs });
+    }
+
     const n = seq.length;
     for (let L = minLength; L <= Math.min(maxLength, n); L++) {
       for (let i = 0; i <= n - L; i++) {
         const sub = seq.slice(i, i + L);
-        const cats = sub.map(s => s.category);
-        if (new Set(cats).size === 1) continue; // skip all-same-category sequences
+        const cats = sub.map(s => s.activity);
+        if (new Set(cats).size === 1) continue;
         const key = cats.join('→');
         if (!patternMap[key]) {
           patternMap[key] = { sequence: cats, count: 0, totalTimeMins: 0, collabs: new Set() };
         }
         patternMap[key].count++;
         patternMap[key].totalTimeMins += sub.reduce((s, item) => s + item.secs, 0) / 60;
+        patternMap[key].collabs.add(sid.split(':')[0]);
       }
     }
   }
@@ -2279,9 +2482,32 @@ function analyzeSequentialPatterns(rows, minLength, maxLength, minSupport) {
     .slice(0, 40)
     .map(p => ({
       ...p,
-      collabs: p.collabs.size || 1,
-      score: Math.min(100, Math.round((p.count / 5) * 20 + (p.sequence.length / 8) * 20 + (p.totalTimeMins / 60) * 30)),
+      collabs: p.collabs.size,
+      score: Math.min(100, Math.round(Math.min(p.count / 10, 1) * 45 + (p.sequence.length / 8) * 20 + Math.min(p.totalTimeMins / 120, 1) * 35)),
     }));
+}
+
+function getPatternActivity(row) {
+  if (row.domain) return `system:${row.domain}`;
+  if (row.category && row.category !== 'outro') return row.category;
+  if (row.processDisplay && !/^desconhecido$/i.test(row.processDisplay)) return `app:${row.processDisplay}`;
+  return 'outro';
+}
+
+function getActivityLabel(activity) {
+  if (activity.startsWith('system:')) return activity.slice(7);
+  if (activity.startsWith('app:')) return activity.slice(4);
+  return CATEGORY_LABELS[activity] || activity;
+}
+
+function getActivityColor(activity) {
+  if (activity.startsWith('system:')) {
+    const domain = activity.slice(7);
+    const category = Object.entries(DOMAIN_MAP).find(([key]) => domain.includes(key))?.[1] || 'web';
+    return CATEGORY_COLORS[category] || CATEGORY_COLORS.web;
+  }
+  if (activity.startsWith('app:')) return CATEGORY_COLORS.outro;
+  return CATEGORY_COLORS[activity] || '#6e7681';
 }
 
 function analyzeCopyPasteFlows(rows, windowSeconds) {
@@ -2435,11 +2661,11 @@ function computeFragmentationIndex(rows) {
 }
 
 function mapDomainWorkflows(rows, minTitleFreq) {
-  minTitleFreq = minTitleFreq || 2;
+  minTitleFreq = minTitleFreq || 1;
   const result = {};
 
-  // Filter only web rows with domain and window title
-  const webRows = rows.filter(r => r.category === 'web' && r.domain);
+  // O domínio pode vir do campo DocumentDomain ou ter sido inferido do WindowTitle.
+  const webRows = rows.filter(r => r.domain);
 
   // Group by domain
   const byDomain = {};
@@ -2451,7 +2677,7 @@ function mapDomainWorkflows(rows, minTitleFreq) {
   }
 
   for (const [domain, recs] of Object.entries(byDomain)) {
-    if (recs.length < 5) continue;
+    if (recs.length < 2) continue;
     const pages = {};
     const transitions = {};
     let totalHours = 0;
@@ -3093,11 +3319,11 @@ function buildAdvancedAutomations(rows, metrics, analyses) {
       feasibility: 70,
     });
     autos.push({
-      title: `Sequência Repetitiva: ${p.sequence.map(c => CATEGORY_LABELS[c] || c).join(' → ')}`,
+      title: `Sequência Repetitiva: ${p.sequence.map(getActivityLabel).join(' → ')}`,
       description: `Padrão repetido ${p.count}× detectado. Sequência de ${p.sequence.length} etapas pode ser automatizada via macro ou RPA.`,
       savingsHours: Math.round(p.totalTimeMins / 60 * 0.7),
       complexity: p.sequence.length <= 3 ? 'Baixa' : p.sequence.length <= 5 ? 'Média' : 'Alta',
-      apps: [...new Set(p.sequence.map(c => CATEGORY_LABELS[c] || c))],
+      apps: [...new Set(p.sequence.map(getActivityLabel))],
       priority: scored.score >= 60 ? 'high' : scored.score >= 40 ? 'medium' : 'low',
       score: scored.score,
       scoreData: scored,
@@ -3289,33 +3515,49 @@ function detectAutomations(metrics) {
 
 // ─── HIERARCHICAL CLUSTERING ─────────────────────────────────────────────────
 
-function buildDendrogram(transitionMatrix, categories) {
+function buildDendrogram(transitionMatrix, categories, rows) {
   if (!categories || categories.length < 2) return null;
   const n = categories.length;
 
-  // Build normalized transition totals per category
-  const catTotals = {};
-  for (const cat of categories) catTotals[cat] = 0;
-  for (const [key, val] of Object.entries(transitionMatrix)) {
-    const [from, to] = key.split('→');
-    if (catTotals[from] !== undefined) catTotals[from] += val;
-    if (catTotals[to] !== undefined) catTotals[to] += val;
+  // Associação combina transições diretas com coocorrência em janelas de 15 min.
+  const occurrences = Object.fromEntries(categories.map(cat => [cat, 0]));
+  const windowCounts = Object.fromEntries(categories.map(cat => [cat, 0]));
+  const pairCounts = {};
+  const windows = {};
+
+  for (const r of (rows || [])) {
+    if (occurrences[r.category] !== undefined) occurrences[r.category]++;
+    const bucket = r.start
+      ? `${r.collaborator}:${Math.floor(r.start.getTime() / (15 * 60 * 1000))}`
+      : `${r.collaborator}:session:${r.sessionId}`;
+    if (!windows[bucket]) windows[bucket] = new Set();
+    windows[bucket].add(r.category);
   }
 
-  // Distance matrix: dist(i,j) = 1 - (P(j|i) + P(i|j)) / 2
+  for (const set of Object.values(windows)) {
+    const cats = Array.from(set).filter(c => windowCounts[c] !== undefined);
+    cats.forEach(c => windowCounts[c]++);
+    for (let i = 0; i < cats.length; i++) {
+      for (let j = i + 1; j < cats.length; j++) {
+        const key = [cats[i], cats[j]].sort().join('|');
+        pairCounts[key] = (pairCounts[key] || 0) + 1;
+      }
+    }
+  }
+
   const dist = Array.from({ length: n }, () => new Array(n).fill(1));
   for (let i = 0; i < n; i++) {
     dist[i][i] = 0;
     for (let j = i + 1; j < n; j++) {
       const a = categories[i], b = categories[j];
-      const keyAB = `${a}→${b}`, keyBA = `${b}→${a}`;
-      const ab = transitionMatrix[keyAB] || 0;
-      const ba = transitionMatrix[keyBA] || 0;
-      const totA = catTotals[a] || 1;
-      const totB = catTotals[b] || 1;
-      const pAB = ab / totA, pBA = ba / totB;
-      const similarity = (pAB + pBA) / 2;
-      dist[i][j] = dist[j][i] = Math.max(0, 1 - similarity * 5);
+      const pairKey = [a, b].sort().join('|');
+      const cooccurrence = (pairCounts[pairKey] || 0) /
+        Math.sqrt(Math.max(1, windowCounts[a] * windowCounts[b]));
+      const transitionCount = (transitionMatrix[`${a}→${b}`] || 0) + (transitionMatrix[`${b}→${a}`] || 0);
+      const transitionAffinity = Math.min(1, transitionCount /
+        Math.sqrt(Math.max(1, occurrences[a] * occurrences[b])) * 4);
+      const similarity = Math.min(1, cooccurrence * 0.65 + transitionAffinity * 0.35);
+      dist[i][j] = dist[j][i] = 1 - similarity;
     }
   }
 
@@ -3450,12 +3692,11 @@ function activateApp() {
   setupNavScrollHandlers();
 
   // Scroll to top / overview
+  history.replaceState(null, '', '#overview');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
   // Update nav highlight to overview
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const overviewNav = document.querySelector('[data-view="overview"]');
-  if (overviewNav) overviewNav.classList.add('active');
+  setActiveNav('overview');
 
   // Ensure cytoscape fits after scroll mode renders everything
   setTimeout(() => {
@@ -3539,6 +3780,8 @@ function renderOverview() {
     totalHours = displayCollabs.reduce((s, c) => s + c.hours, 0);
     totalRecords = displayCollabs.reduce((s, c) => s + c.records, 0);
   }
+
+  renderExecutiveSummary(f === 'all' ? m : getFilteredMetrics());
 
   const nProcesses = Object.keys(m.categoryTimeMap).length;
   const aa = m.advancedAnalytics;
@@ -3633,6 +3876,37 @@ function renderOverview() {
       </div>` : ''}
     </div>`;
   }).join('');
+}
+
+function renderExecutiveSummary(metrics) {
+  const rows = getFilteredData();
+  const apps = new Set(rows.map(r => r.processDisplay).filter(v => v && !/^desconhecido$/i.test(v)));
+  const systems = new Set(rows.map(r => r.domain).filter(Boolean));
+  const appSystemCount = new Set([
+    ...Array.from(apps, app => `app:${app.toLowerCase()}`),
+    ...Array.from(systems, system => `system:${system.toLowerCase()}`),
+  ]).size;
+  const period = metrics.period || {};
+  const periodLabel = period.min
+    ? `${formatDateBR(period.min)} — ${formatDateBR(period.max || period.min)}`
+    : 'Período não identificado';
+
+  document.getElementById('executive-summary').innerHTML = `
+    <div class="executive-summary-head">
+      <span>✨</span>
+      <div><h2>Resumo executivo</h2><p>Panorama dos arquivos carregados antes das análises detalhadas.</p></div>
+    </div>
+    <div class="executive-summary-grid">
+      <div class="executive-metric"><strong>${fmtH(metrics.totalHours)}</strong><span>horas analisadas</span></div>
+      <div class="executive-metric"><strong>${appSystemCount}</strong><span>aplicativos e sistemas</span></div>
+      <div class="executive-metric"><strong>${metrics.collaborators.length}</strong><span>colaborador(es)</span></div>
+      <div class="executive-metric"><strong style="font-size:14px">${periodLabel}</strong><span>período da análise</span></div>
+    </div>`;
+}
+
+function formatDateBR(isoDate) {
+  const parts = String(isoDate || '').split('-');
+  return parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : String(isoDate || '—');
 }
 
 // ─── RENDER: TEMPORAL ────────────────────────────────────────────────────────
@@ -3800,13 +4074,18 @@ function renderApps() {
   // Domains table
   const domainTbody = document.getElementById('domains-tbody');
   const domains = f === 'all' ? m.topDomains : getFilteredMetrics().topDomains;
-  domainTbody.innerHTML = domains.map(d => `
+  domainTbody.innerHTML = domains.length ? domains.map(d => `
     <tr>
       <td>${d.domain}</td>
       <td>${fmtH(d.hours)}</td>
       <td>${fmtNum(d.count)}</td>
     </tr>
-  `).join('');
+  `).join('') : `
+    <tr><td colspan="3"><div class="empty-state">
+      <div class="empty-state-icon">🌐</div>
+      <h3>Nenhum sistema web identificado</h3>
+      <p>Os títulos das janelas analisadas não continham URLs, domínios ou nomes de sistemas reconhecíveis.</p>
+    </div></td></tr>`;
 }
 
 // ─── RENDER: PROCESS MAP ─────────────────────────────────────────────────────
@@ -4011,18 +4290,24 @@ function renderCytoscape(container, transitions, nodeTime, options = {}) {
 // ─── RENDER: GROUPING ────────────────────────────────────────────────────────
 
 function updateClusters(n) {
-  n = parseInt(n);
-  document.getElementById('cluster-count').textContent = n;
-
   const grid = document.getElementById('cluster-grid');
+  const rows = getFilteredData();
+  const filteredMetrics = DataStore.activeFilter === 'all' ? DataStore.metrics : getFilteredMetrics();
+  const dendrogram = DataStore.activeFilter === 'all'
+    ? DataStore.dendrogram
+    : buildDendrogram(filteredMetrics.transitionMatrix, filteredMetrics.categories, rows);
+  const categoryCount = filteredMetrics.categories.length;
+  const slider = document.getElementById('cluster-slider');
+  slider.max = Math.max(2, Math.min(12, categoryCount));
+  n = Math.max(2, Math.min(parseInt(n) || 2, categoryCount));
+  document.getElementById('cluster-count').textContent = categoryCount >= 2 ? n : '—';
 
-  if (!DataStore.dendrogram || DataStore.dendrogram.length === 0) {
-    grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🧩</div><h3>Dados insuficientes para agrupamento</h3><p>Carregue ao menos dois colaboradores com categorias de atividade distintas.</p></div>';
+  if (!dendrogram || categoryCount < 2) {
+    grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🧩</div><h3>Pouca variedade de atividades</h3><p>O agrupamento precisa de pelo menos duas categorias distintas com coocorrências ou transições. Ele não depende do número de colaboradores.</p></div>';
     return;
   }
 
-  const rows = DataStore.raw;
-  const clusters = cutDendrogram(DataStore.dendrogram, n);
+  const clusters = cutDendrogram(dendrogram, n);
 
   // Calculate time per category
   const categoryTotalTime = {};
@@ -4070,6 +4355,9 @@ function updateClusters(n) {
       <div class="cluster-apps">${catChips}</div>
       <div class="cluster-stats">
         Tempo total: <span>${fmtH(clTime)}</span>
+      </div>
+      <div style="font-size:11px;color:var(--text-dim);margin-top:6px">
+        ${cl.categories.length > 1 ? 'Atividades associadas por coocorrência temporal e transições.' : 'Atividade sem associação forte com outro grupo neste corte.'}
       </div>
       ${appsList}
     </div>`;
@@ -4141,13 +4429,18 @@ function renderDetails() {
     </tr>
   `).join('');
 
-  document.getElementById('excel-tbody').innerHTML = excel.map(e => `
+  document.getElementById('excel-tbody').innerHTML = excel.length ? excel.map(e => `
     <tr>
       <td>${e.file}</td>
       <td>${fmtNum(e.count)}</td>
       <td>${e.collab}</td>
     </tr>
-  `).join('');
+  `).join('') : `
+    <tr><td colspan="3"><div class="empty-state">
+      <div class="empty-state-icon">📊</div>
+      <h3>Nenhum arquivo de planilha identificado</h3>
+      <p>Não encontramos nomes de arquivos em DocumentName nem em títulos como “Planilha1 - Excel”.</p>
+    </div></td></tr>`;
 
   document.getElementById('interaction-tbody').innerHTML = collabs.map(c => `
     <tr>
@@ -4288,10 +4581,11 @@ function renderDataFlows() {
 // ─── RENDER: PATTERNS ────────────────────────────────────────────────────────
 
 function renderPatterns() {
-  const aa = DataStore.metrics.advancedAnalytics;
+  const metrics = DataStore.activeFilter === 'all' ? DataStore.metrics : getFilteredMetrics();
+  const aa = metrics.advancedAnalytics;
   if (!aa) return;
 
-  const minFreq = parseInt(document.getElementById('pattern-min-freq').value) || 3;
+  const minFreq = parseInt(document.getElementById('pattern-min-freq').value) || 2;
   const maxLen = parseInt(document.getElementById('pattern-max-len').value) || 5;
   const sortBy = document.getElementById('pattern-sort').value;
 
@@ -4328,7 +4622,7 @@ function renderPatterns() {
   if (patterns.length === 0) {
     const totalPatterns = aa.sequentialPatterns.length;
     const msg = totalPatterns === 0
-      ? 'Nenhuma sequência multi-categoria repetida foi encontrada nas sessões. Isso pode ocorrer quando os dados possuem poucas sessões longas ou quando os registros de uma categoria dominam o período analisado.'
+      ? 'Não houve uma sequência de duas ou mais atividades repetida ao menos duas vezes. Isso costuma acontecer quando há poucos registros ou quando todo o período contém apenas uma atividade.'
       : 'Nenhum padrão corresponde aos filtros atuais. Reduza a frequência mínima ou aumente o comprimento máximo.';
     grid.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔄</div><h3>Nenhum padrão encontrado</h3><p>${msg}</p></div>`;
     return;
@@ -4337,8 +4631,8 @@ function renderPatterns() {
   grid.innerHTML = patterns.slice(0, 24).map((p, i) => {
     const scoreClass = p.score >= 70 ? 'critical' : p.score >= 50 ? 'high' : p.score >= 30 ? 'medium' : 'low';
     const chips = p.sequence.map((cat, ci) => {
-      const color = CATEGORY_COLORS[cat] || '#6e7681';
-      const label = CATEGORY_LABELS[cat] || cat;
+      const color = getActivityColor(cat);
+      const label = getActivityLabel(cat);
       const arr = ci < p.sequence.length - 1 ? '<span class="pattern-arrow">→</span>' : '';
       return `<span class="pattern-chip" style="background:${color}22;color:${color};border:1px solid ${color}44">${label}</span>${arr}`;
     }).join('');
@@ -4501,7 +4795,8 @@ function renderDeepWork() {
 let drilldownCyInstance = null;
 
 function renderDrilldown() {
-  const aa = DataStore.metrics.advancedAnalytics;
+  const metrics = DataStore.activeFilter === 'all' ? DataStore.metrics : getFilteredMetrics();
+  const aa = metrics.advancedAnalytics;
   if (!aa) return;
   const dw = aa.domainWorkflows;
 
@@ -4516,13 +4811,27 @@ function renderDrilldown() {
     sel.innerHTML += `<option value="${domain}"${current === domain ? ' selected' : ''}>${domain}</option>`;
   }
 
-  if (current && dw[current]) {
-    renderDrilldownGraph();
+  if (!domains.length) {
+    const identifiedCount = metrics.topDomains.length;
+    const emptyTitle = identifiedCount ? 'Visitas insuficientes por sistema' : 'Nenhum sistema identificado';
+    const emptyMessage = identifiedCount
+      ? `${identifiedCount} sistema(s) foi(ram) identificado(s), mas o fluxo interno exige ao menos duas visitas ao mesmo sistema.`
+      : 'Os títulos das janelas não continham URLs, domínios ou nomes de sistemas conhecidos para montar este detalhamento.';
+    sel.disabled = true;
+    document.getElementById('drilldown-stats').textContent = '';
+    document.getElementById('drilldown-cy').innerHTML = `<div class="empty-state" style="padding:40px"><div class="empty-state-icon">🌐</div><h3>${emptyTitle}</h3><p>${emptyMessage}</p></div>`;
+    document.getElementById('drilldown-pages-tbody').innerHTML = '<tr><td colspan="2" class="text-dim">Nenhuma página ou tela disponível.</td></tr>';
+    return;
   }
+
+  sel.disabled = false;
+  sel.value = current && dw[current] ? current : domains[0][0];
+  renderDrilldownGraph();
 }
 
 function renderDrilldownGraph() {
-  const aa = DataStore.metrics.advancedAnalytics;
+  const metrics = DataStore.activeFilter === 'all' ? DataStore.metrics : getFilteredMetrics();
+  const aa = metrics.advancedAnalytics;
   if (!aa) return;
   const dw = aa.domainWorkflows;
 
@@ -4835,6 +5144,10 @@ function resetAnalysis() {
     window._scrollSpyObserver.disconnect();
     window._scrollSpyObserver = null;
   }
+  if (window._scrollSpyHandler) {
+    window.removeEventListener('scroll', window._scrollSpyHandler);
+    window._scrollSpyHandler = null;
+  }
 
   document.querySelectorAll('.nav-item').forEach(n => {
     if (n.dataset.view !== 'upload') n.classList.add('disabled');
@@ -4852,9 +5165,7 @@ function resetAnalysis() {
   document.getElementById('view-upload').classList.add('active');
 
   // Update nav
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const uploadNav = document.querySelector('[data-view="upload"]');
-  if (uploadNav) uploadNav.classList.add('active');
+  setActiveNav('upload');
 
   location.hash = '#upload';
 }
@@ -4864,6 +5175,7 @@ function resetAnalysis() {
 async function loadDemoData() {
   pendingFiles = [];
   showProgress();
+  document.getElementById('progress-file-count').textContent = 'Gerando dados de demonstração...';
 
   await sleep(50);
   setStep(0, 'active');
@@ -4892,7 +5204,7 @@ async function loadDemoData() {
   DataStore.raw = enriched;
   DataStore.metrics = metrics;
   DataStore.collaborators = metrics.collaborators.map(c => c.name);
-  DataStore.dendrogram = buildDendrogram(metrics.transitionMatrix, metrics.categories);
+  DataStore.dendrogram = buildDendrogram(metrics.transitionMatrix, metrics.categories, enriched);
   setStep(4, 'done');
 
   setStep(5, 'active');
