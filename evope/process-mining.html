@@ -645,10 +645,13 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      height: 550px;
+      height: clamp(500px, 64vh, 720px);
+      min-height: 500px;
+      width: 100%;
       position: relative;
       overflow: hidden;
     }
+    #cy { width: 100%; height: 100%; }
     .cy-legend {
       position: absolute;
       bottom: 12px;
@@ -883,6 +886,17 @@
       .kpi-grid { grid-template-columns: repeat(2, 1fr); }
       .chart-grid { grid-template-columns: 1fr; }
       .upload-explainer, .executive-summary-grid { grid-template-columns: 1fr 1fr; }
+      .cy-container { height: 520px; min-height: 500px; }
+      .cy-legend {
+        left: 10px;
+        right: 10px;
+        max-width: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px 12px;
+      }
+      .cy-legend-title { width: 100%; margin-bottom: 2px; }
+      .cy-legend-item { margin-bottom: 0; }
     }
 
     /* ── MISC ── */
@@ -1392,8 +1406,8 @@
     <div class="map-controls">
       <label>Layout:</label>
       <select id="map-layout" onchange="refreshProcessMap()">
+        <option value="dagre" selected>Hierárquico (dagre)</option>
         <option value="cose">Orgânico (cose)</option>
-        <option value="dagre">Hierárquico (dagre)</option>
         <option value="circle">Circular</option>
         <option value="breadthfirst">Árvore</option>
       </select>
@@ -1715,6 +1729,9 @@ const DOMAIN_MAP = {
   'teams.microsoft.com': 'chat', 'slack.com': 'chat',
   'chatgpt.com': 'ai_assistant', 'claude.ai': 'ai_assistant', 'copilot': 'ai_assistant',
   'web.whatsapp': 'whatsapp', 'whatsapp.com': 'whatsapp',
+  'chrome.browser': 'web', 'edge.browser': 'web', 'firefox.browser': 'web',
+  'excel.desktop': 'planilha', 'outlook.desktop': 'email',
+  'sap.com': 'sistema',
 };
 
 const SYSTEM_TITLE_PATTERNS = [
@@ -1724,6 +1741,7 @@ const SYSTEM_TITLE_PATTERNS = [
   { pattern: /\b(?:google\s+sheets|planilhas\s+google)\b/i, domain: 'sheets.google.com' },
   { pattern: /\b(?:google\s+docs|documentos\s+google)\b/i, domain: 'docs.google.com' },
   { pattern: /\bsharepoint\b/i, domain: 'sharepoint.com' },
+  { pattern: /\bmicrosoft\s+outlook\s*\(desktop\)/i, domain: 'outlook.desktop' },
   { pattern: /\b(?:outlook|office\s*365)\b/i, domain: 'outlook.office.com' },
   { pattern: /\b(?:azure\s+devops|dev\.azure)\b/i, domain: 'dev.azure.com' },
   { pattern: /\bgoogle\s+calendar\b/i, domain: 'calendar.google.com' },
@@ -1741,13 +1759,36 @@ const SYSTEM_TITLE_PATTERNS = [
   { pattern: /\bwhatsapp\b/i, domain: 'web.whatsapp.com' },
   { pattern: /\bchatgpt\b/i, domain: 'chatgpt.com' },
   { pattern: /\bclaude\b/i, domain: 'claude.ai' },
+  // Aplicativos desktop também são sistemas válidos para o drilldown. Estes
+  // padrões ficam depois dos serviços web para "Chrome - Gmail" virar Gmail,
+  // e não apenas Chrome.
+  { pattern: /\b(?:microsoft\s+)?excel\b/i, domain: 'excel.desktop' },
+  { pattern: /\bgoogle\s+chrome\b/i, domain: 'chrome.browser' },
+  { pattern: /\bmicrosoft\s+edge\b/i, domain: 'edge.browser' },
+  { pattern: /\b(?:mozilla\s+)?firefox\b/i, domain: 'firefox.browser' },
 ];
+
+const PROCESS_SYSTEM_MAP = {
+  chrome: 'chrome.browser', msedge: 'edge.browser', firefox: 'firefox.browser',
+  excel: 'excel.desktop', outlook: 'outlook.desktop', olk: 'outlook.desktop',
+  teams: 'teams.microsoft.com', 'ms-teams': 'teams.microsoft.com',
+  whatsapp: 'web.whatsapp.com', saplogon: 'sap.com', sap: 'sap.com',
+};
 
 const CATEGORY_COLORS = {
   web: '#2D52EF', email: '#d29922', planilha: '#3fb950', chat: '#bc8cff',
   documento: '#39d353', notas: '#58a6ff', apresentacao: '#db6d28', ide: '#f85149',
   sql: '#e3b341', whatsapp: '#25D366', pdf: '#ff6b6b', remote_desktop: '#a5d6ff',
   navegacao: '#7ee787', ai_assistant: '#ffa657', lazer: '#8b949e', sistema: '#768390', outro: '#6e7681',
+};
+
+// Paleta de alto contraste exclusiva do Process Map. Mantém as cores das
+// demais visualizações intactas e melhora a distinção entre nós adjacentes.
+const PROCESS_MAP_COLORS = {
+  web: '#3B82F6', email: '#F59E0B', planilha: '#10B981', chat: '#8B5CF6',
+  documento: '#22C55E', notas: '#06B6D4', apresentacao: '#F97316', ide: '#EF4444',
+  sql: '#EAB308', whatsapp: '#16A34A', pdf: '#F43F5E', remote_desktop: '#6366F1',
+  navegacao: '#84CC16', ai_assistant: '#EC4899', lazer: '#64748B', sistema: '#14B8A6', outro: '#94A3B8',
 };
 
 const CATEGORY_LABELS = {
@@ -2083,7 +2124,7 @@ function normalizeData(rows) {
     const proc = String(r.Process || r.ProcessOriginal || r.process || '').toLowerCase().trim();
     const winTitle = String(r.WindowTitle || r.windowtitle || r.window_title || '').trim();
     let domain = normalizeDomain(r.DocumentDomain || r.document_domain || r.domain || '');
-    if (!domain) domain = extractSystemFromTitle(winTitle);
+    if (!domain) domain = extractSystemFromTitle(winTitle, proc);
 
     const sourceDocName = String(r.DocumentName || r.document_name || '').trim();
 
@@ -2142,19 +2183,27 @@ function normalizeDomain(value) {
     .replace(/[^a-z0-9._-]+$/g, '');
 }
 
-function extractSystemFromTitle(title) {
+function extractSystemFromTitle(title, process) {
   const text = String(title || '').trim();
-  if (!text) return '';
 
-  // URL completa, URL sem protocolo ou domínio visível em qualquer parte do título.
-  const urlMatch = text.match(/(?:https?:\/\/|www\.)([a-z0-9.-]+\.[a-z]{2,})(?::\d+)?(?:[\/?#]|\b)/i);
-  if (urlMatch) return normalizeDomain(urlMatch[1]);
+  if (text) {
+    // URL completa, URL sem protocolo ou domínio visível em qualquer parte do título.
+    const urlMatch = text.match(/(?:https?:\/\/|www\.)([a-z0-9.-]+\.[a-z]{2,})(?::\d+)?(?:[\/?#]|\b)/i);
+    if (urlMatch) return normalizeDomain(urlMatch[1]);
 
-  const domainMatch = text.match(/\b((?:[a-z0-9-]+\.)+(?:com\.br|com|net|org|io|ai|app|dev|cloud|gov\.br|gov|edu\.br))\b/i);
-  if (domainMatch) return normalizeDomain(domainMatch[1]);
+    const domainMatch = text.match(/\b((?:[a-z0-9-]+\.)+(?:com\.br|com|net|org|io|ai|app|dev|cloud|gov\.br|gov|edu\.br))\b/i);
+    if (domainMatch) return normalizeDomain(domainMatch[1]);
 
-  const known = SYSTEM_TITLE_PATTERNS.find(item => item.pattern.test(text));
-  return known ? known.domain : '';
+    const known = SYSTEM_TITLE_PATTERNS.find(item => item.pattern.test(text));
+    if (known) return known.domain;
+  }
+
+  // Último fallback: o processo é mais confiável que retornar vazio quando o
+  // Analyser omite DocumentDomain e o título não contém o nome do aplicativo.
+  const proc = String(process || '').toLowerCase().replace(/\.exe$/i, '').trim();
+  if (PROCESS_SYSTEM_MAP[proc]) return PROCESS_SYSTEM_MAP[proc];
+  const processHint = Object.entries(PROCESS_SYSTEM_MAP).find(([key]) => proc.includes(key));
+  return processHint ? processHint[1] : '';
 }
 
 function extractSpreadsheetName(title) {
@@ -2433,62 +2482,103 @@ function computeMetrics(rows, eventLog) {
 // ─── ADVANCED ANALYTICS ENGINE ───────────────────────────────────────────────
 
 function analyzeSequentialPatterns(rows, minLength, maxLength, minSupport) {
-  minLength = minLength || 2;
-  maxLength = maxLength || 6;
-  minSupport = minSupport || 2;
+  minLength = Number.isFinite(minLength) ? minLength : 2;
+  maxLength = Number.isFinite(maxLength) ? maxLength : 8;
+  minSupport = Number.isFinite(minSupport) ? minSupport : 2;
 
-  // Agrupa por sessão. DocumentDomain e DocumentName não participam da chave:
-  // padrões continuam funcionando quando esses campos vêm vazios no Analyser.
+  // Agrupa apenas por colaborador/sessão. DocumentDomain e DocumentName nunca
+  // participam da chave, pois ambos costumam vir vazios no export do Analyser.
   const sessions = {};
   for (const r of rows) {
-    const sid = r.collaborator + ':' + r.sessionId;
+    const collaborator = String(r.collaborator || 'Colaborador');
+    const fallbackSession = r.date || (r.start instanceof Date ? r.start.toISOString().slice(0, 10) : 'geral');
+    const sid = collaborator + ':' + (r.sessionId ?? fallbackSession);
     if (!sessions[sid]) sessions[sid] = [];
-    sessions[sid].push({ activity: getPatternActivity(r), secs: r.secs || 0, start: r.start });
+    sessions[sid].push({
+      systemActivity: getPatternActivity(r),
+      categoryActivity: getPatternCategoryActivity(r),
+      secs: r.secs || 0,
+      start: r.start,
+      collaborator,
+    });
   }
 
   const patternMap = {};
   for (const [sid, rawSeq] of Object.entries(sessions)) {
-    rawSeq.sort((a, b) => (!a.start || !b.start) ? 0 : a.start - b.start);
+    rawSeq.sort((a, b) => {
+      const aTime = a.start instanceof Date ? a.start.getTime() : Number.POSITIVE_INFINITY;
+      const bTime = b.start instanceof Date ? b.start.getTime() : Number.POSITIVE_INFINITY;
+      return aTime - bTime;
+    });
 
-    // Eventos do Analyser são muito granulares. Compactar repetições consecutivas
-    // evita que "web→web→web" esconda os fluxos de trabalho reais.
-    const seq = [];
-    for (const event of rawSeq) {
-      const previous = seq[seq.length - 1];
-      if (previous && previous.activity === event.activity) previous.secs += event.secs;
-      else seq.push({ activity: event.activity, secs: event.secs });
-    }
+    // Minera duas abstrações da mesma sessão. A visão por sistema preserva
+    // Gmail/Conta Azul/SAP; a visão por categoria impede que muitos títulos ou
+    // domínios distintos fragmentem uma rotina real abaixo do suporte mínimo.
+    for (const level of ['system', 'category']) {
+      const activityField = level === 'system' ? 'systemActivity' : 'categoryActivity';
+      const seq = [];
+      for (const event of rawSeq) {
+        const activity = event[activityField];
+        if (!activity) continue;
+        const previous = seq[seq.length - 1];
+        if (previous && previous.activity === activity) previous.secs += event.secs;
+        else seq.push({ activity, secs: event.secs });
+      }
 
-    const n = seq.length;
-    for (let L = minLength; L <= Math.min(maxLength, n); L++) {
-      for (let i = 0; i <= n - L; i++) {
-        const sub = seq.slice(i, i + L);
-        const cats = sub.map(s => s.activity);
-        if (new Set(cats).size === 1) continue;
-        const key = cats.join('→');
-        if (!patternMap[key]) {
-          patternMap[key] = { sequence: cats, count: 0, totalTimeMins: 0, collabs: new Set() };
+      const n = seq.length;
+      for (let L = minLength; L <= Math.min(maxLength, n); L++) {
+        for (let i = 0; i <= n - L; i++) {
+          const sub = seq.slice(i, i + L);
+          const activities = sub.map(item => item.activity);
+          if (new Set(activities).size === 1) continue;
+          const key = level + '|' + activities.join('→');
+          if (!patternMap[key]) {
+            patternMap[key] = {
+              sequence: activities,
+              level,
+              count: 0,
+              totalTimeMins: 0,
+              collabs: new Set(),
+            };
+          }
+          patternMap[key].count++;
+          patternMap[key].totalTimeMins += sub.reduce((sum, item) => sum + item.secs, 0) / 60;
+          patternMap[key].collabs.add(rawSeq[0].collaborator || sid.split(':')[0]);
         }
-        patternMap[key].count++;
-        patternMap[key].totalTimeMins += sub.reduce((s, item) => s + item.secs, 0) / 60;
-        patternMap[key].collabs.add(sid.split(':')[0]);
       }
     }
   }
 
-  return Object.values(patternMap)
+  const supported = Object.values(patternMap)
     .filter(p => p.count >= minSupport)
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 40)
     .map(p => ({
       ...p,
       collabs: p.collabs.size,
       score: Math.min(100, Math.round(Math.min(p.count / 10, 1) * 45 + (p.sequence.length / 8) * 20 + Math.min(p.totalTimeMins / 120, 1) * 35)),
     }));
+
+  // Limita cada combinação de nível/comprimento separadamente. O corte global
+  // antigo fazia padrões longos ocuparem todo o top 40 antes que o filtro de
+  // comprimento da tela fosse aplicado.
+  const buckets = {};
+  for (const pattern of supported) {
+    const bucket = `${pattern.level}:${pattern.sequence.length}`;
+    if (!buckets[bucket]) buckets[bucket] = [];
+    buckets[bucket].push(pattern);
+  }
+  return Object.values(buckets)
+    .flatMap(bucket => bucket.sort((a, b) => b.count - a.count || b.score - a.score).slice(0, 100))
+    .sort((a, b) => b.count - a.count || b.score - a.score);
 }
 
 function getPatternActivity(row) {
   if (row.domain) return `system:${row.domain}`;
+  if (row.category && row.category !== 'outro') return row.category;
+  if (row.processDisplay && !/^desconhecido$/i.test(row.processDisplay)) return `app:${row.processDisplay}`;
+  return 'outro';
+}
+
+function getPatternCategoryActivity(row) {
   if (row.category && row.category !== 'outro') return row.category;
   if (row.processDisplay && !/^desconhecido$/i.test(row.processDisplay)) return `app:${row.processDisplay}`;
   return 'outro';
@@ -2664,20 +2754,24 @@ function mapDomainWorkflows(rows, minTitleFreq) {
   minTitleFreq = minTitleFreq || 1;
   const result = {};
 
-  // O domínio pode vir do campo DocumentDomain ou ter sido inferido do WindowTitle.
-  const webRows = rows.filter(r => r.domain);
-
-  // Group by domain
+  // Recalcula o sistema aqui também: isto torna o drilldown resiliente a dados
+  // normalizados por versões anteriores e a DocumentDomain="".
   const byDomain = {};
-  for (const r of webRows) {
-    const d = r.domain.replace(/^www\./, '').split('/')[0];
+  for (const r of rows) {
+    const d = getRowSystem(r);
     if (!d) continue;
     if (!byDomain[d]) byDomain[d] = [];
     byDomain[d].push(r);
   }
 
   for (const [domain, recs] of Object.entries(byDomain)) {
-    if (recs.length < 2) continue;
+    recs.sort((a, b) => {
+      const collabOrder = String(a.collaborator || '').localeCompare(String(b.collaborator || ''));
+      if (collabOrder) return collabOrder;
+      const aTime = a.start instanceof Date ? a.start.getTime() : Number.POSITIVE_INFINITY;
+      const bTime = b.start instanceof Date ? b.start.getTime() : Number.POSITIVE_INFINITY;
+      return aTime - bTime;
+    });
     const pages = {};
     const transitions = {};
     let totalHours = 0;
@@ -2712,6 +2806,15 @@ function mapDomainWorkflows(rows, minTitleFreq) {
   }
 
   return result;
+}
+
+function getRowSystem(row) {
+  const explicit = normalizeDomain(row.domain || row.DocumentDomain || row.document_domain || '');
+  if (explicit) return explicit.replace(/^www\./, '').split('/')[0];
+  return extractSystemFromTitle(
+    row.windowTitle || row.WindowTitle || '',
+    row.process || row.processDisplay || row.Process || ''
+  ).replace(/^www\./, '').split('/')[0];
 }
 
 function computeInteractionIntensity(rows) {
@@ -4091,6 +4194,7 @@ function renderApps() {
 // ─── RENDER: PROCESS MAP ─────────────────────────────────────────────────────
 
 let currentMapTab = 'all';
+let processMapResizeObserver = null;
 
 function selectMapTab(tab) {
   currentMapTab = tab;
@@ -4108,11 +4212,16 @@ function refreshProcessMap() {
 
   let nodeTime, transitionMatrix;
 
-  if (currentMapTab === 'all') {
+  // O filtro global tem precedência sobre as abas locais do mapa. Antes, mudar
+  // o colaborador no cabeçalho redesenhava a view, mas continuava usando os
+  // dados gerais quando a aba "Geral" estava ativa.
+  const mapScope = DataStore.activeFilter !== 'all' ? DataStore.activeFilter : currentMapTab;
+
+  if (mapScope === 'all') {
     nodeTime = DataStore.metrics.nodeTime;
     transitionMatrix = DataStore.metrics.transitionMatrix;
   } else {
-    const rows = DataStore.raw.filter(r => r.collaborator === currentMapTab);
+    const rows = DataStore.raw.filter(r => r.collaborator === mapScope);
     const eventLog = buildEventLog(rows);
     const localTrans = {};
     for (const session of Object.values(eventLog)) {
@@ -4132,22 +4241,34 @@ function refreshProcessMap() {
   }
 
   const container = document.getElementById('cy');
+  if (cyInstance) { cyInstance.destroy(); cyInstance = null; }
+  if (processMapResizeObserver) { processMapResizeObserver.disconnect(); processMapResizeObserver = null; }
   container.innerHTML = '';
   container.style.width = '100%';
   container.style.height = '100%';
 
   cyInstance = renderCytoscape(container, transitionMatrix, nodeTime, { layout, minPercent: minPct });
 
+  if (processMapResizeObserver) processMapResizeObserver.disconnect();
+  if (typeof ResizeObserver !== 'undefined') {
+    processMapResizeObserver = new ResizeObserver(() => {
+      if (!cyInstance) return;
+      cyInstance.resize();
+      cyInstance.fit(undefined, 48);
+    });
+    processMapResizeObserver.observe(container.parentElement);
+  }
+
   // Build legend
-  const usedCats = Object.keys(nodeTime).filter(c => {
-    const total = Object.values(nodeTime).reduce((s, v) => s + v, 0);
-    return (nodeTime[c] / total * 100) >= minPct;
-  });
+  const total = Object.values(nodeTime).reduce((s, v) => s + v, 0) || 1;
+  const usedCats = Object.keys(nodeTime)
+    .filter(c => (nodeTime[c] / total * 100) >= minPct)
+    .sort((a, b) => nodeTime[b] - nodeTime[a]);
   const legend = document.getElementById('cy-legend');
   legend.innerHTML = `<div class="cy-legend-title">Legenda</div>` +
-    usedCats.slice(0, 10).map(c => `
+    usedCats.map(c => `
       <div class="cy-legend-item">
-        <div class="cy-legend-dot" style="background:${CATEGORY_COLORS[c] || '#6e7681'}"></div>
+        <div class="cy-legend-dot" style="background:${PROCESS_MAP_COLORS[c] || '#94A3B8'}"></div>
         <span>${CATEGORY_LABELS[c] || c}</span>
       </div>
     `).join('');
@@ -4162,11 +4283,11 @@ function renderCytoscape(container, transitions, nodeTime, options = {}) {
     .map(cat => ({
       data: {
         id: cat,
-        label: (CATEGORY_LABELS[cat] || cat).replace(' ', '\n'),
+        label: CATEGORY_LABELS[cat] || cat,
         time: nodeTime[cat],
         percent: (nodeTime[cat] / totalTime * 100).toFixed(1),
         freq: Object.entries(transitions).filter(([k]) => k.startsWith(cat+'→') || k.endsWith('→'+cat)).reduce((s,[,v]) => s+v, 0),
-        color: CATEGORY_COLORS[cat] || '#6e7681',
+        color: PROCESS_MAP_COLORS[cat] || '#94A3B8',
       }
     }));
 
@@ -4186,7 +4307,8 @@ function renderCytoscape(container, transitions, nodeTime, options = {}) {
           source: src,
           target: dst,
           freq: val,
-          width: 1 + (val / maxFreq) * 8,
+          frequencyLabel: `${val}×`,
+          width: 2 + (val / maxFreq) * 7,
         }
       };
     });
@@ -4194,12 +4316,16 @@ function renderCytoscape(container, transitions, nodeTime, options = {}) {
   const maxTime = Math.max(...Object.values(nodeTime), 1);
 
   const layoutConfig = layout === 'dagre'
-    ? { name: 'dagre', rankDir: 'TB', animate: true, animationDuration: 400 }
+    ? {
+        name: 'dagre', rankDir: 'LR', rankSep: 130, nodeSep: 85, edgeSep: 35,
+        ranker: 'network-simplex', padding: 55, fit: true,
+        animate: true, animationDuration: 450,
+      }
     : layout === 'circle'
-    ? { name: 'circle', animate: true }
+    ? { name: 'circle', animate: true, padding: 55, spacingFactor: 1.25 }
     : layout === 'breadthfirst'
-    ? { name: 'breadthfirst', animate: true }
-    : { name: 'cose', animate: true, animationDuration: 400, nodeRepulsion: 8000, idealEdgeLength: 120 };
+    ? { name: 'breadthfirst', directed: true, animate: true, padding: 55, spacingFactor: 1.35 }
+    : { name: 'cose', animate: true, animationDuration: 450, padding: 55, nodeRepulsion: 12000, idealEdgeLength: 155, componentSpacing: 90 };
 
   const cy = cytoscape({
     container,
@@ -4213,31 +4339,42 @@ function renderCytoscape(container, transitions, nodeTime, options = {}) {
           'color': '#ffffff',
           'text-valign': 'center',
           'text-halign': 'center',
-          'font-size': '9px',
+          'font-size': '13px',
           'font-weight': 'bold',
-          'width': ele => Math.max(30, 30 + (ele.data('time') / maxTime) * 70),
-          'height': ele => Math.max(30, 30 + (ele.data('time') / maxTime) * 70),
-          'border-width': 2,
-          'border-color': 'rgba(255,255,255,0.3)',
+          'font-family': 'Inter, Arial, sans-serif',
+          'width': ele => 68 + Math.sqrt(ele.data('time') / maxTime) * 48,
+          'height': ele => 68 + Math.sqrt(ele.data('time') / maxTime) * 48,
+          'border-width': 3,
+          'border-color': '#ffffff',
+          'border-opacity': 0.55,
+          'overlay-opacity': 0,
           'text-wrap': 'wrap',
-          'text-max-width': '80px',
+          'text-max-width': '100px',
+          'text-outline-color': 'rgba(0,0,0,0.5)',
+          'text-outline-width': 1,
         }
       },
       {
         selector: 'edge',
         style: {
           'width': 'data(width)',
-          'line-color': '#d29922',
-          'target-arrow-color': '#d29922',
+          'line-color': '#8BB9FF',
+          'target-arrow-color': '#D9E9FF',
           'target-arrow-shape': 'triangle',
+          'arrow-scale': 1.35,
           'curve-style': 'bezier',
-          'opacity': 0.55,
-          'label': 'data(freq)',
-          'font-size': '8px',
-          'color': '#d29922',
-          'text-background-color': '#0d1117',
-          'text-background-opacity': 0.8,
-          'text-background-padding': '2px',
+          'opacity': 0.78,
+          'label': 'data(frequencyLabel)',
+          'font-size': '11px',
+          'font-weight': '600',
+          'color': '#E6EDF3',
+          'text-background-color': '#111827',
+          'text-background-opacity': 0.94,
+          'text-background-padding': '4px',
+          'text-background-shape': 'roundrectangle',
+          'text-border-color': '#475569',
+          'text-border-width': 1,
+          'text-border-opacity': 0.8,
         }
       },
       {
@@ -4249,10 +4386,20 @@ function renderCytoscape(container, transitions, nodeTime, options = {}) {
         style: { 'opacity': 1 }
       },
     ],
-    layout: layoutConfig,
+    layout: { name: 'preset' },
     minZoom: 0.2,
     maxZoom: 4,
+    wheelSensitivity: 0.18,
   });
+
+  // Executar o layout depois de registrar o evento evita perder o layoutstop
+  // dos layouts rápidos e garante um fit nítido em qualquer tamanho de tela.
+  const layoutRun = cy.layout(layoutConfig);
+  cy.one('layoutstop', () => {
+    cy.resize();
+    cy.fit(undefined, 48);
+  });
+  layoutRun.run();
 
   // Tooltip
   const tooltip = document.getElementById('cy-tooltip');
@@ -4594,6 +4741,8 @@ function renderPatterns() {
   if (sortBy === 'time') patterns = patterns.slice().sort((a, b) => b.totalTimeMins - a.totalTimeMins);
   else if (sortBy === 'score') patterns = patterns.slice().sort((a, b) => b.score - a.score);
 
+  const maxFrequency = patterns.length ? Math.max(...patterns.map(p => p.count)) : 0;
+
   // KPIs
   document.getElementById('patterns-kpis').innerHTML = `
     <div class="kpi-card blue">
@@ -4603,8 +4752,8 @@ function renderPatterns() {
     </div>
     <div class="kpi-card green">
       <div class="kpi-label">Maior Frequência</div>
-      <div class="kpi-value">${patterns.length > 0 ? patterns[0].count : 0}×</div>
-      <div class="kpi-sub">repetições do padrão #1</div>
+      <div class="kpi-value">${maxFrequency}×</div>
+      <div class="kpi-sub">maior número de repetições</div>
     </div>
     <div class="kpi-card yellow">
       <div class="kpi-label">Tempo Total em Padrões</div>
@@ -4813,11 +4962,12 @@ function renderDrilldown() {
 
   if (!domains.length) {
     const identifiedCount = metrics.topDomains.length;
-    const emptyTitle = identifiedCount ? 'Visitas insuficientes por sistema' : 'Nenhum sistema identificado';
+    const emptyTitle = identifiedCount ? 'Títulos indisponíveis por sistema' : 'Nenhum sistema identificado';
     const emptyMessage = identifiedCount
-      ? `${identifiedCount} sistema(s) foi(ram) identificado(s), mas o fluxo interno exige ao menos duas visitas ao mesmo sistema.`
+      ? `${identifiedCount} sistema(s) foi(ram) identificado(s), mas não há títulos de janela disponíveis para detalhar.`
       : 'Os títulos das janelas não continham URLs, domínios ou nomes de sistemas conhecidos para montar este detalhamento.';
     sel.disabled = true;
+    if (drilldownCyInstance) { drilldownCyInstance.destroy(); drilldownCyInstance = null; }
     document.getElementById('drilldown-stats').textContent = '';
     document.getElementById('drilldown-cy').innerHTML = `<div class="empty-state" style="padding:40px"><div class="empty-state-icon">🌐</div><h3>${emptyTitle}</h3><p>${emptyMessage}</p></div>`;
     document.getElementById('drilldown-pages-tbody').innerHTML = '<tr><td colspan="2" class="text-dim">Nenhuma página ou tela disponível.</td></tr>';
@@ -4912,9 +5062,10 @@ function renderDrilldownGraph() {
         }
       },
     ],
-    layout: { name: 'cose', animate: true, animationDuration: 300, nodeRepulsion: 6000, idealEdgeLength: 100 },
+    layout: { name: 'cose', animate: true, animationDuration: 300, nodeRepulsion: 6000, idealEdgeLength: 100, fit: true, padding: 35 },
     minZoom: 0.2, maxZoom: 4,
   });
+  drilldownCyInstance.one('layoutstop', () => drilldownCyInstance && drilldownCyInstance.fit(undefined, 35));
 }
 
 // ─── RENDER: BENCHMARKING ────────────────────────────────────────────────────
@@ -5133,6 +5284,7 @@ function resetAnalysis() {
   pendingFiles = [];
 
   if (cyInstance) { cyInstance.destroy(); cyInstance = null; }
+  if (processMapResizeObserver) { processMapResizeObserver.disconnect(); processMapResizeObserver = null; }
   Object.values(chartInstances).forEach(c => c.destroy());
   chartInstances = {};
 
