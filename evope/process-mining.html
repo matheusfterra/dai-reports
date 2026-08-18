@@ -379,7 +379,7 @@
     /* ── KPI GRID ── */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 16px;
       margin-bottom: 24px;
     }
@@ -822,6 +822,294 @@
       background: var(--primary);
       margin-top: 4px;
     }
+
+    /* ── ADVANCED VIEWS ── */
+
+    /* Flow bars (Sankey-like) */
+    .flow-list { display: flex; flex-direction: column; gap: 10px; }
+    .flow-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+    }
+    .flow-bar-label {
+      width: 200px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text-dim);
+      flex-shrink: 0;
+    }
+    .flow-bar-track {
+      flex: 1;
+      height: 20px;
+      background: var(--bg);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+    .flow-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      padding-left: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: white;
+      transition: width 0.4s ease;
+    }
+    .flow-bar-count {
+      width: 40px;
+      text-align: right;
+      font-weight: 700;
+      color: var(--text);
+      flex-shrink: 0;
+    }
+
+    /* Pattern cards */
+    .pattern-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .pattern-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+    }
+    .pattern-sequence {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 12px;
+      align-items: center;
+    }
+    .pattern-chip {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .pattern-arrow {
+      color: var(--text-dim);
+      font-size: 12px;
+    }
+    .pattern-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .pattern-freq {
+      font-size: 22px;
+      font-weight: 700;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--primary);
+    }
+    .pattern-freq-label { font-size: 11px; color: var(--text-dim); }
+
+    /* Score badge */
+    .score-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      border: 3px solid;
+      flex-shrink: 0;
+    }
+    .score-badge.critical { border-color: var(--red); color: var(--red); background: rgba(248,81,73,0.1); }
+    .score-badge.high { border-color: var(--orange); color: var(--orange); background: rgba(219,109,40,0.1); }
+    .score-badge.medium { border-color: var(--yellow); color: var(--yellow); background: rgba(210,153,34,0.1); }
+    .score-badge.low { border-color: var(--text-dim); color: var(--text-dim); background: rgba(110,118,129,0.1); }
+
+    /* Score bar mini */
+    .score-bar {
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .score-bar-fill { height: 100%; border-radius: 3px; }
+
+    /* Gauge container */
+    .gauge-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+    }
+    .gauge-value {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1;
+      margin-top: 8px;
+    }
+    .gauge-label { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
+
+    /* Heatmap grid */
+    .heatmap-grid {
+      display: grid;
+      gap: 3px;
+    }
+    .heatmap-cell {
+      width: 18px;
+      height: 18px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: opacity var(--transition);
+    }
+    .heatmap-cell:hover { opacity: 0.75; }
+    .heatmap-labels {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 3px;
+    }
+    .heatmap-label {
+      width: 18px;
+      text-align: center;
+      font-size: 9px;
+      color: var(--text-dim);
+    }
+
+    /* Benchmark table */
+    .benchmark-table { width: 100%; border-collapse: collapse; }
+    .benchmark-table th {
+      padding: 8px 12px;
+      background: var(--bg);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-dim);
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .benchmark-table td {
+      padding: 8px 12px;
+      font-size: 12px;
+      border-bottom: 1px solid rgba(48,54,61,0.4);
+    }
+    .benchmark-table tr:last-child td { border-bottom: none; }
+    .benchmark-table tr:hover td { background: var(--surface-hover); }
+
+    /* Doc lifecycle cards */
+    .doc-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin-bottom: 8px;
+    }
+    .doc-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .doc-name {
+      font-weight: 600;
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 300px;
+    }
+    .doc-stats {
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+    .doc-stats span { color: var(--text); font-weight: 600; }
+    .doc-coapp-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 6px;
+    }
+
+    /* Deep work view */
+    .deep-work-bar {
+      height: 12px;
+      background: var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      margin: 4px 0;
+      display: flex;
+    }
+    .deep-work-fill { height: 100%; }
+
+    /* Drilldown view */
+    .drilldown-controls {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .drilldown-controls label { font-size: 12px; color: var(--text-dim); }
+    .drilldown-controls select {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+    }
+
+    /* Controls for patterns view */
+    .pattern-controls {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .pattern-controls label { font-size: 12px; color: var(--text-dim); white-space: nowrap; }
+
+    /* Radar chart wrapper */
+    .radar-wrap {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    /* TFI badge on collab cards */
+    .tfi-bar {
+      margin-top: 8px;
+      padding: 8px 0 0 0;
+      border-top: 1px solid var(--border);
+    }
+    .tfi-label { font-size: 11px; color: var(--text-dim); margin-bottom: 3px; }
+    .tfi-track {
+      height: 5px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .tfi-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--green), var(--yellow), var(--red));
+    }
   </style>
 </head>
 <body>
@@ -846,6 +1134,13 @@
     <a href="#processmap" class="nav-item disabled" data-view="processmap">🗺 Process Map</a>
     <a href="#grouping" class="nav-item disabled" data-view="grouping">🧩 Agrupamento</a>
     <a href="#automation" class="nav-item disabled" data-view="automation">🤖 Automação</a>
+    <div class="nav-section">AVANÇADO</div>
+    <a href="#dataflows" class="nav-item disabled" data-view="dataflows">🔀 Fluxos de Dados</a>
+    <a href="#patterns" class="nav-item disabled" data-view="patterns">🔄 Padrões Repetitivos</a>
+    <a href="#deepwork" class="nav-item disabled" data-view="deepwork">🎯 Deep Work</a>
+    <a href="#drilldown" class="nav-item disabled" data-view="drilldown">🔍 Drill-Down</a>
+    <a href="#benchmarking" class="nav-item disabled" data-view="benchmarking">📈 Benchmarking</a>
+    <a href="#documents" class="nav-item disabled" data-view="documents">📄 Documentos</a>
     <div class="nav-section">DADOS</div>
     <a href="#details" class="nav-item disabled" data-view="details">🗂 Tabelas</a>
   </nav>
@@ -1108,6 +1403,191 @@
         <tbody id="interaction-tbody"></tbody>
       </table>
     </div>
+    <div class="table-card mb-4" id="gaps-card">
+      <div class="table-card-header">
+        <h3>Top Pares com Gaps / Interrupções</h3>
+      </div>
+      <table class="data-table" id="gaps-table">
+        <thead>
+          <tr>
+            <th>Antes</th>
+            <th>Depois</th>
+            <th>Ocorrências</th>
+            <th>Gap Médio (min)</th>
+          </tr>
+        </thead>
+        <tbody id="gaps-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- VIEW: DATAFLOWS -->
+  <section id="view-dataflows" class="view">
+    <div class="section-header">
+      <h2>Fluxos de Dados — Copy-Paste Cross-App</h2>
+      <p>Transferências manuais de dados detectadas entre aplicativos (janela de 120s)</p>
+    </div>
+    <div class="kpi-grid" id="dataflows-kpis"></div>
+    <div class="chart-card full mb-6">
+      <h3>Fluxos de Transferência (src → dst)</h3>
+      <div id="dataflows-list" class="flow-list"></div>
+    </div>
+    <div class="table-card">
+      <div class="table-card-header">
+        <h3>Detalhamento de Pares</h3>
+      </div>
+      <table class="data-table" id="dataflows-table">
+        <thead>
+          <tr>
+            <th>Origem</th>
+            <th>Destino</th>
+            <th>Transferências</th>
+            <th>Gap Médio (s)</th>
+          </tr>
+        </thead>
+        <tbody id="dataflows-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- VIEW: PATTERNS -->
+  <section id="view-patterns" class="view">
+    <div class="section-header">
+      <h2>Padrões Repetitivos</h2>
+      <p>Sequências de categorias que se repetem — candidatos diretos a automação</p>
+    </div>
+    <div class="pattern-controls">
+      <div class="slider-group">
+        <label>Frequência mínima:</label>
+        <input type="range" id="pattern-min-freq" min="2" max="20" value="3" step="1"
+               oninput="document.getElementById('pattern-freq-val').textContent=this.value; renderPatterns()">
+        <span class="slider-value" id="pattern-freq-val">3</span>
+      </div>
+      <div class="slider-group">
+        <label>Comprimento máx:</label>
+        <input type="range" id="pattern-max-len" min="3" max="8" value="5" step="1"
+               oninput="document.getElementById('pattern-len-val').textContent=this.value; renderPatterns()">
+        <span class="slider-value" id="pattern-len-val">5</span>
+      </div>
+      <div>
+        <label>Ordenar por: </label>
+        <select id="pattern-sort" onchange="renderPatterns()">
+          <option value="count">Frequência</option>
+          <option value="time">Tempo total</option>
+          <option value="score">Score de automação</option>
+        </select>
+      </div>
+    </div>
+    <div id="patterns-kpis" class="kpi-grid"></div>
+    <div class="pattern-grid" id="pattern-grid"></div>
+  </section>
+
+  <!-- VIEW: DEEP WORK -->
+  <section id="view-deepwork" class="view">
+    <div class="section-header">
+      <h2>Deep Work &amp; Produtividade</h2>
+      <p>Análise de foco vs. fragmentação por colaborador</p>
+    </div>
+    <div class="kpi-grid" id="deepwork-kpis"></div>
+    <div class="chart-grid mb-6">
+      <div class="chart-card">
+        <h3>Deep Work vs. Shallow Work</h3>
+        <div class="chart-wrap"><canvas id="chart-deepwork-pie" height="240"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Eficiência por Hora do Dia (Teclas/min)</h3>
+        <div class="chart-wrap"><canvas id="chart-efficiency-hour" height="240"></canvas></div>
+      </div>
+    </div>
+    <div class="collab-grid" id="deepwork-collab-grid"></div>
+  </section>
+
+  <!-- VIEW: DRILL-DOWN -->
+  <section id="view-drilldown" class="view">
+    <div class="section-header">
+      <h2>Detalhamento por Sistema</h2>
+      <p>Fluxo interno de páginas e títulos dentro de cada domínio/sistema</p>
+    </div>
+    <div class="drilldown-controls">
+      <label>Sistema / Domínio:</label>
+      <select id="drilldown-domain" onchange="renderDrilldownGraph()">
+        <option value="">Selecione um domínio</option>
+      </select>
+      <span id="drilldown-stats" style="font-size:12px; color:var(--text-dim); margin-left:16px"></span>
+    </div>
+    <div class="cy-container" id="drilldown-cy-container" style="height:480px">
+      <div id="drilldown-cy" style="width:100%;height:100%"></div>
+    </div>
+    <div class="table-card" style="margin-top:16px">
+      <div class="table-card-header"><h3>Páginas / Títulos Visitados</h3></div>
+      <table class="data-table" id="drilldown-pages-table">
+        <thead><tr><th>Título / Página</th><th>Visitas</th></tr></thead>
+        <tbody id="drilldown-pages-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- VIEW: BENCHMARKING -->
+  <section id="view-benchmarking" class="view">
+    <div class="section-header">
+      <h2>Comparativo de Colaboradores</h2>
+      <p>Benchmarking de métricas normalizadas entre pares</p>
+    </div>
+    <div class="chart-grid mb-6">
+      <div class="chart-card">
+        <h3>Radar de Competências</h3>
+        <div class="chart-wrap radar-wrap"><canvas id="chart-radar" height="300"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Distribuição de Workload por Turno</h3>
+        <div class="chart-wrap"><canvas id="chart-workload" height="300"></canvas></div>
+      </div>
+    </div>
+    <div class="table-card">
+      <div class="table-card-header"><h3>Comparativo Detalhado por Categoria</h3></div>
+      <div style="overflow-x:auto">
+        <table class="benchmark-table" id="benchmark-table">
+          <thead>
+            <tr>
+              <th>Categoria</th>
+              <th>Colaborador</th>
+              <th>Horas</th>
+              <th>% do Dia</th>
+              <th>Teclas/h</th>
+              <th>Sessões</th>
+              <th>Duração Média (min)</th>
+            </tr>
+          </thead>
+          <tbody id="benchmark-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIEW: DOCUMENTS -->
+  <section id="view-documents" class="view">
+    <div class="section-header">
+      <h2>Ciclo de Vida de Documentos</h2>
+      <p>Rastreamento de documentos acessados — frequência, colaboradores e aplicativos co-usados</p>
+    </div>
+    <div class="kpi-grid" id="documents-kpis"></div>
+    <div class="map-controls mb-4">
+      <label>Tipo:</label>
+      <select id="doc-type-filter" onchange="renderDocuments()">
+        <option value="all">Todos</option>
+        <option value="xls">Excel (.xls*)</option>
+        <option value="doc">Word (.doc*)</option>
+        <option value="pdf">PDF (.pdf)</option>
+        <option value="ppt">PowerPoint (.ppt*)</option>
+      </select>
+      <label style="margin-left:12px">Ordenar por:</label>
+      <select id="doc-sort" onchange="renderDocuments()">
+        <option value="accesses">Acessos</option>
+        <option value="hours">Horas</option>
+        <option value="days">Dias ativos</option>
+      </select>
+    </div>
+    <div id="documents-list"></div>
   </section>
 </div>
 
@@ -1342,7 +1822,7 @@ async function startAnalysis() {
 
   setStep(5, 'active');
   await sleep(30);
-  metrics.automations = detectAutomations(metrics);
+  metrics.automations = buildAdvancedAutomations(DataStore.raw, metrics, metrics.advancedAnalytics);
   setStep(5, 'done');
 
   document.getElementById('progress-bar').style.width = '100%';
@@ -1614,6 +2094,30 @@ function computeMetrics(rows, eventLog) {
     nodeFreq[cat] = rows.filter(r => r.category === cat).length;
   }
 
+  // ─── Advanced Analytics ───
+  const advancedAnalytics = {
+    sequentialPatterns: analyzeSequentialPatterns(rows),
+    copyPasteFlows: analyzeCopyPasteFlows(rows),
+    processLoops: detectProcessLoops(transitionMatrix),
+    fragmentation: computeFragmentationIndex(rows),
+    domainWorkflows: mapDomainWorkflows(rows),
+    interactionIntensity: computeInteractionIntensity(rows),
+    gaps: analyzeGaps(rows),
+    overtime: detectOvertimeAnomalies(rows),
+    variants: analyzeProcessVariants(rows),
+    interleaving: detectTaskInterleaving(rows),
+    documentLifecycle: analyzeDocumentLifecycle(rows),
+    benchmarks: benchmarkCollaborators(rows),
+    workload: analyzeWorkloadDistribution(rows),
+    deepWork: classifyDeepShallowWork(rows),
+    cooccurrence: analyzeAppCooccurrence(rows),
+    seasonality: analyzeWeeklySeasonality(rows),
+    responseTime: analyzeResponseTime(rows),
+    duplicateWork: detectDuplicateWork(rows),
+    efficiencyByHour: analyzeEfficiencyByHour(rows),
+    markov: computeMarkovChain(transitionMatrix, categories),
+  };
+
   return {
     totalRecords: rows.length,
     totalHours,
@@ -1631,7 +2135,953 @@ function computeMetrics(rows, eventLog) {
     weekdayMap,
     dailyMap,
     period: { min: minDate, max: maxDate },
+    advancedAnalytics,
   };
+}
+
+// ─── ADVANCED ANALYTICS ENGINE ───────────────────────────────────────────────
+
+function analyzeSequentialPatterns(rows, minLength, maxLength, minSupport) {
+  minLength = minLength || 3;
+  maxLength = maxLength || 6;
+  minSupport = minSupport || 3;
+
+  // Group by collaborator+session
+  const sessions = {};
+  for (const r of rows) {
+    const sid = r.collaborator + ':' + r.sessionId;
+    if (!sessions[sid]) sessions[sid] = [];
+    sessions[sid].push(r.category);
+  }
+
+  const patternMap = {};
+  for (const seq of Object.values(sessions)) {
+    const n = seq.length;
+    for (let L = minLength; L <= Math.min(maxLength, n); L++) {
+      for (let i = 0; i <= n - L; i++) {
+        const sub = seq.slice(i, i + L);
+        if (new Set(sub).size < 2) continue; // skip trivial all-same
+        const key = sub.join('→');
+        if (!patternMap[key]) {
+          patternMap[key] = { sequence: sub, count: 0, totalTimeMins: 0, collabs: new Set() };
+        }
+        patternMap[key].count++;
+        // approximate time: sum durations of rows in this window
+        const windowRows = rows.slice(i, i + L);
+        patternMap[key].totalTimeMins += windowRows.reduce((s, r2) => s + (r2.secs || 0), 0) / 60;
+        // we can't easily track collaborators per session here without more info
+      }
+    }
+  }
+
+  return Object.values(patternMap)
+    .filter(p => p.count >= minSupport)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 40)
+    .map(p => ({
+      ...p,
+      collabs: p.collabs.size || 1,
+      score: Math.min(100, Math.round((p.count / 5) * 20 + (p.sequence.length / 8) * 20 + (p.totalTimeMins / 60) * 30)),
+    }));
+}
+
+function analyzeCopyPasteFlows(rows, windowSeconds) {
+  windowSeconds = windowSeconds || 120;
+
+  // Sort by collaborator+start
+  const sorted = rows.slice().sort((a, b) => {
+    if (a.collaborator !== b.collaborator) return a.collaborator < b.collaborator ? -1 : 1;
+    if (!a.start) return 1;
+    if (!b.start) return -1;
+    return a.start - b.start;
+  });
+
+  const flowMap = {};
+  let totalTransfers = 0;
+
+  for (let i = 0; i < sorted.length - 1; i++) {
+    const curr = sorted[i];
+    const next = sorted[i + 1];
+    if (curr.collaborator !== next.collaborator) continue;
+    if (!curr.copyCount || curr.copyCount <= 0) continue;
+    if (!next.pasteCount || next.pasteCount <= 0) continue;
+    if (curr.category === next.category) continue;
+
+    const gapSecs = curr.end && next.start ? (next.start - curr.end) / 1000 : 0;
+    if (gapSecs > windowSeconds) continue;
+
+    const key = curr.category + '→' + next.category;
+    if (!flowMap[key]) {
+      flowMap[key] = { src: curr.category, dst: next.category, srcDetail: [], dstDetail: [], count: 0, totalGapSecs: 0 };
+    }
+    flowMap[key].count++;
+    flowMap[key].totalGapSecs += gapSecs;
+    totalTransfers++;
+
+    if (curr.processDisplay) flowMap[key].srcDetail.push(curr.processDisplay);
+    if (next.processDisplay) flowMap[key].dstDetail.push(next.processDisplay);
+  }
+
+  const flows = Object.values(flowMap)
+    .sort((a, b) => b.count - a.count)
+    .map(f => ({
+      ...f,
+      avgGapSecs: f.count > 0 ? Math.round(f.totalGapSecs / f.count) : 0,
+    }));
+
+  const topPairs = flows.slice(0, 10);
+  return { flows, totalTransfers, topPairs };
+}
+
+function detectProcessLoops(transitionMatrix, minFrequency) {
+  minFrequency = minFrequency || 5;
+  const loops = [];
+
+  // Build adjacency from transitionMatrix
+  const adj = {};
+  for (const [key, val] of Object.entries(transitionMatrix)) {
+    if (val < minFrequency) continue;
+    const [from, to] = key.split('→');
+    if (!adj[from]) adj[from] = [];
+    adj[from].push(to);
+  }
+
+  const cats = Object.keys(adj);
+
+  // Detect A→B→A
+  for (const a of cats) {
+    for (const b of (adj[a] || [])) {
+      if ((adj[b] || []).includes(a)) {
+        const freq = (transitionMatrix[a + '→' + b] || 0) + (transitionMatrix[b + '→' + a] || 0);
+        loops.push({
+          cycle: [a, b, a],
+          frequency: freq,
+          estimatedIterations: Math.round(freq / 2),
+        });
+      }
+    }
+  }
+
+  // Detect A→B→C→A
+  for (const a of cats) {
+    for (const b of (adj[a] || [])) {
+      for (const c of (adj[b] || [])) {
+        if (c !== a && c !== b && (adj[c] || []).includes(a)) {
+          const freq = Math.min(
+            transitionMatrix[a + '→' + b] || 0,
+            transitionMatrix[b + '→' + c] || 0,
+            transitionMatrix[c + '→' + a] || 0,
+          );
+          if (freq >= minFrequency) {
+            loops.push({ cycle: [a, b, c, a], frequency: freq * 3, estimatedIterations: freq });
+          }
+        }
+      }
+    }
+  }
+
+  return loops.sort((a, b) => b.frequency - a.frequency).slice(0, 10);
+}
+
+function computeFragmentationIndex(rows) {
+  const result = {};
+  const LONG_BLOCK_SECS = 120;
+
+  // Group by collaborator
+  const byCollab = {};
+  for (const r of rows) {
+    if (!byCollab[r.collaborator]) byCollab[r.collaborator] = [];
+    byCollab[r.collaborator].push(r);
+  }
+
+  for (const [col, recs] of Object.entries(byCollab)) {
+    let totalSecs = 0, longBlocksSecs = 0, microBlocks = 0, totalBlocks = 0;
+    const blockDurations = [];
+
+    // Group consecutive same-category
+    let blockCat = null, blockSecs = 0;
+    for (const r of recs) {
+      if (r.category !== blockCat) {
+        if (blockCat !== null) {
+          blockDurations.push(blockSecs);
+          totalBlocks++;
+          if (blockSecs >= LONG_BLOCK_SECS) longBlocksSecs += blockSecs;
+          if (blockSecs < 30) microBlocks++;
+        }
+        blockCat = r.category;
+        blockSecs = r.secs;
+      } else {
+        blockSecs += r.secs;
+      }
+      totalSecs += r.secs;
+    }
+    // last block
+    if (blockCat !== null) {
+      blockDurations.push(blockSecs);
+      totalBlocks++;
+      if (blockSecs >= LONG_BLOCK_SECS) longBlocksSecs += blockSecs;
+      if (blockSecs < 30) microBlocks++;
+    }
+
+    const tfi = totalSecs > 0 ? 1 - (longBlocksSecs / totalSecs) : 0;
+    const avgBlockSecs = totalBlocks > 0 ? blockDurations.reduce((s, v) => s + v, 0) / totalBlocks : 0;
+    const sorted = blockDurations.slice().sort((a, b) => a - b);
+    const medianBlockSecs = sorted.length > 0 ? sorted[Math.floor(sorted.length / 2)] : 0;
+    const pctMicroBlocks = totalBlocks > 0 ? (microBlocks / totalBlocks * 100) : 0;
+
+    result[col] = { tfi, avgBlockSecs, medianBlockSecs, pctMicroBlocks, totalBlocks };
+  }
+
+  return result;
+}
+
+function mapDomainWorkflows(rows, minTitleFreq) {
+  minTitleFreq = minTitleFreq || 2;
+  const result = {};
+
+  // Filter only web rows with domain and window title
+  const webRows = rows.filter(r => r.category === 'web' && r.domain);
+
+  // Group by domain
+  const byDomain = {};
+  for (const r of webRows) {
+    const d = r.domain.replace(/^www\./, '').split('/')[0];
+    if (!d) continue;
+    if (!byDomain[d]) byDomain[d] = [];
+    byDomain[d].push(r);
+  }
+
+  for (const [domain, recs] of Object.entries(byDomain)) {
+    if (recs.length < 5) continue;
+    const pages = {};
+    const transitions = {};
+    let totalHours = 0;
+
+    for (let i = 0; i < recs.length; i++) {
+      const r = recs[i];
+      // Normalize title: remove IDs/numbers at end
+      const title = r.windowTitle.replace(/\s*[\d\-_]+$/, '').trim().slice(0, 60) || '(sem título)';
+      pages[title] = (pages[title] || 0) + 1;
+      totalHours += r.hours;
+
+      if (i > 0 && recs[i - 1].collaborator === r.collaborator) {
+        const prevTitle = recs[i - 1].windowTitle.replace(/\s*[\d\-_]+$/, '').trim().slice(0, 60) || '(sem título)';
+        if (prevTitle !== title) {
+          const tkey = prevTitle + '→' + title;
+          transitions[tkey] = (transitions[tkey] || 0) + 1;
+        }
+      }
+    }
+
+    // Filter rare pages
+    const filteredPages = Object.fromEntries(
+      Object.entries(pages).filter(([, c]) => c >= minTitleFreq)
+    );
+
+    result[domain] = {
+      pages: filteredPages,
+      transitions,
+      totalHours,
+      totalVisits: recs.length,
+    };
+  }
+
+  return result;
+}
+
+function computeInteractionIntensity(rows) {
+  const grouped = {};
+
+  for (const r of rows) {
+    const key = r.category + '|' + r.collaborator;
+    if (!grouped[key]) {
+      grouped[key] = { category: r.category, collaborator: r.collaborator, keys: 0, mouse: 0, cp: 0, secs: 0, count: 0 };
+    }
+    const g = grouped[key];
+    g.keys += r.keyCount;
+    g.mouse += r.mouseCount;
+    g.cp += (r.copyCount || 0) + (r.pasteCount || 0);
+    g.secs += r.secs;
+    g.count++;
+  }
+
+  return Object.values(grouped).map(g => {
+    const mins = g.secs / 60 || 1;
+    const keysPerMin = g.keys / mins;
+    const mousePerMin = g.mouse / mins;
+    const copyPasteRatio = g.secs > 0 ? g.cp / (g.secs / 60) : 0;
+
+    let interactionType = 'mixed';
+    if (keysPerMin > 60) interactionType = 'data_entry';
+    else if (keysPerMin < 5 && mousePerMin < 5) interactionType = 'passive';
+    else if (mousePerMin > keysPerMin * 3) interactionType = 'navigation';
+
+    return {
+      category: g.category,
+      collaborator: g.collaborator,
+      keysPerMin: +keysPerMin.toFixed(1),
+      mousePerMin: +mousePerMin.toFixed(1),
+      copyPasteRatio: +copyPasteRatio.toFixed(2),
+      interactionType,
+      totalHours: g.secs / 3600,
+    };
+  }).sort((a, b) => b.totalHours - a.totalHours);
+}
+
+function analyzeGaps(rows, gapThresholdSecs) {
+  gapThresholdSecs = gapThresholdSecs || 60;
+  let totalGapSecs = 0, countGaps = 0;
+  const gapPairs = {};
+
+  // Sort by collaborator+start
+  const sorted = rows.slice().sort((a, b) => {
+    if (a.collaborator !== b.collaborator) return a.collaborator < b.collaborator ? -1 : 1;
+    if (!a.start || !b.start) return 0;
+    return a.start - b.start;
+  });
+
+  for (let i = 0; i < sorted.length - 1; i++) {
+    const curr = sorted[i];
+    const next = sorted[i + 1];
+    if (curr.collaborator !== next.collaborator) continue;
+    if (!curr.end || !next.start) continue;
+
+    const gapSecs = (next.start - curr.end) / 1000;
+    if (gapSecs >= gapThresholdSecs && gapSecs < 7200) { // max 2h
+      totalGapSecs += gapSecs;
+      countGaps++;
+      const key = curr.category + '→' + next.category;
+      if (!gapPairs[key]) gapPairs[key] = { before: curr.category, after: next.category, count: 0, totalGapSecs: 0 };
+      gapPairs[key].count++;
+      gapPairs[key].totalGapSecs += gapSecs;
+    }
+  }
+
+  const topGapPairs = Object.values(gapPairs)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 10)
+    .map(p => ({ ...p, avgGapMins: +(p.totalGapSecs / p.count / 60).toFixed(1) }));
+
+  return {
+    totalGapHours: totalGapSecs / 3600,
+    avgGapMinutes: countGaps > 0 ? +(totalGapSecs / countGaps / 60).toFixed(1) : 0,
+    countGaps,
+    topGapPairs,
+  };
+}
+
+function detectOvertimeAnomalies(rows, workHours) {
+  workHours = workHours || [8, 18];
+  const result = {};
+
+  const byCollab = {};
+  for (const r of rows) {
+    if (!byCollab[r.collaborator]) byCollab[r.collaborator] = [];
+    byCollab[r.collaborator].push(r);
+  }
+
+  for (const [col, recs] of Object.entries(byCollab)) {
+    let outsideSecs = 0, totalSecs = 0, weekendSecs = 0;
+    const dailyHours = {};
+
+    for (const r of recs) {
+      totalSecs += r.secs;
+      if (r.hour !== undefined && (r.hour < workHours[0] || r.hour >= workHours[1])) {
+        outsideSecs += r.secs;
+      }
+      if (r.weekday === 0 || r.weekday === 6) weekendSecs += r.secs;
+      if (r.date) dailyHours[r.date] = (dailyHours[r.date] || 0) + r.hours;
+    }
+
+    const overloadedDays = Object.values(dailyHours).filter(h => h > 10).length;
+    const avgDailyHours = Object.keys(dailyHours).length > 0
+      ? totalSecs / 3600 / Object.keys(dailyHours).length
+      : 0;
+
+    result[col] = {
+      pctOutsideHours: totalSecs > 0 ? +(outsideSecs / totalSecs * 100).toFixed(1) : 0,
+      overloadedDays,
+      weekendHours: +(weekendSecs / 3600).toFixed(1),
+      avgDailyHours: +avgDailyHours.toFixed(1),
+    };
+  }
+
+  return result;
+}
+
+function analyzeProcessVariants(rows) {
+  const sessionVariants = {};
+
+  // Group by collab+sessionId
+  const sessions = {};
+  for (const r of rows) {
+    const sid = r.collaborator + ':' + r.sessionId;
+    if (!sessions[sid]) sessions[sid] = [];
+    sessions[sid].push(r.category);
+  }
+
+  // Deduplicate consecutive
+  for (const [sid, cats] of Object.entries(sessions)) {
+    const deduped = [cats[0]];
+    for (let i = 1; i < cats.length; i++) {
+      if (cats[i] !== cats[i - 1]) deduped.push(cats[i]);
+    }
+    if (deduped.length >= 2) {
+      const key = deduped.join('→');
+      sessionVariants[key] = (sessionVariants[key] || 0) + 1;
+    }
+  }
+
+  const totalCases = Object.values(sessionVariants).reduce((s, v) => s + v, 0);
+  const sorted = Object.entries(sessionVariants).sort((a, b) => b[1] - a[1]);
+
+  const coverageTop5 = sorted.slice(0, 5).reduce((s, [, c]) => s + c, 0) / (totalCases || 1) * 100;
+  const coverageTop10 = sorted.slice(0, 10).reduce((s, [, c]) => s + c, 0) / (totalCases || 1) * 100;
+
+  return {
+    totalVariants: sorted.length,
+    totalCases,
+    coverageTop5: +coverageTop5.toFixed(1),
+    coverageTop10: +coverageTop10.toFixed(1),
+    topVariants: sorted.slice(0, 20).map(([v, c]) => ({ variant: v, count: c })),
+  };
+}
+
+function detectTaskInterleaving(rows, windowMinutes) {
+  windowMinutes = windowMinutes || 30;
+  const windowMs = windowMinutes * 60 * 1000;
+  const result = {};
+
+  const byCollab = {};
+  for (const r of rows) {
+    if (!byCollab[r.collaborator]) byCollab[r.collaborator] = [];
+    byCollab[r.collaborator].push(r);
+  }
+
+  for (const [col, recs] of Object.entries(byCollab)) {
+    const windowCounts = [];
+
+    for (let i = 0; i < recs.length; i++) {
+      if (!recs[i].start) continue;
+      const windowEnd = recs[i].start.getTime() + windowMs;
+      const catsInWindow = new Set();
+      for (let j = i; j < recs.length; j++) {
+        if (!recs[j].start || recs[j].start.getTime() > windowEnd) break;
+        catsInWindow.add(recs[j].category);
+      }
+      windowCounts.push(catsInWindow.size);
+    }
+
+    const avg = windowCounts.length > 0 ? windowCounts.reduce((s, v) => s + v, 0) / windowCounts.length : 0;
+    const max = windowCounts.length > 0 ? Math.max(...windowCounts) : 0;
+
+    result[col] = {
+      avgCatsPerWindow: +avg.toFixed(2),
+      maxCatsPerWindow: max,
+      interleavingScore: Math.min(100, Math.round(avg / 8 * 100)),
+    };
+  }
+
+  return result;
+}
+
+function analyzeDocumentLifecycle(rows) {
+  const docs = {};
+
+  for (const r of rows) {
+    if (!r.docName || r.docName.length < 3) continue;
+    const name = r.docName.toLowerCase().trim();
+    if (!docs[name]) {
+      docs[name] = {
+        name: r.docName,
+        accesses: 0,
+        secs: 0,
+        dates: new Set(),
+        coApps: {},
+        collaborators: new Set(),
+      };
+    }
+    const d = docs[name];
+    d.accesses++;
+    d.secs += r.secs;
+    if (r.date) d.dates.add(r.date);
+    d.coApps[r.processDisplay] = (d.coApps[r.processDisplay] || 0) + 1;
+    d.collaborators.add(r.collaborator);
+  }
+
+  return Object.values(docs)
+    .filter(d => d.accesses >= 2)
+    .sort((a, b) => b.accesses - a.accesses)
+    .slice(0, 50)
+    .map(d => {
+      const uniqueDays = d.dates.size;
+      const hours = d.secs / 3600;
+      const avgPerDay = uniqueDays > 0 ? d.accesses / uniqueDays : d.accesses;
+      let frequency = 'baixa';
+      if (avgPerDay >= 5) frequency = 'diária intensa';
+      else if (avgPerDay >= 2) frequency = 'diária';
+      else if (avgPerDay >= 0.5) frequency = 'semanal';
+
+      const coApps = Object.entries(d.coApps)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 4)
+        .map(([app, count]) => ({ app, count }));
+
+      return {
+        name: d.name,
+        accesses: d.accesses,
+        hours: +hours.toFixed(2),
+        uniqueDays,
+        frequency,
+        coApps,
+        collaborators: Array.from(d.collaborators),
+      };
+    });
+}
+
+function benchmarkCollaborators(rows) {
+  const catCollab = {};
+
+  for (const r of rows) {
+    const key = r.category + '|' + r.collaborator;
+    if (!catCollab[key]) {
+      catCollab[key] = {
+        category: r.category,
+        collaborator: r.collaborator,
+        secs: 0, keys: 0, sessions: new Set(),
+      };
+    }
+    const e = catCollab[key];
+    e.secs += r.secs;
+    e.keys += r.keyCount;
+    e.sessions.add(r.sessionId);
+  }
+
+  // Per collaborator total secs
+  const collabTotal = {};
+  for (const r of rows) {
+    collabTotal[r.collaborator] = (collabTotal[r.collaborator] || 0) + r.secs;
+  }
+
+  // Find categories with ≥2 collaborators
+  const catEntries = {};
+  for (const e of Object.values(catCollab)) {
+    if (!catEntries[e.category]) catEntries[e.category] = [];
+    catEntries[e.category].push(e);
+  }
+
+  const result = [];
+  for (const [cat, entries] of Object.entries(catEntries)) {
+    if (entries.length < 2) continue;
+    for (const e of entries) {
+      const hours = e.secs / 3600;
+      const totalSecs = collabTotal[e.collaborator] || 1;
+      result.push({
+        category: cat,
+        collaborator: e.collaborator,
+        hours: +hours.toFixed(2),
+        pctOfDay: +(e.secs / totalSecs * 100).toFixed(1),
+        keysPerHour: hours > 0 ? Math.round(e.keys / hours) : 0,
+        sessions: e.sessions.size,
+        avgSessionMin: e.sessions.size > 0 ? +(e.secs / 60 / e.sessions.size).toFixed(1) : 0,
+      });
+    }
+  }
+
+  return result.sort((a, b) => b.hours - a.hours);
+}
+
+function analyzeWorkloadDistribution(rows) {
+  const result = {};
+
+  for (const r of rows) {
+    if (!result[r.collaborator]) {
+      result[r.collaborator] = { morning: 0, afternoon: 0, evening: 0, night: 0 };
+    }
+    const slot = r.hour !== undefined ?
+      (r.hour < 12 ? 'morning' : r.hour < 18 ? 'afternoon' : r.hour < 22 ? 'evening' : 'night') :
+      'morning';
+    result[r.collaborator][slot] += r.hours;
+  }
+
+  return result;
+}
+
+function classifyDeepShallowWork(rows) {
+  const DEEP_CATS = new Set(['planilha', 'documento', 'ide', 'sql', 'apresentacao', 'pdf']);
+  const SHALLOW_CATS = new Set(['email', 'chat', 'whatsapp']);
+  const DEEP_BLOCK_THRESHOLD = 120; // seconds
+
+  const byCollab = {};
+  for (const r of rows) {
+    if (!byCollab[r.collaborator]) byCollab[r.collaborator] = [];
+    byCollab[r.collaborator].push(r);
+  }
+
+  const result = {};
+  for (const [col, recs] of Object.entries(byCollab)) {
+    let deepSecs = 0, shallowSecs = 0;
+
+    // Count deep blocks (contiguous in deep category >= threshold)
+    let blockCat = null, blockSecs = 0;
+    for (const r of recs) {
+      if (r.category !== blockCat) {
+        if (blockCat !== null) {
+          if (DEEP_CATS.has(blockCat) && blockSecs >= DEEP_BLOCK_THRESHOLD) deepSecs += blockSecs;
+          if (SHALLOW_CATS.has(blockCat)) shallowSecs += blockSecs;
+        }
+        blockCat = r.category;
+        blockSecs = r.secs;
+      } else {
+        blockSecs += r.secs;
+      }
+    }
+    if (blockCat !== null) {
+      if (DEEP_CATS.has(blockCat) && blockSecs >= DEEP_BLOCK_THRESHOLD) deepSecs += blockSecs;
+      if (SHALLOW_CATS.has(blockCat)) shallowSecs += blockSecs;
+    }
+
+    const totalSecs = recs.reduce((s, r) => s + r.secs, 0) || 1;
+    result[col] = {
+      deepHours: +(deepSecs / 3600).toFixed(2),
+      shallowHours: +(shallowSecs / 3600).toFixed(2),
+      deepPct: +(deepSecs / totalSecs * 100).toFixed(1),
+      shallowPct: +(shallowSecs / totalSecs * 100).toFixed(1),
+      ratio: shallowSecs > 0 ? +(deepSecs / shallowSecs).toFixed(2) : 99,
+    };
+  }
+
+  return result;
+}
+
+function analyzeAppCooccurrence(rows) {
+  // Per session: set of categories
+  const sessionSets = {};
+  for (const r of rows) {
+    const sid = r.collaborator + ':' + r.sessionId;
+    if (!sessionSets[sid]) sessionSets[sid] = new Set();
+    sessionSets[sid].add(r.category);
+  }
+
+  const pairCount = {};
+  const singleCount = {};
+  const totalSessions = Object.keys(sessionSets).length || 1;
+
+  for (const cats of Object.values(sessionSets)) {
+    const arr = Array.from(cats);
+    for (const c of arr) {
+      singleCount[c] = (singleCount[c] || 0) + 1;
+    }
+    for (let i = 0; i < arr.length; i++) {
+      for (let j = i + 1; j < arr.length; j++) {
+        const key = [arr[i], arr[j]].sort().join('|');
+        pairCount[key] = (pairCount[key] || 0) + 1;
+      }
+    }
+  }
+
+  return Object.entries(pairCount)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 20)
+    .map(([key, count]) => {
+      const [a, b] = key.split('|');
+      const support = count / totalSessions;
+      const confidence = singleCount[a] > 0 ? count / singleCount[a] : 0;
+      const lift = (singleCount[b] / totalSessions) > 0
+        ? confidence / (singleCount[b] / totalSessions)
+        : 0;
+      return { a, b, support: +support.toFixed(3), confidence: +confidence.toFixed(3), lift: +lift.toFixed(2) };
+    });
+}
+
+function analyzeWeeklySeasonality(rows) {
+  const result = {};
+
+  for (const r of rows) {
+    if (!result[r.collaborator]) result[r.collaborator] = {};
+    const wd = r.weekday !== undefined ? r.weekday : 1;
+    if (!result[r.collaborator][wd]) result[r.collaborator][wd] = {};
+    result[r.collaborator][wd][r.category] = (result[r.collaborator][wd][r.category] || 0) + r.hours;
+  }
+
+  return result;
+}
+
+function analyzeResponseTime(rows) {
+  const COMM_CATS = new Set(['email', 'chat', 'whatsapp']);
+  const PROD_CATS = new Set(['planilha', 'documento', 'ide', 'sql', 'apresentacao', 'web']);
+  const result = [];
+
+  const sorted = rows.slice().sort((a, b) => {
+    if (a.collaborator !== b.collaborator) return a.collaborator < b.collaborator ? -1 : 1;
+    if (!a.start || !b.start) return 0;
+    return a.start - b.start;
+  });
+
+  for (let i = 0; i < sorted.length - 1; i++) {
+    const curr = sorted[i];
+    const next = sorted[i + 1];
+    if (curr.collaborator !== next.collaborator) continue;
+    if (!COMM_CATS.has(curr.category)) continue;
+    if (!PROD_CATS.has(next.category)) continue;
+    if (!curr.end || !next.start) continue;
+
+    const gapSecs = (next.start - curr.end) / 1000;
+    if (gapSecs >= 0 && gapSecs < 3600) {
+      result.push({
+        collaborator: curr.collaborator,
+        from: curr.category,
+        to: next.category,
+        responseSeconds: Math.round(gapSecs),
+      });
+    }
+  }
+
+  return result;
+}
+
+function detectDuplicateWork(rows) {
+  const docCollabs = {};
+  const domainCollabs = {};
+
+  for (const r of rows) {
+    if (r.docName && r.docName.length > 3) {
+      const k = r.docName.toLowerCase();
+      if (!docCollabs[k]) docCollabs[k] = new Set();
+      docCollabs[k].add(r.collaborator);
+    }
+    if (r.category === 'web' && r.domain) {
+      const d = r.domain.replace(/^www\./, '').split('/')[0];
+      if (d) {
+        if (!domainCollabs[d]) domainCollabs[d] = new Set();
+        domainCollabs[d].add(r.collaborator);
+      }
+    }
+  }
+
+  const sharedDocs = Object.fromEntries(
+    Object.entries(docCollabs)
+      .filter(([, s]) => s.size >= 2)
+      .map(([k, s]) => [k, Array.from(s)])
+  );
+
+  const sharedDomains = Object.fromEntries(
+    Object.entries(domainCollabs)
+      .filter(([, s]) => s.size >= 2)
+      .map(([k, s]) => [k, Array.from(s)])
+  );
+
+  return { sharedDocs, sharedDomains };
+}
+
+function analyzeEfficiencyByHour(rows) {
+  const result = {};
+
+  for (const r of rows) {
+    if (r.hour === undefined) continue;
+    if (!result[r.collaborator]) result[r.collaborator] = {};
+    const col = result[r.collaborator];
+    if (!col[r.hour]) col[r.hour] = { keys: 0, secs: 0, switches: 0, lastCat: null };
+    col[r.hour].keys += r.keyCount;
+    col[r.hour].secs += r.secs;
+    if (col[r.hour].lastCat !== null && col[r.hour].lastCat !== r.category) {
+      col[r.hour].switches++;
+    }
+    col[r.hour].lastCat = r.category;
+  }
+
+  const output = {};
+  for (const [col, hours] of Object.entries(result)) {
+    output[col] = Array.from({ length: 24 }, (_, h) => {
+      const e = hours[h] || { keys: 0, secs: 0, switches: 0 };
+      const mins = e.secs / 60 || 1;
+      return {
+        hour: h,
+        keysPerMin: +(e.keys / mins).toFixed(1),
+        switchesPerHour: e.secs > 0 ? +(e.switches / (e.secs / 3600)).toFixed(1) : 0,
+        hoursActive: +(e.secs / 3600).toFixed(2),
+      };
+    });
+  }
+
+  return output;
+}
+
+function computeMarkovChain(transitionMatrix, categories) {
+  if (!categories || categories.length === 0) return { transitionProbs: {}, stationaryDistribution: {} };
+
+  const n = categories.length;
+  const idx = {};
+  categories.forEach((c, i) => { idx[c] = i; });
+
+  // Build row-normalized probability matrix
+  const P = Array.from({ length: n }, () => new Array(n).fill(0));
+  for (const [key, val] of Object.entries(transitionMatrix)) {
+    const [from, to] = key.split('→');
+    if (idx[from] !== undefined && idx[to] !== undefined) {
+      P[idx[from]][idx[to]] += val;
+    }
+  }
+  // Normalize rows
+  for (let i = 0; i < n; i++) {
+    const rowSum = P[i].reduce((s, v) => s + v, 0);
+    if (rowSum > 0) P[i] = P[i].map(v => v / rowSum);
+    else P[i][i] = 1; // absorbing state
+  }
+
+  // Power iteration for stationary distribution
+  let pi = new Array(n).fill(1 / n);
+  for (let iter = 0; iter < 100; iter++) {
+    const newPi = new Array(n).fill(0);
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < n; j++) {
+        newPi[j] += pi[i] * P[i][j];
+      }
+    }
+    pi = newPi;
+  }
+
+  const stationaryDistribution = {};
+  categories.forEach((c, i) => { stationaryDistribution[c] = +pi[i].toFixed(4); });
+
+  const transitionProbs = {};
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      if (P[i][j] > 0.01) {
+        transitionProbs[categories[i] + '→' + categories[j]] = +P[i][j].toFixed(3);
+      }
+    }
+  }
+
+  return { transitionProbs, stationaryDistribution };
+}
+
+function scoreAutomationOpportunity(opp) {
+  // 5 dimensions (weights sum to 100)
+  const repetitivity = Math.min(100, (opp.repetitionCount || 0) / 50 * 100) * 0.30;
+  const timeVolume = Math.min(100, (opp.timeHours || 0) / 40 * 100) * 0.25;
+  const manualTransfer = Math.min(100, (opp.copyPasteCount || 0) / 30 * 100) * 0.20;
+  const standardization = (opp.standardization || 50) * 0.15;
+  const feasibility = (opp.feasibility || 60) * 0.10;
+
+  const score = Math.round(repetitivity + timeVolume + manualTransfer + standardization + feasibility);
+
+  let priority = 'BAIXA';
+  if (score >= 75) priority = 'CRITICA';
+  else if (score >= 55) priority = 'ALTA';
+  else if (score >= 35) priority = 'MEDIA';
+
+  return {
+    score,
+    priority,
+    breakdown: { repetitivity: +repetitivity.toFixed(1), timeVolume: +timeVolume.toFixed(1), manualTransfer: +manualTransfer.toFixed(1) },
+  };
+}
+
+function buildAdvancedAutomations(rows, metrics, analyses) {
+  const autos = [];
+  const { categoryTimeMap, transitionMatrix, totalHours } = metrics;
+
+  // 1. Sequential patterns → automations
+  const patterns = (analyses && analyses.sequentialPatterns) || [];
+  for (const p of patterns.slice(0, 5)) {
+    if (p.count < 3) continue;
+    const scored = scoreAutomationOpportunity({
+      repetitionCount: p.count * 2,
+      timeHours: p.totalTimeMins / 60,
+      copyPasteCount: 10,
+      standardization: 60,
+      feasibility: 70,
+    });
+    autos.push({
+      title: `Sequência Repetitiva: ${p.sequence.map(c => CATEGORY_LABELS[c] || c).join(' → ')}`,
+      description: `Padrão repetido ${p.count}× detectado. Sequência de ${p.sequence.length} etapas pode ser automatizada via macro ou RPA.`,
+      savingsHours: Math.round(p.totalTimeMins / 60 * 0.7),
+      complexity: p.sequence.length <= 3 ? 'Baixa' : p.sequence.length <= 5 ? 'Média' : 'Alta',
+      apps: [...new Set(p.sequence.map(c => CATEGORY_LABELS[c] || c))],
+      priority: scored.score >= 60 ? 'high' : scored.score >= 40 ? 'medium' : 'low',
+      score: scored.score,
+      scoreData: scored,
+    });
+  }
+
+  // 2. Copy-paste flows → integrations
+  const flows = (analyses && analyses.copyPasteFlows && analyses.copyPasteFlows.flows) || [];
+  for (const f of flows.slice(0, 3)) {
+    if (f.count < 3) continue;
+    const scored = scoreAutomationOpportunity({
+      repetitionCount: f.count,
+      timeHours: f.count * (f.avgGapSecs / 3600),
+      copyPasteCount: f.count * 2,
+      standardization: 70,
+      feasibility: 75,
+    });
+    autos.push({
+      title: `Integração ${CATEGORY_LABELS[f.src] || f.src} → ${CATEGORY_LABELS[f.dst] || f.dst}`,
+      description: `${f.count} transferências manuais detectadas entre ${CATEGORY_LABELS[f.src] || f.src} e ${CATEGORY_LABELS[f.dst] || f.dst}. API ou webhook pode substituir copy-paste.`,
+      savingsHours: Math.round(f.count * f.avgGapSecs / 3600 * 0.8),
+      complexity: 'Média',
+      apps: [CATEGORY_LABELS[f.src] || f.src, CATEGORY_LABELS[f.dst] || f.dst],
+      priority: scored.score >= 60 ? 'high' : 'medium',
+      score: scored.score,
+      scoreData: scored,
+    });
+  }
+
+  // 3. Existing heuristics with scoring
+  const webPct = (categoryTimeMap.web || 0) / (totalHours || 1) * 100;
+  const planPct = (categoryTimeMap.planilha || 0) / (totalHours || 1) * 100;
+  const emailPct = (categoryTimeMap.email || 0) / (totalHours || 1) * 100;
+  const pdfPct = (categoryTimeMap.pdf || 0) / (totalHours || 1) * 100;
+
+  const excelWebCount = (transitionMatrix['planilha→web'] || 0) + (transitionMatrix['web→planilha'] || 0);
+  if (excelWebCount > 5) {
+    const scored = scoreAutomationOpportunity({ repetitionCount: excelWebCount, timeHours: totalHours * 0.12, copyPasteCount: excelWebCount, standardization: 65, feasibility: 70 });
+    autos.push({
+      title: 'Transferência Manual Excel ↔ Web',
+      description: `${excelWebCount} transições entre planilhas e navegador. Integração via API pode eliminar entrada manual.`,
+      savingsHours: Math.round(totalHours * 0.12),
+      complexity: 'Média', apps: ['Excel', 'Navegador'],
+      priority: scored.score >= 55 ? 'high' : 'medium', score: scored.score, scoreData: scored,
+    });
+  }
+
+  if (emailPct > 15) {
+    const scored = scoreAutomationOpportunity({ repetitionCount: 30, timeHours: totalHours * emailPct / 100, copyPasteCount: 5, standardization: 70, feasibility: 80 });
+    autos.push({
+      title: 'Automação de E-mails Repetitivos',
+      description: `${emailPct.toFixed(0)}% do tempo em email. Templates e triagem por IA reduzem esforço manual.`,
+      savingsHours: Math.round(totalHours * emailPct / 100 * 0.35),
+      complexity: 'Baixa', apps: ['Outlook', 'Email'],
+      priority: scored.score >= 55 ? 'high' : 'medium', score: scored.score, scoreData: scored,
+    });
+  }
+
+  if (pdfPct > 3) {
+    const scored = scoreAutomationOpportunity({ repetitionCount: 20, timeHours: totalHours * pdfPct / 100, copyPasteCount: 15, standardization: 80, feasibility: 85 });
+    autos.push({
+      title: 'Extração Automática de PDFs',
+      description: `${pdfPct.toFixed(0)}% do tempo em PDFs. OCR e IA eliminam leitura manual.`,
+      savingsHours: Math.round(totalHours * pdfPct / 100 * 0.6),
+      complexity: 'Baixa', apps: ['Acrobat', 'PDF'],
+      priority: 'high', score: scored.score, scoreData: scored,
+    });
+  }
+
+  if (planPct > 20) {
+    const scored = scoreAutomationOpportunity({ repetitionCount: 40, timeHours: totalHours * planPct / 100, copyPasteCount: 20, standardization: 60, feasibility: 65 });
+    autos.push({
+      title: 'Relatórios Excel Automáticos',
+      description: `${planPct.toFixed(0)}% do tempo em planilhas. Geração via Power BI ou Python elimina atualização manual.`,
+      savingsHours: Math.round(totalHours * planPct / 100 * 0.4),
+      complexity: 'Média', apps: ['Excel', 'Power BI'],
+      priority: scored.score >= 55 ? 'high' : 'medium', score: scored.score, scoreData: scored,
+    });
+  }
+
+  return autos
+    .filter((a, i, arr) => arr.findIndex(b => b.title === a.title) === i) // deduplicate
+    .sort((a, b) => (b.score || 0) - (a.score || 0));
 }
 
 // ─── DETECT AUTOMATIONS ──────────────────────────────────────────────────────
@@ -1891,6 +3341,12 @@ function renderView(hash) {
     case 'grouping': updateClusters(document.getElementById('cluster-slider').value); break;
     case 'automation': renderAutomation(); break;
     case 'details': renderDetails(); break;
+    case 'dataflows': renderDataFlows(); break;
+    case 'patterns': renderPatterns(); break;
+    case 'deepwork': renderDeepWork(); break;
+    case 'drilldown': renderDrilldown(); break;
+    case 'benchmarking': renderBenchmarking(); break;
+    case 'documents': renderDocuments(); break;
   }
 }
 
@@ -1929,6 +3385,14 @@ function renderOverview() {
   }
 
   const nProcesses = Object.keys(m.categoryTimeMap).length;
+  const aa = m.advancedAnalytics;
+
+  // Deep Work % average
+  const dwAvg = aa && aa.deepWork ?
+    Object.values(aa.deepWork).reduce((s, v) => s + v.deepPct, 0) / Math.max(Object.keys(aa.deepWork).length, 1) : 0;
+
+  // Economia potencial (sum savings from automations)
+  const totalSavings = (m.automations || []).reduce((s, a) => s + (a.savingsHours || 0), 0);
 
   document.getElementById('kpi-grid').innerHTML = `
     <div class="kpi-card blue">
@@ -1951,16 +3415,30 @@ function renderOverview() {
       <div class="kpi-value">${nProcesses}</div>
       <div class="kpi-sub">categorias distintas</div>
     </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Deep Work %</div>
+      <div class="kpi-value">${dwAvg.toFixed(0)}%</div>
+      <div class="kpi-sub">trabalho focado médio</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">Economia Potencial</div>
+      <div class="kpi-value">${fmtH(totalSavings)}</div>
+      <div class="kpi-sub">horas/mês automáveis</div>
+    </div>
   `;
 
   const grid = document.getElementById('collab-grid');
   grid.innerHTML = displayCollabs.map(c => {
     const topCatLabel = CATEGORY_LABELS[c.topCategory] || c.topCategory;
     const topCatColor = CATEGORY_COLORS[c.topCategory] || '#6e7681';
+    const fragData = aa && aa.fragmentation ? (aa.fragmentation[c.name] || {}) : {};
+    const tfiPct = (fragData.tfi || 0) * 100;
+    const tfiColor = tfiPct < 30 ? 'var(--green)' : tfiPct < 60 ? 'var(--yellow)' : 'var(--red)';
+    const dwData = aa && aa.deepWork ? (aa.deepWork[c.name] || {}) : {};
     return `
     <div class="collab-card">
       <div class="collab-name">${c.name}</div>
-      <div class="collab-meta">${fmtNum(c.records)} registros · <span class="badge badge-blue">${topCatLabel}</span></div>
+      <div class="collab-meta">${fmtNum(c.records)} registros · <span class="badge badge-blue">${topCatLabel}</span>${dwData.deepPct !== undefined ? ` · <span class="badge badge-green">Deep ${dwData.deepPct}%</span>` : ''}</div>
       <div class="collab-stats">
         <div>
           <div class="collab-stat-label">Total de Horas</div>
@@ -1989,6 +3467,14 @@ function renderOverview() {
           </div>
         `).join('')}
       </div>
+      ${fragData.tfi !== undefined ? `
+      <div class="tfi-bar">
+        <div class="tfi-label" style="display:flex;justify-content:space-between">
+          <span>Fragmentação (TFI)</span>
+          <span style="color:${tfiColor};font-weight:600">${tfiPct.toFixed(0)}%</span>
+        </div>
+        <div class="tfi-track"><div class="tfi-fill" style="width:${tfiPct}%"></div></div>
+      </div>` : ''}
     </div>`;
   }).join('');
 }
@@ -2448,15 +3934,24 @@ function renderAutomation() {
     const complexityBadge = a.complexity === 'Baixa' ? 'badge-green' :
                             a.complexity === 'Média' ? 'badge-yellow' : 'badge-orange';
     const priorityClass = a.priority === 'high' ? 'high' : a.priority === 'medium' ? 'medium' : 'low';
+    const score = a.score || 0;
+    const scoreClass = score >= 70 ? 'critical' : score >= 50 ? 'high' : score >= 30 ? 'medium' : 'low';
+    const scoreHtml = score ? `<div class="score-badge ${scoreClass}" title="Score de automação: ${score}/100">${score}</div>` : '';
     return `
     <div class="auto-card ${priorityClass}">
       <div class="auto-card-header">
         <h4>${a.title}</h4>
-        <span class="badge ${complexityBadge}">${a.complexity}</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="badge ${complexityBadge}">${a.complexity}</span>
+          ${scoreHtml}
+        </div>
       </div>
       <p>${a.description}</p>
       <div class="auto-savings">${a.savingsHours}h/mês</div>
       <div class="auto-savings-label">economia estimada</div>
+      ${score ? `<div class="score-bar" style="margin-top:10px">
+        <div class="score-bar-fill" style="width:${score}%;background:${score >= 70 ? 'var(--red)' : score >= 50 ? 'var(--orange)' : score >= 30 ? 'var(--yellow)' : 'var(--text-dim)'}"></div>
+      </div>` : ''}
       <div class="auto-apps">
         ${a.apps.map(app => `<span class="badge badge-gray">${app}</span>`).join('')}
       </div>
@@ -2507,6 +4002,23 @@ function renderDetails() {
       <td>${c.ctxPerHour}</td>
     </tr>
   `).join('');
+
+  // Gaps table
+  const aa = DataStore.metrics.advancedAnalytics;
+  const gapsCard = document.getElementById('gaps-card');
+  if (aa && aa.gaps && aa.gaps.topGapPairs && aa.gaps.topGapPairs.length > 0) {
+    if (gapsCard) gapsCard.style.display = '';
+    document.getElementById('gaps-tbody').innerHTML = aa.gaps.topGapPairs.map(p => `
+      <tr>
+        <td><span class="color-dot" style="background:${CATEGORY_COLORS[p.before] || '#6e7681'}"></span>${CATEGORY_LABELS[p.before] || p.before}</td>
+        <td><span class="color-dot" style="background:${CATEGORY_COLORS[p.after] || '#6e7681'}"></span>${CATEGORY_LABELS[p.after] || p.after}</td>
+        <td>${fmtNum(p.count)}</td>
+        <td>${p.avgGapMins} min</td>
+      </tr>
+    `).join('');
+  } else {
+    if (gapsCard) gapsCard.style.display = 'none';
+  }
 }
 
 // ─── TABLE UTILITIES ─────────────────────────────────────────────────────────
@@ -2547,6 +4059,583 @@ function filterDetailTables(q) {
   tables.forEach(row => {
     row.style.display = row.textContent.toLowerCase().includes(lq) ? '' : 'none';
   });
+}
+
+// ─── RENDER: DATAFLOWS ───────────────────────────────────────────────────────
+
+function renderDataFlows() {
+  const aa = DataStore.metrics.advancedAnalytics;
+  if (!aa) return;
+  const { flows, totalTransfers } = aa.copyPasteFlows;
+
+  // KPIs
+  const topSrc = flows.length > 0 ? flows[0].src : '--';
+  const topDst = flows.length > 0 ? flows[0].dst : '--';
+  document.getElementById('dataflows-kpis').innerHTML = `
+    <div class="kpi-card blue">
+      <div class="kpi-label">Total Transferências</div>
+      <div class="kpi-value">${fmtNum(totalTransfers)}</div>
+      <div class="kpi-sub">copy-paste cross-app detectados</div>
+    </div>
+    <div class="kpi-card yellow">
+      <div class="kpi-label">Pares Únicos</div>
+      <div class="kpi-value">${flows.length}</div>
+      <div class="kpi-sub">combinações de origem→destino</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Maior Fluxo</div>
+      <div class="kpi-value" style="font-size:18px">${CATEGORY_LABELS[topSrc] || topSrc}</div>
+      <div class="kpi-sub">→ ${CATEGORY_LABELS[topDst] || topDst}</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-label">Maior Contagem</div>
+      <div class="kpi-value">${flows.length > 0 ? flows[0].count : 0}</div>
+      <div class="kpi-sub">transferências no par #1</div>
+    </div>
+  `;
+
+  // Flow bars
+  const maxCount = flows.length > 0 ? flows[0].count : 1;
+  const FLOW_COLORS = ['#2D52EF','#3fb950','#d29922','#bc8cff','#f85149','#db6d28','#58a6ff','#e3b341'];
+  const list = document.getElementById('dataflows-list');
+  if (flows.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔀</div><p>Nenhum fluxo copy-paste detectado nos dados.</p></div>';
+  } else {
+    list.innerHTML = flows.slice(0, 15).map((f, i) => {
+      const pct = Math.round(f.count / maxCount * 100);
+      const color = FLOW_COLORS[i % FLOW_COLORS.length];
+      const srcLabel = CATEGORY_LABELS[f.src] || f.src;
+      const dstLabel = CATEGORY_LABELS[f.dst] || f.dst;
+      return `
+      <div class="flow-bar-row">
+        <div class="flow-bar-label">${srcLabel} → ${dstLabel}</div>
+        <div class="flow-bar-track">
+          <div class="flow-bar-fill" style="width:${pct}%;background:${color}">${f.count > 3 ? f.count + 'x' : ''}</div>
+        </div>
+        <div class="flow-bar-count">${f.count}x</div>
+      </div>`;
+    }).join('');
+  }
+
+  // Table
+  document.getElementById('dataflows-tbody').innerHTML = flows.map(f => `
+    <tr>
+      <td><span class="color-dot" style="background:${CATEGORY_COLORS[f.src] || '#6e7681'}"></span>${CATEGORY_LABELS[f.src] || f.src}</td>
+      <td><span class="color-dot" style="background:${CATEGORY_COLORS[f.dst] || '#6e7681'}"></span>${CATEGORY_LABELS[f.dst] || f.dst}</td>
+      <td><strong>${f.count}</strong></td>
+      <td>${f.avgGapSecs}s</td>
+    </tr>
+  `).join('');
+}
+
+// ─── RENDER: PATTERNS ────────────────────────────────────────────────────────
+
+function renderPatterns() {
+  const aa = DataStore.metrics.advancedAnalytics;
+  if (!aa) return;
+
+  const minFreq = parseInt(document.getElementById('pattern-min-freq').value) || 3;
+  const maxLen = parseInt(document.getElementById('pattern-max-len').value) || 5;
+  const sortBy = document.getElementById('pattern-sort').value;
+
+  let patterns = aa.sequentialPatterns.filter(p => p.count >= minFreq && p.sequence.length <= maxLen);
+
+  if (sortBy === 'time') patterns = patterns.slice().sort((a, b) => b.totalTimeMins - a.totalTimeMins);
+  else if (sortBy === 'score') patterns = patterns.slice().sort((a, b) => b.score - a.score);
+
+  // KPIs
+  document.getElementById('patterns-kpis').innerHTML = `
+    <div class="kpi-card blue">
+      <div class="kpi-label">Padrões Detectados</div>
+      <div class="kpi-value">${patterns.length}</div>
+      <div class="kpi-sub">com freq ≥ ${minFreq}</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Maior Frequência</div>
+      <div class="kpi-value">${patterns.length > 0 ? patterns[0].count : 0}×</div>
+      <div class="kpi-sub">repetições do padrão #1</div>
+    </div>
+    <div class="kpi-card yellow">
+      <div class="kpi-label">Tempo Total em Padrões</div>
+      <div class="kpi-value">${fmtH(patterns.reduce((s, p) => s + p.totalTimeMins / 60, 0))}</div>
+      <div class="kpi-sub">horas em sequências repetitivas</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-label">Score Máximo</div>
+      <div class="kpi-value">${patterns.length > 0 ? (sortBy === 'score' ? patterns[0].score : Math.max(...patterns.map(p => p.score))) : 0}</div>
+      <div class="kpi-sub">potencial de automação</div>
+    </div>
+  `;
+
+  const grid = document.getElementById('pattern-grid');
+  if (patterns.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔄</div><h3>Nenhum padrão encontrado</h3><p>Ajuste os filtros de frequência mínima ou comprimento máximo.</p></div>';
+    return;
+  }
+
+  grid.innerHTML = patterns.slice(0, 24).map((p, i) => {
+    const scoreClass = p.score >= 70 ? 'critical' : p.score >= 50 ? 'high' : p.score >= 30 ? 'medium' : 'low';
+    const chips = p.sequence.map((cat, ci) => {
+      const color = CATEGORY_COLORS[cat] || '#6e7681';
+      const label = CATEGORY_LABELS[cat] || cat;
+      const arr = ci < p.sequence.length - 1 ? '<span class="pattern-arrow">→</span>' : '';
+      return `<span class="pattern-chip" style="background:${color}22;color:${color};border:1px solid ${color}44">${label}</span>${arr}`;
+    }).join('');
+
+    return `
+    <div class="pattern-card">
+      <div class="pattern-sequence">${chips}</div>
+      <div class="pattern-stats">
+        <div>
+          <div class="pattern-freq">${p.count}×</div>
+          <div class="pattern-freq-label">repetições · ${fmtH(p.totalTimeMins / 60)}</div>
+        </div>
+        <div class="score-badge ${scoreClass}">${p.score}</div>
+      </div>
+      <div class="score-bar" title="Score de automação: ${p.score}/100">
+        <div class="score-bar-fill" style="width:${p.score}%;background:${p.score >= 70 ? 'var(--red)' : p.score >= 50 ? 'var(--orange)' : p.score >= 30 ? 'var(--yellow)' : 'var(--text-dim)'}"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─── RENDER: DEEP WORK ───────────────────────────────────────────────────────
+
+function renderDeepWork() {
+  const aa = DataStore.metrics.advancedAnalytics;
+  if (!aa) return;
+  const dw = aa.deepWork;
+  const frag = aa.fragmentation;
+  const eff = aa.efficiencyByHour;
+
+  const collabs = Object.keys(dw);
+  const totalDeep = collabs.reduce((s, c) => s + dw[c].deepHours, 0);
+  const totalShallow = collabs.reduce((s, c) => s + dw[c].shallowHours, 0);
+  const avgDeepPct = collabs.length > 0 ?
+    collabs.reduce((s, c) => s + dw[c].deepPct, 0) / collabs.length : 0;
+  const avgTfi = Object.keys(frag).length > 0 ?
+    Object.values(frag).reduce((s, v) => s + v.tfi, 0) / Object.keys(frag).length : 0;
+
+  document.getElementById('deepwork-kpis').innerHTML = `
+    <div class="kpi-card green">
+      <div class="kpi-label">Deep Work %</div>
+      <div class="kpi-value">${avgDeepPct.toFixed(0)}%</div>
+      <div class="kpi-sub">média entre colaboradores</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">Horas Profundas</div>
+      <div class="kpi-value">${fmtH(totalDeep)}</div>
+      <div class="kpi-sub">planilha, doc, IDE, SQL</div>
+    </div>
+    <div class="kpi-card yellow">
+      <div class="kpi-label">Índice Fragmentação</div>
+      <div class="kpi-value">${(avgTfi * 100).toFixed(0)}%</div>
+      <div class="kpi-sub">TFI médio (0=foco, 100=fragmentado)</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-label">Shallow Work</div>
+      <div class="kpi-value">${fmtH(totalShallow)}</div>
+      <div class="kpi-sub">email, chat, WhatsApp</div>
+    </div>
+  `;
+
+  // Deep vs shallow pie
+  if (chartInstances['chart-deepwork-pie']) chartInstances['chart-deepwork-pie'].destroy();
+  const pieCtx = document.getElementById('chart-deepwork-pie').getContext('2d');
+  chartInstances['chart-deepwork-pie'] = new Chart(pieCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Deep Work', 'Shallow Work', 'Outros'],
+      datasets: [{
+        data: [+totalDeep.toFixed(1), +totalShallow.toFixed(1), +(DataStore.metrics.totalHours - totalDeep - totalShallow).toFixed(1)],
+        backgroundColor: ['#3fb950cc', '#f85149cc', '#8b949ecc'],
+        borderColor: ['#3fb950', '#f85149', '#8b949e'],
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { color: '#e6edf3', font: { size: 11 } } },
+        tooltip: { backgroundColor: '#161b22', borderColor: '#30363d', borderWidth: 1, titleColor: '#e6edf3', bodyColor: '#8b949e' },
+      },
+    },
+  });
+
+  // Efficiency by hour (avg across all collabs)
+  const hourlyEff = Array.from({ length: 24 }, (_, h) => {
+    const vals = collabs.map(c => eff[c] ? eff[c][h].keysPerMin : 0).filter(v => v > 0);
+    return vals.length > 0 ? vals.reduce((s, v) => s + v, 0) / vals.length : 0;
+  });
+
+  if (chartInstances['chart-efficiency-hour']) chartInstances['chart-efficiency-hour'].destroy();
+  const effCtx = document.getElementById('chart-efficiency-hour').getContext('2d');
+  chartInstances['chart-efficiency-hour'] = new Chart(effCtx, {
+    type: 'bar',
+    data: {
+      labels: Array.from({ length: 24 }, (_, h) => `${h}h`),
+      datasets: [{
+        label: 'Teclas/min',
+        data: hourlyEff.map(v => +v.toFixed(1)),
+        backgroundColor: hourlyEff.map(v => v > 20 ? '#3fb95099' : v > 10 ? '#d2992299' : '#8b949e55'),
+        borderColor: hourlyEff.map(v => v > 20 ? '#3fb950' : v > 10 ? '#d29922' : '#8b949e'),
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { backgroundColor: '#161b22', borderColor: '#30363d', borderWidth: 1, titleColor: '#e6edf3', bodyColor: '#8b949e' },
+      },
+      scales: {
+        x: { ticks: { color: '#8b949e', font: { size: 9 } }, grid: { color: '#30363d30' } },
+        y: { ticks: { color: '#8b949e', font: { size: 10 } }, grid: { color: '#30363d50' } },
+      },
+    },
+  });
+
+  // Per-collaborator cards
+  const grid = document.getElementById('deepwork-collab-grid');
+  grid.innerHTML = collabs.map(col => {
+    const d = dw[col];
+    const f = frag[col] || {};
+    const tfiPct = (f.tfi || 0) * 100;
+    const tfiColor = tfiPct < 30 ? 'var(--green)' : tfiPct < 60 ? 'var(--yellow)' : 'var(--red)';
+    return `
+    <div class="collab-card">
+      <div class="collab-name">${col}</div>
+      <div class="collab-meta">Deep Work / Shallow Work / Outros</div>
+      <div class="collab-stats">
+        <div>
+          <div class="collab-stat-label">Deep Work</div>
+          <div class="collab-stat-value text-green">${d.deepPct}%</div>
+        </div>
+        <div>
+          <div class="collab-stat-label">Shallow Work</div>
+          <div class="collab-stat-value text-red">${d.shallowPct}%</div>
+        </div>
+        <div>
+          <div class="collab-stat-label">Ratio D/S</div>
+          <div class="collab-stat-value">${d.ratio}×</div>
+        </div>
+        <div>
+          <div class="collab-stat-label">Blocos/sessão</div>
+          <div class="collab-stat-value">${fmtNum(f.totalBlocks || 0)}</div>
+        </div>
+      </div>
+      <div class="tfi-bar">
+        <div class="tfi-label" style="display:flex;justify-content:space-between">
+          <span>Fragmentação (TFI)</span>
+          <span style="color:${tfiColor}">${tfiPct.toFixed(0)}%</span>
+        </div>
+        <div class="tfi-track"><div class="tfi-fill" style="width:${tfiPct}%"></div></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─── RENDER: DRILLDOWN ───────────────────────────────────────────────────────
+
+let drilldownCyInstance = null;
+
+function renderDrilldown() {
+  const aa = DataStore.metrics.advancedAnalytics;
+  if (!aa) return;
+  const dw = aa.domainWorkflows;
+
+  const domains = Object.entries(dw)
+    .sort((a, b) => b[1].totalVisits - a[1].totalVisits)
+    .slice(0, 30);
+
+  const sel = document.getElementById('drilldown-domain');
+  const current = sel.value;
+  sel.innerHTML = '<option value="">Selecione um domínio</option>';
+  for (const [domain] of domains) {
+    sel.innerHTML += `<option value="${domain}"${current === domain ? ' selected' : ''}>${domain}</option>`;
+  }
+
+  if (current && dw[current]) {
+    renderDrilldownGraph();
+  }
+}
+
+function renderDrilldownGraph() {
+  const aa = DataStore.metrics.advancedAnalytics;
+  if (!aa) return;
+  const dw = aa.domainWorkflows;
+
+  const domain = document.getElementById('drilldown-domain').value;
+  if (!domain || !dw[domain]) {
+    document.getElementById('drilldown-stats').textContent = '';
+    document.getElementById('drilldown-pages-tbody').innerHTML = '';
+    return;
+  }
+
+  const data = dw[domain];
+  document.getElementById('drilldown-stats').textContent =
+    `${fmtNum(data.totalVisits)} visitas · ${fmtH(data.totalHours)}`;
+
+  // Build pages table
+  const pagesArr = Object.entries(data.pages).sort((a, b) => b[1] - a[1]);
+  document.getElementById('drilldown-pages-tbody').innerHTML = pagesArr.slice(0, 20).map(([title, count]) => `
+    <tr><td>${title}</td><td>${fmtNum(count)}</td></tr>
+  `).join('');
+
+  // Cytoscape for internal workflow
+  if (drilldownCyInstance) { drilldownCyInstance.destroy(); drilldownCyInstance = null; }
+
+  const container = document.getElementById('drilldown-cy');
+  container.innerHTML = '';
+
+  const pageSet = new Set(Object.keys(data.pages));
+  const maxVisits = Math.max(...Object.values(data.pages), 1);
+
+  const nodes = Object.entries(data.pages).map(([title, count]) => ({
+    data: {
+      id: title,
+      label: title.slice(0, 30),
+      count,
+      color: `hsl(${Math.round(count / maxVisits * 120)}, 70%, 50%)`,
+    }
+  }));
+
+  const maxTrans = Math.max(...Object.values(data.transitions), 1);
+  const edges = Object.entries(data.transitions)
+    .filter(([key]) => {
+      const [src, dst] = key.split('→');
+      return pageSet.has(src) && pageSet.has(dst);
+    })
+    .slice(0, 40)
+    .map(([key, val]) => {
+      const [src, dst] = key.split('→');
+      return { data: { id: key, source: src, target: dst, freq: val, width: 1 + (val / maxTrans) * 6 } };
+    });
+
+  if (nodes.length === 0) {
+    container.innerHTML = '<div class="empty-state" style="padding:40px"><div class="empty-state-icon">🔍</div><p>Dados insuficientes para este domínio.</p></div>';
+    return;
+  }
+
+  drilldownCyInstance = cytoscape({
+    container,
+    elements: [...nodes, ...edges],
+    style: [
+      {
+        selector: 'node',
+        style: {
+          'background-color': 'data(color)',
+          'label': 'data(label)',
+          'color': '#ffffff', 'text-valign': 'center', 'text-halign': 'center',
+          'font-size': '8px', 'font-weight': 'bold',
+          'width': ele => Math.max(25, 20 + (ele.data('count') / maxVisits) * 60),
+          'height': ele => Math.max(25, 20 + (ele.data('count') / maxVisits) * 60),
+          'border-width': 2, 'border-color': 'rgba(255,255,255,0.2)',
+          'text-wrap': 'wrap', 'text-max-width': '70px',
+        }
+      },
+      {
+        selector: 'edge',
+        style: {
+          'width': 'data(width)', 'line-color': '#d29922', 'target-arrow-color': '#d29922',
+          'target-arrow-shape': 'triangle', 'curve-style': 'bezier', 'opacity': 0.6,
+        }
+      },
+    ],
+    layout: { name: 'cose', animate: true, animationDuration: 300, nodeRepulsion: 6000, idealEdgeLength: 100 },
+    minZoom: 0.2, maxZoom: 4,
+  });
+}
+
+// ─── RENDER: BENCHMARKING ────────────────────────────────────────────────────
+
+function renderBenchmarking() {
+  const aa = DataStore.metrics.advancedAnalytics;
+  if (!aa) return;
+  const benchmarks = aa.benchmarks;
+  const workload = aa.workload;
+  const collabs = DataStore.collaborators;
+
+  // Radar chart: normalize 5 metrics per collaborator
+  const radarMetrics = [
+    { label: 'Deep Work %', key: 'deepPct', src: aa.deepWork, max: 80 },
+    { label: 'Teclas/h', key: 'keysH', max: 5000 },
+    { label: 'Sessões', key: 'sessions', max: 50 },
+    { label: 'Eficiência manhã', key: 'mornEff', max: 30 },
+    { label: 'Foco (1-TFI)', key: 'focus', max: 100 },
+  ];
+
+  const radarData = collabs.map(col => {
+    const dw = (aa.deepWork || {})[col] || {};
+    const frag = (aa.fragmentation || {})[col] || {};
+    const effArr = (aa.efficiencyByHour || {})[col] || [];
+    const mornAvg = effArr.slice(8, 12).reduce((s, e) => s + e.keysPerMin, 0) / 4;
+    const collabMetrics = benchmarks.filter(b => b.collaborator === col);
+    const totalSessions = collabMetrics.reduce((s, b) => s + b.sessions, 0);
+    const totalKeys = DataStore.metrics.collaborators.find(c => c.name === col);
+    const keysH = totalKeys && totalKeys.hours > 0 ? Math.round(totalKeys.keys / totalKeys.hours) : 0;
+    return [
+      Math.min(100, (dw.deepPct || 0) / 80 * 100),
+      Math.min(100, keysH / 50),
+      Math.min(100, totalSessions / 50 * 100),
+      Math.min(100, mornAvg / 30 * 100),
+      Math.min(100, (1 - (frag.tfi || 0)) * 100),
+    ];
+  });
+
+  const COLORS = ['#2D52EF', '#3fb950', '#d29922', '#bc8cff', '#f85149', '#db6d28'];
+
+  if (chartInstances['chart-radar']) chartInstances['chart-radar'].destroy();
+  const radarCtx = document.getElementById('chart-radar').getContext('2d');
+  chartInstances['chart-radar'] = new Chart(radarCtx, {
+    type: 'radar',
+    data: {
+      labels: ['Deep Work %', 'Teclas/h', 'Sessões', 'Efic. Manhã', 'Foco'],
+      datasets: collabs.map((col, ci) => ({
+        label: col,
+        data: radarData[ci],
+        backgroundColor: COLORS[ci % COLORS.length] + '33',
+        borderColor: COLORS[ci % COLORS.length],
+        borderWidth: 2,
+        pointBackgroundColor: COLORS[ci % COLORS.length],
+        pointRadius: 3,
+      })),
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { color: '#e6edf3', font: { size: 11 } } },
+        tooltip: { backgroundColor: '#161b22', borderColor: '#30363d', borderWidth: 1, titleColor: '#e6edf3', bodyColor: '#8b949e' },
+      },
+      scales: {
+        r: {
+          min: 0, max: 100,
+          ticks: { color: '#8b949e', font: { size: 9 }, stepSize: 20 },
+          grid: { color: '#30363d' },
+          pointLabels: { color: '#e6edf3', font: { size: 10 } },
+          angleLines: { color: '#30363d' },
+        }
+      },
+    },
+  });
+
+  // Workload by shift chart (stacked bar)
+  const shifts = ['morning', 'afternoon', 'evening', 'night'];
+  const shiftLabels = { morning: 'Manhã (0-12h)', afternoon: 'Tarde (12-18h)', evening: 'Noite (18-22h)', night: 'Madrugada (22h+)' };
+  const shiftColors = ['#2D52EFcc', '#3fb950cc', '#d29922cc', '#bc8cffcc'];
+
+  if (chartInstances['chart-workload']) chartInstances['chart-workload'].destroy();
+  const wlCtx = document.getElementById('chart-workload').getContext('2d');
+  chartInstances['chart-workload'] = new Chart(wlCtx, {
+    type: 'bar',
+    data: {
+      labels: collabs,
+      datasets: shifts.map((s, i) => ({
+        label: shiftLabels[s],
+        data: collabs.map(col => +((workload[col] || {})[s] || 0).toFixed(2)),
+        backgroundColor: shiftColors[i],
+        borderColor: shiftColors[i].replace('cc', ''),
+        borderWidth: 1,
+      })),
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { color: '#e6edf3', font: { size: 10 } } },
+        tooltip: { backgroundColor: '#161b22', borderColor: '#30363d', borderWidth: 1, titleColor: '#e6edf3', bodyColor: '#8b949e' },
+      },
+      scales: {
+        x: { stacked: true, ticks: { color: '#8b949e', font: { size: 10 } }, grid: { color: '#30363d30' } },
+        y: { stacked: true, ticks: { color: '#8b949e', font: { size: 10 } }, grid: { color: '#30363d50' } },
+      },
+    },
+  });
+
+  // Benchmark table
+  document.getElementById('benchmark-tbody').innerHTML = benchmarks.slice(0, 40).map(b => `
+    <tr>
+      <td><span class="color-dot" style="background:${CATEGORY_COLORS[b.category] || '#6e7681'}"></span>${CATEGORY_LABELS[b.category] || b.category}</td>
+      <td><strong>${b.collaborator}</strong></td>
+      <td>${fmtH(b.hours)}</td>
+      <td>${b.pctOfDay}%</td>
+      <td>${fmtNum(b.keysPerHour)}</td>
+      <td>${b.sessions}</td>
+      <td>${b.avgSessionMin}min</td>
+    </tr>
+  `).join('');
+}
+
+// ─── RENDER: DOCUMENTS ───────────────────────────────────────────────────────
+
+function renderDocuments() {
+  const aa = DataStore.metrics.advancedAnalytics;
+  if (!aa) return;
+
+  const typeFilter = document.getElementById('doc-type-filter').value;
+  const sortBy = document.getElementById('doc-sort').value;
+
+  let docs = aa.documentLifecycle.slice();
+
+  if (typeFilter !== 'all') {
+    docs = docs.filter(d => d.name.toLowerCase().includes('.' + typeFilter));
+  }
+
+  if (sortBy === 'hours') docs.sort((a, b) => b.hours - a.hours);
+  else if (sortBy === 'days') docs.sort((a, b) => b.uniqueDays - a.uniqueDays);
+  else docs.sort((a, b) => b.accesses - a.accesses);
+
+  // KPIs
+  document.getElementById('documents-kpis').innerHTML = `
+    <div class="kpi-card blue">
+      <div class="kpi-label">Documentos Únicos</div>
+      <div class="kpi-value">${docs.length}</div>
+      <div class="kpi-sub">com ≥2 acessos</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Total de Acessos</div>
+      <div class="kpi-value">${fmtNum(docs.reduce((s, d) => s + d.accesses, 0))}</div>
+      <div class="kpi-sub">ao longo do período</div>
+    </div>
+    <div class="kpi-card yellow">
+      <div class="kpi-label">Horas em Documentos</div>
+      <div class="kpi-value">${fmtH(docs.reduce((s, d) => s + d.hours, 0))}</div>
+      <div class="kpi-sub">tempo total</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-label">Compartilhados</div>
+      <div class="kpi-value">${docs.filter(d => d.collaborators.length > 1).length}</div>
+      <div class="kpi-sub">acessados por 2+ colaboradores</div>
+    </div>
+  `;
+
+  const list = document.getElementById('documents-list');
+  if (docs.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📄</div><h3>Nenhum documento encontrado</h3><p>Os dados não contêm nomes de documentos suficientes.</p></div>';
+    return;
+  }
+
+  list.innerHTML = docs.slice(0, 30).map(d => {
+    const freqBadge = d.frequency === 'diária intensa' ? 'badge-red' :
+                      d.frequency === 'diária' ? 'badge-yellow' :
+                      d.frequency === 'semanal' ? 'badge-blue' : 'badge-gray';
+    const shared = d.collaborators.length > 1 ? `<span class="badge badge-purple" style="margin-left:6px">Compartilhado</span>` : '';
+    return `
+    <div class="doc-card">
+      <div class="doc-card-header">
+        <div class="doc-name">${d.name}${shared}</div>
+        <span class="badge ${freqBadge}">${d.frequency}</span>
+      </div>
+      <div class="doc-stats">
+        <span>${fmtNum(d.accesses)} acessos</span>
+        <span>${fmtH(d.hours)} horas</span>
+        <span>${d.uniqueDays} dias</span>
+        <span>${d.collaborators.join(', ')}</span>
+      </div>
+      <div class="doc-coapp-chips">
+        ${d.coApps.map(a => `<span class="cluster-app-chip">${a.app} (${a.count}×)</span>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
 }
 
 // ─── FORMATTING ──────────────────────────────────────────────────────────────
@@ -2629,7 +4718,7 @@ async function loadDemoData() {
 
   setStep(5, 'active');
   await sleep(50);
-  metrics.automations = detectAutomations(metrics);
+  metrics.automations = buildAdvancedAutomations(enriched, metrics, metrics.advancedAnalytics);
   setStep(5, 'done');
 
   document.getElementById('progress-bar').style.width = '100%';
@@ -2695,17 +4784,36 @@ function generateDemoData() {
         const startTime = new Date(currentTime);
         const endTime = new Date(currentTime.getTime() + durationSecs * 1000);
 
-        const windows = {
-          excel: ['Relatório Mensal.xlsx', 'Dados Clientes.xlsx', 'Pipeline Vendas.xlsx', 'Budget 2026.xlsx'],
-          outlook: ['Reunião Semanal - Equipe', 'FW: Proposta Comercial', 'Relatório de KPIs', 'Convite: Sprint Review'],
-          chrome: ['contaazul.com.br', 'sharepoint.com', 'google.com', 'analytics.google.com'],
-          teams: ['Canal Geral', 'Reunião diária', 'Chat com gerência'],
-          winword: ['Proposta Comercial v2.docx', 'Ata de Reunião.docx', 'Manual Processo.docx'],
+        const windowsByApp = {
+          excel: ['Relatório Mensal.xlsx', 'Dados Clientes.xlsx', 'Pipeline Vendas.xlsx', 'Budget 2026.xlsx', 'Controle Financeiro.xlsx', 'Métricas Campanhas.xlsx'],
+          outlook: ['Reunião Semanal - Equipe', 'FW: Proposta Comercial', 'Relatório de KPIs', 'Convite: Sprint Review', 'RE: Aprovação orçamento', 'Status projeto Q3'],
+          chrome: ['contaazul.com.br', 'sharepoint.com', 'google.com', 'analytics.google.com', 'app.hubspot.com', 'docs.google.com', 'drive.google.com'],
+          msedge: ['teams.microsoft.com', 'outlook.office.com', 'sharepoint.com', 'powerbi.com'],
+          teams: ['Canal Geral', 'Reunião diária', 'Chat com gerência', 'Suporte Técnico', 'Projeto Alpha'],
+          winword: ['Proposta Comercial v2.docx', 'Ata de Reunião.docx', 'Manual Processo.docx', 'Relatório Mensal.docx'],
+          acrord32: ['Contrato Fornecedor.pdf', 'NF-2026-03.pdf', 'Relatório Auditoria.pdf', 'Manual Sistema.pdf'],
+          onenote: ['Notas Sprint', 'Ideias produto', 'Reunião de planejamento'],
+          powerpnt: ['Apresentação Diretoria.pptx', 'Deck Vendas Q2.pptx', 'Proposta Cliente.pptx'],
+          chatgpt: ['ChatGPT - análise de dados', 'ChatGPT - rascunho email', 'ChatGPT - código Python'],
+          explorer: ['C:\\Documentos', 'C:\\Downloads', 'C:\\Projetos\\Alpha'],
         };
-        const winTitles = windows[app] || [`${app} - Janela ${Math.floor(Math.random() * 10)}`];
+
+        const winTitles = windowsByApp[app] || [`${app} - Janela ${Math.floor(Math.random() * 10)}`];
         const winTitle = winTitles[Math.floor(Math.random() * winTitles.length)];
 
-        const domain = pickedCat === 'web' ? (windows.chrome[Math.floor(Math.random() * windows.chrome.length)]) : '';
+        const webDomains = windowsByApp.chrome;
+        const webDomain = pickedCat === 'web' ? webDomains[Math.floor(Math.random() * webDomains.length)] : '';
+
+        // Realistic copy-paste: higher for planilha→web and web→planilha transitions
+        const isDataTransition = (pickedCat === 'planilha' || pickedCat === 'web' || pickedCat === 'email');
+        const copyCount = isDataTransition ? Math.floor(Math.random() * 8) : Math.floor(Math.random() * 2);
+        const pasteCount = isDataTransition ? Math.floor(Math.random() * 6) : Math.floor(Math.random() * 2);
+
+        // DocumentName for spreadsheets and docs
+        let docName = '';
+        if (pickedCat === 'planilha') docName = windowsByApp.excel[Math.floor(Math.random() * windowsByApp.excel.length)];
+        else if (pickedCat === 'documento') docName = windowsByApp.winword[Math.floor(Math.random() * windowsByApp.winword.length)];
+        else if (pickedCat === 'pdf') docName = windowsByApp.acrord32[Math.floor(Math.random() * windowsByApp.acrord32.length)];
 
         rows.push({
           StartDate: startTime.toISOString().replace('T', ' ').slice(0, 19),
@@ -2714,12 +4822,12 @@ function generateDemoData() {
           Process: app,
           ProcessOriginal: app,
           WindowTitle: winTitle,
-          DocumentName: pickedCat === 'planilha' ? (windows.excel[Math.floor(Math.random() * windows.excel.length)]) : '',
-          DocumentDomain: domain,
-          KeyCount: Math.floor(Math.random() * 200),
-          MouseCount: Math.floor(Math.random() * 100),
-          CopyCount: Math.floor(Math.random() * 10),
-          PasteCount: Math.floor(Math.random() * 10),
+          DocumentName: docName,
+          DocumentDomain: webDomain,
+          KeyCount: Math.floor(Math.random() * 250),
+          MouseCount: Math.floor(Math.random() * 120),
+          CopyCount: copyCount,
+          PasteCount: pasteCount,
           _collaborator: collab,
         });
 
