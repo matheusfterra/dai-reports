@@ -196,7 +196,7 @@
     .view.active { display: block; }
 
     /* ── UPLOAD VIEW ── */
-    #view-upload {
+    #view-upload.active {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -204,7 +204,27 @@
       min-height: calc(100vh - 0px);
       padding: 40px 32px;
     }
-    #view-upload.active { display: flex; }
+
+    /* ── SCROLL STORYTELLING (dashboard-active mode) ── */
+    body.dashboard-active .view {
+      display: block !important;
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+      scroll-margin-top: 72px;
+    }
+    body.dashboard-active .view:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+    body.dashboard-active #view-upload {
+      display: none !important;
+    }
+    /* Process map and drilldown need explicit flex in scroll mode */
+    body.dashboard-active #view-processmap {
+      display: block !important;
+      flex-direction: column;
+    }
     .upload-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -1337,6 +1357,87 @@
     <div class="cluster-grid" id="cluster-grid"></div>
   </section>
 
+  <!-- VIEW: PATTERNS -->
+  <section id="view-patterns" class="view">
+    <div class="section-header">
+      <h2>Padrões Repetitivos</h2>
+      <p>Sequências de categorias que se repetem — candidatos diretos a automação</p>
+    </div>
+    <div class="pattern-controls">
+      <div class="slider-group">
+        <label>Frequência mínima:</label>
+        <input type="range" id="pattern-min-freq" min="2" max="20" value="3" step="1"
+               oninput="document.getElementById('pattern-freq-val').textContent=this.value; renderPatterns()">
+        <span class="slider-value" id="pattern-freq-val">3</span>
+      </div>
+      <div class="slider-group">
+        <label>Comprimento máx:</label>
+        <input type="range" id="pattern-max-len" min="3" max="8" value="5" step="1"
+               oninput="document.getElementById('pattern-len-val').textContent=this.value; renderPatterns()">
+        <span class="slider-value" id="pattern-len-val">5</span>
+      </div>
+      <div>
+        <label>Ordenar por: </label>
+        <select id="pattern-sort" onchange="renderPatterns()">
+          <option value="count">Frequência</option>
+          <option value="time">Tempo total</option>
+          <option value="score">Score de automação</option>
+        </select>
+      </div>
+    </div>
+    <div id="patterns-kpis" class="kpi-grid"></div>
+    <div class="pattern-grid" id="pattern-grid"></div>
+  </section>
+
+  <!-- VIEW: DATAFLOWS -->
+  <section id="view-dataflows" class="view">
+    <div class="section-header">
+      <h2>Fluxos de Dados — Copy-Paste Cross-App</h2>
+      <p>Transferências manuais de dados detectadas entre aplicativos (janela de 120s)</p>
+    </div>
+    <div class="kpi-grid" id="dataflows-kpis"></div>
+    <div class="chart-card full mb-6">
+      <h3>Fluxos de Transferência (src → dst)</h3>
+      <div id="dataflows-list" class="flow-list"></div>
+    </div>
+    <div class="table-card">
+      <div class="table-card-header">
+        <h3>Detalhamento de Pares</h3>
+      </div>
+      <table class="data-table" id="dataflows-table">
+        <thead>
+          <tr>
+            <th>Origem</th>
+            <th>Destino</th>
+            <th>Transferências</th>
+            <th>Gap Médio (s)</th>
+          </tr>
+        </thead>
+        <tbody id="dataflows-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- VIEW: DEEP WORK -->
+  <section id="view-deepwork" class="view">
+    <div class="section-header">
+      <h2>Deep Work &amp; Produtividade</h2>
+      <p>Análise de foco vs. fragmentação por colaborador</p>
+    </div>
+    <div class="kpi-grid" id="deepwork-kpis"></div>
+    <div class="chart-grid mb-6">
+      <div class="chart-card">
+        <h3>Deep Work vs. Shallow Work</h3>
+        <div class="chart-wrap"><canvas id="chart-deepwork-pie" height="240"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Eficiência por Hora do Dia (Teclas/min)</h3>
+        <div class="chart-wrap"><canvas id="chart-efficiency-hour" height="240"></canvas></div>
+      </div>
+    </div>
+    <div class="collab-grid" id="deepwork-collab-grid"></div>
+  </section>
+
   <!-- VIEW: AUTOMATION -->
   <section id="view-automation" class="view">
     <div class="section-header">
@@ -1344,6 +1445,94 @@
       <p>Processos identificados com maior potencial de automação</p>
     </div>
     <div class="automation-grid" id="automation-grid"></div>
+  </section>
+
+  <!-- VIEW: BENCHMARKING -->
+  <section id="view-benchmarking" class="view">
+    <div class="section-header">
+      <h2>Comparativo de Colaboradores</h2>
+      <p>Benchmarking de métricas normalizadas entre pares</p>
+    </div>
+    <div class="chart-grid mb-6">
+      <div class="chart-card">
+        <h3>Radar de Competências</h3>
+        <div class="chart-wrap radar-wrap"><canvas id="chart-radar" height="300"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Distribuição de Workload por Turno</h3>
+        <div class="chart-wrap"><canvas id="chart-workload" height="300"></canvas></div>
+      </div>
+    </div>
+    <div class="table-card">
+      <div class="table-card-header"><h3>Comparativo Detalhado por Categoria</h3></div>
+      <div style="overflow-x:auto">
+        <table class="benchmark-table" id="benchmark-table">
+          <thead>
+            <tr>
+              <th>Categoria</th>
+              <th>Colaborador</th>
+              <th>Horas</th>
+              <th>% do Dia</th>
+              <th>Teclas/h</th>
+              <th>Sessões</th>
+              <th>Duração Média (min)</th>
+            </tr>
+          </thead>
+          <tbody id="benchmark-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIEW: DRILL-DOWN -->
+  <section id="view-drilldown" class="view">
+    <div class="section-header">
+      <h2>Detalhamento por Sistema</h2>
+      <p>Fluxo interno de páginas e títulos dentro de cada domínio/sistema</p>
+    </div>
+    <div class="drilldown-controls">
+      <label>Sistema / Domínio:</label>
+      <select id="drilldown-domain" onchange="renderDrilldownGraph()">
+        <option value="">Selecione um domínio</option>
+      </select>
+      <span id="drilldown-stats" style="font-size:12px; color:var(--text-dim); margin-left:16px"></span>
+    </div>
+    <div class="cy-container" id="drilldown-cy-container" style="height:480px">
+      <div id="drilldown-cy" style="width:100%;height:100%"></div>
+    </div>
+    <div class="table-card" style="margin-top:16px">
+      <div class="table-card-header"><h3>Páginas / Títulos Visitados</h3></div>
+      <table class="data-table" id="drilldown-pages-table">
+        <thead><tr><th>Título / Página</th><th>Visitas</th></tr></thead>
+        <tbody id="drilldown-pages-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- VIEW: DOCUMENTS -->
+  <section id="view-documents" class="view">
+    <div class="section-header">
+      <h2>Ciclo de Vida de Documentos</h2>
+      <p>Rastreamento de documentos acessados — frequência, colaboradores e aplicativos co-usados</p>
+    </div>
+    <div class="kpi-grid" id="documents-kpis"></div>
+    <div class="map-controls mb-4">
+      <label>Tipo:</label>
+      <select id="doc-type-filter" onchange="renderDocuments()">
+        <option value="all">Todos</option>
+        <option value="xls">Excel (.xls*)</option>
+        <option value="doc">Word (.doc*)</option>
+        <option value="pdf">PDF (.pdf)</option>
+        <option value="ppt">PowerPoint (.ppt*)</option>
+      </select>
+      <label style="margin-left:12px">Ordenar por:</label>
+      <select id="doc-sort" onchange="renderDocuments()">
+        <option value="accesses">Acessos</option>
+        <option value="hours">Horas</option>
+        <option value="days">Dias ativos</option>
+      </select>
+    </div>
+    <div id="documents-list"></div>
   </section>
 
   <!-- VIEW: DETAILS -->
@@ -1420,175 +1609,6 @@
       </table>
     </div>
   </section>
-
-  <!-- VIEW: DATAFLOWS -->
-  <section id="view-dataflows" class="view">
-    <div class="section-header">
-      <h2>Fluxos de Dados — Copy-Paste Cross-App</h2>
-      <p>Transferências manuais de dados detectadas entre aplicativos (janela de 120s)</p>
-    </div>
-    <div class="kpi-grid" id="dataflows-kpis"></div>
-    <div class="chart-card full mb-6">
-      <h3>Fluxos de Transferência (src → dst)</h3>
-      <div id="dataflows-list" class="flow-list"></div>
-    </div>
-    <div class="table-card">
-      <div class="table-card-header">
-        <h3>Detalhamento de Pares</h3>
-      </div>
-      <table class="data-table" id="dataflows-table">
-        <thead>
-          <tr>
-            <th>Origem</th>
-            <th>Destino</th>
-            <th>Transferências</th>
-            <th>Gap Médio (s)</th>
-          </tr>
-        </thead>
-        <tbody id="dataflows-tbody"></tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- VIEW: PATTERNS -->
-  <section id="view-patterns" class="view">
-    <div class="section-header">
-      <h2>Padrões Repetitivos</h2>
-      <p>Sequências de categorias que se repetem — candidatos diretos a automação</p>
-    </div>
-    <div class="pattern-controls">
-      <div class="slider-group">
-        <label>Frequência mínima:</label>
-        <input type="range" id="pattern-min-freq" min="2" max="20" value="3" step="1"
-               oninput="document.getElementById('pattern-freq-val').textContent=this.value; renderPatterns()">
-        <span class="slider-value" id="pattern-freq-val">3</span>
-      </div>
-      <div class="slider-group">
-        <label>Comprimento máx:</label>
-        <input type="range" id="pattern-max-len" min="3" max="8" value="5" step="1"
-               oninput="document.getElementById('pattern-len-val').textContent=this.value; renderPatterns()">
-        <span class="slider-value" id="pattern-len-val">5</span>
-      </div>
-      <div>
-        <label>Ordenar por: </label>
-        <select id="pattern-sort" onchange="renderPatterns()">
-          <option value="count">Frequência</option>
-          <option value="time">Tempo total</option>
-          <option value="score">Score de automação</option>
-        </select>
-      </div>
-    </div>
-    <div id="patterns-kpis" class="kpi-grid"></div>
-    <div class="pattern-grid" id="pattern-grid"></div>
-  </section>
-
-  <!-- VIEW: DEEP WORK -->
-  <section id="view-deepwork" class="view">
-    <div class="section-header">
-      <h2>Deep Work &amp; Produtividade</h2>
-      <p>Análise de foco vs. fragmentação por colaborador</p>
-    </div>
-    <div class="kpi-grid" id="deepwork-kpis"></div>
-    <div class="chart-grid mb-6">
-      <div class="chart-card">
-        <h3>Deep Work vs. Shallow Work</h3>
-        <div class="chart-wrap"><canvas id="chart-deepwork-pie" height="240"></canvas></div>
-      </div>
-      <div class="chart-card">
-        <h3>Eficiência por Hora do Dia (Teclas/min)</h3>
-        <div class="chart-wrap"><canvas id="chart-efficiency-hour" height="240"></canvas></div>
-      </div>
-    </div>
-    <div class="collab-grid" id="deepwork-collab-grid"></div>
-  </section>
-
-  <!-- VIEW: DRILL-DOWN -->
-  <section id="view-drilldown" class="view">
-    <div class="section-header">
-      <h2>Detalhamento por Sistema</h2>
-      <p>Fluxo interno de páginas e títulos dentro de cada domínio/sistema</p>
-    </div>
-    <div class="drilldown-controls">
-      <label>Sistema / Domínio:</label>
-      <select id="drilldown-domain" onchange="renderDrilldownGraph()">
-        <option value="">Selecione um domínio</option>
-      </select>
-      <span id="drilldown-stats" style="font-size:12px; color:var(--text-dim); margin-left:16px"></span>
-    </div>
-    <div class="cy-container" id="drilldown-cy-container" style="height:480px">
-      <div id="drilldown-cy" style="width:100%;height:100%"></div>
-    </div>
-    <div class="table-card" style="margin-top:16px">
-      <div class="table-card-header"><h3>Páginas / Títulos Visitados</h3></div>
-      <table class="data-table" id="drilldown-pages-table">
-        <thead><tr><th>Título / Página</th><th>Visitas</th></tr></thead>
-        <tbody id="drilldown-pages-tbody"></tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- VIEW: BENCHMARKING -->
-  <section id="view-benchmarking" class="view">
-    <div class="section-header">
-      <h2>Comparativo de Colaboradores</h2>
-      <p>Benchmarking de métricas normalizadas entre pares</p>
-    </div>
-    <div class="chart-grid mb-6">
-      <div class="chart-card">
-        <h3>Radar de Competências</h3>
-        <div class="chart-wrap radar-wrap"><canvas id="chart-radar" height="300"></canvas></div>
-      </div>
-      <div class="chart-card">
-        <h3>Distribuição de Workload por Turno</h3>
-        <div class="chart-wrap"><canvas id="chart-workload" height="300"></canvas></div>
-      </div>
-    </div>
-    <div class="table-card">
-      <div class="table-card-header"><h3>Comparativo Detalhado por Categoria</h3></div>
-      <div style="overflow-x:auto">
-        <table class="benchmark-table" id="benchmark-table">
-          <thead>
-            <tr>
-              <th>Categoria</th>
-              <th>Colaborador</th>
-              <th>Horas</th>
-              <th>% do Dia</th>
-              <th>Teclas/h</th>
-              <th>Sessões</th>
-              <th>Duração Média (min)</th>
-            </tr>
-          </thead>
-          <tbody id="benchmark-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
-  <!-- VIEW: DOCUMENTS -->
-  <section id="view-documents" class="view">
-    <div class="section-header">
-      <h2>Ciclo de Vida de Documentos</h2>
-      <p>Rastreamento de documentos acessados — frequência, colaboradores e aplicativos co-usados</p>
-    </div>
-    <div class="kpi-grid" id="documents-kpis"></div>
-    <div class="map-controls mb-4">
-      <label>Tipo:</label>
-      <select id="doc-type-filter" onchange="renderDocuments()">
-        <option value="all">Todos</option>
-        <option value="xls">Excel (.xls*)</option>
-        <option value="doc">Word (.doc*)</option>
-        <option value="pdf">PDF (.pdf)</option>
-        <option value="ppt">PowerPoint (.ppt*)</option>
-      </select>
-      <label style="margin-left:12px">Ordenar por:</label>
-      <select id="doc-sort" onchange="renderDocuments()">
-        <option value="accesses">Acessos</option>
-        <option value="hours">Horas</option>
-        <option value="days">Dias ativos</option>
-      </select>
-    </div>
-    <div id="documents-list"></div>
-  </section>
 </div>
 
 <!-- ===== JAVASCRIPT ===== -->
@@ -1661,6 +1681,20 @@ class Router {
   }
   route() {
     const hash = location.hash.slice(1) || 'upload';
+
+    // In dashboard-active (scroll) mode, hash changes scroll to section
+    if (DataStore.metrics && document.body.classList.contains('dashboard-active')) {
+      const el = document.getElementById('view-' + hash);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      const nav = document.querySelector(`[data-view="${hash}"]`);
+      if (nav) nav.classList.add('active');
+      return;
+    }
+
+    // Normal tab-switching mode (upload state or pre-data)
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     const view = document.getElementById('view-' + hash);
@@ -1675,6 +1709,56 @@ class Router {
 }
 
 const router = new Router();
+
+// ─── SCROLL SPY & NAV SCROLL HANDLERS ────────────────────────────────────────
+
+function setupScrollSpy() {
+  // Disconnect previous observer if any
+  if (window._scrollSpyObserver) {
+    window._scrollSpyObserver.disconnect();
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id.replace('view-', '');
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        const nav = document.querySelector(`[data-view="${id}"]`);
+        if (nav) nav.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-72px 0px -55% 0px', threshold: 0.05 });
+
+  document.querySelectorAll('.view:not(#view-upload)').forEach(v => observer.observe(v));
+  window._scrollSpyObserver = observer;
+}
+
+function setupNavScrollHandlers() {
+  // Remove old handlers by cloning nodes, then re-attach
+  document.querySelectorAll('.nav-item[data-view]').forEach(n => {
+    const clone = n.cloneNode(true);
+    n.parentNode.replaceChild(clone, n);
+  });
+
+  document.querySelectorAll('.nav-item[data-view]').forEach(n => {
+    n.addEventListener('click', (e) => {
+      // Only intercept when dashboard-active scroll mode is on
+      // Don't intercept the upload link (it should trigger reset via hash or be ignored)
+      if (!DataStore.metrics || !document.body.classList.contains('dashboard-active')) return;
+      if (n.dataset.view === 'upload') return; // let normal hash change handle it (router ignores in scroll mode for upload)
+
+      const viewId = 'view-' + n.dataset.view;
+      const el = document.getElementById(viewId);
+      if (el) {
+        e.preventDefault();
+        el.scrollIntoView({ behavior: 'smooth' });
+        // Update active state immediately
+        document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
+        n.classList.add('active');
+      }
+    });
+  });
+}
 
 // ─── UPLOAD & DROP ZONE ──────────────────────────────────────────────────────
 
@@ -3323,13 +3407,73 @@ function activateApp() {
     tabsEl.innerHTML += `<div class="map-tab" data-tab="${col}" onclick="selectMapTab('${col}')">${col}</div>`;
   }
 
-  // Navigate to overview
-  location.hash = '#overview';
+  // Activate scroll storytelling mode
+  document.body.classList.add('dashboard-active');
+
+  // Hide upload view (already hidden by CSS, but remove active class to be safe)
+  document.getElementById('view-upload').classList.remove('active');
+
+  // Remove any lingering active class from non-upload views (CSS now shows them all)
+  document.querySelectorAll('.view:not(#view-upload)').forEach(v => v.classList.remove('active'));
+
+  // Render ALL views in sequence
+  renderOverview();
+  renderTemporal();
+  renderApps();
+  refreshProcessMap();
+  updateClusters(document.getElementById('cluster-slider').value);
+  renderPatterns();
+  renderDataFlows();
+  renderDeepWork();
+  renderAutomation();
+  renderBenchmarking();
+  renderDrilldown();
+  renderDocuments();
+  renderDetails();
+
+  // Set up scroll spy for sidebar active tracking
+  setupScrollSpy();
+
+  // Set up nav click handlers for smooth scroll
+  setupNavScrollHandlers();
+
+  // Scroll to top / overview
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Update nav highlight to overview
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const overviewNav = document.querySelector('[data-view="overview"]');
+  if (overviewNav) overviewNav.classList.add('active');
+
+  // Ensure cytoscape fits after scroll mode renders everything
+  setTimeout(() => {
+    if (cyInstance) cyInstance.fit();
+  }, 400);
 }
 
 function applyCollaboratorFilter() {
   DataStore.activeFilter = document.getElementById('filter-collaborator').value;
-  renderView(location.hash.slice(1) || 'overview');
+
+  // In scroll mode, re-render all visible views
+  if (document.body.classList.contains('dashboard-active')) {
+    renderOverview();
+    renderTemporal();
+    renderApps();
+    refreshProcessMap();
+    updateClusters(document.getElementById('cluster-slider').value);
+    renderPatterns();
+    renderDataFlows();
+    renderDeepWork();
+    renderAutomation();
+    renderBenchmarking();
+    renderDrilldown();
+    renderDocuments();
+    renderDetails();
+    // Re-fit cytoscape after re-render
+    setTimeout(() => { if (cyInstance) cyInstance.fit(); }, 200);
+  } else {
+    renderView(location.hash.slice(1) || 'overview');
+  }
 }
 
 function renderView(hash) {
@@ -4666,6 +4810,15 @@ function resetAnalysis() {
   Object.values(chartInstances).forEach(c => c.destroy());
   chartInstances = {};
 
+  // Exit scroll storytelling mode
+  document.body.classList.remove('dashboard-active');
+
+  // Tear down scroll spy observer if exists
+  if (window._scrollSpyObserver) {
+    window._scrollSpyObserver.disconnect();
+    window._scrollSpyObserver = null;
+  }
+
   document.querySelectorAll('.nav-item').forEach(n => {
     if (n.dataset.view !== 'upload') n.classList.add('disabled');
   });
@@ -4676,6 +4829,15 @@ function resetAnalysis() {
   document.getElementById('progress-bar').style.width = '0%';
   document.getElementById('file-input').value = '';
   document.getElementById('sidebar-subtitle').textContent = 'Plataforma de Análise';
+
+  // Show upload view and hide all others
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-upload').classList.add('active');
+
+  // Update nav
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const uploadNav = document.querySelector('[data-view="upload"]');
+  if (uploadNav) uploadNav.classList.add('active');
 
   location.hash = '#upload';
 }
