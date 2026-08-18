@@ -1171,6 +1171,20 @@
       border-radius: var(--radius-sm);
       font-size: 13px;
     }
+    .drilldown-controls button {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 5px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 12px;
+      transition: background var(--transition);
+    }
+    .drilldown-controls button:hover { background: var(--surface-hover); }
+    .drilldown-controls .separator {
+      width: 1px; height: 20px; background: var(--border); flex-shrink: 0;
+    }
 
     /* Controls for patterns view */
     .pattern-controls {
@@ -1424,6 +1438,7 @@
       <div id="cy"></div>
       <div class="cy-legend" id="cy-legend"></div>
     </div>
+    <p style="font-size:11px;color:var(--text-dim);margin-top:6px;text-align:center">Clique em um no para destacar conexoes. Use scroll para zoom. Arraste para mover o grafo.</p>
   </section>
 
   <!-- VIEW: GROUPING -->
@@ -1576,15 +1591,20 @@
       <p>Fluxo interno de páginas e títulos dentro de cada domínio/sistema</p>
     </div>
     <div class="drilldown-controls">
-      <label>Sistema / Domínio:</label>
+      <label>Sistema / Dominio:</label>
       <select id="drilldown-domain" onchange="renderDrilldownGraph()">
-        <option value="">Selecione um domínio</option>
+        <option value="">Selecione um dominio</option>
       </select>
       <span id="drilldown-stats" style="font-size:12px; color:var(--text-dim); margin-left:16px"></span>
+      <div class="separator"></div>
+      <button onclick="drilldownCyInstance && drilldownCyInstance.zoom(drilldownCyInstance.zoom()*1.2)">+ Zoom</button>
+      <button onclick="drilldownCyInstance && drilldownCyInstance.zoom(drilldownCyInstance.zoom()*0.8)">- Zoom</button>
+      <button onclick="drilldownCyInstance && drilldownCyInstance.fit()">Ajustar</button>
     </div>
     <div class="cy-container" id="drilldown-cy-container" style="height:480px">
       <div id="drilldown-cy" style="width:100%;height:100%"></div>
     </div>
+    <p style="font-size:11px;color:var(--text-dim);margin-top:6px;text-align:center">Clique em um no para destacar conexoes. Use scroll para zoom. Top 25 paginas exibidas.</p>
     <div class="table-card" style="margin-top:16px">
       <div class="table-card-header"><h3>Páginas / Títulos Visitados</h3></div>
       <table class="data-table" id="drilldown-pages-table">
@@ -4251,10 +4271,16 @@ function refreshProcessMap() {
 
   if (processMapResizeObserver) processMapResizeObserver.disconnect();
   if (typeof ResizeObserver !== 'undefined') {
+    let resizeTimer = null;
     processMapResizeObserver = new ResizeObserver(() => {
       if (!cyInstance) return;
-      cyInstance.resize();
-      cyInstance.fit(undefined, 48);
+      // Debounce: evita re-fit a cada frame durante resize continuo
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (!cyInstance) return;
+        cyInstance.resize();
+        cyInstance.fit(undefined, 48);
+      }, 150);
     });
     processMapResizeObserver.observe(container.parentElement);
   }
@@ -4278,6 +4304,14 @@ function renderCytoscape(container, transitions, nodeTime, options = {}) {
   const { layout = 'cose', minPercent = 0 } = options;
   const totalTime = Object.values(nodeTime).reduce((a, b) => a + b, 0) || 1;
 
+  // Pre-computar frequencia por no (O(E) em vez de O(N*E))
+  const nodeFreqMap = {};
+  for (const [key, val] of Object.entries(transitions)) {
+    const [src, dst] = key.split('→');
+    nodeFreqMap[src] = (nodeFreqMap[src] || 0) + val;
+    if (src !== dst) nodeFreqMap[dst] = (nodeFreqMap[dst] || 0) + val;
+  }
+
   const nodes = Object.keys(nodeTime)
     .filter(cat => (nodeTime[cat] / totalTime * 100) >= minPercent)
     .map(cat => ({
@@ -4286,20 +4320,27 @@ function renderCytoscape(container, transitions, nodeTime, options = {}) {
         label: CATEGORY_LABELS[cat] || cat,
         time: nodeTime[cat],
         percent: (nodeTime[cat] / totalTime * 100).toFixed(1),
-        freq: Object.entries(transitions).filter(([k]) => k.startsWith(cat+'→') || k.endsWith('→'+cat)).reduce((s,[,v]) => s+v, 0),
+        freq: nodeFreqMap[cat] || 0,
         color: PROCESS_MAP_COLORS[cat] || '#94A3B8',
       }
     }));
 
   const nodeIds = new Set(nodes.map(n => n.data.id));
-  const maxFreq = Math.max(...Object.values(transitions).filter(v => v > 0), 1);
 
-  const edges = Object.entries(transitions)
+  // Filtrar edges validos e ordenar por frequencia descendente
+  const validEdges = Object.entries(transitions)
     .filter(([key, val]) => {
       const [src, dst] = key.split('→');
       return nodeIds.has(src) && nodeIds.has(dst) && src !== dst && val > 0;
     })
-    .map(([key, val]) => {
+    .sort((a, b) => b[1] - a[1]);
+
+  // Performance: limitar a top 50 edges para evitar visual poluido e layout pesado
+  const MAX_EDGES = 50;
+  const topEdges = validEdges.slice(0, MAX_EDGES);
+  const maxFreq = topEdges.length > 0 ? topEdges[0][1] : 1;
+
+  const edges = topEdges.map(([key, val]) => {
       const [src, dst] = key.split('→');
       return {
         data: {
@@ -4315,17 +4356,19 @@ function renderCytoscape(container, transitions, nodeTime, options = {}) {
 
   const maxTime = Math.max(...Object.values(nodeTime), 1);
 
+  // Performance: animate desabilitado — layouts animados com muitos nos/edges
+  // causam travamento perceptivel. O fit() pos-layout garante visual limpo.
   const layoutConfig = layout === 'dagre'
     ? {
         name: 'dagre', rankDir: 'LR', rankSep: 130, nodeSep: 85, edgeSep: 35,
         ranker: 'network-simplex', padding: 55, fit: true,
-        animate: true, animationDuration: 450,
+        animate: false,
       }
     : layout === 'circle'
-    ? { name: 'circle', animate: true, padding: 55, spacingFactor: 1.25 }
+    ? { name: 'circle', animate: false, padding: 55, spacingFactor: 1.25 }
     : layout === 'breadthfirst'
-    ? { name: 'breadthfirst', directed: true, animate: true, padding: 55, spacingFactor: 1.35 }
-    : { name: 'cose', animate: true, animationDuration: 450, padding: 55, nodeRepulsion: 12000, idealEdgeLength: 155, componentSpacing: 90 };
+    ? { name: 'breadthfirst', directed: true, animate: false, padding: 55, spacingFactor: 1.35 }
+    : { name: 'cose', animate: false, padding: 55, nodeRepulsion: 12000, idealEdgeLength: 155, componentSpacing: 90, maxSimulationTime: 2000 };
 
   const cy = cytoscape({
     container,
@@ -4352,6 +4395,7 @@ function renderCytoscape(container, transitions, nodeTime, options = {}) {
           'text-max-width': '100px',
           'text-outline-color': 'rgba(0,0,0,0.5)',
           'text-outline-width': 1,
+          'cursor': 'pointer',
         }
       },
       {
@@ -5008,25 +5052,34 @@ function renderDrilldownGraph() {
   const container = document.getElementById('drilldown-cy');
   container.innerHTML = '';
 
-  const pageSet = new Set(Object.keys(data.pages));
   const maxVisits = Math.max(...Object.values(data.pages), 1);
 
-  const nodes = Object.entries(data.pages).map(([title, count]) => ({
+  // Limitar a top 25 paginas por visitas para evitar grafo ilegivel
+  const topPages = Object.entries(data.pages)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 25);
+  const pageSet = new Set(topPages.map(([t]) => t));
+
+  const nodes = topPages.map(([title, count]) => ({
     data: {
       id: title,
-      label: title.slice(0, 30),
+      label: title.length > 35 ? title.slice(0, 33) + '...' : title,
+      fullLabel: title,
       count,
       color: `hsl(${Math.round(count / maxVisits * 120)}, 70%, 50%)`,
     }
   }));
 
-  const maxTrans = Math.max(...Object.values(data.transitions), 1);
-  const edges = Object.entries(data.transitions)
+  // Filtrar edges validos, ordenar por freq, limitar top 30
+  const validDrillEdges = Object.entries(data.transitions)
     .filter(([key]) => {
       const [src, dst] = key.split('→');
-      return pageSet.has(src) && pageSet.has(dst);
+      return pageSet.has(src) && pageSet.has(dst) && src !== dst;
     })
-    .slice(0, 40)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 30);
+  const maxTrans = validDrillEdges.length > 0 ? validDrillEdges[0][1] : 1;
+  const edges = validDrillEdges
     .map(([key, val]) => {
       const [src, dst] = key.split('→');
       return { data: { id: key, source: src, target: dst, freq: val, width: 1 + (val / maxTrans) * 6 } };
@@ -5047,11 +5100,14 @@ function renderDrilldownGraph() {
           'background-color': 'data(color)',
           'label': 'data(label)',
           'color': '#ffffff', 'text-valign': 'center', 'text-halign': 'center',
-          'font-size': '8px', 'font-weight': 'bold',
-          'width': ele => Math.max(25, 20 + (ele.data('count') / maxVisits) * 60),
-          'height': ele => Math.max(25, 20 + (ele.data('count') / maxVisits) * 60),
-          'border-width': 2, 'border-color': 'rgba(255,255,255,0.2)',
-          'text-wrap': 'wrap', 'text-max-width': '70px',
+          'font-size': '11px', 'font-weight': 'bold',
+          'width': ele => Math.max(35, 25 + (ele.data('count') / maxVisits) * 60),
+          'height': ele => Math.max(35, 25 + (ele.data('count') / maxVisits) * 60),
+          'border-width': 2, 'border-color': 'rgba(255,255,255,0.3)',
+          'text-wrap': 'wrap', 'text-max-width': '90px',
+          'text-outline-color': 'rgba(0,0,0,0.5)',
+          'text-outline-width': 1,
+          'cursor': 'pointer',
         }
       },
       {
@@ -5059,13 +5115,55 @@ function renderDrilldownGraph() {
         style: {
           'width': 'data(width)', 'line-color': '#d29922', 'target-arrow-color': '#d29922',
           'target-arrow-shape': 'triangle', 'curve-style': 'bezier', 'opacity': 0.6,
+          'label': 'data(freq)',
+          'font-size': '9px', 'color': '#d29922',
+          'text-background-color': '#111827', 'text-background-opacity': 0.9,
+          'text-background-padding': '3px', 'text-background-shape': 'roundrectangle',
         }
       },
+      {
+        selector: '.dimmed',
+        style: { 'opacity': 0.1 }
+      },
+      {
+        selector: '.highlighted',
+        style: { 'opacity': 1 }
+      },
     ],
-    layout: { name: 'cose', animate: true, animationDuration: 300, nodeRepulsion: 6000, idealEdgeLength: 100, fit: true, padding: 35 },
-    minZoom: 0.2, maxZoom: 4,
+    layout: { name: 'cose', animate: false, nodeRepulsion: 6000, idealEdgeLength: 100, fit: true, padding: 35, maxSimulationTime: 2000 },
+    minZoom: 0.2, maxZoom: 4, wheelSensitivity: 0.18,
   });
   drilldownCyInstance.one('layoutstop', () => drilldownCyInstance && drilldownCyInstance.fit(undefined, 35));
+
+  // Tooltip on hover (reuse cy-tooltip element)
+  const ddTooltip = document.getElementById('cy-tooltip');
+  drilldownCyInstance.on('mouseover', 'node', function(evt) {
+    const d = evt.target.data();
+    document.getElementById('tt-title').textContent = d.fullLabel || d.label;
+    document.getElementById('tt-time').textContent = fmtNum(d.count) + ' visitas';
+    document.getElementById('tt-percent').textContent = ((d.count / maxVisits) * 100).toFixed(1) + '%';
+    document.getElementById('tt-freq').textContent = '';
+    ddTooltip.classList.add('visible');
+  });
+  drilldownCyInstance.on('mousemove', 'node', function(evt) {
+    ddTooltip.style.left = (evt.originalEvent.clientX + 14) + 'px';
+    ddTooltip.style.top = (evt.originalEvent.clientY - 10) + 'px';
+  });
+  drilldownCyInstance.on('mouseout', 'node', () => ddTooltip.classList.remove('visible'));
+
+  // Click to highlight connected
+  drilldownCyInstance.on('tap', 'node', function(evt) {
+    const node = evt.target;
+    drilldownCyInstance.elements().addClass('dimmed').removeClass('highlighted');
+    node.removeClass('dimmed').addClass('highlighted');
+    node.connectedEdges().removeClass('dimmed').addClass('highlighted');
+    node.connectedEdges().connectedNodes().removeClass('dimmed').addClass('highlighted');
+  });
+  drilldownCyInstance.on('tap', function(evt) {
+    if (evt.target === drilldownCyInstance) {
+      drilldownCyInstance.elements().removeClass('dimmed highlighted');
+    }
+  });
 }
 
 // ─── RENDER: BENCHMARKING ────────────────────────────────────────────────────
