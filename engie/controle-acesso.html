@@ -8,6 +8,16 @@
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
+
+input[type=date],
+select{
+  width:100%;
+  padding:12px 10px;
+  margin:6px 0 14px;
+  border:1px solid #ccc;
+  border-radius:6px;
+  font-size:16px;
+}
   :root{--azul:#00285A;--verde:#00A99D;--cinza:#f4f6f8;}
   *{box-sizing:border-box;}
   body{font-family:Arial,Helvetica,sans-serif;margin:0;background:var(--cinza);color:#222;-webkit-text-size-adjust:100%;}
@@ -468,71 +478,146 @@ function ajustarTexto(ctx, texto, larguraMax){
   return t === String(texto) ? t : t + "…";
 }
 
-function montarQRIdentificado(containerTemp, nome, empresa, local, validadeASO, tamanho=220){
-  const dados = JSON.stringify({ nome, empresa, local, validadeASO });
+function montarQRIdentificado(
+  containerTemp,
+  nome,
+  empresa,
+  local,
+  validadeASO,
+  tamanho = 220
+){
+
+  // QR SEM validadeASO
+  const dados = JSON.stringify({
+    nome: nome,
+    empresa: empresa,
+    local: local
+  });
+
   gerarQRBruto(containerTemp, dados, tamanho);
 
   return new Promise((resolve)=>{
+
+    const container = document.getElementById(containerTemp);
+
     setTimeout(()=>{
-      const container = document.getElementById(containerTemp);
-      const origem = container.querySelector("canvas") || container.querySelector("img");
-      if(!origem){ resolve(null); return; }
 
-      const desenhar = ()=>{
-        const margem = 18;
-        const alturaLegenda = 82;
-        const largura = tamanho + margem*2;
-        const altura  = tamanho + margem + alturaLegenda;
+      const origem =
+        container.querySelector("canvas") ||
+        container.querySelector("img");
 
-        const canvas = document.createElement("canvas");
-        canvas.width = largura;
-        canvas.height = altura;
-        const ctx = canvas.getContext("2d");
+      if(!origem){
+        resolve(null);
+        return;
+      }
+
+      const canvas = document.createElement("canvas");
+
+      const margem = 18;
+      const alturaLegenda = 82;
+
+      canvas.width = tamanho + (margem * 2);
+      canvas.height = tamanho + margem + alturaLegenda;
+
+      const ctx = canvas.getContext("2d");
+
+      function desenhar(){
 
         ctx.fillStyle = "#ffffff";
-        ctx.fillRect(0, 0, largura, altura);
+        ctx.fillRect(0,0,canvas.width,canvas.height);
 
-        ctx.drawImage(origem, margem, margem, tamanho, tamanho);
+        ctx.drawImage(
+          origem,
+          margem,
+          margem,
+          tamanho,
+          tamanho
+        );
 
         ctx.strokeStyle = "#dddddd";
         ctx.lineWidth = 1;
+
         ctx.beginPath();
-        ctx.moveTo(margem, tamanho + margem + 8);
-        ctx.lineTo(largura - margem, tamanho + margem + 8);
+        ctx.moveTo(
+          margem,
+          tamanho + margem + 8
+        );
+        ctx.lineTo(
+          canvas.width - margem,
+          tamanho + margem + 8
+        );
         ctx.stroke();
 
-        ctx.textAlign = "center";
-        const larguraTexto = largura - 16;
         let y = tamanho + margem + 30;
+
+        ctx.textAlign = "center";
+
+        const larguraTexto =
+          canvas.width - 16;
 
         ctx.fillStyle = "#00285A";
         ctx.font = "bold 16px Arial";
-        ctx.fillText(ajustarTexto(ctx, nome, larguraTexto), largura/2, y);
+
+        ctx.fillText(
+          ajustarTexto(ctx,nome,larguraTexto),
+          canvas.width / 2,
+          y
+        );
 
         y += 21;
+
         ctx.fillStyle = "#333333";
         ctx.font = "14px Arial";
-        ctx.fillText(ajustarTexto(ctx, empresa, larguraTexto), largura/2, y);
+
+        ctx.fillText(
+          ajustarTexto(ctx,empresa,larguraTexto),
+          canvas.width / 2,
+          y
+        );
 
         y += 19;
+
         ctx.fillStyle = "#666666";
         ctx.font = "12px Arial";
-        ctx.fillText(ajustarTexto(ctx, "Local: " + local, larguraTexto), largura/2, y);
+
+        ctx.fillText(
+          ajustarTexto(
+            ctx,
+            "Local: " + local,
+            larguraTexto
+          ),
+          canvas.width / 2,
+          y
+        );
 
         ctx.strokeStyle = "#00285A";
         ctx.lineWidth = 2;
-        ctx.strokeRect(1, 1, largura-2, altura-2);
 
-        resolve(canvas.toDataURL("image/png"));
-      };
+        ctx.strokeRect(
+          1,
+          1,
+          canvas.width - 2,
+          canvas.height - 2
+        );
 
-      if(origem.tagName === "IMG" && !origem.complete){
+        resolve(
+          canvas.toDataURL("image/png")
+        );
+      }
+
+      if(
+        origem.tagName === "IMG" &&
+        !origem.complete
+      ){
         origem.onload = desenhar;
-      } else {
+      }else{
         desenhar();
       }
-    }, 300);
+
+    },500);
+
   });
+
 }
 
 /* =====================================================
@@ -739,15 +824,30 @@ function atualizarTabelaColaboradores(){
           <button class="btn btn-mini btn-secundario" onclick="reemitirQR(${i},'imprimir')">Imprimir</button>
         </td>
         <td>
-          <button class="btn btn-mini btn-alerta" onclick="excluirColaborador(${i})">Excluir</button>
-        </td>
+  <button class="btn btn-mini"
+          onclick="editarColaborador(${i})">
+    Editar
+  </button>
+
+  <button class="btn btn-mini btn-alerta"
+          onclick="excluirColaborador(${i})">
+    Excluir
+  </button>
+</td>
       </tr>`;
   });
 }
 
 function reemitirQR(indice, acao){
   const c = colaboradores[indice];
-  montarQRIdentificado("qrTemp", c.nome, c.empresa, c.local, 220).then(imagem=>{
+  montarQRIdentificado(
+  "qrTemp",
+  c.nome,
+  c.empresa,
+  c.local,
+  c.validadeASO,
+  220
+).then(imagem=>{
     if(!imagem) return;
     if(acao === "baixar") baixarImagem(c.nome, imagem);
     else imprimirCredencial(c.nome, imagem);
@@ -861,6 +961,8 @@ function onLeituraSucesso(texto){
   let dados;
   try{
     dados = JSON.parse(texto);
+console.log(dados);
+``
     if(!dados.nome || !dados.empresa) throw new Error("campos ausentes");
   }catch(e){
     statusEl.className = "status erro";
@@ -872,10 +974,14 @@ function onLeituraSucesso(texto){
   registrarAcesso(dados);
 }
 
-function registrarAcesso({nome, empresa, local}){
+function registrarAcesso({nome, empresa, local, validadeASO}){
   let colaborador = colaboradores.find(c=>c.nome===nome && c.empresa===empresa);
+  if(colaborador && validadeASO){
+  colaborador.validadeASO = validadeASO;
+}
   if(!colaborador){
-    colaborador = { nome, empresa, local, dentro:false, horaEntradaTimestamp:null };
+    colaborador = {nome, empresa, local, validadeASO, dentro:false, horaEntradaTimestamp:null
+};
     colaboradores.push(colaborador);
   }
 
@@ -1290,8 +1396,125 @@ function limparTodosDados(){
   alert("Todos os dados foram apagados.");
 }
 
+function editarColaborador(indice){
+
+  const c = colaboradores[indice];
+
+  document.getElementById("editIndice").value = indice;
+  document.getElementById("editNome").value = c.nome || "";
+  document.getElementById("editEmpresa").value = c.empresa || "";
+  document.getElementById("editLocal").value = c.local || "";
+  document.getElementById("editASO").value = c.validadeASO || "";
+
+  document.getElementById("modalEdicao").style.display = "flex";
+}
+
+function fecharModalEdicao(){
+
+  document.getElementById("modalEdicao").style.display = "none";
+
+}
+
+function salvarEdicaoColaborador(){
+
+  const indice =
+      parseInt(document.getElementById("editIndice").value);
+
+  const colaborador =
+      colaboradores[indice];
+
+  colaborador.nome =
+      document.getElementById("editNome").value.trim();
+
+  colaborador.empresa =
+      document.getElementById("editEmpresa").value.trim();
+
+  colaborador.local =
+      document.getElementById("editLocal").value;
+
+  colaborador.validadeASO =
+      document.getElementById("editASO").value;
+
+  salvar("colaboradores", colaboradores);
+
+  atualizarTabelaColaboradores();
+  atualizarTabela();
+
+  fecharModalEdicao();
+
+  alert("Cadastro atualizado com sucesso.");
+}
+
+window.addEventListener("click", function(event){
+
+  const modal =
+      document.getElementById("modalEdicao");
+
+  if(event.target === modal){
+
+      fecharModalEdicao();
+
+  }
+
+});
 /* Inicialização */
 atualizarTabela();
 </script>
+<div id="modalEdicao" style="
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.6);
+z-index:99999;
+justify-content:center;
+align-items:center;">
+
+  <div style="
+    background:#fff;
+    width:95%;
+    max-width:500px;
+    padding:20px;
+    border-radius:8px;">
+
+    <h2>Editar Colaborador</h2>
+
+    <input type="hidden" id="editIndice">
+
+    <label>Nome</label>
+    <input type="text" id="editNome">
+
+    <label>Empresa</label>
+    <input type="text" id="editEmpresa">
+
+    <label>Local</label>
+    <select id="editLocal">
+      <option>Usina</option>
+      <option>SE 345</option>
+      <option>SE 500</option>
+      <option>PMJA</option>
+      <option>PEJA</option>
+      <option>Outros</option>
+    </select>
+
+    <label>Validade ASO</label>
+    <input type="date" id="editASO">
+
+    <div style="margin-top:15px;text-align:right">
+      <button class="btn btn-secundario"
+              onclick="fecharModalEdicao()">
+        Cancelar
+      </button>
+
+      <button class="btn"
+              onclick="salvarEdicaoColaborador()">
+        Salvar
+      </button>
+    </div>
+
+  </div>
+</div>
 </body>
 </html>
