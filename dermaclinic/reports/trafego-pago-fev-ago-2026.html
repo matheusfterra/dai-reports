@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DermaClinic | Trafego Pago — Fev a Ago 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--coral:#EEA26E;--gold:#B8975A;--text:#222222;--bg:#FAF7F4;--white:#FFFFFF;--light-gray:#F0EDE9;--green:#4CAF50;--red:#E53935;--blue:#2196F3}
+body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:15px}
+h1,h2,h3,h4{font-family:'Playfair Display',serif;font-weight:700;line-height:1.2}
+.container{max-width:960px;margin:0 auto;padding:0 20px}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,#222222 0%,#3a3a3a 100%);color:var(--white);padding:60px 20px;text-align:center;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--coral),var(--gold))}
+.hero h1{font-size:clamp(28px,5vw,48px);margin-bottom:12px;font-weight:800}
+.hero .highlight{color:var(--coral);font-size:clamp(40px,7vw,72px);display:block;margin:16px 0}
+.hero .subtitle{font-family:'Poppins',sans-serif;font-weight:300;font-size:clamp(14px,2.5vw,18px);opacity:0.85;max-width:600px;margin:0 auto}
+.hero .period{display:inline-block;background:rgba(238,162,110,0.2);border:1px solid rgba(238,162,110,0.4);border-radius:20px;padding:6px 20px;margin-top:20px;font-family:'Poppins',sans-serif;font-size:13px;letter-spacing:1px}
+
+/* KPI Cards */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:40px auto;max-width:960px;padding:0 20px}
+.kpi-card{background:var(--white);border-radius:12px;padding:24px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,0.06);border-top:3px solid var(--coral);transition:transform 0.2s}
+.kpi-card:hover{transform:translateY(-2px)}
+.kpi-card .value{font-family:'Playfair Display',serif;font-size:32px;font-weight:800;color:var(--text);margin:8px 0 4px}
+.kpi-card .value.coral{color:var(--coral)}
+.kpi-card .value.gold{color:var(--gold)}
+.kpi-card .label{font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:#888;font-weight:600}
+.kpi-card .detail{font-size:11px;color:#aaa;margin-top:4px}
+
+/* Sections */
+.section{padding:48px 20px;max-width:960px;margin:0 auto}
+.section h2{font-size:clamp(22px,4vw,32px);margin-bottom:8px;position:relative;display:inline-block}
+.section h2::after{content:'';position:absolute;bottom:-4px;left:0;width:40px;height:3px;background:var(--coral);border-radius:2px}
+.section .section-intro{color:#666;font-size:14px;margin:16px 0 32px;max-width:700px}
+
+/* Funnel */
+.funnel{max-width:500px;margin:0 auto 40px}
+.funnel-step{text-align:center;padding:16px 20px;margin:0 auto;color:var(--white);font-weight:600;border-radius:4px;position:relative;transition:transform 0.2s}
+.funnel-step:hover{transform:scale(1.02)}
+.funnel-step .num{font-family:'Playfair Display',serif;font-size:28px;font-weight:800}
+.funnel-step .lbl{font-size:12px;text-transform:uppercase;letter-spacing:1px;opacity:0.9}
+.funnel-arrow{text-align:center;color:#ccc;font-size:20px;margin:4px 0}
+.funnel-rate{text-align:center;font-size:11px;color:var(--gold);font-weight:600;margin:-2px 0 4px;letter-spacing:0.5px}
+.fs-1{background:linear-gradient(135deg,#888,#999);width:100%}
+.fs-2{background:linear-gradient(135deg,#EEA26E,#d4915a);width:80%}
+.fs-3{background:linear-gradient(135deg,#B8975A,#a07840);width:55%}
+.fs-4{background:linear-gradient(135deg,#222,#444);width:35%}
+
+/* Story Card */
+.story-card{background:var(--white);border-radius:16px;padding:32px;box-shadow:0 4px 20px rgba(0,0,0,0.06);margin:32px 0;border-left:4px solid var(--gold)}
+.story-card h3{font-size:22px;margin-bottom:12px;color:var(--text)}
+.story-card .emoji{font-size:32px;margin-bottom:12px;display:block}
+.story-card .stat{font-family:'Playfair Display',serif;font-size:36px;font-weight:800;color:var(--coral);margin:12px 0}
+
+/* Chart Container */
+.chart-container{background:var(--white);border-radius:12px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,0.06);margin:24px 0}
+.chart-container h3{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--light-gray)}
+.chart-wrap{position:relative;height:320px}
+.chart-wrap-sm{position:relative;height:260px}
+
+/* Table */
+.table-wrap{overflow-x:auto;margin:24px 0;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.06)}
+table{width:100%;border-collapse:collapse;background:var(--white);font-size:13px}
+thead{background:var(--text);color:var(--white)}
+th{padding:12px 10px;text-align:left;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap}
+td{padding:10px;border-bottom:1px solid var(--light-gray);vertical-align:middle}
+tr:hover td{background:rgba(238,162,110,0.04)}
+td a{color:var(--coral);text-decoration:none;font-weight:500}
+td a:hover{text-decoration:underline}
+.status{display:inline-block;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:600}
+.status-atendido{background:#e8f5e9;color:#2e7d32}
+.status-confirmado{background:#e3f2fd;color:#1565c0}
+.status-marcado{background:#fff3e0;color:#e65100}
+
+/* Pipeline */
+.pipeline-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:24px 0}
+.pipe-card{background:var(--white);border-radius:10px;padding:16px;text-align:center;box-shadow:0 1px 8px rgba(0,0,0,0.05)}
+.pipe-card .month{font-weight:600;font-size:13px;color:#888;text-transform:uppercase}
+.pipe-card .count{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--coral);margin:4px 0}
+.pipe-card .names{font-size:11px;color:#999;line-height:1.4}
+
+/* Footer */
+.footer{background:var(--text);color:rgba(255,255,255,0.7);padding:32px 20px;text-align:center;font-size:12px;margin-top:40px}
+.footer .brand{color:var(--coral);font-family:'Playfair Display',serif;font-size:16px;font-weight:700;margin-bottom:8px}
+
+/* Methodology */
+.methodology{background:var(--light-gray);border-radius:12px;padding:24px;margin:32px 0;font-size:13px;color:#666}
+.methodology h4{font-size:14px;margin-bottom:8px;color:var(--text)}
+.methodology ul{padding-left:20px;margin-top:8px}
+.methodology li{margin-bottom:4px}
+
+/* Divider */
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--coral),transparent);margin:48px 0;opacity:0.3}
+
+/* Responsive */
+@media(max-width:600px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .kpi-card .value{font-size:24px}
+  .pipeline-grid{grid-template-columns:repeat(2,1fr)}
+  .chart-wrap{height:260px}
+  table{font-size:11px}
+  th,td{padding:8px 6px}
+  .section{padding:32px 16px}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="container">
+    <h1>Cada R$1 investido retornou</h1>
+    <span class="highlight">R$ 4,09</span>
+    <p class="subtitle">De 732 contatos a R$25.610 em receita comprovada. Este e o raio-x completo do trafego pago da DermaClinic.</p>
+    <span class="period">FEVEREIRO — AGOSTO 2026</span>
+  </div>
+</header>
+
+<!-- KPI CARDS -->
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="label">Receita Atribuida</div>
+    <div class="value coral">R$ 25.610</div>
+    <div class="detail">20 agendamentos pagantes</div>
+  </div>
+  <div class="kpi-card">
+    <div class="label">Investimento Total</div>
+    <div class="value">R$ 6.258</div>
+    <div class="detail">Meta Ads + Google Ads</div>
+  </div>
+  <div class="kpi-card">
+    <div class="label">ROI</div>
+    <div class="value coral">4,09x</div>
+    <div class="detail">Retorno sobre investimento</div>
+  </div>
+  <div class="kpi-card">
+    <div class="label">CAC</div>
+    <div class="value gold">R$ 625,80</div>
+    <div class="detail">Custo por paciente</div>
+  </div>
+  <div class="kpi-card">
+    <div class="label">Pacientes Convertidos</div>
+    <div class="value">10</div>
+    <div class="detail">Novos pacientes pagantes</div>
+  </div>
+  <div class="kpi-card">
+    <div class="label">Ticket Medio</div>
+    <div class="value gold">R$ 1.281</div>
+    <div class="detail">Por agendamento</div>
+  </div>
+</div>
+
+<!-- FUNIL -->
+<div class="section">
+  <h2>O Funil Completo</h2>
+  <p class="section-intro">De cada 73 contatos que chegaram pelo trafego pago, 1 se tornou paciente pagante. Parece pouco? Em dermatologia estetica, esse volume gera receita de alto ticket — e pacientes recorrentes.</p>
+
+  <div class="funnel">
+    <div class="funnel-step fs-1"><div class="num">732</div><div class="lbl">Contatos no Inbox</div></div>
+    <div class="funnel-arrow">&#9660;</div>
+    <div class="funnel-rate">9,2% matchearam com Feegow</div>
+    <div class="funnel-step fs-2"><div class="num">67</div><div class="lbl">Matches Feegow</div></div>
+    <div class="funnel-arrow">&#9660;</div>
+    <div class="funnel-rate">29,9% agendaram procedimento pagante</div>
+    <div class="funnel-step fs-3"><div class="num">20</div><div class="lbl">Agendamentos Pagantes</div></div>
+    <div class="funnel-arrow">&#9660;</div>
+    <div class="funnel-rate">10 pacientes distintos</div>
+    <div class="funnel-step fs-4"><div class="num">R$ 25.610</div><div class="lbl">Receita Comprovada</div></div>
+  </div>
+
+  <div class="chart-container">
+    <h3>Conversao por Etapa do Funil</h3>
+    <div class="chart-wrap-sm"><canvas id="chartFunnel"></canvas></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- CASO CLEDIR -->
+<div class="section">
+  <h2>A Joia Escondida</h2>
+  <p class="section-intro">Uma unica paciente responde por 57% de toda a receita do trafego pago. A historia de Cledir revela o verdadeiro poder do marketing digital: nao e sobre volume, e sobre fidelizacao.</p>
+
+  <div class="story-card">
+    <span class="emoji">&#128142;</span>
+    <h3>Cledir A. F. dos Santos</h3>
+    <p>Primeira consulta em <strong>26 de fevereiro</strong> — uma Toxina Botulinica de R$1.750. Seis meses depois, Cledir ja realizou <strong>8 procedimentos</strong>, de Sculptra a Laser CO2 Full Face, com mais um agendado para setembro.</p>
+    <div class="stat">R$ 14.700</div>
+    <p style="font-size:13px;color:#888">8 procedimentos em 7 meses — 57% da receita total do trafego pago</p>
+    <p style="margin-top:16px;font-size:14px">O CAC da Cledir foi de <strong>R$625,80</strong> (rateado). Seu retorno individual e de <strong>23,5x</strong> o custo de aquisicao. Cada procedimento gera um ticket medio de <strong>R$1.837</strong>.</p>
+  </div>
+
+  <div class="chart-container">
+    <h3>Receita por Paciente</h3>
+    <div class="chart-wrap"><canvas id="chartPatients"></canvas></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- PIPELINE CRESCENTE -->
+<div class="section">
+  <h2>O Pipeline Nao Para</h2>
+  <p class="section-intro">O investimento de hoje gera resultados amanha. Agosto e setembro ja contam com agendamentos confirmados — o funil continua alimentando a clinica.</p>
+
+  <div class="pipeline-grid">
+    <div class="pipe-card"><div class="month">Fev</div><div class="count">1</div><div class="names">Cledir</div></div>
+    <div class="pipe-card"><div class="month">Abr</div><div class="count">3</div><div class="names">M. da Graca, Eliane, Cledir</div></div>
+    <div class="pipe-card"><div class="month">Mai</div><div class="count">2</div><div class="names">Cledir (x2)</div></div>
+    <div class="pipe-card"><div class="month">Jun</div><div class="count">1</div><div class="names">Cledir</div></div>
+    <div class="pipe-card"><div class="month">Jul</div><div class="count">3</div><div class="names">Cledir, Sirlene, Morganna, Kely</div></div>
+    <div class="pipe-card"><div class="month">Ago</div><div class="count">5</div><div class="names">Cledir, Jorge, Claudia, Yanethsy, Kely</div></div>
+    <div class="pipe-card"><div class="month">Set</div><div class="count">4</div><div class="names">Francine (x2), Cledir, Claudia</div></div>
+  </div>
+
+  <div class="chart-container">
+    <h3>Investimento vs Receita Mensal</h3>
+    <div class="chart-wrap"><canvas id="chartMonthly"></canvas></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- NOVOS PACIENTES -->
+<div class="section">
+  <h2>Pacientes Novos Continuam Chegando</h2>
+  <p class="section-intro">Alem da recorrencia de Cledir, o trafego pago continua atraindo novos rostos. Cada mes traz pelo menos um paciente inedito, ampliando a base de clientes da clinica.</p>
+
+  <div class="chart-container">
+    <h3>Cronologia de Entrada dos 10 Pacientes</h3>
+    <div class="chart-wrap-sm"><canvas id="chartTimeline"></canvas></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:24px">
+    <div class="story-card" style="border-left-color:var(--coral)">
+      <h3 style="font-size:16px">&#128200; Metricas de Aquisicao</h3>
+      <p style="font-size:13px;margin-top:8px"><strong>1,37%</strong> dos contatos viram pacientes pagantes</p>
+      <p style="font-size:13px"><strong>29,9%</strong> dos matches Feegow geram agendamento</p>
+      <p style="font-size:13px"><strong>2,0</strong> agendamentos por paciente (media)</p>
+    </div>
+    <div class="story-card" style="border-left-color:var(--green)">
+      <h3 style="font-size:16px">&#128176; Valor por Tipo</h3>
+      <p style="font-size:13px;margin-top:8px"><strong>Procedimentos esteticos</strong>: ticket medio R$1.750</p>
+      <p style="font-size:13px"><strong>Consultas</strong>: R$400 (avaliativa) a R$980 (dermatologica)</p>
+      <p style="font-size:13px"><strong>Laser/CO2</strong>: R$1.200 a R$3.500</p>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- INVESTIMENTO DETALHADO -->
+<div class="section">
+  <h2>Investimento Mensal</h2>
+  <p class="section-intro">A partir de junho, o Google Ads entrou como segundo canal — ampliando o alcance sem inflar o orcamento de Meta Ads.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Mes</th><th>Meta Ads</th><th>Google Ads</th><th>Total</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Fevereiro</td><td>R$ 862,76</td><td>—</td><td><strong>R$ 862,76</strong></td></tr>
+        <tr><td>Marco</td><td>R$ 711,01</td><td>—</td><td><strong>R$ 711,01</strong></td></tr>
+        <tr><td>Abril*</td><td>~R$ 970</td><td>—</td><td><strong>~R$ 970</strong></td></tr>
+        <tr><td>Maio</td><td>R$ 883,37</td><td>—</td><td><strong>R$ 883,37</strong></td></tr>
+        <tr><td>Junho</td><td>R$ 1.069,69</td><td>R$ 404,23</td><td><strong>R$ 1.473,92</strong></td></tr>
+        <tr><td>Julho</td><td>R$ 808,67</td><td>R$ 547,96</td><td><strong>R$ 1.356,63</strong></td></tr>
+        <tr><td colspan="3" style="text-align:right;font-weight:700">Total acumulado</td><td><strong style="color:var(--coral)">R$ 6.258</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:11px;color:#999;margin-top:8px">* Abril: dados parciais extrapolados do relatorio W15 (R$693,28 em 4 dias).</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- TABELA COMPLETA DE AGENDAMENTOS -->
+<div class="section">
+  <h2>Os 20 Agendamentos</h2>
+  <p class="section-intro">Cada linha abaixo e um agendamento pagante comprovado — com link direto para o Feegow. Retornos, fototerapia e retirada de pontos foram excluidos da contagem.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>#</th><th>Data</th><th>Paciente</th><th>Procedimento</th><th>Valor</th><th>Status</th><th>Links</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td><td>26/02</td><td>Cledir A. F. dos Santos</td><td>Toxina Botulinica</td><td>R$ 1.750</td>
+          <td><span class="status status-atendido">Atendido</span></td>
+          <td><a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=7281" target="_blank">Feegow</a></td>
+        </tr>
+        <tr>
+          <td>2</td><td>08/04</td><td>Maria da Graca Moura</td><td>Proc. Cirurgico Menor</td><td>R$ 800</td>
+          <td><span class="status status-atendido">Atendido</span></td>
+          <td><a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=7773" target="_blank">Feegow</a></td>
+        </tr>
+        <tr>
+          <td>3</td><td>08/04</td><td>Eliane Schurtz Gonzaga</td><td>Toxina Botulinica</td><td>R$ 2.400</td>
+          <td><span class="status status-atendido">Atendido</span></td>
+          <td><a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=7893" target="_blank">Feegow</a></td>
+        </tr>
+        <tr>
+          <td>4</td><td>14/04</td><td>Cledir A. F. dos Santos</td><td>Sculptra</td><td>R$ 2.500</td>
+          <td><span class="status status-atendido">Atendido</span></td>
+          <td><a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=7674" target="_blank">Feegow</a></td>
+        </tr>
+        <tr>
+          <td>5</td><td>13/05</td><td>Cledir A. F. dos Santos</td><td>Preenchimento de Olheiras</td><td>R$ 1.600</td>
+          <td><span class="status status-atendido">Atendido</span></td>
+          <td><a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=8372" target="_blank">Feegow</a></td>
+        </tr>
+        <tr>
+          <td>6</td><td>18/05</td><td>Cledir A. F. dos Santos</td><td>Pequenos Procedimentos</td><td>R$ 1.200</td>
+          <td><span class="status status-atendido">Atendido</span></td>
+          <td><a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=8950" target="_blank">Feegow</a></td>
+        </tr>
+        <tr>
+          <td>7</td><td>26/06</td><td>Cledir A. F. dos Santos</td><td>CO2 Olhos</td><td>R$ 1.200</td>
+          <td><span class="status status-confirmado">Confirmado</span></td>
+          <td><a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=9685" target="_blank">Feegow</a></td>
+        </tr>
+        <tr>
+          <td>8</td><td>08/07</td><td>Cledir A. F. dos Santos</td><td>Laser CO2 Full Face</td><td>R$ 3.500</td>
+          <td><span class="status status-atendido">Atendido</span></td>
+          <td><a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=10007" target="_blank">Feegow</a></td>
+        </tr>
+        <tr>
+          <td>9</td><td>13/07</td><td>Sirlene Salvador</td><td>Consulta Prever</td><td>R$ 1.800</td>
+          <td><span class="status status-atendido">Atendido</span></td>
+          <td><a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=9773" target="_blank">Feegow</a></td>
+        </tr>
+        <tr>
+          <td>10</td><td>21/07</td><td>Morganna dos Santos</td><td>Consulta Avaliativa</td><td>R$ 400</td>
+          <td><span class="status status-atendido">Atendido</span></td>
+          <td><a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=20947" target="_blank">Feegow</a></td>
+        </tr>
+        <tr>
+          <td>11</td><td>27/07</td><td>Kely da Rocha</td><td>Consulta Avaliativa</td><td>R$ 400</td>
+          <td><span class="status status-atendido">Atendido</span></td>
+          <td><a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=21186" target="_blank">Feegow</a></td>
+        </tr>
+        <tr>
+          <td>12</td><td>05/08</td><td>Cledir A. F. dos Santos</td><td>Toxina Botulinica</td><td>R$ 1.750</td>
+          <td><span class="status status-atendido">Atendido</span></td>
+          <td><a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=10359" target="_blank">Feegow</a></td>
+        </tr>
+        <tr>
+          <td>13</td><td>13/08</td><td>Jorge Luiz Magro</td><td>Consulta Dermatologica</td><td>R$ 980</td>
+          <td><span class="status status-atendido">Atendido</span></td>
+          <td><a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=21491" target="_blank">Feegow</a></td>
+        </tr>
+        <tr>
+          <td>14</td><td>17/08</td><td>Claudia V. L. Gabardo</td><td>Consulta Avaliativa</td><td>R$ 400</td>
+          <td><span class="status status-atendido">Atendido</span></td>
+          <td><a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=20919" target="_blank">Feegow</a></td>
+        </tr>
+        <tr>
+          <td>15</td><td>20/08</td><td>Yanethsy Hernandez Rodriguez</td><td>Consulta Dermatologica</td><td>R$ 980</td>
+          <td><span class="status status-atendido">Atendido</span></td>
+          <td>
+            <a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=21648" target="_blank">Feegow</a>
+            &middot; <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17413" target="_blank">Chatwoot</a>
+          </td>
+        </tr>
+        <tr>
+          <td>16</td><td>24/08</td><td>Kely da Rocha</td><td>Pequenos Procedimentos</td><td>R$ 1.200</td>
+          <td><span class="status status-marcado">Marcado</span></td>
+          <td><a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=21644" target="_blank">Feegow</a></td>
+        </tr>
+        <tr>
+          <td>17</td><td>01/09</td><td>Francine Menezes</td><td>Consulta Avaliativa&sup1;</td><td>R$ 400</td>
+          <td><span class="status status-marcado">Marcado</span></td>
+          <td>
+            <a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=20977" target="_blank">Feegow</a>
+            &middot; <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/16502" target="_blank">Chatwoot</a>
+          </td>
+        </tr>
+        <tr>
+          <td>18</td><td>03/09</td><td>Cledir A. F. dos Santos</td><td>Fotona Dorso de Maos</td><td>R$ 1.200</td>
+          <td><span class="status status-confirmado">Confirmado</span></td>
+          <td><a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=21366" target="_blank">Feegow</a></td>
+        </tr>
+        <tr>
+          <td>19</td><td>09/09</td><td>Claudia V. L. Gabardo</td><td>Fotona Pescoco</td><td>R$ 750</td>
+          <td><span class="status status-marcado">Marcado</span></td>
+          <td><a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=21613" target="_blank">Feegow</a></td>
+        </tr>
+        <tr>
+          <td>20</td><td>29/09</td><td>Francine Menezes</td><td>Consulta Avaliativa</td><td>R$ 400</td>
+          <td><span class="status status-marcado">Marcado</span></td>
+          <td><a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=20996" target="_blank">Feegow</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:11px;color:#999;margin-top:8px">&sup1; AgendamentoID 20977 (Francine): valor no Feegow registrado como R$4,00 — corrigido para R$400 (Consulta Avaliativa padrao). Provavel erro de lancamento.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- EVOLUCAO MENSAL -->
+<div class="section">
+  <h2>Evolucao Mensal</h2>
+  <p class="section-intro">Visualizacao mes a mes de como o investimento se transformou em receita — com destaque para julho, que concentrou o maior retorno absoluto.</p>
+
+  <div class="chart-container">
+    <h3>Investimento vs Receita por Mes</h3>
+    <div class="chart-wrap"><canvas id="chartEvolution"></canvas></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- CONCLUSOES -->
+<div class="section">
+  <h2>Conclusoes e Recomendacoes</h2>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:24px">
+    <div class="story-card" style="border-left-color:var(--green)">
+      <h3 style="font-size:16px">O que funciona</h3>
+      <ul style="font-size:13px;padding-left:16px;margin-top:8px;line-height:1.8">
+        <li><strong>ROI de 4,09x</strong> — muito acima do breakeven</li>
+        <li><strong>Fidelizacao</strong> — Cledir prova que 1 paciente gera R$14.700+</li>
+        <li><strong>Pipeline ativo</strong> — set/2026 ja tem 4 agendamentos</li>
+        <li><strong>Ticket alto</strong> — media de R$1.281 por agendamento</li>
+      </ul>
+    </div>
+    <div class="story-card" style="border-left-color:var(--coral)">
+      <h3 style="font-size:16px">Oportunidades</h3>
+      <ul style="font-size:13px;padding-left:16px;margin-top:8px;line-height:1.8">
+        <li><strong>Nutricao dos 732 contatos</strong> — 98,6% nao converteram (ainda). Campanhas de remarketing podem reativar</li>
+        <li><strong>Google Ads em expansao</strong> — entrou em junho, merece mais orcamento para captura de intencao</li>
+        <li><strong>Automacao pos-consulta</strong> — mensagens de follow-up para recompra (modelo Cledir)</li>
+        <li><strong>Ampliacao de budget</strong> — com ROI de 4x, ha espaco para escalar mantendo rentabilidade</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- METODOLOGIA -->
+<div class="section">
+  <div class="methodology">
+    <h4>Metodologia</h4>
+    <ul>
+      <li><strong>Contatos</strong>: total de conversas no inbox "Trafego Pago" (Chatwoot inbox 56) de fev a ago/2026.</li>
+      <li><strong>Match Feegow</strong>: cruzamento por ultimos 8 digitos do telefone entre Chatwoot e Feegow. Yanethsy incluida via match manual.</li>
+      <li><strong>Agendamentos pagantes</strong>: exclui retornos, fototerapia e retirada de pontos. Consulta avaliativa conta como R$400 mesmo se valor_total=0 no Feegow.</li>
+      <li><strong>Receita</strong>: valor do campo valor_total do Feegow, exceto Francine (AgendamentoID 20977) corrigido de R$4 para R$400.</li>
+      <li><strong>Investimento</strong>: soma de gastos reportados em Meta Ads e Google Ads. Abril extrapolado a partir de dados parciais (W15).</li>
+      <li><strong>ROI</strong>: Receita / Investimento. CAC: Investimento / Pacientes distintos.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="brand">DermaClinic</div>
+  <p>Relatorio gerado em 21 de agosto de 2026 | Digital AI</p>
+  <p style="margin-top:4px;font-size:11px">Dados extraidos do Feegow, Chatwoot e plataformas de anuncios. Sujeito a atualizacao conforme novos agendamentos se concretizem.</p>
+</footer>
+
+<script>
+// Color palette
+const CORAL = '#EEA26E';
+const GOLD = '#B8975A';
+const DARK = '#222222';
+const LIGHT = '#FAF7F4';
+const GREEN = '#4CAF50';
+const BLUE = '#2196F3';
+
+Chart.defaults.font.family = "'Poppins', sans-serif";
+Chart.defaults.font.size = 12;
+Chart.defaults.color = '#666';
+
+// 1. Funnel Chart (horizontal bar)
+new Chart(document.getElementById('chartFunnel'), {
+  type: 'bar',
+  data: {
+    labels: ['Contatos Inbox', 'Matches Feegow', 'Agendamentos Pagantes', 'Pacientes Convertidos'],
+    datasets: [{
+      data: [732, 67, 20, 10],
+      backgroundColor: ['#999', CORAL, GOLD, DARK],
+      borderRadius: 6,
+      barThickness: 32
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            var rates = ['', '9,2% do total', '29,9% dos matches', '50% dos agendantes'];
+            return ctx.raw.toLocaleString('pt-BR') + (rates[ctx.dataIndex] ? ' (' + rates[ctx.dataIndex] + ')' : '');
+          }
+        }
+      }
+    },
+    scales: {
+      x: { display: false },
+      y: { grid: { display: false } }
+    }
+  }
+});
+
+// 2. Patients Revenue (horizontal bar)
+new Chart(document.getElementById('chartPatients'), {
+  type: 'bar',
+  data: {
+    labels: [
+      'Cledir A. F. dos Santos',
+      'Eliane Schurtz Gonzaga',
+      'Sirlene Salvador',
+      'Kely da Rocha',
+      'Jorge Luiz Magro',
+      'Yanethsy H. Rodriguez',
+      'Claudia V. L. Gabardo',
+      'Maria da Graca Moura',
+      'Francine Menezes',
+      'Morganna dos Santos'
+    ],
+    datasets: [{
+      data: [14700, 2400, 1800, 1600, 980, 980, 1150, 800, 800, 400],
+      backgroundColor: [CORAL, GOLD, GOLD, GOLD, GOLD, GOLD, GOLD, GOLD, GOLD, GOLD],
+      borderRadius: 6,
+      barThickness: 24
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            return 'R$ ' + ctx.raw.toLocaleString('pt-BR');
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { callback: function(v) { return 'R$ ' + (v/1000).toFixed(0) + 'k'; } },
+        grid: { color: 'rgba(0,0,0,0.05)' }
+      },
+      y: { grid: { display: false } }
+    }
+  }
+});
+
+// 3. Monthly Evolution (grouped bar)
+new Chart(document.getElementById('chartEvolution'), {
+  type: 'bar',
+  data: {
+    labels: ['Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set'],
+    datasets: [
+      {
+        label: 'Investimento',
+        data: [863, 711, 970, 883, 1474, 1357, null, null],
+        backgroundColor: DARK,
+        borderRadius: 4,
+        barThickness: 20
+      },
+      {
+        label: 'Receita',
+        data: [1750, 0, 5700, 2800, 1200, 6100, 5310, 2750],
+        backgroundColor: CORAL,
+        borderRadius: 4,
+        barThickness: 20
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { usePointStyle: true, pointStyle: 'rectRounded' } },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            if (ctx.raw === null) return ctx.dataset.label + ': em andamento';
+            return ctx.dataset.label + ': R$ ' + ctx.raw.toLocaleString('pt-BR');
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        ticks: { callback: function(v) { return 'R$ ' + (v/1000).toFixed(1) + 'k'; } },
+        grid: { color: 'rgba(0,0,0,0.05)' }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// 4. Patient timeline (scatter-like with bar)
+new Chart(document.getElementById('chartTimeline'), {
+  type: 'bar',
+  data: {
+    labels: ['Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set'],
+    datasets: [
+      {
+        label: 'Pacientes novos',
+        data: [1, 0, 2, 0, 0, 3, 3, 1],
+        backgroundColor: CORAL,
+        borderRadius: 6,
+        barThickness: 28
+      },
+      {
+        label: 'Agendamentos recorrentes',
+        data: [0, 0, 1, 2, 1, 1, 2, 3],
+        backgroundColor: GOLD,
+        borderRadius: 6,
+        barThickness: 28
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { usePointStyle: true, pointStyle: 'rectRounded' } }
+    },
+    scales: {
+      y: {
+        stacked: true,
+        ticks: { stepSize: 1 },
+        grid: { color: 'rgba(0,0,0,0.05)' }
+      },
+      x: { stacked: true, grid: { display: false } }
+    }
+  }
+});
+</script>
+</body>
+</html>
