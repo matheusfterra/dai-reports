@@ -4,97 +4,118 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DermaClinic | Trafego Pago — Fev a Ago 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/favicon-32.png">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--coral:#EEA26E;--gold:#B8975A;--text:#222222;--bg:#FAF7F4;--white:#FFFFFF;--light-gray:#F0EDE9;--green:#4CAF50;--red:#E53935;--blue:#2196F3}
-body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:15px}
-h1,h2,h3,h4{font-family:'Playfair Display',serif;font-weight:700;line-height:1.2}
+:root{
+  --primary:#2D52EF;
+  --primary-dark:#0F1F5C;
+  --secondary:#3B2FC9;
+  --accent:#E8EEFF;
+  --bg:#F5F7FF;
+  --white:#FFFFFF;
+  --text:#0F1F5C;
+  --text-secondary:#435a98;
+  --text-muted:#6677AA;
+  --light-gray:#E8EEFF;
+  --green:#22C55E;
+  --red:#EF4444;
+  --surface:#FFFFFF;
+  --gradient:linear-gradient(135deg,#2D52EF 0%,#0F1F5C 100%);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:15px}
+h1,h2,h3,h4{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;line-height:1.2}
 .container{max-width:960px;margin:0 auto;padding:0 20px}
 
 /* Hero */
-.hero{background:linear-gradient(135deg,#222222 0%,#3a3a3a 100%);color:var(--white);padding:60px 20px;text-align:center;position:relative;overflow:hidden}
-.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--coral),var(--gold))}
-.hero h1{font-size:clamp(28px,5vw,48px);margin-bottom:12px;font-weight:800}
-.hero .highlight{color:var(--coral);font-size:clamp(40px,7vw,72px);display:block;margin:16px 0}
-.hero .subtitle{font-family:'Poppins',sans-serif;font-weight:300;font-size:clamp(14px,2.5vw,18px);opacity:0.85;max-width:600px;margin:0 auto}
-.hero .period{display:inline-block;background:rgba(238,162,110,0.2);border:1px solid rgba(238,162,110,0.4);border-radius:20px;padding:6px 20px;margin-top:20px;font-family:'Poppins',sans-serif;font-size:13px;letter-spacing:1px}
+.hero{background:var(--gradient);color:var(--white);padding:60px 20px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;right:-20%;width:60%;height:200%;background:radial-gradient(circle,rgba(255,255,255,0.05) 0%,transparent 70%);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--primary),var(--secondary),var(--primary))}
+.hero-logos{display:flex;align-items:center;justify-content:center;gap:24px;margin-bottom:32px}
+.hero-logos img{height:40px;filter:brightness(0) invert(1);opacity:0.95}
+.hero-logos .separator{width:1px;height:32px;background:rgba(255,255,255,0.3)}
+.hero h1{font-size:clamp(24px,4vw,40px);margin-bottom:12px;font-weight:600;letter-spacing:-0.5px}
+.hero .highlight{color:var(--accent);font-size:clamp(40px,7vw,72px);display:block;margin:16px 0;font-weight:800;letter-spacing:-1px}
+.hero .subtitle{font-family:'DM Sans',sans-serif;font-weight:300;font-size:clamp(14px,2.5vw,18px);opacity:0.85;max-width:600px;margin:0 auto}
+.hero .period{display:inline-block;background:rgba(232,238,255,0.15);border:1px solid rgba(232,238,255,0.3);border-radius:20px;padding:6px 20px;margin-top:20px;font-family:'DM Sans',sans-serif;font-size:13px;letter-spacing:1px}
 
 /* KPI Cards */
 .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:40px auto;max-width:960px;padding:0 20px}
-.kpi-card{background:var(--white);border-radius:12px;padding:24px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,0.06);border-top:3px solid var(--coral);transition:transform 0.2s}
-.kpi-card:hover{transform:translateY(-2px)}
-.kpi-card .value{font-family:'Playfair Display',serif;font-size:32px;font-weight:800;color:var(--text);margin:8px 0 4px}
-.kpi-card .value.coral{color:var(--coral)}
-.kpi-card .value.gold{color:var(--gold)}
-.kpi-card .label{font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:#888;font-weight:600}
-.kpi-card .detail{font-size:11px;color:#aaa;margin-top:4px}
+.kpi-card{background:var(--surface);border-radius:12px;padding:24px;text-align:center;box-shadow:0 2px 12px rgba(15,31,92,0.06);border-top:3px solid var(--primary);transition:transform 0.2s}
+.kpi-card:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(15,31,92,0.1)}
+.kpi-card .value{font-family:'Plus Jakarta Sans',sans-serif;font-size:32px;font-weight:800;color:var(--text);margin:8px 0 4px}
+.kpi-card .value.primary{color:var(--primary)}
+.kpi-card .value.secondary{color:var(--secondary)}
+.kpi-card .label{font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);font-weight:600}
+.kpi-card .detail{font-size:11px;color:var(--text-muted);margin-top:4px;opacity:0.8}
 
 /* Sections */
 .section{padding:48px 20px;max-width:960px;margin:0 auto}
-.section h2{font-size:clamp(22px,4vw,32px);margin-bottom:8px;position:relative;display:inline-block}
-.section h2::after{content:'';position:absolute;bottom:-4px;left:0;width:40px;height:3px;background:var(--coral);border-radius:2px}
-.section .section-intro{color:#666;font-size:14px;margin:16px 0 32px;max-width:700px}
+.section h2{font-size:clamp(22px,4vw,32px);margin-bottom:8px;position:relative;display:inline-block;color:var(--primary-dark)}
+.section h2::after{content:'';position:absolute;bottom:-4px;left:0;width:40px;height:3px;background:var(--primary);border-radius:2px}
+.section .section-intro{color:var(--text-secondary);font-size:14px;margin:16px 0 32px;max-width:700px}
 
 /* Funnel */
 .funnel{max-width:500px;margin:0 auto 40px}
-.funnel-step{text-align:center;padding:16px 20px;margin:0 auto;color:var(--white);font-weight:600;border-radius:4px;position:relative;transition:transform 0.2s}
+.funnel-step{text-align:center;padding:16px 20px;margin:0 auto;color:var(--white);font-weight:600;border-radius:8px;position:relative;transition:transform 0.2s}
 .funnel-step:hover{transform:scale(1.02)}
-.funnel-step .num{font-family:'Playfair Display',serif;font-size:28px;font-weight:800}
+.funnel-step .num{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800}
 .funnel-step .lbl{font-size:12px;text-transform:uppercase;letter-spacing:1px;opacity:0.9}
-.funnel-arrow{text-align:center;color:#ccc;font-size:20px;margin:4px 0}
-.funnel-rate{text-align:center;font-size:11px;color:var(--gold);font-weight:600;margin:-2px 0 4px;letter-spacing:0.5px}
-.fs-1{background:linear-gradient(135deg,#888,#999);width:100%}
-.fs-2{background:linear-gradient(135deg,#EEA26E,#d4915a);width:80%}
-.fs-3{background:linear-gradient(135deg,#B8975A,#a07840);width:55%}
-.fs-4{background:linear-gradient(135deg,#222,#444);width:35%}
+.funnel-arrow{text-align:center;color:var(--text-muted);font-size:20px;margin:4px 0;opacity:0.4}
+.funnel-rate{text-align:center;font-size:11px;color:var(--secondary);font-weight:600;margin:-2px 0 4px;letter-spacing:0.5px}
+.fs-1{background:linear-gradient(135deg,#708acd,#435a98);width:100%}
+.fs-2{background:linear-gradient(135deg,#2D52EF,#1937a8);width:80%}
+.fs-3{background:linear-gradient(135deg,#3B2FC9,#230d8b);width:55%}
+.fs-4{background:var(--gradient);width:35%}
 
 /* Story Card */
-.story-card{background:var(--white);border-radius:16px;padding:32px;box-shadow:0 4px 20px rgba(0,0,0,0.06);margin:32px 0;border-left:4px solid var(--gold)}
-.story-card h3{font-size:22px;margin-bottom:12px;color:var(--text)}
+.story-card{background:var(--surface);border-radius:16px;padding:32px;box-shadow:0 4px 20px rgba(15,31,92,0.06);margin:32px 0;border-left:4px solid var(--secondary)}
+.story-card h3{font-size:22px;margin-bottom:12px;color:var(--primary-dark)}
 .story-card .emoji{font-size:32px;margin-bottom:12px;display:block}
-.story-card .stat{font-family:'Playfair Display',serif;font-size:36px;font-weight:800;color:var(--coral);margin:12px 0}
+.story-card .stat{font-family:'Plus Jakarta Sans',sans-serif;font-size:36px;font-weight:800;color:var(--primary);margin:12px 0}
 
 /* Chart Container */
-.chart-container{background:var(--white);border-radius:12px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,0.06);margin:24px 0}
-.chart-container h3{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--light-gray)}
+.chart-container{background:var(--surface);border-radius:12px;padding:24px;box-shadow:0 2px 12px rgba(15,31,92,0.06);margin:24px 0}
+.chart-container h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--light-gray);color:var(--primary-dark)}
 .chart-wrap{position:relative;height:320px}
 .chart-wrap-sm{position:relative;height:260px}
 
 /* Table */
-.table-wrap{overflow-x:auto;margin:24px 0;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.06)}
-table{width:100%;border-collapse:collapse;background:var(--white);font-size:13px}
-thead{background:var(--text);color:var(--white)}
+.table-wrap{overflow-x:auto;margin:24px 0;border-radius:12px;box-shadow:0 2px 12px rgba(15,31,92,0.06)}
+table{width:100%;border-collapse:collapse;background:var(--surface);font-size:13px}
+thead{background:var(--primary-dark);color:var(--white)}
 th{padding:12px 10px;text-align:left;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap}
 td{padding:10px;border-bottom:1px solid var(--light-gray);vertical-align:middle}
-tr:hover td{background:rgba(238,162,110,0.04)}
-td a{color:var(--coral);text-decoration:none;font-weight:500}
+tr:hover td{background:rgba(45,82,239,0.03)}
+td a{color:var(--primary);text-decoration:none;font-weight:500}
 td a:hover{text-decoration:underline}
 .status{display:inline-block;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:600}
-.status-atendido{background:#e8f5e9;color:#2e7d32}
-.status-confirmado{background:#e3f2fd;color:#1565c0}
-.status-marcado{background:#fff3e0;color:#e65100}
+.status-atendido{background:#dcfce7;color:#166534}
+.status-confirmado{background:#dbeafe;color:#1e40af}
+.status-marcado{background:#fef3c7;color:#92400e}
 
 /* Pipeline */
 .pipeline-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:24px 0}
-.pipe-card{background:var(--white);border-radius:10px;padding:16px;text-align:center;box-shadow:0 1px 8px rgba(0,0,0,0.05)}
-.pipe-card .month{font-weight:600;font-size:13px;color:#888;text-transform:uppercase}
-.pipe-card .count{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--coral);margin:4px 0}
-.pipe-card .names{font-size:11px;color:#999;line-height:1.4}
+.pipe-card{background:var(--surface);border-radius:10px;padding:16px;text-align:center;box-shadow:0 1px 8px rgba(15,31,92,0.05)}
+.pipe-card .month{font-weight:600;font-size:13px;color:var(--text-muted);text-transform:uppercase}
+.pipe-card .count{font-family:'Plus Jakarta Sans',sans-serif;font-size:24px;font-weight:700;color:var(--primary);margin:4px 0}
+.pipe-card .names{font-size:11px;color:var(--text-muted);line-height:1.4}
 
 /* Footer */
-.footer{background:var(--text);color:rgba(255,255,255,0.7);padding:32px 20px;text-align:center;font-size:12px;margin-top:40px}
-.footer .brand{color:var(--coral);font-family:'Playfair Display',serif;font-size:16px;font-weight:700;margin-bottom:8px}
+.footer{background:var(--primary-dark);color:rgba(232,238,255,0.7);padding:32px 20px;text-align:center;font-size:12px;margin-top:40px}
+.footer .brand{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px}
+.footer .brand img{height:28px;filter:brightness(0) invert(1);opacity:0.9}
 
 /* Methodology */
-.methodology{background:var(--light-gray);border-radius:12px;padding:24px;margin:32px 0;font-size:13px;color:#666}
-.methodology h4{font-size:14px;margin-bottom:8px;color:var(--text)}
+.methodology{background:var(--accent);border-radius:12px;padding:24px;margin:32px 0;font-size:13px;color:var(--text-secondary)}
+.methodology h4{font-size:14px;margin-bottom:8px;color:var(--primary-dark)}
 .methodology ul{padding-left:20px;margin-top:8px}
 .methodology li{margin-bottom:4px}
 
 /* Divider */
-.divider{height:1px;background:linear-gradient(90deg,transparent,var(--coral),transparent);margin:48px 0;opacity:0.3}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--primary),transparent);margin:48px 0;opacity:0.15}
 
 /* Responsive */
 @media(max-width:600px){
@@ -105,6 +126,7 @@ td a:hover{text-decoration:underline}
   table{font-size:11px}
   th,td{padding:8px 6px}
   .section{padding:32px 16px}
+  .hero-logos img{height:28px}
 }
 </style>
 </head>
@@ -113,6 +135,11 @@ td a:hover{text-decoration:underline}
 <!-- HERO -->
 <header class="hero">
   <div class="container">
+    <div class="hero-logos">
+      <img src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-horizontal.png" alt="Digital AI">
+      <div class="separator"></div>
+      <img src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/clients/dermaclinic/logo-dermaclinic.png" alt="DermaClinic" onerror="this.style.display='none'">
+    </div>
     <h1>Cada R$1 investido retornou</h1>
     <span class="highlight">R$ 4,09</span>
     <p class="subtitle">De 732 contatos a R$25.610 em receita comprovada. Este e o raio-x completo do trafego pago da DermaClinic.</p>
@@ -124,7 +151,7 @@ td a:hover{text-decoration:underline}
 <div class="kpi-grid">
   <div class="kpi-card">
     <div class="label">Receita Atribuida</div>
-    <div class="value coral">R$ 25.610</div>
+    <div class="value primary">R$ 25.610</div>
     <div class="detail">20 agendamentos pagantes</div>
   </div>
   <div class="kpi-card">
@@ -134,12 +161,12 @@ td a:hover{text-decoration:underline}
   </div>
   <div class="kpi-card">
     <div class="label">ROI</div>
-    <div class="value coral">4,09x</div>
+    <div class="value primary">4,09x</div>
     <div class="detail">Retorno sobre investimento</div>
   </div>
   <div class="kpi-card">
     <div class="label">CAC</div>
-    <div class="value gold">R$ 625,80</div>
+    <div class="value secondary">R$ 625,80</div>
     <div class="detail">Custo por paciente</div>
   </div>
   <div class="kpi-card">
@@ -149,7 +176,7 @@ td a:hover{text-decoration:underline}
   </div>
   <div class="kpi-card">
     <div class="label">Ticket Medio</div>
-    <div class="value gold">R$ 1.281</div>
+    <div class="value secondary">R$ 1.281</div>
     <div class="detail">Por agendamento</div>
   </div>
 </div>
@@ -190,7 +217,7 @@ td a:hover{text-decoration:underline}
     <h3>Cledir A. F. dos Santos</h3>
     <p>Primeira consulta em <strong>26 de fevereiro</strong> — uma Toxina Botulinica de R$1.750. Seis meses depois, Cledir ja realizou <strong>8 procedimentos</strong>, de Sculptra a Laser CO2 Full Face, com mais um agendado para setembro.</p>
     <div class="stat">R$ 14.700</div>
-    <p style="font-size:13px;color:#888">8 procedimentos em 7 meses — 57% da receita total do trafego pago</p>
+    <p style="font-size:13px;color:var(--text-muted)">8 procedimentos em 7 meses — 57% da receita total do trafego pago</p>
     <p style="margin-top:16px;font-size:14px">O CAC da Cledir foi de <strong>R$625,80</strong> (rateado). Seu retorno individual e de <strong>23,5x</strong> o custo de aquisicao. Cada procedimento gera um ticket medio de <strong>R$1.837</strong>.</p>
   </div>
 
@@ -236,14 +263,14 @@ td a:hover{text-decoration:underline}
   </div>
 
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:24px">
-    <div class="story-card" style="border-left-color:var(--coral)">
-      <h3 style="font-size:16px">&#128200; Metricas de Aquisicao</h3>
+    <div class="story-card" style="border-left-color:var(--primary)">
+      <h3 style="font-size:16px">Metricas de Aquisicao</h3>
       <p style="font-size:13px;margin-top:8px"><strong>1,37%</strong> dos contatos viram pacientes pagantes</p>
       <p style="font-size:13px"><strong>29,9%</strong> dos matches Feegow geram agendamento</p>
       <p style="font-size:13px"><strong>2,0</strong> agendamentos por paciente (media)</p>
     </div>
     <div class="story-card" style="border-left-color:var(--green)">
-      <h3 style="font-size:16px">&#128176; Valor por Tipo</h3>
+      <h3 style="font-size:16px">Valor por Tipo</h3>
       <p style="font-size:13px;margin-top:8px"><strong>Procedimentos esteticos</strong>: ticket medio R$1.750</p>
       <p style="font-size:13px"><strong>Consultas</strong>: R$400 (avaliativa) a R$980 (dermatologica)</p>
       <p style="font-size:13px"><strong>Laser/CO2</strong>: R$1.200 a R$3.500</p>
@@ -270,11 +297,11 @@ td a:hover{text-decoration:underline}
         <tr><td>Maio</td><td>R$ 883,37</td><td>—</td><td><strong>R$ 883,37</strong></td></tr>
         <tr><td>Junho</td><td>R$ 1.069,69</td><td>R$ 404,23</td><td><strong>R$ 1.473,92</strong></td></tr>
         <tr><td>Julho</td><td>R$ 808,67</td><td>R$ 547,96</td><td><strong>R$ 1.356,63</strong></td></tr>
-        <tr><td colspan="3" style="text-align:right;font-weight:700">Total acumulado</td><td><strong style="color:var(--coral)">R$ 6.258</strong></td></tr>
+        <tr><td colspan="3" style="text-align:right;font-weight:700">Total acumulado</td><td><strong style="color:var(--primary)">R$ 6.258</strong></td></tr>
       </tbody>
     </table>
   </div>
-  <p style="font-size:11px;color:#999;margin-top:8px">* Abril: dados parciais extrapolados do relatorio W15 (R$693,28 em 4 dias).</p>
+  <p style="font-size:11px;color:var(--text-muted);margin-top:8px">* Abril: dados parciais extrapolados do relatorio W15 (R$693,28 em 4 dias).</p>
 </div>
 
 <div class="divider"></div>
@@ -399,7 +426,7 @@ td a:hover{text-decoration:underline}
       </tbody>
     </table>
   </div>
-  <p style="font-size:11px;color:#999;margin-top:8px">&sup1; AgendamentoID 20977 (Francine): valor no Feegow registrado como R$4,00 — corrigido para R$400 (Consulta Avaliativa padrao). Provavel erro de lancamento.</p>
+  <p style="font-size:11px;color:var(--text-muted);margin-top:8px">&sup1; AgendamentoID 20977 (Francine): valor no Feegow registrado como R$4,00 — corrigido para R$400 (Consulta Avaliativa padrao). Provavel erro de lancamento.</p>
 </div>
 
 <div class="divider"></div>
@@ -431,7 +458,7 @@ td a:hover{text-decoration:underline}
         <li><strong>Ticket alto</strong> — media de R$1.281 por agendamento</li>
       </ul>
     </div>
-    <div class="story-card" style="border-left-color:var(--coral)">
+    <div class="story-card" style="border-left-color:var(--primary)">
       <h3 style="font-size:16px">Oportunidades</h3>
       <ul style="font-size:13px;padding-left:16px;margin-top:8px;line-height:1.8">
         <li><strong>Nutricao dos 732 contatos</strong> — 98,6% nao converteram (ainda). Campanhas de remarketing podem reativar</li>
@@ -460,23 +487,25 @@ td a:hover{text-decoration:underline}
 
 <!-- FOOTER -->
 <footer class="footer">
-  <div class="brand">DermaClinic</div>
-  <p>Relatorio gerado em 21 de agosto de 2026 | Digital AI</p>
+  <div class="brand">
+    <img src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-horizontal.png" alt="Digital AI">
+  </div>
+  <p>Relatorio gerado em 21 de agosto de 2026 | Preparado para DermaClinic</p>
   <p style="margin-top:4px;font-size:11px">Dados extraidos do Feegow, Chatwoot e plataformas de anuncios. Sujeito a atualizacao conforme novos agendamentos se concretizem.</p>
 </footer>
 
 <script>
-// Color palette
-const CORAL = '#EEA26E';
-const GOLD = '#B8975A';
-const DARK = '#222222';
-const LIGHT = '#FAF7F4';
-const GREEN = '#4CAF50';
-const BLUE = '#2196F3';
+// Digital AI Color palette
+const PRIMARY = '#2D52EF';
+const SECONDARY = '#3B2FC9';
+const DARK = '#0F1F5C';
+const LIGHT = '#E8EEFF';
+const GREEN = '#22C55E';
+const MUTED = '#708acd';
 
-Chart.defaults.font.family = "'Poppins', sans-serif";
+Chart.defaults.font.family = "'DM Sans', sans-serif";
 Chart.defaults.font.size = 12;
-Chart.defaults.color = '#666';
+Chart.defaults.color = '#435a98';
 
 // 1. Funnel Chart (horizontal bar)
 new Chart(document.getElementById('chartFunnel'), {
@@ -485,7 +514,7 @@ new Chart(document.getElementById('chartFunnel'), {
     labels: ['Contatos Inbox', 'Matches Feegow', 'Agendamentos Pagantes', 'Pacientes Convertidos'],
     datasets: [{
       data: [732, 67, 20, 10],
-      backgroundColor: ['#999', CORAL, GOLD, DARK],
+      backgroundColor: [MUTED, PRIMARY, SECONDARY, DARK],
       borderRadius: 6,
       barThickness: 32
     }]
@@ -530,7 +559,7 @@ new Chart(document.getElementById('chartPatients'), {
     ],
     datasets: [{
       data: [14700, 2400, 1800, 1600, 980, 980, 1150, 800, 800, 400],
-      backgroundColor: [CORAL, GOLD, GOLD, GOLD, GOLD, GOLD, GOLD, GOLD, GOLD, GOLD],
+      backgroundColor: [PRIMARY, SECONDARY, SECONDARY, SECONDARY, SECONDARY, SECONDARY, SECONDARY, SECONDARY, SECONDARY, SECONDARY],
       borderRadius: 6,
       barThickness: 24
     }]
@@ -552,7 +581,7 @@ new Chart(document.getElementById('chartPatients'), {
     scales: {
       x: {
         ticks: { callback: function(v) { return 'R$ ' + (v/1000).toFixed(0) + 'k'; } },
-        grid: { color: 'rgba(0,0,0,0.05)' }
+        grid: { color: 'rgba(15,31,92,0.05)' }
       },
       y: { grid: { display: false } }
     }
@@ -575,7 +604,7 @@ new Chart(document.getElementById('chartEvolution'), {
       {
         label: 'Receita',
         data: [1750, 0, 5700, 2800, 1200, 6100, 5310, 2750],
-        backgroundColor: CORAL,
+        backgroundColor: PRIMARY,
         borderRadius: 4,
         barThickness: 20
       }
@@ -598,14 +627,14 @@ new Chart(document.getElementById('chartEvolution'), {
     scales: {
       y: {
         ticks: { callback: function(v) { return 'R$ ' + (v/1000).toFixed(1) + 'k'; } },
-        grid: { color: 'rgba(0,0,0,0.05)' }
+        grid: { color: 'rgba(15,31,92,0.05)' }
       },
       x: { grid: { display: false } }
     }
   }
 });
 
-// 4. Patient timeline (scatter-like with bar)
+// 4. Patient timeline (stacked bar)
 new Chart(document.getElementById('chartTimeline'), {
   type: 'bar',
   data: {
@@ -614,14 +643,14 @@ new Chart(document.getElementById('chartTimeline'), {
       {
         label: 'Pacientes novos',
         data: [1, 0, 2, 0, 0, 3, 3, 1],
-        backgroundColor: CORAL,
+        backgroundColor: PRIMARY,
         borderRadius: 6,
         barThickness: 28
       },
       {
         label: 'Agendamentos recorrentes',
         data: [0, 0, 1, 2, 1, 1, 2, 3],
-        backgroundColor: GOLD,
+        backgroundColor: SECONDARY,
         borderRadius: 6,
         barThickness: 28
       }
@@ -637,7 +666,7 @@ new Chart(document.getElementById('chartTimeline'), {
       y: {
         stacked: true,
         ticks: { stepSize: 1 },
-        grid: { color: 'rgba(0,0,0,0.05)' }
+        grid: { color: 'rgba(15,31,92,0.05)' }
       },
       x: { stacked: true, grid: { display: false } }
     }
