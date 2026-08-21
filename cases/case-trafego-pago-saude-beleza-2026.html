@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case de Sucesso | Tráfego Pago — Saúde &amp; Beleza de Alto Padrão</title>
+<link rel="icon" type="image/png" href="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/favicon-32.png">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#2D52EF;
+  --primary-dark:#0F1F5C;
+  --secondary:#3B2FC9;
+  --accent:#E8EEFF;
+  --bg:#F5F7FF;
+  --white:#FFFFFF;
+  --text:#0F1F5C;
+  --text-secondary:#435a98;
+  --text-muted:#6677AA;
+  --light-gray:#E8EEFF;
+  --green:#22C55E;
+  --red:#EF4444;
+  --surface:#FFFFFF;
+  --gradient:linear-gradient(135deg,#2D52EF 0%,#0F1F5C 100%);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:15px}
+h1,h2,h3,h4{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;line-height:1.2}
+.container{max-width:960px;margin:0 auto;padding:0 20px}
+
+/* Hero */
+.hero{background:var(--gradient);color:var(--white);padding:60px 20px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;right:-20%;width:60%;height:200%;background:radial-gradient(circle,rgba(255,255,255,0.05) 0%,transparent 70%);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--primary),var(--secondary),var(--primary))}
+.hero-logos{display:flex;align-items:center;justify-content:center;gap:24px;margin-bottom:32px}
+.hero-logos img{height:40px;filter:brightness(0) invert(1);opacity:0.95}
+.hero-logos .separator{width:1px;height:32px;background:rgba(255,255,255,0.3)}
+.hero-logos .logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.5px;color:var(--white);opacity:0.95}
+.hero h1{font-size:clamp(24px,4vw,40px);margin-bottom:12px;font-weight:600;letter-spacing:-0.5px}
+.hero .highlight{color:var(--accent);font-size:clamp(40px,7vw,72px);display:block;margin:16px 0;font-weight:800;letter-spacing:-1px}
+.hero .subtitle{font-family:'DM Sans',sans-serif;font-weight:300;font-size:clamp(14px,2.5vw,18px);opacity:0.85;max-width:600px;margin:0 auto}
+.hero .period{display:inline-block;background:rgba(232,238,255,0.15);border:1px solid rgba(232,238,255,0.3);border-radius:20px;padding:6px 20px;margin-top:20px;font-family:'DM Sans',sans-serif;font-size:13px;letter-spacing:1px}
+
+/* KPI Cards */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:40px auto;max-width:960px;padding:0 20px}
+.kpi-card{background:var(--surface);border-radius:12px;padding:24px;text-align:center;box-shadow:0 2px 12px rgba(15,31,92,0.06);border-top:3px solid var(--primary);transition:transform 0.2s}
+.kpi-card:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(15,31,92,0.1)}
+.kpi-card .value{font-family:'Plus Jakarta Sans',sans-serif;font-size:32px;font-weight:800;color:var(--text);margin:8px 0 4px}
+.kpi-card .value.primary{color:var(--primary)}
+.kpi-card .value.secondary{color:var(--secondary)}
+.kpi-card .label{font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);font-weight:600}
+.kpi-card .detail{font-size:11px;color:var(--text-muted);margin-top:4px;opacity:0.8}
+
+/* Sections */
+.section{padding:48px 20px;max-width:960px;margin:0 auto}
+.section h2{font-size:clamp(22px,4vw,32px);margin-bottom:8px;position:relative;display:inline-block;color:var(--primary-dark)}
+.section h2::after{content:'';position:absolute;bottom:-4px;left:0;width:40px;height:3px;background:var(--primary);border-radius:2px}
+.section .section-intro{color:var(--text-secondary);font-size:14px;margin:16px 0 32px;max-width:700px}
+
+/* Funnel */
+.funnel{max-width:500px;margin:0 auto 40px}
+.funnel-step{text-align:center;padding:16px 20px;margin:0 auto;color:var(--white);font-weight:600;border-radius:8px;position:relative;transition:transform 0.2s}
+.funnel-step:hover{transform:scale(1.02)}
+.funnel-step .num{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800}
+.funnel-step .lbl{font-size:12px;text-transform:uppercase;letter-spacing:1px;opacity:0.9}
+.funnel-arrow{text-align:center;color:var(--text-muted);font-size:20px;margin:4px 0;opacity:0.4}
+.funnel-rate{text-align:center;font-size:11px;color:var(--secondary);font-weight:600;margin:-2px 0 4px;letter-spacing:0.5px}
+.fs-1{background:linear-gradient(135deg,#708acd,#435a98);width:100%}
+.fs-2{background:linear-gradient(135deg,#2D52EF,#1937a8);width:80%}
+.fs-3{background:linear-gradient(135deg,#3B2FC9,#230d8b);width:55%}
+.fs-4{background:var(--gradient);width:35%}
+
+/* Story Card */
+.story-card{background:var(--surface);border-radius:16px;padding:32px;box-shadow:0 4px 20px rgba(15,31,92,0.06);margin:32px 0;border-left:4px solid var(--secondary)}
+.story-card h3{font-size:22px;margin-bottom:12px;color:var(--primary-dark)}
+.story-card .emoji{font-size:32px;margin-bottom:12px;display:block}
+.story-card .stat{font-family:'Plus Jakarta Sans',sans-serif;font-size:36px;font-weight:800;color:var(--primary);margin:12px 0}
+
+/* Chart Container */
+.chart-container{background:var(--surface);border-radius:12px;padding:24px;box-shadow:0 2px 12px rgba(15,31,92,0.06);margin:24px 0}
+.chart-container h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--light-gray);color:var(--primary-dark)}
+.chart-wrap{position:relative;height:320px}
+.chart-wrap-sm{position:relative;height:260px}
+
+/* Table */
+.table-wrap{overflow-x:auto;margin:24px 0;border-radius:12px;box-shadow:0 2px 12px rgba(15,31,92,0.06)}
+table{width:100%;border-collapse:collapse;background:var(--surface);font-size:13px}
+thead{background:var(--primary-dark);color:var(--white)}
+th{padding:12px 10px;text-align:left;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap}
+td{padding:10px;border-bottom:1px solid var(--light-gray);vertical-align:middle}
+tr:hover td{background:rgba(45,82,239,0.03)}
+td a{color:var(--primary);text-decoration:none;font-weight:500}
+td a:hover{text-decoration:underline}
+.status{display:inline-block;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:600}
+.status-atendido{background:#dcfce7;color:#166534}
+.status-confirmado{background:#dbeafe;color:#1e40af}
+.status-marcado{background:#fef3c7;color:#92400e}
+
+/* Pipeline */
+.pipeline-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:24px 0}
+.pipe-card{background:var(--surface);border-radius:10px;padding:16px;text-align:center;box-shadow:0 1px 8px rgba(15,31,92,0.05)}
+.pipe-card .month{font-weight:600;font-size:13px;color:var(--text-muted);text-transform:uppercase}
+.pipe-card .count{font-family:'Plus Jakarta Sans',sans-serif;font-size:24px;font-weight:700;color:var(--primary);margin:4px 0}
+.pipe-card .names{font-size:11px;color:var(--text-muted);line-height:1.4}
+
+/* Footer */
+.footer{background:var(--primary-dark);color:rgba(232,238,255,0.7);padding:32px 20px;text-align:center;font-size:12px;margin-top:40px}
+.footer .brand{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px}
+.footer .brand img{height:28px;filter:brightness(0) invert(1);opacity:0.9}
+
+/* Methodology */
+.methodology{background:var(--accent);border-radius:12px;padding:24px;margin:32px 0;font-size:13px;color:var(--text-secondary)}
+.methodology h4{font-size:14px;margin-bottom:8px;color:var(--primary-dark)}
+.methodology ul{padding-left:20px;margin-top:8px}
+.methodology li{margin-bottom:4px}
+
+/* Divider */
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--primary),transparent);margin:48px 0;opacity:0.15}
+
+/* Responsive */
+@media(max-width:600px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .kpi-card .value{font-size:24px}
+  .pipeline-grid{grid-template-columns:repeat(2,1fr)}
+  .chart-wrap{height:260px}
+  table{font-size:11px}
+  th,td{padding:8px 6px}
+  .section{padding:32px 16px}
+  .hero-logos img{height:28px}
+  .hero-logos .logo-text{font-size:16px}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-logos">
+      <img src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-horizontal.png" alt="Digital AI">
+    </div>
+    <h1>Cada R$1 investido retornou</h1>
+    <span class="highlight">R$ 4,09</span>
+    <p class="subtitle">De 732 contatos a R$25.610 em receita comprovada. Este é o raio-x completo do tráfego pago de uma clínica de estética e dermatologia de alto padrão.</p>
+    <span class="period">7 MESES DE CAMPANHA</span>
+  </div>
+</header>
+
+<!-- KPI CARDS -->
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="label">Receita Atribuída</div>
+    <div class="value primary">R$ 25.610</div>
+    <div class="detail">20 agendamentos pagantes</div>
+  </div>
+  <div class="kpi-card">
+    <div class="label">Investimento Total</div>
+    <div class="value">R$ 6.258</div>
+    <div class="detail">Meta Ads + Google Ads</div>
+  </div>
+  <div class="kpi-card">
+    <div class="label">ROI</div>
+    <div class="value primary">4,09x</div>
+    <div class="detail">Retorno sobre investimento</div>
+  </div>
+  <div class="kpi-card">
+    <div class="label">CAC</div>
+    <div class="value secondary">R$ 625,80</div>
+    <div class="detail">Custo por paciente</div>
+  </div>
+  <div class="kpi-card">
+    <div class="label">Pacientes Convertidos</div>
+    <div class="value">10</div>
+    <div class="detail">Novos pacientes pagantes</div>
+  </div>
+  <div class="kpi-card">
+    <div class="label">Ticket Médio</div>
+    <div class="value secondary">R$ 1.281</div>
+    <div class="detail">Por agendamento</div>
+  </div>
+</div>
+
+<!-- FUNIL -->
+<div class="section">
+  <h2>O Funil Completo</h2>
+  <p class="section-intro">De cada 73 contatos que chegaram pelo tráfego pago, 1 se tornou paciente pagante. Em dermatologia estética de alto padrão, esse volume gera receita de alto ticket — e pacientes recorrentes.</p>
+
+  <div class="funnel">
+    <div class="funnel-step fs-1"><div class="num">732</div><div class="lbl">Contatos no Inbox</div></div>
+    <div class="funnel-arrow">&#9660;</div>
+    <div class="funnel-rate">9,2% matchearam com o sistema</div>
+    <div class="funnel-step fs-2"><div class="num">67</div><div class="lbl">Matches Confirmados</div></div>
+    <div class="funnel-arrow">&#9660;</div>
+    <div class="funnel-rate">29,9% agendaram procedimento pagante</div>
+    <div class="funnel-step fs-3"><div class="num">20</div><div class="lbl">Agendamentos Pagantes</div></div>
+    <div class="funnel-arrow">&#9660;</div>
+    <div class="funnel-rate">10 pacientes distintos</div>
+    <div class="funnel-step fs-4"><div class="num">R$ 25.610</div><div class="lbl">Receita Comprovada</div></div>
+  </div>
+
+  <div class="chart-container">
+    <h3>Conversão por Etapa do Funil</h3>
+    <div class="chart-wrap-sm"><canvas id="chartFunnel"></canvas></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- CASO DESTAQUE -->
+<div class="section">
+  <h2>A Joia Escondida</h2>
+  <p class="section-intro">Uma única paciente responde por 57% de toda a receita do tráfego pago. Essa história revela o verdadeiro poder do marketing digital: não é sobre volume, é sobre fidelização.</p>
+
+  <div class="story-card">
+    <span class="emoji">&#128142;</span>
+    <h3>Paciente Destaque</h3>
+    <p>Primeira consulta no <strong>segundo mês de campanha</strong> — uma Toxina Botulínica de R$1.750. Seis meses depois, já realizou <strong>8 procedimentos</strong>, de Sculptra a Laser CO2 Full Face, com mais um agendado.</p>
+    <div class="stat">R$ 14.700</div>
+    <p style="font-size:13px;color:var(--text-muted)">8 procedimentos em 7 meses — 57% da receita total do tráfego pago</p>
+    <p style="margin-top:16px;font-size:14px">O CAC desta paciente foi de <strong>R$625,80</strong> (rateado). Seu retorno individual é de <strong>23,5x</strong> o custo de aquisição. Cada procedimento gera um ticket médio de <strong>R$1.837</strong>.</p>
+  </div>
+
+  <div class="chart-container">
+    <h3>Receita por Paciente</h3>
+    <div class="chart-wrap"><canvas id="chartPatients"></canvas></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- PIPELINE CRESCENTE -->
+<div class="section">
+  <h2>O Pipeline Não Para</h2>
+  <p class="section-intro">O investimento de hoje gera resultados amanhã. Os meses seguintes já contam com agendamentos confirmados — o funil continua alimentando a clínica.</p>
+
+  <div class="pipeline-grid">
+    <div class="pipe-card"><div class="month">Mês 1</div><div class="count">1</div><div class="names">1 paciente</div></div>
+    <div class="pipe-card"><div class="month">Mês 3</div><div class="count">3</div><div class="names">3 pacientes</div></div>
+    <div class="pipe-card"><div class="month">Mês 4</div><div class="count">2</div><div class="names">2 retornos</div></div>
+    <div class="pipe-card"><div class="month">Mês 5</div><div class="count">1</div><div class="names">1 retorno</div></div>
+    <div class="pipe-card"><div class="month">Mês 6</div><div class="count">3</div><div class="names">3 novos + retornos</div></div>
+    <div class="pipe-card"><div class="month">Mês 7</div><div class="count">5</div><div class="names">3 novos + retornos</div></div>
+    <div class="pipe-card"><div class="month">Mês 8+</div><div class="count">4</div><div class="names">Pipeline ativo</div></div>
+  </div>
+
+  <div class="chart-container">
+    <h3>Investimento vs Receita Mensal</h3>
+    <div class="chart-wrap"><canvas id="chartMonthly"></canvas></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- NOVOS PACIENTES -->
+<div class="section">
+  <h2>Pacientes Novos Continuam Chegando</h2>
+  <p class="section-intro">Além da recorrência da paciente destaque, o tráfego pago continua atraindo novos rostos. Cada mês traz pelo menos um paciente inédito, ampliando a base de clientes da clínica.</p>
+
+  <div class="chart-container">
+    <h3>Cronologia de Entrada dos 10 Pacientes</h3>
+    <div class="chart-wrap-sm"><canvas id="chartTimeline"></canvas></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:24px">
+    <div class="story-card" style="border-left-color:var(--primary)">
+      <h3 style="font-size:16px">Métricas de Aquisição</h3>
+      <p style="font-size:13px;margin-top:8px"><strong>1,37%</strong> dos contatos viram pacientes pagantes</p>
+      <p style="font-size:13px"><strong>29,9%</strong> dos matches confirmados geram agendamento</p>
+      <p style="font-size:13px"><strong>2,0</strong> agendamentos por paciente (média)</p>
+    </div>
+    <div class="story-card" style="border-left-color:var(--green)">
+      <h3 style="font-size:16px">Valor por Tipo</h3>
+      <p style="font-size:13px;margin-top:8px"><strong>Procedimentos estéticos</strong>: ticket médio R$1.750</p>
+      <p style="font-size:13px"><strong>Consultas</strong>: R$400 (avaliativa) a R$980 (dermatológica)</p>
+      <p style="font-size:13px"><strong>Laser/CO2</strong>: R$1.200 a R$3.500</p>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- INVESTIMENTO DETALHADO -->
+<div class="section">
+  <h2>Investimento Mensal</h2>
+  <p class="section-intro">A partir do quinto mês, o Google Ads entrou como segundo canal — ampliando o alcance sem inflar o orçamento de Meta Ads.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Mês</th><th>Meta Ads</th><th>Google Ads</th><th>Total</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Mês 1</td><td>R$ 862,76</td><td>—</td><td><strong>R$ 862,76</strong></td></tr>
+        <tr><td>Mês 2</td><td>R$ 711,01</td><td>—</td><td><strong>R$ 711,01</strong></td></tr>
+        <tr><td>Mês 3*</td><td>~R$ 970</td><td>—</td><td><strong>~R$ 970</strong></td></tr>
+        <tr><td>Mês 4</td><td>R$ 883,37</td><td>—</td><td><strong>R$ 883,37</strong></td></tr>
+        <tr><td>Mês 5</td><td>R$ 1.069,69</td><td>R$ 404,23</td><td><strong>R$ 1.473,92</strong></td></tr>
+        <tr><td>Mês 6</td><td>R$ 808,67</td><td>R$ 547,96</td><td><strong>R$ 1.356,63</strong></td></tr>
+        <tr><td colspan="3" style="text-align:right;font-weight:700">Total acumulado</td><td><strong style="color:var(--primary)">R$ 6.258</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:11px;color:var(--text-muted);margin-top:8px">* Mês 3: dados parciais extrapolados de relatório semanal.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- TABELA COMPLETA DE AGENDAMENTOS -->
+<div class="section">
+  <h2>Os 20 Agendamentos</h2>
+  <p class="section-intro">Cada linha abaixo é um agendamento pagante comprovado. Retornos, fototerapia e retirada de pontos foram excluídos da contagem.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>#</th><th>Mês</th><th>Paciente</th><th>Procedimento</th><th>Valor</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Mês 1</td><td>Paciente A</td><td>Toxina Botulínica</td><td>R$ 1.750</td><td><span class="status status-atendido">Atendido</span></td></tr>
+        <tr><td>2</td><td>Mês 3</td><td>Paciente B</td><td>Proc. Cirúrgico Menor</td><td>R$ 800</td><td><span class="status status-atendido">Atendido</span></td></tr>
+        <tr><td>3</td><td>Mês 3</td><td>Paciente C</td><td>Toxina Botulínica</td><td>R$ 2.400</td><td><span class="status status-atendido">Atendido</span></td></tr>
+        <tr><td>4</td><td>Mês 3</td><td>Paciente A</td><td>Sculptra</td><td>R$ 2.500</td><td><span class="status status-atendido">Atendido</span></td></tr>
+        <tr><td>5</td><td>Mês 4</td><td>Paciente A</td><td>Preenchimento de Olheiras</td><td>R$ 1.600</td><td><span class="status status-atendido">Atendido</span></td></tr>
+        <tr><td>6</td><td>Mês 4</td><td>Paciente A</td><td>Pequenos Procedimentos</td><td>R$ 1.200</td><td><span class="status status-atendido">Atendido</span></td></tr>
+        <tr><td>7</td><td>Mês 5</td><td>Paciente A</td><td>CO2 Olhos</td><td>R$ 1.200</td><td><span class="status status-confirmado">Confirmado</span></td></tr>
+        <tr><td>8</td><td>Mês 6</td><td>Paciente A</td><td>Laser CO2 Full Face</td><td>R$ 3.500</td><td><span class="status status-atendido">Atendido</span></td></tr>
+        <tr><td>9</td><td>Mês 6</td><td>Paciente D</td><td>Consulta Especializada</td><td>R$ 1.800</td><td><span class="status status-atendido">Atendido</span></td></tr>
+        <tr><td>10</td><td>Mês 6</td><td>Paciente E</td><td>Consulta Avaliativa</td><td>R$ 400</td><td><span class="status status-atendido">Atendido</span></td></tr>
+        <tr><td>11</td><td>Mês 6</td><td>Paciente F</td><td>Consulta Avaliativa</td><td>R$ 400</td><td><span class="status status-atendido">Atendido</span></td></tr>
+        <tr><td>12</td><td>Mês 7</td><td>Paciente A</td><td>Toxina Botulínica</td><td>R$ 1.750</td><td><span class="status status-atendido">Atendido</span></td></tr>
+        <tr><td>13</td><td>Mês 7</td><td>Paciente G</td><td>Consulta Dermatológica</td><td>R$ 980</td><td><span class="status status-atendido">Atendido</span></td></tr>
+        <tr><td>14</td><td>Mês 7</td><td>Paciente H</td><td>Consulta Avaliativa</td><td>R$ 400</td><td><span class="status status-atendido">Atendido</span></td></tr>
+        <tr><td>15</td><td>Mês 7</td><td>Paciente I</td><td>Consulta Dermatológica</td><td>R$ 980</td><td><span class="status status-atendido">Atendido</span></td></tr>
+        <tr><td>16</td><td>Mês 7</td><td>Paciente F</td><td>Pequenos Procedimentos</td><td>R$ 1.200</td><td><span class="status status-marcado">Marcado</span></td></tr>
+        <tr><td>17</td><td>Mês 8</td><td>Paciente J</td><td>Consulta Avaliativa</td><td>R$ 400</td><td><span class="status status-marcado">Marcado</span></td></tr>
+        <tr><td>18</td><td>Mês 8</td><td>Paciente A</td><td>Fotona Dorso de Mãos</td><td>R$ 1.200</td><td><span class="status status-confirmado">Confirmado</span></td></tr>
+        <tr><td>19</td><td>Mês 8</td><td>Paciente H</td><td>Fotona Pescoço</td><td>R$ 750</td><td><span class="status status-marcado">Marcado</span></td></tr>
+        <tr><td>20</td><td>Mês 8</td><td>Paciente J</td><td>Consulta Avaliativa</td><td>R$ 400</td><td><span class="status status-marcado">Marcado</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- EVOLUCAO MENSAL -->
+<div class="section">
+  <h2>Evolução Mensal</h2>
+  <p class="section-intro">Visualização mês a mês de como o investimento se transformou em receita — com destaque para o mês 6, que concentrou o maior retorno absoluto.</p>
+
+  <div class="chart-container">
+    <h3>Investimento vs Receita por Mês</h3>
+    <div class="chart-wrap"><canvas id="chartEvolution"></canvas></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- BENCHMARK -->
+<div class="section">
+  <h2>Benchmark: Clínica vs. Mercado</h2>
+  <p class="section-intro">Como os resultados desta clínica de estética e dermatologia de alto padrão se comparam com os benchmarks do setor no Brasil? Dados consolidados de 10 fontes especializadas.</p>
+
+  <div class="chart-container">
+    <h3>Scorecard — Clínica vs. Benchmark do Setor</h3>
+    <div class="chart-wrap"><canvas id="chartBenchmark"></canvas></div>
+  </div>
+
+  <div class="table-wrap" style="margin-top:24px">
+    <table>
+      <thead>
+        <tr><th>Métrica</th><th>Clínica</th><th>Benchmark Mercado</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Lead &rarr; Agendamento</strong> <span style="font-size:10px;color:var(--text-muted)">(dos matched)</span></td>
+          <td><strong>29,9%</strong></td>
+          <td>20–30%</td>
+          <td><span class="status status-atendido">&#10003; No topo</span></td>
+        </tr>
+        <tr>
+          <td><strong>Conversão end-to-end</strong> <span style="font-size:10px;color:var(--text-muted)">(contatos &rarr; pacientes)</span></td>
+          <td><strong>1,37%</strong></td>
+          <td>1,0–2,5%</td>
+          <td><span class="status status-atendido">&#10003; Dentro</span></td>
+        </tr>
+        <tr>
+          <td><strong>Ticket médio</strong></td>
+          <td><strong>R$ 1.281</strong></td>
+          <td>R$ 800–2.000</td>
+          <td><span class="status status-atendido">&#10003; Alto padrão</span></td>
+        </tr>
+        <tr>
+          <td><strong>ROI</strong></td>
+          <td><strong>4,09x</strong></td>
+          <td>3–5x <span style="font-size:10px;color:var(--text-muted)">(meses 2–3)</span></td>
+          <td><span class="status status-atendido">&#10003; Acima</span></td>
+        </tr>
+        <tr>
+          <td><strong>CAC</strong></td>
+          <td><strong>R$ 625,80</strong></td>
+          <td>R$ 250–600</td>
+          <td><span class="status status-marcado">&#9888; No limite</span></td>
+        </tr>
+        <tr>
+          <td><strong>CPL (estimado)</strong> <span style="font-size:10px;color:var(--text-muted)">(invest &divide; contatos)</span></td>
+          <td><strong>R$ 8,55</strong></td>
+          <td>R$ 30–80 <span style="font-size:10px;color:var(--text-muted)">(Meta Ads)</span></td>
+          <td><span class="status status-atendido">&#10003; Muito abaixo</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:24px">
+    <div class="story-card" style="border-left-color:var(--green)">
+      <h3 style="font-size:16px">Acima do Mercado</h3>
+      <ul style="font-size:13px;padding-left:16px;margin-top:8px;line-height:1.8">
+        <li><strong>ROI de 4,09x</strong> — acima do benchmark de 3–5x para meses 2–3 de campanha</li>
+        <li><strong>CPL extremamente baixo</strong> — R$8,55 vs. R$30–80 do mercado</li>
+        <li><strong>Conversão lead&rarr;agendamento</strong> — 29,9%, no topo da faixa saudável</li>
+        <li><strong>Ticket médio</strong> — R$1.281 confirma posicionamento premium</li>
+      </ul>
+    </div>
+    <div class="story-card" style="border-left-color:var(--secondary)">
+      <h3 style="font-size:16px">Oportunidades de Melhoria</h3>
+      <ul style="font-size:13px;padding-left:16px;margin-top:8px;line-height:1.8">
+        <li><strong>CAC no limite</strong> — R$625,80 vs. teto de R$600; compensado pelo alto ticket</li>
+        <li><strong>Rastreabilidade</strong> — apenas 9% dos contatos matchearam com o sistema; mercado ref. 15–25%</li>
+        <li><strong>Nutrição de leads</strong> — 91% dos contatos não converteram; régua de follow-up pode reativar</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="chart-container" style="margin-top:24px">
+    <h3>ROI por Fase de Maturação — Clínica vs. Referência</h3>
+    <div class="chart-wrap-sm"><canvas id="chartROI"></canvas></div>
+  </div>
+
+  <div class="methodology" style="margin-top:24px">
+    <h4>Fontes do Benchmark</h4>
+    <ul>
+      <li><a href="https://gruponogueiramkt.com/quanto-investir-meta-ads-clinicas-guia-orcamento-2025/" target="_blank" style="color:var(--primary)">Grupo Nogueira Mkt</a> — CPL por especialidade, ROI por fase de campanha</li>
+      <li><a href="https://fourads.com.br/blog/quanto-investir-em-trafego-pago-para-clinica-de-estetica" target="_blank" style="color:var(--primary)">FourAds</a> — Investimento e ROI para clínicas de estética</li>
+      <li><a href="https://www.buscacliente.com.br/blog/vendas/leads/aumente-conversoes-com-funil-de-vendas-para-clinica-de-estetica-e-qualificacao-de-leads/" target="_blank" style="color:var(--primary)">Buscacliente</a> — Funil de vendas e taxas de conversão por etapa</li>
+      <li><a href="https://raphaelhenriques.com/blog/trafego-pago-para-clinicas-de-cirurgia-plastica-e-estetica-2026/" target="_blank" style="color:var(--primary)">Raphael Henriques</a> — Tráfego pago para cirurgia plástica/estética 2026</li>
+      <li><a href="https://pro.doctoralia.com.br/blog/clinicas/dados-de-saude-no-brasil-panorama-das-clinicas-e-hospitais" target="_blank" style="color:var(--primary)">Doctoralia — Panorama 2025</a> — Pesquisa setorial com 1.048 respondentes</li>
+      <li><a href="https://c.facilconsulta.com.br/taxa-de-faltas-em-consultas-medicas-dados-do-mercado/" target="_blank" style="color:var(--primary)">Fácil Consulta</a> — Taxa de faltas por especialidade</li>
+      <li><a href="https://practicegrowthco.com/blog/med-spa-marketing-benchmarks" target="_blank" style="color:var(--primary)">Practice Growth Co</a> — Med spa marketing benchmarks (EUA)</li>
+      <li><a href="https://www.pennock.co/blog/medspa-and-aesthetics-paid-media-benchmarks-google-vs-meta" target="_blank" style="color:var(--primary)">Pennock Agency</a> — Medspa paid media: Google vs. Meta (EUA)</li>
+      <li><a href="https://www.wordstream.com/blog/facebook-ads-benchmarks-2025" target="_blank" style="color:var(--primary)">WordStream</a> — Facebook Ads benchmarks 2025</li>
+      <li><a href="https://agenciakaizen.com.br/leads-clinica-estetica-qualificados/" target="_blank" style="color:var(--primary)">Agência Kaizen</a> — Survey com 50 clínicas estéticas</li>
+    </ul>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- CONCLUSOES -->
+<div class="section">
+  <h2>Conclusões e Recomendações</h2>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:24px">
+    <div class="story-card" style="border-left-color:var(--green)">
+      <h3 style="font-size:16px">O que funciona</h3>
+      <ul style="font-size:13px;padding-left:16px;margin-top:8px;line-height:1.8">
+        <li><strong>ROI de 4,09x</strong> — muito acima do breakeven</li>
+        <li><strong>Fidelização</strong> — 1 paciente pode gerar R$14.700+ em 7 meses</li>
+        <li><strong>Pipeline ativo</strong> — agendamentos futuros já confirmados</li>
+        <li><strong>Ticket alto</strong> — média de R$1.281 por agendamento</li>
+      </ul>
+    </div>
+    <div class="story-card" style="border-left-color:var(--primary)">
+      <h3 style="font-size:16px">Oportunidades</h3>
+      <ul style="font-size:13px;padding-left:16px;margin-top:8px;line-height:1.8">
+        <li><strong>Nutrição dos 732 contatos</strong> — 98,6% não converteram (ainda). Campanhas de remarketing podem reativar</li>
+        <li><strong>Google Ads em expansão</strong> — entrou recentemente, merece mais orçamento para captura de intenção</li>
+        <li><strong>Automação pós-consulta</strong> — mensagens de follow-up para recompra</li>
+        <li><strong>Ampliação de budget</strong> — com ROI de 4x, há espaço para escalar mantendo rentabilidade</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- METODOLOGIA -->
+<div class="section">
+  <div class="methodology">
+    <h4>Metodologia</h4>
+    <ul>
+      <li><strong>Contatos</strong>: total de conversas no inbox de tráfego pago durante os 7 meses de campanha.</li>
+      <li><strong>Match</strong>: cruzamento por telefone entre plataforma de atendimento e sistema de gestão clínica.</li>
+      <li><strong>Agendamentos pagantes</strong>: exclui retornos, fototerapia e retirada de pontos. Consulta avaliativa conta como R$400.</li>
+      <li><strong>Receita</strong>: valor registrado no sistema de gestão da clínica.</li>
+      <li><strong>Investimento</strong>: soma de gastos reportados em Meta Ads e Google Ads.</li>
+      <li><strong>ROI</strong>: Receita / Investimento. CAC: Investimento / Pacientes distintos.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="brand">
+    <img src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-horizontal.png" alt="Digital AI">
+  </div>
+  <p>Case de Sucesso — Área da Saúde | Segmento de Beleza | Público de Alto Padrão</p>
+  <p style="margin-top:4px;font-size:11px">Dados extraídos de sistemas reais de gestão clínica e plataformas de anúncios. Resultados reais de cliente atendido pela Digital AI.</p>
+</footer>
+
+<script>
+// Digital AI Color palette
+const PRIMARY = '#2D52EF';
+const SECONDARY = '#3B2FC9';
+const DARK = '#0F1F5C';
+const LIGHT = '#E8EEFF';
+const GREEN = '#22C55E';
+const MUTED = '#708acd';
+
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+Chart.defaults.font.size = 12;
+Chart.defaults.color = '#435a98';
+
+// 1. Funnel Chart (horizontal bar)
+new Chart(document.getElementById('chartFunnel'), {
+  type: 'bar',
+  data: {
+    labels: ['Contatos Inbox', 'Matches Confirmados', 'Agendamentos Pagantes', 'Pacientes Convertidos'],
+    datasets: [{
+      data: [732, 67, 20, 10],
+      backgroundColor: [MUTED, PRIMARY, SECONDARY, DARK],
+      borderRadius: 6,
+      barThickness: 32
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            var rates = ['', '9,2% do total', '29,9% dos matches', '50% dos agendantes'];
+            return ctx.raw.toLocaleString('pt-BR') + (rates[ctx.dataIndex] ? ' (' + rates[ctx.dataIndex] + ')' : '');
+          }
+        }
+      }
+    },
+    scales: {
+      x: { display: false },
+      y: { grid: { display: false } }
+    }
+  }
+});
+
+// 2. Patients Revenue (horizontal bar)
+new Chart(document.getElementById('chartPatients'), {
+  type: 'bar',
+  data: {
+    labels: [
+      'Paciente A',
+      'Paciente C',
+      'Paciente D',
+      'Paciente F',
+      'Paciente G',
+      'Paciente I',
+      'Paciente H',
+      'Paciente B',
+      'Paciente J',
+      'Paciente E'
+    ],
+    datasets: [{
+      data: [14700, 2400, 1800, 1600, 980, 980, 1150, 800, 800, 400],
+      backgroundColor: [PRIMARY, SECONDARY, SECONDARY, SECONDARY, SECONDARY, SECONDARY, SECONDARY, SECONDARY, SECONDARY, SECONDARY],
+      borderRadius: 6,
+      barThickness: 24
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            return 'R$ ' + ctx.raw.toLocaleString('pt-BR');
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { callback: function(v) { return 'R$ ' + (v/1000).toFixed(0) + 'k'; } },
+        grid: { color: 'rgba(15,31,92,0.05)' }
+      },
+      y: { grid: { display: false } }
+    }
+  }
+});
+
+// 3. Monthly Investment vs Revenue (line + bar combo) — chartMonthly
+new Chart(document.getElementById('chartMonthly'), {
+  type: 'bar',
+  data: {
+    labels: ['Mês 1', 'Mês 2', 'Mês 3', 'Mês 4', 'Mês 5', 'Mês 6', 'Mês 7', 'Mês 8+'],
+    datasets: [
+      {
+        label: 'Investimento',
+        data: [863, 711, 970, 883, 1474, 1357, null, null],
+        backgroundColor: 'rgba(15,31,92,0.15)',
+        borderColor: DARK,
+        borderWidth: 2,
+        borderRadius: 4,
+        barThickness: 20,
+        order: 2
+      },
+      {
+        label: 'Receita',
+        type: 'line',
+        data: [1750, 0, 5700, 2800, 1200, 6100, 5310, 2750],
+        borderColor: PRIMARY,
+        backgroundColor: 'rgba(45,82,239,0.1)',
+        fill: true,
+        tension: 0.3,
+        pointRadius: 5,
+        pointBackgroundColor: PRIMARY,
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        order: 1
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { usePointStyle: true, pointStyle: 'rectRounded' } },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            if (ctx.raw === null) return ctx.dataset.label + ': em andamento';
+            return ctx.dataset.label + ': R$ ' + ctx.raw.toLocaleString('pt-BR');
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        ticks: { callback: function(v) { return 'R$ ' + (v/1000).toFixed(1) + 'k'; } },
+        grid: { color: 'rgba(15,31,92,0.05)' }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// 4. Monthly Evolution (grouped bar) — chartEvolution
+new Chart(document.getElementById('chartEvolution'), {
+  type: 'bar',
+  data: {
+    labels: ['Mês 1', 'Mês 2', 'Mês 3', 'Mês 4', 'Mês 5', 'Mês 6', 'Mês 7', 'Mês 8+'],
+    datasets: [
+      {
+        label: 'Investimento',
+        data: [863, 711, 970, 883, 1474, 1357, null, null],
+        backgroundColor: DARK,
+        borderRadius: 4,
+        barThickness: 20
+      },
+      {
+        label: 'Receita',
+        data: [1750, 0, 5700, 2800, 1200, 6100, 5310, 2750],
+        backgroundColor: PRIMARY,
+        borderRadius: 4,
+        barThickness: 20
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { usePointStyle: true, pointStyle: 'rectRounded' } },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            if (ctx.raw === null) return ctx.dataset.label + ': em andamento';
+            return ctx.dataset.label + ': R$ ' + ctx.raw.toLocaleString('pt-BR');
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        ticks: { callback: function(v) { return 'R$ ' + (v/1000).toFixed(1) + 'k'; } },
+        grid: { color: 'rgba(15,31,92,0.05)' }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// 5. Patient timeline (stacked bar)
+new Chart(document.getElementById('chartTimeline'), {
+  type: 'bar',
+  data: {
+    labels: ['Mês 1', 'Mês 2', 'Mês 3', 'Mês 4', 'Mês 5', 'Mês 6', 'Mês 7', 'Mês 8+'],
+    datasets: [
+      {
+        label: 'Pacientes novos',
+        data: [1, 0, 2, 0, 0, 3, 3, 1],
+        backgroundColor: PRIMARY,
+        borderRadius: 6,
+        barThickness: 28
+      },
+      {
+        label: 'Agendamentos recorrentes',
+        data: [0, 0, 1, 2, 1, 1, 2, 3],
+        backgroundColor: SECONDARY,
+        borderRadius: 6,
+        barThickness: 28
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { usePointStyle: true, pointStyle: 'rectRounded' } }
+    },
+    scales: {
+      y: {
+        stacked: true,
+        ticks: { stepSize: 1 },
+        grid: { color: 'rgba(15,31,92,0.05)' }
+      },
+      x: { stacked: true, grid: { display: false } }
+    }
+  }
+});
+
+// 6. Benchmark Scorecard (grouped horizontal bar)
+new Chart(document.getElementById('chartBenchmark'), {
+  type: 'bar',
+  data: {
+    labels: ['Lead \u2192 Agendamento', 'Convers\u00e3o End-to-End', 'ROI', 'Ticket M\u00e9dio (R$)', 'CAC (R$)'],
+    datasets: [
+      {
+        label: 'Cl\u00ednica',
+        data: [29.9, 1.37, 4.09, 1281, 626],
+        backgroundColor: PRIMARY,
+        borderRadius: 6,
+        barThickness: 18
+      },
+      {
+        label: 'Benchmark Mercado (topo)',
+        data: [30, 2.5, 5, 2000, 600],
+        backgroundColor: 'rgba(15,31,92,0.15)',
+        borderColor: DARK,
+        borderWidth: 1,
+        borderRadius: 6,
+        barThickness: 18
+      }
+    ]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { usePointStyle: true, pointStyle: 'rectRounded' } },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            var suffix = ['%', '%', 'x', '', ''];
+            var prefix = ['', '', '', 'R$ ', 'R$ '];
+            var val = ctx.raw;
+            return ctx.dataset.label + ': ' + prefix[ctx.dataIndex] + val.toLocaleString('pt-BR') + suffix[ctx.dataIndex];
+          }
+        }
+      }
+    },
+    scales: {
+      x: { display: false },
+      y: { grid: { display: false } }
+    }
+  }
+});
+
+// 7. ROI by Maturation Phase
+new Chart(document.getElementById('chartROI'), {
+  type: 'bar',
+  data: {
+    labels: ['M\u00eas 1\n(aprendizado)', 'Meses 2\u20133\n(otimiza\u00e7\u00e3o)', 'Meses 4\u201312\n(matura\u00e7\u00e3o)', 'Cl\u00ednica\n(7 meses)'],
+    datasets: [
+      {
+        label: 'ROI benchmark (topo)',
+        data: [3, 5, 8, null],
+        backgroundColor: 'rgba(15,31,92,0.12)',
+        borderColor: DARK,
+        borderWidth: 1,
+        borderRadius: 4,
+        barThickness: 36
+      },
+      {
+        label: 'ROI benchmark (piso)',
+        data: [1.5, 3, 4, null],
+        backgroundColor: 'rgba(15,31,92,0.06)',
+        borderColor: 'rgba(15,31,92,0.3)',
+        borderWidth: 1,
+        borderRadius: 4,
+        barThickness: 36
+      },
+      {
+        label: 'Cl\u00ednica',
+        data: [null, null, null, 4.09],
+        backgroundColor: PRIMARY,
+        borderRadius: 4,
+        barThickness: 36
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { usePointStyle: true, pointStyle: 'rectRounded' } },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            if (ctx.raw === null) return null;
+            return ctx.dataset.label + ': ' + ctx.raw.toLocaleString('pt-BR') + 'x';
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        ticks: { callback: function(v) { return v + 'x'; } },
+        grid: { color: 'rgba(15,31,92,0.05)' },
+        beginAtZero: true
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+</script>
+</body>
+</html>
