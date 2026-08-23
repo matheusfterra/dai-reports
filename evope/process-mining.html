@@ -123,8 +123,7 @@
     }
     .nav-item:not(.disabled):hover { padding-left: 24px; }
     .nav-item.disabled {
-      opacity: 0.35;
-      cursor: not-allowed;
+      display: none;
     }
     .sidebar-footer {
       padding: 16px 20px;
@@ -1277,23 +1276,23 @@
   <nav class="sidebar-nav" id="sidebar-nav">
     <div class="nav-section">DADOS</div>
     <a href="#upload" class="nav-item" data-view="upload">📤 Carregar arquivos</a>
-    <div class="nav-section">ANÁLISE</div>
-    <a href="#overview" class="nav-item disabled" data-view="overview" title="Faça upload de um arquivo para desbloquear">📊 Visão Geral</a>
-    <a href="#temporal" class="nav-item disabled" data-view="temporal" title="Faça upload de um arquivo para desbloquear">📅 Análise Temporal</a>
-    <a href="#apps" class="nav-item disabled" data-view="apps" title="Faça upload de um arquivo para desbloquear">💻 Apps e Sistemas</a>
-    <div class="nav-section">PROCESSOS</div>
-    <a href="#processmap" class="nav-item disabled" data-view="processmap" title="Faça upload de um arquivo para desbloquear">🗺️ Mapa de Processos</a>
-    <a href="#grouping" class="nav-item disabled" data-view="grouping" title="Faça upload de um arquivo para desbloquear">🧩 Grupos de Atividades</a>
-    <div class="nav-section">AVANÇADO</div>
-    <a href="#patterns" class="nav-item disabled" data-view="patterns" title="Faça upload de um arquivo para desbloquear">🔄 Padrões Repetitivos</a>
-    <a href="#dataflows" class="nav-item disabled" data-view="dataflows" title="Faça upload de um arquivo para desbloquear">🔀 Fluxos Copy/Paste</a>
-    <a href="#deepwork" class="nav-item disabled" data-view="deepwork" title="Faça upload de um arquivo para desbloquear">🎯 Deep Work</a>
-    <a href="#automation" class="nav-item disabled" data-view="automation" title="Faça upload de um arquivo para desbloquear">🤖 Oportunidades de Automação</a>
-    <a href="#benchmarking" class="nav-item disabled" data-view="benchmarking" title="Faça upload de um arquivo para desbloquear">📈 Comparativo da Equipe</a>
-    <a href="#drilldown" class="nav-item disabled" data-view="drilldown" title="Faça upload de um arquivo para desbloquear">🔍 Sistemas em Detalhe</a>
-    <a href="#documents" class="nav-item disabled" data-view="documents" title="Faça upload de um arquivo para desbloquear">📄 Ciclo de Documentos</a>
-    <div class="nav-section">DETALHES</div>
-    <a href="#details" class="nav-item disabled" data-view="details" title="Faça upload de um arquivo para desbloquear">🗂️ Tabelas Detalhadas</a>
+    <div class="nav-section nav-section-data" style="display:none">ANÁLISE</div>
+    <a href="#overview" class="nav-item disabled" data-view="overview">📊 Visão Geral</a>
+    <a href="#temporal" class="nav-item disabled" data-view="temporal">📅 Análise Temporal</a>
+    <a href="#apps" class="nav-item disabled" data-view="apps">💻 Apps e Sistemas</a>
+    <div class="nav-section nav-section-data" style="display:none">PROCESSOS</div>
+    <a href="#processmap" class="nav-item disabled" data-view="processmap">🗺️ Mapa de Processos</a>
+    <a href="#grouping" class="nav-item disabled" data-view="grouping">🧩 Grupos de Atividades</a>
+    <div class="nav-section nav-section-data" style="display:none">AVANÇADO</div>
+    <a href="#patterns" class="nav-item disabled" data-view="patterns">🔄 Padrões Repetitivos</a>
+    <a href="#dataflows" class="nav-item disabled" data-view="dataflows">🔀 Fluxos Copy/Paste</a>
+    <a href="#deepwork" class="nav-item disabled" data-view="deepwork">🎯 Deep Work</a>
+    <a href="#automation" class="nav-item disabled" data-view="automation">🤖 Oportunidades de Automação</a>
+    <a href="#benchmarking" class="nav-item disabled" data-view="benchmarking">📈 Comparativo da Equipe</a>
+    <a href="#drilldown" class="nav-item disabled" data-view="drilldown">🔍 Sistemas em Detalhe</a>
+    <a href="#documents" class="nav-item disabled" data-view="documents">📄 Ciclo de Documentos</a>
+    <div class="nav-section nav-section-data" style="display:none">DETALHES</div>
+    <a href="#details" class="nav-item disabled" data-view="details">🗂️ Tabelas Detalhadas</a>
   </nav>
   <div class="sidebar-footer">
     <button id="btn-new-analysis" class="btn-new-analysis" style="display:none" onclick="resetAnalysis()">↩ Nova Análise</button>
@@ -3994,11 +3993,12 @@ function cutDendrogram(dendrogram, nClusters) {
 // ─── ACTIVATE APP ────────────────────────────────────────────────────────────
 
 function activateApp() {
-  // Enable nav items and remove disabled tooltips
+  // Enable nav items (makes them visible — CSS: .disabled { display:none })
   document.querySelectorAll('.nav-item.disabled').forEach(n => {
     n.classList.remove('disabled');
-    n.removeAttribute('title');
   });
+  // Show nav section headers
+  document.querySelectorAll('.nav-section-data').forEach(s => s.style.display = '');
 
   // Show header + new analysis button
   document.getElementById('global-header').style.display = 'flex';
@@ -5848,9 +5848,10 @@ function resetAnalysis() {
   document.querySelectorAll('.nav-item').forEach(n => {
     if (n.dataset.view !== 'upload') {
       n.classList.add('disabled');
-      n.setAttribute('title', 'Faça upload de um arquivo para desbloquear');
     }
   });
+  // Hide nav section headers
+  document.querySelectorAll('.nav-section-data').forEach(s => s.style.display = 'none');
   document.getElementById('global-header').style.display = 'none';
   document.getElementById('btn-new-analysis').style.display = 'none';
   document.getElementById('upload-preview').innerHTML = '';
