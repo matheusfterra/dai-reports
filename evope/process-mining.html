@@ -124,7 +124,7 @@
     .nav-item:not(.disabled):hover { padding-left: 24px; }
     .nav-item.disabled {
       opacity: 0.35;
-      pointer-events: none;
+      cursor: not-allowed;
     }
     .sidebar-footer {
       padding: 16px 20px;
@@ -1278,22 +1278,22 @@
     <div class="nav-section">DADOS</div>
     <a href="#upload" class="nav-item" data-view="upload">📤 Carregar arquivos</a>
     <div class="nav-section">ANÁLISE</div>
-    <a href="#overview" class="nav-item disabled" data-view="overview">📊 Visão Geral</a>
-    <a href="#temporal" class="nav-item disabled" data-view="temporal">📅 Análise Temporal</a>
-    <a href="#apps" class="nav-item disabled" data-view="apps">💻 Apps e Sistemas</a>
+    <a href="#overview" class="nav-item disabled" data-view="overview" title="Faça upload de um arquivo para desbloquear">📊 Visão Geral</a>
+    <a href="#temporal" class="nav-item disabled" data-view="temporal" title="Faça upload de um arquivo para desbloquear">📅 Análise Temporal</a>
+    <a href="#apps" class="nav-item disabled" data-view="apps" title="Faça upload de um arquivo para desbloquear">💻 Apps e Sistemas</a>
     <div class="nav-section">PROCESSOS</div>
-    <a href="#processmap" class="nav-item disabled" data-view="processmap">🗺️ Mapa de Processos</a>
-    <a href="#grouping" class="nav-item disabled" data-view="grouping">🧩 Grupos de Atividades</a>
+    <a href="#processmap" class="nav-item disabled" data-view="processmap" title="Faça upload de um arquivo para desbloquear">🗺️ Mapa de Processos</a>
+    <a href="#grouping" class="nav-item disabled" data-view="grouping" title="Faça upload de um arquivo para desbloquear">🧩 Grupos de Atividades</a>
     <div class="nav-section">AVANÇADO</div>
-    <a href="#patterns" class="nav-item disabled" data-view="patterns">🔄 Padrões Repetitivos</a>
-    <a href="#dataflows" class="nav-item disabled" data-view="dataflows">🔀 Fluxos Copy/Paste</a>
-    <a href="#deepwork" class="nav-item disabled" data-view="deepwork">🎯 Deep Work</a>
-    <a href="#automation" class="nav-item disabled" data-view="automation">🤖 Oportunidades de Automação</a>
-    <a href="#benchmarking" class="nav-item disabled" data-view="benchmarking">📈 Comparativo da Equipe</a>
-    <a href="#drilldown" class="nav-item disabled" data-view="drilldown">🔍 Sistemas em Detalhe</a>
-    <a href="#documents" class="nav-item disabled" data-view="documents">📄 Ciclo de Documentos</a>
+    <a href="#patterns" class="nav-item disabled" data-view="patterns" title="Faça upload de um arquivo para desbloquear">🔄 Padrões Repetitivos</a>
+    <a href="#dataflows" class="nav-item disabled" data-view="dataflows" title="Faça upload de um arquivo para desbloquear">🔀 Fluxos Copy/Paste</a>
+    <a href="#deepwork" class="nav-item disabled" data-view="deepwork" title="Faça upload de um arquivo para desbloquear">🎯 Deep Work</a>
+    <a href="#automation" class="nav-item disabled" data-view="automation" title="Faça upload de um arquivo para desbloquear">🤖 Oportunidades de Automação</a>
+    <a href="#benchmarking" class="nav-item disabled" data-view="benchmarking" title="Faça upload de um arquivo para desbloquear">📈 Comparativo da Equipe</a>
+    <a href="#drilldown" class="nav-item disabled" data-view="drilldown" title="Faça upload de um arquivo para desbloquear">🔍 Sistemas em Detalhe</a>
+    <a href="#documents" class="nav-item disabled" data-view="documents" title="Faça upload de um arquivo para desbloquear">📄 Ciclo de Documentos</a>
     <div class="nav-section">DETALHES</div>
-    <a href="#details" class="nav-item disabled" data-view="details">🗂️ Tabelas Detalhadas</a>
+    <a href="#details" class="nav-item disabled" data-view="details" title="Faça upload de um arquivo para desbloquear">🗂️ Tabelas Detalhadas</a>
   </nav>
   <div class="sidebar-footer">
     <button id="btn-new-analysis" class="btn-new-analysis" style="display:none" onclick="resetAnalysis()">↩ Nova Análise</button>
@@ -1455,6 +1455,12 @@
       <div class="map-tab active" data-tab="all" onclick="selectMapTab('all')">Geral</div>
     </div>
     <div class="map-controls">
+      <label>Nível:</label>
+      <select id="map-detail-level" onchange="refreshProcessMap()" style="min-width:130px">
+        <option value="category" selected>Categoria</option>
+        <option value="function">Funcionalidade</option>
+      </select>
+      <div class="separator"></div>
       <label>Layout:</label>
       <select id="map-layout" onchange="refreshProcessMap()">
         <option value="dagre" selected>Hierárquico (dagre)</option>
@@ -1500,6 +1506,24 @@
       <h2>Padrões Repetitivos</h2>
       <p>Sequências de atividades e sistemas que se repetem — candidatos diretos a automação</p>
     </div>
+
+    <!-- ACTIVITY BLOCKS (Spec 3 + 4) -->
+    <div class="chart-card full mb-6" id="activity-blocks-section">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+        <h3 style="margin:0">Blocos de Atividade</h3>
+        <div style="display:flex;align-items:center;gap:10px">
+          <label style="color:var(--text-dim);font-size:12px">Tamanho do bloco:</label>
+          <select id="block-size-toggle" onchange="renderActivityBlocks()" style="background:var(--bg-card);color:var(--text);border:1px solid var(--border);padding:4px 8px;border-radius:6px;font-size:12px">
+            <option value="3" selected>3 passos</option>
+            <option value="4">4 passos</option>
+          </select>
+        </div>
+      </div>
+      <p style="color:var(--text-dim);font-size:12px;margin-bottom:12px">Blocos de passos consecutivos usando [Processo] Funcionalidade — cada bloco mostra a predicao do proximo passo</p>
+      <div id="activity-blocks-grid" class="pattern-grid"></div>
+    </div>
+
+    <!-- SEQUENTIAL PATTERNS (existente) -->
     <div class="pattern-controls">
       <div class="slider-group">
         <label>Frequência mínima:</label>
@@ -1750,6 +1774,24 @@
         <tbody id="gaps-tbody"></tbody>
       </table>
     </div>
+    <div class="table-card mb-4">
+      <div class="table-card-header">
+        <h3>Predicoes — Proximo Passo por Bloco</h3>
+      </div>
+      <table class="data-table" id="predictions-table">
+        <thead>
+          <tr>
+            <th>Bloco</th>
+            <th onclick="sortTable('predictions-table',1)">Proximo Provavel</th>
+            <th onclick="sortTable('predictions-table',2)">Prob.</th>
+            <th onclick="sortTable('predictions-table',3)">Freq</th>
+            <th onclick="sortTable('predictions-table',4)">Tempo Med</th>
+            <th onclick="sortTable('predictions-table',5)">Economia</th>
+          </tr>
+        </thead>
+        <tbody id="predictions-tbody"></tbody>
+      </table>
+    </div>
   </section>
 </div>
 
@@ -1953,6 +1995,11 @@ function setupNavScrollHandlers() {
 
   document.querySelectorAll('.nav-item[data-view]').forEach(n => {
     n.addEventListener('click', (e) => {
+      // Block clicks on disabled nav items
+      if (n.classList.contains('disabled')) {
+        e.preventDefault();
+        return;
+      }
       // Only intercept when dashboard-active scroll mode is on
       // Don't intercept the upload link (it should trigger reset via hash or be ignored)
       if (!DataStore.metrics || !document.body.classList.contains('dashboard-active')) return;
@@ -2207,11 +2254,17 @@ function normalizeData(rows) {
     let secs = parseFloat(r.TempoSegundos || r.tempo_segundos || r.duration_seconds || 0);
     if (!secs && start && end) secs = (end - start) / 1000;
 
+    // processFunction: [Process] WindowTitle (truncado 50 chars) — nivel de detalhe fino
+    const processDisplayVal = String(r.Process || r.ProcessOriginal || r.process || proc || 'Desconhecido');
+    const titleShort = (winTitle || '').substring(0, 50);
+    const processFunction = titleShort ? `[${processDisplayVal}] ${titleShort}`.trim() : `[${processDisplayVal}]`;
+
     return {
       collaborator: r._collaborator,
       process: proc || 'desconhecido',
-      processDisplay: String(r.Process || r.ProcessOriginal || r.process || proc || 'Desconhecido'),
+      processDisplay: processDisplayVal,
       category,
+      processFunction,
       windowTitle: winTitle,
       docName,
       domain,
@@ -2491,8 +2544,36 @@ function computeMetrics(rows, eventLog) {
     nodeFreq[cat] = rows.filter(r => r.category === cat).length;
   }
 
+  // processFunction-level metrics (Spec 2: nivel de detalhe fino)
+  const funcTimeMap = {};
+  const funcCategoryMap = {}; // processFunction -> category (para herdar cor)
+  for (const r of rows) {
+    funcTimeMap[r.processFunction] = (funcTimeMap[r.processFunction] || 0) + r.hours;
+    if (!funcCategoryMap[r.processFunction]) funcCategoryMap[r.processFunction] = r.category;
+  }
+  const nodeFuncTime = funcTimeMap;
+
+  // Transition matrix por processFunction (dedup consecutivos iguais dentro da sessao)
+  const transitionMatrixFunc = {};
+  const sessionGroups = {};
+  for (const r of rows) {
+    const sid = `${r.collaborator}:${r.sessionId}`;
+    if (!sessionGroups[sid]) sessionGroups[sid] = [];
+    sessionGroups[sid].push(r.processFunction);
+  }
+  for (const events of Object.values(sessionGroups)) {
+    for (let i = 0; i < events.length - 1; i++) {
+      if (events[i] !== events[i + 1]) {
+        const key = `${events[i]}→${events[i + 1]}`;
+        transitionMatrixFunc[key] = (transitionMatrixFunc[key] || 0) + 1;
+      }
+    }
+  }
+
   // ─── Advanced Analytics ───
   const advancedAnalytics = {
+    activityBlocks3: extractActivityBlocks(rows, 3),
+    activityBlocks4: extractActivityBlocks(rows, 4),
     sequentialPatterns: analyzeSequentialPatterns(rows),
     copyPasteFlows: analyzeCopyPasteFlows(rows),
     processLoops: detectProcessLoops(transitionMatrix),
@@ -2528,6 +2609,9 @@ function computeMetrics(rows, eventLog) {
     nodeTime,
     nodeFreq,
     transitionMatrix,
+    transitionMatrixFunc,
+    nodeFuncTime,
+    funcCategoryMap,
     hourlyMap,
     weekdayMap,
     dailyMap,
@@ -2639,6 +2723,127 @@ function getPatternCategoryActivity(row) {
   if (row.category && row.category !== 'outro') return row.category;
   if (row.processDisplay && !/^desconhecido$/i.test(row.processDisplay)) return `app:${row.processDisplay}`;
   return 'outro';
+}
+
+// ─── ACTIVITY BLOCKS MINING (Spec 3 + 4) ────────────────────────────────────
+
+function extractActivityBlocks(rows, blockSize, minSupport) {
+  blockSize = blockSize || 3;
+  minSupport = minSupport || 3;
+
+  // Group rows by session
+  const sessionGroups = {};
+  for (const r of rows) {
+    const sid = `${r.collaborator}:${r.sessionId}`;
+    if (!sessionGroups[sid]) sessionGroups[sid] = { collaborator: r.collaborator, events: [] };
+    sessionGroups[sid].events.push(r);
+  }
+
+  const blockMap = {};
+
+  for (const session of Object.values(sessionGroups)) {
+    const events = session.events;
+    // Build deduplicated sequence of processFunction (remove consecutive duplicates)
+    const deduped = [];
+    const dedupedRows = [];
+    for (const ev of events) {
+      const activity = ev.processFunction || ev.category;
+      if (deduped.length === 0 || deduped[deduped.length - 1] !== activity) {
+        deduped.push(activity);
+        dedupedRows.push(ev);
+      }
+    }
+
+    // Sliding window of blockSize
+    for (let i = 0; i <= deduped.length - blockSize; i++) {
+      const blockSteps = deduped.slice(i, i + blockSize);
+      const blockKey = blockSteps.join(' → ');
+
+      if (!blockMap[blockKey]) {
+        blockMap[blockKey] = {
+          block: blockSteps,
+          key: blockKey,
+          count: 0,
+          totalMins: 0,
+          collaborators: new Set(),
+          nextSteps: {},
+          occurrenceTimes: [],
+        };
+      }
+
+      const entry = blockMap[blockKey];
+      entry.count++;
+      entry.collaborators.add(session.collaborator);
+
+      // Sum time of block steps
+      let blockTimeMins = 0;
+      for (let j = i; j < i + blockSize && j < dedupedRows.length; j++) {
+        blockTimeMins += (dedupedRows[j].secs || 0) / 60;
+      }
+      entry.totalMins += blockTimeMins;
+      entry.occurrenceTimes.push(blockTimeMins);
+
+      // Register next step (N+1) for prediction (Spec 4)
+      const nextIdx = i + blockSize;
+      if (nextIdx < deduped.length) {
+        const nextActivity = deduped[nextIdx];
+        if (!entry.nextSteps[nextActivity]) {
+          entry.nextSteps[nextActivity] = { count: 0, totalTimeMins: 0 };
+        }
+        entry.nextSteps[nextActivity].count++;
+        if (nextIdx < dedupedRows.length) {
+          entry.nextSteps[nextActivity].totalTimeMins += (dedupedRows[nextIdx].secs || 0) / 60;
+        }
+      }
+    }
+  }
+
+  // Filter by minSupport and compute derived metrics
+  return Object.values(blockMap)
+    .filter(b => b.count >= minSupport)
+    .map(b => {
+      const avgMins = b.count > 0 ? b.totalMins / b.count : 0;
+      const collabCount = b.collaborators.size;
+      // Automation score: frequency x time x regularity (stddev-based)
+      const mean = avgMins;
+      const variance = b.occurrenceTimes.reduce((s, t) => s + (t - mean) ** 2, 0) / (b.occurrenceTimes.length || 1);
+      const cv = mean > 0 ? Math.sqrt(variance) / mean : 1; // coefficient of variation
+      const regularity = Math.max(0, 1 - cv); // 0=erratic, 1=perfectly regular
+      const automationScore = Math.min(100, Math.round(
+        Math.min(b.count / 15, 1) * 40 +
+        Math.min(b.totalMins / 120, 1) * 30 +
+        regularity * 30
+      ));
+
+      // Compute next step distribution (Spec 4)
+      const totalNextOccurrences = Object.values(b.nextSteps).reduce((s, n) => s + n.count, 0);
+      const nextStepDistribution = Object.entries(b.nextSteps)
+        .map(([step, data]) => ({
+          step,
+          count: data.count,
+          probability: totalNextOccurrences > 0 ? data.count / totalNextOccurrences : 0,
+          avgTimeMins: data.count > 0 ? data.totalTimeMins / data.count : 0,
+        }))
+        .sort((a, c) => c.probability - a.probability)
+        .slice(0, 5); // top 5
+
+      const topPrediction = nextStepDistribution[0] || null;
+      const highlyPredictable = topPrediction && topPrediction.probability >= 0.7;
+
+      return {
+        block: b.block,
+        key: b.key,
+        count: b.count,
+        totalMins: b.totalMins,
+        avgMins,
+        collaborators: collabCount,
+        automationScore,
+        nextStepDistribution,
+        highlyPredictable,
+        potentialSavingMins: highlyPredictable && topPrediction ? topPrediction.avgTimeMins * b.count : 0,
+      };
+    })
+    .sort((a, c) => c.count - a.count);
 }
 
 function getActivityLabel(activity) {
@@ -3789,8 +3994,11 @@ function cutDendrogram(dendrogram, nClusters) {
 // ─── ACTIVATE APP ────────────────────────────────────────────────────────────
 
 function activateApp() {
-  // Enable nav items
-  document.querySelectorAll('.nav-item.disabled').forEach(n => n.classList.remove('disabled'));
+  // Enable nav items and remove disabled tooltips
+  document.querySelectorAll('.nav-item.disabled').forEach(n => {
+    n.classList.remove('disabled');
+    n.removeAttribute('title');
+  });
 
   // Show header + new analysis button
   document.getElementById('global-header').style.display = 'flex';
@@ -3851,12 +4059,13 @@ function activateApp() {
   // Set up nav click handlers for smooth scroll
   setupNavScrollHandlers();
 
-  // Scroll to top / overview
+  // Scroll to overview section with slight delay for rendering
   history.replaceState(null, '', '#overview');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  // Update nav highlight to overview
   setActiveNav('overview');
+  setTimeout(() => {
+    const overviewEl = document.getElementById('view-overview');
+    if (overviewEl) overviewEl.scrollIntoView({ behavior: 'smooth' });
+  }, 300);
 
   // Ensure cytoscape fits after scroll mode renders everything
   setTimeout(() => {
@@ -4267,44 +4476,64 @@ function refreshProcessMap() {
 
   const layout = document.getElementById('map-layout').value;
   const minPct = parseFloat(document.getElementById('map-min-pct').value) || 0;
+  const detailLevel = document.getElementById('map-detail-level').value;
+  const isFuncLevel = detailLevel === 'function';
 
-  let nodeTime, transitionMatrix;
+  let nodeTime, transitionMatrix, colorResolver;
 
-  // O filtro global tem precedência sobre as abas locais do mapa. Antes, mudar
-  // o colaborador no cabeçalho redesenhava a view, mas continuava usando os
-  // dados gerais quando a aba "Geral" estava ativa.
+  // O filtro global tem precedência sobre as abas locais do mapa.
   const mapScope = DataStore.activeFilter !== 'all' ? DataStore.activeFilter : currentMapTab;
 
   if (mapScope === 'all') {
-    nodeTime = DataStore.metrics.nodeTime;
-    transitionMatrix = DataStore.metrics.transitionMatrix;
+    if (isFuncLevel) {
+      nodeTime = DataStore.metrics.nodeFuncTime;
+      transitionMatrix = DataStore.metrics.transitionMatrixFunc;
+    } else {
+      nodeTime = DataStore.metrics.nodeTime;
+      transitionMatrix = DataStore.metrics.transitionMatrix;
+    }
   } else {
     const rows = DataStore.raw.filter(r => r.collaborator === mapScope);
-    const eventLog = buildEventLog(rows);
+    const field = isFuncLevel ? 'processFunction' : 'category';
     const localTrans = {};
-    for (const session of Object.values(eventLog)) {
-      const events = session.events;
+    // Build per-collaborator transitions
+    const sessionGroups = {};
+    for (const r of rows) {
+      const sid = `${r.collaborator}:${r.sessionId}`;
+      if (!sessionGroups[sid]) sessionGroups[sid] = [];
+      sessionGroups[sid].push(r[field]);
+    }
+    for (const events of Object.values(sessionGroups)) {
       for (let i = 0; i < events.length - 1; i++) {
-        if (events[i] !== events[i+1]) {
-          const key = `${events[i]}→${events[i+1]}`;
+        if (events[i] !== events[i + 1]) {
+          const key = `${events[i]}→${events[i + 1]}`;
           localTrans[key] = (localTrans[key] || 0) + 1;
         }
       }
     }
     nodeTime = {};
     for (const r of rows) {
-      nodeTime[r.category] = (nodeTime[r.category] || 0) + r.hours;
+      nodeTime[r[field]] = (nodeTime[r[field]] || 0) + r.hours;
     }
     transitionMatrix = localTrans;
   }
 
+  // For function level, resolve colors from parent category
+  if (isFuncLevel) {
+    colorResolver = (nodeId) => {
+      const cat = DataStore.metrics.funcCategoryMap[nodeId] || 'outro';
+      return PROCESS_MAP_COLORS[cat] || '#94A3B8';
+    };
+  }
+
+  // Apply higher minPct for function level to reduce noise (minimum 1%)
+  const effectiveMinPct = isFuncLevel ? Math.max(minPct, 1) : minPct;
+
   const container = document.getElementById('cy');
   if (cyInstance) { cyInstance.destroy(); cyInstance = null; }
   if (processMapResizeObserver) { processMapResizeObserver.disconnect(); processMapResizeObserver = null; }
-  // U1: Loading indicator while graph initializes
   container.innerHTML = '<div class="cy-loading"><div class="cy-loading-spinner"></div>Renderizando grafo...</div>';
 
-  // P2 FIX: Guard de dimensoes — se container tem height zero, defer com rAF
   function initCyWhenReady() {
     const rect = container.parentElement.getBoundingClientRect();
     if (rect.width < 10 || rect.height < 10) {
@@ -4312,9 +4541,14 @@ function refreshProcessMap() {
       return;
     }
     container.innerHTML = '';
-    cyInstance = renderCytoscape(container, transitionMatrix, nodeTime, { layout, minPercent: minPct });
+    cyInstance = renderCytoscape(container, transitionMatrix, nodeTime, {
+      layout,
+      minPercent: effectiveMinPct,
+      colorResolver: isFuncLevel ? colorResolver : null,
+      isFuncLevel
+    });
     setupProcessMapResizeObserver(container);
-    buildProcessMapLegend(nodeTime, minPct);
+    buildProcessMapLegend(nodeTime, effectiveMinPct, isFuncLevel ? DataStore.metrics.funcCategoryMap : null);
   }
   initCyWhenReady();
 }
@@ -4336,23 +4570,40 @@ function setupProcessMapResizeObserver(container) {
   }
 }
 
-function buildProcessMapLegend(nodeTime, minPct) {
+function buildProcessMapLegend(nodeTime, minPct, funcCategoryMap) {
   const total = Object.values(nodeTime).reduce((s, v) => s + v, 0) || 1;
   const usedCats = Object.keys(nodeTime)
     .filter(c => (nodeTime[c] / total * 100) >= minPct)
     .sort((a, b) => nodeTime[b] - nodeTime[a]);
   const legend = document.getElementById('cy-legend');
-  legend.innerHTML = `<div class="cy-legend-title">Legenda</div>` +
-    usedCats.map(c => `
-      <div class="cy-legend-item">
-        <div class="cy-legend-dot" style="background:${PROCESS_MAP_COLORS[c] || '#94A3B8'}"></div>
-        <span>${CATEGORY_LABELS[c] || c}</span>
-      </div>
-    `).join('');
+
+  if (funcCategoryMap) {
+    // Function level: group by parent category for compact legend
+    const catSet = new Set();
+    for (const func of usedCats) {
+      catSet.add(funcCategoryMap[func] || 'outro');
+    }
+    const cats = [...catSet].sort();
+    legend.innerHTML = `<div class="cy-legend-title">Legenda (por categoria)</div>` +
+      cats.map(c => `
+        <div class="cy-legend-item">
+          <div class="cy-legend-dot" style="background:${PROCESS_MAP_COLORS[c] || '#94A3B8'}"></div>
+          <span>${CATEGORY_LABELS[c] || c}</span>
+        </div>
+      `).join('');
+  } else {
+    legend.innerHTML = `<div class="cy-legend-title">Legenda</div>` +
+      usedCats.map(c => `
+        <div class="cy-legend-item">
+          <div class="cy-legend-dot" style="background:${PROCESS_MAP_COLORS[c] || '#94A3B8'}"></div>
+          <span>${CATEGORY_LABELS[c] || c}</span>
+        </div>
+      `).join('');
+  }
 }
 
 function renderCytoscape(container, transitions, nodeTime, options = {}) {
-  const { layout = 'cose', minPercent = 0 } = options;
+  const { layout = 'cose', minPercent = 0, colorResolver = null, isFuncLevel = false } = options;
   const totalTime = Object.values(nodeTime).reduce((a, b) => a + b, 0) || 1;
 
   // Pre-computar frequencia por no (O(E) em vez de O(N*E))
@@ -4365,16 +4616,27 @@ function renderCytoscape(container, transitions, nodeTime, options = {}) {
 
   const nodes = Object.keys(nodeTime)
     .filter(cat => (nodeTime[cat] / totalTime * 100) >= minPercent)
-    .map(cat => ({
-      data: {
-        id: cat,
-        label: CATEGORY_LABELS[cat] || cat,
-        time: nodeTime[cat],
-        percent: (nodeTime[cat] / totalTime * 100).toFixed(1),
-        freq: nodeFreqMap[cat] || 0,
-        color: PROCESS_MAP_COLORS[cat] || '#94A3B8',
+    .map(cat => {
+      // For function level, use colorResolver; truncate label for readability
+      let label, color;
+      if (isFuncLevel && colorResolver) {
+        label = cat.length > 35 ? cat.substring(0, 32) + '...' : cat;
+        color = colorResolver(cat);
+      } else {
+        label = CATEGORY_LABELS[cat] || cat;
+        color = PROCESS_MAP_COLORS[cat] || '#94A3B8';
       }
-    }));
+      return {
+        data: {
+          id: cat,
+          label,
+          time: nodeTime[cat],
+          percent: (nodeTime[cat] / totalTime * 100).toFixed(1),
+          freq: nodeFreqMap[cat] || 0,
+          color,
+        }
+      };
+    });
 
   const nodeIds = new Set(nodes.map(n => n.data.id));
 
@@ -4714,6 +4976,42 @@ function renderDetails() {
   } else {
     if (gapsCard) gapsCard.style.display = 'none';
   }
+
+  // Predictions table (Spec 4)
+  const activeAA = (f !== 'all') ? getFilteredMetrics().advancedAnalytics : aa;
+  const allBlocks = [...(activeAA.activityBlocks3 || []), ...(activeAA.activityBlocks4 || [])];
+  const predictable = allBlocks
+    .filter(b => b.nextStepDistribution && b.nextStepDistribution.length > 0)
+    .sort((a, c) => {
+      const ap = a.nextStepDistribution[0]?.probability || 0;
+      const cp = c.nextStepDistribution[0]?.probability || 0;
+      return cp - ap;
+    })
+    .slice(0, 30);
+
+  const predTbody = document.getElementById('predictions-tbody');
+  if (predTbody) {
+    if (predictable.length === 0) {
+      predTbody.innerHTML = '<tr><td colspan="6" style="color:var(--text-dim);text-align:center;padding:20px">Sem predicoes disponiveis — dados insuficientes</td></tr>';
+    } else {
+      predTbody.innerHTML = predictable.map(b => {
+        const top = b.nextStepDistribution[0];
+        const blockLabel = b.block.map(s => s.length > 20 ? s.substring(0, 17) + '...' : s).join(' → ');
+        const nextLabel = top.step.length > 25 ? top.step.substring(0, 22) + '...' : top.step;
+        const pct = (top.probability * 100).toFixed(0);
+        const highlight = b.highlyPredictable ? 'style="background:rgba(16,185,129,0.08)"' : '';
+        return `
+          <tr ${highlight}>
+            <td title="${b.key}" style="font-size:11px;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${blockLabel}</td>
+            <td title="${top.step}">${nextLabel}</td>
+            <td><strong>${pct}%</strong></td>
+            <td>${b.count}×</td>
+            <td>${top.avgTimeMins.toFixed(1)} min</td>
+            <td>${b.potentialSavingMins > 0 ? fmtH(b.potentialSavingMins / 60) : '—'}</td>
+          </tr>`;
+      }).join('');
+    }
+  }
 }
 
 // ─── TABLE UTILITIES ─────────────────────────────────────────────────────────
@@ -4823,9 +5121,88 @@ function renderDataFlows() {
   `).join('');
 }
 
+// ─── RENDER: ACTIVITY BLOCKS (Spec 3 + 4) ───────────────────────────────────
+
+function renderActivityBlocks() {
+  const metrics = DataStore.activeFilter === 'all' ? DataStore.metrics : getFilteredMetrics();
+  const aa = metrics.advancedAnalytics;
+  if (!aa) return;
+
+  const blockSize = parseInt(document.getElementById('block-size-toggle').value) || 3;
+  const blocks = blockSize === 4 ? aa.activityBlocks4 : aa.activityBlocks3;
+  const grid = document.getElementById('activity-blocks-grid');
+
+  if (!blocks || blocks.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🧩</div><h3>Sem blocos detectados</h3><p>Poucos dados ou atividades muito diversificadas para formar blocos de ' + blockSize + ' passos.</p></div>';
+    return;
+  }
+
+  grid.innerHTML = blocks.slice(0, 20).map((b, i) => {
+    const scoreClass = b.automationScore >= 70 ? 'critical' : b.automationScore >= 50 ? 'high' : b.automationScore >= 30 ? 'medium' : 'low';
+
+    // Block steps as chips
+    const chips = b.block.map((step, si) => {
+      const label = step.length > 28 ? step.substring(0, 25) + '...' : step;
+      const arr = si < b.block.length - 1 ? '<span class="pattern-arrow">→</span>' : '';
+      return `<span class="pattern-chip" style="background:rgba(45,82,239,0.12);color:var(--primary);border:1px solid rgba(45,82,239,0.3);font-size:11px">${label}</span>${arr}`;
+    }).join('');
+
+    // Next step prediction (Spec 4)
+    let predictionHtml = '';
+    if (b.nextStepDistribution && b.nextStepDistribution.length > 0) {
+      const predItems = b.nextStepDistribution.slice(0, 3).map(ns => {
+        const pct = (ns.probability * 100).toFixed(0);
+        const barWidth = Math.round(ns.probability * 100);
+        const stepLabel = ns.step.length > 30 ? ns.step.substring(0, 27) + '...' : ns.step;
+        return `
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:11px">
+            <div style="flex:1;min-width:0">
+              <div style="color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${ns.step}">${stepLabel}</div>
+              <div style="background:var(--bg);border-radius:3px;height:6px;margin-top:2px;overflow:hidden">
+                <div style="height:100%;border-radius:3px;width:${barWidth}%;background:${ns.probability >= 0.7 ? 'var(--green)' : 'var(--primary)'}"></div>
+              </div>
+            </div>
+            <span style="color:var(--text-dim);min-width:32px;text-align:right;font-weight:600">${pct}%</span>
+          </div>`;
+      }).join('');
+
+      const predictBadge = b.highlyPredictable
+        ? `<div style="background:rgba(16,185,129,0.15);color:var(--green);border:1px solid rgba(16,185,129,0.3);padding:3px 8px;border-radius:6px;font-size:10px;font-weight:600;margin-bottom:6px">Alta previsibilidade — candidato a automacao</div>`
+        : '';
+
+      predictionHtml = `
+        <div style="border-top:1px solid var(--border);margin-top:8px;padding-top:8px">
+          ${predictBadge}
+          <div style="color:var(--text-dim);font-size:10px;font-weight:600;margin-bottom:4px;text-transform:uppercase">Proximo passo provavel</div>
+          ${predItems}
+          ${b.potentialSavingMins > 0 ? `<div style="color:var(--text-dim);font-size:10px;margin-top:4px">Economia potencial: <strong>${fmtH(b.potentialSavingMins / 60)}</strong></div>` : ''}
+        </div>`;
+    }
+
+    return `
+    <div class="pattern-card" style="${b.highlyPredictable ? 'border-left:3px solid var(--green)' : ''}">
+      <div class="pattern-sequence" style="flex-wrap:wrap">${chips}</div>
+      <div class="pattern-stats">
+        <div>
+          <div class="pattern-freq">${b.count}×</div>
+          <div class="pattern-freq-label">${b.collaborators} colab. · ${fmtH(b.totalMins / 60)} · avg ${b.avgMins.toFixed(1)}min</div>
+        </div>
+        <div class="score-badge ${scoreClass}">${b.automationScore}</div>
+      </div>
+      <div class="score-bar" title="Score de automacao: ${b.automationScore}/100">
+        <div class="score-bar-fill" style="width:${b.automationScore}%;background:${b.automationScore >= 70 ? 'var(--red)' : b.automationScore >= 50 ? 'var(--orange)' : b.automationScore >= 30 ? 'var(--yellow)' : 'var(--text-dim)'}"></div>
+      </div>
+      ${predictionHtml}
+    </div>`;
+  }).join('');
+}
+
 // ─── RENDER: PATTERNS ────────────────────────────────────────────────────────
 
 function renderPatterns() {
+  // Render activity blocks first (Spec 3 + 4)
+  renderActivityBlocks();
+
   const metrics = DataStore.activeFilter === 'all' ? DataStore.metrics : getFilteredMetrics();
   const aa = metrics.advancedAnalytics;
   if (!aa) return;
@@ -5469,7 +5846,10 @@ function resetAnalysis() {
   }
 
   document.querySelectorAll('.nav-item').forEach(n => {
-    if (n.dataset.view !== 'upload') n.classList.add('disabled');
+    if (n.dataset.view !== 'upload') {
+      n.classList.add('disabled');
+      n.setAttribute('title', 'Faça upload de um arquivo para desbloquear');
+    }
   });
   document.getElementById('global-header').style.display = 'none';
   document.getElementById('btn-new-analysis').style.display = 'none';
