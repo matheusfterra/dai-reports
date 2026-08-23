@@ -610,6 +610,33 @@
     .sort-asc::after { content: ' ↑'; }
     .sort-desc::after { content: ' ↓'; }
 
+    /* ── TABLE PAGINATION ── */
+    .table-pagination {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 var(--radius-md) var(--radius-md);
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+    .pagination-buttons { display: flex; gap: 6px; }
+    .pagination-buttons button {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 12px;
+      transition: background 0.15s;
+    }
+    .pagination-buttons button:hover:not(:disabled) { background: var(--surface-hover); }
+    .pagination-buttons button:disabled { opacity: 0.4; cursor: default; }
+
     /* ── PROCESS MAP VIEW ── */
     #view-processmap.active { display: flex; flex-direction: column; }
     .map-controls {
@@ -4151,10 +4178,10 @@ function renderOverview() {
     totalRecords = displayCollabs.reduce((s, c) => s + c.records, 0);
   }
 
-  renderExecutiveSummary(f === 'all' ? m : getFilteredMetrics());
-
-  const nProcesses = Object.keys(m.categoryTimeMap).length;
-  const aa = m.advancedAnalytics;
+  const filteredM = f !== 'all' ? getFilteredMetrics() : m;
+  renderExecutiveSummary(filteredM);
+  const nProcesses = Object.keys(filteredM.categoryTimeMap).length;
+  const aa = filteredM.advancedAnalytics;
 
   // Deep Work % average
   const dwAvg = aa && aa.deepWork ?
@@ -4359,17 +4386,11 @@ function renderChart(canvasId, type, labels, datasets, extraOptions = {}) {
 function renderApps() {
   const m = DataStore.metrics;
   const f = DataStore.activeFilter;
+  const fm = f !== 'all' ? getFilteredMetrics() : m;
 
-  let apps = m.topApps;
-  let catMap = m.categoryTimeMap;
-  let totalH = m.totalHours;
-
-  if (f !== 'all') {
-    const fm = getFilteredMetrics();
-    apps = fm.topApps;
-    catMap = fm.categoryTimeMap;
-    totalH = fm.totalHours;
-  }
+  const apps = fm.topApps;
+  const catMap = fm.categoryTimeMap;
+  const totalH = fm.totalHours;
 
   const top15 = apps.slice(0, 15);
 
@@ -4431,31 +4452,35 @@ function renderApps() {
   });
 
   // Apps table
-  const tbody = document.getElementById('apps-tbody');
-  tbody.innerHTML = apps.map(a => `
+  paginateTable('apps-tbody', apps.map(a => `
     <tr>
       <td>${a.app}</td>
       <td><span class="badge" style="background:${CATEGORY_COLORS[a.category]}22;color:${CATEGORY_COLORS[a.category]}">${CATEGORY_LABELS[a.category] || a.category}</span></td>
       <td>${fmtH(a.hours)}</td>
       <td>${a.pct}%</td>
     </tr>
-  `).join('');
+  `), 10);
 
   // Domains table
-  const domainTbody = document.getElementById('domains-tbody');
-  const domains = f === 'all' ? m.topDomains : getFilteredMetrics().topDomains;
-  domainTbody.innerHTML = domains.length ? domains.map(d => `
-    <tr>
-      <td>${d.domain}</td>
-      <td>${fmtH(d.hours)}</td>
-      <td>${fmtNum(d.count)}</td>
-    </tr>
-  `).join('') : `
-    <tr><td colspan="3"><div class="empty-state">
-      <div class="empty-state-icon">🌐</div>
-      <h3>Nenhum sistema web identificado</h3>
-      <p>Os títulos das janelas analisadas não continham URLs, domínios ou nomes de sistemas reconhecíveis.</p>
-    </div></td></tr>`;
+  const domains = fm.topDomains;
+  if (domains.length) {
+    paginateTable('domains-tbody', domains.map(d => `
+      <tr>
+        <td>${d.domain}</td>
+        <td>${fmtH(d.hours)}</td>
+        <td>${fmtNum(d.count)}</td>
+      </tr>
+    `), 10);
+  } else {
+    document.getElementById('domains-tbody').innerHTML = `
+      <tr><td colspan="3"><div class="empty-state">
+        <div class="empty-state-icon">🌐</div>
+        <h3>Nenhum sistema web identificado</h3>
+        <p>Os títulos das janelas analisadas não continham URLs, domínios ou nomes de sistemas reconhecíveis.</p>
+      </div></td></tr>`;
+    const ctrl = document.getElementById('domains-tbody-pagination');
+    if (ctrl) ctrl.remove();
+  }
 }
 
 // ─── RENDER: PROCESS MAP ─────────────────────────────────────────────────────
@@ -4916,40 +4941,40 @@ function renderAutomation() {
 function renderDetails() {
   const m = DataStore.metrics;
   const f = DataStore.activeFilter;
+  const fm = f !== 'all' ? getFilteredMetrics() : m;
 
-  let transitions = m.topTransitions;
-  let excel = m.excelList;
-  let collabs = m.collaborators;
+  let transitions = fm.topTransitions;
+  let excel = fm.excelList;
+  let collabs = f !== 'all' ? m.collaborators.filter(c => c.name === f) : m.collaborators;
 
-  if (f !== 'all') {
-    const fm = getFilteredMetrics();
-    transitions = fm.topTransitions;
-    excel = fm.excelList;
-    collabs = m.collaborators.filter(c => c.name === f);
-  }
-
-  document.getElementById('transitions-tbody').innerHTML = transitions.map(t => `
+  paginateTable('transitions-tbody', transitions.map(t => `
     <tr>
       <td><span class="color-dot" style="background:${CATEGORY_COLORS[t.from] || '#6e7681'}"></span>${CATEGORY_LABELS[t.from] || t.from}</td>
       <td><span class="color-dot" style="background:${CATEGORY_COLORS[t.to] || '#6e7681'}"></span>${CATEGORY_LABELS[t.to] || t.to}</td>
       <td>${fmtNum(t.count)}</td>
     </tr>
-  `).join('');
+  `), 10);
 
-  document.getElementById('excel-tbody').innerHTML = excel.length ? excel.map(e => `
-    <tr>
-      <td>${e.file}</td>
-      <td>${fmtNum(e.count)}</td>
-      <td>${e.collab}</td>
-    </tr>
-  `).join('') : `
-    <tr><td colspan="3"><div class="empty-state">
-      <div class="empty-state-icon">📊</div>
-      <h3>Nenhum arquivo de planilha identificado</h3>
-      <p>Não encontramos nomes de arquivos em DocumentName nem em títulos como “Planilha1 - Excel”.</p>
-    </div></td></tr>`;
+  if (excel.length) {
+    paginateTable('excel-tbody', excel.map(e => `
+      <tr>
+        <td>${e.file}</td>
+        <td>${fmtNum(e.count)}</td>
+        <td>${e.collab}</td>
+      </tr>
+    `), 10);
+  } else {
+    document.getElementById('excel-tbody').innerHTML = `
+      <tr><td colspan=”3”><div class=”empty-state”>
+        <div class=”empty-state-icon”>📊</div>
+        <h3>Nenhum arquivo de planilha identificado</h3>
+        <p>Não encontramos nomes de arquivos em DocumentName nem em títulos como “Planilha1 - Excel”.</p>
+      </div></td></tr>`;
+    const ctrl = document.getElementById('excel-tbody-pagination');
+    if (ctrl) ctrl.remove();
+  }
 
-  document.getElementById('interaction-tbody').innerHTML = collabs.map(c => `
+  paginateTable('interaction-tbody', collabs.map(c => `
     <tr>
       <td><strong>${c.name}</strong></td>
       <td>${c.hours > 0 ? fmtNum(Math.round(c.keys / c.hours)) : 0}</td>
@@ -4958,27 +4983,27 @@ function renderDetails() {
       <td>${fmtNum(c.pastes)}</td>
       <td>${c.ctxPerHour}</td>
     </tr>
-  `).join('');
+  `), 10);
 
   // Gaps table
-  const aa = DataStore.metrics.advancedAnalytics;
+  const aa = fm.advancedAnalytics;
   const gapsCard = document.getElementById('gaps-card');
   if (aa && aa.gaps && aa.gaps.topGapPairs && aa.gaps.topGapPairs.length > 0) {
     if (gapsCard) gapsCard.style.display = '';
-    document.getElementById('gaps-tbody').innerHTML = aa.gaps.topGapPairs.map(p => `
+    paginateTable('gaps-tbody', aa.gaps.topGapPairs.map(p => `
       <tr>
         <td><span class="color-dot" style="background:${CATEGORY_COLORS[p.before] || '#6e7681'}"></span>${CATEGORY_LABELS[p.before] || p.before}</td>
         <td><span class="color-dot" style="background:${CATEGORY_COLORS[p.after] || '#6e7681'}"></span>${CATEGORY_LABELS[p.after] || p.after}</td>
         <td>${fmtNum(p.count)}</td>
         <td>${p.avgGapMins} min</td>
       </tr>
-    `).join('');
+    `), 10);
   } else {
     if (gapsCard) gapsCard.style.display = 'none';
   }
 
   // Predictions table (Spec 4)
-  const activeAA = (f !== 'all') ? getFilteredMetrics().advancedAnalytics : aa;
+  const activeAA = aa;
   const allBlocks = [...(activeAA.activityBlocks3 || []), ...(activeAA.activityBlocks4 || [])];
   const predictable = allBlocks
     .filter(b => b.nextStepDistribution && b.nextStepDistribution.length > 0)
@@ -4993,8 +5018,10 @@ function renderDetails() {
   if (predTbody) {
     if (predictable.length === 0) {
       predTbody.innerHTML = '<tr><td colspan="6" style="color:var(--text-dim);text-align:center;padding:20px">Sem predicoes disponiveis — dados insuficientes</td></tr>';
+      const ctrl = document.getElementById('predictions-tbody-pagination');
+      if (ctrl) ctrl.remove();
     } else {
-      predTbody.innerHTML = predictable.map(b => {
+      paginateTable('predictions-tbody', predictable.map(b => {
         const top = b.nextStepDistribution[0];
         const blockLabel = b.block.map(s => s.length > 20 ? s.substring(0, 17) + '...' : s).join(' → ');
         const nextLabel = top.step.length > 25 ? top.step.substring(0, 22) + '...' : top.step;
@@ -5009,12 +5036,68 @@ function renderDetails() {
             <td>${top.avgTimeMins.toFixed(1)} min</td>
             <td>${b.potentialSavingMins > 0 ? fmtH(b.potentialSavingMins / 60) : '—'}</td>
           </tr>`;
-      }).join('');
+      }), 10);
     }
   }
 }
 
 // ─── TABLE UTILITIES ─────────────────────────────────────────────────────────
+
+// Pagination state: { tbodyId: { rows: [], page: 0, pageSize: 10 } }
+window._tablePagination = {};
+
+function paginateTable(tbodyId, rows, pageSize) {
+  pageSize = pageSize || 10;
+  window._tablePagination[tbodyId] = { rows: rows, page: 0, pageSize: pageSize };
+  _renderPage(tbodyId);
+}
+
+function _renderPage(tbodyId) {
+  const state = window._tablePagination[tbodyId];
+  if (!state) return;
+  const { rows, page, pageSize } = state;
+  const tbody = document.getElementById(tbodyId);
+  if (!tbody) return;
+
+  if (rows.length <= pageSize) {
+    // No pagination needed — show all rows and remove controls
+    tbody.innerHTML = rows.join('');
+    const ctrl = document.getElementById(tbodyId + '-pagination');
+    if (ctrl) ctrl.remove();
+    return;
+  }
+
+  const start = page * pageSize;
+  const end = Math.min(start + pageSize, rows.length);
+  tbody.innerHTML = rows.slice(start, end).join('');
+
+  // Insert or update pagination controls after the table
+  let ctrl = document.getElementById(tbodyId + '-pagination');
+  if (!ctrl) {
+    ctrl = document.createElement('div');
+    ctrl.id = tbodyId + '-pagination';
+    ctrl.className = 'table-pagination';
+    const table = tbody.closest('table');
+    if (table && table.parentNode) {
+      table.parentNode.insertBefore(ctrl, table.nextSibling);
+    }
+  }
+  ctrl.innerHTML = `
+    <span class="pagination-info">Mostrando ${start + 1}–${end} de ${rows.length}</span>
+    <div class="pagination-buttons">
+      <button onclick="changePage('${tbodyId}', -1)" ${page === 0 ? 'disabled' : ''}>← Anterior</button>
+      <button onclick="changePage('${tbodyId}', 1)" ${end >= rows.length ? 'disabled' : ''}>Próxima →</button>
+    </div>
+  `;
+}
+
+function changePage(tbodyId, delta) {
+  const state = window._tablePagination[tbodyId];
+  if (!state) return;
+  const maxPage = Math.ceil(state.rows.length / state.pageSize) - 1;
+  state.page = Math.max(0, Math.min(maxPage, state.page + delta));
+  _renderPage(tbodyId);
+}
 
 let sortState = {};
 
@@ -5022,7 +5105,7 @@ function sortTable(tableId, colIdx) {
   const table = document.getElementById(tableId);
   if (!table) return;
   const tbody = table.querySelector('tbody');
-  const rows = Array.from(tbody.querySelectorAll('tr'));
+  const tbodyId = tbody ? tbody.id : null;
 
   const key = `${tableId}:${colIdx}`;
   sortState[key] = sortState[key] === 'asc' ? 'desc' : 'asc';
@@ -5032,32 +5115,65 @@ function sortTable(tableId, colIdx) {
     th.className = i === colIdx ? (dir === 'asc' ? 'sort-asc' : 'sort-desc') : '';
   });
 
-  rows.sort((a, b) => {
-    const aVal = a.cells[colIdx]?.textContent?.trim() || '';
-    const bVal = b.cells[colIdx]?.textContent?.trim() || '';
+  // Helper: extract text from column in HTML string
+  function extractCol(html, idx) {
+    const tds = html.match(/<td[^>]*>([\s\S]*?)<\/td>/gi) || [];
+    if (idx >= tds.length) return '';
+    return (tds[idx] || '').replace(/<[^>]+>/g, '').trim();
+  }
+
+  function comparator(aHtml, bHtml) {
+    const aVal = extractCol(aHtml, colIdx);
+    const bVal = extractCol(bHtml, colIdx);
     const aNum = parseFloat(aVal.replace(/[^0-9.-]/g, ''));
     const bNum = parseFloat(bVal.replace(/[^0-9.-]/g, ''));
     if (!isNaN(aNum) && !isNaN(bNum)) {
       return dir === 'asc' ? aNum - bNum : bNum - aNum;
     }
     return dir === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
-  });
+  }
 
-  rows.forEach(r => tbody.appendChild(r));
+  // If paginated, sort the full rows array and re-render page 1
+  if (tbodyId && window._tablePagination[tbodyId]) {
+    const state = window._tablePagination[tbodyId];
+    state.rows.sort(comparator);
+    state.page = 0;
+    _renderPage(tbodyId);
+  } else {
+    // Fallback: sort DOM rows directly (non-paginated tables)
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    rows.sort((a, b) => {
+      const aVal = a.cells[colIdx]?.textContent?.trim() || '';
+      const bVal = b.cells[colIdx]?.textContent?.trim() || '';
+      const aNum = parseFloat(aVal.replace(/[^0-9.-]/g, ''));
+      const bNum = parseFloat(bVal.replace(/[^0-9.-]/g, ''));
+      if (!isNaN(aNum) && !isNaN(bNum)) {
+        return dir === 'asc' ? aNum - bNum : bNum - aNum;
+      }
+      return dir === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+    });
+    rows.forEach(r => tbody.appendChild(r));
+  }
 }
 
 function filterDetailTables(q) {
-  const tables = document.querySelectorAll('#view-details .data-table tbody tr');
   const lq = q.toLowerCase();
-  tables.forEach(row => {
-    row.style.display = row.textContent.toLowerCase().includes(lq) ? '' : 'none';
+  const detailTbodyIds = ['transitions-tbody', 'excel-tbody', 'interaction-tbody', 'gaps-tbody', 'predictions-tbody'];
+  detailTbodyIds.forEach(tbodyId => {
+    const state = window._tablePagination[tbodyId];
+    if (!state) return;
+    if (!state._allRows) state._allRows = state.rows.slice();
+    state.rows = lq ? state._allRows.filter(html => html.replace(/<[^>]+>/g, '').toLowerCase().includes(lq)) : state._allRows.slice();
+    state.page = 0;
+    _renderPage(tbodyId);
   });
 }
 
 // ─── RENDER: DATAFLOWS ───────────────────────────────────────────────────────
 
 function renderDataFlows() {
-  const aa = DataStore.metrics.advancedAnalytics;
+  const metrics = DataStore.activeFilter === 'all' ? DataStore.metrics : getFilteredMetrics();
+  const aa = metrics.advancedAnalytics;
   if (!aa) return;
   const { flows, totalTransfers } = aa.copyPasteFlows;
 
@@ -5111,14 +5227,14 @@ function renderDataFlows() {
   }
 
   // Table
-  document.getElementById('dataflows-tbody').innerHTML = flows.map(f => `
+  paginateTable('dataflows-tbody', flows.map(f => `
     <tr>
       <td><span class="color-dot" style="background:${CATEGORY_COLORS[f.src] || '#6e7681'}"></span>${CATEGORY_LABELS[f.src] || f.src}</td>
       <td><span class="color-dot" style="background:${CATEGORY_COLORS[f.dst] || '#6e7681'}"></span>${CATEGORY_LABELS[f.dst] || f.dst}</td>
       <td><strong>${f.count}</strong></td>
       <td>${f.avgGapSecs}s</td>
     </tr>
-  `).join('');
+  `), 10);
 }
 
 // ─── RENDER: ACTIVITY BLOCKS (Spec 3 + 4) ───────────────────────────────────
@@ -5281,7 +5397,8 @@ function renderPatterns() {
 // ─── RENDER: DEEP WORK ───────────────────────────────────────────────────────
 
 function renderDeepWork() {
-  const aa = DataStore.metrics.advancedAnalytics;
+  const metrics = DataStore.activeFilter === 'all' ? DataStore.metrics : getFilteredMetrics();
+  const aa = metrics.advancedAnalytics;
   if (!aa) return;
   const dw = aa.deepWork;
   const frag = aa.fragmentation;
@@ -5473,9 +5590,9 @@ function renderDrilldownGraph() {
 
   // Build pages table
   const pagesArr = Object.entries(data.pages).sort((a, b) => b[1] - a[1]);
-  document.getElementById('drilldown-pages-tbody').innerHTML = pagesArr.slice(0, 20).map(([title, count]) => `
+  paginateTable('drilldown-pages-tbody', pagesArr.map(([title, count]) => `
     <tr><td>${title}</td><td>${fmtNum(count)}</td></tr>
-  `).join('');
+  `), 10);
 
   // Cytoscape for internal workflow
   if (drilldownCyInstance) { drilldownCyInstance.destroy(); drilldownCyInstance = null; }
@@ -5615,11 +5732,14 @@ function renderDrilldownGraph() {
 // ─── RENDER: BENCHMARKING ────────────────────────────────────────────────────
 
 function renderBenchmarking() {
-  const aa = DataStore.metrics.advancedAnalytics;
+  const metrics = DataStore.activeFilter === 'all' ? DataStore.metrics : getFilteredMetrics();
+  const aa = metrics.advancedAnalytics;
   if (!aa) return;
   const benchmarks = aa.benchmarks;
   const workload = aa.workload;
-  const collabs = DataStore.collaborators;
+  const collabs = DataStore.activeFilter === 'all'
+    ? DataStore.collaborators
+    : DataStore.collaborators.filter(c => c === DataStore.activeFilter);
 
   // Radar chart: normalize 5 metrics per collaborator
   const radarMetrics = [
@@ -5717,7 +5837,7 @@ function renderBenchmarking() {
   });
 
   // Benchmark table
-  document.getElementById('benchmark-tbody').innerHTML = benchmarks.slice(0, 40).map(b => `
+  paginateTable('benchmark-tbody', benchmarks.map(b => `
     <tr>
       <td><span class="color-dot" style="background:${CATEGORY_COLORS[b.category] || '#6e7681'}"></span>${CATEGORY_LABELS[b.category] || b.category}</td>
       <td><strong>${b.collaborator}</strong></td>
@@ -5727,13 +5847,14 @@ function renderBenchmarking() {
       <td>${b.sessions}</td>
       <td>${b.avgSessionMin}min</td>
     </tr>
-  `).join('');
+  `), 10);
 }
 
 // ─── RENDER: DOCUMENTS ───────────────────────────────────────────────────────
 
 function renderDocuments() {
-  const aa = DataStore.metrics.advancedAnalytics;
+  const metrics = DataStore.activeFilter === 'all' ? DataStore.metrics : getFilteredMetrics();
+  const aa = metrics.advancedAnalytics;
   if (!aa) return;
 
   const typeFilter = document.getElementById('doc-type-filter').value;
