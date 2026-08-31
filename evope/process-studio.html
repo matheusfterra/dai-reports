@@ -322,6 +322,13 @@
       <a href="#fases"         class="nav-link">Fases F0 → F3</a>
       <a href="#build"         class="nav-link">Build & Deploy</a>
     </div>
+
+    <div class="nav-section">
+      <div class="nav-label">Gotchas</div>
+      <a href="#gotchas-tauri"  class="nav-link">Tauri / Build</a>
+      <a href="#gotchas-vision" class="nav-link">OpenAI Vision / IA</a>
+      <a href="#gotchas-skill"  class="nav-link">Skill Export</a>
+    </div>
   </aside>
 
   <!-- ─── CONTENT ─── -->
@@ -900,6 +907,54 @@ npm run tauri:build                                # instalador NSIS</pre>
         <strong>Versão atual:</strong> <code>0.1.0</code><br/>
         <strong>Nome:</strong> provisório — será renomeado após definição final
       </p>
+    </section>
+
+    <!-- GOTCHAS -->
+    <section id="gotchas-tauri">
+      <h2><span class="sec-num">13</span>Gotchas — Tauri / Build / Instalador <a class="anchor" href="#gotchas-tauri">#</a></h2>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">⚠️</span>
+        <p><strong>externalBin com cópia manual gera instalador desatualizado</strong> (2026-08-21) — O Tauri empacota o externalBin a partir de <code>src-tauri/&lt;pasta&gt;/</code>, mas o build do binário (pkg) sai em outra pasta. Se a cópia for passo manual, o instalador NSIS pode sair com binário velho sem erro. <strong>Fix:</strong> script de sync por hash chamado no <code>beforeBuildCommand</code> (<code>scripts/sync-sidecar.js</code>), falhando o build se o binário não existir.</p>
+      </div>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">⚠️</span>
+        <p><strong>Windows limpo: exe Rust exige +crt-static</strong> (2026-08-21) — Por padrão o alvo MSVC linka <code>vcruntime140.dll</code> dinamicamente — essa DLL NÃO vem de fábrica no Windows. Num PC recém-formatado o app não abre. <strong>Fix:</strong> <code>src-tauri/.cargo/config.toml</code> com <code>[target.x86_64-pc-windows-msvc] rustflags = ["-C","target-feature=+crt-static"]</code>.</p>
+      </div>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">⚠️</span>
+        <p><strong>WebView2 default = downloadBootstrapper</strong> (2026-08-21) — Sem <code>bundle.windows.webviewInstallMode</code> no tauri.conf, o NSIS baixa o bootstrapper do WebView2 na hora e aborta se o download falhar. <strong>Fix:</strong> <code>embedBootstrapper</code> (+~2 MB) embute o bootstrapper; internet só é necessária se a máquina não tiver o runtime (Win11 sempre tem).</p>
+      </div>
+    </section>
+
+    <section id="gotchas-vision">
+      <h2><span class="sec-num">14</span>Gotchas — OpenAI Vision / IA <a class="anchor" href="#gotchas-vision">#</a></h2>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">👁️</span>
+        <p><strong>detail:'low' torna screenshots ilegíveis</strong> (2026-08-20) — Com <code>image_url: { detail: 'low' }</code> a OpenAI reduz a imagem a ~512px — barra de endereços, rótulos e cabeçalhos ficam ilegíveis. <strong>Fix:</strong> <code>detail: 'high'</code> + frames a ≥1536px (ffmpeg <code>scale='min(1536,iw)':-2</code>, JPEG <code>-q:v 4</code>).</p>
+      </div>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">🧩</span>
+        <p><strong>LLM só extrai o que o schema tem onde guardar</strong> (2026-08-20) — Structured outputs: se o JSON Schema não tem campo para um dado e o prompt não manda transcrevê-lo, o modelo ignora. <strong>Fix:</strong> campo dedicado no schema com descrição "NUNCA inventar, null se ilegível" + instrução explícita + validação pós-parse.</p>
+      </div>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">🎲</span>
+        <p><strong>OCR de ids longos é estocástico</strong> (2026-08-20) — Mesmo com detail:high e frames 1536px, a transcrição de ids longos (id de planilha Google, id de agente) varia entre execuções. <strong>Mitigação:</strong> regra de "grafia única" — reutilizar URLs já registradas no resumo acumulado. Para artefatos críticos, verificação manual dos literais.</p>
+      </div>
+    </section>
+
+    <section id="gotchas-skill">
+      <h2><span class="sec-num">15</span>Gotchas — Skill Export <a class="anchor" href="#gotchas-skill">#</a></h2>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">📦</span>
+        <p><strong>Zip de skill no Windows: backslash + wrapper duplo</strong> (2026-08-27) — <code>Compress-Archive</code> (PowerShell 5.1) grava entradas com <code>\</code> como separador — a spec de zip exige <code>/</code>. Skills exportadas pelo Process Studio vêm com wrapper duplo e nome truncado. <strong>Fix:</strong> usar <code>tar.exe -a -c -f skill.zip &lt;pasta&gt;</code> — gera <code>/</code> corretamente. Achatar e renomear antes de zipar.</p>
+      </div>
     </section>
 
   </main>
