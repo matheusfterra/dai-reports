@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DermaClinic — Relatório de Atendimento · Agosto 2026</title>
+  <link rel="stylesheet" href="../../_shared/style.css" />
+  <style>
+    .report-header {
+      background: linear-gradient(135deg, #0d2137 0%, #0a3d62 100%);
+      padding: 32px 40px;
+      border-bottom: 1px solid #1e3a5f;
+    }
+    .report-header h1 {
+      font-size: 1.6rem; font-weight: 700; color: #fff; letter-spacing: 0.02em;
+    }
+    .report-header p { color: #7db3d8; font-size: 0.875rem; margin-top: 6px; }
+    .badge {
+      display: inline-block; background: #1e3a5f; color: #58a6ff;
+      border-radius: 20px; padding: 2px 12px; font-size: 0.75rem;
+      font-weight: 600; margin-left: 10px; vertical-align: middle;
+    }
+    .badge-warn {
+      background: rgba(240,136,62,0.15); color: #f0883e;
+    }
+    .report-body { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
+    .kpi-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 16px; margin-bottom: 40px;
+    }
+    .kpi-card {
+      background: #161b22; border: 1px solid #1e3a5f; border-radius: 12px;
+      padding: 22px 18px; text-align: center; transition: transform 0.15s;
+    }
+    .kpi-card:hover { transform: translateY(-2px); }
+    .kpi-label { font-size: 0.7rem; color: #7db3d8; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 8px; }
+    .kpi-value { font-size: 1.75rem; font-weight: 700; color: #58a6ff; line-height: 1; }
+    .kpi-unit { font-size: 0.8rem; color: #8b949e; margin-top: 5px; }
+    .kpi-delta { font-size: 0.75rem; font-weight: 600; margin-top: 4px; }
+    .kpi-prev  { font-size: 0.68rem; color: #6e7681; margin-top: 3px; }
+    .delta-up   { color: #3fb950; }
+    .delta-down { color: #f85149; }
+    .delta-warn { color: #f0883e; }
+    .section { margin-bottom: 48px; }
+    .section-title {
+      font-size: 0.72rem; font-weight: 700; color: #7db3d8; text-transform: uppercase;
+      letter-spacing: 0.12em; margin-bottom: 20px; padding-bottom: 10px;
+      border-bottom: 1px solid #1e3a5f;
+    }
+    .section-subtitle {
+      font-size: 1rem; font-weight: 600; color: #c9d1d9;
+      margin-bottom: 12px; margin-top: 24px;
+    }
+    .tbl-wrap {
+      background: #161b22; border: 1px solid #1e3a5f; border-radius: 12px;
+      overflow: hidden; overflow-x: auto; margin-bottom: 24px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    thead th {
+      background: #0d2137; color: #7db3d8; font-size: 0.7rem; text-transform: uppercase;
+      letter-spacing: 0.08em; padding: 12px 16px; text-align: right;
+      border-bottom: 1px solid #1e3a5f; white-space: nowrap;
+    }
+    thead th:first-child { text-align: left; }
+    tbody td {
+      padding: 11px 16px; text-align: right; border-bottom: 1px solid #0d1117;
+      color: #c9d1d9; vertical-align: middle;
+    }
+    tbody td:first-child { text-align: left; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: #1c2530; }
+    tbody tr.total-row td {
+      background: #0d2137; font-weight: 700; color: #e6edf3;
+      border-top: 1px solid #1e3a5f;
+    }
+    .opp-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px; margin-bottom: 24px;
+    }
+    .opp-card { background: #161b22; border: 1px solid #1e3a5f; border-radius: 12px; padding: 22px; }
+    .opp-card.priority-alta   { border-left: 4px solid #f85149; }
+    .opp-card.priority-media  { border-left: 4px solid #f0883e; }
+    .opp-card.priority-baixa  { border-left: 4px solid #3fb950; }
+    .opp-tag { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+    .opp-card.priority-alta  .opp-tag { color: #f85149; }
+    .opp-card.priority-media .opp-tag { color: #f0883e; }
+    .opp-card.priority-baixa .opp-tag { color: #3fb950; }
+    .opp-card h3 { font-size: 0.95rem; font-weight: 600; color: #e6edf3; margin-bottom: 8px; }
+    .opp-card p { font-size: 0.82rem; color: #8b949e; line-height: 1.55; }
+    .steps-list { list-style: none; padding: 0; margin: 0; }
+    .steps-list li {
+      display: flex; gap: 14px; padding: 14px 0;
+      border-bottom: 1px solid #1e3a5f; align-items: flex-start;
+    }
+    .steps-list li:last-child { border-bottom: none; }
+    .step-num {
+      flex-shrink: 0; width: 28px; height: 28px; background: #1e3a5f; color: #58a6ff;
+      font-weight: 700; font-size: 0.8rem; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-text strong { display: block; font-size: 0.88rem; color: #e6edf3; margin-bottom: 4px; }
+    .step-text span { font-size: 0.8rem; color: #8b949e; line-height: 1.5; }
+    .analysis-block {
+      background: #161b22; border: 1px solid #1e3a5f; border-radius: 12px;
+      padding: 24px; margin-bottom: 20px; font-size: 0.875rem; color: #c9d1d9; line-height: 1.65;
+    }
+    .analysis-block p + p { margin-top: 10px; }
+    .analysis-block .highlight { color: #58a6ff; font-weight: 600; }
+    .ind-green  { color: #3fb950; font-weight: 600; }
+    .ind-yellow { color: #f0883e; font-weight: 600; }
+    .ind-red    { color: #f85149; font-weight: 600; }
+    .progress-group { margin-bottom: 12px; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: #c9d1d9; margin-bottom: 5px; }
+    .progress-bar { height: 8px; background: #1e3a5f; border-radius: 4px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 4px; background: #58a6ff; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+    @media (max-width: 768px) {
+      .two-col { grid-template-columns: 1fr; }
+      .opp-grid { grid-template-columns: 1fr; }
+      .report-body { padding: 24px 16px; }
+    }
+    .bench-source { font-size: 0.72rem; color: #6e7681; font-style: italic; }
+    .bench-source a { color: #58a6ff; text-decoration: none; font-style: italic; }
+    .bench-source a:hover { text-decoration: underline; color: #79c0ff; }
+    .bench-pos-green  { color: #3fb950; font-weight: 600; }
+    .bench-pos-yellow { color: #f0883e; font-weight: 600; }
+    .bench-pos-red    { color: #f85149; font-weight: 600; }
+    .report-footer { text-align: center; padding: 32px; border-top: 1px solid #1e3a5f; font-size: 0.78rem; color: #6e7681; }
+    .exec-summary {
+      background: linear-gradient(135deg, #0d2137 0%, #091d31 100%);
+      border: 1px solid #1e3a5f; border-radius: 12px; padding: 28px; margin-bottom: 40px;
+    }
+    .exec-summary h2 { font-size: 0.72rem; font-weight: 700; color: #7db3d8; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 16px; }
+    .exec-summary p { font-size: 0.9rem; color: #c9d1d9; line-height: 1.7; }
+    .exec-summary .highlight { color: #58a6ff; font-weight: 600; }
+    .exec-summary .callout {
+      margin-top: 16px; padding: 12px 16px;
+      background: rgba(248,81,73,0.08); border-left: 3px solid #f85149;
+      border-radius: 6px; font-size: 0.85rem; color: #c9d1d9;
+    }
+    .exec-summary .callout-green {
+      margin-top: 12px; padding: 12px 16px;
+      background: rgba(63,185,80,0.08); border-left: 3px solid #3fb950;
+      border-radius: 6px; font-size: 0.85rem; color: #c9d1d9;
+    }
+    .alert-banner {
+      background: rgba(248,81,73,0.06); border: 1px solid rgba(248,81,73,0.25);
+      border-radius: 8px; padding: 14px 18px; margin-bottom: 20px;
+      font-size: 0.85rem; color: #c9d1d9;
+    }
+    .alert-banner strong { color: #f85149; }
+    .warn-banner {
+      background: rgba(240,136,62,0.06); border: 1px solid rgba(240,136,62,0.25);
+      border-radius: 8px; padding: 14px 18px; margin-bottom: 20px;
+      font-size: 0.85rem; color: #c9d1d9;
+    }
+    .warn-banner strong { color: #f0883e; }
+    .success-banner {
+      background: rgba(63,185,80,0.06); border: 1px solid rgba(63,185,80,0.25);
+      border-radius: 8px; padding: 14px 18px; margin-bottom: 20px;
+      font-size: 0.85rem; color: #c9d1d9;
+    }
+    .success-banner strong { color: #3fb950; }
+  </style>
+</head>
+<body>
+
+<div id="gate-loading" style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0d1117;">
+  <div style="text-align:center;">
+    <div style="width:40px;height:40px;border:3px solid #1e3a5f;border-top-color:#58a6ff;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;"></div>
+    <p style="color:#7db3d8;font-size:0.85rem;font-family:'Segoe UI',system-ui,sans-serif;">Verificando acesso…</p>
+  </div>
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
+<div id="gate-direct" style="display:none;align-items:center;justify-content:center;min-height:100vh;background:#0d1117;">
+  <div style="text-align:center;max-width:380px;padding:40px 32px;background:#161b22;border:1px solid #1e3a5f;border-radius:16px;font-family:'Segoe UI',system-ui,sans-serif;">
+    <div style="font-size:2.5rem;margin-bottom:16px;">🔒</div>
+    <h2 style="color:#e6edf3;font-size:1.1rem;margin-bottom:8px;">Acesso Restrito</h2>
+    <p style="color:#8b949e;font-size:0.85rem;line-height:1.5;">Este relatório é exclusivo para a equipe DermaClinic.<br>Acesse pelo link enviado pela Digital AI.</p>
+  </div>
+</div>
+
+<div id="app" style="display:none;">
+  <div class="report-content">
+
+    <!-- HEADER -->
+    <div class="report-header">
+      <h1>DermaClinic <span style="color:#7db3d8">—</span> Relatório de Atendimento <span class="badge">Agosto 2026</span></h1>
+      <p>Período: 01/08/2026 a 31/08/2026 · Dados atualizados em 31/08/2026 · Fonte: clinic_analytics (ETL Feegow) · Elaborado por <img src="../../_shared/logo-negative.svg" style="height:13px;vertical-align:middle;opacity:0.85;" alt="Digital AI" /></p>
+    </div>
+
+    <div class="report-body">
+
+      <!-- ── SUMÁRIO EXECUTIVO ── -->
+      <div class="exec-summary">
+        <h2>Sumário Executivo</h2>
+        <p>
+          Agosto de 2026 (01–31/ago): receita total <span class="highlight">R$272.805</span>. Volume de atendimentos: <span class="highlight">489 atendidos</span> de 650 agendamentos. Ticket médio geral: <span class="highlight">R$557,88</span> (todos atendidos). Dermatologia (Eoda+Raquel): 208 consultas | R$247.595 | TM R$1.190,36.
+        </p>
+        <div class="callout-green">
+          <strong>Destaques positivos:</strong>
+          ✓ Receita R$272.805 — +57,2% vs julho (R$173.510) — recorde do ano;
+          ✓ No-show 4,15% (27 casos) — melhora de 0,60pp vs julho (4,75%);
+          ✓ 55 novos pacientes (primeiras consultas) — captação ativa funcionando;
+          ✓ Ticket médio dermatologia R$1.190,36 — 2,5× acima da média nacional (R$300–500);
+          ✓ 238 pacientes únicos atendidos em agosto — +73,7% vs julho (137).
+        </div>
+        <div class="callout">
+          <strong>⚠ Pontos de atenção:</strong>
+          ⚠ Ticket médio dermatologia R$1.190,36 — queda de 6,0% vs julho (R$1.266,50) — monitorar mix de procedimentos;
+          ⚠ Taxa de realização (atendidos/agendados): 75,2% — 65 cancelamentos (10,0%);
+          ⚠ 28/ago com maior volume de faltas (6) — monitorar padrão;
+          ⚠ Fototerapia com queda de sessões: 235 vs 261 em julho (−9,9%).
+        </div>
+      </div>
+
+      <!-- ── KPIs PRINCIPAIS ── -->
+      <div class="section">
+        <div class="section-title">KPIs do Mês</div>
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Receita Total</div>
+            <div class="kpi-value">R$272.805</div>
+            <div class="kpi-unit">total faturado ago</div>
+            <div class="kpi-delta delta-up">+57,2% vs. jul</div>
+            <div class="kpi-prev">Jul: R$173.510</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Ticket Médio Derma</div>
+            <div class="kpi-value" style="color:#3fb950;">R$1.190,36</div>
+            <div class="kpi-unit">por consulta dermatológica</div>
+            <div class="kpi-delta delta-down">−6,0% vs. jul</div>
+            <div class="kpi-prev">Jul: R$1.266,50</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Consultas Realizadas</div>
+            <div class="kpi-value" style="color:#3fb950;">208</div>
+            <div class="kpi-unit">dermatologia (Eoda+Raquel)</div>
+            <div class="kpi-delta delta-up">+489 total clínica</div>
+            <div class="kpi-prev">Jul: 128 (derm)</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">No-show</div>
+            <div class="kpi-value" style="color:#3fb950;">4,15%</div>
+            <div class="kpi-unit">27 casos de 650</div>
+            <div class="kpi-delta delta-up">−0,60pp vs jul (melhora)</div>
+            <div class="kpi-prev">Jul: 4,75% (29 casos)</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Pacientes Únicos</div>
+            <div class="kpi-value">238</div>
+            <div class="kpi-unit">pacientes únicos atendidos</div>
+            <div class="kpi-delta delta-up">55 novos (23,1%)</div>
+            <div class="kpi-prev">Jul: 137</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Taxa de Retorno</div>
+            <div class="kpi-value">76,9%</div>
+            <div class="kpi-unit">recorrência</div>
+            <div class="kpi-delta delta-up">183 retornantes</div>
+            <div class="kpi-prev">Jul: 69,5%</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Leads WhatsApp</div>
+            <div class="kpi-value" style="color:#f0883e;">—</div>
+            <div class="kpi-unit">dados a confirmar ago</div>
+            <div class="kpi-delta delta-down">referência jul: 109 Meta</div>
+            <div class="kpi-prev">Jul: 109 conv Meta</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Sessões Fototerapia</div>
+            <div class="kpi-value">235</div>
+            <div class="kpi-unit">realizadas (procedimentos foto)</div>
+            <div class="kpi-delta delta-down">R$2.160 receita (−9,9%)</div>
+            <div class="kpi-prev">Jul: 261 sess</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Projeção Anual</div>
+            <div class="kpi-value">R$3,27M</div>
+            <div class="kpi-unit">base ago × 12</div>
+            <div class="kpi-delta delta-up">+57,2% vs jul projeção</div>
+            <div class="kpi-prev">R$272.805/mês</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SEÇÃO 1: FINANCEIRO ── -->
+      <div class="section">
+        <div class="section-title">1. Desempenho Financeiro</div>
+
+        <div class="analysis-block">
+          <p>
+            A receita total da clínica em agosto foi de <span class="highlight">R$272.805</span>,
+            composta por <span class="highlight">R$247.595 de dermatologia</span>
+            (Dra. Eoda R$148.805 + Dra. Raquel R$98.790) e
+            <span class="highlight">R$2.160 de fototerapia</span> (235 sessões a R$9,19/sessão) e R$18.050 da Prof. 5.
+            Ticket médio geral de R$557,88 (489 atendidos). Ticket médio dermatologia R$1.190,36 — <span class="highlight">2,5× acima da média nacional de R$300–500</span>.
+          </p>
+          <p>
+            A <span class="highlight">Semana mais forte do mês</span> foi S3 (11–17/ago), com
+            <span class="highlight">R$86.490 (31,7% do mês)</span>. S2 (04–10/ago) foi a segunda maior com R$80.610 (29,5%). Pico operacional consolidado nas semanas 2 e 3.
+            PIX e formas de pagamento — dados do módulo financeiro Feegow a atualizar para comparativo preciso.
+          </p>
+        </div>
+
+        <div class="section-subtitle">Receita por Semana — Dermatologia (sem fototerapia)</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Semana</th><th>Período</th><th>Receita</th><th>Atend.</th><th>TM</th><th>% do Mês</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Semana 1</td>
+                <td>01–03/ago</td>
+                <td>R$15.335</td>
+                <td>19</td>
+                <td>R$807,11</td>
+                <td>6,2%</td>
+              </tr>
+              <tr>
+                <td>Semana 2</td>
+                <td>04–10/ago</td>
+                <td>R$80.610</td>
+                <td>69</td>
+                <td>R$1.168,26</td>
+                <td>32,6%</td>
+              </tr>
+              <tr>
+                <td>Semana 3</td>
+                <td>11–17/ago</td>
+                <td><strong>R$86.490</strong></td>
+                <td>74</td>
+                <td>R$1.168,78</td>
+                <td><strong>34,9%</strong></td>
+              </tr>
+              <tr>
+                <td>Semana 4</td>
+                <td>18–24/ago</td>
+                <td>R$45.915</td>
+                <td>58</td>
+                <td>R$791,64</td>
+                <td>18,6%</td>
+              </tr>
+              <tr>
+                <td>Semana 5</td>
+                <td>25–31/ago</td>
+                <td>R$42.295</td>
+                <td>34</td>
+                <td>R$1.243,97</td>
+                <td>17,1%</td>
+              </tr>
+              <tr class="total-row">
+                <td colspan="2">Total Agosto (derm)</td>
+                <td>R$247.595</td>
+                <td>208</td>
+                <td>R$1.190,36</td>
+                <td>100%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-subtitle">Formas de Pagamento — Referência mai/jun 2026 <span style="font-size:0.75rem;color:#f0883e;">(dados de agosto ainda não disponíveis no Feegow Finance)</span></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Forma de Pagamento</th><th>Transações</th><th>Valor</th><th>Participação</th><th>vs. Junho</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Cartão de Crédito</td>
+                <td>54</td>
+                <td>R$ 107.115,00</td>
+                <td>68,5%</td>
+                <td class="ind-yellow">−2,9pp (mai: ~71,4%)</td>
+              </tr>
+              <tr>
+                <td>PIX ↑↑</td>
+                <td>25</td>
+                <td>R$ 32.395,00</td>
+                <td>20,7%</td>
+                <td class="ind-green">+7,0pp (mai: 13,7%)</td>
+              </tr>
+              <tr>
+                <td>Cartão de Débito</td>
+                <td>10</td>
+                <td>R$ 12.320,00</td>
+                <td>7,9%</td>
+                <td class="ind-yellow">−2,6pp (mai: 10,5%)</td>
+              </tr>
+              <tr>
+                <td>Dinheiro</td>
+                <td>5</td>
+                <td>R$ 4.090,00</td>
+                <td>2,6%</td>
+                <td class="ind-yellow">−1,8pp (mai: 4,4%)</td>
+              </tr>
+              <tr>
+                <td>Convênio / Outros</td>
+                <td>1</td>
+                <td>R$ 400,00</td>
+                <td>0,3%</td>
+                <td>—</td>
+              </tr>
+              <tr class="total-row">
+                <td>Total</td>
+                <td>95</td>
+                <td>—</td>
+                <td>100%</td>
+                <td>—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.78rem;color:#6e7681;margin-top:-8px;margin-bottom:20px;">
+          * Formas de pagamento: dados do módulo financeiro Feegow — meses de referência. Atualizar com dados de agosto quando disponível no Feegow Finance.
+        </p>
+
+        <div class="analysis-block">
+          <div class="progress-group">
+            <div class="progress-label"><span>Cartão Crédito</span><span>68,5%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:68.5%;background:#58a6ff;"></div></div>
+          </div>
+          <div class="progress-group">
+            <div class="progress-label"><span>PIX ↑↑ (+7,0pp vs mai)</span><span>20,7%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:20.7%;background:#3fb950;"></div></div>
+          </div>
+          <div class="progress-group">
+            <div class="progress-label"><span>Cartão Débito</span><span>7,9%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:7.9%;background:#79c0ff;"></div></div>
+          </div>
+          <div class="progress-group">
+            <div class="progress-label"><span>Dinheiro</span><span>2,6%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:2.6%;background:#f0883e;"></div></div>
+          </div>
+          <div class="progress-group">
+            <div class="progress-label"><span>Convênio/Outros</span><span>0,3%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:0.3%;background:#6e7681;"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SEÇÃO 2: INDICADORES CLÍNICOS ── -->
+      <div class="section">
+        <div class="section-title">2. Indicadores Clínicos</div>
+
+        <div class="success-banner">
+          <strong>✓ No-show abaixo do benchmark nacional:</strong> Taxa de <strong>4,15% em agosto</strong> (27 casos) —
+          melhora de 0,60pp vs. julho (4,75%). A DermaClinic está <strong>3× abaixo do benchmark nacional</strong> de 15%–20%
+          (<span class="bench-source"><a href="https://saudedigitalnews.com.br/13/12/2023/doctoralia-e-feegow-lancam-panorama-das-clinicas-e-hospitais-2024/" target="_blank" rel="noopener">Panorama Doctoralia+Feegow 2024</a></span>).
+          Receita não realizada por no-show: 27 × R$1.190,36 = <strong>R$32.139,72</strong>.
+        </div>
+
+        <div class="analysis-block">
+          <p>
+            Foram realizadas <span class="highlight">208 consultas médicas</span> em agosto (Dra. Eoda: 122 + Dra. Raquel: 86), mais 42 atendimentos da Prof. 5 e 235 sessões de fototerapia, totalizando 489 atendidos. <span class="highlight">27 não comparecimentos (4,15%)</span> de 650 agendamentos. Taxa muito abaixo do benchmark nacional de 15%–20% — gestão de agenda eficiente.
+          </p>
+          <p>
+            A <span class="highlight">taxa de retorno de 76,9%</span> (183 pacientes recorrentes de 238 únicos atendidos) está acima do benchmark de 55%–65% para dermatologia privada. 55 novos pacientes em agosto representam 23,1% do total — captação via tráfego pago funcionando.
+          </p>
+        </div>
+
+        <div class="section-subtitle">2.1 Eficiência da Agenda (Dermatologia)</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Métrica</th><th>DermaClinic Ago/26</th><th>Benchmark</th><th>Avaliação</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Consultas Realizadas</td>
+                <td>208 (derm) · 489 total</td><td>—</td><td class="bench-pos-green">🟢 Volume recorde</td>
+              </tr>
+              <tr>
+                <td>Taxa de No-show</td>
+                <td>4,15% (27 casos)</td>
+                <td>~15%–20% clínicas privadas — <span class="bench-source"><a href="https://saudedigitalnews.com.br/13/12/2023/doctoralia-e-feegow-lancam-panorama-das-clinicas-e-hospitais-2024/" target="_blank" rel="noopener">Panorama Doctoralia+Feegow 2024</a></span></td>
+                <td class="bench-pos-green">🟢 <strong>3× abaixo do benchmark — excelente</strong></td>
+              </tr>
+              <tr>
+                <td>Ticket Médio</td>
+                <td>R$1.190,36 (derm)</td>
+                <td>R$ 300–500 média nacional</td>
+                <td class="bench-pos-green">🟢 <strong>2,5× acima da média nacional</strong></td>
+              </tr>
+              <tr>
+                <td>Taxa de Retorno</td>
+                <td>76,9%</td>
+                <td>55%–65% dermato privada</td>
+                <td class="bench-pos-green">🟢 <strong>Acima do benchmark — excelente fidelização</strong></td>
+              </tr>
+              <tr>
+                <td>Pacientes Únicos</td>
+                <td>238</td>
+                <td>—</td>
+                <td class="bench-pos-green">🟢 55 novos = captação ativa</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-subtitle">2.2 Fototerapia</div>
+        <div class="success-banner">
+          <strong>✓ Fototerapia:</strong> 235 sessões em agosto vs. 261 em julho (−9,9%). Receita R$2.160 vs. R$5.490 julho (−60,7%). TM por sessão R$9,19. Nota: dados de fototerapia incluem procedimentos IDs 223, 265, 328, 379, 448, 475, 476.
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Indicador</th><th>Ago 2026</th><th>Jul 2026</th><th>Var.</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Sessões Realizadas</td>
+                <td>235</td><td>261</td>
+                <td class="ind-yellow">−9,9%</td>
+              </tr>
+              <tr>
+                <td>Receita Fototerapia</td>
+                <td>R$2.160</td><td>R$5.490</td>
+                <td class="ind-red">−60,7%</td>
+              </tr>
+              <tr>
+                <td>Ticket Médio por Sessão</td>
+                <td>R$9,19</td><td>R$21</td>
+                <td class="ind-red">−56,2%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.78rem;color:#6e7681;margin-top:-12px;">
+          * Dados de fototerapia incluem procedimentos IDs 223, 265, 328, 379, 448, 475, 476 via clinic_analytics (ETL por data de agendamento).
+        </p>
+      </div>
+
+      <!-- ── SEÇÃO 3: DESEMPENHO POR MÉDICA ── -->
+      <div class="section">
+        <div class="section-title">3. Desempenho por Médica</div>
+
+        <div class="analysis-block">
+          <p>
+            Em agosto, as dermatologistas realizaram <span class="highlight">208 consultas</span>
+            (+ 42 da Prof. 5 e 235 de fototerapia = 489 total clínica).
+            <span class="highlight">Dra. Eoda Steglich</span>: 122 atendimentos, <span class="highlight">R$148.805</span> e
+            <span class="highlight">TM R$1.219,71</span>. Participação na receita dermatológica: 60,1%. No-show: 3,93% (7 faltas de 178 agendados).
+          </p>
+          <p>
+            <span class="highlight">Dra. Raquel Steglich</span>: 86 atendimentos
+            (R$98.790, TM R$1.148,72). No-show: 4,00% (5 faltas de 125 agendados). Prof. 5: 42 atendimentos (R$18.050, TM R$429,76, no-show 1,67%). Receita total clínica: R$272.805.
+          </p>
+        </div>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Médica</th>
+                <th>Agendadas</th>
+                <th>Realizadas</th>
+                <th>No-shows</th>
+                <th>Receita</th>
+                <th>Ticket Médio</th>
+                <th>Novos Pac.</th>
+                <th>Part. Receita</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Dra. Eoda Steglich</strong></td>
+                <td>178</td>
+                <td><strong>122</strong></td>
+                <td>7 (3,93%)</td>
+                <td><strong>R$148.805</strong></td>
+                <td class="ind-green"><strong>R$1.219,71</strong></td>
+                <td>30</td>
+                <td><strong>60,1%</strong></td>
+              </tr>
+              <tr>
+                <td>Dra. Raquel Steglich</td>
+                <td>125</td>
+                <td>86</td>
+                <td>5 (4,00%)</td>
+                <td>R$98.790</td>
+                <td>R$1.148,72</td>
+                <td>11</td>
+                <td>39,9%</td>
+              </tr>
+              <tr>
+                <td>Prof. 5</td>
+                <td>60</td>
+                <td>42</td>
+                <td>1 (1,67%)</td>
+                <td>R$18.050</td>
+                <td>R$429,76</td>
+                <td>7</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>Fototerapia</td>
+                <td>—</td>
+                <td>235</td>
+                <td>—</td>
+                <td>R$2.160</td>
+                <td>R$9,19</td>
+                <td>—</td>
+                <td>—</td>
+              </tr>
+              <tr class="total-row">
+                <td>TOTAL (derm)</td>
+                <td>363</td>
+                <td>208</td>
+                <td>12 (3,96%)</td>
+                <td>R$247.595</td>
+                <td>R$1.190,36</td>
+                <td>55</td>
+                <td>100%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-subtitle">Evolução de Ticket Médio por Médica</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Médica</th><th>Julho 2026</th><th>Agosto 2026</th><th>Variação</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Dra. Eoda Steglich</td>
+                <td>R$1.431</td>
+                <td class="ind-yellow"><strong>R$1.219,71</strong></td>
+                <td class="ind-yellow">−14,8%</td>
+              </tr>
+              <tr>
+                <td>Dra. Raquel Steglich</td>
+                <td>R$1.025</td>
+                <td class="ind-green">R$1.148,72</td>
+                <td class="ind-green">+12,1%</td>
+              </tr>
+              <tr class="total-row">
+                <td>Clínica (derm)</td>
+                <td>R$1.266,50</td>
+                <td class="ind-yellow">R$1.190,36</td>
+                <td class="ind-yellow">−6,0% <span style="font-size:0.75rem;font-weight:400;">(mix de procedimentos)</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.78rem;color:#6e7681;margin-top:-12px;margin-bottom:20px;">
+          * Dados via feegow_appointments / clinic_analytics (ETL por data de agendamento agosto 2026).
+        </p>
+      </div>
+
+      <!-- ── SEÇÃO 4: PERFIL DOS PACIENTES ── -->
+      <div class="section">
+        <div class="section-title">4. Perfil dos Pacientes</div>
+
+        <div class="two-col">
+          <!-- Origem dos pacientes -->
+          <div>
+            <div class="section-subtitle" style="margin-top:0;">Perfil de Origem</div>
+            <div class="tbl-wrap">
+              <table>
+                <thead>
+                  <tr><th>Perfil</th><th>Estimativa</th><th>%</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Pacientes novos</td>
+                    <td>55</td>
+                    <td>23,1%</td>
+                  </tr>
+                  <tr>
+                    <td>Pacientes recorrentes</td>
+                    <td>183</td>
+                    <td>76,9%</td>
+                  </tr>
+                  <tr class="total-row">
+                    <td>Total pacientes únicos</td>
+                    <td>238</td>
+                    <td>100%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="analysis-block" style="margin-top:16px;">
+              <p>
+                <span class="highlight">Taxa de retorno de 76,9%</span> — acima do benchmark de 55%–65% para dermatologia privada (<span class="bench-source"><a href="https://www.sbd.org.br/sociedade-brasileira-de-dermatologia-divulga-inquerito-atualizado-sobre-doencas-de-pele-no-brasil/" target="_blank" rel="noopener">Inquérito SBD 2024</a></span>), melhora vs. julho (69,5%). 55 novos pacientes (23,1%) mostram que a captação via tráfego pago está convertendo. Dra. Eoda: 30 novos, Dra. Raquel: 11 novos, Prof. 5: 7 novos.
+              </p>
+            </div>
+          </div>
+
+          <!-- Novos por médica -->
+          <div>
+            <div class="section-subtitle" style="margin-top:0;">Novos Pacientes por Profissional</div>
+            <div class="analysis-block">
+              <div class="progress-group">
+                <div class="progress-label"><span>Total clínica</span><span><strong>55 novos pacientes</strong></span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:100%;background:#3fb950;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span>Dra. Eoda Steglich</span><span>30 novos (54,5%)</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:54.5%;background:#58a6ff;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span>Dra. Raquel Steglich</span><span>11 novos (20,0%)</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:20%;background:#79c0ff;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span>Prof. 5</span><span>7 novos (12,7%)</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:12.7%;background:#f0883e;"></div></div>
+              </div>
+            </div>
+            <p style="font-size:0.8rem;color:#8b949e;margin-top:-10px;">
+              55 novos pacientes total — Dra. Eoda: 30, Dra. Raquel: 11, Prof. 5: 7 (7 restantes: fototerapia/outros).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SEÇÃO 5: COMPARATIVO JUL vs AGO ── -->
+      <div class="section">
+        <div class="section-title">5. Comparativo Julho × Agosto 2026</div>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Indicador</th><th>Julho 2026</th><th>Agosto 2026</th><th>Variação</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Receita Dermatologia</td>
+                <td>R$158.445</td>
+                <td>R$247.595</td>
+                <td class="ind-green">+56,3%</td>
+              </tr>
+              <tr>
+                <td>Receita Fototerapia</td>
+                <td>R$5.490</td>
+                <td>R$2.160</td>
+                <td class="ind-red">−60,7%</td>
+              </tr>
+              <tr>
+                <td>Receita Total</td>
+                <td>R$173.510</td>
+                <td>R$272.805</td>
+                <td class="ind-green">+57,2%</td>
+              </tr>
+              <tr>
+                <td>Consultas Realizadas</td>
+                <td>128 (derm) · 417 total</td>
+                <td>208 (derm) · 489 total</td>
+                <td class="ind-green">+62,5% (derm)</td>
+              </tr>
+              <tr>
+                <td>Pacientes Únicos</td>
+                <td>137</td>
+                <td>238</td>
+                <td class="ind-green">+73,7%</td>
+              </tr>
+              <tr>
+                <td>Ticket Médio (derm)</td>
+                <td>R$1.266,50</td>
+                <td>R$1.190,36</td>
+                <td class="ind-yellow">−6,0%</td>
+              </tr>
+              <tr>
+                <td>No-show (clínica)</td>
+                <td>4,75% (29 casos)</td>
+                <td>4,15% (27 casos)</td>
+                <td class="ind-green">−0,60pp — melhora</td>
+              </tr>
+              <tr>
+                <td>Taxa de Retorno</td>
+                <td>69,5%</td>
+                <td>76,9%</td>
+                <td class="ind-green">+7,4pp — melhora</td>
+              </tr>
+              <tr>
+                <td>PIX (% pagamentos)</td>
+                <td>— (dados jul a confirmar)</td>
+                <td>— (dados ago a confirmar)</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>Leads WhatsApp</td>
+                <td>109 (Meta Ads conv)</td>
+                <td>— (dados ago a confirmar)</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>Dra. Eoda — Receita</td>
+                <td>R$95.910 (67 atend.)</td>
+                <td>R$148.805 (122 atend.)</td>
+                <td class="ind-green">+55,2%</td>
+              </tr>
+              <tr>
+                <td>Dra. Raquel — Receita</td>
+                <td>R$62.535 (61 atend.)</td>
+                <td>R$98.790 (86 atend.)</td>
+                <td class="ind-green">+58,0%</td>
+              </tr>
+              <tr>
+                <td>Fototerapia Sessões</td>
+                <td>261</td>
+                <td>235</td>
+                <td class="ind-yellow">−9,9%</td>
+              </tr>
+              <tr>
+                <td>Projeção Anual</td>
+                <td>R$2,08M (base jul×12)</td>
+                <td>R$3,27M (base ago×12)</td>
+                <td class="ind-green">+57,2%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="analysis-block">
+          <p>
+            Agosto de 2026 foi o melhor mês do ano: <span class="highlight">R$272.805</span> de receita (+57,2% vs. julho) com <span class="highlight">208 consultas dermatológicas</span> (+62,5%), 238 pacientes únicos (+73,7%) e taxa de retorno de 76,9% (+7,4pp vs. julho). Dra. Eoda lidera com R$148.805 (TM R$1.219,71) e 30 novos pacientes.
+          </p>
+          <p>
+            Único ponto de atenção: ticket médio dermatologia recuou 6,0% para R$1.190,36 (vs. R$1.266,50 em julho) — mix de procedimentos a monitorar. Fototerapia reduziu 9,9% em sessões e 60,7% em receita — reativar base de pacientes crônicos.
+          </p>
+        </div>
+      </div>
+
+      <!-- ── SEÇÃO 6: WHATSAPP / DIGITAL ── -->
+      <div class="section">
+        <div class="section-title">6. Atendimento Digital — WhatsApp (Chat)</div>
+
+        <div class="alert-banner">
+          <strong>⚠ Alerta — Dados WhatsApp Agosto:</strong> Dados de Chatwoot/WhatsApp de agosto em consolidação.
+          Referência julho: 109 conversas Meta Ads. Monitorar picos de tempo de resposta — cada pico representa risco de perda de lead quente.
+        </div>
+
+        <div class="analysis-block">
+          <p>
+            Agosto — dados de conversas via tráfego pago (Meta + Google WhatsApp) em consolidação. Referência de julho: <span class="highlight">109 conversas Meta Ads</span>.
+            Com 55 novos pacientes confirmados via Feegow em agosto e receita de R$272.805, o canal digital está funcionando.
+          </p>
+          <p>
+            Distribuição por inbox e funil de conversão a atualizar com dados Chatwoot de agosto.
+            Fora de picos de interrupção, o atendimento opera em &lt;1 min conforme esperado.
+          </p>
+        </div>
+
+        <div class="section-subtitle">Distribuição por Inbox — Referência Julho 2026</div>
+        <div class="analysis-block">
+          <div class="progress-group">
+            <div class="progress-label"><span><strong>Relacionamento</strong></span><span><strong>467 (62,4%) — referência jul</strong></span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:62.4%;background:#3fb950;"></div></div>
+          </div>
+          <div class="progress-group">
+            <div class="progress-label"><span>Tráfego Pago</span><span>128 (17,1%) — referência jul</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:17.1%;background:#58a6ff;"></div></div>
+          </div>
+          <div class="progress-group">
+            <div class="progress-label"><span>VIP</span><span>104 (13,9%) — referência jul</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:13.9%;background:#79c0ff;"></div></div>
+          </div>
+          <div class="progress-group">
+            <div class="progress-label"><span>Canal Direto</span><span>49 (6,6%) — referência jul</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:6.6%;background:#f0883e;"></div></div>
+          </div>
+        </div>
+
+        <div class="section-subtitle">Funil Tráfego Pago — Referência Julho 2026</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Etapa</th><th>Volume (jul)</th><th>Taxa (jul)</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Conversas TP iniciadas</td>
+                <td>128</td>
+                <td>100%</td>
+              </tr>
+              <tr>
+                <td>Qualificados (intenção real)</td>
+                <td>125</td>
+                <td class="ind-green">97,7% ↑ recorde histórico jul</td>
+              </tr>
+              <tr>
+                <td>Agendamentos confirmados (label)</td>
+                <td>9</td>
+                <td class="ind-yellow">7,0% de conversão TP→agendamento</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.78rem;color:#6e7681;margin-top:-12px;margin-bottom:20px;">
+          * Dados agosto via Chatwoot em consolidação. Referência: julho (109 conversas Meta Ads). Agendamentos contados via etiqueta "agendamento" no Chat.
+        </p>
+      </div>
+
+      <!-- ── SEÇÃO 7: BENCHMARKS ── -->
+      <div class="section">
+        <div class="section-title">7. Benchmarks do Setor</div>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Indicador</th><th>DermaClinic Ago/26</th><th>Benchmark Brasil</th><th>Fonte</th><th>Posicionamento</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Ticket Médio Consulta</td>
+                <td>R$1.190,36 (derm) · R$557,88 (geral)</td>
+                <td>R$ 300–500 (média nacional)</td>
+                <td class="bench-source"><a href="https://tabelaplanos.com.br/precos-consulta-dermatologista-2025/" target="_blank" rel="noopener">tabelaplanos.com.br 2025</a></td>
+                <td class="bench-pos-green">🟢 <strong>2,5× acima da média nacional</strong></td>
+              </tr>
+              <tr>
+                <td>TM Dra. Eoda</td>
+                <td>R$1.219,71</td>
+                <td>R$ 400–800 (SP/capitais)</td>
+                <td class="bench-source"><a href="https://emfoco.med.br/quanto-custa-uma-consulta-com-dermatologista/" target="_blank" rel="noopener">Instituto Medicina em Foco SP 2026</a></td>
+                <td class="bench-pos-green">🟢 <strong>Dentro/acima da faixa SP/capitais</strong></td>
+              </tr>
+              <tr>
+                <td>Taxa de No-show</td>
+                <td>4,15% (27 casos)</td>
+                <td>~15%–20% clínicas privadas</td>
+                <td class="bench-source"><a href="https://saudedigitalnews.com.br/13/12/2023/doctoralia-e-feegow-lancam-panorama-das-clinicas-e-hospitais-2024/" target="_blank" rel="noopener">Panorama Doctoralia+Feegow 2024</a></td>
+                <td class="bench-pos-green">🟢 <strong>3× abaixo do benchmark — excelente</strong></td>
+              </tr>
+              <tr>
+                <td>Taxa de Retorno</td>
+                <td>76,9%</td>
+                <td>55%–65% dermato privada</td>
+                <td class="bench-source"><a href="https://www.sbd.org.br/sociedade-brasileira-de-dermatologia-divulga-inquerito-atualizado-sobre-doencas-de-pele-no-brasil/" target="_blank" rel="noopener">Inquérito SBD 2024</a></td>
+                <td class="bench-pos-green">🟢 <strong>Acima do benchmark — excelente fidelização</strong></td>
+              </tr>
+              <tr>
+                <td>Receita Anual Projetada</td>
+                <td>R$3,27M (base ago×12)</td>
+                <td>R$ 1,15M–1,94M (3 méd.)</td>
+                <td class="bench-source"><a href="https://saudedigitalnews.com.br/13/12/2023/doctoralia-e-feegow-lancam-panorama-das-clinicas-e-hospitais-2024/" target="_blank" rel="noopener">Panorama Doctoralia+Feegow 2024</a></td>
+                <td class="bench-pos-green">🟢 <strong>+68% acima do teto do benchmark</strong></td>
+              </tr>
+              <tr>
+                <td>PIX (% receita)</td>
+                <td>— (dados ago a confirmar)</td>
+                <td>~18%–25% clínicas saúde</td>
+                <td class="bench-source">Benchmark ABIHF 2024</td>
+                <td class="bench-pos-yellow">🟡 Atualizar com dados Feegow Finance ago</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── SEÇÃO 8: OPORTUNIDADES ── -->
+      <div class="section">
+        <div class="section-title">8. Oportunidades Identificadas</div>
+
+        <div class="opp-grid">
+          <div class="opp-card priority-alta">
+            <div class="opp-tag">🟢 Alta Prioridade — Manter Momentum</div>
+            <h3>Sustentar e Ampliar Crescimento de Consultas para Setembro</h3>
+            <p>
+              208 consultas dermatológicas em agosto (recorde do ano) vs. 128 em julho (+62,5%).
+              Com ticket médio de R$1.190,36 (derm), cada 10 consultas a mais representam +R$11.903 de receita incremental.
+              Ação: manter agenda cheia e intensificar criativos Meta Ads para capitalizar o momentum — meta setembro: superar 208 (recorde histórico).
+            </p>
+          </div>
+
+          <div class="opp-card priority-alta">
+            <div class="opp-tag">🔴 Alta Prioridade — Urgente</div>
+            <h3>Recuperar Ticket Médio Dermatologia (queda de 6,0% vs julho)</h3>
+            <p>
+              Ticket médio caiu de R$1.266,50 (julho) para R$1.190,36 (agosto, −6,0%). Cada +R$100 de TM com 208 consultas = +R$20.800 de receita. Identificar procedimentos de alto valor realizados em agosto e replicar mix. Estruturar protocolo de upsell aproveitando taxa de retorno de 76,9%.
+            </p>
+          </div>
+
+          <div class="opp-card priority-media">
+            <div class="opp-tag">🟡 Curto Prazo</div>
+            <h3>Investigar e Corrigir Picos de Tempo de Resposta WPP</h3>
+            <p>
+              Monitorar picos em agosto — referência de julho: 109 conversas Meta Ads.
+              Configurar monitoramento ativo no n8n para detectar falhas da IA em &lt;5 min
+              e acionar fallback humano automaticamente. Cada minuto além de 5 min
+              reduz probabilidade de conversão em ~10% (HBR).
+            </p>
+          </div>
+
+          <div class="opp-card priority-media">
+            <div class="opp-tag">🟡 Curto Prazo</div>
+            <h3>Recuperar Receita de Fototerapia</h3>
+            <p>
+              Sessões de fototerapia em agosto: 235 (vs. 261 em julho, −9,9%). Receita: R$2.160 (vs. R$5.490 em julho, −60,7%). TM por sessão: R$9,19. Reativar base de pacientes crônicos (psoríase, vitiligo, dermatite) com campanha de reengajamento via WhatsApp.
+            </p>
+          </div>
+
+          <div class="opp-card priority-media">
+            <div class="opp-tag">🟡 Curto Prazo</div>
+            <h3>Aproveitar Taxa de Retorno Excepcional (76,9%)</h3>
+            <p>
+              Taxa de retorno de 76,9% em agosto (vs. 69,5% em julho, +7,4pp) — acima do benchmark de 55%–65%. Ativar programa de indicação entre pacientes recorrentes para ampliar captação orgânica. Cada 10 indicações com TM R$1.190 = +R$11.900 incremental.
+            </p>
+          </div>
+
+          <div class="opp-card priority-baixa">
+            <div class="opp-tag">🟢 Médio Prazo</div>
+            <h3>Aproveitar No-show Excelente como Diferencial</h3>
+            <p>
+              No-show de agosto: 4,15% (27 casos) — 3× abaixo do benchmark nacional (15–20%) e melhora vs. julho (4,75%, −0,60pp).
+              Usar histórico de excelência em material de captação e campanhas de indicação para destacar confiabilidade da clínica.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SEÇÃO 9: PRÓXIMOS PASSOS ── -->
+      <div class="section">
+        <div class="section-title">9. Próximos Passos</div>
+
+        <ul class="steps-list">
+          <li>
+            <div class="step-num">1</div>
+            <div class="step-text">
+              <strong>Sustentar crescimento de consultas e bater recorde em setembro (meta: 209+)</strong>
+              <span>208 consultas dermatológicas em agosto — recorde do ano. Com TM de R$1.190,36 (derm),
+              manter agenda cheia e intensificar Meta Ads para superar o recorde. Revisar slots vazios de cada médica
+              e identificar causas dos 65 cancelamentos de agosto.</span>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">2</div>
+            <div class="step-text">
+              <strong>Recuperar ticket médio dermatologia (meta: R$1.266+)</strong>
+              <span>TM derma caiu 6,0% (R$1.190,36 em agosto vs. R$1.266,50 em julho). Analisar mix de procedimentos de agosto,
+              identificar quais procedimentos de alto valor (Toxina Botulínica, Laser CO2, Liftera) podem ser ampliados.
+              Estruturar protocolo de upsell aproveitando taxa de retorno de 76,9%.</span>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">3</div>
+            <div class="step-text">
+              <strong>Revisar estratégia de Meta Ads para setembro</strong>
+              <span>Agosto: 55 novos pacientes captados via Feegow. Analisar CAC com base nos resultados de agosto.
+              Com TM de R$1.190,36 (derm), otimizar criativos e aumentar volume de leads qualificados para setembro.</span>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">4</div>
+            <div class="step-text">
+              <strong>Investigar queda de receita de fototerapia e reverter</strong>
+              <span>Fototerapia em agosto: 235 sessões (−9,9% vs. jul) e receita R$2.160 (−60,7% vs. R$5.490 jul).
+              TM caiu para R$9,19/sessão — revisar mix. Reativar pacientes crônicos
+              (psoríase, vitiligo, dermatite) com campanha de reengajamento via WhatsApp.</span>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">5</div>
+            <div class="step-text">
+              <strong>Aproveitar taxa de retorno excepcional (76,9%) para ampliar indicações</strong>
+              <span>Taxa de retorno de 76,9% em agosto (+7,4pp vs. julho). Com 183 pacientes recorrentes,
+              ativar programa de indicação estruturado — cada 10 indicações com TM R$1.190 = +R$11.900 incremental.
+              Monitorar continuidade da melhora no no-show (4,15% em agosto).</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ──────────── AGENDAMENTOS FEEGOW ──────────── -->
+      <div class="section" style="margin-top:48px;">
+        <div class="section-title">Agendamentos Feegow — Agosto 2026</div>
+        <p style="color:#7db3d8;font-size:0.82rem;margin-bottom:20px;">
+          Todos os agendamentos registrados no Feegow com data de consulta em agosto/2026 (inclui procedimentos, fototerapia e consultas médicas). Fonte: <code>feegow_appointments</code>.
+        </p>
+
+        <!-- KPIs de agendamentos -->
+        <div class="kpi-grid" style="margin-bottom:32px;">
+          <div class="kpi-card">
+            <div class="kpi-label">Total Agendamentos</div>
+            <div class="kpi-value" style="color:#58a6ff;">650</div>
+            <div class="kpi-unit">todos os tipos de atendimento</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Atendidos</div>
+            <div class="kpi-value" style="color:#3fb950;">489</div>
+            <div class="kpi-unit">75,2% taxa de comparecimento</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Primeiras Consultas</div>
+            <div class="kpi-value" style="color:#e3b341;">55</div>
+            <div class="kpi-unit">novos pacientes no mês</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Desmarcados</div>
+            <div class="kpi-value" style="color:#f85149;">65</div>
+            <div class="kpi-unit">10,0% de cancelamentos</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Não Compareceu</div>
+            <div class="kpi-value" style="color:#f0883e;">27</div>
+            <div class="kpi-unit">4,15% no-show</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Conf. Pendente</div>
+            <div class="kpi-value" style="color:#8b949e;">0</div>
+            <div class="kpi-unit">mês encerrado</div>
+          </div>
+        </div>
+
+        <!-- Volume por dia -->
+        <div class="section-subtitle" style="color:#7db3d8;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px;">Volume por Dia</div>
+        <div style="overflow-x:auto;margin-bottom:32px;">
+          <table style="width:100%;border-collapse:collapse;font-size:0.82rem;">
+            <thead>
+              <tr style="border-bottom:1px solid #1e3a5f;">
+                <th style="text-align:left;padding:8px 12px;color:#7db3d8;font-weight:600;">Data</th>
+                <th style="text-align:center;padding:8px 12px;color:#7db3d8;font-weight:600;">Agend.</th>
+                <th style="text-align:center;padding:8px 12px;color:#3fb950;font-weight:600;">Atendidos</th>
+                <th style="text-align:center;padding:8px 12px;color:#f0883e;font-weight:600;">No-show</th>
+                <th style="text-align:center;padding:8px 12px;color:#f85149;font-weight:600;">Cancelados</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:7px 12px;color:#8b949e;font-style:italic;">01/08 (sex)</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:7px 12px;color:#8b949e;font-style:italic;">02/08 (sáb)</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:7px 12px;color:#c9d1d9;">03/08 (dom)</td><td style="text-align:center;color:#c9d1d9;">40</td><td style="text-align:center;color:#3fb950;">35</td><td style="text-align:center;color:#f0883e;">1</td><td style="text-align:center;color:#f85149;">3</td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:7px 12px;color:#c9d1d9;">04/08 (seg)</td><td style="text-align:center;color:#c9d1d9;">29</td><td style="text-align:center;color:#3fb950;">21</td><td style="text-align:center;color:#f0883e;">2</td><td style="text-align:center;color:#f85149;">5</td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:7px 12px;color:#c9d1d9;">05/08 (ter)</td><td style="text-align:center;color:#c9d1d9;">42</td><td style="text-align:center;color:#3fb950;">31</td><td style="text-align:center;color:#f0883e;">0</td><td style="text-align:center;color:#f85149;">5</td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:7px 12px;color:#c9d1d9;">06/08 (qua)</td><td style="text-align:center;color:#c9d1d9;">38</td><td style="text-align:center;color:#3fb950;">26</td><td style="text-align:center;color:#f0883e;">0</td><td style="text-align:center;color:#f85149;">7</td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:7px 12px;color:#c9d1d9;">07/08 (qui)</td><td style="text-align:center;color:#c9d1d9;">27</td><td style="text-align:center;color:#3fb950;">22</td><td style="text-align:center;color:#f0883e;">1</td><td style="text-align:center;color:#f85149;">0</td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:7px 12px;color:#8b949e;font-style:italic;">08/08 (sex)</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:7px 12px;color:#8b949e;font-style:italic;">09/08 (sáb)</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:7px 12px;color:#c9d1d9;">10/08 (dom)</td><td style="text-align:center;color:#c9d1d9;">38</td><td style="text-align:center;color:#3fb950;">26</td><td style="text-align:center;color:#f0883e;">0</td><td style="text-align:center;color:#f85149;">4</td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:7px 12px;color:#c9d1d9;">11/08 (seg)</td><td style="text-align:center;color:#c9d1d9;">33</td><td style="text-align:center;color:#3fb950;">23</td><td style="text-align:center;color:#f0883e;">1</td><td style="text-align:center;color:#f85149;">5</td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:7px 12px;color:#c9d1d9;">12/08 (ter)</td><td style="text-align:center;color:#c9d1d9;">45</td><td style="text-align:center;color:#3fb950;">37</td><td style="text-align:center;color:#f0883e;">0</td><td style="text-align:center;color:#f85149;">8</td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:7px 12px;color:#c9d1d9;">13/08 (qua)</td><td style="text-align:center;color:#c9d1d9;">33</td><td style="text-align:center;color:#3fb950;">26</td><td style="text-align:center;color:#f0883e;">0</td><td style="text-align:center;color:#f85149;">3</td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:7px 12px;color:#c9d1d9;">14/08 (qui)</td><td style="text-align:center;color:#c9d1d9;">28</td><td style="text-align:center;color:#3fb950;">22</td><td style="text-align:center;color:#f0883e;">1</td><td style="text-align:center;color:#f85149;">0</td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:7px 12px;color:#8b949e;font-style:italic;">15/08 (sex)</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:7px 12px;color:#8b949e;font-style:italic;">16/08 (sáb)</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:7px 12px;color:#c9d1d9;">17/08 (dom)</td><td style="text-align:center;color:#c9d1d9;">34</td><td style="text-align:center;color:#3fb950;">25</td><td style="text-align:center;color:#f0883e;">2</td><td style="text-align:center;color:#f85149;">3</td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:7px 12px;color:#c9d1d9;">18/08 (seg)</td><td style="text-align:center;color:#c9d1d9;">12</td><td style="text-align:center;color:#3fb950;">11</td><td style="text-align:center;color:#f0883e;">0</td><td style="text-align:center;color:#f85149;">0</td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:7px 12px;color:#c9d1d9;">19/08 (ter)</td><td style="text-align:center;color:#c9d1d9;">39</td><td style="text-align:center;color:#3fb950;">27</td><td style="text-align:center;color:#f0883e;">3</td><td style="text-align:center;color:#f85149;">5</td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:7px 12px;color:#c9d1d9;">20/08 (qua)</td><td style="text-align:center;color:#c9d1d9;">39</td><td style="text-align:center;color:#3fb950;">33</td><td style="text-align:center;color:#f0883e;">1</td><td style="text-align:center;color:#f85149;">4</td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:7px 12px;color:#c9d1d9;">21/08 (qui)</td><td style="text-align:center;color:#c9d1d9;">18</td><td style="text-align:center;color:#3fb950;">16</td><td style="text-align:center;color:#f0883e;">1</td><td style="text-align:center;color:#f85149;">0</td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:7px 12px;color:#8b949e;font-style:italic;">22/08 (sex)</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:7px 12px;color:#8b949e;font-style:italic;">23/08 (sáb)</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:7px 12px;color:#c9d1d9;">24/08 (dom)</td><td style="text-align:center;color:#c9d1d9;">37</td><td style="text-align:center;color:#3fb950;">31</td><td style="text-align:center;color:#f0883e;">4</td><td style="text-align:center;color:#f85149;">1</td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:7px 12px;color:#c9d1d9;">25/08 (seg)</td><td style="text-align:center;color:#c9d1d9;">42</td><td style="text-align:center;color:#3fb950;">30</td><td style="text-align:center;color:#f0883e;">3</td><td style="text-align:center;color:#f85149;">5</td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:7px 12px;color:#c9d1d9;">26/08 (ter)</td><td style="text-align:center;color:#c9d1d9;">29</td><td style="text-align:center;color:#3fb950;">20</td><td style="text-align:center;color:#f0883e;">0</td><td style="text-align:center;color:#f85149;">4</td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:7px 12px;color:#c9d1d9;">27/08 (qua)</td><td style="text-align:center;color:#c9d1d9;">22</td><td style="text-align:center;color:#3fb950;">19</td><td style="text-align:center;color:#f0883e;">1</td><td style="text-align:center;color:#f85149;">2</td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:7px 12px;color:#c9d1d9;">28/08 (qui) <span style="color:#f0883e;font-size:0.75rem;">★ maior no-show</span></td><td style="text-align:center;color:#c9d1d9;">15</td><td style="text-align:center;color:#3fb950;">8</td><td style="text-align:center;color:#f0883e;">6</td><td style="text-align:center;color:#f85149;">1</td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:7px 12px;color:#8b949e;font-style:italic;">29/08 (sex)</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:7px 12px;color:#8b949e;font-style:italic;">30/08 (sáb)</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td><td style="text-align:center;color:#6e7681;">0</td></tr>
+              <tr style="border-bottom:2px solid #1e3a5f;"><td style="padding:7px 12px;color:#c9d1d9;">31/08 (dom)</td><td style="text-align:center;color:#c9d1d9;">10</td><td style="text-align:center;color:#3fb950;">0</td><td style="text-align:center;color:#f0883e;">0</td><td style="text-align:center;color:#f85149;">0</td></tr>
+              <tr style="background:#0a1628;">
+                <td style="padding:8px 12px;font-weight:700;color:#fff;">TOTAL AGOSTO (01–31/ago)</td>
+                <td style="text-align:center;font-weight:700;color:#58a6ff;">650</td>
+                <td style="text-align:center;font-weight:700;color:#3fb950;">489 (75,2%)</td>
+                <td style="text-align:center;font-weight:700;color:#f0883e;">27</td>
+                <td style="text-align:center;font-weight:700;color:#f85149;">65</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Primeiras consultas por data e horário -->
+        <div class="section-subtitle" style="color:#7db3d8;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px;">Primeiras Consultas — Datas e Horários (55 novos pacientes)</div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+            <thead>
+              <tr style="border-bottom:1px solid #1e3a5f;">
+                <th style="text-align:left;padding:6px 12px;color:#7db3d8;font-weight:600;">Data</th>
+                <th style="text-align:left;padding:6px 12px;color:#7db3d8;font-weight:600;">Horário</th>
+                <th style="text-align:left;padding:6px 12px;color:#7db3d8;font-weight:600;">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">03/08</td><td style="padding:5px 12px;color:#8b949e;">09:50</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">03/08</td><td style="padding:5px 12px;color:#8b949e;">13:30</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">03/08</td><td style="padding:5px 12px;color:#8b949e;">16:30</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">05/08</td><td style="padding:5px 12px;color:#8b949e;">10:30</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">05/08</td><td style="padding:5px 12px;color:#8b949e;">13:30</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">05/08</td><td style="padding:5px 12px;color:#8b949e;">14:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">06/08</td><td style="padding:5px 12px;color:#8b949e;">13:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">06/08</td><td style="padding:5px 12px;color:#8b949e;">16:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">07/08</td><td style="padding:5px 12px;color:#8b949e;">09:20</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">10/08</td><td style="padding:5px 12px;color:#8b949e;">13:30</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">10/08</td><td style="padding:5px 12px;color:#8b949e;">15:20</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">10/08</td><td style="padding:5px 12px;color:#8b949e;">16:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">11/08</td><td style="padding:5px 12px;color:#8b949e;">08:35</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">11/08</td><td style="padding:5px 12px;color:#8b949e;">10:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">11/08</td><td style="padding:5px 12px;color:#8b949e;">13:30</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">11/08</td><td style="padding:5px 12px;color:#8b949e;">14:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">11/08</td><td style="padding:5px 12px;color:#8b949e;">14:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">11/08</td><td style="padding:5px 12px;color:#8b949e;">14:30</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">11/08</td><td style="padding:5px 12px;color:#8b949e;">14:30</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">11/08</td><td style="padding:5px 12px;color:#8b949e;">15:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">11/08</td><td style="padding:5px 12px;color:#8b949e;">17:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">12/08</td><td style="padding:5px 12px;color:#8b949e;">12:30</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">13/08</td><td style="padding:5px 12px;color:#8b949e;">10:20</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">13/08</td><td style="padding:5px 12px;color:#8b949e;">14:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">13/08</td><td style="padding:5px 12px;color:#8b949e;">14:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">14/08</td><td style="padding:5px 12px;color:#8b949e;">14:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">14/08</td><td style="padding:5px 12px;color:#8b949e;">14:30</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">17/08</td><td style="padding:5px 12px;color:#8b949e;">13:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">17/08</td><td style="padding:5px 12px;color:#8b949e;">14:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">17/08</td><td style="padding:5px 12px;color:#8b949e;">15:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">18/08</td><td style="padding:5px 12px;color:#8b949e;">13:05</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">18/08</td><td style="padding:5px 12px;color:#8b949e;">14:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">19/08</td><td style="padding:5px 12px;color:#8b949e;">11:30</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">19/08</td><td style="padding:5px 12px;color:#8b949e;">13:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">19/08</td><td style="padding:5px 12px;color:#8b949e;">13:30</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">19/08</td><td style="padding:5px 12px;color:#8b949e;">17:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">20/08</td><td style="padding:5px 12px;color:#8b949e;">10:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">20/08</td><td style="padding:5px 12px;color:#8b949e;">14:30</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">20/08</td><td style="padding:5px 12px;color:#8b949e;">15:30</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">20/08</td><td style="padding:5px 12px;color:#8b949e;">16:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">20/08</td><td style="padding:5px 12px;color:#8b949e;">16:30</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">20/08</td><td style="padding:5px 12px;color:#8b949e;">17:40</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">24/08</td><td style="padding:5px 12px;color:#8b949e;">10:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">24/08</td><td style="padding:5px 12px;color:#8b949e;">14:30</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">24/08</td><td style="padding:5px 12px;color:#8b949e;">15:20</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">24/08</td><td style="padding:5px 12px;color:#8b949e;">16:30</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">25/08</td><td style="padding:5px 12px;color:#8b949e;">10:30</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">25/08</td><td style="padding:5px 12px;color:#8b949e;">14:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">25/08</td><td style="padding:5px 12px;color:#8b949e;">14:30</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">25/08</td><td style="padding:5px 12px;color:#8b949e;">14:30</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">26/08</td><td style="padding:5px 12px;color:#8b949e;">13:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">26/08</td><td style="padding:5px 12px;color:#8b949e;">15:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;"><td style="padding:5px 12px;color:#c9d1d9;">26/08</td><td style="padding:5px 12px;color:#8b949e;">16:30</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:1px solid #161b22;background:#0d1117;"><td style="padding:5px 12px;color:#c9d1d9;">27/08</td><td style="padding:5px 12px;color:#8b949e;">10:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+              <tr style="border-bottom:2px solid #1e3a5f;"><td style="padding:5px 12px;color:#c9d1d9;">27/08</td><td style="padding:5px 12px;color:#8b949e;">15:00</td><td style="padding:5px 12px;"><span style="color:#3fb950;">✓ Atendido</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="background:#0d2137;border:1px solid #1e3a5f;border-radius:8px;padding:14px 18px;margin-top:20px;font-size:0.8rem;color:#7db3d8;">
+          <strong style="color:#58a6ff;">Nota metodológica:</strong> Os 650 agendamentos incluem todas as categorias de atendimento (fototerapia, procedimentos estéticos, consultas médicas, mapeamento corporal). As 208 consultas médicas dermatológicas realizadas reportadas em outras seções correspondem ao subconjunto de consultas médicas (Dra. Eoda + Dra. Raquel) extraído da tabela <code>feegow_appointments</code>. Métricas agregadas cobrem 01–31/ago. Primeiras consultas = <code>primeiro_agendamento=1</code> e <code>status=3</code> — 55 no total. Dias 01, 02, 08, 09, 15, 16, 22, 23, 29, 30 sem agendamentos registrados (fins de semana/feriado).
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="report-footer">
+        Relatório gerado em 31/08/2026 · Dados: 01/08/2026 a 31/08/2026 · Digital AI · Fonte: Feegow PostgreSQL (489 atendidos · R$272.805 · 650 agendamentos 01–31/ago) · Próximo relatório: 01/10/2026
+      </div>
+
+    </div><!-- /report-body -->
+  </div><!-- /report-content -->
+</div><!-- /app -->
+
+<script src="../../_shared/auth.js"></script>
+<script>
+  initChatwootAuth({
+    gateLoading: 'gate-loading',
+    gateDirect:  'gate-direct',
+    gateApp:     'app',
+    client:      'dermaclinic',
+    report:      'atendimento-ago-2026'
+  });
+</script>
+
+</body>
+</html>
