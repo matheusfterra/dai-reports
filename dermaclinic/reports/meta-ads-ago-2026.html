@@ -279,6 +279,113 @@
     .css-legend-dot { width: 12px; height: 12px; border-radius: 3px; }
     .css-legend-conv { background: rgba(99,102,241,0.75); border: 1px solid #6366F1; }
     .css-legend-quali { background: rgba(16,185,129,0.3); border: 1px solid #10B981; }
+
+    /* ─── FIX: Proteções globais de texto (word-break / overflow) ─── */
+
+    /* .kpi-row — usado na seção ROI mas não tinha CSS definido */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    /* .section-desc — usada na seção ROI mas não tinha CSS definido */
+    .section-desc {
+      font-size: 13px;
+      color: var(--dai-muted);
+      line-height: 1.65;
+      margin: 8px 0 20px;
+    }
+
+    /* info-box: protege texto longo contra overflow */
+    .info-box {
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+
+    /* action-card: protege títulos e corpo contra quebra */
+    .action-body h4,
+    .action-body p {
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+
+    /* compare-block: protege valores longos como "DRA EODA (27 msgs)" */
+    .cb-row {
+      word-break: break-word;
+      overflow-wrap: break-word;
+      min-width: 0;
+    }
+    .cb-row .val {
+      text-align: right;
+      flex-shrink: 0;
+      min-width: 0;
+      word-break: break-word;
+    }
+    .cb-row .metric {
+      flex-shrink: 0;
+      margin-right: 8px;
+    }
+
+    /* tabelas: nomes longos de criativos */
+    tbody td {
+      word-break: break-word;
+      overflow-wrap: break-word;
+      min-width: 0;
+    }
+
+    /* spotlight tagline e analysis */
+    .spotlight .tagline,
+    .spotlight p.analysis {
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+
+    /* kpi-card: protege valores e labels */
+    .kpi-card {
+      min-width: 0;
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+
+    /* hero-banner: protege texto longo */
+    .hero-banner h3,
+    .hero-banner p {
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+
+    /* compare-block: protege label longo */
+    .compare-block {
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    /* Corrigir action-card span 2 em mobile (1 coluna) */
+    @media (max-width: 900px) {
+      .action-card[style*="grid-column: span 2"],
+      .action-card[style*="grid-column:span 2"] {
+        grid-column: span 1 !important;
+      }
+    }
+
+    /* kpi-row responsive (seção ROI) */
+    @media (max-width: 900px) {
+      .kpi-row { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .kpi-row { grid-template-columns: 1fr; }
+      .kpi-grid-5 { grid-template-columns: 1fr; }
+      .compare-strip { grid-template-columns: 1fr; }
+    }
+
+    /* Prevenir scroll horizontal global */
+    html, body {
+      overflow-x: hidden;
+    }
+    .container {
+      overflow-x: hidden;
+    }
   </style>
 </head>
 <body>
