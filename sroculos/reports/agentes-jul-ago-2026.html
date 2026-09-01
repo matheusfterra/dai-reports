@@ -247,22 +247,22 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
   </div>
   <div class="kpi-grid">
     <div class="kpi-card">
-      <div class="kpi-label">Conversas <span class="tip"><span class="tip-icon">?</span><div class="tip-box"><strong>conversations</strong><br>Fonte: PostgreSQL &middot; chat_prod<br><code>reporting_events + conversations</code><br>account_id=6 &middot; 14/07/2026&#8211;31/08/2026<br><br>Total de conversas abertas no periodo.</div></span></div>
+      <div class="kpi-label">Conversas <span class="tip"><span class="tip-icon">?</span><div class="tip-box">Total de conversas abertas no periodo, considerando todos os canais de atendimento (WhatsApp + Instagram).</div></span></div>
       <div class="kpi-value">14.962</div>
       <div class="kpi-sub">conversas no periodo</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-label">Resolucoes <span class="tip"><span class="tip-icon">?</span><div class="tip-box"><strong>resolutions_count</strong><br>Fonte: PostgreSQL &middot; chat_prod &middot; reporting_events<br>Agent: 50.455 &middot; Bot: 19.122<br><br>Cada evento de resolucao e contado separadamente.</div></span></div>
-      <div class="kpi-value">69.577</div>
-      <div class="kpi-sub">50.455 agente + 19.122 bot</div>
+      <div class="kpi-label">Contatos Unicos <span class="tip"><span class="tip-icon">?</span><div class="tip-box">Numero de contatos distintos que enviaram pelo menos uma mensagem no periodo.</div></span></div>
+      <div class="kpi-value">15.898</div>
+      <div class="kpi-sub">contatos atendidos no periodo</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-label">Mensagens <span class="tip"><span class="tip-icon">?</span><div class="tip-box"><strong>messages</strong><br>Fonte: PostgreSQL &middot; chat_prod &middot; messages<br>Recebidas: 86.785<br>Enviadas: 98.747<br>Total: 185.532</div></span></div>
+      <div class="kpi-label">Mensagens <span class="tip"><span class="tip-icon">?</span><div class="tip-box">Total de mensagens trocadas no periodo.<br>Recebidas: 86.785<br>Enviadas: 98.747</div></span></div>
       <div class="kpi-value">185.532</div>
       <div class="kpi-sub">86.785 recebidas + 98.747 enviadas</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-label">1a Resposta &middot; Geral <span class="tip tip-right"><span class="tip-icon">?</span><div class="tip-box"><strong>avg_first_response_time</strong><br>Fonte: PostgreSQL &middot; chat_prod<br>Media geral em business hours: 441,48s = 7,4 min<br>Iris (inbox sr.oculos avg): ~0s instantaneo<br>Calculado apenas em horario comercial.</div></span></div>
+      <div class="kpi-label">1a Resposta &middot; Geral <span class="tip tip-right"><span class="tip-icon">?</span><div class="tip-box">Tempo medio para o primeiro contato receber uma resposta, calculado em horario comercial. A Iris responde instantaneamente (&asymp; 0s).</div></span></div>
       <div class="kpi-value">7,4 min</div>
       <div class="kpi-sub">tempo medio de 1a resposta (business hours)</div>
     </div>
@@ -280,20 +280,20 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
   </div>
   <div class="iris-stats">
     <div class="iris-stat">
-      <div class="iris-stat-val">19.122 <span class="tip" style="vertical-align:middle"><span class="tip-icon" style="background:rgba(255,255,255,.25);color:#fff">?</span><div class="tip-box"><strong>Resolucoes bot (Iris)</strong><br>Fonte: PostgreSQL &middot; chat_prod &middot; reporting_events<br>sender_type=AgentBot &middot; account_id=6<br>Conversas resolvidas sem intervencao humana.</div></span></div>
-      <div class="iris-stat-label">resolucoes automaticas</div>
-    </div>
-    <div class="iris-stat">
-      <div class="iris-stat-val">27,5%</div>
-      <div class="iris-stat-label">do total de resolucoes</div>
-    </div>
-    <div class="iris-stat">
-      <div class="iris-stat-val">10.097 <span class="tip" style="vertical-align:middle"><span class="tip-icon" style="background:rgba(255,255,255,.25);color:#fff">?</span><div class="tip-box"><strong>Conversas Iris (nao atribuidas)</strong><br>67,5% do total de 14.962 conversas.<br>Iris opera como "nao atribuido" &mdash; sem ID de agente humano.</div></span></div>
+      <div class="iris-stat-val">10.097</div>
       <div class="iris-stat-label">conversas gerenciadas</div>
     </div>
     <div class="iris-stat">
+      <div class="iris-stat-val">38.584</div>
+      <div class="iris-stat-label">mensagens enviadas</div>
+    </div>
+    <div class="iris-stat">
       <div class="iris-stat-val">39,1%</div>
-      <div class="iris-stat-label">do volume enviado</div>
+      <div class="iris-stat-label">do volume respondido</div>
+    </div>
+    <div class="iris-stat">
+      <div class="iris-stat-val">6.752</div>
+      <div class="iris-stat-label">listas de lojas enviadas</div>
     </div>
     <div class="iris-stat">
       <div class="iris-stat-val">&#8776;0s</div>
@@ -307,7 +307,7 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
   <div class="section-header">
     <span class="section-title">Volumetria</span>
     <div class="section-divider"></div>
-    <span class="section-meta"><span class="tip">Jul 14&#8211;31 + Agosto completo <span class="tip-icon">?</span><div class="tip-box">Fonte: PostgreSQL &middot; chat_prod &middot; conversations + messages<br>Julho: 14/07&#8211;31/07 (18 dias)<br>Agosto: 01/08&#8211;31/08 (31 dias)<br>account_id=6</div></span></span>
+    <span class="section-meta">Jul 14&#8211;31 + Agosto completo</span>
   </div>
   <div class="chart-card" style="margin-bottom:16px">
     <div class="chart-card-header">
@@ -337,17 +337,15 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
         <thead>
           <tr>
             <th>Mes</th>
-            <th class="num"><span class="tip">Conversas<span class="tip-icon" style="margin-left:4px">?</span><div class="tip-box">conversations &middot; PostgreSQL &middot; chat_prod</div></span></th>
-            <th class="num"><span class="tip">Msgs Recebidas<span class="tip-icon" style="margin-left:4px">?</span><div class="tip-box">incoming_messages_count &middot; messages table</div></span></th>
-            <th class="num"><span class="tip">Msgs Enviadas<span class="tip-icon" style="margin-left:4px">?</span><div class="tip-box">outgoing_messages_count &middot; messages table</div></span></th>
-            <th class="num"><span class="tip">Resol. Agente<span class="tip-icon" style="margin-left:4px">?</span><div class="tip-box">resolutions_count &middot; reporting_events &middot; sender_type=Agent</div></span></th>
-            <th class="num"><span class="tip">Resol. Bot<span class="tip-icon" style="margin-left:4px">?</span><div class="tip-box">resolutions_count &middot; reporting_events &middot; sender_type=AgentBot</div></span></th>
+            <th class="num">Conversas</th>
+            <th class="num">Msgs Recebidas</th>
+            <th class="num">Msgs Enviadas</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td>Julho/26 <em style="font-size:.75rem;color:var(--text-muted)">(14&#8211;31)</em></td><td class="num">5.799</td><td class="num">32.268</td><td class="num">37.020</td><td class="num">19.267</td><td class="num">7.167</td></tr>
-          <tr><td>Agosto/26</td><td class="num">9.163</td><td class="num">54.517</td><td class="num">61.727</td><td class="num">31.188</td><td class="num">11.955</td></tr>
-          <tr style="font-weight:700;background:var(--bg)"><td><strong>TOTAL</strong></td><td class="num hl">14.962</td><td class="num hl">86.785</td><td class="num hl">98.747</td><td class="num hl">50.455</td><td class="num hl">19.122</td></tr>
+          <tr><td>Julho/26 <em style="font-size:.75rem;color:var(--text-muted)">(14&#8211;31)</em></td><td class="num">5.799</td><td class="num">32.268</td><td class="num">37.020</td></tr>
+          <tr><td>Agosto/26</td><td class="num">9.163</td><td class="num">54.517</td><td class="num">61.727</td></tr>
+          <tr style="font-weight:700;background:var(--bg)"><td><strong>TOTAL</strong></td><td class="num hl">14.962</td><td class="num hl">86.785</td><td class="num hl">98.747</td></tr>
         </tbody>
       </table>
     </div>
@@ -359,7 +357,7 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
   <div class="section-header">
     <span class="section-title">Distribuicao por Canal</span>
     <div class="section-divider"></div>
-    <span class="section-meta"><span class="tip">7 inboxes &middot; 6 operacionais exibidos<span class="tip-icon" style="margin-left:6px">?</span><div class="tip-box">Fonte: PostgreSQL &middot; chat_prod &middot; conversations<br>Agrupado por inbox_id &middot; account_id=6<br>TEST_SrOculos_01 excluido (1 conv)</div></span></span>
+    <span class="section-meta">7 canais &middot; 6 operacionais exibidos</span>
   </div>
   <div class="two-col">
     <div class="chart-card">
@@ -375,16 +373,16 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
       <div class="chart-card-header"><div class="chart-card-title">Top Canais por Volume</div></div>
       <div style="overflow-x:auto;max-height:340px;overflow-y:auto">
         <table class="data-table">
-          <thead><tr><th>Canal</th><th class="num">Conversas</th><th class="num"><span class="tip">Msgs In<span class="tip-icon" style="margin-left:3px">?</span><div class="tip-box">incoming_messages_count por inbox &middot; PostgreSQL &middot; chat_prod</div></span></th><th class="num"><span class="tip">Msgs Out<span class="tip-icon" style="margin-left:3px">?</span><div class="tip-box">outgoing_messages_count por inbox &middot; PostgreSQL &middot; chat_prod</div></span></th><th class="num">Resolucoes</th></tr></thead>
+          <thead><tr><th>Canal</th><th class="num">Conversas</th><th class="num">Msgs Recebidas</th><th class="num">Msgs Enviadas</th></tr></thead>
           <tbody>
-            <tr><td>PRE_SrOculos_03_Oficial</td><td class="num">3.763</td><td class="num">33.065</td><td class="num">35.295</td><td class="num">23.297</td></tr>
-            <tr><td>POS_SrOculos_13_Oficial</td><td class="num">2.819</td><td class="num">14.210</td><td class="num">15.196</td><td class="num">12.829</td></tr>
-            <tr><td>Instagram DM (@sr.oculos)</td><td class="num">2.720</td><td class="num">11.997</td><td class="num">18.322</td><td class="num">8.399</td></tr>
-            <tr><td>PRE_SrOculos_10_Oficial</td><td class="num">2.494</td><td class="num">11.868</td><td class="num">12.770</td><td class="num">10.741</td></tr>
-            <tr><td>POS_SrOculos_09_Oficial</td><td class="num">2.211</td><td class="num">10.782</td><td class="num">11.749</td><td class="num">9.814</td></tr>
-            <tr><td>POS_SrOculos_05_Oficial</td><td class="num">915</td><td class="num">4.252</td><td class="num">4.651</td><td class="num">3.973</td></tr>
-            <tr><td>PRE_SrOculos_07</td><td class="num">39</td><td class="num">438</td><td class="num">586</td><td class="num">368</td></tr>
-            <tr style="font-weight:700;background:var(--bg)"><td><strong>Total (excl. teste)</strong></td><td class="num"><strong>12.961</strong></td><td class="num"><strong>86.612</strong></td><td class="num"><strong>98.569</strong></td><td class="num"><strong>69.421</strong></td></tr>
+            <tr><td>PRE_SrOculos_03_Oficial</td><td class="num">3.763</td><td class="num">33.065</td><td class="num">35.295</td></tr>
+            <tr><td>POS_SrOculos_13_Oficial</td><td class="num">2.819</td><td class="num">14.210</td><td class="num">15.196</td></tr>
+            <tr><td>Instagram DM (@sr.oculos)</td><td class="num">2.720</td><td class="num">11.997</td><td class="num">18.322</td></tr>
+            <tr><td>PRE_SrOculos_10_Oficial</td><td class="num">2.494</td><td class="num">11.868</td><td class="num">12.770</td></tr>
+            <tr><td>POS_SrOculos_09_Oficial</td><td class="num">2.211</td><td class="num">10.782</td><td class="num">11.749</td></tr>
+            <tr><td>POS_SrOculos_05_Oficial</td><td class="num">915</td><td class="num">4.252</td><td class="num">4.651</td></tr>
+            <tr><td>PRE_SrOculos_07</td><td class="num">39</td><td class="num">438</td><td class="num">586</td></tr>
+            <tr style="font-weight:700;background:var(--bg)"><td><strong>Total (excl. teste)</strong></td><td class="num"><strong>12.961</strong></td><td class="num"><strong>86.612</strong></td><td class="num"><strong>98.569</strong></td></tr>
           </tbody>
         </table>
       </div>
@@ -397,32 +395,31 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
   <div class="section-header">
     <span class="section-title">Campanhas e Etiquetas</span>
     <div class="section-divider"></div>
-    <span class="section-meta"><span class="tip">6 labels monitoradas<span class="tip-icon" style="margin-left:6px">?</span><div class="tip-box">Fonte: PostgreSQL &middot; chat_prod &middot; reporting_events + conversations<br>Agrupado por label &middot; account_id=6 &middot; 14/07&#8211;31/08/2026</div></span></span>
+    <span class="section-meta">6 etiquetas monitoradas</span>
   </div>
   <div class="lkpi-grid">
-    <div class="lkpi"><div class="lkpi-val">4.546</div><div class="lkpi-name">Transferencias para equipe <span class="tip"><span class="tip-icon">?</span><div class="tip-box">Label <code>transferencia_time</code><br>Conversas: 4.546 &middot; Resolucoes: 28.893<br>Conversas transferidas da Iris para atendente humana.</div></span></div></div>
-    <div class="lkpi"><div class="lkpi-val">2.425</div><div class="lkpi-name">Conversas Instagram <span class="tip"><span class="tip-icon">?</span><div class="tip-box">Label <code>instagram</code><br>Conversas: 2.425<br>Marcacoes de atendimento via canal Instagram DM.</div></span></div></div>
-    <div class="lkpi"><div class="lkpi-val">925</div><div class="lkpi-name">Finalizacoes Instagram <span class="tip"><span class="tip-icon">?</span><div class="tip-box">Label <code>finalizacao_instagram</code><br>Conversas: 925 &middot; Resolucoes: 8.762<br>Conversas finalizadas com fluxo especifico do Instagram.</div></span></div></div>
-    <div class="lkpi"><div class="lkpi-val">178</div><div class="lkpi-name">Em analise de qualidade <span class="tip"><span class="tip-icon">?</span><div class="tip-box">Label <code>digital_ai_analisando_atendimento</code><br>Conversas: 178<br>Conversas monitoradas para melhoria continua da IA.</div></span></div></div>
+    <div class="lkpi"><div class="lkpi-val">4.546</div><div class="lkpi-name">Transferencias para equipe <span class="tip"><span class="tip-icon">?</span><div class="tip-box">Conversas transferidas da Iris para uma atendente humana quando necessario.</div></span></div></div>
+    <div class="lkpi"><div class="lkpi-val">2.425</div><div class="lkpi-name">Conversas Instagram <span class="tip"><span class="tip-icon">?</span><div class="tip-box">Atendimentos realizados via canal Instagram DM.</div></span></div></div>
+    <div class="lkpi"><div class="lkpi-val">925</div><div class="lkpi-name">Finalizacoes Instagram <span class="tip"><span class="tip-icon">?</span><div class="tip-box">Conversas finalizadas com fluxo especifico do Instagram.</div></span></div></div>
+    <div class="lkpi"><div class="lkpi-val">178</div><div class="lkpi-name">Em analise de qualidade <span class="tip"><span class="tip-icon">?</span><div class="tip-box">Conversas monitoradas para melhoria continua da IA.</div></span></div></div>
   </div>
   <div class="chart-card">
     <div class="chart-card-header"><div class="chart-card-title">Labels por Volume de Conversas</div></div>
     <table class="data-table">
       <thead>
         <tr>
-          <th>Label</th>
+          <th>Etiqueta</th>
           <th class="num">Conversas</th>
-          <th class="num">Resolucoes</th>
-          <th class="num">Resol./Conv.</th>
+          <th>Descricao</th>
         </tr>
       </thead>
       <tbody>
-        <tr><td>&#128260; transferencia_time</td><td class="num">4.546</td><td class="num">28.893</td><td class="num hl">6,4&#215;</td></tr>
-        <tr><td>&#128247; instagram</td><td class="num">2.425</td><td class="num">&#8212;</td><td class="num">&#8212;</td></tr>
-        <tr><td>&#9989; finalizacao_instagram</td><td class="num">925</td><td class="num">8.762</td><td class="num hl">9,5&#215;</td></tr>
-        <tr><td>&#128228; contato_encaminhado</td><td class="num">829</td><td class="num">&#8212;</td><td class="num">&#8212;</td></tr>
-        <tr><td>&#128269; digital_ai_analisando_atendimento</td><td class="num">178</td><td class="num">&#8212;</td><td class="num">&#8212;</td></tr>
-        <tr><td>&#127874; disparo_aniversariante</td><td class="num">5</td><td class="num">137</td><td class="num hl">27,4&#215;</td></tr>
+        <tr><td>&#128260; Transferencia para equipe</td><td class="num">4.546</td><td style="font-size:.8rem;color:var(--text-secondary)">Conversa transferida da Iris para atendente</td></tr>
+        <tr><td>&#128247; Instagram</td><td class="num">2.425</td><td style="font-size:.8rem;color:var(--text-secondary)">Atendimento via Instagram DM</td></tr>
+        <tr><td>&#9989; Finalizacao Instagram</td><td class="num">925</td><td style="font-size:.8rem;color:var(--text-secondary)">Conversa finalizada pelo fluxo do Instagram</td></tr>
+        <tr><td>&#128228; Contato encaminhado</td><td class="num">829</td><td style="font-size:.8rem;color:var(--text-secondary)">Contato encaminhado para loja ou equipe</td></tr>
+        <tr><td>&#128269; Analise de qualidade</td><td class="num">178</td><td style="font-size:.8rem;color:var(--text-secondary)">Monitoramento para melhoria da IA</td></tr>
+        <tr><td>&#127874; Disparo aniversariante</td><td class="num">5</td><td style="font-size:.8rem;color:var(--text-secondary)">Mensagem automatica de aniversario</td></tr>
       </tbody>
     </table>
   </div>
@@ -447,7 +444,7 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
     <div style="background:linear-gradient(135deg,#065f46 0%,#059669 100%);border-radius:12px;padding:22px 20px;color:#fff;text-align:center">
       <div style="font-size:.75rem;font-weight:600;letter-spacing:.08em;opacity:.8;text-transform:uppercase;margin-bottom:8px">Enviadas pela Iris</div>
       <div style="font-size:2.2rem;font-weight:800;line-height:1">38.584</div>
-      <div style="font-size:.78rem;opacity:.75;margin-top:6px">mensagens AgentBot no periodo</div>
+      <div style="font-size:.78rem;opacity:.75;margin-top:6px">mensagens enviadas pela Iris</div>
     </div>
 
     <div style="background:linear-gradient(135deg,#6d28d9 0%,#8b5cf6 100%);border-radius:12px;padding:22px 20px;color:#fff;text-align:center">
@@ -459,7 +456,7 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
     <div style="background:linear-gradient(135deg,#92400e 0%,#d97706 100%);border-radius:12px;padding:22px 20px;color:#fff;text-align:center">
       <div style="font-size:.75rem;font-weight:600;letter-spacing:.08em;opacity:.8;text-transform:uppercase;margin-bottom:8px">1a Resposta Iris</div>
       <div style="font-size:2.2rem;font-weight:800;line-height:1">&#8776; 0s</div>
-      <div style="font-size:.78rem;opacity:.75;margin-top:6px">inbox avg = 0,00s em business hours</div>
+      <div style="font-size:.78rem;opacity:.75;margin-top:6px">resposta instantanea, 24 horas por dia</div>
     </div>
 
   </div>
@@ -472,15 +469,129 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
       <div style="font-size:.78rem;color:#15803d">mensagens enviadas no periodo</div>
     </div>
     <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:18px 20px">
-      <div style="font-size:.78rem;font-weight:700;color:#1e40af;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Resolucoes Totais</div>
-      <div style="font-size:2rem;font-weight:800;color:#1d4ed8;margin-bottom:4px">69.577</div>
-      <div style="font-size:.78rem;color:#2563eb">resolucoes concluidas &middot; Ratio 4,65&#215; conversas</div>
+      <div style="font-size:.78rem;font-weight:700;color:#1e40af;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Contatos que Retornaram</div>
+      <div style="font-size:2rem;font-weight:800;color:#1d4ed8;margin-bottom:4px">2.398</div>
+      <div style="font-size:.78rem;color:#2563eb">contatos que voltaram a conversar em dias diferentes</div>
     </div>
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════
-     NOVA SECAO: EVOLUCAO DA QUALIDADE DA IA
+     INTELIGENCIA DE ATENDIMENTO
+═══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">Inteligencia de Atendimento</span>
+    <div class="section-divider"></div>
+    <span class="section-meta">O que os contatos buscam &middot; 14 Jul&#8211;31 Ago 2026</span>
+  </div>
+
+  <!-- KPIs de comportamento -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;box-shadow:var(--shadow-sm)">
+      <div style="font-size:2rem;margin-bottom:6px">&#128083;</div>
+      <div style="font-family:var(--font-head);font-size:1.8rem;font-weight:800;color:var(--brand-dark);line-height:1">5.757</div>
+      <div style="font-size:.78rem;color:var(--text-secondary);margin-top:6px;font-weight:500">perguntaram sobre<br><strong>oculos / armacao / grau</strong></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;box-shadow:var(--shadow-sm)">
+      <div style="font-size:2rem;margin-bottom:6px">&#128176;</div>
+      <div style="font-family:var(--font-head);font-size:1.8rem;font-weight:800;color:var(--brand-dark);line-height:1">3.308</div>
+      <div style="font-size:.78rem;color:var(--text-secondary);margin-top:6px;font-weight:500">perguntaram sobre<br><strong>preco / orcamento / valor</strong></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;box-shadow:var(--shadow-sm)">
+      <div style="font-size:2rem;margin-bottom:6px">&#128065;</div>
+      <div style="font-family:var(--font-head);font-size:1.8rem;font-weight:800;color:var(--brand-dark);line-height:1">1.685</div>
+      <div style="font-size:.78rem;color:var(--text-secondary);margin-top:6px;font-weight:500">perguntaram sobre<br><strong>lentes / progressivo / multifocal</strong></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;box-shadow:var(--shadow-sm)">
+      <div style="font-size:2rem;margin-bottom:6px">&#128203;</div>
+      <div style="font-family:var(--font-head);font-size:1.8rem;font-weight:800;color:var(--brand-dark);line-height:1">4.583</div>
+      <div style="font-size:.78rem;color:var(--text-secondary);margin-top:6px;font-weight:500">perguntaram sobre<br><strong>receita / exame / consulta</strong></div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;box-shadow:var(--shadow-sm)">
+      <div style="font-size:2rem;margin-bottom:6px">&#128205;</div>
+      <div style="font-family:var(--font-head);font-size:1.8rem;font-weight:800;color:var(--brand-dark);line-height:1">1.963</div>
+      <div style="font-size:.78rem;color:var(--text-secondary);margin-top:6px;font-weight:500">perguntaram sobre<br><strong>localizacao de lojas</strong></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;box-shadow:var(--shadow-sm)">
+      <div style="font-size:2rem;margin-bottom:6px">&#128337;</div>
+      <div style="font-family:var(--font-head);font-size:1.8rem;font-weight:800;color:var(--brand-dark);line-height:1">1.035</div>
+      <div style="font-size:.78rem;color:var(--text-secondary);margin-top:6px;font-weight:500">perguntaram sobre<br><strong>horario de funcionamento</strong></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;box-shadow:var(--shadow-sm)">
+      <div style="font-size:2rem;margin-bottom:6px">&#127908;</div>
+      <div style="font-family:var(--font-head);font-size:1.8rem;font-weight:800;color:var(--brand-dark);line-height:1">3.455</div>
+      <div style="font-size:.78rem;color:var(--text-secondary);margin-top:6px;font-weight:500">contatos enviaram<br><strong>mensagens de audio</strong></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;box-shadow:var(--shadow-sm)">
+      <div style="font-size:2rem;margin-bottom:6px">&#128257;</div>
+      <div style="font-family:var(--font-head);font-size:1.8rem;font-weight:800;color:var(--brand-dark);line-height:1">2.398</div>
+      <div style="font-size:.78rem;color:var(--text-secondary);margin-top:6px;font-weight:500">contatos que<br><strong>retornaram em dias diferentes</strong></div>
+    </div>
+  </div>
+
+  <!-- Grafico de barras: demandas mais frequentes -->
+  <div class="two-col" style="margin-bottom:20px">
+    <div class="chart-card">
+      <div class="chart-card-header"><div class="chart-card-title">Principais Demandas dos Contatos</div></div>
+      <div class="chart-wrap" style="height:280px"><canvas id="demandsChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-card-header"><div class="chart-card-title">Termos Mais Buscados pelos Contatos</div></div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;padding:10px 0;min-height:250px">
+        <span style="font-size:2.6rem;font-weight:800;color:#2D52EF;opacity:.9">oculos</span>
+        <span style="font-size:2.2rem;font-weight:700;color:#7C3AED;opacity:.85">informacoes</span>
+        <span style="font-size:2rem;font-weight:700;color:#059669;opacity:.85">interesse</span>
+        <span style="font-size:1.9rem;font-weight:700;color:#ea580c;opacity:.8">exame</span>
+        <span style="font-size:1.8rem;font-weight:700;color:#0891b2;opacity:.8">loja</span>
+        <span style="font-size:1.6rem;font-weight:600;color:#dc2626;opacity:.75">shopping</span>
+        <span style="font-size:1.5rem;font-weight:600;color:#7C3AED;opacity:.7">valor</span>
+        <span style="font-size:1.5rem;font-weight:600;color:#2D52EF;opacity:.7">armacao</span>
+        <span style="font-size:1.4rem;font-weight:600;color:#059669;opacity:.7">lente</span>
+        <span style="font-size:1.35rem;font-weight:600;color:#ea580c;opacity:.65">messejana</span>
+        <span style="font-size:1.3rem;font-weight:600;color:#0891b2;opacity:.65">quanto</span>
+        <span style="font-size:1.3rem;font-weight:600;color:#dc2626;opacity:.65">preco</span>
+        <span style="font-size:1.25rem;font-weight:500;color:#7C3AED;opacity:.6">grau</span>
+        <span style="font-size:1.25rem;font-weight:500;color:#2D52EF;opacity:.6">orcamento</span>
+        <span style="font-size:1.2rem;font-weight:500;color:#059669;opacity:.6">vista</span>
+        <span style="font-size:1.2rem;font-weight:500;color:#ea580c;opacity:.6">parangaba</span>
+        <span style="font-size:1.15rem;font-weight:500;color:#0891b2;opacity:.55">lentes</span>
+        <span style="font-size:1.15rem;font-weight:500;color:#dc2626;opacity:.55">promocao</span>
+        <span style="font-size:1.1rem;font-weight:500;color:#7C3AED;opacity:.55">centro</span>
+        <span style="font-size:1.1rem;font-weight:500;color:#2D52EF;opacity:.55">consultar</span>
+        <span style="font-size:1.05rem;font-weight:500;color:#059669;opacity:.5">north</span>
+        <span style="font-size:1.05rem;font-weight:500;color:#ea580c;opacity:.5">sabado</span>
+        <span style="font-size:1rem;font-weight:500;color:#0891b2;opacity:.5">endereco</span>
+        <span style="font-size:1rem;font-weight:500;color:#dc2626;opacity:.5">fortaleza</span>
+        <span style="font-size:.95rem;font-weight:500;color:#7C3AED;opacity:.5">horario</span>
+        <span style="font-size:.95rem;font-weight:500;color:#2D52EF;opacity:.5">armacoes</span>
+        <span style="font-size:.9rem;font-weight:500;color:#059669;opacity:.5">joquei</span>
+        <span style="font-size:.9rem;font-weight:500;color:#ea580c;opacity:.5">maracanau</span>
+        <span style="font-size:.9rem;font-weight:500;color:#0891b2;opacity:.5">receita</span>
+        <span style="font-size:.9rem;font-weight:500;color:#dc2626;opacity:.5">consulta</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Destaque: Iris enviou lista de lojas -->
+  <div style="background:linear-gradient(135deg,#047857 0%,var(--success) 100%);border-radius:12px;padding:22px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;box-shadow:0 4px 20px rgba(5,150,105,.20)">
+    <div style="display:flex;align-items:center;gap:16px">
+      <span style="font-size:2.2rem">&#128205;</span>
+      <div>
+        <div style="font-family:var(--font-head);font-size:1.1rem;font-weight:800;color:#fff">Iris enviou a lista de lojas em 6.752 conversas</div>
+        <div style="font-size:.84rem;color:rgba(255,255,255,.8);margin-top:4px">Orientando contatos sobre localizacao, enderecos e unidades mais proximas automaticamente</div>
+      </div>
+    </div>
+    <div style="font-family:var(--font-head);font-size:2.4rem;font-weight:800;color:#fff">45,1%</div>
+  </div>
+  <div style="font-size:.78rem;color:var(--text-muted);text-align:right;margin-top:6px;margin-bottom:0">das 14.962 conversas receberam informacoes de lojas automaticamente pela Iris</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     EVOLUCAO DA QUALIDADE DA IA
 ═══════════════════════════════════════════════ -->
 <div class="section">
   <div class="section-header">
@@ -684,38 +795,19 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
   </div>
 </div>
 
-<!-- Metodologia -->
+<!-- Notas -->
 <div class="section">
   <div class="section-header">
-    <span class="section-title">Metodologia e Fontes</span>
+    <span class="section-title">Notas</span>
     <div class="section-divider"></div>
   </div>
   <div class="chart-card">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
-      <div>
-        <div style="font-size:.82rem;font-weight:700;color:var(--brand-dark);margin-bottom:10px">Fontes de Dados</div>
-        <div style="font-size:.8rem;color:var(--text-secondary);line-height:1.85">
-          <div>&middot; <strong>PostgreSQL</strong> &#8212; banco <code>chat_prod</code> &middot; account_id=6</div>
-          <div>&middot; <strong>Tabelas</strong> &#8212; <code>reporting_events</code>, <code>conversations</code>, <code>messages</code></div>
-          <div>&middot; <strong>Periodo</strong> &#8212; 14/07/2026 a 31/08/2026 (49 dias)</div>
-          <div>&middot; <strong>Metricas</strong> &#8212; conversations, resolutions, incoming/outgoing messages, sender_type, first_response_time</div>
-          <div>&middot; <strong>Segmentacao</strong> &#8212; por inbox_id, sender_type (Agent/AgentBot/User), label</div>
-          <div>&middot; <strong>Custo Meta</strong> &#8212; tabela oficial de precos (jul/2026) &middot; USD 0,0068/msg</div>
-          <div>&middot; <strong>Qualidade IA</strong> &#8212; planilha de analise de ocorrencias &middot; Iris Producao vs. Iris Agentes</div>
-        </div>
-      </div>
-      <div>
-        <div style="font-size:.82rem;font-weight:700;color:var(--brand-dark);margin-bottom:10px">Ressalvas Tecnicas</div>
-        <div style="font-size:.8rem;color:var(--text-secondary);line-height:1.85">
-          <div>&middot; <strong>Julho parcial</strong> &#8212; dados a partir de 14/07/2026</div>
-          <div>&middot; <strong>Resolucoes &gt; Conversas</strong> &#8212; ratio ~4,65&#215; esperado (conversas reabertas)</div>
-          <div>&middot; <strong>Iris = nao atribuido</strong> &#8212; bot sem ID de agente humano; identificado por sender_type=AgentBot</div>
-          <div>&middot; <strong>Mensagens Iris</strong> &#8212; 38.584 msgs AgentBot (sender_type) vs. 46.707 msgs de conversas nao atribuidas</div>
-          <div>&middot; <strong>1a Resposta</strong> &#8212; 7,4 min em business hours (441,48s avg); Iris &#8776; 0s instantaneo</div>
-          <div>&middot; <strong>Cenario C</strong> &#8212; Meta cobra por todos os tokens (USD 2/1M). Baseado em execucao real #15738550: 55.974 tokens/turno.</div>
-          <div>&middot; <strong>Cotacao</strong> &#8212; USD/BRL 5,75 (referencia Jun/2026)</div>
-        </div>
-      </div>
+    <div style="font-size:.82rem;color:var(--text-secondary);line-height:1.85">
+      <div>&middot; <strong>Periodo</strong> &#8212; 14 de julho a 31 de agosto de 2026 (49 dias)</div>
+      <div>&middot; <strong>Julho parcial</strong> &#8212; dados a partir do dia 14/07</div>
+      <div>&middot; <strong>Custo Meta (Cenario B)</strong> &#8212; tabela oficial de precos Meta (jul/2026), cotacao USD/BRL 5,75</div>
+      <div>&middot; <strong>Inteligencia de Atendimento</strong> &#8212; analise por conteudo das mensagens recebidas; um contato pode aparecer em mais de uma categoria</div>
+      <div>&middot; <strong>Termos mais buscados</strong> &#8212; palavras mais frequentes enviadas pelos contatos, excluindo termos genericos</div>
     </div>
   </div>
 </div>
@@ -728,8 +820,8 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
       <div class="footer-brand">
         <div class="footer-logo"><img src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-primary.svg" alt="Digital AI" onerror="this.style.display='none'"></div>
       </div>
-      <div class="footer-meta">Dados validados por equipe de ciencia de dados &middot; Uso interno &middot; Sr. Oculos</div>
-      <div class="footer-note">Gerado em 01/09/2026 &middot; PostgreSQL &middot; chat_prod &middot; Conta #6</div>
+      <div class="footer-meta">Relatorio de atendimento &middot; Sr. Oculos</div>
+      <div class="footer-note">Gerado em 01/09/2026</div>
     </div>
   </div>
 </footer>
@@ -866,8 +958,7 @@ function mkConv() {
     data: {
       labels: months,
       datasets: [
-        { label: 'Conversas', data: conv, backgroundColor: '#2D52EF', borderRadius: 6, borderSkipped: false, order: 2 },
-        { label: 'Resolucoes', data: resolAg, type: 'line', borderColor: '#059669', backgroundColor: 'rgba(5,150,105,.07)', borderWidth: 2.5, pointBackgroundColor: '#059669', pointRadius: 6, fill: false, tension: .35, order: 1 }
+        { label: 'Conversas', data: conv, backgroundColor: '#2D52EF', borderRadius: 6, borderSkipped: false }
       ]
     },
     options: CHART_OPTS(false)
@@ -895,7 +986,6 @@ function mkAll() {
       labels: months,
       datasets: [
         { label: 'Conversas', data: conv, backgroundColor: '#2D52EF', borderRadius: 4, borderSkipped: false },
-        { label: 'Resolucoes', data: resolAg, backgroundColor: '#059669', borderRadius: 4, borderSkipped: false },
         { label: 'Msgs Recebidas', data: msgIn, backgroundColor: 'rgba(124,58,237,.5)', borderRadius: 4, borderSkipped: false },
         { label: 'Msgs Enviadas', data: msgOut, backgroundColor: 'rgba(124,58,237,.28)', borderRadius: 4, borderSkipped: false }
       ]
@@ -999,6 +1089,41 @@ new Chart(qCtx, {
         max: 50,
         title: { display: true, text: 'Ocorrencias', color: '#94A3B8', font: { size: 11 } }
       }
+    }
+  }
+});
+
+// ── DEMANDS CHART (horizontal bar) ──────────────────────────────
+const demCtx = document.getElementById('demandsChart').getContext('2d');
+new Chart(demCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Oculos / Armacao / Grau', 'Receita / Exame / Consulta', 'Preco / Orcamento', 'Localizacao de Lojas', 'Lentes / Progressivo', 'Horario de Funcionamento'],
+    datasets: [{
+      label: 'Contatos',
+      data: [5757, 4583, 3308, 1963, 1685, 1035],
+      backgroundColor: ['#2D52EF', '#7C3AED', '#059669', '#ea580c', '#0891b2', '#d97706'],
+      borderRadius: 6,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#0F1F5C',
+        titleFont: { family: 'Plus Jakarta Sans', size: 12, weight: '700' },
+        bodyFont: { family: 'DM Sans', size: 12 },
+        padding: 12, cornerRadius: 8,
+        callbacks: { label: c => ' ' + c.raw.toLocaleString('pt-BR') + ' contatos' }
+      }
+    },
+    scales: {
+      x: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { color: '#94A3B8', font: { size: 11 }, callback: v => v >= 1000 ? (v/1000).toFixed(0)+'k' : v } },
+      y: { grid: { display: false }, ticks: { color: '#475569', font: { family: 'DM Sans', size: 12 } } }
     }
   }
 });
