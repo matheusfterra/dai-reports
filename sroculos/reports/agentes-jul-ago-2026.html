@@ -262,7 +262,7 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
       <div class="kpi-sub">86.785 recebidas + 98.747 enviadas</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-label">1a Resposta &middot; Geral <span class="tip tip-right"><span class="tip-icon">?</span><div class="tip-box">Tempo medio para o primeiro contato receber uma resposta, calculado em horario comercial. A Iris responde instantaneamente (&asymp; 0s).</div></span></div>
+      <div class="kpi-label">1a Resposta &middot; Geral <span class="tip tip-right"><span class="tip-icon">?</span><div class="tip-box">Tempo medio para o primeiro contato receber uma resposta, calculado em horario comercial. A Iris tem mediana de ~38 segundos.</div></span></div>
       <div class="kpi-value">7,4 min</div>
       <div class="kpi-sub">tempo medio de 1a resposta (business hours)</div>
     </div>
@@ -275,7 +275,7 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
     <div class="iris-avatar">&#129302;</div>
     <div>
       <div class="iris-name">Iris &middot; Agente de IA</div>
-      <div class="iris-desc">Atendimento automatico &middot; 24 horas por dia, 7 dias por semana</div>
+      <div class="iris-desc">Atendimento automatico &middot; disponivel 24h por dia</div>
     </div>
   </div>
   <div class="iris-stats">
@@ -296,8 +296,8 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
       <div class="iris-stat-label">listas de lojas enviadas</div>
     </div>
     <div class="iris-stat">
-      <div class="iris-stat-val">&#8776;0s</div>
-      <div class="iris-stat-label">1a resposta automatica</div>
+      <div class="iris-stat-val">~38s</div>
+      <div class="iris-stat-label">mediana de 1a resposta</div>
     </div>
   </div>
 </div>
@@ -455,8 +455,8 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
 
     <div style="background:linear-gradient(135deg,#92400e 0%,#d97706 100%);border-radius:12px;padding:22px 20px;color:#fff;text-align:center">
       <div style="font-size:.75rem;font-weight:600;letter-spacing:.08em;opacity:.8;text-transform:uppercase;margin-bottom:8px">1a Resposta Iris</div>
-      <div style="font-size:2.2rem;font-weight:800;line-height:1">&#8776; 0s</div>
-      <div style="font-size:.78rem;opacity:.75;margin-top:6px">resposta instantanea, 24 horas por dia</div>
+      <div style="font-size:2.2rem;font-weight:800;line-height:1">~38s</div>
+      <div style="font-size:.78rem;opacity:.75;margin-top:6px">mediana de 1a resposta automatica</div>
     </div>
 
   </div>
@@ -610,7 +610,7 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
       <div class="reduction-detail">
         <strong>Iris Producao:</strong> 108 ocorrencias registradas<br>
         <strong>Iris Agentes:</strong> 44 ocorrencias registradas<br>
-        <strong>103 de 108</strong> identificadas proativamente via analise
+        <strong>34 de 108</strong> reportadas pelo grupo &middot; <strong>59</strong> identificadas via analise
       </div>
     </div>
   </div>
@@ -634,12 +634,13 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
     <div class="quality-card after">
       <div class="quality-card-label">Depois &middot; Iris Agentes</div>
       <div class="quality-card-title">Configuracao Atual</div>
-      <div class="quality-total">41</div>
+      <div class="quality-total">44</div>
       <div class="quality-total-sub">ocorrencias registradas</div>
       <div class="quality-items">
         <div class="quality-item"><span class="quality-item-name">Ajuste Aplicado</span><span class="quality-item-val">20</span></div>
         <div class="quality-item"><span class="quality-item-name">Novo Treinamento</span><span class="quality-item-val">14</span></div>
         <div class="quality-item"><span class="quality-item-name">Fix Estrutural</span><span class="quality-item-val">7</span></div>
+        <div class="quality-item"><span class="quality-item-name">Nao Iniciada</span><span class="quality-item-val">3</span></div>
       </div>
     </div>
   </div>
@@ -654,7 +655,7 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
   <div class="quality-note">
     <span style="font-size:1.1rem;flex-shrink:0">&#128269;</span>
     <div>
-      <strong>Identificacao Proativa:</strong> 103 das 108 ocorrencias (95,4%) foram identificadas internamente <em>atraves de analise continua</em> &#8212; nao por reporte da equipe. Apenas 5 originaram do grupo (reporte manual da equipe). Isso demonstra maturidade do processo de monitoramento da IA.
+      <strong>Identificacao Proativa:</strong> Das 108 ocorrencias em Iris Producao, 34 (31,5%) foram reportadas pela equipe via grupo e 59 (54,6%) identificadas internamente <em>atraves de analise continua</em>. Na Iris Agentes, 18 de 44 (40,9%) vieram do grupo e 26 (59,1%) via analise. O monitoramento combinado &#8212; equipe + analise &#8212; garante cobertura ampla para melhoria continua.
     </div>
   </div>
 </div>
@@ -1036,9 +1037,9 @@ new Chart(document.getElementById('channelChart').getContext('2d'), {
 
 // ── QUALITY EVOLUTION CHART ───────────────────────────────────────
 const qCtx = document.getElementById('qualityChart').getContext('2d');
-const qCategories = ['Ajuste Aplicado', 'Novo Treinamento', 'Fix Estrutural', 'Instabilidade META/Outros'];
-const qBefore = [39, 32, 18, 19];
-const qAfter  = [20, 14,  7,  0];
+const qCategories = ['Ajuste Aplicado', 'Novo Treinamento', 'Fix Estrutural', 'Nao Iniciada', 'Instab./Outros'];
+const qBefore = [39, 32, 18, 0, 19];
+const qAfter  = [20, 14,  7, 3,  0];
 
 new Chart(qCtx, {
   type: 'bar',
