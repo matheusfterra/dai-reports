@@ -611,13 +611,13 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
   <!-- Banner de reducao -->
   <div class="reduction-banner">
     <div>
-      <div class="reduction-big"><span class="reduction-highlight">&#8595; 59%</span> menos ocorr&#234;ncias</div>
+      <div class="reduction-big"><span class="reduction-highlight">&#8595; 62%</span> menos ocorr&#234;ncias</div>
       <div class="reduction-label">ap&#243;s ado&#231;&#227;o da estrat&#233;gia de divis&#227;o de agentes</div>
     </div>
     <div class="reduction-right">
       <div class="reduction-detail">
         <strong>Iris Produ&#231;&#227;o:</strong> 108 ocorr&#234;ncias registradas<br>
-        <strong>Iris Agentes:</strong> 44 ocorr&#234;ncias registradas<br>
+        <strong>Iris Agentes:</strong> 41 ocorr&#234;ncias registradas<br>
         <strong>34 de 108</strong> reportadas pelo grupo &#183; <strong>59</strong> identificadas via an&#225;lise
       </div>
     </div>
@@ -641,8 +641,8 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
       <div style="font-family:var(--font-head);font-size:3.2rem;font-weight:800;line-height:1">52,9%</div>
       <div style="font-size:.88rem;opacity:.85;margin-top:8px">das transfer&#234;ncias s&#227;o por recebimento de m&#237;dia</div>
       <div style="margin-top:14px;background:rgba(255,255,255,.15);border-radius:8px;padding:10px 14px;font-size:.82rem;line-height:1.6">
-        <strong>3.249 de 6.140</strong> conversas transferidas continham imagem/&#225;udio/v&#237;deo do contato.<br>
-        A Iris transfere <strong>obrigatoriamente por design</strong> ao receber m&#237;dia &#8212; isso n&#227;o indica erro, mas sim uma limita&#231;&#227;o t&#233;cnica da API que est&#225; sendo tratada.
+        <strong>3.249 de 6.140</strong> conversas transferidas continham imagem, v&#237;deo ou documento do contato.<br>
+        A Iris transfere <strong>obrigatoriamente por design</strong> ao receber esses tipos de m&#237;dia &#8212; isso n&#227;o indica erro, mas sim uma limita&#231;&#227;o t&#233;cnica da API que est&#225; sendo tratada. &#193;udios j&#225; s&#227;o transcritos e respondidos normalmente.
       </div>
     </div>
   </div>
@@ -666,13 +666,12 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
     <div class="quality-card after">
       <div class="quality-card-label">Depois &#183; Iris Agentes</div>
       <div class="quality-card-title">Configura&#231;&#227;o Atual</div>
-      <div class="quality-total">44</div>
+      <div class="quality-total">41</div>
       <div class="quality-total-sub">ocorr&#234;ncias registradas</div>
       <div class="quality-items">
         <div class="quality-item"><span class="quality-item-name">Ajuste Aplicado</span><span class="quality-item-val">20</span></div>
         <div class="quality-item"><span class="quality-item-name">Novo Treinamento</span><span class="quality-item-val">14</span></div>
         <div class="quality-item"><span class="quality-item-name">Fix Estrutural</span><span class="quality-item-val">7</span></div>
-        <div class="quality-item"><span class="quality-item-name">N&#227;o Iniciada</span><span class="quality-item-val">3</span></div>
       </div>
     </div>
   </div>
@@ -687,7 +686,7 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
   <div class="quality-note">
     <span style="font-size:1.1rem;flex-shrink:0">&#128269;</span>
     <div>
-      <strong>Identifica&#231;&#227;o Proativa:</strong> Das 108 ocorr&#234;ncias em Iris Produ&#231;&#227;o, 34 (31,5%) foram reportadas pela equipe via grupo e 59 (54,6%) identificadas internamente <em>atrav&#233;s de an&#225;lise cont&#237;nua</em>. Na Iris Agentes, 18 de 44 (40,9%) vieram do grupo e 26 (59,1%) via an&#225;lise. O monitoramento combinado &#8212; equipe + an&#225;lise &#8212; garante cobertura ampla para melhoria cont&#237;nua.
+      <strong>Identifica&#231;&#227;o Proativa:</strong> Das 108 ocorr&#234;ncias em Iris Produ&#231;&#227;o, 34 (31,5%) foram reportadas pela equipe via grupo e 59 (54,6%) identificadas internamente <em>atrav&#233;s de an&#225;lise cont&#237;nua</em>. Na Iris Agentes, 17 de 41 (41,5%) vieram do grupo e 24 (58,5%) via an&#225;lise. O monitoramento combinado &#8212; equipe + an&#225;lise &#8212; garante cobertura ampla para melhoria cont&#237;nua.
     </div>
   </div>
 </div>
@@ -1095,9 +1094,9 @@ new Chart(document.getElementById('channelChart').getContext('2d'), {
 
 // ── QUALITY EVOLUTION CHART ───────────────────────────────────────
 const qCtx = document.getElementById('qualityChart').getContext('2d');
-const qCategories = ['Ajuste Aplicado', 'Novo Treinamento', 'Fix Estrutural', 'Nao Iniciada', 'Instab./Outros'];
-const qBefore = [39, 32, 18, 0, 19];
-const qAfter  = [20, 14,  7, 3,  0];
+const qCategories = ['Ajuste Aplicado', 'Novo Treinamento', 'Fix Estrutural', 'Instab./Outros'];
+const qBefore = [39, 32, 18, 19];
+const qAfter  = [20, 14,  7,  0];
 
 new Chart(qCtx, {
   type: 'bar',
