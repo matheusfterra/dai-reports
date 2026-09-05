@@ -608,6 +608,127 @@
     .footer p { font-size: 13px; color: var(--text-muted); }
 
     /* --- RESPONSIVE --- */
+    /* --- DISCOVERY QUESTIONS --- */
+    .discovery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 24px;
+    }
+    .discovery-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .discovery-block:hover {
+      border-color: rgba(255,87,34,0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+    }
+    .discovery-block-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .discovery-block-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(255,87,34,0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .discovery-block-header h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .discovery-block-header .block-count {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--orange);
+      background: rgba(255,87,34,0.1);
+      padding: 3px 10px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,87,34,0.2);
+      margin-left: auto;
+    }
+    .discovery-question {
+      display: flex;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+      color: var(--text-body);
+      line-height: 1.6;
+    }
+    .discovery-question:last-child { border-bottom: none; }
+    .discovery-question .q-num {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      background: rgba(255,87,34,0.08);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--orange);
+      margin-top: 2px;
+    }
+    .discovery-question .q-hint {
+      color: var(--text-muted);
+      font-size: 12px;
+      font-style: italic;
+    }
+
+    /* --- PRES DISCOVERY --- */
+    .pres-discovery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .pres-discovery-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+    }
+    .pres-discovery-block h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pres-discovery-block h4 .icon { font-size: 18px; }
+    .pres-q {
+      font-size: 12px;
+      color: var(--text-body);
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(31,31,31,0.5);
+      line-height: 1.5;
+      display: flex;
+      gap: 8px;
+    }
+    .pres-q:last-child { border-bottom: none; }
+    .pres-q-num {
+      flex-shrink: 0;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--orange);
+      width: 18px;
+    }
+
     @media (max-width: 768px) {
       .hero h1 { font-size: 32px; }
       .hero p { font-size: 16px; }
@@ -616,10 +737,11 @@
       .phase-number { width: 60px; height: 60px; font-size: 20px; }
       .flow-line { display: none; }
       .header-inner { flex-direction: column; gap: 12px; }
-      .frentes-grid, .risks-grid, .principles-grid { grid-template-columns: 1fr; }
+      .frentes-grid, .risks-grid, .principles-grid, .discovery-grid { grid-template-columns: 1fr; }
       .timeline-bar-cell { display: none; }
       .section { padding: 40px 20px; }
       .btn-presentation span.btn-text { display: none; }
+      .pres-discovery-grid { grid-template-columns: 1fr; }
     }
 
     /* ============================= */
@@ -1403,6 +1525,92 @@
     </div>
   </section>
 
+  <!-- DISCOVERY QUESTIONS -->
+  <section class="section">
+    <div class="section-title animate-on-scroll">Reuniao de Kick-off</div>
+    <h2 class="animate-on-scroll">Roteiro de Discovery</h2>
+    <p class="animate-on-scroll">Perguntas organizadas por bloco tematico para a reuniao inicial. Respostas a essas perguntas definem o baseline do projeto e refinam o cronograma.</p>
+
+    <div class="discovery-grid">
+
+      <!-- BLOCO 1 -->
+      <div class="discovery-block animate-on-scroll stagger-1">
+        <div class="discovery-block-header">
+          <div class="discovery-block-icon">&#128196;</div>
+          <h3>Base Atual</h3>
+          <span class="block-count">7 perguntas</span>
+        </div>
+        <div class="discovery-question"><span class="q-num">1</span><div>Quantos artigos/paginas existem hoje na base HELP? <span class="q-hint">(centenas? milhares?)</span></div></div>
+        <div class="discovery-question"><span class="q-num">2</span><div>Em que formatos estao os conteudos? <span class="q-hint">(PDF, Word, HTML, video, planilha?)</span></div></div>
+        <div class="discovery-question"><span class="q-num">3</span><div>Qual a estrutura de categorias/pastas atual? <span class="q-hint">(por area? produto? processo?)</span></div></div>
+        <div class="discovery-question"><span class="q-num">4</span><div>Existe algum inventario ou mapa dos conteudos ja feito?</div></div>
+        <div class="discovery-question"><span class="q-num">5</span><div>Quando foi a ultima atualizacao significativa da base?</div></div>
+        <div class="discovery-question"><span class="q-num">6</span><div>Ha conteudos duplicados ou contraditorios conhecidos?</div></div>
+        <div class="discovery-question"><span class="q-num">7</span><div>Existe conteudo em mais de um idioma?</div></div>
+      </div>
+
+      <!-- BLOCO 2 -->
+      <div class="discovery-block animate-on-scroll stagger-2">
+        <div class="discovery-block-header">
+          <div class="discovery-block-icon">&#128101;</div>
+          <h3>Usuarios</h3>
+          <span class="block-count">5 perguntas</span>
+        </div>
+        <div class="discovery-question"><span class="q-num">8</span><div>Quem sao os principais perfis de usuarios da base HELP? <span class="q-hint">(atendentes, gerentes, back-office, TI?)</span></div></div>
+        <div class="discovery-question"><span class="q-num">9</span><div>Qual o volume de acessos diarios/mensais? <span class="q-hint">(analytics do SharePoint?)</span></div></div>
+        <div class="discovery-question"><span class="q-num">10</span><div>Quais as reclamacoes mais frequentes dos usuarios sobre a base?</div></div>
+        <div class="discovery-question"><span class="q-num">11</span><div>Como o usuario busca informacao hoje? <span class="q-hint">(busca, menu, link recebido?)</span></div></div>
+        <div class="discovery-question"><span class="q-num">12</span><div>Existem conteudos mais criticos que outros? <span class="q-hint">(quais areas impactam o atendimento?)</span></div></div>
+      </div>
+
+      <!-- BLOCO 3 -->
+      <div class="discovery-block animate-on-scroll stagger-3">
+        <div class="discovery-block-header">
+          <div class="discovery-block-icon">&#128188;</div>
+          <h3>Governanca e Responsaveis</h3>
+          <span class="block-count">5 perguntas</span>
+        </div>
+        <div class="discovery-question"><span class="q-num">13</span><div>Quem sao os donos de conteudo por area no Bradesco? <span class="q-hint">(existe RACI?)</span></div></div>
+        <div class="discovery-question"><span class="q-num">14</span><div>Como funciona o fluxo de criacao/atualizacao de conteudo hoje?</div></div>
+        <div class="discovery-question"><span class="q-num">15</span><div>Quem sera o ponto focal do Bradesco para validacoes durante o projeto?</div></div>
+        <div class="discovery-question"><span class="q-num">16</span><div>Qual o SLA esperado para aprovacoes? <span class="q-hint">(dias? semanas?)</span></div></div>
+        <div class="discovery-question"><span class="q-num">17</span><div>Existe algum comite ou forum de governanca de conteudo?</div></div>
+      </div>
+
+      <!-- BLOCO 4 -->
+      <div class="discovery-block animate-on-scroll stagger-4">
+        <div class="discovery-block-header">
+          <div class="discovery-block-icon">&#9881;</div>
+          <h3>Tecnologia e Acesso</h3>
+          <span class="block-count">6 perguntas</span>
+        </div>
+        <div class="discovery-question"><span class="q-num">18</span><div>Que tipo de acesso ao SharePoint sera fornecido? <span class="q-hint">(leitura? edicao? admin?)</span></div></div>
+        <div class="discovery-question"><span class="q-num">19</span><div>Em quanto tempo o acesso pode ser liberado?</div></div>
+        <div class="discovery-question"><span class="q-num">20</span><div>O SharePoint tem busca configurada com metadata/tags?</div></div>
+        <div class="discovery-question"><span class="q-num">21</span><div>O HELP se integra com algum outro sistema? <span class="q-hint">(chatbot, service desk, treinamento?)</span></div></div>
+        <div class="discovery-question"><span class="q-num">22</span><div>Ha restricoes de seguranca ou compliance para manipulacao dos conteudos?</div></div>
+        <div class="discovery-question"><span class="q-num">23</span><div>E possivel receber um export completo da base enquanto o acesso direto nao sai?</div></div>
+      </div>
+
+      <!-- BLOCO 5 -->
+      <div class="discovery-block animate-on-scroll stagger-1" style="grid-column: 1 / -1;">
+        <div class="discovery-block-header">
+          <div class="discovery-block-icon">&#127919;</div>
+          <h3>Expectativas e Sucesso</h3>
+          <span class="block-count">5 perguntas</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 0 32px;">
+          <div class="discovery-question"><span class="q-num">24</span><div>Qual o principal resultado esperado com a reestruturacao? <span class="q-hint">(menos tempo, menos erros, menos tickets?)</span></div></div>
+          <div class="discovery-question"><span class="q-num">25</span><div>Existem metricas atuais de performance da base? <span class="q-hint">(tempo de busca, satisfacao?)</span></div></div>
+          <div class="discovery-question"><span class="q-num">26</span><div>Qual o prazo ideal para o Bradesco? <span class="q-hint">(data limite, ciclo regulatorio?)</span></div></div>
+          <div class="discovery-question"><span class="q-num">27</span><div>Existe orcamento ou recurso do Bradesco para apoiar com especialistas (SMEs)?</div></div>
+          <div class="discovery-question"><span class="q-num">28</span><div>Como o sucesso sera medido ao final? <span class="q-hint">(antes/depois, pesquisa, reducao de tickets?)</span></div></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
   <!-- FOOTER -->
   <footer class="footer animate-on-scroll">
     <div class="footer-logos">
@@ -1421,7 +1629,7 @@
         <img src="https://elloconsultoria.com/images/ello-logo-orange.png" alt="Ello" height="28" onerror="this.style.display='none'">
         <span class="pres-badge">HELP CORE</span>
       </div>
-      <span class="pres-counter" id="presCounter">1 / 12</span>
+      <span class="pres-counter" id="presCounter">1 / 14</span>
       <div class="pres-controls">
         <button class="pres-btn" onclick="prevSlide()" title="Anterior">&#8592;</button>
         <button class="pres-btn" onclick="nextSlide()" title="Próximo">&#8594;</button>
@@ -1635,8 +1843,69 @@
         </div>
       </div>
 
-      <!-- SLIDE 12: Próximos Passos -->
+      <!-- SLIDE 12: Discovery 1/2 -->
       <div class="pres-slide" id="slide-11">
+        <div class="section-title">Reuniao de Kick-off</div>
+        <h2>Roteiro de Discovery (1/2)</h2>
+        <div class="pres-discovery-grid">
+          <div class="pres-discovery-block">
+            <h4><span class="icon">&#128196;</span> Base Atual</h4>
+            <div class="pres-q"><span class="pres-q-num">1</span>Quantos artigos/paginas existem hoje na base HELP?</div>
+            <div class="pres-q"><span class="pres-q-num">2</span>Em que formatos estao os conteudos? (PDF, Word, HTML, video?)</div>
+            <div class="pres-q"><span class="pres-q-num">3</span>Qual a estrutura de categorias/pastas atual?</div>
+            <div class="pres-q"><span class="pres-q-num">4</span>Existe algum inventario dos conteudos ja feito?</div>
+            <div class="pres-q"><span class="pres-q-num">5</span>Quando foi a ultima atualizacao significativa?</div>
+            <div class="pres-q"><span class="pres-q-num">6</span>Ha conteudos duplicados ou contraditorios conhecidos?</div>
+            <div class="pres-q"><span class="pres-q-num">7</span>Existe conteudo em mais de um idioma?</div>
+          </div>
+          <div class="pres-discovery-block">
+            <h4><span class="icon">&#128101;</span> Usuarios</h4>
+            <div class="pres-q"><span class="pres-q-num">8</span>Quem sao os principais perfis de usuarios da base HELP?</div>
+            <div class="pres-q"><span class="pres-q-num">9</span>Qual o volume de acessos diarios/mensais?</div>
+            <div class="pres-q"><span class="pres-q-num">10</span>Quais as reclamacoes mais frequentes dos usuarios?</div>
+            <div class="pres-q"><span class="pres-q-num">11</span>Como o usuario busca informacao hoje?</div>
+            <div class="pres-q"><span class="pres-q-num">12</span>Existem conteudos mais criticos que outros?</div>
+          </div>
+          <div class="pres-discovery-block" style="grid-column: 1 / -1;">
+            <h4><span class="icon">&#128188;</span> Governanca e Responsaveis</h4>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 24px;">
+              <div class="pres-q"><span class="pres-q-num">13</span>Quem sao os donos de conteudo por area? (RACI?)</div>
+              <div class="pres-q"><span class="pres-q-num">14</span>Como funciona o fluxo de criacao/atualizacao hoje?</div>
+              <div class="pres-q"><span class="pres-q-num">15</span>Quem sera o ponto focal para validacoes?</div>
+              <div class="pres-q"><span class="pres-q-num">16</span>Qual o SLA esperado para aprovacoes?</div>
+              <div class="pres-q"><span class="pres-q-num">17</span>Existe comite ou forum de governanca de conteudo?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 13: Discovery 2/2 -->
+      <div class="pres-slide" id="slide-12">
+        <div class="section-title">Reuniao de Kick-off</div>
+        <h2>Roteiro de Discovery (2/2)</h2>
+        <div class="pres-discovery-grid">
+          <div class="pres-discovery-block">
+            <h4><span class="icon">&#9881;</span> Tecnologia e Acesso</h4>
+            <div class="pres-q"><span class="pres-q-num">18</span>Que tipo de acesso ao SharePoint sera fornecido?</div>
+            <div class="pres-q"><span class="pres-q-num">19</span>Em quanto tempo o acesso pode ser liberado?</div>
+            <div class="pres-q"><span class="pres-q-num">20</span>O SharePoint tem busca com metadata/tags configurada?</div>
+            <div class="pres-q"><span class="pres-q-num">21</span>O HELP se integra com outro sistema? (chatbot, service desk?)</div>
+            <div class="pres-q"><span class="pres-q-num">22</span>Ha restricoes de seguranca/compliance para os conteudos?</div>
+            <div class="pres-q"><span class="pres-q-num">23</span>Possivel receber export da base enquanto o acesso nao sai?</div>
+          </div>
+          <div class="pres-discovery-block">
+            <h4><span class="icon">&#127919;</span> Expectativas e Sucesso</h4>
+            <div class="pres-q"><span class="pres-q-num">24</span>Qual o principal resultado esperado com a reestruturacao?</div>
+            <div class="pres-q"><span class="pres-q-num">25</span>Existem metricas atuais de performance da base?</div>
+            <div class="pres-q"><span class="pres-q-num">26</span>Qual o prazo ideal para o Bradesco?</div>
+            <div class="pres-q"><span class="pres-q-num">27</span>Existe orcamento/recurso do Bradesco para SMEs?</div>
+            <div class="pres-q"><span class="pres-q-num">28</span>Como o sucesso sera medido ao final?</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 14: Próximos Passos -->
+      <div class="pres-slide" id="slide-13">
         <div style="text-align: center;">
           <div class="section-title">Próximos Passos</div>
           <h2 style="margin-bottom: 40px;">Ações Imediatas</h2>
@@ -1673,7 +1942,7 @@
     document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
 
     // --- Presentation Mode ---
-    const totalSlides = 12;
+    const totalSlides = 14;
     let currentSlide = 0;
 
     function buildProgressDots() {
