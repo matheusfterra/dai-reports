@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>ENGIE | Detalhamento Técnico - Hidrogerador</title>
+  <style>
+    :root {
+      --primary: #002e5b;
+      --primary-light: #005f9e;
+      --accent: #00a3e0;
+      --dark: #1f2937;
+      --light: #f8fafc;
+      --border: #cbd5e1;
+      --highlight: rgba(0, 95, 158, 0.15);
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #f1f5f9;
+      color: var(--dark);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    header {
+      background-color: var(--primary);
+      color: white;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid var(--accent);
+    }
+
+    header h1 { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: 0.5px; }
+    header span { font-size: 12px; background: rgba(255, 255, 255, 0.15); padding: 4px 10px; border-radius: 4px; }
+
+    .main-layout { display: flex; flex: 1; overflow: hidden; }
+
+    .sidebar {
+      width: 340px;
+      background: white;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .sidebar-header { padding: 16px; border-bottom: 1px solid var(--border); background: #f8fafc; }
+    .sidebar-header h2 { margin: 0 0 4px 0; font-size: 15px; color: var(--primary); }
+    .sidebar-header p { margin: 0; font-size: 12px; color: #64748b; }
+
+    .comp-list { list-style: none; padding: 0; margin: 0; }
+
+    .comp-item {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f1f5f9;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-left: 4px solid transparent;
+    }
+
+    .comp-item:hover, .comp-item.active {
+      background-color: var(--highlight);
+      border-left: 4px solid var(--primary-light);
+    }
+
+    .comp-title {
+      font-weight: bold;
+      font-size: 13px;
+      color: var(--primary);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .comp-title span {
+      font-size: 10px;
+      background: #e2e8f0;
+      color: #64748b;
+      padding: 1px 6px;
+      border-radius: 10px;
+    }
+
+    .comp-desc { font-size: 11px; color: #475569; line-height: 1.4; }
+
+    .viewer {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f8fafc;
+      padding: 16px;
+      position: relative;
+    }
+
+    .svg-container { width: 100%; height: 100%; max-width: 850px; max-height: 95vh; }
+    svg { width: 100%; height: 100%; }
+
+    .interactive-group { cursor: pointer; pointer-events: all; }
+    .interactive-group .part-fill { transition: fill 0.2s, stroke 0.2s, opacity 0.2s; }
+
+    .interactive-group:hover .part-fill,
+    .interactive-group.active .part-fill {
+      fill: #bfdbfe !important;
+      stroke: var(--primary-light) !important;
+      stroke-width: 2px !important;
+    }
+
+    .interactive-group:hover .part-stroke,
+    .interactive-group.active .part-stroke {
+      stroke: var(--primary-light) !important;
+      stroke-width: 2.5px !important;
+    }
+
+    .leader-line {
+      stroke: #475569;
+      stroke-width: 1.2;
+      fill: none;
+      transition: stroke 0.2s, stroke-width 0.2s;
+    }
+
+    .interactive-group:hover .leader-line,
+    .interactive-group.active .leader-line {
+      stroke: var(--primary-light);
+      stroke-width: 2;
+    }
+
+    .leader-text {
+      font-size: 11px;
+      font-weight: 700;
+      fill: #334155;
+      letter-spacing: 0.3px;
+      transition: fill 0.2s;
+    }
+
+    .interactive-group:hover .leader-text,
+    .interactive-group.active .leader-text {
+      fill: var(--primary-light);
+    }
+
+    .context-note {
+      font-size: 10px;
+      font-style: italic;
+      fill: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Diagrama Técnico Interativo: Turbina-Gerador Vertical</h1>
+    <span>Vista em Corte Vertical</span>
+  </header>
+
+  <div class="main-layout">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h2>Componentes do Ativo</h2>
+        <p>Passe o mouse sobre os itens ou sobre o desenho para destacar cada seção do gerador.</p>
+      </div>
+      <ul class="comp-list">
+        <li class="comp-item" data-target="mancais">
+          <div class="comp-title">Mancais <span>01</span></div>
+          <div class="comp-desc">Mancal Combinado (guia superior + escora) no topo, Mancal Guia Inferior e Mancal Guia da Turbina, responsáveis por suportar as cargas radiais e axiais do eixo.</div>
+        </li>
+        <li class="comp-item" data-target="porta-escovas">
+          <div class="comp-title">Porta-escovas <span>02</span></div>
+          <div class="comp-desc">Conjunto de anéis coletores e escovas de carvão montado no eixo, responsável pela transferência da corrente de excitação ao rotor.</div>
+        </li>
+        <li class="comp-item" data-target="rotor">
+          <div class="comp-title">Rotor <span>03</span></div>
+          <div class="comp-desc">Parte giratória: eixo, cruzeta (braços de suporte) e coroa polar com os polos magnéticos que geram o campo indutor.</div>
+        </li>
+        <li class="comp-item" data-target="estator">
+          <div class="comp-title">Estator <span>04</span></div>
+          <div class="comp-desc">Parte fixa que envolve o rotor, formada pelo núcleo laminado e pelos enrolamentos onde a tensão é induzida.</div>
+        </li>
+        <li class="comp-item" data-target="freios">
+          <div class="comp-title">Freios <span>05</span></div>
+          <div class="comp-desc">Conjunto de calços/macacos hidropneumáticos junto à base do rotor, usados para frenagem e para levantamento do conjunto girante em manutenções.</div>
+        </li>
+        <li class="comp-item" data-target="base-maquina">
+          <div class="comp-title">Base da Máquina <span>06</span></div>
+          <div class="comp-desc">Estrutura de suporte (cruzeta) e fundação em concreto que sustentam todo o conjunto gerador e transmitem as cargas à obra civil.</div>
+        </li>
+        <li class="comp-item" data-target="acessorios">
+          <div class="comp-title">Acessórios <span>07</span></div>
+          <div class="comp-desc">Radiadores de ar/água para resfriamento do estator, tubulações associadas e demais dispositivos auxiliares.</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="viewer">
+      <div class="svg-container">
+        <svg viewBox="0 0 900 1150" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="hatch-concrete" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+              <line x1="0" y1="0" x2="0" y2="16" stroke="#cbd5e1" stroke-width="1.5"/>
+              <circle cx="8" cy="8" r="1.2" fill="#94a3b8"/>
+            </pattern>
+            <pattern id="hatch-stator" width="8" height="8" patternUnits="userSpaceOnUse">
+              <line x1="0" y1="4" x2="8" y2="4" stroke="#475569" stroke-width="0.8"/>
+            </pattern>
+            <pattern id="hatch-radiator" width="6" height="20" patternUnits="userSpaceOnUse">
+              <line x1="3" y1="0" x2="3" y2="20" stroke="#64748b" stroke-width="1.5"/>
+            </pattern>
+            <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#475569" />
+            </marker>
+            <marker id="dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5">
+              <circle cx="5" cy="5" r="3" fill="#475569" />
+            </marker>
+          </defs>
+
+          <!-- Eixo de centro -->
+          <line x1="450" y1="15" x2="450" y2="1000" stroke="#94a3b8" stroke-width="1" stroke-dasharray="12,6,3,6"/>
+
+          <!-- ================= BASE DA MÁQUINA ================= -->
+          <g class="interactive-group" data-part="base-maquina">
+            <!-- Cruzeta / suporte superior da base -->
+            <rect class="part-fill" x="150" y="670" width="600" height="45" fill="#e2e8f0" stroke="#1f2937" stroke-width="2"/>
+            <!-- Paredes de concreto do poço -->
+            <polygon class="part-fill" points="100,715 250,715 230,950 90,950" fill="url(#hatch-concrete)" stroke="#1f2937" stroke-width="2"/>
+            <polygon class="part-fill" points="650,715 800,715 810,950 670,950" fill="url(#hatch-concrete)" stroke="#1f2937" stroke-width="2"/>
+            <!-- Laje de fundação -->
+            <rect class="part-fill" x="90" y="950" width="720" height="40" fill="url(#hatch-concrete)" stroke="#1f2937" stroke-width="2"/>
+
+            <path class="leader-line" d="M 800,940 L 845,940 L 845,900" marker-end="url(#arrow)"/>
+            <text x="850" y="895" class="leader-text" text-anchor="start">BASE DA</text>
+            <text x="850" y="908" class="leader-text" text-anchor="start">MÁQUINA</text>
+          </g>
+
+          <!-- ================= ACESSÓRIOS (RADIADORES + TUBULAÇÕES) ================= -->
+          <g class="interactive-group" data-part="acessorios">
+            <rect class="part-fill" x="90" y="320" width="80" height="190" rx="4" fill="url(#hatch-radiator)" stroke="#1f2937" stroke-width="2"/>
+            <rect class="part-fill" x="730" y="320" width="80" height="190" rx="4" fill="url(#hatch-radiator)" stroke="#1f2937" stroke-width="2"/>
+
+            <path class="part-stroke" d="M 170,345 C 230,345 250,320 300,318" fill="none" stroke="#0ea5e9" stroke-width="4"/>
+            <path class="part-stroke" d="M 170,485 C 230,485 250,510 300,512" fill="none" stroke="#0ea5e9" stroke-width="4"/>
+            <path class="part-stroke" d="M 730,345 C 670,345 650,320 600,318" fill="none" stroke="#0ea5e9" stroke-width="4"/>
+            <path class="part-stroke" d="M 730,485 C 670,485 650,510 600,512" fill="none" stroke="#0ea5e9" stroke-width="4"/>
+
+            <path class="leader-line" d="M 90,410 L 40,410 L 40,380" marker-end="url(#arrow)"/>
+            <text x="35" y="375" class="leader-text" text-anchor="end">ACESSÓRIOS</text>
+            <text x="35" y="388" class="leader-text" text-anchor="end" font-size="9">(RADIADORES)</text>
+          </g>
+
+          <!-- ================= ESTATOR ================= -->
+          <g class="interactive-group" data-part="estator">
+            <rect class="part-fill" x="180" y="300" width="110" height="230" fill="url(#hatch-stator)" stroke="#002e5b" stroke-width="2.5"/>
+            <rect class="part-fill" x="610" y="300" width="110" height="230" fill="url(#hatch-stator)" stroke="#002e5b" stroke-width="2.5"/>
+            <!-- cabeças de bobina -->
+            <rect class="part-fill" x="175" y="290" width="120" height="14" fill="#93c5fd" stroke="#002e5b" stroke-width="1.5"/>
+            <rect class="part-fill" x="605" y="290" width="120" height="14" fill="#93c5fd" stroke="#002e5b" stroke-width="1.5"/>
+
+            <path class="leader-line" d="M 720,340 L 780,340 L 780,300" marker-end="url(#arrow)"/>
+            <text x="785" y="295" class="leader-text" text-anchor="start">ESTATOR</text>
+          </g>
+
+          <!-- ================= ROTOR ================= -->
+          <g class="interactive-group" data-part="rotor">
+            <!-- Eixo -->
+            <rect class="part-fill" x="430" y="60" width="40" height="850" fill="#94a3b8" stroke="#1f2937" stroke-width="2"/>
+            <!-- Cruzeta superior -->
+            <polygon class="part-fill" points="430,280 470,280 590,330 310,330" fill="#cbd5e1" stroke="#1f2937" stroke-width="2"/>
+            <!-- Coroa polar / polos -->
+            <rect class="part-fill" x="310" y="330" width="280" height="190" fill="#e2e8f0" stroke="#1f2937" stroke-width="2.5"/>
+            <g stroke="#64748b" stroke-width="1.2">
+              <line x1="340" y1="330" x2="340" y2="520"/>
+              <line x1="375" y1="330" x2="375" y2="520"/>
+              <line x1="410" y1="330" x2="410" y2="520"/>
+              <line x1="490" y1="330" x2="490" y2="520"/>
+              <line x1="525" y1="330" x2="525" y2="520"/>
+              <line x1="560" y1="330" x2="560" y2="520"/>
+            </g>
+            <!-- Cruzeta inferior -->
+            <polygon class="part-fill" points="310,520 590,520 470,570 430,570" fill="#cbd5e1" stroke="#1f2937" stroke-width="2"/>
+
+            <path class="leader-line" d="M 310,420 L 250,420 L 250,395" marker-end="url(#arrow)"/>
+            <text x="245" y="390" class="leader-text" text-anchor="end">ROTOR</text>
+          </g>
+
+          <!-- ================= FREIOS ================= -->
+          <g class="interactive-group" data-part="freios">
+            <!-- Disco/anel de frenagem solidário ao rotor -->
+            <rect class="part-fill" x="310" y="515" width="280" height="10" fill="#475569" stroke="#1f2937" stroke-width="1.5"/>
+            <!-- Calço/macaco esquerdo -->
+            <rect class="part-fill" x="245" y="545" width="55" height="45" fill="#fde68a" stroke="#1f2937" stroke-width="2"/>
+            <rect class="part-fill" x="263" y="525" width="18" height="25" fill="#fbbf24" stroke="#1f2937" stroke-width="1.5"/>
+            <!-- Calço/macaco direito -->
+            <rect class="part-fill" x="600" y="545" width="55" height="45" fill="#fde68a" stroke="#1f2937" stroke-width="2"/>
+            <rect class="part-fill" x="619" y="525" width="18" height="25" fill="#fbbf24" stroke="#1f2937" stroke-width="1.5"/>
+
+            <path class="leader-line" d="M 245,568 L 190,568 L 190,590" marker-end="url(#arrow)"/>
+            <text x="185" y="605" class="leader-text" text-anchor="end">FREIOS</text>
+          </g>
+
+          <!-- ================= MANCAIS (COMBINADO + GUIA INFERIOR + GUIA DA TURBINA) ================= -->
+          <g class="interactive-group" data-part="mancais">
+            <!-- Mancal Combinado (topo) -->
+            <rect class="part-fill" x="300" y="60" width="300" height="150" rx="6" fill="#dbeafe" stroke="#1f2937" stroke-width="2.5"/>
+            <rect class="part-fill" x="360" y="80" width="20" height="55" fill="#93c5fd" stroke="#1f2937" stroke-width="1.5"/>
+            <rect class="part-fill" x="520" y="80" width="20" height="55" fill="#93c5fd" stroke="#1f2937" stroke-width="1.5"/>
+            <rect class="part-fill" x="340" y="175" width="220" height="20" fill="#60a5fa" stroke="#1f2937" stroke-width="1.5"/>
+            <g fill="#1f2937">
+              <circle cx="370" cy="65" r="4"/><circle cx="410" cy="65" r="4"/>
+              <circle cx="450" cy="65" r="4"/><circle cx="490" cy="65" r="4"/><circle cx="530" cy="65" r="4"/>
+            </g>
+
+            <!-- Mancal Guia Inferior -->
+            <rect class="part-fill" x="380" y="595" width="140" height="80" rx="5" fill="#dbeafe" stroke="#1f2937" stroke-width="2.5"/>
+            <rect class="part-fill" x="400" y="610" width="16" height="45" fill="#93c5fd" stroke="#1f2937" stroke-width="1.5"/>
+            <rect class="part-fill" x="484" y="610" width="16" height="45" fill="#93c5fd" stroke="#1f2937" stroke-width="1.5"/>
+
+            <!-- Mancal Guia da Turbina -->
+            <rect class="part-fill" x="380" y="790" width="140" height="70" rx="5" fill="#dbeafe" stroke="#1f2937" stroke-width="2.5"/>
+            <rect class="part-fill" x="400" y="803" width="16" height="40" fill="#93c5fd" stroke="#1f2937" stroke-width="1.5"/>
+            <rect class="part-fill" x="484" y="803" width="16" height="40" fill="#93c5fd" stroke="#1f2937" stroke-width="1.5"/>
+
+            <path class="leader-line" d="M 600,110 L 660,110" marker-end="url(#arrow)"/>
+            <text x="665" y="100" class="leader-text">MANCAL COMBINADO</text>
+            <text x="665" y="112" class="leader-text" font-size="9">(GUIA SUPERIOR + ESCORA)</text>
+
+            <path class="leader-line" d="M 520,635 L 590,635" marker-end="url(#arrow)"/>
+            <text x="595" y="639" class="leader-text" font-size="10">MANCAL GUIA INFERIOR</text>
+
+            <path class="leader-line" d="M 380,825 L 300,825" marker-end="url(#arrow)"/>
+            <text x="295" y="829" class="leader-text" text-anchor="end" font-size="10">MANCAL GUIA DA TURBINA</text>
+          </g>
+
+          <!-- ================= PORTA-ESCOVAS ================= -->
+          <g class="interactive-group" data-part="porta-escovas">
+            <!-- Anéis coletores no eixo -->
+            <rect class="part-fill" x="415" y="222" width="70" height="30" rx="3" fill="#fbcfe8" stroke="#1f2937" stroke-width="2"/>
+            <!-- Braço esquerdo + caixa de escovas -->
+            <line x1="415" y1="237" x2="270" y2="237" stroke="#1f2937" stroke-width="2"/>
+            <rect class="part-fill" x="210" y="215" width="60" height="45" fill="#fde68a" stroke="#1f2937" stroke-width="2"/>
+            <g fill="#334155">
+              <rect x="220" y="225" width="7" height="25"/>
+              <rect x="232" y="225" width="7" height="25"/>
+              <rect x="244" y="225" width="7" height="25"/>
+            </g>
+            <!-- Braço direito + caixa de escovas -->
+            <line x1="485" y1="237" x2="630" y2="237" stroke="#1f2937" stroke-width="2"/>
+            <rect class="part-fill" x="630" y="215" width="60" height="45" fill="#fde68a" stroke="#1f2937" stroke-width="2"/>
+            <g fill="#334155">
+              <rect x="640" y="225" width="7" height="25"/>
+              <rect x="652" y="225" width="7" height="25"/>
+              <rect x="664" y="225" width="7" height="25"/>
+            </g>
+
+            <path class="leader-line" d="M 690,237 L 745,237 L 745,220" marker-end="url(#arrow)"/>
+            <text x="750" y="216" class="leader-text">PORTA-ESCOVAS</text>
+          </g>
+
+          <!-- ================= TAMPA SUPERIOR (contexto, não interativo) ================= -->
+          <polygon points="410,15 490,15 470,60 430,60" fill="#e2e8f0" stroke="#1f2937" stroke-width="1.5"/>
+
+          <!-- ================= INDICAÇÃO DE CONTINUIDADE (TURBINA - fora do escopo) ================= -->
+          <line x1="410" y1="905" x2="430" y2="915" stroke="#94a3b8" stroke-width="1.5"/>
+          <line x1="430" y1="915" x2="410" y2="925" stroke="#94a3b8" stroke-width="1.5"/>
+          <line x1="470" y1="905" x2="490" y2="915" stroke="#94a3b8" stroke-width="1.5"/>
+          <line x1="490" y1="915" x2="470" y2="925" stroke="#94a3b8" stroke-width="1.5"/>
+          <path d="M 410,930 C 420,970 480,970 490,930" fill="none" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="450" y="1015" text-anchor="middle" class="context-note">(continua para a turbina — fora do escopo deste diagrama)</text>
+
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const items = document.querySelectorAll('.comp-item');
+    const groups = document.querySelectorAll('.interactive-group');
+
+    function clearActive() {
+      items.forEach(i => i.classList.remove('active'));
+      groups.forEach(g => g.classList.remove('active'));
+    }
+
+    items.forEach(item => {
+      const target = item.dataset.target;
+      item.addEventListener('mouseenter', () => {
+        clearActive();
+        item.classList.add('active');
+        document.querySelectorAll(`.interactive-group[data-part="${target}"]`)
+          .forEach(g => g.classList.add('active'));
+      });
+      item.addEventListener('mouseleave', clearActive);
+    });
+
+    groups.forEach(group => {
+      const target = group.dataset.part;
+      group.addEventListener('mouseenter', () => {
+        clearActive();
+        group.classList.add('active');
+        document.querySelectorAll(`.comp-item[data-target="${target}"]`)
+          .forEach(i => i.classList.add('active'));
+      });
+      group.addEventListener('mouseleave', clearActive);
+    });
+  </script>
+</body>
+</html>
