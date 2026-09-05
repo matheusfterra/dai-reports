@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HELP CORE | Plano de Execucao</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF5722;
+      --orange-dark: #E64A19;
+      --orange-light: #FF8A65;
+      --peach: #FFC978;
+      --bg: #0A0A0A;
+      --surface: #151515;
+      --surface-hover: #1A1A1A;
+      --border: #1F1F1F;
+      --text: #FFFFFF;
+      --text-body: #D4D8DD;
+      --text-muted: #9EA5AC;
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Nunito Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-body);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* --- HEADER --- */
+    .header {
+      background: linear-gradient(135deg, var(--surface) 0%, #0D0D0D 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 24px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo-area { display: flex; align-items: center; gap: 16px; }
+    .logo-area img { height: 40px; }
+    .logo-divider { width: 1px; height: 32px; background: var(--border); }
+    .project-badge {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--orange);
+      background: rgba(255,87,34,0.1);
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,87,34,0.2);
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .header-date {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .status-pill {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: rgba(255,193,7,0.12);
+      color: #FFC107;
+      border: 1px solid rgba(255,193,7,0.25);
+    }
+
+    /* --- HERO --- */
+    .hero {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 32px 60px;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 52px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .hero h1 span { color: var(--orange); }
+    .hero p {
+      font-size: 20px;
+      color: var(--text-muted);
+      max-width: 700px;
+      margin: 0 auto 40px;
+      line-height: 1.6;
+    }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    .hero-stat {
+      text-align: center;
+    }
+    .hero-stat .number {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--orange);
+      display: block;
+    }
+    .hero-stat .label {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* --- SECTIONS --- */
+    .section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 32px;
+    }
+    .section-title {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 12px;
+    }
+    .section h2 {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .section > p {
+      color: var(--text-muted);
+      font-size: 17px;
+      max-width: 700px;
+      margin-bottom: 48px;
+    }
+
+    /* --- FLOWCHART --- */
+    .flowchart {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .flow-line {
+      position: absolute;
+      left: 44px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--orange) 0%, var(--orange-light) 50%, var(--peach) 100%);
+      opacity: 0.3;
+    }
+    .phase-card {
+      display: flex;
+      gap: 24px;
+      position: relative;
+      padding: 0 0 48px 0;
+    }
+    .phase-card:last-child { padding-bottom: 0; }
+    .phase-number {
+      flex-shrink: 0;
+      width: 90px;
+      height: 90px;
+      background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 800;
+      color: white;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 0 40px rgba(255,87,34,0.3);
+    }
+    .phase-content {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      transition: border-color 0.3s;
+    }
+    .phase-content:hover {
+      border-color: rgba(255,87,34,0.3);
+    }
+    .phase-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .phase-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .phase-duration {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--orange);
+      background: rgba(255,87,34,0.1);
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,87,34,0.2);
+      white-space: nowrap;
+    }
+    .phase-desc {
+      color: var(--text-body);
+      font-size: 15px;
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+    .phase-deliverables {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .deliverable {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      font-size: 13px;
+      color: var(--text-body);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .deliverable::before {
+      content: '';
+      flex-shrink: 0;
+      width: 6px;
+      height: 6px;
+      background: var(--orange);
+      border-radius: 50%;
+      margin-top: 6px;
+    }
+    .ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--peach);
+      background: rgba(255,201,120,0.08);
+      padding: 4px 12px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,201,120,0.15);
+    }
+    .ai-badge svg { width: 14px; height: 14px; }
+    .ai-intensity {
+      display: inline-flex;
+      gap: 3px;
+      margin-left: 6px;
+    }
+    .ai-intensity .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--peach);
+      opacity: 0.25;
+    }
+    .ai-intensity .dot.active { opacity: 1; }
+
+    /* --- FRENTES --- */
+    .frentes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .frente-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: border-color 0.3s, transform 0.2s;
+    }
+    .frente-card:hover {
+      border-color: rgba(255,87,34,0.3);
+      transform: translateY(-2px);
+    }
+    .frente-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(255,87,34,0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+    .frente-card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .frente-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* --- TIMELINE --- */
+    .timeline-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .timeline-table thead th {
+      background: var(--surface);
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 16px 20px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .timeline-table tbody td {
+      padding: 16px 20px;
+      font-size: 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .timeline-table tbody tr:last-child td { border-bottom: none; }
+    .timeline-table tbody tr:hover { background: var(--surface-hover); }
+    .timeline-table .phase-name { color: var(--text); font-weight: 600; }
+    .timeline-bar-cell { width: 40%; }
+    .timeline-bar-container {
+      background: var(--bg);
+      border-radius: 8px;
+      height: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .timeline-bar {
+      height: 100%;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      padding-left: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: white;
+      white-space: nowrap;
+    }
+
+    /* --- RISKS --- */
+    .risks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 16px;
+    }
+    .risk-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 24px;
+    }
+    .risk-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .risk-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .risk-level {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+    .risk-level.high { background: rgba(244,67,54,0.12); color: #F44336; border: 1px solid rgba(244,67,54,0.25); }
+    .risk-level.medium { background: rgba(255,193,7,0.12); color: #FFC107; border: 1px solid rgba(255,193,7,0.25); }
+    .risk-mitigation {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .risk-mitigation strong { color: var(--orange-light); }
+
+    /* --- PRINCIPLES --- */
+    .principles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 16px;
+    }
+    .principle {
+      display: flex;
+      gap: 16px;
+      padding: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .principle-num {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      background: rgba(255,87,34,0.1);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--orange);
+    }
+    .principle h4 { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .principle p { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+    /* --- FOOTER --- */
+    .footer {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 32px 40px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    .footer-logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 24px;
+    }
+    .footer-logos img { height: 30px; opacity: 0.6; }
+    .footer p { font-size: 13px; color: var(--text-muted); }
+
+    /* --- RESPONSIVE --- */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 32px; }
+      .hero p { font-size: 16px; }
+      .hero-stats { gap: 24px; }
+      .phase-card { flex-direction: column; gap: 16px; }
+      .phase-number { width: 60px; height: 60px; font-size: 20px; }
+      .flow-line { display: none; }
+      .header-inner { flex-direction: column; gap: 12px; }
+      .frentes-grid, .risks-grid, .principles-grid { grid-template-columns: 1fr; }
+      .timeline-bar-cell { display: none; }
+      .section { padding: 40px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo-area">
+        <img src="https://elloconsultoria.com/images/ello-logo-orange.png" alt="Ello Consultoria" onerror="this.style.display='none'">
+        <div class="logo-divider"></div>
+        <span class="project-badge">HELP CORE</span>
+      </div>
+      <div class="header-right">
+        <span class="header-date">Setembro 2026</span>
+        <span class="status-pill">Planejamento</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Plano de Execucao<br><span>HELP CORE</span></h1>
+    <p>Reestruturacao, padronizacao e melhoria continua da base de conhecimento HELP &mdash; transformando conteudo existente em informacao acessivel, organizada e sustentavel.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="number">6</span>
+        <span class="label">Fases</span>
+      </div>
+      <div class="hero-stat">
+        <span class="number">4-6</span>
+        <span class="label">Meses</span>
+      </div>
+      <div class="hero-stat">
+        <span class="number">4</span>
+        <span class="label">Frentes</span>
+      </div>
+      <div class="hero-stat">
+        <span class="number">30+</span>
+        <span class="label">Entregaveis</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FRENTES DE TRABALHO -->
+  <section class="section">
+    <div class="section-title">Organizacao</div>
+    <h2>Frentes de Trabalho</h2>
+    <p>O projeto opera em quatro frentes transversais que permeiam todas as fases de execucao.</p>
+    <div class="frentes-grid">
+      <div class="frente-card">
+        <div class="frente-icon">&#9998;</div>
+        <h3>Conteudo</h3>
+        <p>Revisao, reescrita, simplificacao e padronizacao dos materiais da base de conhecimento.</p>
+      </div>
+      <div class="frente-card">
+        <div class="frente-icon">&#128736;</div>
+        <h3>Arquitetura da Informacao</h3>
+        <p>Taxonomia, hierarquia, navegacao e jornadas de usuario para facilitar o acesso ao conhecimento.</p>
+      </div>
+      <div class="frente-card">
+        <div class="frente-icon">&#9881;</div>
+        <h3>Tecnologia</h3>
+        <p>Conversao de formatos, automacao de processos e ferramentas de IA como apoio a execucao.</p>
+      </div>
+      <div class="frente-card">
+        <div class="frente-icon">&#128203;</div>
+        <h3>Governanca</h3>
+        <p>Fluxos de atualizacao, definicao de papeis, metricas de saude e curadoria continua.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FLUXOGRAMA DE FASES -->
+  <section class="section">
+    <div class="section-title">Execucao</div>
+    <h2>Fases do Projeto</h2>
+    <p>Metodologia sequencial com paralelismo parcial entre fases 4 e 5, permitindo entregas incrementais por lote.</p>
+
+    <div class="flowchart">
+      <div class="flow-line"></div>
+
+      <!-- FASE 1 -->
+      <div class="phase-card">
+        <div class="phase-number">1</div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-title">Discovery & Diagnostico</span>
+            <span class="phase-duration">2-3 semanas</span>
+          </div>
+          <p class="phase-desc">Mapear o estado atual da base HELP, identificar problemas sistematicos, oportunidades de melhoria e definir o baseline para medicao de progresso.</p>
+          <div class="phase-deliverables">
+            <div class="deliverable">Inventario completo de conteudos</div>
+            <div class="deliverable">Mapa de problemas classificado</div>
+            <div class="deliverable">Analise de navegacao atual</div>
+            <div class="deliverable">Relatorio de diagnostico</div>
+            <div class="deliverable">Matriz de priorizacao</div>
+          </div>
+          <div class="ai-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4v2a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M9 12h6m-3 0v8m-4 0h8"/></svg>
+            IA: Catalogacao automatica, deteccao de duplicidades
+            <span class="ai-intensity"><span class="dot"></span><span class="dot active"></span><span class="dot active"></span><span class="dot"></span><span class="dot"></span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FASE 2 -->
+      <div class="phase-card">
+        <div class="phase-number">2</div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-title">Taxonomia & Arquitetura da Informacao</span>
+            <span class="phase-duration">2-3 semanas</span>
+          </div>
+          <p class="phase-desc">Definir a estrutura organizacional da base &mdash; como os conteudos serao categorizados, hierarquizados e encontrados pelos usuarios.</p>
+          <div class="phase-deliverables">
+            <div class="deliverable">Arvore taxonomica hierarquica</div>
+            <div class="deliverable">Mapa de jornadas de usuario</div>
+            <div class="deliverable">Glossario de termos padronizado</div>
+            <div class="deliverable">Guia de rotulacao</div>
+            <div class="deliverable">Plano de migracoes de-para</div>
+          </div>
+          <div class="ai-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4v2a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M9 12h6m-3 0v8m-4 0h8"/></svg>
+            IA: Clustering semantico, sugestao de categorias
+            <span class="ai-intensity"><span class="dot"></span><span class="dot active"></span><span class="dot active"></span><span class="dot"></span><span class="dot"></span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FASE 3 -->
+      <div class="phase-card">
+        <div class="phase-number">3</div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-title">Templates & Padroes Editoriais</span>
+            <span class="phase-duration">2 semanas</span>
+          </div>
+          <p class="phase-desc">Criar os modelos e diretrizes que garantem consistencia visual, estrutural e linguistica em toda a base de conhecimento.</p>
+          <div class="phase-deliverables">
+            <div class="deliverable">Templates por tipo de conteudo</div>
+            <div class="deliverable">Guia de estilo editorial</div>
+            <div class="deliverable">Checklist de qualidade</div>
+            <div class="deliverable">Template HTML para SharePoint</div>
+            <div class="deliverable">Kit de exemplos (3-5 pilotos)</div>
+          </div>
+          <div class="ai-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4v2a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M9 12h6m-3 0v8m-4 0h8"/></svg>
+            IA: Analise comparativa, geracao de drafts
+            <span class="ai-intensity"><span class="dot"></span><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FASE 4 -->
+      <div class="phase-card">
+        <div class="phase-number">4</div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-title">Revisao & Reescrita de Conteudos</span>
+            <span class="phase-duration">6-10 semanas</span>
+          </div>
+          <p class="phase-desc">Aplicar os padroes a todos os conteudos &mdash; a maior fase do projeto. Pipeline hibrido: IA gera o draft, revisor humano valida e aprova.</p>
+          <div class="phase-deliverables">
+            <div class="deliverable">100% dos conteudos revisados</div>
+            <div class="deliverable">Registro de deduplicacao</div>
+            <div class="deliverable">Conteudos em microblocos</div>
+            <div class="deliverable">Dashboards semanais de progresso</div>
+            <div class="deliverable">Backlog de excecoes</div>
+          </div>
+          <div class="ai-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4v2a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M9 12h6m-3 0v8m-4 0h8"/></svg>
+            IA: Reescrita automatizada, deduplicacao, microblocos
+            <span class="ai-intensity"><span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot active"></span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FASE 5 -->
+      <div class="phase-card">
+        <div class="phase-number">5</div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-title">Conversao & Publicacao</span>
+            <span class="phase-duration">3-4 semanas</span>
+          </div>
+          <p class="phase-desc">Converter todos os conteudos revisados para HTML compativel com SharePoint e publicar na nova estrutura taxonomica.</p>
+          <div class="phase-deliverables">
+            <div class="deliverable">Conteudos convertidos para HTML</div>
+            <div class="deliverable">Estrutura publicada no SharePoint</div>
+            <div class="deliverable">Testes de navegacao validados</div>
+            <div class="deliverable">Relatorio de conversao</div>
+            <div class="deliverable">Redirect map (URLs antigas)</div>
+          </div>
+          <div class="ai-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4v2a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M9 12h6m-3 0v8m-4 0h8"/></svg>
+            IA: Conversao PDF-HTML, extracao de estrutura
+            <span class="ai-intensity"><span class="dot"></span><span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot"></span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FASE 6 -->
+      <div class="phase-card">
+        <div class="phase-number">6</div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-title">Governanca & Curadoria Continua</span>
+            <span class="phase-duration">2-3 sem + continua</span>
+          </div>
+          <p class="phase-desc">Estabelecer processos, papeis e ferramentas para que a base se mantenha atualizada, consistente e relevante ao longo do tempo.</p>
+          <div class="phase-deliverables">
+            <div class="deliverable">Modelo de governanca (RACI)</div>
+            <div class="deliverable">Fluxo de publicacao padronizado</div>
+            <div class="deliverable">Calendario de revisao periodica</div>
+            <div class="deliverable">Dashboard de saude da base</div>
+            <div class="deliverable">Manual de operacao + treinamento</div>
+          </div>
+          <div class="ai-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4v2a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M9 12h6m-3 0v8m-4 0h8"/></svg>
+            IA: Monitoramento, deteccao de desatualizacao
+            <span class="ai-intensity"><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="section">
+    <div class="section-title">Cronograma</div>
+    <h2>Timeline Estimada</h2>
+    <p>Duracao total de 4 a 6 meses, refinada apos a conclusao da Fase 1 (Discovery) quando o volume real da base for conhecido.</p>
+
+    <table class="timeline-table">
+      <thead>
+        <tr>
+          <th>Fase</th>
+          <th>Duracao</th>
+          <th>Acumulado</th>
+          <th class="timeline-bar-cell">Progresso</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="phase-name">1. Discovery & Diagnostico</td>
+          <td>2-3 semanas</td>
+          <td>Semana 3</td>
+          <td class="timeline-bar-cell">
+            <div class="timeline-bar-container">
+              <div class="timeline-bar" style="width: 12%; background: linear-gradient(90deg, var(--orange), var(--orange-light));">S1-3</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="phase-name">2. Taxonomia & Arq. Informacao</td>
+          <td>2-3 semanas</td>
+          <td>Semana 6</td>
+          <td class="timeline-bar-cell">
+            <div class="timeline-bar-container">
+              <div class="timeline-bar" style="width: 12%; margin-left: 12%; background: linear-gradient(90deg, var(--orange), var(--orange-light));">S4-6</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="phase-name">3. Templates & Padroes</td>
+          <td>2 semanas</td>
+          <td>Semana 8</td>
+          <td class="timeline-bar-cell">
+            <div class="timeline-bar-container">
+              <div class="timeline-bar" style="width: 8%; margin-left: 24%; background: linear-gradient(90deg, var(--orange), var(--orange-light));">S7-8</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="phase-name">4. Revisao & Reescrita</td>
+          <td>6-10 semanas</td>
+          <td>Semana 18</td>
+          <td class="timeline-bar-cell">
+            <div class="timeline-bar-container">
+              <div class="timeline-bar" style="width: 40%; margin-left: 32%; background: linear-gradient(90deg, var(--orange), var(--peach));">S9-18</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="phase-name">5. Conversao & Publicacao</td>
+          <td>3-4 semanas</td>
+          <td>Semana 22</td>
+          <td class="timeline-bar-cell">
+            <div class="timeline-bar-container">
+              <div class="timeline-bar" style="width: 16%; margin-left: 60%; background: linear-gradient(90deg, var(--orange-light), var(--peach));">S18-22</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="phase-name">6. Governanca & Curadoria</td>
+          <td>2-3 sem + continua</td>
+          <td>Semana 24+</td>
+          <td class="timeline-bar-cell">
+            <div class="timeline-bar-container">
+              <div class="timeline-bar" style="width: 24%; margin-left: 76%; background: linear-gradient(90deg, var(--peach), #FFE0B2);">S22-24+</div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- IA -->
+  <section class="section">
+    <div class="section-title">Inteligencia Artificial</div>
+    <h2>O Papel da IA no Projeto</h2>
+    <p>A IA e utilizada como ferramenta de apoio a execucao &mdash; acelera o trabalho e garante consistencia em escala. Todo output passa por validacao humana.</p>
+
+    <div class="principles-grid">
+      <div class="principle">
+        <div class="principle-num">&#9881;</div>
+        <div>
+          <h4>IA como Copiloto</h4>
+          <p>A IA gera drafts, analises e sugestoes. Decisoes e validacao final sao sempre humanas &mdash; a IA nao substitui a expertise editorial, ela a potencializa.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">&#128274;</div>
+        <div>
+          <h4>Nao Exposta ao Usuario Final</h4>
+          <p>A IA e uma ferramenta interna da equipe de execucao. O usuario final da base HELP nunca interage diretamente com a IA &mdash; so recebe o resultado validado.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">&#9989;</div>
+        <div>
+          <h4>Validacao Humana Obrigatoria</h4>
+          <p>100% dos outputs de IA passam por revisao humana antes de qualquer publicacao. Controle de qualidade via checklist objetivo em cada entrega.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">&#128200;</div>
+        <div>
+          <h4>Intensidade Progressiva</h4>
+          <p>O uso de IA cresce gradualmente &mdash; baixo no inicio (diagnostico), maximo na Fase 4 (reescrita em escala) e diminui na governanca (monitoramento continuo).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RISCOS -->
+  <section class="section">
+    <div class="section-title">Gestao de Riscos</div>
+    <h2>Riscos Identificados</h2>
+    <p>Principais riscos mapeados com estrategias de mitigacao pre-definidas para cada cenario.</p>
+
+    <div class="risks-grid">
+      <div class="risk-card">
+        <div class="risk-header">
+          <span class="risk-title">Acesso a base restrito/demorado</span>
+          <span class="risk-level high">Alto</span>
+        </div>
+        <div class="risk-mitigation"><strong>Mitigacao:</strong> Solicitar acesso na primeira reuniao; trabalhar com exports parciais enquanto acesso total nao e liberado.</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header">
+          <span class="risk-title">Volume maior que estimado</span>
+          <span class="risk-level medium">Medio</span>
+        </div>
+        <div class="risk-mitigation"><strong>Mitigacao:</strong> Diagnostico da Fase 1 levanta volume real; priorizar por criticidade; ajustar timeline apos inventario.</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header">
+          <span class="risk-title">Conteudos sem dono identificavel</span>
+          <span class="risk-level high">Alto</span>
+        </div>
+        <div class="risk-mitigation"><strong>Mitigacao:</strong> Criar categoria "A Validar" e engajar stakeholders por area para identificar responsaveis.</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header">
+          <span class="risk-title">Aprovacoes em cadeia lentas</span>
+          <span class="risk-level high">Alto</span>
+        </div>
+        <div class="risk-mitigation"><strong>Mitigacao:</strong> Definir SLAs de aprovacao por fase; agrupar entregas em lotes para reduzir ciclos.</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header">
+          <span class="risk-title">Resistencia a mudanca</span>
+          <span class="risk-level medium">Medio</span>
+        </div>
+        <div class="risk-mitigation"><strong>Mitigacao:</strong> Comunicacao clara sobre beneficios; transicao gradual com redirects; treinamento dos usuarios.</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header">
+          <span class="risk-title">Mudancas de escopo</span>
+          <span class="risk-level medium">Medio</span>
+        </div>
+        <div class="risk-mitigation"><strong>Mitigacao:</strong> Scope freeze por fase; mudancas registradas como change requests com impacto documentado.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRINCIPIOS -->
+  <section class="section">
+    <div class="section-title">Filosofia</div>
+    <h2>Principios de Execucao</h2>
+    <p>Os valores que orientam cada decisao ao longo de todas as fases do projeto.</p>
+
+    <div class="principles-grid">
+      <div class="principle">
+        <div class="principle-num">1</div>
+        <div>
+          <h4>Conteudo primeiro, tecnologia depois</h4>
+          <p>O foco e na qualidade e organizacao da informacao, nao em ferramentas.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">2</div>
+        <div>
+          <h4>Incremental e iterativo</h4>
+          <p>Entregas por lote com validacao a cada ciclo &mdash; nao esperar tudo pronto para comecar a publicar.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">3</div>
+        <div>
+          <h4>IA como copiloto, humano como piloto</h4>
+          <p>IA gera drafts e analises; decisoes e validacao final sao sempre humanas.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">4</div>
+        <div>
+          <h4>Governanca desde o dia 1</h4>
+          <p>Nao deixar a governanca para o final &mdash; cada fase ja considera como manter o conteudo.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">5</div>
+        <div>
+          <h4>Transparencia na cadeia</h4>
+          <p>Entregas claras, rastreabilidade total, sem surpresas em nenhum nivel da cadeia.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">6</div>
+        <div>
+          <h4>Medir para melhorar</h4>
+          <p>Baseline no diagnostico, metricas durante a execucao, KPIs na governanca.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-logos">
+      <img src="https://elloconsultoria.com/images/ello-logo-orange.png" alt="Ello" onerror="this.style.display='none'">
+      <span style="color: var(--text-muted); font-size: 20px;">+</span>
+      <img src="https://manager.digital-ai.tech/uploads/company/favicon.png" alt="Digital AI" onerror="this.style.display='none'">
+    </div>
+    <p>Ello Consultoria + Digital AI &mdash; Projeto HELP CORE &mdash; Setembro 2026</p>
+    <p style="margin-top: 8px; font-size: 11px; color: #666;">Documento de planejamento para apresentacao. Sujeito a ajustes apos validacao com stakeholders.</p>
+  </footer>
+
+</body>
+</html>
