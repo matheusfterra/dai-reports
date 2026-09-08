@@ -15,27 +15,31 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
+
         :root {
-            --engie-blue: #003399;
-            --engie-blue-dark: #002266;
-            --engie-blue-light: #e8eef7;
-            --engie-green: #00a651;
+            --engie-blue: #007ACD;
+            --engie-blue-dark: #182663;
+            --engie-blue-light: #E7EEFC;
+            --engie-green: #23D2B5;
             --engie-green-light: #e6f7ef;
+            --engie-teal: #008480;
+            --engie-gradient: linear-gradient(90deg, #00AAFF 0%, #23D2B5 100%);
             --accent-red: #d32f2f;
             --accent-orange: #f57c00;
             --accent-gold: #ffa000;
-            --text-primary: #1a1a2e;
-            --text-secondary: #4a4a6a;
-            --text-light: #7a7a9a;
+            --text-primary: #232D35;
+            --text-secondary: #334551;
+            --text-light: #60798B;
             --bg-white: #ffffff;
-            --bg-gray: #f5f6fa;
-            --border: #e0e4ed;
+            --bg-gray: #F6F8F9;
+            --border: #CCD4DA;
             --sidebar-width: 280px;
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
-            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-md: 0 1px 18px rgba(0,0,0,0.06), 0 6px 10px rgba(0,0,0,0.06), 0 3px 5px rgba(0,0,0,0.1);
             --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
-            --radius: 12px;
-            --radius-sm: 8px;
+            --radius: 8px;
+            --radius-sm: 4px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -46,7 +50,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+            font-family: 'Lato', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
             color: var(--text-primary);
             background: var(--bg-gray);
             line-height: 1.7;
@@ -70,7 +74,7 @@
 
         .sidebar-header {
             padding: 28px 24px 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 3px solid; border-image: linear-gradient(90deg, #00AAFF 0%, #23D2B5 100%) 1;
         }
 
         .sidebar-logo {
@@ -119,7 +123,7 @@
         .sidebar-nav a.active {
             background: rgba(255,255,255,0.1);
             color: #fff;
-            border-left-color: var(--engie-green);
+            border-left: 3px solid; border-image: linear-gradient(180deg, #00AAFF, #23D2B5) 1;
             font-weight: 600;
         }
 
@@ -230,7 +234,7 @@
 
         /* HERO SECTION */
         .hero {
-            background: linear-gradient(135deg, var(--engie-blue-dark) 0%, var(--engie-blue) 100%);
+            background: linear-gradient(135deg, #182663 0%, #004478 60%, #007ACD 100%);
             color: #fff;
             padding: 80px 60px;
             min-height: 100vh;
@@ -802,7 +806,16 @@
     <!-- SIDEBAR -->
     <nav class="sidebar">
         <div class="sidebar-header">
-            <div class="sidebar-logo">ENGIE Brasil Energia</div>
+            <div class="sidebar-logo">
+                <svg viewBox="0 0 450 166" width="120" fill="white" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:8px;display:block;">
+                    <path d="M132.49 0.0400391H0V165.81H132.49V124.62H42.6V102.74H116.72V62.95H42.6V41.23H132.49V0.0400391Z"/>
+                    <path d="M283.11 0.0400391H240.51V98.44L175.54 0.0400391H138.65V165.81H181.24V66.5L246.79 165.81H283.11V0.0400391Z"/>
+                    <path d="M410.43 82.93C410.43 33.11 379.86 0 334.93 0C290.55 0 256.59 34.52 256.59 82.93C256.59 129.37 289.14 165.85 334.93 165.85C365.5 165.85 392.15 149.76 404.64 123.58L366.92 108.97C360.05 121.61 348.38 130.17 333.52 130.17C313.16 130.17 299.46 113.23 299.46 82.93C299.46 51.44 313.44 35.67 334.09 35.67C350.63 35.67 361.18 45.42 366.36 62.08H329.2V92.63H410.15C410.43 88.65 410.43 86.97 410.43 82.93Z"/>
+                    <path d="M449.31 0.0400391H413.26V165.81H449.31V0.0400391Z"/>
+                    <path d="M449.31 0.0400391H413.26V165.81H449.31V0.0400391Z"/>
+                </svg>
+                Brasil Energia
+            </div>
             <div class="sidebar-title">Defesa Técnica: Supervisor de Manutenção Mecânica</div>
             <div class="sidebar-subtitle">Regional REMG: Jaguara (424 MW) + Miranda (408 MW)</div>
         </div>
@@ -829,6 +842,13 @@
         <!-- S1: SUMARIO EXECUTIVO (HERO) -->
         <section class="hero section" id="sumario">
             <div class="section-inner">
+                <svg viewBox="0 0 450 166" width="160" fill="white" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:24px;display:block;opacity:0.92;">
+                    <path d="M132.49 0.0400391H0V165.81H132.49V124.62H42.6V102.74H116.72V62.95H42.6V41.23H132.49V0.0400391Z"/>
+                    <path d="M283.11 0.0400391H240.51V98.44L175.54 0.0400391H138.65V165.81H181.24V66.5L246.79 165.81H283.11V0.0400391Z"/>
+                    <path d="M410.43 82.93C410.43 33.11 379.86 0 334.93 0C290.55 0 256.59 34.52 256.59 82.93C256.59 129.37 289.14 165.85 334.93 165.85C365.5 165.85 392.15 149.76 404.64 123.58L366.92 108.97C360.05 121.61 348.38 130.17 333.52 130.17C313.16 130.17 299.46 113.23 299.46 82.93C299.46 51.44 313.44 35.67 334.09 35.67C350.63 35.67 361.18 45.42 366.36 62.08H329.2V92.63H410.15C410.43 88.65 410.43 86.97 410.43 82.93Z"/>
+                    <path d="M449.31 0.0400391H413.26V165.81H449.31V0.0400391Z"/>
+                    <path d="M449.31 0.0400391H413.26V165.81H449.31V0.0400391Z"/>
+                </svg>
                 <div class="hero-overline">Defesa Técnica / Business Case</div>
                 <h1>
                     Contratação de Supervisor de<br>
@@ -905,9 +925,7 @@
                 <h3 style="margin: 40px 0 16px; font-size: 1.1rem; color: var(--engie-blue-dark);">Dados Operacionais Reais (Agosto/2025 a Agosto/2026)</h3>
 
                 <div class="callout warning">
-                    <p><strong>Sobrecarga comprovada:</strong> ~80 horas extras sem registro formal, ~40 reuniões semanais,
-                    20 horas de gestão, 10 horas de emergências e apenas 2 rondas em campo por semana.
-                    O supervisor não consegue estar onde precisa: no campo, supervisionando execução.</p>
+                    <p><strong>Sobrecarga operacional comprovada:</strong> O supervisor acumula ~80 horas adicionais de demanda por mês sem compensação estrutural, participa de ~40 reuniões semanais, dedica 20 horas à gestão administrativa, 10 horas a emergências — restando apenas 2 rondas de campo por semana. A sobrecarga operacional impede a presença técnica onde é mais necessária: no campo, supervisionando execução com segurança.</p>
                 </div>
 
                 <div class="chart-row">
@@ -1037,10 +1055,15 @@
                     da manutenção. UHET possui a melhor disponibilidade operacional do comparativo (80,82%).</p>
                 </div>
 
+                <div class="callout" style="margin: 24px 0; padding: 20px; border-left: 4px solid var(--engie-blue); background: var(--engie-blue-light); border-radius: var(--radius-sm);">
+                    <strong>📋 Nota sobre comparabilidade:</strong>
+                    <p style="margin-top: 8px;">As usinas utilizadas como referência foram selecionadas por similaridade de porte, complexidade de equipamentos e regime operacional. Diferenças pontuais de configuração existem, mas os indicadores estruturais (ratio técnico/MW, carga de manutenção, criticidade dos ativos) são comparáveis e validam a análise.</p>
+                </div>
+
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px;">
                     <div class="testimonial">
                         <p>A separação de supervisores por disciplina melhorou significativamente a qualidade
-                        da manutenção é a disponibilidade das máquinas. Estreito atingiu disponibilidade
+                        da manutenção e a disponibilidade das máquinas. Estreito atingiu disponibilidade
                         operacional de 80,82%, a melhor do comparativo ENGIE, com ratio de 9:1 e 8:1.</p>
                         <div class="author">Roberto Castanheira, Gerente UHET (Estreito)</div>
                     </div>
@@ -1138,6 +1161,11 @@
                     atividade, a empresa responde por falha de organização do trabalho (Art. 157, CLT;
                     NR-1, item 1.5.1.1.1). Responsabilidade penal e civil.</p>
                 </div>
+
+                <div class="callout callout-warning" style="margin: 24px 0; padding: 20px; border-left: 4px solid var(--accent-orange); background: #fff8e1; border-radius: var(--radius-sm);">
+                    <strong>⚠️ Contraargumento antecipado: "Pode esperar o próximo ciclo orçamentário?"</strong>
+                    <p style="margin-top: 8px;">Cada mês sem supervisão mecânica dedicada representa risco acumulado: falhas não detectadas precocemente, manutenções corretivas de emergência com custo 3-5x superior ao preventivo, e desgaste acelerado das equipes que acumulam funções. O custo da espera não é zero — é o custo invisível de cada falha que poderia ter sido evitada.</p>
+                </div>
             </div>
         </section>
 
@@ -1187,10 +1215,8 @@
                 <div class="risk-item">
                     <div class="risk-level risk-high">ALTO</div>
                     <div class="risk-content">
-                        <h4>Risco de Sobrecarga e Burnout</h4>
-                        <p>~80 horas extras (sem registro formal), ~40 reuniões semanais, apenas 2 rondas em campo
-                        por semana. O supervisor não consegue estar onde precisa: no campo. A sobrecarga gera
-                        erros de julgamento, fadiga crônica, e risco de rotatividade.</p>
+                        <h4>Risco de Sobrecarga Operacional e Continuidade de Pessoal</h4>
+                        <p>A demanda operacional acumulada (~80h adicionais/mês, ~40 reuniões semanais, apenas 2 rondas em campo) configura sobrecarga estrutural que compromete a qualidade das decisões técnicas, gera fadiga crônica e eleva o risco de rotatividade. A perda do supervisor, em cenário de acúmulo de funções, deixaria ambas as equipes sem liderança técnica de forma imediata.</p>
                     </div>
                 </div>
 
@@ -1439,7 +1465,7 @@
                             <li>Risco de não conformidade com NR-10</li>
                             <li>365 OS pendentes (backlog crescente)</li>
                             <li>Ratio preventiva/corretiva 1:1</li>
-                            <li>~80h extras, ~40 reuniões/semana</li>
+                            <li>~80h demanda adicional/mês, ~40 reuniões/semana</li>
                             <li>Ponto único de falha</li>
                             <li>TEIF 53,07 (menor que usinas com segregação)</li>
                             <li>Única usina ENGIE neste modelo</li>
@@ -1510,6 +1536,11 @@
                     de absorver a demanda incremental da modernização sem comprometer a operação corrente.</p>
                 </div>
 
+                <div class="callout callout-danger" style="margin: 24px 0; padding: 20px; border-left: 4px solid var(--accent-red); background: #ffebee; border-radius: var(--radius-sm);">
+                    <strong>⚠️ Responsabilidade documentada</strong>
+                    <p style="margin-top: 8px;">Este documento registra formalmente a necessidade técnica identificada. A não contratação, após ciência desta análise, transfere a responsabilidade por eventuais consequências operacionais para a esfera decisória que optou pela manutenção do status quo.</p>
+                </div>
+
                 <!-- CTA Final -->
                 <div class="cta-box">
                     <h3>Recomendação Final</h3>
@@ -1524,8 +1555,13 @@
                         O investimento protegido: R$ 500 milhões em modernização.</strong>
                     </p>
                     <p style="font-size: 1.15rem; font-weight: 700; color: #fff; margin-top: 20px;">
-                        Aprovação recomendada antes do início da modernização (1o semestre de 2027).
+                        Aprovação necessária até dezembro de 2026 — início da modernização em 2027 não admite adiamento desta correção estrutural.
                     </p>
+
+                    <p style="font-size: 1.1rem; line-height: 1.8; margin: 20px 0; padding: 20px; background: rgba(255,255,255,0.12); color: white; border-radius: var(--radius); font-weight: 500; border: 1px solid rgba(255,255,255,0.2);">
+                        A REMG opera hoje com um déficit estrutural de supervisão mecânica que compromete a eficiência operacional, eleva os custos de manutenção corretiva e concentra risco técnico em profissionais já sobrecarregados. Esta não é uma contratação de conveniência — é uma correção de vulnerabilidade operacional. Cada mês de adiamento acumula o custo invisível das falhas que poderiam ter sido prevenidas.
+                    </p>
+
                     <p style="margin-top: 24px; font-size: 0.9rem; color: rgba(255,255,255,0.8); border-top: 1px solid rgba(255,255,255,0.2); padding-top: 16px;">
                         Elaborado por: Marcos Terra, Coordenador de O&M, Regional REMG<br>
                         Setembro de 2026
@@ -1571,8 +1607,8 @@
         }
 
         // ===== CHARTS =====
-        const blueColor = '#003399';
-        const greenColor = '#00a651';
+        const blueColor = '#007ACD';
+        const greenColor = '#23D2B5';
         const redColor = '#d32f2f';
         const orangeColor = '#f57c00';
         const grayColor = '#7a7a9a';
