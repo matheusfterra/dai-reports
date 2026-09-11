@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Estruturação O&M - UHJA/UHMI - Cenários A a E</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --engie-blue: #00AAFF;
+    --engie-green: #23D2B5;
+    --engie-gradient: linear-gradient(90deg, #00AAFF 0%, #23D2B5 100%);
+    --engie-primary: #007ACD;
+    --engie-navy: #182663;
+    --bg: #0A0A0A;
+    --surface: #151515;
+    --surface-2: #1E1E1E;
+    --border: #1F1F1F;
+    --border-light: #2A2A2A;
+    --text: #FFFFFF;
+    --text-body: #D4D8DD;
+    --text-muted: #9EA5AC;
+    --radius: 8px;
+    --radius-sm: 4px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body { font-family: 'Lato', 'Segoe UI', -apple-system, sans-serif; background: var(--bg); color: var(--text-body); line-height: 1.6; }
+
+  /* ===== TOP HEADER ===== */
+  .top-header {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 56px;
+    background: rgba(10,10,10,0.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    z-index: 500;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px;
+  }
+  .top-header::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 2px; background: var(--engie-gradient);
+  }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .header-logo svg { height: 22px; width: auto; }
+  .header-badge {
+    background: rgba(0,170,255,0.12); border: 1px solid rgba(0,170,255,0.25);
+    color: var(--engie-blue); padding: 3px 12px; border-radius: 50px;
+    font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+  }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .header-date { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.5px; }
+  .btn-back {
+    background: rgba(0,170,255,0.12); border: 1px solid rgba(0,170,255,0.25);
+    color: var(--engie-blue); padding: 7px 18px; border-radius: 50px;
+    cursor: pointer; font-size: 0.8rem; font-weight: 700;
+    display: flex; align-items: center; gap: 6px;
+    transition: opacity 0.2s, transform 0.2s; font-family: 'Lato', sans-serif;
+    text-decoration: none;
+  }
+  .btn-back:hover { opacity: 0.85; transform: translateY(-1px); }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 100px 32px 40px; text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero h1 {
+    font-size: 1.8rem; font-weight: 900; color: var(--text);
+    margin-bottom: 10px; line-height: 1.2;
+  }
+  .hero p { font-size: 0.95rem; color: var(--text-muted); max-width: 700px; margin: 0 auto; }
+
+  /* ===== TABS ===== */
+  .tabs {
+    display: flex; flex-wrap: wrap; background: var(--surface);
+    padding: 0 20px; border-bottom: 1px solid var(--border);
+    position: sticky; top: 56px; z-index: 400;
+  }
+  .tablink {
+    background: none; border: none; color: var(--text-muted);
+    padding: 14px 18px; font-size: 0.82rem; cursor: pointer;
+    font-weight: 700; font-family: 'Lato', sans-serif;
+    transition: color 0.2s, background 0.2s;
+    white-space: nowrap;
+  }
+  .tablink:hover { background: var(--surface-2); color: var(--text); }
+  .tablink.active {
+    background: var(--surface-2); color: var(--engie-blue);
+    border-bottom: 2px solid var(--engie-blue);
+  }
+
+  /* ===== CONTENT ===== */
+  .content-wrap { max-width: 1100px; margin: 0 auto; padding: 20px 30px 60px; }
+  .tabcontent { display: none; padding: 25px 0; }
+
+  h2 {
+    color: var(--engie-blue); margin-top: 30px; margin-bottom: 16px;
+    border-left: 4px solid var(--engie-blue); padding-left: 12px;
+    font-size: 1.3rem; font-weight: 900;
+  }
+  h3 {
+    color: var(--text); margin-top: 24px; margin-bottom: 10px;
+    font-size: 1rem; font-weight: 700;
+  }
+
+  /* ===== TABLES ===== */
+  table {
+    border-collapse: collapse; width: 100%;
+    margin: 12px 0 20px 0; font-size: 0.82rem;
+  }
+  th, td {
+    border: 1px solid var(--border-light); padding: 8px 12px; text-align: left;
+  }
+  th {
+    background: rgba(0,170,255,0.15); color: var(--engie-blue);
+    font-weight: 700; text-transform: uppercase; font-size: 0.72rem;
+    letter-spacing: 0.5px;
+  }
+  tr { background: var(--surface); }
+  tr:nth-child(even) { background: var(--surface-2); }
+  .total-row { font-weight: bold; background: rgba(0,170,255,0.08) !important; }
+  .grand-total {
+    font-weight: bold; background: rgba(0,170,255,0.2) !important;
+    color: var(--text);
+  }
+
+  /* ===== ROW HIGHLIGHTS ===== */
+  .new-row { background-color: rgba(35,210,181,0.1) !important; }
+  .rm-row { background-color: rgba(211,47,47,0.1) !important; }
+  .delta-pos { color: #ff6b6b; font-weight: bold; }
+  .delta-neg { color: var(--engie-green); font-weight: bold; }
+  .delta-zero { color: var(--text-muted); font-weight: bold; }
+
+  /* ===== BOX ===== */
+  .box {
+    background: var(--surface); border: 1px solid var(--border-light);
+    border-radius: var(--radius); padding: 14px 20px;
+    margin-bottom: 18px; font-size: 0.88rem;
+    border-left: 3px solid var(--engie-blue);
+  }
+
+  .note { font-size: 0.75rem; color: var(--text-muted); font-style: italic; }
+
+  /* ===== CARDS ===== */
+  .cards { display: flex; gap: 15px; margin: 15px 0; flex-wrap: wrap; }
+  .card {
+    flex: 1; min-width: 220px;
+    border: 1px solid var(--border-light); border-radius: var(--radius);
+    padding: 14px 18px; background: var(--surface);
+  }
+  .card h4 {
+    margin-top: 0; margin-bottom: 8px; color: var(--engie-blue);
+    font-size: 0.85rem; font-weight: 700;
+  }
+
+  /* ===== ORG CHART ===== */
+  .org {
+    font-family: 'Courier New', monospace; background: var(--surface);
+    border: 1px solid var(--border-light); border-radius: var(--radius);
+    padding: 14px; white-space: pre; font-size: 0.78rem;
+    overflow-x: auto; color: var(--text-body); line-height: 1.5;
+  }
+
+  /* ===== BADGES ===== */
+  .badge {
+    display: inline-block; padding: 3px 8px; border-radius: var(--radius-sm);
+    font-size: 0.68rem; font-weight: bold; color: #fff;
+  }
+  .badge-green { background: var(--engie-green); color: #000; }
+  .badge-red { background: #d32f2f; }
+  .badge-gray { background: #555; }
+
+  ul { margin-top: 6px; padding-left: 20px; }
+  li { margin-bottom: 6px; }
+  ol { padding-left: 20px; }
+  ol li { margin-bottom: 6px; }
+
+  /* ===== SUMMARY HIGHLIGHT ===== */
+  .summary-highlight {
+    background: rgba(0,170,255,0.06); border: 1px solid rgba(0,170,255,0.2);
+    border-radius: var(--radius); padding: 18px 22px; margin: 20px 0;
+  }
+
+  p { margin: 8px 0; }
+  strong { color: var(--text); }
+  em { color: var(--text-muted); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .top-header { padding: 0 16px; }
+    .hero { padding: 80px 16px 30px; }
+    .hero h1 { font-size: 1.3rem; }
+    .tabs { padding: 0 8px; overflow-x: auto; }
+    .tablink { padding: 10px 12px; font-size: 0.72rem; }
+    .content-wrap { padding: 16px 16px 40px; }
+    table { font-size: 0.72rem; }
+    th, td { padding: 5px 6px; }
+    .cards { flex-direction: column; }
+    .org { font-size: 0.65rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP HEADER -->
+<header class="top-header">
+    <div class="header-left">
+        <div class="header-logo">
+            <svg viewBox="0 0 468.43 130.26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M376.94,130.26c-24.38,0-44.16-20.42-44.16-45.55s19.78-45.55,44.16-45.55,44.16,20.42,44.16,45.55-19.78,45.55-44.16,45.55Zm0-72.6c-14.4,0-26.12,12.14-26.12,27.05s11.72,27.05,26.12,27.05,26.12-12.14,26.12-27.05-11.72-27.05-26.12-27.05Z" fill="var(--engie-blue)"/>
+                <rect x="428.43" y="0" width="18" height="128.5" fill="var(--engie-blue)"/>
+                <path d="M189.84,128.5V41.17h54.72v16.5h-36.72v18.67h33.1v16.5h-33.1v19.17h37.89v16.5h-55.89Z" fill="var(--engie-blue)"/>
+                <path d="M141.73,128.5V0h18v52.5h.5c5.55-8.83,15.72-13.34,27.22-13.34v18c-16.5,0-27.72,10.67-27.72,27.17v44.17h-18Z" fill="var(--engie-blue)"/>
+                <path d="M71.54,128.5V41.17h17.22v12.5h.5c5.55-9.67,15.72-14.5,27.89-14.5,21.05,0,33.22,14.67,33.22,36.34v52.99h-18V78.67c0-14.5-7.17-22.67-20.72-22.67-13.56,0-22.11,10.17-22.11,24.84v47.67h-18Z" fill="var(--engie-blue)"/>
+                <path d="M0,128.5V41.17h54.72v16.5H18v18.67h33.1v16.5H18v19.17h37.89v16.5H0Z" fill="var(--engie-blue)"/>
+                <path d="M382.68,55.5C331.4,20.95,264.51,0,191.34,0S51.28,20.95,0,55.5c51-17.11,110.62-28.54,191.34-28.54s140.34,11.43,191.34,28.54Z" fill="var(--engie-blue)"/>
+            </svg>
+        </div>
+        <div class="header-badge">Estruturação O&M</div>
+    </div>
+    <div class="header-right">
+        <span class="header-date">Setembro 2026</span>
+        <a class="btn-back" href="index.html">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+            Defesa Técnica
+        </a>
+    </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+    <h1>Estruturação O&M — UHJA (Jaguara) e UHMI (Miranda)</h1>
+    <p>Separação de especialidades Elétrica/Mecânica em UHJA — Análise de Cenários A a E</p>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tablink active" onclick="openTab(event,'tabA')">A — Sem Reposição</button>
+  <button class="tablink" onclick="openTab(event,'tabB')">B — Com Reposição</button>
+  <button class="tablink" onclick="openTab(event,'tabC')">C — Rearranjo + Sem Reposição</button>
+  <button class="tablink" onclick="openTab(event,'tabD')">D — Rearranjo + Com Reposição</button>
+  <button class="tablink" onclick="openTab(event,'tabE')">E — Transferência Fabrício</button>
+  <button class="tablink" onclick="openTab(event,'tabResumo')">Resumo Executivo</button>
+</div>
+
+<div class="content-wrap">
+
+<!-- ==================== TAB A ==================== -->
+<div id="tabA" class="tabcontent" style="display:block">
+<h2>Cenário A — Promoção sem reposição de Técnico III (somente UHJA)</h2>
+<div class="box">
+<strong>Estratégia:</strong> Ronaldo (Chefe de Equipe Mecânico) é promovido a Supervisor Mecânica; Felipe (Técnico III) é promovido a Chefe de Equipe Mecânico; a vaga de Técnico III deixada por Felipe <strong>não é reposta</strong>. Otávio passa a ser Supervisor Elétrica dedicado. Nenhuma alteração em UHMI.
+</div>
+
+<h3>Tabela Comparativa por Colaborador — Manutenção UHJA</h3>
+<table>
+<tr><th>Colaborador</th><th>Cargo Atual</th><th>Valor Atual</th><th>Cargo Novo</th><th>Valor Novo</th><th>Δ</th></tr>
+<tr><td>Otávio</td><td>Supervisor Manutenção (Elétrica)</td><td>16.462,04</td><td>Supervisor Elétrica</td><td>16.462,04</td><td class="delta-zero">0,00</td></tr>
+<tr class="new-row"><td>Ronaldo</td><td>Chefe de Equipe Mecânico</td><td>14.864,45</td><td>Supervisor Mecânica</td><td>15.738,83</td><td class="delta-pos">+874,38</td></tr>
+<tr class="new-row"><td>Felipe</td><td>Técnico III Mecânico</td><td>9.541,21</td><td>Chefe de Equipe Mecânico</td><td>13.593,57</td><td class="delta-pos">+4.052,36</td></tr>
+<tr class="rm-row"><td><em>(vaga Felipe)</em></td><td>—</td><td>—</td><td><em>Não reposta</em></td><td>0,00</td><td class="delta-neg">−9.541,21</td></tr>
+<tr><td>Leildo</td><td colspan="2">Técnico III Mecânico — 9.037,13</td><td colspan="2">Mantido</td><td class="delta-zero">0,00</td></tr>
+<tr><td>Aldo</td><td colspan="2">Técnico II Mecânico — 7.774,36</td><td colspan="2">Mantido</td><td class="delta-zero">0,00</td></tr>
+<tr><td>Carlos</td><td colspan="2">Técnico II Mecânico — 9.067,68</td><td colspan="2">Mantido</td><td class="delta-zero">0,00</td></tr>
+<tr><td>Dione</td><td colspan="2">Técnico I Mecânico — 5.250,02</td><td colspan="2">Mantido</td><td class="delta-zero">0,00</td></tr>
+<tr><td>Caio</td><td colspan="2">Chefe Equipe Elétrica — 13.593,57</td><td colspan="2">Mantido</td><td class="delta-zero">0,00</td></tr>
+<tr><td>Jean / Jorge / Vanderlei / Elias / Danielly</td><td colspan="2">Equipe Elétrica — 31.280,83 (total)</td><td colspan="2">Mantidos</td><td class="delta-zero">0,00</td></tr>
+<tr class="grand-total"><td colspan="2">TOTAL MANUTENÇÃO UHJA</td><td>116.871,29</td><td colspan="2">121.798,03</td><td>+4.926,74</td></tr>
+</table>
+
+<h3>Comparativo Antes/Depois</h3>
+<div class="cards">
+<div class="card"><h4>Situação Atual</h4>Manutenção: <strong>R$ 116.871,29</strong><br>Headcount: <strong>13</strong><br>Supervisores: <strong>1 (dual)</strong></div>
+<div class="card"><h4>Após Rearranjo</h4>Manutenção: <strong>R$ 121.798,03</strong><br>Headcount: <strong>12 (-1)</strong><br>Supervisores: <strong>2 (especializados)</strong></div>
+</div>
+
+<h3>Impacto Total — UHJA e UHMI</h3>
+<table>
+<tr><th>Segmento</th><th>Atual</th><th>Cenário A</th><th>Δ</th></tr>
+<tr><td>UHJA Manutenção</td><td>116.871,29</td><td>121.798,03</td><td class="delta-pos">+4.926,74</td></tr>
+<tr><td>UHJA Operação</td><td>40.312,74</td><td>40.312,74</td><td>—</td></tr>
+<tr class="total-row"><td>TOTAL UHJA</td><td>157.184,03</td><td>162.110,77</td><td class="delta-pos">+4.926,74</td></tr>
+<tr><td>UHMI (Manutenção+Operação)</td><td>120.090,31</td><td>120.090,31</td><td>—</td></tr>
+<tr class="grand-total"><td>TOTAL GERAL</td><td>277.274,34</td><td>282.201,08</td><td>+4.926,74</td></tr>
+</table>
+<p>Aumento anualizado: <strong>+ R$ 59.120,88/ano</strong> | Headcount total: 29 → 28 (-1)</p>
+
+<h3>Organograma — Depois</h3>
+<div class="org">Supervisor Elétrica (Otávio)        Supervisor Mecânica (Ronaldo)
+│                                     │
+Chefe Equipe Elétrica (Caio)          Chefe Equipe Mecânico (Felipe)
+├─ Téc. III (Jean)                    ├─ Téc. III Mecânico (Leildo)
+├─ Téc. II (Jorge)                    ├─ Téc. II Mecânico (Aldo, Carlos)
+└─ Téc. I (Vanderlei, Elias, Danielly)└─ Téc. I Mecânico (Dione)
+                                       (vaga Téc. III NÃO reposta)</div>
+
+<h3>Benefícios e Considerações</h3>
+<ul>
+<li><span class="badge badge-green">+</span> Menor custo entre as opções de separação (impacto 1,78% sobre folha total).</li>
+<li><span class="badge badge-green">+</span> Reduz headcount em 1 pessoa.</li>
+<li><span class="badge badge-red">−</span> Equipe mecânica reduzida de 6 para 5 técnicos; validar carga de trabalho.</li>
+</ul>
+</div>
+
+<!-- ==================== TAB B ==================== -->
+<div id="tabB" class="tabcontent">
+<h2>Cenário B — Promoção com reposição de Técnico III (somente UHJA)</h2>
+<div class="box">
+<strong>Estratégia:</strong> Idêntico ao Cenário A (Ronaldo → Supervisor Mecânica; Felipe → Chefe de Equipe), porém a vaga de Técnico III deixada por Felipe <strong>é reposta</strong> com um novo Técnico III (referência salarial: R$ 9.541,21). Nenhuma alteração em UHMI.
+</div>
+
+<h3>Tabela Comparativa por Colaborador — Manutenção UHJA</h3>
+<table>
+<tr><th>Colaborador</th><th>Cargo Atual</th><th>Valor Atual</th><th>Cargo Novo</th><th>Valor Novo</th><th>Δ</th></tr>
+<tr><td>Otávio</td><td>Supervisor Manutenção (Elétrica)</td><td>16.462,04</td><td>Supervisor Elétrica</td><td>16.462,04</td><td class="delta-zero">0,00</td></tr>
+<tr class="new-row"><td>Ronaldo</td><td>Chefe de Equipe Mecânico</td><td>14.864,45</td><td>Supervisor Mecânica</td><td>15.738,83</td><td class="delta-pos">+874,38</td></tr>
+<tr class="new-row"><td>Felipe</td><td>Técnico III Mecânico</td><td>9.541,21</td><td>Chefe de Equipe Mecânico</td><td>13.593,57</td><td class="delta-pos">+4.052,36</td></tr>
+<tr class="new-row"><td><em>Novo colaborador</em></td><td>—</td><td>—</td><td>Técnico III Mecânico (reposição)</td><td>9.541,21</td><td class="delta-pos">+9.541,21</td></tr>
+<tr><td>Demais (Leildo, Aldo, Carlos, Dione, Caio + equipe elétrica)</td><td colspan="2">Mantidos — 84.463,44 (total)</td><td colspan="2">Mantidos</td><td class="delta-zero">0,00</td></tr>
+<tr class="grand-total"><td colspan="2">TOTAL MANUTENÇÃO UHJA</td><td>116.871,29</td><td colspan="2">131.339,24</td><td>+14.467,95</td></tr>
+</table>
+
+<h3>Comparativo Antes/Depois</h3>
+<div class="cards">
+<div class="card"><h4>Situação Atual</h4>Manutenção: <strong>R$ 116.871,29</strong><br>Headcount: <strong>13</strong></div>
+<div class="card"><h4>Após Rearranjo</h4>Manutenção: <strong>R$ 131.339,24</strong><br>Headcount: <strong>13 (0)</strong></div>
+</div>
+
+<div class="box"><strong>Alternativa de menor custo:</strong> reposição com <strong>Técnico I</strong> (em vez de Técnico III) reduz o custo da reposição de R$ 9.541,21 para R$ 5.250,02, resultando em Manutenção UHJA = R$ 127.048,05 e Total Geral = R$ 287.451,10 (economia de R$ 4.291,19/mês frente a este cenário B padrão).</div>
+
+<h3>Impacto Total — UHJA e UHMI</h3>
+<table>
+<tr><th>Segmento</th><th>Atual</th><th>Cenário B</th><th>Δ</th></tr>
+<tr><td>UHJA Manutenção</td><td>116.871,29</td><td>131.339,24</td><td class="delta-pos">+14.467,95</td></tr>
+<tr><td>UHJA Operação</td><td>40.312,74</td><td>40.312,74</td><td>—</td></tr>
+<tr class="total-row"><td>TOTAL UHJA</td><td>157.184,03</td><td>171.651,98</td><td class="delta-pos">+14.467,95</td></tr>
+<tr><td>UHMI (Manutenção+Operação)</td><td>120.090,31</td><td>120.090,31</td><td>—</td></tr>
+<tr class="grand-total"><td>TOTAL GERAL</td><td>277.274,34</td><td>291.742,29</td><td>+14.467,95</td></tr>
+</table>
+<p>Aumento anualizado: <strong>+ R$ 173.615,40/ano</strong> | Headcount total: 29 → 29 (0)</p>
+
+<h3>Benefícios e Considerações</h3>
+<ul>
+<li><span class="badge badge-green">+</span> Mantém capacidade plena da equipe mecânica (6 técnicos).</li>
+<li><span class="badge badge-red">−</span> Cenário mais custoso entre todas as opções (+5,22% sobre folha total).</li>
+</ul>
+</div>
+
+<!-- ==================== TAB C ==================== -->
+<div id="tabC" class="tabcontent">
+<h2>Cenário C — Rearranjo de liderança (Fabrício/Marcus/Osvaldo) + Promoção UHJA sem reposição</h2>
+<div class="box">
+<strong>Estratégia:</strong> Fabrício sai da manutenção para Engenharia (custo removido do O&M). Marcus deixa a Supervisão de Operação UHMI e assume a Supervisão de Manutenção UHMI (mantém salário). Osvaldo passa a responder pela operação das duas usinas (mantém salário, sem posto extra em UHMI). Em paralelo, em UHJA: Ronaldo → Supervisor Mecânica, Felipe → Chefe de Equipe, vaga de Técnico III <strong>não reposta</strong> (mesma lógica do Cenário A).
+</div>
+
+<h3>Tabela Comparativa por Colaborador — UHMI (mudanças de liderança)</h3>
+<table>
+<tr><th>Colaborador</th><th>Cargo Atual</th><th>Valor Atual</th><th>Cargo Novo</th><th>Valor Novo</th><th>Δ</th></tr>
+<tr class="rm-row"><td>Fabrício</td><td>Supervisor Manutenção (Mecânica)</td><td>16.369,95</td><td><em>Transferido p/ Engenharia</em></td><td>0,00 <span class="note">(fora do O&M)</span></td><td class="delta-neg">−16.369,95</td></tr>
+<tr class="new-row"><td>Marcus</td><td>Supervisor Operação UHMI</td><td>17.848,18</td><td>Supervisor Manutenção UHMI</td><td>17.848,18</td><td class="delta-zero">0,00 <span class="note">(lateral)</span></td></tr>
+<tr class="rm-row"><td><em>(vaga Sup. Operação UHMI)</em></td><td>—</td><td>—</td><td><em>Não reposta — Osvaldo assume as 2 usinas</em></td><td>0,00</td><td class="delta-neg">−17.848,18</td></tr>
+<tr><td>Osvaldo</td><td>Supervisor Operação UHJA</td><td>15.738,83</td><td>Supervisor Operação UHJA + UHMI</td><td>15.738,83</td><td class="delta-zero">0,00 <span class="note">(sem adicional)</span></td></tr>
+<tr><td>Thiago Cesar, Victor, Hinaldo, Rafael, Haroldo, Diego, Célio, Hevelly</td><td colspan="2">Equipe manutenção UHMI — mantida</td><td colspan="2">Mantidos</td><td class="delta-zero">0,00</td></tr>
+<tr><td>Taylor, Lucas</td><td colspan="2">Equipe operação UHMI — mantida</td><td colspan="2">Mantidos</td><td class="delta-zero">0,00</td></tr>
+</table>
+
+<h3>Tabela Comparativa por Colaborador — UHJA (mesma lógica do Cenário A)</h3>
+<table>
+<tr><th>Colaborador</th><th>Cargo Atual</th><th>Valor Atual</th><th>Cargo Novo</th><th>Valor Novo</th><th>Δ</th></tr>
+<tr><td>Otávio</td><td>Supervisor Manutenção (Elétrica)</td><td>16.462,04</td><td>Supervisor Elétrica</td><td>16.462,04</td><td class="delta-zero">0,00</td></tr>
+<tr class="new-row"><td>Ronaldo</td><td>Chefe de Equipe Mecânico</td><td>14.864,45</td><td>Supervisor Mecânica</td><td>15.738,83</td><td class="delta-pos">+874,38</td></tr>
+<tr class="new-row"><td>Felipe</td><td>Técnico III Mecânico</td><td>9.541,21</td><td>Chefe de Equipe Mecânico</td><td>13.593,57</td><td class="delta-pos">+4.052,36</td></tr>
+<tr class="rm-row"><td><em>(vaga Felipe)</em></td><td>—</td><td>—</td><td><em>Não reposta</em></td><td>0,00</td><td class="delta-neg">−9.541,21</td></tr>
+</table>
+
+<h3>Impacto Total — UHJA e UHMI</h3>
+<table>
+<tr><th>Segmento</th><th>Atual</th><th>Cenário C</th><th>Δ</th></tr>
+<tr><td>UHJA Manutenção</td><td>116.871,29</td><td>121.798,03</td><td class="delta-pos">+4.926,74</td></tr>
+<tr><td>UHJA Operação</td><td>40.312,74</td><td>40.312,74</td><td>—</td></tr>
+<tr class="total-row"><td>TOTAL UHJA</td><td>157.184,03</td><td>162.110,77</td><td class="delta-pos">+4.926,74</td></tr>
+<tr><td>UHMI Manutenção</td><td>89.454,87</td><td>90.933,10</td><td class="delta-pos">+1.478,23</td></tr>
+<tr><td>UHMI Operação</td><td>30.635,44</td><td>12.787,26</td><td class="delta-neg">−17.848,18</td></tr>
+<tr class="total-row"><td>TOTAL UHMI</td><td>120.090,31</td><td>103.720,36</td><td class="delta-neg">−16.369,95</td></tr>
+<tr class="grand-total"><td>TOTAL GERAL</td><td>277.274,34</td><td>265.831,13</td><td>−11.443,21</td></tr>
+</table>
+<p>Redução anualizada: <strong>− R$ 137.318,52/ano</strong> | Headcount total: 29 → 27 (-2)</p>
+
+<h3>Comparativo Antes/Depois</h3>
+<div class="cards">
+<div class="card"><h4>Situação Atual</h4>Total Geral: <strong>R$ 277.274,34</strong><br>Headcount: <strong>29</strong></div>
+<div class="card"><h4>Após Rearranjo (C)</h4>Total Geral: <strong>R$ 265.831,13</strong><br>Headcount: <strong>27 (-2)</strong></div>
+</div>
+
+<h3>Organograma — Depois (UHMI)</h3>
+<div class="org">Supervisor Manutenção UHMI (Marcus)      Osvaldo (Sup. Operação UHJA + UHMI)
+├─ Chefe Equipe Mecânico (Thiago Cesar)   ├─ UHJA: Steilert, Leandro, Felipe
+├─ Chefe Equipe Elétrica (Haroldo)        └─ UHMI: Taylor, Lucas
+└─ Equipe técnica mantida                  (vaga Sup. Operação UHMI extinta)</div>
+
+<h3>Benefícios e Considerações</h3>
+<ul>
+<li><span class="badge badge-green">+</span> Único cenário com redução líquida de custo total (−4,13%).</li>
+<li><span class="badge badge-green">+</span> Aproveita rearranjo de lideranças já em curso (saída de Fabrício).</li>
+<li><span class="badge badge-red">−</span> Osvaldo acumula 2 usinas sem adicional — avaliar viabilidade operacional/carga de trabalho.</li>
+<li><span class="badge badge-red">−</span> Equipe mecânica UHJA reduzida (mesma ressalva do Cenário A).</li>
+</ul>
+</div>
+
+<!-- ==================== TAB D ==================== -->
+<div id="tabD" class="tabcontent">
+<h2>Cenário D — Rearranjo de liderança + Promoção UHJA com reposição</h2>
+<div class="box">
+<strong>Estratégia:</strong> Idêntico ao Cenário C (Fabrício → Engenharia, Marcus → Sup. Manutenção UHMI, Osvaldo → operação das 2 usinas), porém a vaga de Técnico III deixada por Felipe em UHJA <strong>é reposta</strong> (Técnico III, R$ 9.541,21).
+</div>
+
+<h3>Diferença em relação ao Cenário C</h3>
+<table>
+<tr><th>Item</th><th>Cenário C</th><th>Cenário D</th><th>Δ</th></tr>
+<tr><td>Reposição Técnico III UHJA</td><td>Não reposta</td><td>Reposta (+R$ 9.541,21)</td><td class="delta-pos">+9.541,21</td></tr>
+</table>
+
+<h3>Impacto Total — UHJA e UHMI</h3>
+<table>
+<tr><th>Segmento</th><th>Atual</th><th>Cenário D</th><th>Δ</th></tr>
+<tr><td>UHJA Manutenção</td><td>116.871,29</td><td>131.339,24</td><td class="delta-pos">+14.467,95</td></tr>
+<tr><td>UHJA Operação</td><td>40.312,74</td><td>40.312,74</td><td>—</td></tr>
+<tr class="total-row"><td>TOTAL UHJA</td><td>157.184,03</td><td>171.651,98</td><td class="delta-pos">+14.467,95</td></tr>
+<tr><td>UHMI Manutenção</td><td>89.454,87</td><td>90.933,10</td><td class="delta-pos">+1.478,23</td></tr>
+<tr><td>UHMI Operação</td><td>30.635,44</td><td>12.787,26</td><td class="delta-neg">−17.848,18</td></tr>
+<tr class="total-row"><td>TOTAL UHMI</td><td>120.090,31</td><td>103.720,36</td><td class="delta-neg">−16.369,95</td></tr>
+<tr class="grand-total"><td>TOTAL GERAL</td><td>277.274,34</td><td>275.372,34</td><td>−1.902,00</td></tr>
+</table>
+<p>Redução anualizada: <strong>− R$ 22.824,00/ano</strong> | Headcount total: 29 → 28 (-1)</p>
+
+<h3>Comparativo Antes/Depois</h3>
+<div class="cards">
+<div class="card"><h4>Situação Atual</h4>Total Geral: <strong>R$ 277.274,34</strong><br>Headcount: <strong>29</strong></div>
+<div class="card"><h4>Após Rearranjo (D)</h4>Total Geral: <strong>R$ 275.372,34</strong><br>Headcount: <strong>28 (-1)</strong></div>
+</div>
+
+<div class="box"><strong>Alternativa de menor custo:</strong> substituindo a reposição por Técnico I (R$ 5.250,02), Total Geral cai para R$ 271.081,15 (economia adicional de R$ 4.291,19/mês frente a este cenário D padrão).</div>
+
+<h3>Benefícios e Considerações</h3>
+<ul>
+<li><span class="badge badge-green">+</span> Mantém capacidade plena da equipe mecânica em UHJA <em>e</em> ainda gera economia líquida vs. situação atual.</li>
+<li><span class="badge badge-green">+</span> Melhor equilíbrio entre custo, estrutura e força de trabalho.</li>
+<li><span class="badge badge-red">−</span> Osvaldo acumula 2 usinas sem adicional (mesma ressalva do Cenário C).</li>
+</ul>
+</div>
+
+<!-- ==================== TAB E ==================== -->
+<div id="tabE" class="tabcontent">
+<h2>Cenário E — Fabrício transferido para Supervisão Mecânica UHJA</h2>
+<div class="box">
+<strong>Estratégia:</strong> Em vez de promover Ronaldo/Felipe internamente, <strong>Fabrício é transferido</strong> de UHMI para UHJA como Supervisor Mecânica (mantém seu salário atual). Ronaldo permanece como Chefe de Equipe Mecânico (sem promoção); Felipe permanece Técnico III (sem promoção). Em paralelo: Marcus assume Supervisão de Manutenção UHMI; Osvaldo assume operação das duas usinas — mesma lógica dos Cenários C/D.
+</div>
+
+<h3>Tabela Comparativa por Colaborador — UHJA</h3>
+<table>
+<tr><th>Colaborador</th><th>Cargo Atual</th><th>Valor Atual</th><th>Cargo Novo</th><th>Valor Novo</th><th>Δ</th></tr>
+<tr><td>Otávio</td><td>Supervisor Manutenção (Elétrica)</td><td>16.462,04</td><td>Supervisor Elétrica</td><td>16.462,04</td><td class="delta-zero">0,00</td></tr>
+<tr class="new-row"><td>Fabrício</td><td><em>(vinha de UHMI)</em></td><td>16.369,95</td><td>Supervisor Mecânica (transferido)</td><td>16.369,95</td><td class="delta-pos">+16.369,95 <span class="note">(novo posto em UHJA)</span></td></tr>
+<tr><td>Ronaldo</td><td>Chefe de Equipe Mecânico</td><td>14.864,45</td><td>Chefe de Equipe Mecânico</td><td>14.864,45</td><td class="delta-zero">0,00 <span class="note">(sem promoção)</span></td></tr>
+<tr><td>Felipe</td><td>Técnico III Mecânico</td><td>9.541,21</td><td>Técnico III Mecânico</td><td>9.541,21</td><td class="delta-zero">0,00 <span class="note">(sem promoção)</span></td></tr>
+<tr><td>Demais equipe (Leildo, Aldo, Carlos, Dione, Caio + elétrica)</td><td colspan="2">Mantidos</td><td colspan="2">Mantidos</td><td class="delta-zero">0,00</td></tr>
+<tr class="grand-total"><td colspan="2">TOTAL MANUTENÇÃO UHJA</td><td>116.871,29</td><td colspan="2">133.241,24</td><td>+16.369,95</td></tr>
+</table>
+
+<h3>Tabela Comparativa por Colaborador — UHMI</h3>
+<table>
+<tr><th>Colaborador</th><th>Cargo Atual</th><th>Valor Atual</th><th>Cargo Novo</th><th>Valor Novo</th><th>Δ</th></tr>
+<tr class="rm-row"><td>Fabrício</td><td>Supervisor Manutenção (Mecânica)</td><td>16.369,95</td><td><em>Transferido p/ UHJA</em></td><td>0,00</td><td class="delta-neg">−16.369,95</td></tr>
+<tr class="new-row"><td>Marcus</td><td>Supervisor Operação UHMI</td><td>17.848,18</td><td>Supervisor Manutenção UHMI</td><td>17.848,18</td><td class="delta-zero">0,00 <span class="note">(lateral)</span></td></tr>
+<tr class="rm-row"><td><em>(vaga Sup. Operação UHMI)</em></td><td>—</td><td>—</td><td><em>Não reposta — Osvaldo assume</em></td><td>0,00</td><td class="delta-neg">−17.848,18</td></tr>
+<tr><td>Demais equipe UHMI</td><td colspan="2">Mantida</td><td colspan="2">Mantida</td><td class="delta-zero">0,00</td></tr>
+</table>
+
+<h3>Impacto Total — UHJA e UHMI</h3>
+<table>
+<tr><th>Segmento</th><th>Atual</th><th>Cenário E</th><th>Δ</th></tr>
+<tr><td>UHJA Manutenção</td><td>116.871,29</td><td>133.241,24</td><td class="delta-pos">+16.369,95</td></tr>
+<tr><td>UHJA Operação</td><td>40.312,74</td><td>40.312,74</td><td>—</td></tr>
+<tr class="total-row"><td>TOTAL UHJA</td><td>157.184,03</td><td>173.553,98</td><td class="delta-pos">+16.369,95</td></tr>
+<tr><td>UHMI Manutenção</td><td>89.454,87</td><td>90.933,10</td><td class="delta-pos">+1.478,23</td></tr>
+<tr><td>UHMI Operação</td><td>30.635,44</td><td>12.787,26</td><td class="delta-neg">−17.848,18</td></tr>
+<tr class="total-row"><td>TOTAL UHMI</td><td>120.090,31</td><td>103.720,36</td><td class="delta-neg">−16.369,95</td></tr>
+<tr class="grand-total"><td>TOTAL GERAL</td><td>277.274,34</td><td>277.274,34</td><td>0,00</td></tr>
+</table>
+<p>Variação anualizada: <strong>R$ 0,00/ano</strong> (neutro) | Headcount total: 29 → 28 (-1)</p>
+
+<h3>Comparativo Antes/Depois</h3>
+<div class="cards">
+<div class="card"><h4>Situação Atual</h4>Total Geral: <strong>R$ 277.274,34</strong><br>Headcount: <strong>29</strong></div>
+<div class="card"><h4>Após Rearranjo (E)</h4>Total Geral: <strong>R$ 277.274,34</strong><br>Headcount: <strong>28 (-1)</strong></div>
+</div>
+
+<h3>Organograma — Depois</h3>
+<div class="org">UHJA                                    UHMI
+Supervisor Elétrica (Otávio)            Supervisor Manutenção (Marcus)
+Supervisor Mecânica (Fabrício - novo)   ├─ Chefe Equipe Mecânico (Thiago Cesar)
+├─ Chefe Equipe Mecânico (Ronaldo -     ├─ Chefe Equipe Elétrica (Haroldo)
+│  sem promoção)                        └─ Equipe técnica mantida
+├─ Téc. III Mecânico (Leildo, Felipe -
+│  sem promoção)                        Osvaldo (Sup. Operação UHJA + UHMI)
+└─ Téc. II/I Mecânico (Aldo, Carlos,     ├─ UHJA: Steilert, Leandro, Felipe
+   Dione)                                └─ UHMI: Taylor, Lucas
+                                          (vaga Sup. Operação UHMI extinta)</div>
+
+<h3>Benefícios e Considerações</h3>
+<ul>
+<li><span class="badge badge-green">+</span> Custo neutro (Δ = R$ 0,00) frente à situação atual.</li>
+<li><span class="badge badge-green">+</span> Aproveita talento já formado (Fabrício) como Supervisor Mecânica, sem depender de curva de aprendizado de uma promoção interna.</li>
+<li><span class="badge badge-green">+</span> Não gera cascata de promoções internas em UHJA — estrutura de equipe mecânica permanece intacta (Ronaldo e Felipe nos mesmos cargos).</li>
+<li><span class="badge badge-red">−</span> Osvaldo acumula 2 usinas sem adicional (mesma ressalva dos Cenários C e D).</li>
+<li><span class="badge badge-gray">i</span> Fabrício muda de usina — avaliar aspectos logísticos/pessoais da transferência (deslocamento, moradia, etc.).</li>
+</ul>
+</div>
+
+<!-- ==================== TAB RESUMO EXECUTIVO ==================== -->
+<div id="tabResumo" class="tabcontent">
+<h2>Resumo Executivo — Estruturação O&M UHJA/UHMI</h2>
+
+<div class="box">
+<strong>Objetivo:</strong> Separar as especialidades de manutenção (Elétrica e Mecânica) na UHJA, criando dois supervisores dedicados, seguindo o modelo já em vigor na UHMI. Foram avaliados 5 cenários, considerando diferentes estratégias de promoção, reposição de vagas e rearranjo de lideranças entre as duas usinas.
+</div>
+
+<h3>Quadro Comparativo Geral — Todos os Cenários</h3>
+<table>
+<tr><th>Cenário</th><th>Descrição resumida</th><th>Total UHJA</th><th>Total UHMI</th><th>Total Geral</th><th>Δ vs. Atual</th><th>Headcount</th></tr>
+<tr><td><strong>Atual</strong></td><td>Situação vigente</td><td>157.184,03</td><td>120.090,31</td><td>277.274,34</td><td>—</td><td>29</td></tr>
+<tr><td><strong>A</strong></td><td>Promoção sem reposição (só UHJA)</td><td>162.110,77</td><td>120.090,31</td><td>282.201,08</td><td class="delta-pos">+4.926,74</td><td>28 (-1)</td></tr>
+<tr><td><strong>B</strong></td><td>Promoção com reposição Téc. III (só UHJA)</td><td>171.651,98</td><td>120.090,31</td><td>291.742,29</td><td class="delta-pos">+14.467,95</td><td>29 (0)</td></tr>
+<tr class="new-row"><td><strong>C</strong></td><td>Rearranjo liderança + promoção sem reposição</td><td>162.110,77</td><td>103.720,36</td><td><strong>265.831,13</strong></td><td class="delta-neg"><strong>−11.443,21</strong></td><td>27 (-2)</td></tr>
+<tr><td><strong>D</strong></td><td>Rearranjo liderança + promoção com reposição</td><td>171.651,98</td><td>103.720,36</td><td>275.372,34</td><td class="delta-neg">−1.902,00</td><td>28 (-1)</td></tr>
+<tr><td><strong>E</strong></td><td>Fabrício transferido p/ UHJA (sem cascata promoções)</td><td>173.553,98</td><td>103.720,36</td><td>277.274,34</td><td class="delta-zero">0,00</td><td>28 (-1)</td></tr>
+</table>
+
+<h3>Variações Anualizadas</h3>
+<table>
+<tr><th>Cenário</th><th>Δ Mensal</th><th>Δ Anualizado</th></tr>
+<tr><td>A</td><td class="delta-pos">+4.926,74</td><td class="delta-pos">+59.120,88</td></tr>
+<tr><td>B</td><td class="delta-pos">+14.467,95</td><td class="delta-pos">+173.615,40</td></tr>
+<tr class="new-row"><td><strong>C</strong></td><td class="delta-neg"><strong>−11.443,21</strong></td><td class="delta-neg"><strong>−137.318,52</strong></td></tr>
+<tr><td>D</td><td class="delta-neg">−1.902,00</td><td class="delta-neg">−22.824,00</td></tr>
+<tr><td>E</td><td class="delta-zero">0,00</td><td class="delta-zero">0,00</td></tr>
+</table>
+
+<div class="summary-highlight">
+<h3 style="margin-top:0; border:none; padding-left:0;">Leitura Executiva</h3>
+<ul>
+<li><strong>Cenários A e B</strong> isolam a mudança apenas em UHJA, sem qualquer compensação financeira — geram custo adicional puro (+1,78% a +5,22% sobre a folha total). Recomendados apenas se o rearranjo de lideranças em UHMI (saída de Fabrício) não for viável no curto prazo.</li>
+<li><strong>Cenário C</strong> é o único com <strong>redução líquida de custo</strong> (−4,13%), aproveitando a saída de Fabrício para Engenharia e a reorganização Marcus/Osvaldo para compensar o novo posto de Supervisor Mecânica em UHJA. Contrapartida: reduz a equipe mecânica de UHJA em 1 posição e concentra a operação das duas usinas em Osvaldo.</li>
+<li><strong>Cenário D</strong> é o mais equilibrado: mantém a equipe mecânica de UHJA em capacidade plena (repõe a vaga) e ainda assim gera pequena economia (−0,69%) graças ao rearranjo de lideranças em UHMI.</li>
+<li><strong>Cenário E</strong> é financeiramente neutro, mas evita qualquer promoção em cascata em UHJA — traz um supervisor mecânico já experiente (Fabrício) sem depender da curva de aprendizado de Ronaldo/Felipe em novas funções.</li>
+</ul>
+</div>
+
+<h3>Recomendação</h3>
+<div class="box">
+<strong>Cenário D</strong> é a recomendação principal: combina separação de especialidades em UHJA, manutenção da força de trabalho técnica, reconhecimento de talentos internos (Ronaldo e Felipe) e aproveitamento do rearranjo de lideranças já em curso em UHMI — tudo isso com impacto financeiro levemente positivo (redução de custo).<br><br>
+Como alternativa de <strong>menor custo</strong>, o <strong>Cenário C</strong> deve ser considerado caso a redução da equipe mecânica de UHJA em 1 posição seja operacionalmente viável.<br><br>
+O <strong>Cenário E</strong> é uma alternativa robusta caso haja preferência por um supervisor mecânico já experiente, sem depender de curva de aprendizado de promoções internas — com custo neutro.
+</div>
+
+<h3>Riscos e Pontos de Atenção Transversais</h3>
+<ul>
+<li><strong>Acúmulo de Osvaldo</strong> (Cenários C, D e E): assumir a operação das duas usinas sem adicional salarial pode gerar sobrecarga — validar viabilidade operacional antes de decidir.</li>
+<li><strong>Validação salarial:</strong> todos os valores de promoção/transferência usados são referências internas (baseadas em cargos equivalentes já existentes) e precisam ser confirmados formalmente com RH e Compensação & Benefícios.</li>
+<li><strong>Capacitação em gestão de pessoas</strong> para os colaboradores promovidos a cargos de liderança (Ronaldo, Felipe, e conforme o cenário, Marcus em nova função).</li>
+</ul>
+
+<h3>Próximos Passos</h3>
+<ol>
+<li>Validar com a gerência qual cenário (C, D ou E) melhor equilibra custo e viabilidade operacional.</li>
+<li>Confirmar com RH os valores salariais de referência para as promoções/transferências.</li>
+<li>Se optar por C ou D: formalizar a saída de Fabrício para Engenharia e o processo de transição de Marcus e Osvaldo.</li>
+<li>Definir cronograma de implementação e comunicação às equipes envolvidas.</li>
+</ol>
+
+<p class="note">
+Documento elaborado com base nos dados da apresentação "Estruturação O&M Minas" — UHJA (Jaguara) e UHMI (Miranda).
+Valores sujeitos a validação final de RH e Compensação & Benefícios.
+</p>
+</div>
+
+</div><!-- fim content-wrap -->
+
+<script>
+function openTab(evt, tabId) {
+  var contents = document.getElementsByClassName("tabcontent");
+  for (var i = 0; i < contents.length; i++) {
+    contents[i].style.display = "none";
+  }
+  var tabs = document.getElementsByClassName("tablink");
+  for (var i = 0; i < tabs.length; i++) {
+    tabs[i].className = tabs[i].className.replace(" active", "");
+  }
+  document.getElementById(tabId).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+</script>
+
+</body>
+</html>
