@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Manual Operacional — Gestão de Tráfego Pago | Digital AI</title>
+  <link rel="icon" type="image/png" href="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/favicon-32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ====== CSS RESET & BASE ====== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #2D52EF;
+      --secondary: #3B2FC9;
+      --dark: #0F1F5C;
+      --accent: #E8EEFF;
+      --light: #F7F8FF;
+      --gradient: linear-gradient(135deg, #2D52EF 0%, #0F1F5C 100%);
+      --gradient-soft: linear-gradient(135deg, #E8EEFF 0%, #F7F8FF 100%);
+      --shadow-card: 0 4px 24px rgba(45, 82, 239, 0.10);
+      --shadow-md: 0 8px 32px rgba(45, 82, 239, 0.14);
+      --radius: 12px;
+      --radius-lg: 20px;
+      --font-heading: 'Plus Jakarta Sans', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--light);
+      color: #1a2040;
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ====== TYPOGRAPHY ====== */
+    h1, h2, h3, h4 {
+      font-family: var(--font-heading);
+      line-height: 1.25;
+      font-weight: 700;
+    }
+
+    h1 { font-size: clamp(2rem, 5vw, 3.25rem); font-weight: 800; }
+    h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700; }
+    h3 { font-size: clamp(1.1rem, 2vw, 1.375rem); font-weight: 600; }
+    h4 { font-size: 1rem; font-weight: 600; }
+
+    p { color: #374165; }
+
+    /* ====== LAYOUT ====== */
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section {
+      padding: 72px 0;
+    }
+
+    section:nth-child(even) {
+      background: white;
+    }
+
+    section:nth-child(odd) {
+      background: var(--light);
+    }
+
+    .section-label {
+      display: inline-block;
+      font-family: var(--font-heading);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--primary);
+      background: var(--accent);
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      color: var(--dark);
+      margin-bottom: 10px;
+    }
+
+    .section-subtitle {
+      color: #56648a;
+      font-size: 1.05rem;
+      margin-bottom: 48px;
+      max-width: 640px;
+    }
+
+    /* ====== FADE-IN ANIMATION ====== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ====== CARDS ====== */
+    .card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+      padding: 32px;
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+    }
+
+    .card-grid {
+      display: grid;
+      gap: 24px;
+    }
+
+    .card-grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .card-grid-2 { grid-template-columns: repeat(2, 1fr); }
+
+    @media (max-width: 900px) {
+      .card-grid-3 { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 600px) {
+      .card-grid-3, .card-grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* ====== HERO ====== */
+    .hero {
+      background: var(--gradient);
+      padding: 80px 0 100px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      right: -120px;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -100px;
+      left: -80px;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.03);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-logo {
+      height: 36px;
+      width: auto;
+      margin-bottom: 52px;
+      display: block;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #d4dcff;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      color: white;
+      margin-bottom: 20px;
+      max-width: 720px;
+    }
+
+    .hero-subtitle {
+      color: rgba(255,255,255,0.78);
+      font-size: 1.15rem;
+      max-width: 560px;
+      margin-bottom: 44px;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .hero-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .hero-meta-item .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #6DFFB9;
+      flex-shrink: 0;
+    }
+
+    /* ====== OBJETIVO CARD ====== */
+    .objetivo-card {
+      background: var(--gradient);
+      border-radius: var(--radius-lg);
+      padding: 40px 48px;
+      color: white;
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .objetivo-card::after {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .objetivo-card h3 {
+      color: rgba(255,255,255,0.6);
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .objetivo-card p {
+      color: white;
+      font-size: 1.25rem;
+      font-weight: 500;
+      line-height: 1.55;
+      max-width: 680px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ====== PRINCIPLE CARDS ====== */
+    .principle-card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+      padding: 32px 28px;
+      border-top: 3px solid var(--primary);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+    }
+
+    .principle-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+    }
+
+    .principle-icon {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .principle-card h3 {
+      color: var(--dark);
+      margin-bottom: 10px;
+    }
+
+    .principle-card p {
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* ====== CHECKLIST ====== */
+    .checklist {
+      list-style: none;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #eef0f8;
+      font-size: 0.9375rem;
+      color: #374165;
+    }
+
+    .checklist li:last-child { border-bottom: none; }
+
+    .check-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .check-icon svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .check-icon.orange { background: #FFF0E6; }
+    .check-icon.orange svg path { stroke: #E87230; }
+
+    .section-card-title {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--dark);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-card-title .tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: var(--accent);
+      color: var(--primary);
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+
+    .section-card-title .tag.orange {
+      background: #FFF0E6;
+      color: #E87230;
+    }
+
+    /* ====== TABLES ====== */
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      font-size: 0.9rem;
+    }
+
+    table thead tr {
+      background: var(--gradient);
+    }
+
+    table thead th {
+      color: white;
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 14px 18px;
+      text-align: left;
+    }
+
+    table tbody tr {
+      transition: background 0.15s;
+    }
+
+    table tbody tr:nth-child(even) {
+      background: var(--light);
+    }
+
+    table tbody tr:hover {
+      background: var(--accent);
+    }
+
+    table tbody td {
+      padding: 13px 18px;
+      color: #374165;
+      border-bottom: 1px solid #eef0f8;
+      vertical-align: top;
+    }
+
+    table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .td-dia {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      color: var(--dark);
+      white-space: nowrap;
+    }
+
+    .badge-prazo {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--primary);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+
+    /* ====== TIMELINE ====== */
+    .timeline {
+      position: relative;
+      padding-left: 32px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--accent);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 28px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -26px;
+      top: 8px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 2px solid white;
+      box-shadow: 0 0 0 3px var(--accent);
+    }
+
+    .timeline-card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+      padding: 20px 24px;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .timeline-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateX(4px);
+    }
+
+    .timeline-quando {
+      font-family: var(--font-heading);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    .timeline-atividade {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+
+    .timeline-entregavel {
+      font-size: 0.85rem;
+      color: #56648a;
+    }
+
+    /* ====== KPI CARDS ====== */
+    .kpi-section-title {
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: white;
+      padding: 10px 18px;
+      border-radius: var(--radius) var(--radius) 0 0;
+      margin-bottom: 0;
+    }
+
+    .kpi-section-title.meta { background: linear-gradient(90deg, #1877F2, #0D5DB5); }
+    .kpi-section-title.google { background: linear-gradient(90deg, #34A853, #1E7A38); }
+
+    .kpi-table {
+      width: 100%;
+      background: white;
+      border-radius: 0 0 var(--radius) var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
+
+    .kpi-row {
+      display: flex;
+      align-items: center;
+      padding: 12px 18px;
+      border-bottom: 1px solid #eef0f8;
+      gap: 12px;
+    }
+
+    .kpi-row:last-child { border-bottom: none; }
+    .kpi-row:nth-child(even) { background: #FAFBFF; }
+
+    .kpi-metric {
+      flex: 1;
+      font-size: 0.875rem;
+      color: #374165;
+      font-weight: 500;
+    }
+
+    .kpi-value {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      color: var(--dark);
+      font-size: 0.95rem;
+      text-align: right;
+    }
+
+    .kpi-value.green { color: #1B8E4E; }
+    .kpi-value.blue { color: var(--primary); }
+
+    /* ====== PROCESSOS ====== */
+    .process-card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      transition: box-shadow 0.25s, transform 0.25s;
+    }
+
+    .process-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+    }
+
+    .process-header {
+      background: var(--gradient);
+      padding: 24px 28px 20px;
+    }
+
+    .process-header .process-icon {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .process-header h3 {
+      color: white;
+      font-size: 1.05rem;
+    }
+
+    .process-header p {
+      color: rgba(255,255,255,0.7);
+      font-size: 0.8rem;
+      margin-top: 4px;
+    }
+
+    .process-body {
+      padding: 24px 28px;
+    }
+
+    .process-steps {
+      list-style: none;
+      counter-reset: step;
+    }
+
+    .process-steps li {
+      counter-increment: step;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 10px 0;
+      border-bottom: 1px solid #eef0f8;
+      font-size: 0.875rem;
+      color: #374165;
+    }
+
+    .process-steps li:last-child { border-bottom: none; }
+
+    .process-steps li::before {
+      content: counter(step);
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      border-radius: 6px;
+      background: var(--accent);
+      color: var(--primary);
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ====== ESCALACAO CARDS ====== */
+    .alert-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+      padding: 20px 22px;
+      border-left: 4px solid #E74C3C;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .alert-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateX(4px);
+    }
+
+    .alert-card.yellow { border-left-color: #F39C12; }
+
+    .alert-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .alert-card h4 {
+      color: var(--dark);
+      margin-bottom: 4px;
+      font-size: 0.9375rem;
+    }
+
+    .alert-card p {
+      font-size: 0.825rem;
+      color: #56648a;
+    }
+
+    /* ====== ONBOARDING ====== */
+    .onboarding-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .onboarding-step {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+      padding: 22px 20px;
+      text-align: center;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .onboarding-step:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--gradient);
+      color: white;
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+    }
+
+    .onboarding-step h4 {
+      color: var(--dark);
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    /* ====== SLA TABLE ====== */
+    .canal-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 100px;
+      background: var(--accent);
+      color: var(--primary);
+    }
+
+    /* ====== DIVIDER ====== */
+    .gradient-divider {
+      height: 4px;
+      background: var(--gradient);
+    }
+
+    /* ====== FOOTER ====== */
+    footer {
+      background: var(--dark);
+      padding: 56px 0 40px;
+    }
+
+    .footer-logo {
+      height: 32px;
+      width: auto;
+      display: block;
+      margin-bottom: 16px;
+    }
+
+    .footer-tagline {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+    }
+
+    .footer-doc {
+      color: rgba(255,255,255,0.3);
+      font-size: 0.8rem;
+    }
+
+    /* ====== PRINT ====== */
+    @media print {
+      .fade-in { opacity: 1 !important; transform: none !important; }
+      .hero { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      table thead tr { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .kpi-section-title { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .process-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .objetivo-card { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      footer { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .card:hover, .principle-card:hover, .alert-card:hover, .onboarding-step:hover { transform: none; }
+      section { padding: 40px 0; }
+    }
+
+    @media (max-width: 600px) {
+      section { padding: 48px 0; }
+      .hero { padding: 60px 0 72px; }
+      .objetivo-card { padding: 28px 24px; }
+      .timeline { padding-left: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" style="padding-top:80px;padding-bottom:100px;">
+    <div class="container hero-inner">
+      <img src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-negative.png"
+           alt="Digital AI" class="hero-logo">
+      <div class="hero-badge">
+        <span>📋</span> Manual Operacional
+      </div>
+      <h1>Gestão de Tráfego Pago</h1>
+      <p class="hero-subtitle">Processos, Entregas e KPIs para Excelência em Performance</p>
+      <div class="hero-meta">
+        <div class="hero-meta-item"><span class="dot"></span> Setembro 2026</div>
+        <div class="hero-meta-item"><span class="dot"></span> Digital AI — Operações Internas</div>
+        <div class="hero-meta-item"><span class="dot"></span> Meta Ads + Google Ads</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="gradient-divider"></div>
+
+  <!-- ===== SEÇÃO 1: VISÃO GERAL ===== -->
+  <section id="visao-geral">
+    <div class="container">
+      <div class="fade-in">
+        <span class="section-label">Seção 01</span>
+        <h2 class="section-title">Visão Geral</h2>
+        <p class="section-subtitle">A base que orienta como operamos, entregamos e crescemos em tráfego pago.</p>
+      </div>
+
+      <div class="fade-in objetivo-card">
+        <h3>Objetivo do Manual</h3>
+        <p>"Padronizar processos para escalar a operação de tráfego pago com qualidade consistente, entregando resultados previsíveis e mensuráveis para cada cliente."</p>
+      </div>
+
+      <div class="card-grid card-grid-3 fade-in">
+        <div class="principle-card">
+          <span class="principle-icon">📋</span>
+          <h3>Processos Claros</h3>
+          <p>Cada atividade tem dono, prazo e entregável definido. Sem ambiguidade na operação diária.</p>
+        </div>
+        <div class="principle-card">
+          <span class="principle-icon">📦</span>
+          <h3>Entregas Previsíveis</h3>
+          <p>Clientes recebem relatórios, criativos e otimizações nos prazos acordados, toda semana.</p>
+        </div>
+        <div class="principle-card">
+          <span class="principle-icon">🎯</span>
+          <h3>Resultados Consistentes</h3>
+          <p>KPIs monitorados diariamente. Anomalias detectadas e corrigidas antes de impactar o cliente.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SEÇÃO 2: CRONOGRAMA DIÁRIO ===== -->
+  <section id="rotina-diaria">
+    <div class="container">
+      <div class="fade-in">
+        <span class="section-label">Seção 02</span>
+        <h2 class="section-title">Cronograma Diário</h2>
+        <p class="section-subtitle">A rotina que garante controle total sobre as contas e antecipação de problemas.</p>
+      </div>
+
+      <div class="card-grid card-grid-2 fade-in">
+        <div class="card">
+          <div class="section-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2D52EF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Checklist Diário
+            <span class="tag">Todos os dias</span>
+          </div>
+          <ul class="checklist">
+            <li>
+              <span class="check-icon">
+                <svg viewBox="0 0 12 12" fill="none" stroke="#2D52EF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="2,6 5,9 10,3"/>
+                </svg>
+              </span>
+              Verificar campanhas Meta Ads (todos os clientes)
+            </li>
+            <li>
+              <span class="check-icon">
+                <svg viewBox="0 0 12 12" fill="none" stroke="#2D52EF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="2,6 5,9 10,3"/>
+                </svg>
+              </span>
+              Verificar campanhas Google Ads (todos os clientes)
+            </li>
+            <li>
+              <span class="check-icon">
+                <svg viewBox="0 0 12 12" fill="none" stroke="#2D52EF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="2,6 5,9 10,3"/>
+                </svg>
+              </span>
+              Checar campanhas pausadas ou com erro
+            </li>
+            <li>
+              <span class="check-icon">
+                <svg viewBox="0 0 12 12" fill="none" stroke="#2D52EF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="2,6 5,9 10,3"/>
+                </svg>
+              </span>
+              Monitorar CPA e ROAS — alertar anomalias acima de 20%
+            </li>
+            <li>
+              <span class="check-icon">
+                <svg viewBox="0 0 12 12" fill="none" stroke="#2D52EF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="2,6 5,9 10,3"/>
+                </svg>
+              </span>
+              Responder dúvidas dos clientes (SLA: mesmo dia útil)
+            </li>
+            <li>
+              <span class="check-icon">
+                <svg viewBox="0 0 12 12" fill="none" stroke="#2D52EF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="2,6 5,9 10,3"/>
+                </svg>
+              </span>
+              Registrar métricas na planilha de acompanhamento
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="section-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E87230" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            A cada 2 dias
+            <span class="tag orange">Terça e Quinta</span>
+          </div>
+          <ul class="checklist">
+            <li>
+              <span class="check-icon orange">
+                <svg viewBox="0 0 12 12" fill="none" stroke="#E87230" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="2,6 5,9 10,3"/>
+                </svg>
+              </span>
+              Negativação de termos no Google Ads — mínimo 10 por sessão
+            </li>
+            <li>
+              <span class="check-icon orange">
+                <svg viewBox="0 0 12 12" fill="none" stroke="#E87230" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="2,6 5,9 10,3"/>
+                </svg>
+              </span>
+              Ajuste de lances e segmentações abaixo da meta
+            </li>
+          </ul>
+          <div style="margin-top:20px; padding:16px; background:var(--accent); border-radius:8px;">
+            <p style="font-size:0.825rem; color:var(--dark); font-weight:500;">
+              💡 <strong>Por que 2x por semana?</strong> Lances ajustados diariamente podem causar instabilidade no algoritmo. Ciclos de 48h permitem aprendizado antes da otimização.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SEÇÃO 3: CRONOGRAMA SEMANAL ===== -->
+  <section id="cronograma-semanal">
+    <div class="container">
+      <div class="fade-in">
+        <span class="section-label">Seção 03</span>
+        <h2 class="section-title">Entregas Semanais</h2>
+        <p class="section-subtitle">O que deve ser entregue toda semana, por quem e até quando.</p>
+      </div>
+
+      <div class="table-wrapper fade-in">
+        <table>
+          <thead>
+            <tr>
+              <th>Dia</th>
+              <th>Atividade</th>
+              <th>Entregável</th>
+              <th>Prazo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="td-dia">Segunda</td>
+              <td>Análise de performance semanal</td>
+              <td>Relatório semanal por cliente</td>
+              <td><span class="badge-prazo">até 12h</span></td>
+            </tr>
+            <tr>
+              <td class="td-dia">Segunda</td>
+              <td>Reunião de alinhamento</td>
+              <td>Ata com pontos de ação</td>
+              <td><span class="badge-prazo">30 min</span></td>
+            </tr>
+            <tr>
+              <td class="td-dia">Terça</td>
+              <td>Planejamento de criativos</td>
+              <td>Briefing (2–3 criativos por cliente)</td>
+              <td><span class="badge-prazo">até 18h</span></td>
+            </tr>
+            <tr>
+              <td class="td-dia">Terça</td>
+              <td>Negativação Google Ads</td>
+              <td>Log de termos negativados</td>
+              <td><span class="badge-prazo">até 18h</span></td>
+            </tr>
+            <tr>
+              <td class="td-dia">Quarta</td>
+              <td>Produção de criativos</td>
+              <td>Envio para designer ou criação própria</td>
+              <td><span class="badge-prazo">até 18h</span></td>
+            </tr>
+            <tr>
+              <td class="td-dia">Quinta</td>
+              <td>Negativação Google Ads</td>
+              <td>Log de termos negativados</td>
+              <td><span class="badge-prazo">até 18h</span></td>
+            </tr>
+            <tr>
+              <td class="td-dia">Quinta</td>
+              <td>Benchmark de criativos</td>
+              <td>Relatório benchmark (Meta Ad Library)</td>
+              <td><span class="badge-prazo">até 18h</span></td>
+            </tr>
+            <tr>
+              <td class="td-dia">Sexta</td>
+              <td>Subida de novos criativos</td>
+              <td>Campanhas atualizadas com novos anúncios</td>
+              <td><span class="badge-prazo">até 15h</span></td>
+            </tr>
+            <tr>
+              <td class="td-dia">Sexta</td>
+              <td>Revisão geral fim de semana</td>
+              <td>Checklist de saúde das contas</td>
+              <td><span class="badge-prazo">até 17h</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SEÇÃO 4: CRONOGRAMA MENSAL ===== -->
+  <section id="cronograma-mensal">
+    <div class="container">
+      <div class="fade-in">
+        <span class="section-label">Seção 04</span>
+        <h2 class="section-title">Entregas Mensais</h2>
+        <p class="section-subtitle">Marcos mensais que garantem visão estratégica e alinhamento com clientes.</p>
+      </div>
+
+      <div class="fade-in" style="display:grid;grid-template-columns:1fr 1fr;gap:28px;">
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-card">
+              <div class="timeline-quando">Dia 1–3</div>
+              <div class="timeline-atividade">Relatório mensal de performance</div>
+              <div class="timeline-entregavel">📄 Relatório completo (HTML/PDF) com todos os clientes</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-card">
+              <div class="timeline-quando">Dia 1–3</div>
+              <div class="timeline-atividade">Análise de ROI</div>
+              <div class="timeline-entregavel">📊 Planilha consolidada de ROAS + ROI por cliente</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-card">
+              <div class="timeline-quando">Dia 1–5</div>
+              <div class="timeline-atividade">Planejamento estratégico</div>
+              <div class="timeline-entregavel">🗺 Documento com metas, orçamentos e estratégia do mês</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-card">
+              <div class="timeline-quando">Dia 5–7</div>
+              <div class="timeline-atividade">Reuniões de resultados com clientes</div>
+              <div class="timeline-entregavel">🎯 Apresentação + plano de ação por cliente</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-card">
+              <div class="timeline-quando">Dia 10</div>
+              <div class="timeline-atividade">Benchmark mensal aprofundado</div>
+              <div class="timeline-entregavel">🔍 Relatório com referências e benchmarks do mercado</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-card">
+              <div class="timeline-quando">Dia 15</div>
+              <div class="timeline-atividade">Review de meio de mês</div>
+              <div class="timeline-entregavel">📝 Ata com ajustes de rota e otimizações</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-card">
+              <div class="timeline-quando">Dia 20</div>
+              <div class="timeline-atividade">Auditoria de tracking</div>
+              <div class="timeline-entregavel">✅ Checklist verificado — Pixel, Conversions API, GTM, tags</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SEÇÃO 5: KPIs ===== -->
+  <section id="kpis">
+    <div class="container">
+      <div class="fade-in">
+        <span class="section-label">Seção 05</span>
+        <h2 class="section-title">KPIs Obrigatórios</h2>
+        <p class="section-subtitle">Métricas core que devem ser monitoradas diariamente em todas as contas.</p>
+      </div>
+
+      <div class="card-grid card-grid-2 fade-in">
+        <!-- Meta Ads -->
+        <div>
+          <div class="kpi-section-title meta">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white" style="vertical-align:middle;margin-right:8px;display:inline"><path d="M12 2.04c-5.5 0-10 4.49-10 10.02 0 5 3.66 9.15 8.44 9.9v-7H7.9v-2.9h2.54V9.85c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.23.19 2.23.19v2.47h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.9h-2.33v7a10 10 0 0 0 8.44-9.9c0-5.53-4.5-10.02-10-10.02z"/></svg>
+            Meta Ads
+          </div>
+          <div class="kpi-table">
+            <div class="kpi-row">
+              <span class="kpi-metric">CPM (Custo por Mil Impressões)</span>
+              <span class="kpi-value green">menos de R$ 30</span>
+            </div>
+            <div class="kpi-row">
+              <span class="kpi-metric">CPC (Custo por Clique)</span>
+              <span class="kpi-value green">menos de R$ 2,00</span>
+            </div>
+            <div class="kpi-row">
+              <span class="kpi-metric">CTR (Taxa de Cliques)</span>
+              <span class="kpi-value blue">acima de 1,5%</span>
+            </div>
+            <div class="kpi-row">
+              <span class="kpi-metric">CPA / CPL</span>
+              <span class="kpi-value" style="color:#56648a;">Por cliente</span>
+            </div>
+            <div class="kpi-row">
+              <span class="kpi-metric">ROAS</span>
+              <span class="kpi-value blue">acima de 3x</span>
+            </div>
+            <div class="kpi-row">
+              <span class="kpi-metric">Frequência</span>
+              <span class="kpi-value green">abaixo de 3,0</span>
+            </div>
+            <div class="kpi-row">
+              <span class="kpi-metric">Hook Rate (3s view)</span>
+              <span class="kpi-value blue">acima de 30%</span>
+            </div>
+            <div class="kpi-row">
+              <span class="kpi-metric">Hold Rate</span>
+              <span class="kpi-value blue">acima de 15%</span>
+            </div>
+            <div class="kpi-row">
+              <span class="kpi-metric">ThruPlay (vídeo até o fim)</span>
+              <span class="kpi-value blue">acima de 20%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Google Ads -->
+        <div>
+          <div class="kpi-section-title google">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white" style="vertical-align:middle;margin-right:8px;display:inline"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
+            Google Ads
+          </div>
+          <div class="kpi-table">
+            <div class="kpi-row">
+              <span class="kpi-metric">CPC (Custo por Clique)</span>
+              <span class="kpi-value" style="color:#56648a;">Por nicho</span>
+            </div>
+            <div class="kpi-row">
+              <span class="kpi-metric">CTR — Search</span>
+              <span class="kpi-value blue">acima de 3%</span>
+            </div>
+            <div class="kpi-row">
+              <span class="kpi-metric">Quality Score</span>
+              <span class="kpi-value blue">acima de 7/10</span>
+            </div>
+            <div class="kpi-row">
+              <span class="kpi-metric">Taxa de Conversão</span>
+              <span class="kpi-value green">acima de 3%</span>
+            </div>
+            <div class="kpi-row">
+              <span class="kpi-metric">CPA (Custo por Aquisição)</span>
+              <span class="kpi-value" style="color:#56648a;">Por cliente</span>
+            </div>
+            <div class="kpi-row">
+              <span class="kpi-metric">Impression Share</span>
+              <span class="kpi-value blue">acima de 60%</span>
+            </div>
+            <div class="kpi-row">
+              <span class="kpi-metric">Negativações por semana</span>
+              <span class="kpi-value green">mínimo 10</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SEÇÃO 6: PROCESSOS OPERACIONAIS ===== -->
+  <section id="processos">
+    <div class="container">
+      <div class="fade-in">
+        <span class="section-label">Seção 06</span>
+        <h2 class="section-title">Processos Operacionais</h2>
+        <p class="section-subtitle">Passo a passo documentado para as principais atividades da operação.</p>
+      </div>
+
+      <div class="card-grid card-grid-3 fade-in">
+        <!-- Benchmark -->
+        <div class="process-card">
+          <div class="process-header">
+            <span class="process-icon">🔍</span>
+            <h3>Benchmark de Criativos</h3>
+            <p>Semanal (quinta) + aprofundado mensal (dia 10)</p>
+          </div>
+          <div class="process-body">
+            <ol class="process-steps">
+              <li>Acessar Meta Ad Library no Facebook</li>
+              <li>Buscar 5 ou mais concorrentes diretos do cliente</li>
+              <li>Analisar formatos, copies, CTAs e hooks utilizados</li>
+              <li>Capturar screenshots dos melhores anúncios ativos</li>
+              <li>Documentar: referência, por que funciona, adaptação proposta</li>
+              <li>Salvar no doc compartilhado do cliente</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Criativos -->
+        <div class="process-card">
+          <div class="process-header">
+            <span class="process-icon">🎨</span>
+            <h3>Planejamento de Criativos</h3>
+            <p>Terça até 18h — mínimo 2 variações por cliente</p>
+          </div>
+          <div class="process-body">
+            <ol class="process-steps">
+              <li>Revisar métricas da semana anterior (hook rate, CTR, CPA)</li>
+              <li>Analisar benchmark feito na quinta anterior</li>
+              <li>Definir briefing: formato, copy, CTA e público-alvo</li>
+              <li>Criar mínimo de 2 a 3 variações por cliente na semana</li>
+              <li>Enviar briefing para designer ou produzir internamente</li>
+              <li>Subir criativos finalizados até sexta-feira às 15h</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Negativação -->
+        <div class="process-card">
+          <div class="process-header">
+            <span class="process-icon">🚫</span>
+            <h3>Negativação Google Ads</h3>
+            <p>Terça e quinta — obrigatório para todas as contas</p>
+          </div>
+          <div class="process-body">
+            <ol class="process-steps">
+              <li>Acessar relatório de Termos de Pesquisa por conta</li>
+              <li>Filtrar termos com mais de 10 impressões no período</li>
+              <li>Identificar termos irrelevantes, fora do escopo ou com CPA alto</li>
+              <li>Adicionar à lista negativa (nível campanha ou conta)</li>
+              <li>Registrar em log: data, termo negativado, motivo</li>
+              <li>Revisar se algum termo válido foi negativado anteriormente</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SEÇÃO 7: SLAs ===== -->
+  <section id="slas">
+    <div class="container">
+      <div class="fade-in">
+        <span class="section-label">Seção 07</span>
+        <h2 class="section-title">SLAs e Comunicação</h2>
+        <p class="section-subtitle">Acordos de nível de serviço que definem prazos e canais para cada tipo de demanda.</p>
+      </div>
+
+      <div class="table-wrapper fade-in">
+        <table>
+          <thead>
+            <tr>
+              <th>Tipo de Demanda</th>
+              <th>Prazo de Resposta</th>
+              <th>Canal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Dúvida do cliente</strong></td>
+              <td><span class="badge-prazo">Mesmo dia útil</span></td>
+              <td><span class="canal-badge">WhatsApp / Email</span></td>
+            </tr>
+            <tr>
+              <td><strong>Relatório semanal</strong></td>
+              <td><span class="badge-prazo">Segunda até 12h</span></td>
+              <td><span class="canal-badge">Email / WhatsApp</span></td>
+            </tr>
+            <tr>
+              <td><strong>Relatório mensal</strong></td>
+              <td><span class="badge-prazo">Até dia 3 do mês</span></td>
+              <td><span class="canal-badge">Reunião + PDF ou HTML</span></td>
+            </tr>
+            <tr>
+              <td><strong>Briefing de criativos</strong></td>
+              <td><span class="badge-prazo">Terça até 18h</span></td>
+              <td><span class="canal-badge">Doc compartilhado</span></td>
+            </tr>
+            <tr>
+              <td><strong>Alerta de anomalia</strong> (CPA ou ROAS crítico)</td>
+              <td><span class="badge-prazo" style="background:#FFE8E8;color:#C0392B;">Em até 2h</span></td>
+              <td><span class="canal-badge">WhatsApp direto</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SEÇÃO 8: ESCALAÇÃO ===== -->
+  <section id="escalacao">
+    <div class="container">
+      <div class="fade-in">
+        <span class="section-label">Seção 08</span>
+        <h2 class="section-title">Quando Escalar para a Liderança</h2>
+        <p class="section-subtitle">Situações que exigem comunicação imediata com a liderança — não resolver sozinho.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;" class="fade-in">
+        <div class="alert-card">
+          <span class="alert-icon">🔴</span>
+          <div>
+            <h4>CPA acima de 2x a meta por 3 dias</h4>
+            <p>Sinal de problema estrutural na campanha — escalar imediatamente com print das métricas.</p>
+          </div>
+        </div>
+
+        <div class="alert-card">
+          <span class="alert-icon">🔴</span>
+          <div>
+            <h4>Budget consumido 30% acima do previsto</h4>
+            <p>Risco financeiro direto ao cliente — acionar liderança antes de qualquer pausada.</p>
+          </div>
+        </div>
+
+        <div class="alert-card yellow">
+          <span class="alert-icon">🟡</span>
+          <div>
+            <h4>Conta suspensa sem resolução em 24h</h4>
+            <p>Após tentativa de resolução própria, escalar com print do motivo da suspensão.</p>
+          </div>
+        </div>
+
+        <div class="alert-card yellow">
+          <span class="alert-icon">🟡</span>
+          <div>
+            <h4>Cliente insatisfeito ou reclamação formal</h4>
+            <p>Nunca responder uma reclamação formal sem alinhamento prévio com a liderança.</p>
+          </div>
+        </div>
+
+        <div class="alert-card">
+          <span class="alert-icon">🔴</span>
+          <div>
+            <h4>ROAS abaixo de 2x por semana inteira</h4>
+            <p>Meta mínima é 3x. Abaixo de 2x por 7 dias seguidos exige revisão estratégica urgente.</p>
+          </div>
+        </div>
+
+        <div class="alert-card yellow">
+          <span class="alert-icon">🟡</span>
+          <div>
+            <h4>Tracking quebrado — Pixel ou Tag</h4>
+            <p>Dados incorretos comprometem toda a otimização. Escalar e documentar o problema.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SEÇÃO 9: ONBOARDING ===== -->
+  <section id="onboarding">
+    <div class="container">
+      <div class="fade-in">
+        <span class="section-label">Seção 09</span>
+        <h2 class="section-title">Onboarding de Novo Cliente</h2>
+        <p class="section-subtitle">Checklist completo para garantir uma entrada estruturada e sem falhas técnicas.</p>
+      </div>
+
+      <div class="onboarding-grid fade-in">
+        <div class="onboarding-step">
+          <div class="step-number">1</div>
+          <h4>Receber Briefing Completo</h4>
+          <p style="font-size:0.78rem;color:#56648a;margin-top:6px;">Produto, público, ticket médio, meta de CPA/ROAS</p>
+        </div>
+        <div class="onboarding-step">
+          <div class="step-number">2</div>
+          <h4>Configurar Business Manager</h4>
+          <p style="font-size:0.78rem;color:#56648a;margin-top:6px;">Acessos, conta de anúncios, perfil da empresa</p>
+        </div>
+        <div class="onboarding-step">
+          <div class="step-number">3</div>
+          <h4>Instalar Pixel Meta</h4>
+          <p style="font-size:0.78rem;color:#56648a;margin-top:6px;">Pixel + Conversions API configurados e testados</p>
+        </div>
+        <div class="onboarding-step">
+          <div class="step-number">4</div>
+          <h4>Configurar Tags Google</h4>
+          <p style="font-size:0.78rem;color:#56648a;margin-top:6px;">Google Tag Manager instalado e validado</p>
+        </div>
+        <div class="onboarding-step">
+          <div class="step-number">5</div>
+          <h4>Definir Conversões</h4>
+          <p style="font-size:0.78rem;color:#56648a;margin-top:6px;">Eventos mapeados, testados e rastreando corretamente</p>
+        </div>
+        <div class="onboarding-step">
+          <div class="step-number">6</div>
+          <h4>Mapear Concorrentes</h4>
+          <p style="font-size:0.78rem;color:#56648a;margin-top:6px;">Mínimo de 5 concorrentes diretos identificados</p>
+        </div>
+        <div class="onboarding-step">
+          <div class="step-number">7</div>
+          <h4>Benchmark Inicial</h4>
+          <p style="font-size:0.78rem;color:#56648a;margin-top:6px;">Relatório de benchmark com referências de criativos</p>
+        </div>
+        <div class="onboarding-step">
+          <div class="step-number">8</div>
+          <h4>Definir Metas de KPI</h4>
+          <p style="font-size:0.78rem;color:#56648a;margin-top:6px;">CPA, ROAS, CTR e frequência alvo documentados</p>
+        </div>
+        <div class="onboarding-step">
+          <div class="step-number">9</div>
+          <h4>Criar Primeira Campanha</h4>
+          <p style="font-size:0.78rem;color:#56648a;margin-top:6px;">Campanha de aprendizado + criativos iniciais no ar</p>
+        </div>
+        <div class="onboarding-step">
+          <div class="step-number">10</div>
+          <h4>Documentar Ficha</h4>
+          <p style="font-size:0.78rem;color:#56648a;margin-top:6px;">Ficha do cliente preenchida no sistema interno</p>
+        </div>
+        <div class="onboarding-step">
+          <div class="step-number">11</div>
+          <h4>Reunião de Kickoff</h4>
+          <p style="font-size:0.78rem;color:#56648a;margin-top:6px;">Alinhamento com cliente sobre metas, prazos e comunicação</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="gradient-divider"></div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="container">
+      <img src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-negative.png"
+           alt="Digital AI" class="footer-logo">
+      <p class="footer-tagline">Digital AI — Inteligência que move negócios</p>
+      <p class="footer-doc">Documento interno — Setembro 2026 &nbsp;·&nbsp; Gestão de Tráfego Pago &nbsp;·&nbsp; Uso exclusivo interno</p>
+    </div>
+  </footer>
+
+  <!-- ===== INTERSECTION OBSERVER (fade-in) ===== -->
+  <script>
+    (function() {
+      var els = document.querySelectorAll('.fade-in');
+      if (!('IntersectionObserver' in window)) {
+        els.forEach(function(el) { el.classList.add('visible'); });
+        return;
+      }
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.08 });
+      els.forEach(function(el) { observer.observe(el); });
+    })();
+  </script>
+
+</body>
+</html>
