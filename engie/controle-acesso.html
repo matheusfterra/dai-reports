@@ -1,16 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-971SFXF91V"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-971SFXF91V');
-</script>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Controle de Acesso - Usina de Jaguara | ENGIE</title>
@@ -230,6 +220,11 @@ select{
 
     <label>Empresa</label>
     <input type="text" id="cadEmpresa" placeholder="Empresa">
+<label>CPF</label>
+<input type="text" id="cadCPF" placeholder="000.000.000-00">
+
+<label>Placa do Veículo</label>
+<input type="text" id="cadPlaca" placeholder="ABC1D23">
 
     <label>Validade ASO / Exame Periódico</label>
     <input type="date" id="cadValidadeASO">
@@ -273,6 +268,8 @@ select{
           <th class="sortable sort-asc" data-col="nome" onclick="ordenarTabela('nome')">Nome</th>
           <th class="sortable" data-col="empresa" onclick="ordenarTabela('empresa')">Empresa</th>
           <th class="sortable" data-col="local" onclick="ordenarTabela('local')">Local</th>
+<th>CPF</th>
+<th>Placa</th>
           <th>Validade ASO</th>
           <th>Situação</th>
           <th>QR Code</th>
@@ -644,6 +641,8 @@ function selecionarLocal(botao){
 }
 
 function cadastrarColaborador(){
+  const cpf = document.getElementById("cadCPF").value.trim();
+  const placa = document.getElementById("cadPlaca").value.trim().toUpperCase();
   const nome = document.getElementById("cadNome").value.trim();
   const empresa = document.getElementById("cadEmpresa").value.trim();
   const validadeASO = document.getElementById("cadValidadeASO").value;
@@ -652,7 +651,7 @@ function cadastrarColaborador(){
 
   if(!nome || !empresa || !localEscolhido || !validadeASO){
     statusEl.className = "status erro";
-    statusEl.textContent = "Preencha Nome, Empresa e selecione o Local.";
+    statusEl.textContent = "Preencha Nome, Empresa, selecione o Local e Validade do ASO.";
     tocarErro();
     return;
   }
@@ -663,7 +662,7 @@ function cadastrarColaborador(){
     statusEl.textContent = "Colaborador já cadastrado. QR Code identificado regerado abaixo.";
     tocarBloqueio();
   } else {
-    colaboradores.push({ nome, empresa, local: localEscolhido, validadeASO, dentro:false, horaEntradaTimestamp:null });
+    colaboradores.push({    nome, empresa, cpf, placa, local: localEscolhido, validadeASO, dentro:false, horaEntradaTimestamp:null });
     salvar("colaboradores", colaboradores);
     statusEl.className = "status ok";
     statusEl.textContent = `Cadastro realizado: ${nome} - ${empresa} - ${localEscolhido}.`;
@@ -686,6 +685,8 @@ function cadastrarColaborador(){
   document.getElementById("cadNome").value = "";
   document.getElementById("cadEmpresa").value = "";
   document.getElementById("cadValidadeASO").value = "";
+document.getElementById("cadCPF").value = "";
+document.getElementById("cadPlaca").value = "";
   atualizarTabelaColaboradores();
 }
 
@@ -786,7 +787,9 @@ function atualizarTabelaColaboradores(){
       if(!busca) return true;
       return (c.nome||"").toLowerCase().includes(busca)
           || (c.empresa||"").toLowerCase().includes(busca)
-          || (c.local||"").toLowerCase().includes(busca);
+          || (c.local||"").toLowerCase().includes(busca)
+                        || (c.cpf||"").toLowerCase().includes(busca)
+                        || (c.placa||"").toLowerCase().includes(busca);
     });
 
   lista.sort((a, b) => {
@@ -798,7 +801,7 @@ function atualizarTabelaColaboradores(){
   });
 
   if(lista.length === 0){
-    tbody.innerHTML = `<tr><td colspan="7">${busca ? "Nenhum colaborador encontrado para \""+busca+"\"." : "Nenhum colaborador cadastrado."}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="9">${busca ? "Nenhum colaborador encontrado para \""+busca+"\"." : "Nenhum colaborador cadastrado."}</td></tr>`;
     return;
   }
 
@@ -821,10 +824,13 @@ function atualizarTabelaColaboradores(){
 
     tbody.innerHTML += `
       <tr id="tr-colab-${i}" style="${linhaCor}">
-        <td>${c.nome}</td>
-        <td>${c.empresa}</td>
-        <td>${c.local}</td>
-        <td>${c.validadeASO || "-"}</td>
+
+<td>${c.nome}</td>
+<td>${c.empresa}</td>
+<td>${c.local}</td>
+<td>${c.cpf || "-"}</td>
+<td>${c.placa || "-"}</td>
+ <td>${c.validadeASO || "-"}</td>
         <td style="text-align:center;">
           <label class="toggle-situacao" title="${c.dentro ? 'Clique para registrar SAÍDA' : 'Clique para registrar ENTRADA'}" style="cursor:pointer;display:inline-flex;flex-direction:column;align-items:center;gap:3px;user-select:none;">
             <input type="checkbox" ${c.dentro ? "checked" : ""} onchange="toggleManual(${i},this)" style="width:22px;height:22px;cursor:pointer;accent-color:var(--verde);">
@@ -1323,8 +1329,11 @@ function exportarXLSX(){
   const wb = XLSX.utils.book_new();
 
   const dadosColabs = colaboradores.map(c=>({
+    
     "Nome": c.nome,
     "Empresa": c.empresa,
+    "CPF": c.cpf || "",
+    "Placa": c.placa || "",
     "Local": c.local,
     "Validade ASO": c.validadeASO || "",
     "Situação": c.dentro ? "Dentro" : "Fora"
@@ -1396,6 +1405,8 @@ function importarXLSX(event){
           empresa: r["Empresa"] || "",
           local: r["Local"] || "",
           validadeASO: r["Validade ASO"] || "",
+         cpf: r["CPF"] || "",
+         placa: r["Placa"] || "",
           dentro: (r["Situação"] || "").toLowerCase() === "dentro",
           horaEntradaTimestamp: null
         }));
@@ -1501,6 +1512,8 @@ function editarColaborador(indice){
   document.getElementById("editASO").value = c.validadeASO || "";
 
   document.getElementById("modalEdicao").style.display = "flex";
+document.getElementById("editCPF").value = c.cpf || "";
+document.getElementById("editPlaca").value = c.placa || "";
 }
 
 function fecharModalEdicao(){
@@ -1515,6 +1528,8 @@ function salvarEdicaoColaborador(){
   colaborador.empresa = document.getElementById("editEmpresa").value.trim();
   colaborador.local = document.getElementById("editLocal").value;
   colaborador.validadeASO = document.getElementById("editASO").value;
+colaborador.cpf = document.getElementById("editCPF").value.trim();
+colaborador.placa = document.getElementById("editPlaca").value.trim().toUpperCase();
 
   salvar("colaboradores", colaboradores);
 
@@ -1565,6 +1580,11 @@ align-items:center;">
 
     <label>Empresa</label>
     <input type="text" id="editEmpresa">
+    <label>CPF</label>
+<input type="text" id="editCPF">
+
+<label>Placa do Veículo</label>
+<input type="text" id="editPlaca">
 
     <label>Local</label>
     <select id="editLocal">
