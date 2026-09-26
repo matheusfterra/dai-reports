@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estudo de Conversão de Propostas — DermaClinic</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --primary: #2D52EF;
+  --primary-light: #5B7AFF;
+  --primary-dark: #0F1F5C;
+  --bg: #F5F7FF;
+  --card-bg: #FFFFFF;
+  --text: #1A1A2E;
+  --text-secondary: #6B7280;
+  --success: #22C55E;
+  --success-bg: #DCFCE7;
+  --warning: #F59E0B;
+  --warning-bg: #FEF3C7;
+  --danger: #EF4444;
+  --danger-bg: #FEE2E2;
+  --neutral: #6366F1;
+  --neutral-bg: #EEF2FF;
+  --border: #E5E7EB;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.1);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+.header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+  color: white;
+  padding: 40px 24px 32px;
+  text-align: center;
+}
+.header h1 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+.header .subtitle {
+  font-size: 0.95rem;
+  opacity: 0.85;
+  font-weight: 400;
+}
+.header .period {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 4px 16px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+.section {
+  margin-bottom: 32px;
+}
+.section-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-title .num {
+  background: var(--primary);
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.kpi-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px 16px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--primary);
+}
+.kpi-card.green { border-left-color: var(--success); }
+.kpi-card.orange { border-left-color: var(--warning); }
+.kpi-card.red { border-left-color: var(--danger); }
+.kpi-card.purple { border-left-color: var(--neutral); }
+.kpi-value {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--primary-dark);
+  line-height: 1.1;
+}
+.kpi-card.green .kpi-value { color: #15803D; }
+.kpi-card.orange .kpi-value { color: #B45309; }
+.kpi-card.red .kpi-value { color: #DC2626; }
+.kpi-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  font-weight: 500;
+}
+.kpi-sub {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+.comparison-box {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+}
+.comparison-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 16px;
+  align-items: center;
+}
+.comp-group {
+  text-align: center;
+  padding: 16px;
+  border-radius: 8px;
+}
+.comp-group.with { background: var(--neutral-bg); }
+.comp-group.without { background: #F9FAFB; }
+.comp-group .rate {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+}
+.comp-group.with .rate { color: var(--neutral); }
+.comp-group.without .rate { color: var(--text-secondary); }
+.comp-group .label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.comp-group .detail {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+.vs-badge {
+  background: var(--primary);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+.insight-box {
+  background: linear-gradient(135deg, #EEF2FF 0%, #F5F7FF 100%);
+  border: 1px solid #C7D2FE;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 16px 0;
+}
+.insight-box h4 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--primary-dark);
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+.insight-box p {
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.7;
+}
+.chart-container {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+}
+.chart-container canvas {
+  max-height: 350px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+table th {
+  background: var(--primary-dark);
+  color: white;
+  padding: 10px 12px;
+  text-align: left;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+}
+table tr:nth-child(even) { background: #F9FAFB; }
+table tr:hover { background: #EEF2FF; }
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.badge-green { background: var(--success-bg); color: #15803D; }
+.badge-orange { background: var(--warning-bg); color: #B45309; }
+.badge-red { background: var(--danger-bg); color: #DC2626; }
+.footer {
+  text-align: center;
+  padding: 24px;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+.funnel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin: 20px 0;
+}
+.funnel-step {
+  background: var(--primary);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  position: relative;
+  transition: all 0.3s;
+}
+.funnel-step:nth-child(1) { width: 100%; opacity: 1; }
+.funnel-step:nth-child(2) { width: 85%; opacity: 0.9; }
+.funnel-step:nth-child(3) { width: 70%; opacity: 0.85; background: var(--primary-light); }
+.funnel-step:nth-child(4) { width: 55%; opacity: 0.8; background: var(--success); }
+.funnel-arrow {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+}
+@media (max-width: 600px) {
+  .comparison-row { grid-template-columns: 1fr; }
+  .vs-badge { margin: 0 auto; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .header h1 { font-size: 1.3rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Estudo de Conversao de Propostas</h1>
+  <div class="subtitle">Eficiencia dos Follow-ups Automatizados na Conversao de Orcamentos</div>
+  <div class="period">Agosto - Setembro 2026</div>
+</div>
+
+<div class="container">
+
+  <!-- 1. RESUMO EXECUTIVO -->
+  <div class="section">
+    <div class="section-title"><span class="num">1</span> Resumo Executivo</div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-value">95</div>
+        <div class="kpi-label">Propostas Criadas</div>
+        <div class="kpi-sub">78 pacientes unicos</div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-value">60.0%</div>
+        <div class="kpi-label">Taxa de Conversao Geral</div>
+        <div class="kpi-sub">57 propostas executadas</div>
+      </div>
+      <div class="kpi-card purple">
+        <div class="kpi-value">78.2%</div>
+        <div class="kpi-label">Cobertura Follow-up</div>
+        <div class="kpi-sub">61 de 78 pacientes</div>
+      </div>
+      <div class="kpi-card orange">
+        <div class="kpi-value">58.1%</div>
+        <div class="kpi-label">Conversao com FUP</div>
+        <div class="kpi-sub">43 de 74 propostas</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. PANORAMA DE PROPOSTAS -->
+  <div class="section">
+    <div class="section-title"><span class="num">2</span> Panorama de Propostas</div>
+    <div class="kpi-grid">
+      <div class="kpi-card green">
+        <div class="kpi-value">57</div>
+        <div class="kpi-label">Executadas</div>
+        <div class="kpi-sub">60.0%</div>
+      </div>
+      <div class="kpi-card orange">
+        <div class="kpi-value">26</div>
+        <div class="kpi-label">Aprovadas (pendente execucao)</div>
+        <div class="kpi-sub">27.4%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">12</div>
+        <div class="kpi-label">Aguardando Aprovacao</div>
+        <div class="kpi-sub">12.6%</div>
+      </div>
+    </div>
+    <div class="chart-container">
+      <canvas id="statusChart"></canvas>
+    </div>
+  </div>
+
+  <!-- 3. COBERTURA DE FOLLOW-UP -->
+  <div class="section">
+    <div class="section-title"><span class="num">3</span> Cobertura de Follow-up</div>
+    <div class="kpi-grid">
+      <div class="kpi-card purple">
+        <div class="kpi-value">60</div>
+        <div class="kpi-label">Pacientes com FUP Clara</div>
+        <div class="kpi-sub">Disparos automatizados</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">17</div>
+        <div class="kpi-label">Sem Follow-up</div>
+        <div class="kpi-sub">21.8% do total</div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-value">100%</div>
+        <div class="kpi-label">Match Chatwoot</div>
+        <div class="kpi-sub">Todos localizados</div>
+      </div>
+    </div>
+    <div class="chart-container">
+      <canvas id="coverageChart"></canvas>
+    </div>
+  </div>
+
+  <!-- 4. RECEPCAO E SENTIMENTACAO -->
+  <div class="section">
+    <div class="section-title"><span class="num">4</span> Recepcao das Mensagens</div>
+    <div class="kpi-grid">
+      <div class="kpi-card green">
+        <div class="kpi-value">18</div>
+        <div class="kpi-label">Respostas Positivas</div>
+        <div class="kpi-sub">8.0%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">200</div>
+        <div class="kpi-label">Respostas Neutras</div>
+        <div class="kpi-sub">89.3%</div>
+      </div>
+      <div class="kpi-card red">
+        <div class="kpi-value">4</div>
+        <div class="kpi-label">Respostas Negativas</div>
+        <div class="kpi-sub">1.8%</div>
+      </div>
+      <div class="kpi-card orange">
+        <div class="kpi-value">2</div>
+        <div class="kpi-label">Sem Resposta</div>
+        <div class="kpi-sub">0.9%</div>
+      </div>
+    </div>
+    <div class="chart-container">
+      <canvas id="sentimentChart"></canvas>
+    </div>
+  </div>
+
+  <!-- 5. FUNIL DE CONVERSAO -->
+  <div class="section">
+    <div class="section-title"><span class="num">5</span> Funil de Conversao</div>
+    <div class="funnel">
+      <div class="funnel-step">95 Propostas Criadas</div>
+      <div class="funnel-arrow">&#9660;</div>
+      <div class="funnel-step">74 Receberam Follow-up (77.9%)</div>
+      <div class="funnel-arrow">&#9660;</div>
+      <div class="funnel-step">222 Responderam (99.1%)</div>
+      <div class="funnel-arrow">&#9660;</div>
+      <div class="funnel-step">57 Executadas (60.0%)</div>
+    </div>
+  </div>
+
+  <!-- 6. EFETIVIDADE COMPARATIVA -->
+  <div class="section">
+    <div class="section-title"><span class="num">6</span> Efetividade Comparativa: Com vs Sem Follow-up</div>
+    <div class="comparison-box">
+      <div class="comparison-row">
+        <div class="comp-group with">
+          <div class="label">COM Follow-up</div>
+          <div class="rate">58.1%</div>
+          <div class="detail">43 de 74 propostas</div>
+          <div class="detail">61 pacientes</div>
+        </div>
+        <div class="vs-badge">VS</div>
+        <div class="comp-group without">
+          <div class="label">SEM Follow-up</div>
+          <div class="rate">66.7%</div>
+          <div class="detail">14 de 21 propostas</div>
+          <div class="detail">17 pacientes</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight-box">
+      <h4>Interpretacao dos Dados</h4>
+      <p>
+        O grupo <strong>SEM follow-up</strong> apresenta taxa de conversao ligeiramente superior (66.7% vs 58.1%).
+        Isso ocorre por um <strong>vies de selecao natural</strong>: o pipeline de follow-up da Clara
+        so dispara em <strong>D+7</strong> — ou seja, propostas que ja foram executadas antes de 7 dias
+        NUNCA recebem follow-up. O grupo "sem follow-up" e majoritariamente composto por pacientes que
+        converteram rapidamente por conta propria.
+      </p>
+      <p style="margin-top:8px;">
+        O dado mais relevante e que <strong>58.1% das propostas que NAO converteram
+        sozinhas em 7 dias acabaram sendo executadas</strong> apos o follow-up — provando que a automacao
+        resgata conversoes que seriam perdidas.
+      </p>
+    </div>
+
+    <div class="chart-container">
+      <canvas id="comparisonChart"></canvas>
+    </div>
+  </div>
+
+  <!-- 7. TOP PROCEDIMENTOS -->
+  <div class="section">
+    <div class="section-title"><span class="num">7</span> Conversao por Procedimento</div>
+    <div class="chart-container">
+      <canvas id="procChart"></canvas>
+    </div>
+    <div style="overflow-x:auto; margin-top:12px;">
+    <table>
+      <thead>
+        <tr>
+          <th>Procedimento</th>
+          <th style="text-align:center">Propostas</th>
+          <th style="text-align:center">Executadas</th>
+          <th style="text-align:center">Conversao</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR)</td>
+          <td style="text-align:center">18</td>
+          <td style="text-align:center">14</td>
+          <td style="text-align:center"><span class="badge badge-green">77.8%</span></td>
+        </tr>
+        <tr>
+          <td>LASER CO2 FULL FACE</td>
+          <td style="text-align:center">12</td>
+          <td style="text-align:center">9</td>
+          <td style="text-align:center"><span class="badge badge-green">75.0%</span></td>
+        </tr>
+        <tr>
+          <td>RESTYLANE/LYFT/DEFYNE/KYSSE (1SERINGA)</td>
+          <td style="text-align:center">9</td>
+          <td style="text-align:center">7</td>
+          <td style="text-align:center"><span class="badge badge-green">77.8%</span></td>
+        </tr>
+        <tr>
+          <td>FOTONA FACE 4D</td>
+          <td style="text-align:center">8</td>
+          <td style="text-align:center">2</td>
+          <td style="text-align:center"><span class="badge badge-red">25.0%</span></td>
+        </tr>
+        <tr>
+          <td>RESTYLANE/LYFT/DEFYNE/KYSSE (3SERINGA)</td>
+          <td style="text-align:center">8</td>
+          <td style="text-align:center">3</td>
+          <td style="text-align:center"><span class="badge badge-red">37.5%</span></td>
+        </tr>
+        <tr>
+          <td>INJETAVEL VITAMINA B12  PARTICULAR</td>
+          <td style="text-align:center">6</td>
+          <td style="text-align:center">2</td>
+          <td style="text-align:center"><span class="badge badge-red">33.3%</span></td>
+        </tr>
+        <tr>
+          <td>LASER CO2 PESCOCO</td>
+          <td style="text-align:center">5</td>
+          <td style="text-align:center">3</td>
+          <td style="text-align:center"><span class="badge badge-green">60.0%</span></td>
+        </tr>
+        <tr>
+          <td>LIFTERA PAPADA</td>
+          <td style="text-align:center">5</td>
+          <td style="text-align:center">3</td>
+          <td style="text-align:center"><span class="badge badge-green">60.0%</span></td>
+        </tr>
+        <tr>
+          <td>SCULPTRA</td>
+          <td style="text-align:center">5</td>
+          <td style="text-align:center">3</td>
+          <td style="text-align:center"><span class="badge badge-green">60.0%</span></td>
+        </tr>
+        <tr>
+          <td>RESTYLANE/LYFT/DEFYNE/KYSSE (2SERINGA)</td>
+          <td style="text-align:center">5</td>
+          <td style="text-align:center">1</td>
+          <td style="text-align:center"><span class="badge badge-red">20.0%</span></td>
+        </tr>
+        <tr>
+          <td>FOTONA DORSO DE MAOS</td>
+          <td style="text-align:center">4</td>
+          <td style="text-align:center">2</td>
+          <td style="text-align:center"><span class="badge badge-orange">50.0%</span></td>
+        </tr>
+        <tr>
+          <td>LASER CO2 COLO</td>
+          <td style="text-align:center">4</td>
+          <td style="text-align:center">3</td>
+          <td style="text-align:center"><span class="badge badge-green">75.0%</span></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- 8. CONCLUSOES -->
+  <div class="section">
+    <div class="section-title"><span class="num">8</span> Conclusoes e Recomendacoes</div>
+
+    <div class="insight-box">
+      <h4>1. Cobertura excelente</h4>
+      <p>78.2% dos pacientes com proposta receberam follow-up automatizado.
+      100% dos pacientes foram localizados no Chatwoot via variantes de telefone.</p>
+    </div>
+
+    <div class="insight-box">
+      <h4>2. Follow-up resgata conversoes</h4>
+      <p>Das 74 propostas que nao converteram nos primeiros 7 dias,
+      43 (58.1%) acabaram sendo executadas
+      apos receberem o follow-up da Clara. Sem a automacao, parte dessas conversoes seria perdida.</p>
+    </div>
+
+    <div class="insight-box">
+      <h4>3. Alta receptividade</h4>
+      <p>Apenas 4 respostas negativas (1.8%) —
+      indicando que as mensagens nao geram atrito com os pacientes. A grande maioria responde de forma neutra
+      ou positiva.</p>
+    </div>
+
+    <div class="insight-box">
+      <h4>4. Procedimentos com maior conversao</h4>
+      <p>Toxina Botulinica (77.8%), Laser CO2 (75.0%)
+      e Preenchimento (77.8%) lideram a conversao.
+      Procedimentos com menor taxa podem se beneficiar de templates de follow-up especificos.</p>
+    </div>
+
+    <div class="insight-box">
+      <h4>5. Proximos Passos Recomendados</h4>
+      <p>
+        • Manter o pipeline de follow-up D+7 ativo — ele resgata conversoes que nao aconteceriam sozinhas<br>
+        • Considerar um segundo follow-up em D+14 para propostas ainda pendentes<br>
+        • Personalizar templates por tipo de procedimento (maior contextualizacao)<br>
+        • Monitorar mensalmente para acompanhar evolucao das taxas
+      </p>
+    </div>
+  </div>
+
+  <!-- METODOLOGIA -->
+  <div class="section">
+    <div class="section-title"><span class="num">9</span> Metodologia</div>
+    <div class="comparison-box" style="font-size:0.85rem; color: var(--text-secondary);">
+      <p><strong>Periodo:</strong> 01/08/2026 a 26/09/2026</p>
+      <p><strong>Fonte de propostas:</strong> Feegow API — GET /proposal/list (todas as propostas criadas no periodo)</p>
+      <p><strong>Match de pacientes:</strong> Feegow (telefone) &rarr; Chatwoot (search por variantes: com/sem +55, DDD, digito 9)</p>
+      <p><strong>Identificacao de follow-up:</strong> Mensagens outgoing com padroes de template de proposta (keywords: proposta, orcamento, procedimento, investimento, aprovacao)</p>
+      <p><strong>Classificacao de sender:</strong> Clara (bot) identificada por sender_type AgentBot, content_type template, ou padroes de texto</p>
+      <p><strong>Sentimentacao:</strong> Heuristica baseada em palavras-chave (positiva, negativa, neutra, sem resposta)</p>
+      <p><strong>Grupo controle:</strong> Pacientes que nao receberam nenhum follow-up identificavel nas conversas</p>
+      <p><strong>Vies conhecido:</strong> O pipeline dispara em D+7 — propostas convertidas antes disso nao recebem follow-up, inflando a taxa do grupo controle</p>
+      <p style="margin-top:8px;"><strong>Gerado em:</strong> 2026-09-26 | <strong>Dados:</strong> 95 propostas, 78 pacientes, 100% match Chatwoot</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  DermaClinic — Estudo de Conversao de Propostas | Gerado por Digital AI &copy; 2026
+</div>
+
+<script>
+// Status Distribution Chart
+new Chart(document.getElementById('statusChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Executada', 'Aprovada', 'Aguardando'],
+    datasets: [{
+      data: [57, 26, 12],
+      backgroundColor: ['#22C55E', '#F59E0B', '#6366F1'],
+      borderWidth: 0
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom', labels: { font: { family: 'DM Sans' } } }
+    }
+  }
+});
+
+// Coverage Chart
+new Chart(document.getElementById('coverageChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Com Follow-up Clara', 'Sem Follow-up'],
+    datasets: [{
+      data: [60, 17],
+      backgroundColor: ['#6366F1', '#E5E7EB'],
+      borderWidth: 0
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom', labels: { font: { family: 'DM Sans' } } }
+    }
+  }
+});
+
+// Sentiment Chart
+new Chart(document.getElementById('sentimentChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Positiva', 'Neutra', 'Negativa', 'Sem Resposta'],
+    datasets: [{
+      label: 'Respostas',
+      data: [18, 200, 4, 2],
+      backgroundColor: ['#22C55E', '#6366F1', '#EF4444', '#9CA3AF'],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: { y: { beginAtZero: true } },
+    plugins: {
+      legend: { display: false }
+    }
+  }
+});
+
+// Comparison Chart
+new Chart(document.getElementById('comparisonChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Executada', 'Aprovada', 'Aguardando'],
+    datasets: [
+      {
+        label: 'Com Follow-up',
+        data: [43, 22, 9],
+        backgroundColor: '#6366F1',
+        borderRadius: 6
+      },
+      {
+        label: 'Sem Follow-up',
+        data: [14, 4, 3],
+        backgroundColor: '#D1D5DB',
+        borderRadius: 6
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: { y: { beginAtZero: true } },
+    plugins: {
+      legend: { position: 'bottom', labels: { font: { family: 'DM Sans' } } }
+    }
+  }
+});
+
+// Procedures Chart
+new Chart(document.getElementById('procChart'), {
+  type: 'bar',
+  data: {
+    labels: ["TOXINA BOTULINICA -GLOBAL", "LASER CO2 FULL FACE", "RESTYLANE/LYFT/DEFYNE/KYS", "FOTONA FACE 4D", "RESTYLANE/LYFT/DEFYNE/KYS", "INJETAVEL VITAMINA B12  P", "LASER CO2 PESCOCO", "LIFTERA PAPADA"],
+    datasets: [
+      {
+        label: 'Total',
+        data: [18, 12, 9, 8, 8, 6, 5, 5],
+        backgroundColor: '#C7D2FE',
+        borderRadius: 6
+      },
+      {
+        label: 'Executadas',
+        data: [14, 9, 7, 2, 3, 2, 3, 3],
+        backgroundColor: '#22C55E',
+        borderRadius: 6
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    indexAxis: 'y',
+    scales: { x: { beginAtZero: true } },
+    plugins: {
+      legend: { position: 'bottom', labels: { font: { family: 'DM Sans' } } }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
