@@ -3,735 +3,1242 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Estudo de Conversão de Propostas — DermaClinic</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<title>Estudo de Conversao de Propostas — DermaClinic</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root {
   --primary: #2D52EF;
-  --primary-light: #5B7AFF;
-  --primary-dark: #0F1F5C;
-  --bg: #F5F7FF;
-  --card-bg: #FFFFFF;
-  --text: #1A1A2E;
-  --text-secondary: #6B7280;
-  --success: #22C55E;
-  --success-bg: #DCFCE7;
-  --warning: #F59E0B;
-  --warning-bg: #FEF3C7;
-  --danger: #EF4444;
-  --danger-bg: #FEE2E2;
-  --neutral: #6366F1;
-  --neutral-bg: #EEF2FF;
-  --border: #E5E7EB;
-  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
-  --shadow-lg: 0 4px 16px rgba(0,0,0,0.1);
+  --primary-light: #4F6FF7;
+  --primary-bg: #EEF2FF;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --text: #1e293b;
+  --text-secondary: #64748b;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 * { margin:0; padding:0; box-sizing:border-box; }
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.6;
-  min-height: 100vh;
-}
-.header {
-  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
-  color: white;
-  padding: 40px 24px 32px;
-  text-align: center;
-}
-.header h1 {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 1.75rem;
-  font-weight: 800;
-  margin-bottom: 8px;
-  letter-spacing: -0.02em;
-}
-.header .subtitle {
-  font-size: 0.95rem;
-  opacity: 0.85;
-  font-weight: 400;
-}
-.header .period {
-  display: inline-block;
-  margin-top: 12px;
-  padding: 4px 16px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 500;
-}
-.container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 24px 16px;
-}
-.section {
-  margin-bottom: 32px;
-}
-.section-title {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--primary-dark);
-  margin-bottom: 16px;
-  padding-bottom: 8px;
-  border-bottom: 2px solid var(--primary);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.section-title .num {
-  background: var(--primary);
-  color: white;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8rem;
-  font-weight: 700;
-  flex-shrink: 0;
-}
-.kpi-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 12px;
-  margin-bottom: 20px;
-}
-.kpi-card {
-  background: var(--card-bg);
-  border-radius: 12px;
-  padding: 20px 16px;
-  text-align: center;
-  box-shadow: var(--shadow);
-  border-left: 4px solid var(--primary);
-}
-.kpi-card.green { border-left-color: var(--success); }
-.kpi-card.orange { border-left-color: var(--warning); }
-.kpi-card.red { border-left-color: var(--danger); }
-.kpi-card.purple { border-left-color: var(--neutral); }
-.kpi-value {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 2rem;
-  font-weight: 800;
-  color: var(--primary-dark);
-  line-height: 1.1;
-}
-.kpi-card.green .kpi-value { color: #15803D; }
-.kpi-card.orange .kpi-value { color: #B45309; }
-.kpi-card.red .kpi-value { color: #DC2626; }
-.kpi-label {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  margin-top: 4px;
-  font-weight: 500;
-}
-.kpi-sub {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  margin-top: 2px;
-}
-.comparison-box {
-  background: var(--card-bg);
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: var(--shadow);
-  margin-bottom: 16px;
-}
-.comparison-row {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 16px;
-  align-items: center;
-}
-.comp-group {
-  text-align: center;
-  padding: 16px;
-  border-radius: 8px;
-}
-.comp-group.with { background: var(--neutral-bg); }
-.comp-group.without { background: #F9FAFB; }
-.comp-group .rate {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 2.2rem;
-  font-weight: 800;
-}
-.comp-group.with .rate { color: var(--neutral); }
-.comp-group.without .rate { color: var(--text-secondary); }
-.comp-group .label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-.comp-group .detail {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-}
-.vs-badge {
-  background: var(--primary);
-  color: white;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 0.8rem;
-}
-.insight-box {
-  background: linear-gradient(135deg, #EEF2FF 0%, #F5F7FF 100%);
-  border: 1px solid #C7D2FE;
-  border-radius: 12px;
-  padding: 20px;
-  margin: 16px 0;
-}
-.insight-box h4 {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  color: var(--primary-dark);
-  margin-bottom: 8px;
-  font-size: 0.95rem;
-}
-.insight-box p {
-  font-size: 0.9rem;
-  color: var(--text);
-  line-height: 1.7;
-}
-.chart-container {
-  background: var(--card-bg);
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: var(--shadow);
-  margin-bottom: 16px;
-}
-.chart-container canvas {
-  max-height: 350px;
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.85rem;
-}
-table th {
-  background: var(--primary-dark);
-  color: white;
-  padding: 10px 12px;
-  text-align: left;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 600;
-  font-size: 0.8rem;
-}
-table td {
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--border);
-}
-table tr:nth-child(even) { background: #F9FAFB; }
-table tr:hover { background: #EEF2FF; }
-.badge {
-  display: inline-block;
-  padding: 2px 10px;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-.badge-green { background: var(--success-bg); color: #15803D; }
-.badge-orange { background: var(--warning-bg); color: #B45309; }
-.badge-red { background: var(--danger-bg); color: #DC2626; }
-.footer {
-  text-align: center;
-  padding: 24px;
-  color: var(--text-secondary);
-  font-size: 0.75rem;
-  border-top: 1px solid var(--border);
-  margin-top: 40px;
-}
-.funnel {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  margin: 20px 0;
-}
-.funnel-step {
-  background: var(--primary);
-  color: white;
-  padding: 12px 20px;
-  border-radius: 8px;
-  text-align: center;
-  font-weight: 600;
-  font-size: 0.9rem;
-  position: relative;
-  transition: all 0.3s;
-}
-.funnel-step:nth-child(1) { width: 100%; opacity: 1; }
-.funnel-step:nth-child(2) { width: 85%; opacity: 0.9; }
-.funnel-step:nth-child(3) { width: 70%; opacity: 0.85; background: var(--primary-light); }
-.funnel-step:nth-child(4) { width: 55%; opacity: 0.8; background: var(--success); }
-.funnel-arrow {
-  color: var(--text-secondary);
-  font-size: 1.2rem;
-}
-@media (max-width: 600px) {
-  .comparison-row { grid-template-columns: 1fr; }
-  .vs-badge { margin: 0 auto; }
-  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-  .header h1 { font-size: 1.3rem; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+.container { max-width:1200px; margin:0 auto; padding:24px 16px; }
+h1 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.75rem; font-weight:700; color:var(--primary); margin-bottom:4px; }
+h2 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.25rem; font-weight:600; color:var(--text); margin:32px 0 16px; padding-bottom:8px; border-bottom:2px solid var(--primary); }
+h3 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1rem; font-weight:600; margin:16px 0 8px; }
+.subtitle { color:var(--text-secondary); font-size:0.9rem; margin-bottom:24px; }
+.kpi-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:24px; }
+.kpi-card { background:var(--card); border-radius:12px; padding:16px; box-shadow:var(--shadow); border-left:4px solid var(--primary); }
+.kpi-value { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.5rem; font-weight:700; color:var(--primary); }
+.kpi-value.success { color:var(--success); }
+.kpi-value.warning { color:var(--warning); }
+.kpi-value.danger { color:var(--danger); }
+.kpi-label { font-size:0.8rem; color:var(--text-secondary); margin-top:4px; }
+.card { background:var(--card); border-radius:12px; padding:20px; box-shadow:var(--shadow); margin-bottom:16px; }
+.insight-box { background:#FFFBEB; border-left:4px solid var(--warning); padding:12px 16px; border-radius:0 8px 8px 0; margin:12px 0; font-size:0.85rem; }
+.insight-box.critical { background:#FEF2F2; border-left-color:var(--danger); }
+.insight-box.positive { background:#F0FDF4; border-left-color:var(--success); }
+.chart-container { position:relative; height:300px; margin:16px 0; }
+.chart-container.small { height:220px; }
+table { width:100%; border-collapse:collapse; font-size:0.8rem; }
+th { background:var(--primary); color:#fff; padding:8px 10px; text-align:left; font-weight:600; position:sticky; top:0; }
+td { padding:6px 10px; border-bottom:1px solid var(--border); }
+tr:hover { background:var(--primary-bg); }
+.table-wrapper { max-height:600px; overflow-y:auto; border-radius:8px; border:1px solid var(--border); }
+.comp-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:16px; margin:16px 0; }
+.comp-card { background:var(--card); border-radius:12px; padding:16px; box-shadow:var(--shadow); text-align:center; }
+.comp-card h4 { font-size:0.85rem; color:var(--text-secondary); margin-bottom:8px; }
+.comp-value { font-family:'Plus Jakarta Sans',sans-serif; font-size:2rem; font-weight:700; }
+.comp-sub { font-size:0.8rem; color:var(--text-secondary); margin-top:4px; }
+.methodology { background:#f1f5f9; border-radius:8px; padding:16px; font-size:0.8rem; color:var(--text-secondary); margin-top:16px; }
+.filter-bar { margin:8px 0 12px; display:flex; gap:8px; flex-wrap:wrap; }
+.filter-btn { padding:4px 12px; border-radius:16px; border:1px solid var(--border); background:var(--card); font-size:0.75rem; cursor:pointer; }
+.filter-btn.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+@media (max-width:768px) {
+  .kpi-grid { grid-template-columns:repeat(2, 1fr); }
+  .comp-grid { grid-template-columns:1fr; }
+  h1 { font-size:1.3rem; }
+  table { font-size:0.7rem; }
 }
 </style>
 </head>
 <body>
-
-<div class="header">
-  <h1>Estudo de Conversao de Propostas</h1>
-  <div class="subtitle">Eficiencia dos Follow-ups Automatizados na Conversao de Orcamentos</div>
-  <div class="period">Agosto - Setembro 2026</div>
-</div>
-
 <div class="container">
 
-  <!-- 1. RESUMO EXECUTIVO -->
-  <div class="section">
-    <div class="section-title"><span class="num">1</span> Resumo Executivo</div>
-    <div class="kpi-grid">
-      <div class="kpi-card">
-        <div class="kpi-value">95</div>
-        <div class="kpi-label">Propostas Criadas</div>
-        <div class="kpi-sub">78 pacientes unicos</div>
-      </div>
-      <div class="kpi-card green">
-        <div class="kpi-value">60.0%</div>
-        <div class="kpi-label">Taxa de Conversao Geral</div>
-        <div class="kpi-sub">57 propostas executadas</div>
-      </div>
-      <div class="kpi-card purple">
-        <div class="kpi-value">78.2%</div>
-        <div class="kpi-label">Cobertura Follow-up</div>
-        <div class="kpi-sub">61 de 78 pacientes</div>
-      </div>
-      <div class="kpi-card orange">
-        <div class="kpi-value">58.1%</div>
-        <div class="kpi-label">Conversao com FUP</div>
-        <div class="kpi-sub">43 de 74 propostas</div>
-      </div>
-    </div>
+<h1>Estudo de Conversao de Propostas</h1>
+<p class="subtitle">DermaClinic — Agosto a Setembro 2026 | 95 propostas | 78 pacientes | Gerado em 26/09/2026</p>
+
+<!-- SECTION 1: KPIs -->
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-value">95</div>
+    <div class="kpi-label">Propostas Criadas</div>
   </div>
-
-  <!-- 2. PANORAMA DE PROPOSTAS -->
-  <div class="section">
-    <div class="section-title"><span class="num">2</span> Panorama de Propostas</div>
-    <div class="kpi-grid">
-      <div class="kpi-card green">
-        <div class="kpi-value">57</div>
-        <div class="kpi-label">Executadas</div>
-        <div class="kpi-sub">60.0%</div>
-      </div>
-      <div class="kpi-card orange">
-        <div class="kpi-value">26</div>
-        <div class="kpi-label">Aprovadas (pendente execucao)</div>
-        <div class="kpi-sub">27.4%</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-value">12</div>
-        <div class="kpi-label">Aguardando Aprovacao</div>
-        <div class="kpi-sub">12.6%</div>
-      </div>
-    </div>
-    <div class="chart-container">
-      <canvas id="statusChart"></canvas>
-    </div>
+  <div class="kpi-card">
+    <div class="kpi-value">R$ 413.690</div>
+    <div class="kpi-label">Valor Total das Propostas</div>
   </div>
-
-  <!-- 3. COBERTURA DE FOLLOW-UP -->
-  <div class="section">
-    <div class="section-title"><span class="num">3</span> Cobertura de Follow-up</div>
-    <div class="kpi-grid">
-      <div class="kpi-card purple">
-        <div class="kpi-value">60</div>
-        <div class="kpi-label">Pacientes com FUP Clara</div>
-        <div class="kpi-sub">Disparos automatizados</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-value">17</div>
-        <div class="kpi-label">Sem Follow-up</div>
-        <div class="kpi-sub">21.8% do total</div>
-      </div>
-      <div class="kpi-card green">
-        <div class="kpi-value">100%</div>
-        <div class="kpi-label">Match Chatwoot</div>
-        <div class="kpi-sub">Todos localizados</div>
-      </div>
-    </div>
-    <div class="chart-container">
-      <canvas id="coverageChart"></canvas>
-    </div>
+  <div class="kpi-card">
+    <div class="kpi-value success">R$ 170.810</div>
+    <div class="kpi-label">Faturamento Convertido (Executadas)</div>
   </div>
-
-  <!-- 4. RECEPCAO E SENTIMENTACAO -->
-  <div class="section">
-    <div class="section-title"><span class="num">4</span> Recepcao das Mensagens</div>
-    <div class="kpi-grid">
-      <div class="kpi-card green">
-        <div class="kpi-value">18</div>
-        <div class="kpi-label">Respostas Positivas</div>
-        <div class="kpi-sub">8.0%</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-value">200</div>
-        <div class="kpi-label">Respostas Neutras</div>
-        <div class="kpi-sub">89.3%</div>
-      </div>
-      <div class="kpi-card red">
-        <div class="kpi-value">4</div>
-        <div class="kpi-label">Respostas Negativas</div>
-        <div class="kpi-sub">1.8%</div>
-      </div>
-      <div class="kpi-card orange">
-        <div class="kpi-value">2</div>
-        <div class="kpi-label">Sem Resposta</div>
-        <div class="kpi-sub">0.9%</div>
-      </div>
-    </div>
-    <div class="chart-container">
-      <canvas id="sentimentChart"></canvas>
-    </div>
+  <div class="kpi-card">
+    <div class="kpi-value">60,0%</div>
+    <div class="kpi-label">Taxa de Conversao Geral</div>
   </div>
-
-  <!-- 5. FUNIL DE CONVERSAO -->
-  <div class="section">
-    <div class="section-title"><span class="num">5</span> Funil de Conversao</div>
-    <div class="funnel">
-      <div class="funnel-step">95 Propostas Criadas</div>
-      <div class="funnel-arrow">&#9660;</div>
-      <div class="funnel-step">74 Receberam Follow-up (77.9%)</div>
-      <div class="funnel-arrow">&#9660;</div>
-      <div class="funnel-step">222 Responderam (99.1%)</div>
-      <div class="funnel-arrow">&#9660;</div>
-      <div class="funnel-step">57 Executadas (60.0%)</div>
-    </div>
+  <div class="kpi-card">
+    <div class="kpi-value warning">19.2%</div>
+    <div class="kpi-label">Cobertura FUP Pos-Proposta (Real)</div>
   </div>
-
-  <!-- 6. EFETIVIDADE COMPARATIVA -->
-  <div class="section">
-    <div class="section-title"><span class="num">6</span> Efetividade Comparativa: Com vs Sem Follow-up</div>
-    <div class="comparison-box">
-      <div class="comparison-row">
-        <div class="comp-group with">
-          <div class="label">COM Follow-up</div>
-          <div class="rate">58.1%</div>
-          <div class="detail">43 de 74 propostas</div>
-          <div class="detail">61 pacientes</div>
-        </div>
-        <div class="vs-badge">VS</div>
-        <div class="comp-group without">
-          <div class="label">SEM Follow-up</div>
-          <div class="rate">66.7%</div>
-          <div class="detail">14 de 21 propostas</div>
-          <div class="detail">17 pacientes</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="insight-box">
-      <h4>Interpretacao dos Dados</h4>
-      <p>
-        O grupo <strong>SEM follow-up</strong> apresenta taxa de conversao ligeiramente superior (66.7% vs 58.1%).
-        Isso ocorre por um <strong>vies de selecao natural</strong>: o pipeline de follow-up da Clara
-        so dispara em <strong>D+7</strong> — ou seja, propostas que ja foram executadas antes de 7 dias
-        NUNCA recebem follow-up. O grupo "sem follow-up" e majoritariamente composto por pacientes que
-        converteram rapidamente por conta propria.
-      </p>
-      <p style="margin-top:8px;">
-        O dado mais relevante e que <strong>58.1% das propostas que NAO converteram
-        sozinhas em 7 dias acabaram sendo executadas</strong> apos o follow-up — provando que a automacao
-        resgata conversoes que seriam perdidas.
-      </p>
-    </div>
-
-    <div class="chart-container">
-      <canvas id="comparisonChart"></canvas>
-    </div>
+  <div class="kpi-card">
+    <div class="kpi-value">R$ 4.355</div>
+    <div class="kpi-label">Ticket Medio por Proposta</div>
   </div>
-
-  <!-- 7. TOP PROCEDIMENTOS -->
-  <div class="section">
-    <div class="section-title"><span class="num">7</span> Conversao por Procedimento</div>
-    <div class="chart-container">
-      <canvas id="procChart"></canvas>
-    </div>
-    <div style="overflow-x:auto; margin-top:12px;">
-    <table>
-      <thead>
-        <tr>
-          <th>Procedimento</th>
-          <th style="text-align:center">Propostas</th>
-          <th style="text-align:center">Executadas</th>
-          <th style="text-align:center">Conversao</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>TOXINA BOTULINICA -GLOBAL(1/3SUPERIOR)</td>
-          <td style="text-align:center">18</td>
-          <td style="text-align:center">14</td>
-          <td style="text-align:center"><span class="badge badge-green">77.8%</span></td>
-        </tr>
-        <tr>
-          <td>LASER CO2 FULL FACE</td>
-          <td style="text-align:center">12</td>
-          <td style="text-align:center">9</td>
-          <td style="text-align:center"><span class="badge badge-green">75.0%</span></td>
-        </tr>
-        <tr>
-          <td>RESTYLANE/LYFT/DEFYNE/KYSSE (1SERINGA)</td>
-          <td style="text-align:center">9</td>
-          <td style="text-align:center">7</td>
-          <td style="text-align:center"><span class="badge badge-green">77.8%</span></td>
-        </tr>
-        <tr>
-          <td>FOTONA FACE 4D</td>
-          <td style="text-align:center">8</td>
-          <td style="text-align:center">2</td>
-          <td style="text-align:center"><span class="badge badge-red">25.0%</span></td>
-        </tr>
-        <tr>
-          <td>RESTYLANE/LYFT/DEFYNE/KYSSE (3SERINGA)</td>
-          <td style="text-align:center">8</td>
-          <td style="text-align:center">3</td>
-          <td style="text-align:center"><span class="badge badge-red">37.5%</span></td>
-        </tr>
-        <tr>
-          <td>INJETAVEL VITAMINA B12  PARTICULAR</td>
-          <td style="text-align:center">6</td>
-          <td style="text-align:center">2</td>
-          <td style="text-align:center"><span class="badge badge-red">33.3%</span></td>
-        </tr>
-        <tr>
-          <td>LASER CO2 PESCOCO</td>
-          <td style="text-align:center">5</td>
-          <td style="text-align:center">3</td>
-          <td style="text-align:center"><span class="badge badge-green">60.0%</span></td>
-        </tr>
-        <tr>
-          <td>LIFTERA PAPADA</td>
-          <td style="text-align:center">5</td>
-          <td style="text-align:center">3</td>
-          <td style="text-align:center"><span class="badge badge-green">60.0%</span></td>
-        </tr>
-        <tr>
-          <td>SCULPTRA</td>
-          <td style="text-align:center">5</td>
-          <td style="text-align:center">3</td>
-          <td style="text-align:center"><span class="badge badge-green">60.0%</span></td>
-        </tr>
-        <tr>
-          <td>RESTYLANE/LYFT/DEFYNE/KYSSE (2SERINGA)</td>
-          <td style="text-align:center">5</td>
-          <td style="text-align:center">1</td>
-          <td style="text-align:center"><span class="badge badge-red">20.0%</span></td>
-        </tr>
-        <tr>
-          <td>FOTONA DORSO DE MAOS</td>
-          <td style="text-align:center">4</td>
-          <td style="text-align:center">2</td>
-          <td style="text-align:center"><span class="badge badge-orange">50.0%</span></td>
-        </tr>
-        <tr>
-          <td>LASER CO2 COLO</td>
-          <td style="text-align:center">4</td>
-          <td style="text-align:center">3</td>
-          <td style="text-align:center"><span class="badge badge-green">75.0%</span></td>
-        </tr>
-      </tbody>
-    </table>
-    </div>
-  </div>
-
-  <!-- 8. CONCLUSOES -->
-  <div class="section">
-    <div class="section-title"><span class="num">8</span> Conclusoes e Recomendacoes</div>
-
-    <div class="insight-box">
-      <h4>1. Cobertura excelente</h4>
-      <p>78.2% dos pacientes com proposta receberam follow-up automatizado.
-      100% dos pacientes foram localizados no Chatwoot via variantes de telefone.</p>
-    </div>
-
-    <div class="insight-box">
-      <h4>2. Follow-up resgata conversoes</h4>
-      <p>Das 74 propostas que nao converteram nos primeiros 7 dias,
-      43 (58.1%) acabaram sendo executadas
-      apos receberem o follow-up da Clara. Sem a automacao, parte dessas conversoes seria perdida.</p>
-    </div>
-
-    <div class="insight-box">
-      <h4>3. Alta receptividade</h4>
-      <p>Apenas 4 respostas negativas (1.8%) —
-      indicando que as mensagens nao geram atrito com os pacientes. A grande maioria responde de forma neutra
-      ou positiva.</p>
-    </div>
-
-    <div class="insight-box">
-      <h4>4. Procedimentos com maior conversao</h4>
-      <p>Toxina Botulinica (77.8%), Laser CO2 (75.0%)
-      e Preenchimento (77.8%) lideram a conversao.
-      Procedimentos com menor taxa podem se beneficiar de templates de follow-up especificos.</p>
-    </div>
-
-    <div class="insight-box">
-      <h4>5. Proximos Passos Recomendados</h4>
-      <p>
-        • Manter o pipeline de follow-up D+7 ativo — ele resgata conversoes que nao aconteceriam sozinhas<br>
-        • Considerar um segundo follow-up em D+14 para propostas ainda pendentes<br>
-        • Personalizar templates por tipo de procedimento (maior contextualizacao)<br>
-        • Monitorar mensalmente para acompanhar evolucao das taxas
-      </p>
-    </div>
-  </div>
-
-  <!-- METODOLOGIA -->
-  <div class="section">
-    <div class="section-title"><span class="num">9</span> Metodologia</div>
-    <div class="comparison-box" style="font-size:0.85rem; color: var(--text-secondary);">
-      <p><strong>Periodo:</strong> 01/08/2026 a 26/09/2026</p>
-      <p><strong>Fonte de propostas:</strong> Feegow API — GET /proposal/list (todas as propostas criadas no periodo)</p>
-      <p><strong>Match de pacientes:</strong> Feegow (telefone) &rarr; Chatwoot (search por variantes: com/sem +55, DDD, digito 9)</p>
-      <p><strong>Identificacao de follow-up:</strong> Mensagens outgoing com padroes de template de proposta (keywords: proposta, orcamento, procedimento, investimento, aprovacao)</p>
-      <p><strong>Classificacao de sender:</strong> Clara (bot) identificada por sender_type AgentBot, content_type template, ou padroes de texto</p>
-      <p><strong>Sentimentacao:</strong> Heuristica baseada em palavras-chave (positiva, negativa, neutra, sem resposta)</p>
-      <p><strong>Grupo controle:</strong> Pacientes que nao receberam nenhum follow-up identificavel nas conversas</p>
-      <p><strong>Vies conhecido:</strong> O pipeline dispara em D+7 — propostas convertidas antes disso nao recebem follow-up, inflando a taxa do grupo controle</p>
-      <p style="margin-top:8px;"><strong>Gerado em:</strong> 2026-09-26 | <strong>Dados:</strong> 95 propostas, 78 pacientes, 100% match Chatwoot</p>
-    </div>
-  </div>
-
 </div>
 
-<div class="footer">
-  DermaClinic — Estudo de Conversao de Propostas | Gerado por Digital AI &copy; 2026
+<div class="insight-box critical">
+  <strong>Descoberta critica:</strong> Apenas 19.2% dos pacientes (15/78) receberam follow-up especifico pos-proposta. Os demais 80,8% receberam apenas mensagens genericas (recall, aniversario) ou nenhum follow-up. A alavanca de maior impacto e aumentar essa cobertura.
 </div>
+
+<!-- SECTION 2: Panorama -->
+<h2>Panorama das Propostas</h2>
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-value success">57</div>
+    <div class="kpi-label">Executadas — R$ 170.810</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value" style="color:var(--primary)">26</div>
+    <div class="kpi-label">Aprovadas — R$ 175.610</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value warning">12</div>
+    <div class="kpi-label">Aguardando — R$ 67.270</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="chart-container small">
+    <canvas id="chartStatus"></canvas>
+  </div>
+</div>
+
+<div class="insight-box positive">
+  <strong>Oportunidade:</strong> R$ 175.610 em propostas aprovadas ainda nao executadas (ticket medio R$ 6.754 — 2,3x o ticket das executadas). Foco de acao: converter essas propostas em execucoes.
+</div>
+
+<!-- SECTION 3: Cobertura de Follow-up -->
+<h2>Cobertura de Follow-up (Analise Real)</h2>
+
+<div class="comp-grid">
+  <div class="comp-card">
+    <h4>FUP Pos-Proposta</h4>
+    <div class="comp-value" style="color:var(--danger)">15</div>
+    <div class="comp-sub">19.2% dos pacientes</div>
+  </div>
+  <div class="comp-card">
+    <h4>Apenas FUP Generico</h4>
+    <div class="comp-value" style="color:var(--warning)">44</div>
+    <div class="comp-sub">Recall, aniversario, promocoes</div>
+  </div>
+  <div class="comp-card">
+    <h4>Sem Nenhum FUP</h4>
+    <div class="comp-value" style="color:var(--text-secondary)">19</div>
+    <div class="comp-sub">Nenhuma mensagem</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="chart-container small">
+    <canvas id="chartCoverage"></canvas>
+  </div>
+</div>
+
+<!-- SECTION 4: Comparativo de Efetividade -->
+<h2>Comparativo de Efetividade</h2>
+
+<div class="comp-grid">
+  <div class="comp-card" style="border-top:4px solid var(--primary)">
+    <h4>Clara Pos-Proposta</h4>
+    <div class="comp-value" style="color:var(--primary)">35.7%</div>
+    <div class="comp-sub">14 pacientes | R$ 37.240</div>
+  </div>
+  <div class="comp-card" style="border-top:4px solid var(--success)">
+    <h4>Humano Pos-Proposta</h4>
+    <div class="comp-value" style="color:var(--success)">50.0%</div>
+    <div class="comp-sub">4 pacientes | R$ 15.090</div>
+  </div>
+  <div class="comp-card" style="border-top:4px solid var(--warning)">
+    <h4>Apenas FUP Generico</h4>
+    <div class="comp-value" style="color:var(--warning)">75.0%</div>
+    <div class="comp-sub">44 pacientes | R$ 126.530</div>
+  </div>
+  <div class="comp-card" style="border-top:4px solid var(--text-secondary)">
+    <h4>Sem Follow-up</h4>
+    <div class="comp-value" style="color:var(--text-secondary)">73.7%</div>
+    <div class="comp-sub">19 pacientes | R$ 71.220</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="chart-container">
+    <canvas id="chartComparativo"></canvas>
+  </div>
+</div>
+
+<div class="insight-box">
+  <strong>Vies de selecao (D+7):</strong> A Clara so dispara follow-up 7 dias apos a proposta. Pacientes que convertem nos primeiros 7 dias nunca recebem follow-up — ou seja, o grupo "sem FUP" e naturalmente formado por conversoes rapidas. O delta nao significa que o follow-up prejudica — o publico alcancado e mais dificil por construcao.
+</div>
+
+<!-- SECTION 5: Faturamento por Grupo -->
+<h2>Faturamento por Grupo de Follow-up</h2>
+
+<div class="card">
+  <div class="chart-container">
+    <canvas id="chartFaturamento"></canvas>
+  </div>
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-value" style="color:var(--primary)">R$ 82.830</div>
+    <div class="kpi-label">Valor Propostas — Clara Pos-Proposta</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value success">R$ 32.340</div>
+    <div class="kpi-label">Valor Propostas — Humano Pos-Proposta</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value warning">R$ 219.390</div>
+    <div class="kpi-label">Valor Propostas — FUP Generico</div>
+  </div>
+</div>
+
+<!-- SECTION 6: Resposta ao Follow-up -->
+<h2>Engajamento com Follow-up Pos-Proposta</h2>
+
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-value">15</div>
+    <div class="kpi-label">Receberam FUP Pos-Proposta</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value success">10</div>
+    <div class="kpi-label">Responderam ao FUP</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value">66.7%</div>
+    <div class="kpi-label">Taxa de Resposta</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value success">R$ 30.340</div>
+    <div class="kpi-label">Faturamento Atribuivel ao FUP</div>
+  </div>
+</div>
+
+<div class="insight-box positive">
+  <strong>ROI do Follow-up:</strong> Dos 15 pacientes que receberam follow-up pos-proposta, 4 converteram gerando R$ 30.340 em faturamento. Ainda ha R$ 49.290 em propostas abertas de pacientes que receberam follow-up.
+</div>
+
+<!-- SECTION 7: Tabela Detalhada -->
+<h2>Listagem Completa de Pacientes</h2>
+<p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px">78 pacientes ordenados por valor da proposta (decrescente). Clique no cabecalho para reordenar.</p>
+
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filterTable('all')">Todos (78)</button>
+  <button class="filter-btn" onclick="filterTable('converteu')">Convertidos (57)</button>
+  <button class="filter-btn" onclick="filterTable('pendente')">Pendentes (21)</button>
+  <button class="filter-btn" onclick="filterTable('com_fup')">Com FUP (15)</button>
+  <button class="filter-btn" onclick="filterTable('sem_fup')">Sem FUP (63)</button>
+</div>
+
+<div class="table-wrapper">
+<table id="patientTable">
+<thead>
+<tr>
+<th>Paciente</th>
+<th>Tel.</th>
+<th style="text-align:right">Valor R$</th>
+<th style="text-align:center">Prop.</th>
+<th>Status</th>
+<th>Follow-up</th>
+<th style="text-align:center">Resp.</th>
+<th style="text-align:center">Conv.</th>
+<th style="text-align:center">Dias</th>
+<th>Objecao</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="font-weight:500">LUCIANA REINERT DOS SANTOS</td>
+<td>***0265</td>
+<td style="text-align:right;font-weight:600">R$ 30.000</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td><span style="color:#ef4444;font-size:0.7rem">cancelar</span></td>
+</tr><tr>
+<td style="font-weight:500">Tatiana Goulart Florduardo Mue</td>
+<td>***6327</td>
+<td style="text-align:right;font-weight:600">R$ 20.250</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#f59e0b;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
+<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">EVELIN RODRIGUES PATRUNE DE SO</td>
+<td>***5656</td>
+<td style="text-align:right;font-weight:600">R$ 17.500</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">DJEFREI FERNANDO PASCH</td>
+<td>***4330</td>
+<td style="text-align:right;font-weight:600">R$ 14.970</td>
+<td style="text-align:center">3</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">THABATA MACCARI</td>
+<td>***6008</td>
+<td style="text-align:right;font-weight:600">R$ 14.850</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Jessica Fagundes de Souza</td>
+<td>***7931</td>
+<td style="text-align:right;font-weight:600">R$ 13.550</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Maria Regina Runze</td>
+<td>***0800</td>
+<td style="text-align:right;font-weight:600">R$ 13.500</td>
+<td style="text-align:center">3</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Graziela morgana silva tavares</td>
+<td>***0622</td>
+<td style="text-align:right;font-weight:600">R$ 12.800</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Andrea Del Bianco Ribaski</td>
+<td>***1332</td>
+<td style="text-align:right;font-weight:600">R$ 11.950</td>
+<td style="text-align:center">2</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">2.0d</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Priscila Pereira Lima</td>
+<td>***9244</td>
+<td style="text-align:right;font-weight:600">R$ 11.700</td>
+<td style="text-align:center">2</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">DINARA PAULA PANINI ANDRIOTI</td>
+<td>***2952</td>
+<td style="text-align:right;font-weight:600">R$ 11.250</td>
+<td style="text-align:center">2</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td><span style="color:#ef4444;font-size:0.7rem">nao tenho</span></td>
+</tr><tr>
+<td style="font-weight:500">GISLENI DOS SANTOS VIEIRA</td>
+<td>***6717</td>
+<td style="text-align:right;font-weight:600">R$ 11.240</td>
+<td style="text-align:center">2</td>
+<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Camila de Almeida Garcia</td>
+<td>***6300</td>
+<td style="text-align:right;font-weight:600">R$ 10.490</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Maria de Fátima Arruda Vieira </td>
+<td>***8247</td>
+<td style="text-align:right;font-weight:600">R$ 10.450</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">SAMIR DA SILVA ROSA</td>
+<td>***0929</td>
+<td style="text-align:right;font-weight:600">R$ 9.350</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">MARIANA GRANDI MONTEIRO Dtancr</td>
+<td>***5150</td>
+<td style="text-align:right;font-weight:600">R$ 8.700</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">IZAURA TEREZINHA FIAMONCINI</td>
+<td>***2738</td>
+<td style="text-align:right;font-weight:600">R$ 7.900</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Isabel dos Santos Ramos</td>
+<td>***7712</td>
+<td style="text-align:right;font-weight:600">R$ 7.100</td>
+<td style="text-align:center">2</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Denise Teresinha  Bizzi Guterr</td>
+<td>***5168</td>
+<td style="text-align:right;font-weight:600">R$ 7.000</td>
+<td style="text-align:center">2</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td><span style="color:#ef4444;font-size:0.7rem">nao posso</span></td>
+</tr><tr>
+<td style="font-weight:500">ELIZABETH KLEMTZ</td>
+<td>***2851</td>
+<td style="text-align:right;font-weight:600">R$ 6.900</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td><span style="color:#ef4444;font-size:0.7rem">não dá</span></td>
+</tr><tr>
+<td style="font-weight:500">CATIA BORATTI</td>
+<td>***4921</td>
+<td style="text-align:right;font-weight:600">R$ 6.400</td>
+<td style="text-align:center">2</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">ANA LUIZA DE ASSIS BALDUSSI</td>
+<td>***2057</td>
+<td style="text-align:right;font-weight:600">R$ 6.400</td>
+<td style="text-align:center">2</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">SILVIA APARECIDA MARQUES</td>
+<td>***6690</td>
+<td style="text-align:right;font-weight:600">R$ 6.350</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Janaína Alves Teixeira Costa</td>
+<td>***1264</td>
+<td style="text-align:right;font-weight:600">R$ 6.250</td>
+<td style="text-align:center">2</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Luisana Sfredo de Castro</td>
+<td>***8373</td>
+<td style="text-align:right;font-weight:600">R$ 6.250</td>
+<td style="text-align:center">2</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td><span style="color:#ef4444;font-size:0.7rem">cancelar</span></td>
+</tr><tr>
+<td style="font-weight:500">CARLOS HOEGEN</td>
+<td>***6008</td>
+<td style="text-align:right;font-weight:600">R$ 5.950</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">TANIA MARISE STEUERNAGEL</td>
+<td>***2540</td>
+<td style="text-align:right;font-weight:600">R$ 5.700</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Maria Clotilde Andreotti Zinga</td>
+<td>***1966</td>
+<td style="text-align:right;font-weight:600">R$ 5.150</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#f59e0b;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
+<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Claudia Valéria Lopes Gabardo</td>
+<td>***6027</td>
+<td style="text-align:right;font-weight:600">R$ 5.000</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td><span style="color:#ef4444;font-size:0.7rem">não tenho</span></td>
+</tr><tr>
+<td style="font-weight:500">Ilana Thaís de Andrade</td>
+<td>***7439</td>
+<td style="text-align:right;font-weight:600">R$ 5.000</td>
+<td style="text-align:center">2</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">PASCAL TANNER</td>
+<td>***0489</td>
+<td style="text-align:right;font-weight:600">R$ 4.800</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#f59e0b;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
+<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">GABRIELA NASCIMENTO FERREIRA D</td>
+<td>***0895</td>
+<td style="text-align:right;font-weight:600">R$ 4.500</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Carolina Borini Cherem</td>
+<td>***1685</td>
+<td style="text-align:right;font-weight:600">R$ 4.500</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td><span style="color:#ef4444;font-size:0.7rem">nao vou</span></td>
+</tr><tr>
+<td style="font-weight:500">JEANETE CRISTINE PAUL</td>
+<td>***4403</td>
+<td style="text-align:right;font-weight:600">R$ 4.150</td>
+<td style="text-align:center">2</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">PATRICIA AMBOS PEREIRA</td>
+<td>***2185</td>
+<td style="text-align:right;font-weight:600">R$ 4.100</td>
+<td style="text-align:center">2</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Renata Tridapalli</td>
+<td>***4598</td>
+<td style="text-align:right;font-weight:600">R$ 4.100</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">FLAVIA DA NOBREGA JANNINI</td>
+<td>***1275</td>
+<td style="text-align:right;font-weight:600">R$ 4.000</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td><span style="color:#ef4444;font-size:0.7rem">nao vou</span></td>
+</tr><tr>
+<td style="font-weight:500">JESSICA HOLZ</td>
+<td>***9691</td>
+<td style="text-align:right;font-weight:600">R$ 3.800</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Regina Helena da Silva Rosa</td>
+<td>***1213</td>
+<td style="text-align:right;font-weight:600">R$ 3.700</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">CLEDIR APARECIDA FORMULO DOS S</td>
+<td>***6868</td>
+<td style="text-align:right;font-weight:600">R$ 3.700</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Marilza Stammerjohann Schmitz</td>
+<td>***4957</td>
+<td style="text-align:right;font-weight:600">R$ 3.500</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">BERNADETE CONCEICAO CIDRAL</td>
+<td>***4345</td>
+<td style="text-align:right;font-weight:600">R$ 3.500</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">JUSSARA NASCIMENTO DOMINGOS</td>
+<td>***8075</td>
+<td style="text-align:right;font-weight:600">R$ 3.500</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">JACINIRA MARQUES</td>
+<td>***4386</td>
+<td style="text-align:right;font-weight:600">R$ 3.140</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Isabel Cristina Carrara</td>
+<td>***1065</td>
+<td style="text-align:right;font-weight:600">R$ 3.100</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">SONIA MARIA TAVARES VIEIRA</td>
+<td>***0063</td>
+<td style="text-align:right;font-weight:600">R$ 3.100</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">DANIELE FERREIRA DE SOUZA</td>
+<td>***7005</td>
+<td style="text-align:right;font-weight:600">R$ 3.100</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">LEILA CRISTINA HENRIQUE</td>
+<td>***0762</td>
+<td style="text-align:right;font-weight:600">R$ 2.500</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Alexsandra Fabiana da Maia</td>
+<td>***0296</td>
+<td style="text-align:right;font-weight:600">R$ 2.500</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">MARLUSI RENATA NUNES</td>
+<td>***1997</td>
+<td style="text-align:right;font-weight:600">R$ 2.500</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">KARINE HELOUISA EBERHARDT ZEHN</td>
+<td>***0707</td>
+<td style="text-align:right;font-weight:600">R$ 2.400</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Amanda Portella Segalla</td>
+<td>***7827</td>
+<td style="text-align:right;font-weight:600">R$ 2.000</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">LETÍCIA PAZ RIBEIRO</td>
+<td>***1622</td>
+<td style="text-align:right;font-weight:600">R$ 1.800</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">IVONETE ALVES FANTON</td>
+<td>***3140</td>
+<td style="text-align:right;font-weight:600">R$ 1.750</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Ioni Pavesi Dos Passos</td>
+<td>***0492</td>
+<td style="text-align:right;font-weight:600">R$ 1.750</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">ANA DOS SANTOS</td>
+<td>***0455</td>
+<td style="text-align:right;font-weight:600">R$ 1.750</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td><span style="color:#ef4444;font-size:0.7rem">cancelar</span></td>
+</tr><tr>
+<td style="font-weight:500">VANESSA MARA  SCHULTZ BOMFIM</td>
+<td>***5382</td>
+<td style="text-align:right;font-weight:600">R$ 1.750</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Cristiane De Vita</td>
+<td>***6589</td>
+<td style="text-align:right;font-weight:600">R$ 1.750</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Juliana Cecconello</td>
+<td>***9550</td>
+<td style="text-align:right;font-weight:600">R$ 1.750</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">ZENILDA DUMA</td>
+<td>***1635</td>
+<td style="text-align:right;font-weight:600">R$ 1.750</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">FERNANDA HERMES</td>
+<td>***1236</td>
+<td style="text-align:right;font-weight:600">R$ 1.750</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">PATRICIA DIAS BIRCKHOLZ</td>
+<td>***5251</td>
+<td style="text-align:right;font-weight:600">R$ 1.600</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#f59e0b;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">JULIANA PESSATE PEREIRA*</td>
+<td>***7726</td>
+<td style="text-align:right;font-weight:600">R$ 1.600</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">JEAN NOEL ANDRE OTT</td>
+<td>***7896</td>
+<td style="text-align:right;font-weight:600">R$ 1.600</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td><span style="color:#ef4444;font-size:0.7rem">não consigo</span></td>
+</tr><tr>
+<td style="font-weight:500">Luize Catherine Krause</td>
+<td>***8692</td>
+<td style="text-align:right;font-weight:600">R$ 1.490</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">SERGIO LUIZ STEUERNAGEL</td>
+<td>***4144</td>
+<td style="text-align:right;font-weight:600">R$ 1.200</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">DAIANI COELHO GOMES BOBATTO</td>
+<td>***1081</td>
+<td style="text-align:right;font-weight:600">R$ 1.180</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Maria Eduarda girola</td>
+<td>***5503</td>
+<td style="text-align:right;font-weight:600">R$ 950</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">JOSEANE FRANCINE PAUL</td>
+<td>***2459</td>
+<td style="text-align:right;font-weight:600">R$ 650</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">JANILSON FERREIRA LEITE</td>
+<td>***6382</td>
+<td style="text-align:right;font-weight:600">R$ 550</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">JAISSON VIDAL</td>
+<td>***6481</td>
+<td style="text-align:right;font-weight:600">R$ 550</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">LETICIA FERREIRA DE LIMA</td>
+<td>***4149</td>
+<td style="text-align:right;font-weight:600">R$ 400</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#f59e0b;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
+<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">CLEOCI MORESCO CARELLI</td>
+<td>***2791</td>
+<td style="text-align:right;font-weight:600">R$ 30</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#f59e0b;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Fabiana Bourdokan Valiente</td>
+<td>***4372</td>
+<td style="text-align:right;font-weight:600">R$ 0</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Ednete Pereira da Silva Okano </td>
+<td>***5357</td>
+<td style="text-align:right;font-weight:600">R$ 0</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">JULIA DE MACEDO PEREIRA DALBOS</td>
+<td>***1567</td>
+<td style="text-align:right;font-weight:600">R$ 0</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#f59e0b;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
+<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Kamily Fernandes</td>
+<td>***6486</td>
+<td style="text-align:right;font-weight:600">R$ 0</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr><tr>
+<td style="font-weight:500">Viviane da Silveira Veiga Fach</td>
+<td>***8549</td>
+<td style="text-align:right;font-weight:600">R$ 0</td>
+<td style="text-align:center">1</td>
+<td><span style="background:#f59e0b;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
+<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td style="text-align:center">💬</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- SECTION 8: Conclusoes -->
+<h2>Conclusoes e Recomendacoes</h2>
+
+<div class="card">
+<h3>1. Gap de Cobertura e o Problema Principal</h3>
+<p>Apenas 19,2% dos pacientes com proposta recebem follow-up especifico. Os outros 80,8% recebem apenas mensagens genericas ou nada. <strong>Aumentar a cobertura do disparo de follow-up pos-proposta e a alavanca de maior impacto potencial.</strong></p>
+
+<h3 style="margin-top:16px">2. Follow-up Pos-Proposta Funciona</h3>
+<p>Dos 15 pacientes que receberam follow-up pos-proposta, 66,7% responderam e 4 converteram (R$ 30.340). A taxa de conversao menor (33,3% vs 73,7%) reflete o vies de selecao D+7, nao ineficacia.</p>
+
+<h3 style="margin-top:16px">3. Propostas Aprovadas Nao-Executadas: R$ 175.610</h3>
+<p>26 propostas aprovadas somam R$ 175.610 — mais que as 57 executadas (R$ 170.810). Ticket medio das aprovadas e 2,3x maior. Foco de acao: converter aprovadas em execucoes com follow-up direcionado.</p>
+
+<h3 style="margin-top:16px">4. Recomendacoes</h3>
+<ul style="margin-left:20px;margin-top:8px">
+<li>Ampliar pipeline de follow-up para cobrir 100% das propostas (hoje so 19,2%)</li>
+<li>Criar follow-up especifico para propostas <strong>aprovadas nao-executadas</strong> (R$ 175.610 em jogo)</li>
+<li>Reduzir janela D+7 para D+3 (capturar pacientes antes que esfriem)</li>
+<li>Incluir valor da proposta na mensagem de follow-up para reforcar compromisso</li>
+</ul>
+</div>
+
+<!-- SECTION 9: Metodologia -->
+<h2>Metodologia</h2>
+<div class="methodology">
+<p><strong>Fonte de dados:</strong> API Feegow (propostas e pacientes) + API Chatwoot (conversas e mensagens). Periodo: 01/ago a 26/set/2026.</p>
+<p><strong>Match de pacientes:</strong> Resolucao de telefone com 5+ variantes por numero brasileiro (com/sem +55, com/sem 9o digito, DDD). Taxa de match: 100% (78/78 pacientes).</p>
+<p><strong>Classificacao de follow-up:</strong> Follow-up pos-proposta = mensagens da Clara ou humano enviadas APOS a data de criacao da proposta. Mensagens anteriores (recall, aniversario, promocoes) classificadas como "generico".</p>
+<p><strong>Vies de selecao (D+7):</strong> O pipeline automatizado dispara follow-up 7 dias apos a proposta. Propostas convertidas antes de 7 dias nunca recebem follow-up, inflando a taxa de conversao do grupo controle (sem FUP).</p>
+<p><strong>Sentimento:</strong> Reclassificado por comportamento real (status da proposta + resposta ao follow-up + deteccao de objecao), nao por keywords.</p>
+<p><strong>Valores:</strong> Campo <code>value</code> da API Feegow (valor total da proposta em R$).</p>
+</div>
+
+</div><!-- /container -->
 
 <script>
-// Status Distribution Chart
-new Chart(document.getElementById('statusChart'), {
+// Status Chart
+new Chart(document.getElementById('chartStatus'), {
   type: 'doughnut',
   data: {
-    labels: ['Executada', 'Aprovada', 'Aguardando'],
-    datasets: [{
-      data: [57, 26, 12],
-      backgroundColor: ['#22C55E', '#F59E0B', '#6366F1'],
-      borderWidth: 0
-    }]
+    labels: ['Executadas (R$ 170.810)', 'Aprovadas (R$ 175.610)', 'Aguardando (R$ 67.270)'],
+    datasets: [{ data: [57, 26, 12], backgroundColor: ['#22c55e', '#2D52EF', '#f59e0b'] }]
   },
-  options: {
-    responsive: true,
-    plugins: {
-      legend: { position: 'bottom', labels: { font: { family: 'DM Sans' } } }
-    }
-  }
+  options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'bottom' } } }
 });
 
 // Coverage Chart
-new Chart(document.getElementById('coverageChart'), {
+new Chart(document.getElementById('chartCoverage'), {
   type: 'doughnut',
   data: {
-    labels: ['Com Follow-up Clara', 'Sem Follow-up'],
-    datasets: [{
-      data: [60, 17],
-      backgroundColor: ['#6366F1', '#E5E7EB'],
-      borderWidth: 0
-    }]
+    labels: ['FUP Pos-Proposta (15)', 'Apenas Generico (44)', 'Sem FUP (19)'],
+    datasets: [{ data: [15, 44, 19], backgroundColor: ['#2D52EF', '#f59e0b', '#e2e8f0'] }]
   },
-  options: {
-    responsive: true,
-    plugins: {
-      legend: { position: 'bottom', labels: { font: { family: 'DM Sans' } } }
-    }
-  }
+  options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'bottom' } } }
 });
 
-// Sentiment Chart
-new Chart(document.getElementById('sentimentChart'), {
+// Comparativo Chart
+new Chart(document.getElementById('chartComparativo'), {
   type: 'bar',
   data: {
-    labels: ['Positiva', 'Neutra', 'Negativa', 'Sem Resposta'],
-    datasets: [{
-      label: 'Respostas',
-      data: [18, 200, 4, 2],
-      backgroundColor: ['#22C55E', '#6366F1', '#EF4444', '#9CA3AF'],
-      borderRadius: 6
-    }]
-  },
-  options: {
-    responsive: true,
-    scales: { y: { beginAtZero: true } },
-    plugins: {
-      legend: { display: false }
-    }
-  }
-});
-
-// Comparison Chart
-new Chart(document.getElementById('comparisonChart'), {
-  type: 'bar',
-  data: {
-    labels: ['Executada', 'Aprovada', 'Aguardando'],
+    labels: ['Clara Pos-Proposta', 'Humano Pos-Proposta', 'Apenas Generico', 'Sem Follow-up'],
     datasets: [
-      {
-        label: 'Com Follow-up',
-        data: [43, 22, 9],
-        backgroundColor: '#6366F1',
-        borderRadius: 6
-      },
-      {
-        label: 'Sem Follow-up',
-        data: [14, 4, 3],
-        backgroundColor: '#D1D5DB',
-        borderRadius: 6
-      }
+      { label: 'Taxa de Conversao (%)', data: [35.7, 50.0, 75.0, 73.7], backgroundColor: ['#2D52EF', '#22c55e', '#f59e0b', '#94a3b8'] }
     ]
   },
   options: {
-    responsive: true,
-    scales: { y: { beginAtZero: true } },
-    plugins: {
-      legend: { position: 'bottom', labels: { font: { family: 'DM Sans' } } }
-    }
+    responsive:true, maintainAspectRatio:false,
+    scales: { y: { beginAtZero:true, max:100, ticks:{ callback: v => v+'%' } } },
+    plugins: { legend:{ display:false } }
   }
 });
 
-// Procedures Chart
-new Chart(document.getElementById('procChart'), {
+// Faturamento Chart
+new Chart(document.getElementById('chartFaturamento'), {
   type: 'bar',
   data: {
-    labels: ["TOXINA BOTULINICA -GLOBAL", "LASER CO2 FULL FACE", "RESTYLANE/LYFT/DEFYNE/KYS", "FOTONA FACE 4D", "RESTYLANE/LYFT/DEFYNE/KYS", "INJETAVEL VITAMINA B12  P", "LASER CO2 PESCOCO", "LIFTERA PAPADA"],
+    labels: ['Clara Pos-Proposta', 'Humano Pos-Proposta', 'Apenas Generico', 'Sem Follow-up'],
     datasets: [
-      {
-        label: 'Total',
-        data: [18, 12, 9, 8, 8, 6, 5, 5],
-        backgroundColor: '#C7D2FE',
-        borderRadius: 6
-      },
-      {
-        label: 'Executadas',
-        data: [14, 9, 7, 2, 3, 2, 3, 3],
-        backgroundColor: '#22C55E',
-        borderRadius: 6
-      }
+      { label: 'Valor Total Propostas', data: [82830, 32340, 219390, 107770], backgroundColor: ['#2D52EF99', '#22c55e99', '#f59e0b99', '#94a3b899'] },
+      { label: 'Faturamento Convertido', data: [37240, 15090, 126530, 71220], backgroundColor: ['#2D52EF', '#22c55e', '#f59e0b', '#94a3b8'] }
     ]
   },
   options: {
-    responsive: true,
-    indexAxis: 'y',
-    scales: { x: { beginAtZero: true } },
-    plugins: {
-      legend: { position: 'bottom', labels: { font: { family: 'DM Sans' } } }
-    }
+    responsive:true, maintainAspectRatio:false,
+    scales: { y: { beginAtZero:true, ticks:{ callback: v => 'R$ '+(v/1000).toFixed(0)+'k' } } },
+    plugins: { legend:{ position:'bottom' } }
   }
 });
+
+// Table filter
+function filterTable(type) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  const rows = document.querySelectorAll('#patientTable tbody tr');
+  rows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+    const status = cells[4]?.textContent?.trim() || '';
+    const fu = cells[5]?.textContent?.trim() || '';
+    let show = true;
+    if (type === 'converteu') show = status.includes('Executada');
+    else if (type === 'pendente') show = !status.includes('Executada');
+    else if (type === 'com_fup') show = fu.includes('s-proposta');
+    else if (type === 'sem_fup') show = !fu.includes('s-proposta');
+    row.style.display = show ? '' : 'none';
+  });
+}
 </script>
-
 </body>
 </html>
