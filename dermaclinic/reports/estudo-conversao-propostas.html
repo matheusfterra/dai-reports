@@ -1,74 +1,114 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Estudo de Conversão de Propostas — DermaClinic</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../_shared/style.css" />
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
-:root {
-  --primary: #2D52EF;
-  --primary-light: #4F6FF7;
-  --primary-bg: #EEF2FF;
-  --success: #22c55e;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --text: #1e293b;
-  --text-secondary: #64748b;
-  --bg: #f8fafc;
-  --card: #ffffff;
-  --border: #e2e8f0;
-  --shadow: 0 1px 3px rgba(0,0,0,0.08);
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
-.container { max-width:1200px; margin:0 auto; padding:24px 16px; }
-h1 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.75rem; font-weight:700; color:var(--primary); margin-bottom:4px; }
-h2 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.25rem; font-weight:600; color:var(--text); margin:32px 0 16px; padding-bottom:8px; border-bottom:2px solid var(--primary); }
-h3 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1rem; font-weight:600; margin:16px 0 8px; }
-.subtitle { color:var(--text-secondary); font-size:0.9rem; margin-bottom:24px; }
-.kpi-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:24px; }
-.kpi-card { background:var(--card); border-radius:12px; padding:16px; box-shadow:var(--shadow); border-left:4px solid var(--primary); }
-.kpi-value { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.5rem; font-weight:700; color:var(--primary); }
-.kpi-value.success { color:var(--success); }
-.kpi-value.warning { color:var(--warning); }
-.kpi-value.danger { color:var(--danger); }
-.kpi-label { font-size:0.8rem; color:var(--text-secondary); margin-top:4px; }
-.card { background:var(--card); border-radius:12px; padding:20px; box-shadow:var(--shadow); margin-bottom:16px; }
-.insight-box { background:#FFFBEB; border-left:4px solid var(--warning); padding:12px 16px; border-radius:0 8px 8px 0; margin:12px 0; font-size:0.85rem; }
-.insight-box.critical { background:#FEF2F2; border-left-color:var(--danger); }
-.insight-box.positive { background:#F0FDF4; border-left-color:var(--success); }
-.chart-container { position:relative; height:300px; margin:16px 0; }
-.chart-container.small { height:220px; }
-table { width:100%; border-collapse:collapse; font-size:0.8rem; }
-th { background:var(--primary); color:#fff; padding:8px 10px; text-align:left; font-weight:600; position:sticky; top:0; }
-td { padding:6px 10px; border-bottom:1px solid var(--border); }
-tr:hover { background:var(--primary-bg); }
-.table-wrapper { max-height:600px; overflow-y:auto; border-radius:8px; border:1px solid var(--border); }
-.comp-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:16px; margin:16px 0; }
-.comp-card { background:var(--card); border-radius:12px; padding:16px; box-shadow:var(--shadow); text-align:center; }
-.comp-card h4 { font-size:0.85rem; color:var(--text-secondary); margin-bottom:8px; }
-.comp-value { font-family:'Plus Jakarta Sans',sans-serif; font-size:2rem; font-weight:700; }
-.comp-sub { font-size:0.8rem; color:var(--text-secondary); margin-top:4px; }
-.methodology { background:#f1f5f9; border-radius:8px; padding:16px; font-size:0.8rem; color:var(--text-secondary); margin-top:16px; }
-.filter-bar { margin:8px 0 12px; display:flex; gap:8px; flex-wrap:wrap; }
-.filter-btn { padding:4px 12px; border-radius:16px; border:1px solid var(--border); background:var(--card); font-size:0.75rem; cursor:pointer; }
-.filter-btn.active { background:var(--primary); color:#fff; border-color:var(--primary); }
-@media (max-width:768px) {
-  .kpi-grid { grid-template-columns:repeat(2, 1fr); }
-  .comp-grid { grid-template-columns:1fr; }
-  h1 { font-size:1.3rem; }
-  table { font-size:0.7rem; }
+/* Report Header */
+.report-header { background: linear-gradient(135deg, #0d2137 0%, #0a3d62 100%); padding: 32px 40px; border-bottom: 1px solid #1e3a5f; }
+.report-header h1 { font-size: 1.6rem; font-weight: 700; color: #fff; margin: 0; }
+.report-header p { color: #7db3d8; font-size: 0.875rem; margin-top: 6px; }
+.badge { display: inline-block; background: #1e3a5f; color: #58a6ff; border-radius: 20px; padding: 2px 12px; font-size: 0.75rem; margin-left: 8px; }
+
+/* Report Body */
+.report-body { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
+
+/* KPI Grid */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 24px; }
+.kpi-card { background: #161b22; border: 1px solid #1e3a5f; border-radius: 12px; padding: 16px; }
+.kpi-value { font-size: 1.5rem; font-weight: 700; color: #58a6ff; }
+.kpi-value.success { color: #3fb950; }
+.kpi-value.warning { color: #d29922; }
+.kpi-value.danger { color: #f85149; }
+.kpi-label { font-size: 0.8rem; color: #8b949e; margin-top: 4px; }
+
+/* Section Titles */
+h2 { font-size: 1.25rem; font-weight: 600; color: #c9d1d9; margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #58a6ff; }
+h3 { font-size: 1rem; font-weight: 600; color: #c9d1d9; margin: 16px 0 8px; }
+p { color: #c9d1d9; }
+.subtitle { color: #8b949e; font-size: 0.9rem; margin-bottom: 24px; }
+
+/* Cards */
+.card { background: #161b22; border: 1px solid #1e3a5f; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+
+/* Insight Boxes */
+.insight-box { background: #1c1f23; border-left: 4px solid #d29922; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; font-size: 0.85rem; color: #c9d1d9; }
+.insight-box.critical { border-left-color: #f85149; }
+.insight-box.positive { border-left-color: #3fb950; }
+
+/* Comparison Grid */
+.comp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin: 16px 0; }
+.comp-card { background: #161b22; border: 1px solid #1e3a5f; border-radius: 12px; padding: 16px; text-align: center; }
+.comp-card h4 { font-size: 0.85rem; color: #8b949e; margin-bottom: 8px; }
+.comp-value { font-size: 2rem; font-weight: 700; color: #58a6ff; }
+.comp-sub { font-size: 0.8rem; color: #8b949e; margin-top: 4px; }
+
+/* Charts */
+.chart-container { position: relative; height: 300px; margin: 16px 0; }
+.chart-container.small { height: 220px; }
+
+/* Table */
+.table-wrapper { max-height: 600px; overflow-y: auto; border-radius: 8px; border: 1px solid #1e3a5f; }
+table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+th { background: #1e3a5f; color: #c9d1d9; padding: 8px 10px; text-align: left; font-weight: 600; position: sticky; top: 0; }
+td { padding: 6px 10px; border-bottom: 1px solid #21262d; color: #c9d1d9; }
+tr:hover { background: #161b22; }
+
+/* Filter Bar */
+.filter-bar { margin: 8px 0 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+.filter-btn { padding: 4px 12px; border-radius: 16px; border: 1px solid #30363d; background: #161b22; color: #c9d1d9; font-size: 0.75rem; cursor: pointer; }
+.filter-btn.active { background: #58a6ff; color: #0d1117; border-color: #58a6ff; }
+
+/* Methodology */
+.methodology { background: #161b22; border: 1px solid #1e3a5f; border-radius: 8px; padding: 16px; font-size: 0.8rem; color: #8b949e; margin-top: 16px; }
+
+/* Auth Gates */
+.hidden { display: none !important; }
+.visible { display: block !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .comp-grid { grid-template-columns: 1fr; }
+  .report-header { padding: 24px 16px; }
+  .report-header h1 { font-size: 1.3rem; }
+  .report-body { padding: 24px 16px; }
+  table { font-size: 0.7rem; }
 }
 </style>
 </head>
 <body>
-<div class="report-body">
-<div class="container">
 
-<h1>Estudo de Conversão de Propostas</h1>
-<p class="subtitle">DermaClinic — Agosto a Setembro 2026 | 95 propostas | 78 pacientes | Gerado em 26/09/2026</p>
+<!-- Gate: loading -->
+<div id="gate-loading" style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0d1117;">
+  <div style="text-align:center;color:#8b949e;">
+    <div style="width:40px;height:40px;border:3px solid #21262d;border-top-color:#58a6ff;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px;"></div>
+    <p>Carregando relatório...</p>
+    <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+  </div>
+</div>
+
+<!-- Gate: direct access -->
+<div id="gate-direct" class="hidden" style="min-height:100vh;background:#0d1117;align-items:center;justify-content:center;">
+  <div style="text-align:center;max-width:400px;padding:48px 24px;">
+    <div style="font-size:3rem;margin-bottom:16px;">&#x1f512;</div>
+    <h2 style="color:#c9d1d9;font-size:1.25rem;margin-bottom:8px;border:none;">Acesso Restrito</h2>
+    <p style="color:#8b949e;font-size:0.875rem;line-height:1.5;">Este relatório é exclusivo para a equipe DermaClinic.<br>Acesse via painel do Chat para autenticação automática.</p>
+  </div>
+</div>
+
+<!-- App: authenticated -->
+<div id="app" style="display:none;">
+  <div class="report-content">
+    <div class="report-header">
+      <h1>DermaClinic <span style="color:#7db3d8">—</span> Estudo de Conversão de Propostas <span class="badge">Ago–Set 2026</span></h1>
+      <p>95 propostas · 78 pacientes · Gerado em 26/09/2026 · Elaborado por <img src="../../_shared/logo-negative.svg" alt="Digital AI" style="height:16px;vertical-align:middle;margin-left:4px;" /></p>
+    </div>
+    <div class="report-body">
+
 
 <!-- SECTION 1: KPIs -->
 <div class="kpi-grid">
@@ -110,7 +150,7 @@ tr:hover { background:var(--primary-bg); }
     <div class="kpi-label">Executadas — R$ 170.810</div>
   </div>
   <div class="kpi-card">
-    <div class="kpi-value" style="color:var(--primary)">26</div>
+    <div class="kpi-value" style="color:#58a6ff">26</div>
     <div class="kpi-label">Aprovadas — R$ 175.610</div>
   </div>
   <div class="kpi-card">
@@ -135,17 +175,17 @@ tr:hover { background:var(--primary-bg); }
 <div class="comp-grid">
   <div class="comp-card">
     <h4>FUP Pós-Proposta</h4>
-    <div class="comp-value" style="color:var(--danger)">15</div>
+    <div class="comp-value" style="color:#f85149">15</div>
     <div class="comp-sub">19.2% dos pacientes</div>
   </div>
   <div class="comp-card">
     <h4>Apenas FUP Genérico</h4>
-    <div class="comp-value" style="color:var(--warning)">44</div>
+    <div class="comp-value" style="color:#d29922">44</div>
     <div class="comp-sub">Recall, aniversario, promocoes</div>
   </div>
   <div class="comp-card">
     <h4>Sem Nenhum FUP</h4>
-    <div class="comp-value" style="color:var(--text-secondary)">19</div>
+    <div class="comp-value" style="color:#8b949e">19</div>
     <div class="comp-sub">Nenhuma mensagem</div>
   </div>
 </div>
@@ -160,24 +200,24 @@ tr:hover { background:var(--primary-bg); }
 <h2>Comparativo de Efetividade</h2>
 
 <div class="comp-grid">
-  <div class="comp-card" style="border-top:4px solid var(--primary)">
+  <div class="comp-card" style="border-top:4px solid #58a6ff">
     <h4>Clara Pós-Proposta</h4>
-    <div class="comp-value" style="color:var(--primary)">35.7%</div>
+    <div class="comp-value" style="color:#58a6ff">35.7%</div>
     <div class="comp-sub">14 pacientes | R$ 37.240</div>
   </div>
-  <div class="comp-card" style="border-top:4px solid var(--success)">
+  <div class="comp-card" style="border-top:4px solid #3fb950">
     <h4>Humano Pós-Proposta</h4>
-    <div class="comp-value" style="color:var(--success)">50.0%</div>
+    <div class="comp-value" style="color:#3fb950">50.0%</div>
     <div class="comp-sub">4 pacientes | R$ 15.090</div>
   </div>
-  <div class="comp-card" style="border-top:4px solid var(--warning)">
+  <div class="comp-card" style="border-top:4px solid #d29922">
     <h4>Apenas FUP Genérico</h4>
-    <div class="comp-value" style="color:var(--warning)">75.0%</div>
+    <div class="comp-value" style="color:#d29922">75.0%</div>
     <div class="comp-sub">44 pacientes | R$ 126.530</div>
   </div>
-  <div class="comp-card" style="border-top:4px solid var(--text-secondary)">
+  <div class="comp-card" style="border-top:4px solid #8b949e">
     <h4>Sem Follow-up</h4>
-    <div class="comp-value" style="color:var(--text-secondary)">73.7%</div>
+    <div class="comp-value" style="color:#8b949e">73.7%</div>
     <div class="comp-sub">19 pacientes | R$ 71.220</div>
   </div>
 </div>
@@ -205,7 +245,7 @@ tr:hover { background:var(--primary-bg); }
 
 <div class="kpi-grid">
   <div class="kpi-card">
-    <div class="kpi-value" style="color:var(--primary)">R$ 82.830</div>
+    <div class="kpi-value" style="color:#58a6ff">R$ 82.830</div>
     <div class="kpi-label">Valor Propostas — Clara Pós-Proposta</div>
   </div>
   <div class="kpi-card">
@@ -278,19 +318,19 @@ tr:hover { background:var(--primary-bg); }
 <td>***0265</td>
 <td style="text-align:right;font-weight:600">R$ 30.000</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
-<td><span style="color:#ef4444;font-size:0.7rem">cancelar</span></td>
+<td><span style="color:#f85149;font-size:0.7rem">cancelar</span></td>
 </tr><tr>
 <td style="font-weight:500">Tatiana Goulart Florduardo Mue</td>
 <td>***6327</td>
 <td style="text-align:right;font-weight:600">R$ 20.250</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#f59e0b;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
-<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td><span style="background:#9e6a03;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
+<td><span style="background:#21262d;color:#8b949e;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -300,8 +340,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***5656</td>
 <td style="text-align:right;font-weight:600">R$ 17.500</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -311,8 +351,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***4330</td>
 <td style="text-align:right;font-weight:600">R$ 14.970</td>
 <td style="text-align:center">3</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#21262d;color:#8b949e;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -322,8 +362,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***6008</td>
 <td style="text-align:right;font-weight:600">R$ 14.850</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#21262d;color:#8b949e;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -333,8 +373,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***7931</td>
 <td style="text-align:right;font-weight:600">R$ 13.550</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
-<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -344,8 +384,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***0800</td>
 <td style="text-align:right;font-weight:600">R$ 13.500</td>
 <td style="text-align:center">3</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -355,8 +395,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***0622</td>
 <td style="text-align:right;font-weight:600">R$ 12.800</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
-<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -366,8 +406,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***1332</td>
 <td style="text-align:right;font-weight:600">R$ 11.950</td>
 <td style="text-align:center">2</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">2.0d</td>
@@ -377,8 +417,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***9244</td>
 <td style="text-align:right;font-weight:600">R$ 11.700</td>
 <td style="text-align:center">2</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#21262d;color:#8b949e;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -388,19 +428,19 @@ tr:hover { background:var(--primary-bg); }
 <td>***2952</td>
 <td style="text-align:right;font-weight:600">R$ 11.250</td>
 <td style="text-align:center">2</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
-<td><span style="color:#ef4444;font-size:0.7rem">não tenho</span></td>
+<td><span style="color:#f85149;font-size:0.7rem">não tenho</span></td>
 </tr><tr>
 <td style="font-weight:500">GISLENI DOS SANTOS VIEIRA</td>
 <td>***6717</td>
 <td style="text-align:right;font-weight:600">R$ 11.240</td>
 <td style="text-align:center">2</td>
-<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -410,8 +450,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***6300</td>
 <td style="text-align:right;font-weight:600">R$ 10.490</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -421,8 +461,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***8247</td>
 <td style="text-align:right;font-weight:600">R$ 10.450</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -432,8 +472,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***0929</td>
 <td style="text-align:right;font-weight:600">R$ 9.350</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
-<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -443,8 +483,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***5150</td>
 <td style="text-align:right;font-weight:600">R$ 8.700</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -454,8 +494,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***2738</td>
 <td style="text-align:right;font-weight:600">R$ 7.900</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -465,8 +505,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***7712</td>
 <td style="text-align:right;font-weight:600">R$ 7.100</td>
 <td style="text-align:center">2</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -476,30 +516,30 @@ tr:hover { background:var(--primary-bg); }
 <td>***5168</td>
 <td style="text-align:right;font-weight:600">R$ 7.000</td>
 <td style="text-align:center">2</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
-<td><span style="color:#ef4444;font-size:0.7rem">não posso</span></td>
+<td><span style="color:#f85149;font-size:0.7rem">não posso</span></td>
 </tr><tr>
 <td style="font-weight:500">ELIZABETH KLEMTZ</td>
 <td>***2851</td>
 <td style="text-align:right;font-weight:600">R$ 6.900</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
-<td><span style="color:#ef4444;font-size:0.7rem">não dá</span></td>
+<td><span style="color:#f85149;font-size:0.7rem">não dá</span></td>
 </tr><tr>
 <td style="font-weight:500">CATIA BORATTI</td>
 <td>***4921</td>
 <td style="text-align:right;font-weight:600">R$ 6.400</td>
 <td style="text-align:center">2</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -509,8 +549,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***2057</td>
 <td style="text-align:right;font-weight:600">R$ 6.400</td>
 <td style="text-align:center">2</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#21262d;color:#8b949e;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -520,8 +560,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***6690</td>
 <td style="text-align:right;font-weight:600">R$ 6.350</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
-<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#21262d;color:#8b949e;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -531,8 +571,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***1264</td>
 <td style="text-align:right;font-weight:600">R$ 6.250</td>
 <td style="text-align:center">2</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -542,19 +582,19 @@ tr:hover { background:var(--primary-bg); }
 <td>***8373</td>
 <td style="text-align:right;font-weight:600">R$ 6.250</td>
 <td style="text-align:center">2</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
-<td><span style="color:#ef4444;font-size:0.7rem">cancelar</span></td>
+<td><span style="color:#f85149;font-size:0.7rem">cancelar</span></td>
 </tr><tr>
 <td style="font-weight:500">CARLOS HOEGEN</td>
 <td>***6008</td>
 <td style="text-align:right;font-weight:600">R$ 5.950</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#21262d;color:#8b949e;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -564,8 +604,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***2540</td>
 <td style="text-align:right;font-weight:600">R$ 5.700</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -575,8 +615,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***1966</td>
 <td style="text-align:right;font-weight:600">R$ 5.150</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#f59e0b;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
-<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td><span style="background:#9e6a03;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
+<td><span style="background:#21262d;color:#8b949e;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -586,19 +626,19 @@ tr:hover { background:var(--primary-bg); }
 <td>***6027</td>
 <td style="text-align:right;font-weight:600">R$ 5.000</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
-<td><span style="color:#ef4444;font-size:0.7rem">não tenho</span></td>
+<td><span style="color:#f85149;font-size:0.7rem">não tenho</span></td>
 </tr><tr>
 <td style="font-weight:500">Ilana Thaís de Andrade</td>
 <td>***7439</td>
 <td style="text-align:right;font-weight:600">R$ 5.000</td>
 <td style="text-align:center">2</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -608,8 +648,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***0489</td>
 <td style="text-align:right;font-weight:600">R$ 4.800</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#f59e0b;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
-<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td><span style="background:#9e6a03;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
+<td><span style="background:#21262d;color:#8b949e;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -619,8 +659,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***0895</td>
 <td style="text-align:right;font-weight:600">R$ 4.500</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#21262d;color:#8b949e;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -630,19 +670,19 @@ tr:hover { background:var(--primary-bg); }
 <td>***1685</td>
 <td style="text-align:right;font-weight:600">R$ 4.500</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
-<td><span style="color:#ef4444;font-size:0.7rem">não vou</span></td>
+<td><span style="color:#f85149;font-size:0.7rem">não vou</span></td>
 </tr><tr>
 <td style="font-weight:500">JEANETE CRISTINE PAUL</td>
 <td>***4403</td>
 <td style="text-align:right;font-weight:600">R$ 4.150</td>
 <td style="text-align:center">2</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -652,8 +692,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***2185</td>
 <td style="text-align:right;font-weight:600">R$ 4.100</td>
 <td style="text-align:center">2</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -663,8 +703,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***4598</td>
 <td style="text-align:right;font-weight:600">R$ 4.100</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -674,19 +714,19 @@ tr:hover { background:var(--primary-bg); }
 <td>***1275</td>
 <td style="text-align:right;font-weight:600">R$ 4.000</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
-<td><span style="color:#ef4444;font-size:0.7rem">não vou</span></td>
+<td><span style="color:#f85149;font-size:0.7rem">não vou</span></td>
 </tr><tr>
 <td style="font-weight:500">JESSICA HOLZ</td>
 <td>***9691</td>
 <td style="text-align:right;font-weight:600">R$ 3.800</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -696,8 +736,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***1213</td>
 <td style="text-align:right;font-weight:600">R$ 3.700</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#21262d;color:#8b949e;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -707,8 +747,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***6868</td>
 <td style="text-align:right;font-weight:600">R$ 3.700</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
-<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -718,8 +758,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***4957</td>
 <td style="text-align:right;font-weight:600">R$ 3.500</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -729,8 +769,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***4345</td>
 <td style="text-align:right;font-weight:600">R$ 3.500</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#21262d;color:#8b949e;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -740,8 +780,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***8075</td>
 <td style="text-align:right;font-weight:600">R$ 3.500</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -751,8 +791,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***4386</td>
 <td style="text-align:right;font-weight:600">R$ 3.140</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -762,8 +802,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***1065</td>
 <td style="text-align:right;font-weight:600">R$ 3.100</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
-<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -773,8 +813,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***0063</td>
 <td style="text-align:right;font-weight:600">R$ 3.100</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -784,8 +824,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***7005</td>
 <td style="text-align:right;font-weight:600">R$ 3.100</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
-<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -795,8 +835,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***0762</td>
 <td style="text-align:right;font-weight:600">R$ 2.500</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -806,8 +846,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***0296</td>
 <td style="text-align:right;font-weight:600">R$ 2.500</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -817,8 +857,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***1997</td>
 <td style="text-align:right;font-weight:600">R$ 2.500</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -828,8 +868,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***0707</td>
 <td style="text-align:right;font-weight:600">R$ 2.400</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -839,8 +879,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***7827</td>
 <td style="text-align:right;font-weight:600">R$ 2.000</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -850,8 +890,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***1622</td>
 <td style="text-align:right;font-weight:600">R$ 1.800</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
-<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -861,8 +901,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***3140</td>
 <td style="text-align:right;font-weight:600">R$ 1.750</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -872,8 +912,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***0492</td>
 <td style="text-align:right;font-weight:600">R$ 1.750</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -883,19 +923,19 @@ tr:hover { background:var(--primary-bg); }
 <td>***0455</td>
 <td style="text-align:right;font-weight:600">R$ 1.750</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
-<td><span style="color:#ef4444;font-size:0.7rem">cancelar</span></td>
+<td><span style="color:#f85149;font-size:0.7rem">cancelar</span></td>
 </tr><tr>
 <td style="font-weight:500">VANESSA MARA  SCHULTZ BOMFIM</td>
 <td>***5382</td>
 <td style="text-align:right;font-weight:600">R$ 1.750</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -905,8 +945,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***6589</td>
 <td style="text-align:right;font-weight:600">R$ 1.750</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -916,8 +956,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***9550</td>
 <td style="text-align:right;font-weight:600">R$ 1.750</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#21262d;color:#8b949e;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -927,8 +967,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***1635</td>
 <td style="text-align:right;font-weight:600">R$ 1.750</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#21262d;color:#8b949e;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -938,8 +978,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***1236</td>
 <td style="text-align:right;font-weight:600">R$ 1.750</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -949,8 +989,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***5251</td>
 <td style="text-align:right;font-weight:600">R$ 1.600</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#f59e0b;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#9e6a03;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -960,8 +1000,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***7726</td>
 <td style="text-align:right;font-weight:600">R$ 1.600</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -971,19 +1011,19 @@ tr:hover { background:var(--primary-bg); }
 <td>***7896</td>
 <td style="text-align:right;font-weight:600">R$ 1.600</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
-<td><span style="color:#ef4444;font-size:0.7rem">não consigo</span></td>
+<td><span style="color:#f85149;font-size:0.7rem">não consigo</span></td>
 </tr><tr>
 <td style="font-weight:500">Luize Catherine Krause</td>
 <td>***8692</td>
 <td style="text-align:right;font-weight:600">R$ 1.490</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
-<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -993,8 +1033,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***4144</td>
 <td style="text-align:right;font-weight:600">R$ 1.200</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#21262d;color:#8b949e;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -1004,8 +1044,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***1081</td>
 <td style="text-align:right;font-weight:600">R$ 1.180</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -1015,8 +1055,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***5503</td>
 <td style="text-align:right;font-weight:600">R$ 950</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#21262d;color:#8b949e;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -1026,8 +1066,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***2459</td>
 <td style="text-align:right;font-weight:600">R$ 650</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -1037,8 +1077,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***6382</td>
 <td style="text-align:right;font-weight:600">R$ 550</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -1048,8 +1088,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***6481</td>
 <td style="text-align:right;font-weight:600">R$ 550</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -1059,8 +1099,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***4149</td>
 <td style="text-align:right;font-weight:600">R$ 400</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#f59e0b;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
-<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td><span style="background:#9e6a03;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -1070,8 +1110,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***2791</td>
 <td style="text-align:right;font-weight:600">R$ 30</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#f59e0b;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#9e6a03;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -1081,8 +1121,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***4372</td>
 <td style="text-align:right;font-weight:600">R$ 0</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#21262d;color:#8b949e;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -1092,8 +1132,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***5357</td>
 <td style="text-align:right;font-weight:600">R$ 0</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
-<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td><span style="background:#238636;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Executada</span></td>
+<td><span style="background:#21262d;color:#8b949e;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">✅</td>
 <td style="text-align:center">—</td>
@@ -1103,8 +1143,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***1567</td>
 <td style="text-align:right;font-weight:600">R$ 0</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#f59e0b;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
-<td><span style="background:#e2e8f0;color:#64748b;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
+<td><span style="background:#9e6a03;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
+<td><span style="background:#21262d;color:#8b949e;padding:2px 8px;border-radius:12px;font-size:0.75rem">Nenhum</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -1114,8 +1154,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***6486</td>
 <td style="text-align:right;font-weight:600">R$ 0</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
-<td><span style="background:#2D52EF;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aprovada</span></td>
+<td><span style="background:#1f6feb;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Pós-proposta</span></td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -1125,8 +1165,8 @@ tr:hover { background:var(--primary-bg); }
 <td>***8549</td>
 <td style="text-align:right;font-weight:600">R$ 0</td>
 <td style="text-align:center">1</td>
-<td><span style="background:#f59e0b;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
-<td><span style="background:#94a3b8;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
+<td><span style="background:#9e6a03;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Aguardando</span></td>
+<td><span style="background:#30363d;color:#fff;padding:2px 8px;border-radius:12px;font-size:0.75rem">Genérico</span></td>
 <td style="text-align:center">💬</td>
 <td style="text-align:center">—</td>
 <td style="text-align:center">—</td>
@@ -1168,81 +1208,99 @@ tr:hover { background:var(--primary-bg); }
 <p><strong>Sentimento:</strong> Reclassificado por comportamento real (status da proposta + resposta ao follow-up + detecção de objeção), não por keywords.</p>
 <p><strong>Valores:</strong> Campo <code>value</code> da API Feegow (valor total da proposta em R$).</p>
 </div>
+    </div><!-- /report-body -->
+  </div><!-- /report-content -->
+</div><!-- /app -->
 
-</div><!-- /container -->
-
+<script src="../../_shared/auth.js"></script>
 <script>
-// Status Chart
-new Chart(document.getElementById('chartStatus'), {
-  type: 'doughnut',
-  data: {
-    labels: ['Executadas (R$ 170.810)', 'Aprovadas (R$ 175.610)', 'Aguardando (R$ 67.270)'],
-    datasets: [{ data: [57, 26, 12], backgroundColor: ['#22c55e', '#2D52EF', '#f59e0b'] }]
-  },
-  options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'bottom' } } }
-});
-
-// Coverage Chart
-new Chart(document.getElementById('chartCoverage'), {
-  type: 'doughnut',
-  data: {
-    labels: ['FUP Pós-Proposta (15)', 'Apenas Genérico (44)', 'Sem FUP (19)'],
-    datasets: [{ data: [15, 44, 19], backgroundColor: ['#2D52EF', '#f59e0b', '#e2e8f0'] }]
-  },
-  options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'bottom' } } }
-});
-
-// Comparativo Chart
-new Chart(document.getElementById('chartComparativo'), {
-  type: 'bar',
-  data: {
-    labels: ['Clara Pós-Proposta', 'Humano Pós-Proposta', 'Apenas Genérico', 'Sem Follow-up'],
-    datasets: [
-      { label: 'Taxa de Conversão (%)', data: [35.7, 50.0, 75.0, 73.7], backgroundColor: ['#2D52EF', '#22c55e', '#f59e0b', '#94a3b8'] }
-    ]
-  },
-  options: {
-    responsive:true, maintainAspectRatio:false,
-    scales: { y: { beginAtZero:true, max:100, ticks:{ callback: v => v+'%' } } },
-    plugins: { legend:{ display:false } }
+initChatwootAuth({
+  gateLoading: 'gate-loading',
+  gateDirect: 'gate-direct',
+  gateApp: 'app',
+  client: 'dermaclinic',
+  report: 'estudo-conversao-propostas',
+  onReady: function(auth) {
+    initCharts();
   }
 });
 
-// Faturamento Chart
-new Chart(document.getElementById('chartFaturamento'), {
-  type: 'bar',
-  data: {
-    labels: ['Clara Pós-Proposta', 'Humano Pós-Proposta', 'Apenas Genérico', 'Sem Follow-up'],
-    datasets: [
-      { label: 'Valor Total Propostas', data: [82830, 32340, 219390, 107770], backgroundColor: ['#2D52EF99', '#22c55e99', '#f59e0b99', '#94a3b899'] },
-      { label: 'Faturamento Convertido', data: [37240, 15090, 126530, 71220], backgroundColor: ['#2D52EF', '#22c55e', '#f59e0b', '#94a3b8'] }
-    ]
-  },
-  options: {
-    responsive:true, maintainAspectRatio:false,
-    scales: { y: { beginAtZero:true, ticks:{ callback: v => 'R$ '+(v/1000).toFixed(0)+'k' } } },
-    plugins: { legend:{ position:'bottom' } }
-  }
-});
+function initCharts() {
+  // Dark theme defaults
+  Chart.defaults.color = '#8b949e';
+  Chart.defaults.borderColor = '#21262d';
+
+  // Status Chart
+  new Chart(document.getElementById('chartStatus'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Executadas (R$ 170.810)', 'Aprovadas (R$ 175.610)', 'Aguardando (R$ 67.270)'],
+      datasets: [{ data: [57, 26, 12], backgroundColor: ['#238636', '#1f6feb', '#9e6a03'] }]
+    },
+    options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'bottom', labels:{ color:'#c9d1d9' } } } }
+  });
+
+  // Coverage Chart
+  new Chart(document.getElementById('chartCoverage'), {
+    type: 'doughnut',
+    data: {
+      labels: ['FUP Pós-Proposta (15)', 'Apenas Genérico (44)', 'Sem FUP (19)'],
+      datasets: [{ data: [15, 44, 19], backgroundColor: ['#1f6feb', '#9e6a03', '#30363d'] }]
+    },
+    options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'bottom', labels:{ color:'#c9d1d9' } } } }
+  });
+
+  // Comparativo Chart
+  new Chart(document.getElementById('chartComparativo'), {
+    type: 'bar',
+    data: {
+      labels: ['Clara Pós-Proposta', 'Humano Pós-Proposta', 'Apenas Genérico', 'Sem Follow-up'],
+      datasets: [
+        { label: 'Taxa de Conversão (%)', data: [35.7, 50.0, 75.0, 73.7], backgroundColor: ['#1f6feb', '#238636', '#9e6a03', '#484f58'] }
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      scales: { y: { beginAtZero:true, max:100, ticks:{ callback: function(v){return v+'%'}, color:'#8b949e' }, grid:{ color:'#21262d' } }, x: { ticks:{ color:'#8b949e' }, grid:{ color:'#21262d' } } },
+      plugins: { legend:{ display:false } }
+    }
+  });
+
+  // Faturamento Chart
+  new Chart(document.getElementById('chartFaturamento'), {
+    type: 'bar',
+    data: {
+      labels: ['Clara Pós-Proposta', 'Humano Pós-Proposta', 'Apenas Genérico', 'Sem Follow-up'],
+      datasets: [
+        { label: 'Valor Total Propostas', data: [82830, 32340, 219390, 107770], backgroundColor: ['#1f6feb80', '#23863680', '#9e6a0380', '#48495880'] },
+        { label: 'Faturamento Convertido', data: [37240, 15090, 126530, 71220], backgroundColor: ['#1f6feb', '#238636', '#9e6a03', '#484f58'] }
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      scales: { y: { beginAtZero:true, ticks:{ callback: function(v){return 'R$ '+(v/1000).toFixed(0)+'k'}, color:'#8b949e' }, grid:{ color:'#21262d' } }, x: { ticks:{ color:'#8b949e' }, grid:{ color:'#21262d' } } },
+      plugins: { legend:{ position:'bottom', labels:{ color:'#c9d1d9' } } }
+    }
+  });
+}
 
 // Table filter
 function filterTable(type) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
   event.target.classList.add('active');
-  const rows = document.querySelectorAll('#patientTable tbody tr');
-  rows.forEach(row => {
-    const cells = row.querySelectorAll('td');
-    const status = cells[4]?.textContent?.trim() || '';
-    const fu = cells[5]?.textContent?.trim() || '';
-    let show = true;
-    if (type === 'converteu') show = status.includes('Executada');
-    else if (type === 'pendente') show = !status.includes('Executada');
-    else if (type === 'com_fup') show = fu.includes('s-proposta');
-    else if (type === 'sem_fup') show = !fu.includes('s-proposta');
+  var rows = document.querySelectorAll('#patientTable tbody tr');
+  rows.forEach(function(row) {
+    var cells = row.querySelectorAll('td');
+    var status = (cells[4] && cells[4].textContent) ? cells[4].textContent.trim() : '';
+    var fu = (cells[5] && cells[5].textContent) ? cells[5].textContent.trim() : '';
+    var show = true;
+    if (type === 'converteu') show = status.indexOf('Executada') >= 0;
+    else if (type === 'pendente') show = status.indexOf('Executada') < 0;
+    else if (type === 'com_fup') show = fu.indexOf('s-proposta') >= 0;
+    else if (type === 'sem_fup') show = fu.indexOf('s-proposta') < 0;
     row.style.display = show ? '' : 'none';
   });
 }
 </script>
-</div><!-- report-body -->
 </body>
 </html>
