@@ -1192,21 +1192,42 @@
 
 <script src="../../_shared/auth.js"></script>
 <script>
-initChatwootAuth({
-  gateLoading: 'gate-loading',
-  gateDirect: 'gate-direct',
-  gateApp: 'app',
-  client: 'dermaclinic',
-  report: 'estudo-conversao-propostas',
-  onReady: function(auth) {
-    initCharts();
-  }
+// Standalone mode: auth gates
+if (typeof initChatwootAuth === 'function') {
+  initChatwootAuth({
+    gateLoading: 'gate-loading',
+    gateDirect: 'gate-direct',
+    gateApp: 'app',
+    client: 'dermaclinic',
+    report: 'estudo-conversao-propostas'
+  });
+}
+
+// Load Chart.js if not available (SPA mode doesn't load <script src>)
+function ensureChartJS(cb) {
+  if (typeof Chart !== 'undefined') return cb();
+  var s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+  s.onload = cb;
+  document.head.appendChild(s);
+}
+
+// Initialize charts after a short delay to ensure DOM is ready
+ensureChartJS(function() {
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      initCharts();
+    });
+  });
 });
 
 function initCharts() {
   // Dark theme defaults
   Chart.defaults.color = '#8b949e';
   Chart.defaults.borderColor = '#21262d';
+
+  // Guard: skip if canvas elements don't exist yet
+  if (!document.getElementById('chartStatus')) return;
 
   // Status Chart
   new Chart(document.getElementById('chartStatus'), {
