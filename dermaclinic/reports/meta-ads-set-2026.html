@@ -183,7 +183,6 @@
     .chart-wrap { background: var(--dai-surface); border: 1px solid var(--dai-border); border-radius: var(--radius); padding: 24px; position: relative; }
     .chart-title { font-size: 13px; font-weight: 700; color: var(--dai-white); margin-bottom: 4px; }
     .chart-subtitle { font-size: 11px; color: var(--dai-muted); margin-bottom: 20px; }
-    canvas { display: block; max-height: 280px; }
 
     .divider { border: none; border-top: 1px solid var(--dai-border); margin: 24px 0; }
 
@@ -196,17 +195,20 @@
     .week-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
     .week-card { background: var(--dai-surface); border: 1px solid var(--dai-border); border-radius: var(--radius); padding: 18px 16px; text-align: center; position: relative; overflow: hidden; }
     .week-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
-    .week-card.best::before { background: linear-gradient(90deg, var(--green), #34d399); }
-    .week-card.low::before  { background: linear-gradient(90deg, var(--amber), #fbbf24); }
+    .week-card.best::before   { background: linear-gradient(90deg, var(--green), #34d399); }
+    .week-card.low::before    { background: linear-gradient(90deg, var(--amber), #fbbf24); }
     .week-card.normal::before { background: linear-gradient(90deg, var(--dai-indigo), #818cf8); }
+    .week-card.dead::before   { background: linear-gradient(90deg, var(--red), #f87171); }
     .week-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--dai-muted); margin-bottom: 10px; }
     .week-conv  { font-size: 30px; font-weight: 800; letter-spacing: -1px; color: var(--dai-white); line-height: 1; }
     .week-conv.best { color: var(--green); }
     .week-conv.low  { color: var(--amber); }
+    .week-conv.dead { color: var(--red); }
     .week-sub { font-size: 11px; color: var(--dai-muted); margin-top: 6px; }
     .week-quali { font-size: 12px; font-weight: 600; margin-top: 4px; }
     .week-quali.high { color: var(--green); }
     .week-quali.mid  { color: var(--amber); }
+    .week-quali.bad  { color: var(--red); }
 
     .bar-chart-manual { display: flex; flex-direction: column; gap: 10px; padding: 8px 0; }
 
@@ -240,7 +242,8 @@
     .fade-up:nth-child(3) { animation-delay: 0.19s; }
     .fade-up:nth-child(4) { animation-delay: 0.26s; }
     .fade-up:nth-child(5) { animation-delay: 0.33s; }
-    /* Compare Strip (Diagnóstico quinzenas) */
+
+    /* Compare Strip */
     .compare-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
     .compare-block { background: var(--dai-surface); border: 1px solid var(--dai-border); border-radius: var(--radius); padding: 16px 18px; }
     .cb-label { font-size: 0.75rem; font-weight: 700; color: var(--dai-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
@@ -251,45 +254,30 @@
     .val.amber { color: #F59E0B; }
     .val.green { color: #10B981; }
     .val.red { color: #EF4444; }
+
     /* kpi-grid-3 */
     .kpi-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
     @media (max-width: 600px) { .compare-strip { grid-template-columns: 1fr; } .kpi-grid-3 { grid-template-columns: 1fr; } }
 
     /* CSS Bar Chart (sem Chart.js) */
     .css-chart { position: relative; padding: 8px 0 0; }
-    .css-chart-grid { position: absolute; inset: 0; pointer-events: none; }
-    .css-grid-line { position: absolute; left: 0; right: 0; border-top: 1px dashed rgba(51,65,85,0.5); }
-    .css-grid-line span { position: absolute; left: -28px; top: -8px; font-size: 10px; color: var(--dai-muted); }
-    .css-chart-bars { display: flex; align-items: flex-end; justify-content: space-around; height: 220px; padding: 0 32px 0 40px; gap: 12px; position: relative; }
-    .css-bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-    .css-bars-wrap { height: 170px; flex-shrink: 0; display: flex; align-items: flex-end; gap: 4px; width: 100%; justify-content: center; }
-    .css-bar { width: 32px; border-radius: 4px 4px 0 0; transition: opacity 0.2s; min-height: 4px; }
+    .css-chart-bars { display: flex; align-items: flex-end; justify-content: space-around; height: 220px; padding: 0 16px 0 16px; gap: 16px; position: relative; }
+    .css-bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .css-bars-wrap { height: 160px; flex-shrink: 0; display: flex; align-items: flex-end; gap: 4px; width: 100%; justify-content: center; }
+    .css-bar { border-radius: 4px 4px 0 0; transition: opacity 0.2s; min-height: 4px; }
     .css-bar:hover { opacity: 0.85; }
-    .css-bar-conv { background: rgba(99,102,241,0.75); border: 1px solid #6366F1; }
-    .css-bar-conv.css-bar-best { background: rgba(16,185,129,0.8); border-color: #10B981; }
-    .css-bar-quali { background: rgba(16,185,129,0.3); border: 1px solid #10B981; }
-    .css-bar-quali.css-bar-perfect { background: rgba(16,185,129,0.55); }
-    .css-bar-values { display: flex; gap: 8px; font-size: 11px; font-weight: 700; }
-    .css-val-conv { color: #818CF8; }
-    .css-val-quali { color: #34D399; }
+    .css-bar-value { font-size: 13px; font-weight: 800; }
     .css-bar-label { text-align: center; font-size: 11px; color: var(--dai-muted); line-height: 1.3; }
-    .css-bar-label span { font-size: 10px; color: var(--dai-text-subtle, #64748B); }
-    .css-chart-legend { display: flex; gap: 16px; justify-content: center; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--dai-border); }
-    .css-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--dai-muted); }
-    .css-legend-dot { width: 12px; height: 12px; border-radius: 3px; }
-    .css-legend-conv { background: rgba(99,102,241,0.75); border: 1px solid #6366F1; }
-    .css-legend-quali { background: rgba(16,185,129,0.3); border: 1px solid #10B981; }
+    .css-bar-label span { font-size: 10px; color: #64748B; }
 
-    /* ─── FIX: Proteções globais de texto (word-break / overflow) ─── */
-
-    /* .kpi-row — usado na seção ROI mas não tinha CSS definido */
+    /* kpi-row — ROI section */
     .kpi-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 14px;
     }
 
-    /* .section-desc — usada na seção ROI mas não tinha CSS definido */
+    /* section-desc */
     .section-desc {
       font-size: 13px;
       color: var(--dai-muted);
@@ -297,20 +285,16 @@
       margin: 8px 0 20px;
     }
 
-    /* info-box: protege texto longo contra overflow */
+    /* Proteções globais de texto */
     .info-box {
       word-break: break-word;
       overflow-wrap: break-word;
     }
-
-    /* action-card: protege títulos e corpo contra quebra */
     .action-body h4,
     .action-body p {
       word-break: break-word;
       overflow-wrap: break-word;
     }
-
-    /* compare-block: protege valores longos como "DRA EODA (27 msgs)" */
     .cb-row {
       word-break: break-word;
       overflow-wrap: break-word;
@@ -326,42 +310,31 @@
       flex-shrink: 0;
       margin-right: 8px;
     }
-
-    /* tabelas: nomes longos de criativos */
     tbody td {
       word-break: break-word;
       overflow-wrap: break-word;
       min-width: 0;
     }
-
-    /* spotlight tagline e analysis */
     .spotlight .tagline,
     .spotlight p.analysis {
       word-break: break-word;
       overflow-wrap: break-word;
     }
-
-    /* kpi-card: protege valores e labels */
     .kpi-card {
       min-width: 0;
       word-break: break-word;
       overflow-wrap: break-word;
     }
-
-    /* hero-banner: protege texto longo */
     .hero-banner h3,
     .hero-banner p {
       word-break: break-word;
       overflow-wrap: break-word;
     }
-
-    /* compare-block: protege label longo */
     .compare-block {
       min-width: 0;
       overflow: hidden;
     }
 
-    /* Corrigir action-card span 2 em mobile (1 coluna) */
     @media (max-width: 900px) {
       .action-card[style*="grid-column: span 2"],
       .action-card[style*="grid-column:span 2"] {
@@ -369,7 +342,6 @@
       }
     }
 
-    /* kpi-row responsive (seção ROI) */
     @media (max-width: 900px) {
       .kpi-row { grid-template-columns: 1fr 1fr; }
     }
@@ -379,13 +351,23 @@
       .compare-strip { grid-template-columns: 1fr; }
     }
 
-    /* Prevenir scroll horizontal global */
     html, body {
       overflow-x: hidden;
     }
     .container {
       overflow-x: hidden;
     }
+
+    /* Alert banner para divergência */
+    .alert-banner {
+      background: linear-gradient(135deg, rgba(239,68,68,0.12) 0%, rgba(239,68,68,0.04) 100%);
+      border: 1px solid rgba(239,68,68,0.35); border-left: 4px solid var(--red);
+      border-radius: var(--radius); padding: 20px 24px; margin-bottom: 16px;
+    }
+    .alert-banner .eyebrow { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--red); margin-bottom: 6px; }
+    .alert-banner h4 { font-size: 16px; font-weight: 800; color: var(--dai-white); margin-bottom: 6px; }
+    .alert-banner p { font-size: 13px; color: var(--dai-muted); line-height: 1.65; }
+    .alert-banner p strong { color: var(--red); }
   </style>
 </head>
 <body>
@@ -405,152 +387,121 @@
 
   <div class="app" id="app">
     <div class="report-header">
-      <button class="back-btn" onclick="history.back()">← Voltar</button>
-      <span class="report-header-title">META & Google Ads — Setembro 2026</span>
+      <button class="back-btn" onclick="history.back()">&#8592; Voltar</button>
+      <span class="report-header-title">META &amp; Google Ads &#8212; Setembro 2026</span>
       <span class="report-header-sub" style="display:flex;align-items:center;gap:6px;"><img src="../../_shared/logo-negative.svg" style="height:16px;opacity:0.85;" alt="Digital AI" /></span>
     </div>
 
     <div class="report-content">
       <div class="report-body">
 
-        <h1>META & Google Ads — Tráfego Pago</h1>
+        <h1>META &amp; Google Ads &#8212; Tr&#225;fego Pago</h1>
         <p class="subtitle">DermaClinic | Digital AI</p>
         <p class="meta-line">
-          <span>&#128197; Período: 01 a 30 de setembro de 2026</span>
-          <span>&#128260; Gerado em: 30/09/2026</span>
+          <span>&#128197; Per&#237;odo: 01 a 30 de setembro de 2026</span>
+          <span>&#128260; Gerado em: 02/10/2026</span>
         </p>
 
 <main class="main">
   <div class="container">
 
-    <!-- ─────── FONTES DE DADOS ─────── -->
+    <!-- FONTES DE DADOS -->
     <div class="info-box indigo" style="margin-bottom:32px;">
-      <strong>&#128203; Fontes de Dados — Setembro 2026:</strong> Meta Ads Manager (export 01–30/set), Google Ads Manager (DermaClinic 01–30/set + Dr. Laércio 10–30/set), Chatwoot inbox 56, Feegow agendamentos. <strong>Análise qualitativa do gestor de tráfego integrada. Seção ROI com cruzamento Feegow × Chatwoot — critério: pacientes novos (2 pacientes · 5 agendamentos · R$4.400 receita).</strong>
+      <strong>&#128203; Fontes de Dados &#8212; Setembro 2026:</strong> Meta Ads Manager (export 01&#8211;30/set), Google Ads Manager (DermaClinic 01&#8211;30/set), Chatwoot inbox 56 (Tr&#225;fego Pago), Feegow agendamentos. <strong>An&#225;lise qualitativa integrada. Se&#231;&#227;o ROI com cruzamento Feegow &#215; Chatwoot &#8212; crit&#233;rio: pacientes do tr&#225;fego com agendamentos em set+out (3 pacientes &#183; 6 agendamentos &#183; R$2.200 receita confirmada). Fototerapia exclu&#237;da.</strong>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- 1. RESUMO EXECUTIVO                                                -->
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- 1. RESUMO EXECUTIVO                            -->
+    <!-- ═══════════════════════════════════════════════ -->
     <section class="section">
       <div class="section-header">
         <div class="section-icon amber">&#128200;</div>
         <div>
           <div class="section-title">Resumo Executivo</div>
-          <div class="section-subtitle">Visão consolidada do mês — setembro de 2026</div>
+          <div class="section-subtitle">Vis&#227;o consolidada do m&#234;s &#8212; setembro de 2026</div>
         </div>
       </div>
 
       <div class="hero-banner">
-        <div class="hero-eyebrow">Setembro 2026 — Panorama</div>
-        <h3><strong>93 conversas Meta</strong> a R$8,08/msg · Google Ads com <strong>64 conversões</strong> a R$8,85 · Nova conta Dr. Laércio ativa</h3>
-        <p>Investimento total R$1.536,87 (Meta R$751,69 + Google DC R$566,12 + Laércio R$219,06). Meta com queda de -14,7% em conversas vs julho, porém CPM caiu -15,7%. Google Ads recorde: +36,2% conversões vs jul. <strong>ROI pacientes novos +889%</strong> — 2 pacientes novos atribuídos, receita R$4.400.</p>
+        <div class="hero-eyebrow">Setembro 2026 &#8212; Panorama</div>
+        <h3><strong>86 conversas Meta</strong> a R$5,11/msg (&#8722;37% CPA) &#183; Google Ads com <strong>67 convers&#245;es</strong> a R$12,96 &#183; LASER CO2 dominou 87% do volume</h3>
+        <p>Investimento total R$1.307,41 (Meta R$439,29 + Google R$868,12). CPA Meta atingiu recorde hist&#243;rico positivo: R$5,11 (&#8722;36,8% vs agosto). Google Ads mant&#233;m excel&#234;ncia com 67 convers&#245;es a CPC R$1,55. <strong>Alerta: diverg&#234;ncia de 54 leads entre Meta (86) e Chatwoot (32) &#8212; investiga&#231;&#227;o necess&#225;ria.</strong> ROI hist&#243;rico mantido positivo: +68,3% com R$2.200 receita atribu&#237;da de pacientes de meses anteriores.</p>
       </div>
 
       <div class="kpi-grid">
         <div class="kpi-card indigo fade-up">
           <div class="kpi-label">Conversas Meta</div>
-          <div class="kpi-value">93</div>
-          <div class="kpi-delta down">&#9660; -14,7% vs jul (109)</div>
+          <div class="kpi-value">86</div>
+          <div class="kpi-delta down">&#9660; &#8722;7,5% vs ago (93)</div>
         </div>
         <div class="kpi-card bordo fade-up">
           <div class="kpi-label">Investimento Meta</div>
-          <div class="kpi-value bordo">R$751,69</div>
-          <div class="kpi-delta good-down">&#9660; -7,0% vs jul (R$808,67)</div>
+          <div class="kpi-value bordo">R$439,29</div>
+          <div class="kpi-delta good-down">&#9660; &#8722;41,6% vs ago (R$751,69)</div>
+        </div>
+        <div class="kpi-card green fade-up">
+          <div class="kpi-label">CPA Meta</div>
+          <div class="kpi-value highlight">R$5,11</div>
+          <div class="kpi-delta good-down">&#9660; &#8722;36,8% vs ago (R$8,08) &#8212; RECORDE</div>
         </div>
         <div class="kpi-card amber fade-up">
-          <div class="kpi-label">CPR (Meta)</div>
-          <div class="kpi-value amber-v">R$8,08</div>
-          <div class="kpi-delta down">&#9650; +8,9% vs jul (R$7,42)</div>
+          <div class="kpi-label">CPM</div>
+          <div class="kpi-value amber-v">R$26,23</div>
+          <div class="kpi-delta down">&#9650; +17,3% vs ago (R$22,36)</div>
         </div>
         <div class="kpi-card green fade-up">
-          <div class="kpi-label">CPM</div>
-          <div class="kpi-value highlight">R$22,36</div>
-          <div class="kpi-delta good-down">&#9660; -15,7% vs jul (R$26,51)</div>
+          <div class="kpi-label">CTR Link</div>
+          <div class="kpi-value highlight">1,10%</div>
+          <div class="kpi-delta up">&#9650; +19,6% vs ago (0,92%)</div>
         </div>
         <div class="kpi-card indigo fade-up">
-          <div class="kpi-label">CTR Link</div>
-          <div class="kpi-value">0,92%</div>
-          <div class="kpi-caption">Recuperação vs julho</div>
-        </div>
-        <div class="kpi-card green fade-up">
           <div class="kpi-label">Investimento Total</div>
-          <div class="kpi-value highlight">R$1.536,87</div>
-          <div class="kpi-delta down">&#9650; +13,3% vs jul (R$1.356,63)</div>
-          <div class="kpi-caption">Meta + Google DC + Laércio (novo)</div>
+          <div class="kpi-value">R$1.307,41</div>
+          <div class="kpi-delta good-down">&#9660; &#8722;14,9% vs ago (R$1.536,87)</div>
+          <div class="kpi-caption">Meta R$439,29 + Google R$868,12</div>
         </div>
       </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- 2. PERFORMANCE POR CONJUNTO (AD SET)                              -->
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <section class="section">
-      <div class="section-header">
-        <div class="section-icon indigo">&#128197;</div>
-        <div>
-          <div class="section-title">Performance por Conjunto de Anúncios</div>
-          <div class="section-subtitle">SITE vs LUXO — setembro 2026 (fonte: gestor de tráfego)</div>
-        </div>
-      </div>
-
-      <div class="compare-strip">
-        <div class="compare-block">
-          <div class="cb-label">&#127919; SITE (Advantage+)</div>
-          <div class="cb-row"><span class="metric">Leads</span><span class="val">46</span></div>
-          <div class="cb-row"><span class="metric">CPA</span><span class="val amber">R$9,06</span></div>
-          <div class="cb-row"><span class="metric">CPM</span><span class="val">R$28,00</span></div>
-          <div class="cb-row"><span class="metric">Frequência</span><span class="val red">2,29</span></div>
-        </div>
-        <div class="compare-block">
-          <div class="cb-label">&#128142; LUXO + DERMATOLOGIA (Advantage+)</div>
-          <div class="cb-row"><span class="metric">Leads</span><span class="val">47</span></div>
-          <div class="cb-row"><span class="metric">CPA</span><span class="val green">R$7,13</span></div>
-          <div class="cb-row"><span class="metric">CPM</span><span class="val green">R$22,19</span></div>
-          <div class="cb-row"><span class="metric">Frequência</span><span class="val">—</span></div>
-        </div>
-      </div>
-
-      <div class="info-box amber" style="margin-top:14px;">
-        <strong>&#9888; Alerta de Frequência:</strong> SITE atingiu 2,29 (conta geral 2,50). Acima de 2,0 indica fadiga — o mesmo público está vendo os anúncios repetidamente. <strong>Ação:</strong> Trocar criativos e redistribuir orçamento para Google Ads em setembro.
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- 3. ANÁLISE DO GESTOR                                              -->
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- 2. AN&#193;LISE DO PER&#205;ODO                        -->
+    <!-- ═══════════════════════════════════════════════ -->
     <section class="section">
       <div class="section-header">
         <div class="section-icon amber">&#128172;</div>
         <div>
-          <div class="section-title">Análise do Período</div>
-          <div class="section-subtitle">Avaliação qualitativa dos resultados — Setembro 2026</div>
+          <div class="section-title">An&#225;lise do Per&#237;odo</div>
+          <div class="section-subtitle">Avalia&#231;&#227;o qualitativa dos resultados &#8212; Setembro 2026</div>
         </div>
       </div>
       <div class="card" style="display:flex;flex-direction:column;gap:14px;">
-        <div class="info-box amber">
-          <strong>&#127919; Meta Ads — Eficiência vs Volume:</strong> CPA subiu para R$8,08 (+8,9% vs jul) com queda de -14,7% em volume. CPM caiu -15,7%, mostrando que o custo por impressão está saudável — o problema está na conversão. CTR recuperou para 0,92% e CPC caiu para R$2,73, mas a frequência alta (2,50) indica saturação do público.
+        <div class="info-box green">
+          <strong>&#127942; Meta Ads &#8212; CPA Recorde Hist&#243;rico:</strong> R$5,11 por conversa &#233; o melhor CPA da s&#233;rie hist&#243;rica. Com investimento 41,6% menor, o volume caiu apenas 7,5% &#8212; demonstrando otimiza&#231;&#227;o significativa do algoritmo. CTR Link melhorou para 1,10% (+19,6%) e frequ&#234;ncia recuou para 2,15, indicando menor satura&#231;&#227;o de p&#250;blico.
+        </div>
+        <div class="info-box red">
+          <strong>&#9888; Diverg&#234;ncia Cr&#237;tica &#8212; Meta (86) vs Chatwoot (32):</strong> O Meta reporta 86 conversas iniciadas, mas apenas 32 chegaram ao inbox 56 do Chatwoot. S&#227;o <strong>54 leads perdidos (62,8% do total)</strong>. Poss&#237;veis causas: demora no atendimento, chatbot bloqueando entradas, configura&#231;&#227;o de redirecionamento, ou conversas que abriram mas n&#227;o enviaram mensagem. Investiga&#231;&#227;o urgente necess&#225;ria.
         </div>
         <div class="info-box green">
-          <strong>&#128640; Google Ads — Recorde de conversões:</strong> 64 conversões a R$8,85/conv — melhor resultado histórico (+36,2% vs jul). CTR de 4,56% e taxa de conversão da LP de 15,24% demonstram que o tráfego Google chega com intenção de compra. CPC de R$1,35 é 51% menor que Meta (R$2,73).
+          <strong>&#128640; Google Ads &#8212; Efici&#234;ncia Mantida:</strong> 67 convers&#245;es (+4,7% vs agosto) com CPC de R$1,55 &#8212; queda radical de 82,5% vs hist&#243;rico (R$8,85). CTR de 3,99% e taxa de convers&#227;o de 11,96% demonstram qualidade consistente. Google Ads representou 66,4% do investimento total e entregou 67 convers&#245;es.
+        </div>
+        <div class="info-box red">
+          <strong>&#128683; Mono-depend&#234;ncia LASER CO2 &#8212; Risco Cr&#237;tico:</strong> 75 das 86 conversas (87,2%) vieram exclusivamente de criativos de Laser CO2. Se a performance desse criativo cair, n&#227;o h&#225; backup. HHI estimado: &gt;0,76 &#8212; risco cr&#237;tico de portf&#243;lio. Diversifica&#231;&#227;o urgente com pelo menos 3 novos temas &#233; prioridade #1 para outubro.
         </div>
         <div class="info-box indigo">
-          <strong>&#128161; Google Ads Dr. Laércio (NOVO):</strong> Conta nova ativada em 10/ago. R$219,06 investidos, 116 cliques, CTR 4,57%, CPC R$1,89. Ainda em fase de aprendizado com correspondência ampla de palavras-chave. Próximo passo: migrar para "Maximizar Conversões" quando sair do learning phase.
-        </div>
-        <div class="info-box" style="border-left:3px solid var(--dai-border);background:rgba(255,255,255,0.02);">
-          <strong>&#128270; Decisão estratégica para setembro:</strong> Inverter orçamentos — Meta ↓ R$600/mês (reduzir saturação) e Google ↑ R$1.000/mês (escalar conversões baratas). Reativar público QUENTE no Meta com criativos novos. Criar 3-4 criativos frescos para zerar frequência.
+          <strong>&#128161; Ciclo de Convers&#227;o &gt; 1 M&#234;s (Insight Estrat&#233;gico):</strong> Nenhum lead novo de setembro converteu em agendamento no mesmo m&#234;s. Os 3 pacientes que geraram receita (R$2.200) vieram de conversas de meses anteriores. Nurturing automatizado (follow-up de leads frios/mornos) &#233; essencial para capturar o valor dos leads captados mensalmente.
         </div>
       </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- 4. COMPARATIVO JULHO vs AGOSTO                                    -->
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- 3. COMPARATIVO HIST&#211;RICO                       -->
+    <!-- ═══════════════════════════════════════════════ -->
     <section class="section">
       <div class="section-header">
         <div class="section-icon green">&#128260;</div>
         <div>
-          <div class="section-title">Comparativo Histórico</div>
-          <div class="section-subtitle">Julho vs. Setembro 2026</div>
+          <div class="section-title">Comparativo Hist&#243;rico</div>
+          <div class="section-subtitle">Agosto vs. Setembro 2026</div>
         </div>
       </div>
 
@@ -558,123 +509,130 @@
         <table>
           <thead>
             <tr>
-              <th>Métrica</th>
-              <th style="text-align:right">Jul/26</th>
+              <th>M&#233;trica</th>
               <th style="text-align:right">Ago/26</th>
-              <th style="text-align:right">Variação</th>
-              <th>Avaliação</th>
+              <th style="text-align:right">Set/26</th>
+              <th style="text-align:right">Varia&#231;&#227;o</th>
+              <th>Avalia&#231;&#227;o</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td class="text-white">Conversas Meta</td>
-              <td style="text-align:right">109</td>
-              <td style="text-align:right" class="text-white">93</td>
-              <td style="text-align:right" class="text-red">-14,7%</td>
-              <td><span class="tag tag-red">Queda</span></td>
+              <td style="text-align:right">93</td>
+              <td style="text-align:right" class="text-white">86</td>
+              <td style="text-align:right" class="text-amber">&#8722;7,5%</td>
+              <td><span class="tag tag-amber">Queda leve</span></td>
             </tr>
             <tr>
               <td class="text-white">Invest. Meta</td>
-              <td style="text-align:right">R$808,67</td>
-              <td style="text-align:right" class="text-white">R$751,69</td>
-              <td style="text-align:right" class="text-green">-7,0%</td>
-              <td><span class="tag tag-green">Economia</span></td>
+              <td style="text-align:right">R$751,69</td>
+              <td style="text-align:right" class="text-white">R$439,29</td>
+              <td style="text-align:right" class="text-green">&#8722;41,6%</td>
+              <td><span class="tag tag-green">Economia forte</span></td>
             </tr>
             <tr>
               <td class="text-white">CPA Meta</td>
-              <td style="text-align:right">R$7,42</td>
-              <td style="text-align:right" class="text-white">R$8,08</td>
-              <td style="text-align:right" class="text-red">+8,9%</td>
-              <td><span class="tag tag-amber">Atenção</span></td>
+              <td style="text-align:right">R$8,08</td>
+              <td style="text-align:right" class="text-green">R$5,11</td>
+              <td style="text-align:right" class="text-green">&#8722;36,8%</td>
+              <td><span class="tag tag-green">Recorde positivo</span></td>
             </tr>
             <tr>
               <td class="text-white">CPM</td>
-              <td style="text-align:right">R$26,51</td>
-              <td style="text-align:right" class="text-white">R$22,36</td>
-              <td style="text-align:right" class="text-green">-15,7%</td>
-              <td><span class="tag tag-green">Melhora</span></td>
+              <td style="text-align:right">R$22,36</td>
+              <td style="text-align:right" class="text-white">R$26,23</td>
+              <td style="text-align:right" class="text-red">+17,3%</td>
+              <td><span class="tag tag-red">Piora</span></td>
             </tr>
             <tr>
               <td class="text-white">CTR Link</td>
-              <td style="text-align:right">0,73%</td>
-              <td style="text-align:right" class="text-white">0,92%</td>
-              <td style="text-align:right" class="text-green">+26,0%</td>
+              <td style="text-align:right">0,92%</td>
+              <td style="text-align:right" class="text-green">1,10%</td>
+              <td style="text-align:right" class="text-green">+19,6%</td>
               <td><span class="tag tag-green">Melhora</span></td>
             </tr>
             <tr>
-              <td class="text-white">CPC Link</td>
-              <td style="text-align:right">R$3,62</td>
-              <td style="text-align:right" class="text-white">R$2,73</td>
-              <td style="text-align:right" class="text-green">-24,6%</td>
-              <td><span class="tag tag-green">Melhora</span></td>
+              <td class="text-white">Frequ&#234;ncia</td>
+              <td style="text-align:right">2,29</td>
+              <td style="text-align:right" class="text-white">2,15</td>
+              <td style="text-align:right" class="text-green">&#8722;6,1%</td>
+              <td><span class="tag tag-green">Melhora leve</span></td>
             </tr>
             <tr>
-              <td class="text-white">Invest. Google DC</td>
-              <td style="text-align:right">R$547,96</td>
-              <td style="text-align:right" class="text-white">R$566,12</td>
-              <td style="text-align:right" class="text-amber">+3,3%</td>
-              <td><span class="tag tag-muted">Estável</span></td>
+              <td class="text-white">Alcan&#231;e Meta</td>
+              <td style="text-align:right">&#8212;</td>
+              <td style="text-align:right" class="text-white">7.780</td>
+              <td style="text-align:right" class="text-muted">&#8212;</td>
+              <td><span class="tag tag-muted">Refer&#234;ncia</span></td>
             </tr>
             <tr>
-              <td class="text-white">Conv. Google DC</td>
-              <td style="text-align:right">47</td>
-              <td style="text-align:right" class="text-green">64</td>
-              <td style="text-align:right" class="text-green">+36,2%</td>
-              <td><span class="tag tag-green">Recorde</span></td>
+              <td class="text-white">Impress&#245;es Meta</td>
+              <td style="text-align:right">&#8212;</td>
+              <td style="text-align:right" class="text-white">16.747</td>
+              <td style="text-align:right" class="text-muted">&#8212;</td>
+              <td><span class="tag tag-muted">Refer&#234;ncia</span></td>
             </tr>
             <tr>
-              <td class="text-white">Cliques Google DC</td>
-              <td style="text-align:right">345</td>
-              <td style="text-align:right" class="text-white">420</td>
-              <td style="text-align:right" class="text-green">+21,7%</td>
-              <td><span class="tag tag-green">Crescimento</span></td>
+              <td class="text-white">Chatwoot Inbox 56</td>
+              <td style="text-align:right">65</td>
+              <td style="text-align:right" class="text-white">32</td>
+              <td style="text-align:right" class="text-red">&#8722;50,8%</td>
+              <td><span class="tag tag-red">Queda forte</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">Conv. Google Ads</td>
+              <td style="text-align:right">64</td>
+              <td style="text-align:right" class="text-green">67</td>
+              <td style="text-align:right" class="text-green">+4,7%</td>
+              <td><span class="tag tag-green">Melhora leve</span></td>
+            </tr>
+            <tr>
+              <td class="text-white">Custo Google Ads</td>
+              <td style="text-align:right">~R$785</td>
+              <td style="text-align:right" class="text-white">R$868,12</td>
+              <td style="text-align:right" class="text-amber">+10,6%</td>
+              <td><span class="tag tag-amber">Aumento controlado</span></td>
             </tr>
             <tr>
               <td class="text-white">CPC Google</td>
-              <td style="text-align:right">R$1,59</td>
-              <td style="text-align:right" class="text-green">R$1,35</td>
-              <td style="text-align:right" class="text-green">-15,1%</td>
-              <td><span class="tag tag-green">Melhora</span></td>
+              <td style="text-align:right">R$8,85</td>
+              <td style="text-align:right" class="text-green">R$1,55</td>
+              <td style="text-align:right" class="text-green">&#8722;82,5%</td>
+              <td><span class="tag tag-green">Melhora radical</span></td>
             </tr>
             <tr>
               <td class="text-white">Invest. Total</td>
-              <td style="text-align:right">R$1.356,63</td>
-              <td style="text-align:right" class="text-white">R$1.536,87</td>
-              <td style="text-align:right" class="text-amber">+13,3%</td>
-              <td><span class="tag tag-amber">Inclui Laércio</span></td>
+              <td style="text-align:right">R$1.536,87</td>
+              <td style="text-align:right" class="text-white">R$1.307,41</td>
+              <td style="text-align:right" class="text-green">&#8722;14,9%</td>
+              <td><span class="tag tag-green">Economia</span></td>
             </tr>
             <tr>
-              <td class="text-white">Pacientes Novos Atribuídos</td>
-              <td style="text-align:right">3</td>
-              <td style="text-align:right" class="text-green">2</td>
-              <td style="text-align:right" class="text-amber">-33%</td>
-              <td><span class="tag tag-amber">Critério rigoroso</span></td>
-            </tr>
-            <tr>
-              <td class="text-white">ROI Pacientes Novos</td>
-              <td style="text-align:right">+91,7%</td>
-              <td style="text-align:right" class="text-green">+889%</td>
-              <td style="text-align:right" class="text-green">+797pp</td>
-              <td><span class="tag tag-green">Alto valor/paciente</span></td>
+              <td class="text-white">ROI Real</td>
+              <td style="text-align:right">+889% (R$4.400)</td>
+              <td style="text-align:right" class="text-green">+68,3% (R$2.200)</td>
+              <td style="text-align:right" class="text-amber">Queda</td>
+              <td><span class="tag tag-green">Mant&#233;m positivo</span></td>
             </tr>
           </tbody>
         </table>
       </div>
 
       <div class="info-box green" style="margin-top:14px;">
-        <strong>&#128200; Leitura do comparativo:</strong> Meta perdeu volume (-14,7%) mas melhorou eficiência (CPM -15,7%, CTR +26%, CPC -24,6%). Google Ads decolou com +36,2% conversões e CPC -15,1%. Investimento total subiu 13,3% com entrada do Dr. Laércio. ROI real de pacientes novos: +889% (2 pacientes novos que chegaram e marcaram em setembro).
+        <strong>&#128200; Leitura do comparativo:</strong> Meta reduziu investimento em 41,6% com queda de apenas 7,5% em conversas &#8212; efici&#234;ncia recorde (CPA R$5,11). Google Ads expandiu levemente o custo (+10,6%) com mais convers&#245;es (+4,7%) e CPC 82,5% menor. Investimento total 14,9% menor. ROI positivo mantido (+68,3%) mesmo sem novos leads convertendo no m&#234;s.
       </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- 5. CRIATIVOS — DADOS COMPLETOS AGOSTO 2026                        -->
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- 4. CRIATIVOS &#8212; SETEMBRO 2026                 -->
+    <!-- ═══════════════════════════════════════════════ -->
     <section class="section">
       <div class="section-header">
         <div class="section-icon bordo">&#127942;</div>
         <div>
-          <div class="section-title">Performance de Criativos — Setembro 2026</div>
-          <div class="section-subtitle">Planilha oficial Meta Ads Manager · 01 a 30 de setembro · dados reais</div>
+          <div class="section-title">Performance de Criativos &#8212; Setembro 2026</div>
+          <div class="section-subtitle">Planilha oficial Meta Ads Manager &#183; 01 a 30 de setembro &#183; dados reais</div>
         </div>
       </div>
 
@@ -690,240 +648,366 @@
               <th style="text-align:right">Impr.</th>
               <th style="text-align:right">% Total</th>
               <th>Status</th>
-              <th>Link</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td class="text-green">1</td>
-              <td class="text-white">DRA EODA | 01</td>
-              <td style="text-align:right" class="text-green">27</td>
-              <td style="text-align:right">R$166,53</td>
-              <td style="text-align:right" class="text-green">R$6,17</td>
-              <td style="text-align:right">7.694</td>
-              <td style="text-align:right" class="text-green">26,2%</td>
+              <td class="text-white">AN | LASER CO2 | 01</td>
+              <td style="text-align:right" class="text-green">63</td>
+              <td style="text-align:right">R$287,72</td>
+              <td style="text-align:right" class="text-green">R$4,57</td>
+              <td style="text-align:right">11.407</td>
+              <td style="text-align:right" class="text-green">73,3%</td>
               <td><span class="tag tag-green">Top 1</span></td>
-              <td style="white-space:nowrap"><a href="https://www.instagram.com/p/DcGhMmPAhMf/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:10px;font-weight:600;text-decoration:none;">📷 IG</a> <a href="https://www.facebook.com/61570812722285/videos/1843936666588642" target="_blank" rel="noopener" style="color:#4267B2;font-size:10px;font-weight:600;text-decoration:none;margin-left:3px;">📘 FB</a></td>
             </tr>
             <tr>
               <td class="text-bordo">2</td>
-              <td class="text-white">REJUVENESCER AS MÃOS | 01</td>
-              <td style="text-align:right" class="text-bordo">26</td>
-              <td style="text-align:right">R$233,49</td>
-              <td style="text-align:right" class="text-amber">R$8,98</td>
-              <td style="text-align:right">10.226</td>
-              <td style="text-align:right">25,2%</td>
-              <td><span class="tag tag-bordo">Top 2</span></td>
-              <td style="white-space:nowrap"><a href="https://www.instagram.com/p/DYBDm1TgDkV/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:10px;font-weight:600;text-decoration:none;">📷 IG</a> <a href="https://www.facebook.com/reel/1228637379345506/" target="_blank" rel="noopener" style="color:#4267B2;font-size:10px;font-weight:600;text-decoration:none;margin-left:3px;">📘 FB</a></td>
+              <td class="text-white">AN | LASER CO2 | 02</td>
+              <td style="text-align:right" class="text-bordo">12</td>
+              <td style="text-align:right">R$47,37</td>
+              <td style="text-align:right" class="text-green">R$3,95</td>
+              <td style="text-align:right">1.721</td>
+              <td style="text-align:right">14,0%</td>
+              <td><span class="tag tag-bordo">Top 2</span> <span class="tag tag-green" style="margin-left:2px;">Melhor CPA</span></td>
             </tr>
             <tr>
               <td class="text-white">3</td>
-              <td class="text-white">Dermaclinic Health Institute | 01</td>
-              <td style="text-align:right">22</td>
-              <td style="text-align:right">R$174,90</td>
-              <td style="text-align:right" class="text-green">R$7,95</td>
-              <td style="text-align:right">5.017</td>
-              <td style="text-align:right">21,4%</td>
+              <td class="text-white">AN | Dermaclinic Health Institute | 01</td>
+              <td style="text-align:right">4</td>
+              <td style="text-align:right">R$17,75</td>
+              <td style="text-align:right" class="text-green">R$4,44</td>
+              <td style="text-align:right">512</td>
+              <td style="text-align:right">4,7%</td>
               <td><span class="tag tag-indigo">Top 3</span></td>
-              <td style="white-space:nowrap"><a href="https://www.instagram.com/p/DcGhcHpAyU9/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:10px;font-weight:600;text-decoration:none;">📷 IG</a> <a href="https://www.facebook.com/61570812722285/videos/4306475786285623" target="_blank" rel="noopener" style="color:#4267B2;font-size:10px;font-weight:600;text-decoration:none;margin-left:3px;">📘 FB</a></td>
             </tr>
             <tr>
               <td>4</td>
-              <td class="text-white">MMP CAPILAR | 01</td>
-              <td style="text-align:right">7</td>
-              <td style="text-align:right">R$65,71</td>
-              <td style="text-align:right">R$9,39</td>
-              <td style="text-align:right">2.344</td>
-              <td style="text-align:right">6,8%</td>
+              <td class="text-white">AN | AQUAPURE | 01</td>
+              <td style="text-align:right">3</td>
+              <td style="text-align:right">R$5,12</td>
+              <td style="text-align:right" class="text-green">R$1,71</td>
+              <td style="text-align:right">140</td>
+              <td style="text-align:right">3,5%</td>
               <td><span class="tag tag-muted">Ativo</span></td>
-              <td style="white-space:nowrap"><a href="https://www.instagram.com/p/DbgU8GmA98i/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:10px;font-weight:600;text-decoration:none;">📷 IG</a> <a href="https://www.facebook.com/61570812722285/videos/906037888692906" target="_blank" rel="noopener" style="color:#4267B2;font-size:10px;font-weight:600;text-decoration:none;margin-left:3px;">📘 FB</a></td>
             </tr>
             <tr>
               <td>5</td>
-              <td class="text-white">NOVOS SERVIÇOS | 01</td>
-              <td style="text-align:right">7</td>
-              <td style="text-align:right">R$26,39</td>
-              <td style="text-align:right" class="text-green">R$3,77</td>
-              <td style="text-align:right">1.355</td>
-              <td style="text-align:right">6,8%</td>
-              <td><span class="tag tag-green">Melhor CPA</span></td>
-              <td style="white-space:nowrap"><a href="https://www.instagram.com/p/DcGiAikgDQ6/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:10px;font-weight:600;text-decoration:none;">📷 IG</a> <a href="https://www.facebook.com/61570812722285/posts/pfbid09WoWDJCy157taRWUwfxeLVDo1QuLcYo86ajgxmdCwzGXpbv2WiXa4oaGYbPoH9uDl" target="_blank" rel="noopener" style="color:#4267B2;font-size:10px;font-weight:600;text-decoration:none;margin-left:3px;">📘 FB</a></td>
+              <td class="text-white">AN | NOVOS SERVI&#199;OS | 01</td>
+              <td style="text-align:right">1</td>
+              <td style="text-align:right">R$12,17</td>
+              <td style="text-align:right" class="text-amber">R$12,17</td>
+              <td style="text-align:right">627</td>
+              <td style="text-align:right">1,2%</td>
+              <td><span class="tag tag-muted">Ativo</span></td>
             </tr>
             <tr>
               <td>6</td>
-              <td>ESTRIAS | 01</td>
-              <td style="text-align:right">3</td>
-              <td style="text-align:right">R$30,53</td>
-              <td style="text-align:right">R$10,18</td>
-              <td style="text-align:right">1.957</td>
-              <td style="text-align:right">2,9%</td>
+              <td class="text-white">AN | DRA EODA | 01</td>
+              <td style="text-align:right">1</td>
+              <td style="text-align:right">R$3,32</td>
+              <td style="text-align:right" class="text-green">R$3,32</td>
+              <td style="text-align:right">189</td>
+              <td style="text-align:right">1,2%</td>
               <td><span class="tag tag-muted">Ativo</span></td>
-              <td style="white-space:nowrap"><a href="https://www.instagram.com/p/DWpg8KcgC-L/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:10px;font-weight:600;text-decoration:none;">📷 IG</a> <a href="https://www.facebook.com/61570812722285/posts/pfbid0U8tc9gY2aPhmm7EMv9kTvU3efUa4bzG8hA6T8beJnN1WxrvtzZ178nmvahWqV26bl" target="_blank" rel="noopener" style="color:#4267B2;font-size:10px;font-weight:600;text-decoration:none;margin-left:3px;">📘 FB</a></td>
             </tr>
             <tr>
               <td>7</td>
-              <td>TODA HISTÓRIA QUE CRESCE | 01</td>
-              <td style="text-align:right">3</td>
-              <td style="text-align:right">R$19,26</td>
-              <td style="text-align:right" class="text-green">R$6,42</td>
-              <td style="text-align:right">787</td>
-              <td style="text-align:right">2,9%</td>
-              <td><span class="tag tag-muted">Ativo</span></td>
-              <td style="white-space:nowrap"><a href="https://www.instagram.com/p/DZ54aBFA_1_/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:10px;font-weight:600;text-decoration:none;">📷 IG</a> <a href="https://www.facebook.com/61570812722285/videos/37163820576542649" target="_blank" rel="noopener" style="color:#4267B2;font-size:10px;font-weight:600;text-decoration:none;margin-left:3px;">📘 FB</a></td>
+              <td class="text-white">AN | XERF | 01</td>
+              <td style="text-align:right">1</td>
+              <td style="text-align:right">R$31,41</td>
+              <td style="text-align:right" class="text-red">R$31,41</td>
+              <td style="text-align:right">820</td>
+              <td style="text-align:right">1,2%</td>
+              <td><span class="tag tag-red">CPA alto</span></td>
             </tr>
             <tr>
               <td>8</td>
-              <td>ESPAÇO NOVO | 01</td>
-              <td style="text-align:right">3</td>
-              <td style="text-align:right">R$34,12</td>
-              <td style="text-align:right">R$11,37</td>
-              <td style="text-align:right">1.129</td>
-              <td style="text-align:right">3,2%</td>
-              <td><span class="tag tag-muted">Ativo</span></td>
-              <td style="white-space:nowrap"><a href="https://www.instagram.com/p/DbgU8FJgNOs/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:10px;font-weight:600;text-decoration:none;">📷 IG</a> <a href="https://www.facebook.com/61570812722285/videos/1022649767410717" target="_blank" rel="noopener" style="color:#4267B2;font-size:10px;font-weight:600;text-decoration:none;margin-left:3px;">📘 FB</a></td>
+              <td class="text-white">AN | AQUAPURE | 01 &#8212; C&#243;pia</td>
+              <td style="text-align:right">1</td>
+              <td style="text-align:right">R$19,47</td>
+              <td style="text-align:right" class="text-amber">R$19,47</td>
+              <td style="text-align:right">679</td>
+              <td style="text-align:right">1,2%</td>
+              <td><span class="tag tag-amber">CPA m&#233;dio</span></td>
             </tr>
             <tr>
               <td>9</td>
-              <td>UNYQUE PRO | 01</td>
-              <td style="text-align:right">3</td>
-              <td style="text-align:right">R$60,37</td>
-              <td style="text-align:right" class="text-red">R$20,12</td>
-              <td style="text-align:right">1.677</td>
-              <td style="text-align:right">2,9%</td>
-              <td><span class="tag tag-red">CPA alto</span></td>
-              <td style="white-space:nowrap"><a href="https://www.instagram.com/p/DavxT70Aw-l/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:10px;font-weight:600;text-decoration:none;">📷 IG</a> <a href="https://www.facebook.com/61570812722285/videos/1510959450513602" target="_blank" rel="noopener" style="color:#4267B2;font-size:10px;font-weight:600;text-decoration:none;margin-left:3px;">📘 FB</a></td>
+              <td>AN | TODA HIST&#211;RIA QUE CRESCE | 01 &#8212; C&#243;pia</td>
+              <td style="text-align:right">0</td>
+              <td style="text-align:right">R$0,48</td>
+              <td style="text-align:right">&#8212;</td>
+              <td style="text-align:right">27</td>
+              <td style="text-align:right">0%</td>
+              <td><span class="tag tag-red">Zombie</span></td>
             </tr>
             <tr>
               <td>10</td>
-              <td>CALVÍCIE TEM SOLUÇÃO | 01</td>
-              <td style="text-align:right">1</td>
-              <td style="text-align:right">R$17,54</td>
-              <td style="text-align:right" class="text-red">R$17,54</td>
-              <td style="text-align:right">494</td>
-              <td style="text-align:right">1,0%</td>
-              <td><span class="tag tag-muted">Baixo vol.</span></td>
-              <td style="white-space:nowrap"><a href="https://www.instagram.com/p/DbgU8GmA98i/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:10px;font-weight:600;text-decoration:none;">📷 IG</a> <a href="https://www.facebook.com/61570812722285/videos/2162117571017166" target="_blank" rel="noopener" style="color:#4267B2;font-size:10px;font-weight:600;text-decoration:none;margin-left:3px;">📘 FB</a></td>
+              <td>AN | CASO RITA | 01</td>
+              <td style="text-align:right">0</td>
+              <td style="text-align:right">R$0,50</td>
+              <td style="text-align:right">&#8212;</td>
+              <td style="text-align:right">36</td>
+              <td style="text-align:right">0%</td>
+              <td><span class="tag tag-red">Zombie</span></td>
             </tr>
             <tr>
               <td>11</td>
-              <td>PORQUE ACREDITAMOS | 01</td>
-              <td style="text-align:right">1</td>
-              <td style="text-align:right">R$7,43</td>
-              <td style="text-align:right">R$7,43</td>
-              <td style="text-align:right">280</td>
-              <td style="text-align:right">1,0%</td>
-              <td><span class="tag tag-muted">Baixo vol.</span></td>
-              <td style="white-space:nowrap"><a href="https://www.instagram.com/p/DcGiAD_AKis/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:10px;font-weight:600;text-decoration:none;">📷 IG</a> <a href="https://www.facebook.com/61570812722285/posts/pfbid02XCgbtQLxXbbmHiWToS7FgLZ8awpdcpGkSVo41jJ6eoCpqFEz1eSv3QLphSTA6zVNl" target="_blank" rel="noopener" style="color:#4267B2;font-size:10px;font-weight:600;text-decoration:none;margin-left:3px;">📘 FB</a></td>
+              <td>AN | PORQUE ACREDITAMOS NA DERMACLINIC | 01</td>
+              <td style="text-align:right">0</td>
+              <td style="text-align:right">R$3,50</td>
+              <td style="text-align:right">&#8212;</td>
+              <td style="text-align:right">190</td>
+              <td style="text-align:right">0%</td>
+              <td><span class="tag tag-red">Zombie</span></td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td>AN | CASO RENITA | 01</td>
+              <td style="text-align:right">0</td>
+              <td style="text-align:right">R$0,04</td>
+              <td style="text-align:right">&#8212;</td>
+              <td style="text-align:right">2</td>
+              <td style="text-align:right">0%</td>
+              <td><span class="tag tag-red">Zombie</span></td>
+            </tr>
+            <tr>
+              <td>13</td>
+              <td>AN | CUIDADOS COM A PELE | 01</td>
+              <td style="text-align:right">0</td>
+              <td style="text-align:right">R$0,57</td>
+              <td style="text-align:right">&#8212;</td>
+              <td style="text-align:right">22</td>
+              <td style="text-align:right">0%</td>
+              <td><span class="tag tag-red">Zombie</span></td>
+            </tr>
+            <tr>
+              <td>14</td>
+              <td>AN | CAIXA MISTERIOSA | 01</td>
+              <td style="text-align:right">0</td>
+              <td style="text-align:right">R$7,08</td>
+              <td style="text-align:right">&#8212;</td>
+              <td style="text-align:right">291</td>
+              <td style="text-align:right">0%</td>
+              <td><span class="tag tag-red">Zombie</span></td>
+            </tr>
+            <tr>
+              <td>15</td>
+              <td>AN | CAIXA MISTERIOSA | 01 &#8212; C&#243;pia</td>
+              <td style="text-align:right">0</td>
+              <td style="text-align:right">R$0,40</td>
+              <td style="text-align:right">&#8212;</td>
+              <td style="text-align:right">29</td>
+              <td style="text-align:right">0%</td>
+              <td><span class="tag tag-red">Zombie</span></td>
+            </tr>
+            <tr>
+              <td>16</td>
+              <td>AN | XERF | 01 &#8212; C&#243;pia</td>
+              <td style="text-align:right">0</td>
+              <td style="text-align:right">R$2,16</td>
+              <td style="text-align:right">&#8212;</td>
+              <td style="text-align:right">48</td>
+              <td style="text-align:right">0%</td>
+              <td><span class="tag tag-red">Zombie</span></td>
+            </tr>
+            <tr>
+              <td>17</td>
+              <td>AN | CUIDADOS COM A PELE | 01 &#8212; C&#243;pia</td>
+              <td style="text-align:right">0</td>
+              <td style="text-align:right">R$0,23</td>
+              <td style="text-align:right">&#8212;</td>
+              <td style="text-align:right">7</td>
+              <td style="text-align:right">0%</td>
+              <td><span class="tag tag-red">Zombie</span></td>
             </tr>
           </tbody>
           <tfoot>
             <tr style="font-weight:700;border-top:2px solid #2d3748">
               <td></td>
-              <td>TOTAL (c/ conversão)*</td>
-              <td style="text-align:right">103</td>
-              <td style="text-align:right">R$835,40</td>
-              <td style="text-align:right">R$8,11</td>
-              <td style="text-align:right">33.622</td>
+              <td>TOTAL</td>
+              <td style="text-align:right">86</td>
+              <td style="text-align:right">R$439,29</td>
+              <td style="text-align:right">R$5,11</td>
+              <td style="text-align:right">16.747</td>
               <td style="text-align:right">100%</td>
-              <td></td>
               <td></td>
             </tr>
           </tfoot>
         </table>
       </div>
 
-      <div class="info-box" style="margin-top:12px;font-size:11px;color:#94A3B8">
-        *O export por anúncio totaliza 103 mensagens e R$835,40 em criativos com conversão. O dashboard consolidado do gestor reporta 93 mensagens e R$751,69 investidos — a diferença deve-se à janela de atribuição (configuração view/click no Ads Manager). Os KPIs do resumo executivo usam os dados do gestor (93); a tabela de criativos e shares usam o export por anúncio (103).
-      </div>
       <div class="info-box amber" style="margin-top:14px;">
-        <strong>&#128176; Orçamento sem conversão:</strong> R$35,92 gastos em criativos com zero mensagens (4,78% do budget) — incluindo BOTOX DOS 30 <a href="https://www.facebook.com/reel/1488593136037744/" target="_blank" rel="noopener" style="color:#4267B2;font-size:10px;font-weight:600;text-decoration:none;">📘 FB</a> (R$2,23), PREENCHIMENTO LABIAL <a href="https://www.instagram.com/p/DZLid-4gPVk/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:10px;font-weight:600;text-decoration:none;">📷 IG</a> <a href="https://www.facebook.com/61570812722285/videos/2721892901543081" target="_blank" rel="noopener" style="color:#4267B2;font-size:10px;font-weight:600;text-decoration:none;margin-left:2px;">📘 FB</a> (R$6,34), CASO RITA <a href="https://www.instagram.com/p/DcGgwHqAVxb/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:10px;font-weight:600;text-decoration:none;">📷 IG</a> <a href="https://www.facebook.com/61570812722285/videos/1426448072948876" target="_blank" rel="noopener" style="color:#4267B2;font-size:10px;font-weight:600;text-decoration:none;margin-left:2px;">📘 FB</a> (R$3,52), CASO RENITA <a href="https://www.instagram.com/p/DcGgwhSg1eL/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:10px;font-weight:600;text-decoration:none;">📷 IG</a> <a href="https://www.facebook.com/61570812722285/videos/1383962910585422" target="_blank" rel="noopener" style="color:#4267B2;font-size:10px;font-weight:600;text-decoration:none;margin-left:2px;">📘 FB</a> (R$3,89) e outros. Percentual saudável e dentro do esperado para fase de teste.
+        <strong>&#128176; Budget Zombie (R$17,05 = 3,88% do investimento Meta):</strong> 10 criativos com zero conversas consumiram R$17,05 &#8212; CAIXA MISTERIOSA (R$7,08 + R$0,40), PORQUE ACREDITAMOS (R$3,50), XERF C&#243;pia (R$2,16), NOVOS SERVI&#199;OS 2&#170; inst. (R$2,09), CUIDADOS COM A PELE (R$0,57 + R$0,23), CASO RITA (R$0,50), TODA HIST&#211;RIA (R$0,48), CASO RENITA (R$0,04). Percentual baixo &#8212; dentro do aceit&#225;vel. A&#231;&#227;o: pausar todos os zombies imediatamente.
       </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- 6. CRIATIVO DOMINANTE                                             -->
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- 5. SPOTLIGHT: LASER CO2                        -->
+    <!-- ═══════════════════════════════════════════════ -->
     <section class="section">
       <div class="section-header">
-        <div class="section-icon bordo">&#127775;</div>
+        <div class="section-icon bordo">&#9888;</div>
         <div>
-          <div class="section-title">Mudança de Liderança</div>
-          <div class="section-subtitle">DRA EODA assume topo — diversificação em progresso</div>
+          <div class="section-title">LASER CO2 &#8212; Mono-depend&#234;ncia Cr&#237;tica</div>
+          <div class="section-subtitle">87,2% das conversas concentradas em 1 tema &#8212; risco estrat&#233;gico m&#225;ximo</div>
         </div>
       </div>
 
       <div class="spotlight">
-        <div class="eyebrow">Novo líder em setembro</div>
-        <h3><a href="https://www.instagram.com/p/DcGhMmPAhMf/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;border-bottom:2px solid var(--dai-indigo);">DRA EODA | 01</a> <a href="https://www.facebook.com/61570812722285/videos/1843936666588642" target="_blank" rel="noopener" style="color:#4267B2;font-size:13px;font-weight:600;text-decoration:none;margin-left:6px;vertical-align:middle;">📘 FB</a></h3>
-        <p class="tagline">Desbancou REJUVENESCER AS MÃOS pela primeira vez — concentração caiu de 78% (jul) para 26,2% (ago). Top 3 concentra 72,8% das conversas (HHI 0,191 — risco moderado vs 0,616 em jul).</p>
+        <div class="eyebrow">Alerta de concentra&#231;&#227;o &#8212; setembro 2026</div>
+        <h3>AN | LASER CO2 | 01 &amp; 02 &#8212; Domin&#226;ncia de 87,2%</h3>
+        <p class="tagline">75 das 86 conversas de setembro vieram de criativos de Laser CO2. &#201; um sinal de efici&#234;ncia do criativo, mas cria depend&#234;ncia cr&#237;tica: se o p&#250;blico saturar ou a performance cair, n&#227;o h&#225; alternativa ativa com volume suficiente para substituir. HHI estimado: &gt;0,76 &#8212; risco cr&#237;tico de portf&#243;lio.</p>
         <div class="spotlight-metrics">
           <div class="spotlight-metric">
-            <div class="label">Conversas</div>
-            <div class="value star">27</div>
+            <div class="label">Conversas CO2</div>
+            <div class="value star">75</div>
           </div>
           <div class="spotlight-metric">
-            <div class="label">CPA</div>
-            <div class="value">R$6,17</div>
+            <div class="label">Share do Total</div>
+            <div class="value">87,2%</div>
           </div>
           <div class="spotlight-metric">
-            <div class="label">Share</div>
-            <div class="value">26,2%</div>
+            <div class="label">CPA CO2 | 01</div>
+            <div class="value">R$4,57</div>
           </div>
           <div class="spotlight-metric">
-            <div class="label">Impressões</div>
-            <div class="value">7.694</div>
+            <div class="label">CPA CO2 | 02</div>
+            <div class="value">R$3,95</div>
           </div>
         </div>
         <p class="analysis">
-          <strong>Diversificação saudável:</strong> Em julho, REJUVENESCER AS MÃOS dominava com 78% das conversas (HHI 0,616 — risco crítico). Em agosto, os 3 criativos no topo (DRA EODA 26,2%, REJUVENESCER 25,2%, DHI 21,4%) distribuem o tráfego de forma mais equilibrada. HHI caiu para 0,191 — melhora significativa. NOVOS SERVIÇOS surpreendeu com melhor CPA absoluto (R$3,77) mesmo com volume baixo.
+          <strong>Por que &#233; perigoso:</strong> Agosto tinha DRA EODA (26,2%), REJUVENESCER (25,2%) e DHI (21,4%) distribuindo risco. Setembro concentrou tudo em Laser CO2. O CPA excelente (R$3,95&#8211;R$4,57) &#233; resultado do criativo estar em fase de pico &#8212; mas picos s&#227;o seguidos de satura&#231;&#227;o. <strong>AQUAPURE | 01 mostrou CPA de R$1,71</strong> com apenas R$5,12 investidos &#8212; potencial n&#227;o explorado. DRA EODA caiu de 27 conversas em agosto para apenas 1 em setembro &#8212; sinal de desgaste que pode se repetir com CO2 se n&#227;o agirmos com diversifica&#231;&#227;o urgente.
         </p>
       </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- 7. QUALIFICAÇÃO DE LEADS                                          -->
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- 6. CHATWOOT &#8212; FUNIL INBOX 56                -->
+    <!-- ═══════════════════════════════════════════════ -->
     <section class="section">
       <div class="section-header">
-        <div class="section-icon green">&#129657;</div>
+        <div class="section-icon red">&#128721;</div>
         <div>
-          <div class="section-title">Funil de Qualificação — IA de Atendimento</div>
-          <div class="section-subtitle">Performance da IA no filtro de leads — setembro 2026</div>
+          <div class="section-title">Funil de Atendimento &#8212; Chatwoot Inbox 56</div>
+          <div class="section-subtitle">Tr&#225;fego Pago &#183; diverg&#234;ncia Meta vs Chatwoot &#183; distribui&#231;&#227;o semanal</div>
         </div>
       </div>
 
-      <div class="kpi-grid">
+      <!-- Alerta -->
+      <div class="alert-banner">
+        <div class="eyebrow">&#128680; Diverg&#234;ncia Cr&#237;tica &#8212; Investiga&#231;&#227;o Urgente</div>
+        <h4>Meta: 86 conversas &#8594; Chatwoot: 32 &#8594; 54 leads perdidos (62,8%)</h4>
+        <p>O Meta Ads Manager reporta 86 conversas iniciadas, mas apenas 32 chegaram ao inbox 56. <strong>54 leads pagos foram perdidos no funil</strong> antes de chegar ao atendimento. A cada lead perdido: R$5,11 desperdi&#231;ado. Investigar: configura&#231;&#227;o do bot&#227;o CTA, tempo de resposta do chatbot, filtros de triagem, ou conversas abertas sem mensagem enviada.</p>
+      </div>
+
+      <div class="kpi-grid-4" style="margin-bottom:24px;">
+        <div class="kpi-card red fade-up">
+          <div class="kpi-label">Meta Ads (Topo)</div>
+          <div class="kpi-value" style="color:var(--red);">86</div>
+          <div class="kpi-caption">Conversas reportadas pelo Meta</div>
+        </div>
+        <div class="kpi-card amber fade-up">
+          <div class="kpi-label">Chatwoot Inbox 56</div>
+          <div class="kpi-value amber-v">32</div>
+          <div class="kpi-delta down">&#9660; &#8722;50,8% vs ago (65)</div>
+        </div>
+        <div class="kpi-card red fade-up">
+          <div class="kpi-label">Leads Perdidos</div>
+          <div class="kpi-value" style="color:var(--red);">54</div>
+          <div class="kpi-caption">62,8% das conversas n&#227;o chegaram</div>
+        </div>
         <div class="kpi-card indigo fade-up">
-          <div class="kpi-label">Conversas Meta (Topo)</div>
-          <div class="kpi-value">93</div>
-          <div class="kpi-caption">Total de conversas iniciadas</div>
-        </div>
-        <div class="kpi-card green fade-up">
-          <div class="kpi-label">Leads Qualificados</div>
-          <div class="kpi-value highlight">—</div>
-          <div class="kpi-caption">Dados Chatwoot pendentes consolidação</div>
-        </div>
-        <div class="kpi-card green fade-up">
-          <div class="kpi-label">Taxa Qualificação</div>
-          <div class="kpi-value highlight">—</div>
-          <div class="kpi-caption">% de conversas qualificadas pela IA</div>
+          <div class="kpi-label">Total de Msgs</div>
+          <div class="kpi-value">203</div>
+          <div class="kpi-caption">102 do cliente &#183; 101 do agente</div>
         </div>
       </div>
 
-      <div class="info-box green" style="margin-top:14px;">
-        <strong>&#129302; IA de Atendimento:</strong> A IA processa 100% das conversas de tráfego pago no WhatsApp (inbox 56). Em julho, a taxa de qualificação foi 97,7% (125/128). Dados consolidados de setembro serão atualizados na próxima extração Chatwoot. Os 2 pacientes novos do ROI confirmam que a IA qualificou e encaminhou corretamente.
+      <!-- Distribui&#231;&#227;o semanal -->
+      <h4 style="font-size:13px;font-weight:600;color:var(--dai-muted);margin:0 0 12px;">Distribui&#231;&#227;o Semanal &#8212; Chatwoot Inbox 56</h4>
+      <div class="week-grid" style="margin-bottom:20px;">
+        <div class="week-card best">
+          <div class="week-label">S1 &#183; 01&#8211;07/set</div>
+          <div class="week-conv best">21</div>
+          <div class="week-sub">65,6% do total</div>
+          <div class="week-quali high">Semana forte</div>
+        </div>
+        <div class="week-card low">
+          <div class="week-label">S2 &#183; 08&#8211;14/set</div>
+          <div class="week-conv low">7</div>
+          <div class="week-sub">21,9% do total</div>
+          <div class="week-quali mid">Queda brusca</div>
+        </div>
+        <div class="week-card dead">
+          <div class="week-label">S3 &#183; 15&#8211;21/set</div>
+          <div class="week-conv dead">0</div>
+          <div class="week-sub">Sem entradas</div>
+          <div class="week-quali bad">Semana morta</div>
+        </div>
+        <div class="week-card normal">
+          <div class="week-label">S4 &#183; 22&#8211;30/set</div>
+          <div class="week-conv">4</div>
+          <div class="week-sub">12,5% do total</div>
+          <div class="week-quali mid">Retomada parcial</div>
+        </div>
+      </div>
+
+      <!-- CSS Bar Chart semanal -->
+      <div class="chart-wrap">
+        <div class="chart-title">Conversas por Semana &#8212; Chatwoot Inbox 56</div>
+        <div class="chart-subtitle">Setembro 2026 &#183; M&#225;ximo = 21 conversas (Semana 1)</div>
+        <div class="css-chart">
+          <div class="css-chart-bars" style="align-items:flex-end; justify-content:center; gap:24px; height:200px; padding: 0 24px;">
+            <!-- S1: 21 = 100% de 160px -->
+            <div class="css-bar-group" style="width:90px;">
+              <div class="css-bars-wrap" style="height:160px;">
+                <div class="css-bar" style="height:160px;width:60px;background:rgba(16,185,129,0.8);border:1px solid #10B981;border-radius:4px 4px 0 0;"></div>
+              </div>
+              <div class="css-bar-value" style="color:#34D399;font-size:16px;font-weight:800;">21</div>
+              <div class="css-bar-label">S1<br><span>01&#8211;07/set</span></div>
+            </div>
+            <!-- S2: 7 = 33% de 160px = 53px -->
+            <div class="css-bar-group" style="width:90px;">
+              <div class="css-bars-wrap" style="height:160px;">
+                <div class="css-bar" style="height:53px;width:60px;background:rgba(99,102,241,0.75);border:1px solid #6366F1;border-radius:4px 4px 0 0;"></div>
+              </div>
+              <div class="css-bar-value" style="color:#818CF8;font-size:16px;font-weight:800;">7</div>
+              <div class="css-bar-label">S2<br><span>08&#8211;14/set</span></div>
+            </div>
+            <!-- S3: 0 = min 4px -->
+            <div class="css-bar-group" style="width:90px;">
+              <div class="css-bars-wrap" style="height:160px;">
+                <div class="css-bar" style="height:4px;width:60px;background:rgba(239,68,68,0.5);border:1px solid #EF4444;border-radius:4px 4px 0 0;"></div>
+              </div>
+              <div class="css-bar-value" style="color:#F87171;font-size:16px;font-weight:800;">0</div>
+              <div class="css-bar-label">S3<br><span>15&#8211;21/set</span></div>
+            </div>
+            <!-- S4: 4 = 19% de 160px = 30px -->
+            <div class="css-bar-group" style="width:90px;">
+              <div class="css-bars-wrap" style="height:160px;">
+                <div class="css-bar" style="height:30px;width:60px;background:rgba(245,158,11,0.65);border:1px solid #F59E0B;border-radius:4px 4px 0 0;"></div>
+              </div>
+              <div class="css-bar-value" style="color:#FBBF24;font-size:16px;font-weight:800;">4</div>
+              <div class="css-bar-label">S4<br><span>22&#8211;30/set</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="info-box" style="margin-top:12px;font-size:11px;color:#94A3B8;border-left-color:var(--dai-border);background:transparent;">
+          A semana 3 (15&#8211;21/set) registrou zero conversas no Chatwoot inbox 56. Fen&#244;meno incomum que requer investiga&#231;&#227;o &#8212; pode indicar falha de configura&#231;&#227;o, pausa de an&#250;ncios n&#227;o registrada, ou problema no fluxo de atendimento naquele per&#237;odo.
+        </div>
       </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- 8. AÇÕES PARA SETEMBRO                                            -->
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- 7. A&#199;&#213;ES PARA OUTUBRO                         -->
+    <!-- ═══════════════════════════════════════════════ -->
     <section class="section">
       <div class="section-header">
         <div class="section-icon red">&#9889;</div>
         <div>
-          <div class="section-title">5 Ações Concretas para Setembro</div>
-          <div class="section-subtitle">Priorizadas por impacto e urgência — baseadas nos dados de setembro</div>
+          <div class="section-title">5 A&#231;&#245;es Concretas para Outubro</div>
+          <div class="section-subtitle">Priorizadas por impacto e urg&#234;ncia &#8212; baseadas nos dados de setembro</div>
         </div>
       </div>
 
@@ -931,396 +1015,193 @@
         <div class="action-card fade-up">
           <div class="action-num critical">1</div>
           <div class="action-body">
-            <div class="priority critical">Crítica</div>
-            <h4>Inverter Orçamentos: Meta ↓ R$600 · Google ↑ R$1.000</h4>
-            <p>Google Ads entrega conversões a R$8,85 vs Meta R$8,08, mas com CTR 4,56% (5× maior) e taxa de conversão LP 15,24%. Cada real no Google gera mais resultado. Meta reduzido para manutenção e teste de criativos novos.</p>
+            <div class="priority critical">Cr&#237;tica</div>
+            <h4>Diversificar Criativos &#8212; 3&#8211;5 novos temas al&#233;m de Laser CO2</h4>
+            <p>87% de concentra&#231;&#227;o em 1 criativo &#233; risco cr&#237;tico de portf&#243;lio. Criar pelo menos 3 novos temas: bioestimuladores, peeling, harmoniza&#231;&#227;o facial. AQUAPURE (CPA R$1,71) e DRA EODA mostram potencial n&#227;o explorado com volume maior de investimento.</p>
           </div>
         </div>
         <div class="action-card fade-up">
           <div class="action-num critical">2</div>
           <div class="action-body">
-            <div class="priority critical">Crítica</div>
-            <h4>Criar 3-4 Criativos Novos (zerar frequência)</h4>
-            <p>Frequência da conta em 2,50 — saturação clara. Novos criativos resetam a frequência e trazem público fresco. Priorizar formatos video/carrossel com foco em MMP Capilar e Estrias (demanda crescente).</p>
+            <div class="priority critical">Cr&#237;tica</div>
+            <h4>Investigar Funil &#8212; 54 leads perdidos entre Meta e Chatwoot</h4>
+            <p>62,8% das conversas do Meta n&#227;o chegam ao Chatwoot. Verificar: configura&#231;&#227;o do CTA do an&#250;ncio, tempo de resposta do chatbot, filtros de triagem no inbox 56, conversas abertas sem mensagem enviada. Cada lead perdido representa R$5,11 desperdi&#231;ado.</p>
           </div>
         </div>
         <div class="action-card fade-up">
           <div class="action-num high">3</div>
           <div class="action-body">
             <div class="priority high">Alta</div>
-            <h4>Reativar Público QUENTE em setembro</h4>
-            <p>Público QUENTE foi pausado em julho por CPA alto (R$10,99). Com criativos novos e orçamento reduzido, vale reativar para reconquistar leads que já demonstraram interesse.</p>
+            <h4>Implementar Nurturing &#8212; Follow-up autom&#225;tico para leads frios/mornos</h4>
+            <p>0 leads novos de setembro converteram no mesmo m&#234;s. Ciclo de convers&#227;o confirmado como &gt;1 m&#234;s. Criar sequ&#234;ncia de follow-up autom&#225;tico (D+3, D+7, D+15, D+30) para leads que n&#227;o agendaram. WhatsApp + n8n &#8212; implementa&#231;&#227;o est&#225; no roadmap Digital AI.</p>
           </div>
         </div>
         <div class="action-card fade-up">
           <div class="action-num high">4</div>
           <div class="action-body">
             <div class="priority high">Alta</div>
-            <h4>Migrar Laércio para "Maximizar Conversões"</h4>
-            <p>Conta Dr. Laércio ainda em learning phase com correspondência ampla. Após acumular ~50 conversões, migrar para Maximizar Conversões e refinar palavras-chave negativas. CTR de 4,57% já é excelente.</p>
+            <h4>Manter Google Ads &#8212; Performance excelente, preservar investimento</h4>
+            <p>CPC R$1,55 (&#8722;82,5% vs hist&#243;rico), 67 convers&#245;es, taxa de convers&#227;o 11,96%. Google Ads &#233; o canal mais eficiente. Manter investimento em ~R$868/m&#234;s. N&#227;o redirecionar verba do Google para Meta &#8212; seria um retrocesso.</p>
           </div>
         </div>
         <div class="action-card fade-up" style="grid-column: span 2;">
           <div class="action-num medium">5</div>
           <div class="action-body">
-            <div class="priority medium">Média</div>
-            <h4>Pausar Criativos com CPA > R$15 e Volume < 3</h4>
-            <p>UNYQUE PRO (CPA R$19,83) e CALVÍCIE (R$17,54) consomem budget sem retorno proporcional. Redirecionar para NOVOS SERVIÇOS (CPA R$3,77) e TODA HISTÓRIA (CPA R$6,42) que convertem com eficiência superior.</p>
+            <div class="priority medium">M&#233;dia</div>
+            <h4>Reativar Criativos de Apoio &#8212; AQUAPURE e DRA EODA com or&#231;amento dedicado</h4>
+            <p>AQUAPURE | 01 entregou CPA de R$1,71 (melhor do m&#234;s) com apenas R$5,12 investidos. DRA EODA converteu com CPA R$3,32. Ambos t&#234;m potencial de escala. Alocar R$100&#8211;150/m&#234;s em cada para construir alternativa ao LASER CO2 antes da satura&#231;&#227;o inevit&#225;vel do criativo dominante.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- 9. GOOGLE ADS                                                     -->
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- 8. GOOGLE ADS &#8212; SETEMBRO 2026               -->
+    <!-- ═══════════════════════════════════════════════ -->
     <section class="section" id="google-ads">
       <div class="section-header">
         <div class="section-icon indigo">&#128200;</div>
         <div>
-          <div class="section-title">Google Ads — Setembro 2026</div>
-          <div class="section-subtitle">DermaClinic + Dr. Laércio (novo) · dados Google Ads Manager</div>
+          <div class="section-title">Google Ads &#8212; Setembro 2026</div>
+          <div class="section-subtitle">DermaClinic &#183; dados Google Ads Manager 01&#8211;30/set</div>
         </div>
       </div>
 
-      <!-- DermaClinic KPIs -->
-      <h3 style="font-size:14px;font-weight:700;color:var(--dai-white);margin-bottom:14px;">DermaClinic — Conta Principal</h3>
       <div class="kpi-grid-5" style="margin-bottom:24px;">
         <div class="kpi-card green fade-up">
-          <div class="kpi-label">Conversões</div>
-          <div class="kpi-value highlight">64</div>
-          <div class="kpi-delta up">&#9650; +36,2% vs jul (47)</div>
+          <div class="kpi-label">Convers&#245;es</div>
+          <div class="kpi-value highlight">67</div>
+          <div class="kpi-delta up">&#9650; +4,7% vs ago (64)</div>
         </div>
         <div class="kpi-card indigo fade-up">
           <div class="kpi-label">Investimento</div>
-          <div class="kpi-value">R$566,12</div>
-          <div class="kpi-delta down">&#9650; +3,3%</div>
+          <div class="kpi-value">R$868,12</div>
+          <div class="kpi-delta down">&#9650; +10,6% vs ago (~R$785)</div>
         </div>
         <div class="kpi-card green fade-up">
-          <div class="kpi-label">CPA</div>
-          <div class="kpi-value highlight">R$8,85</div>
-          <div class="kpi-caption">Meta: R$8,08</div>
+          <div class="kpi-label">Custo/Convers&#227;o</div>
+          <div class="kpi-value highlight">R$12,96</div>
+          <div class="kpi-caption">67 conv / R$868,12</div>
         </div>
         <div class="kpi-card indigo fade-up">
           <div class="kpi-label">Cliques</div>
-          <div class="kpi-value">420</div>
-          <div class="kpi-delta up">&#9650; +21,7% vs jul (345)</div>
+          <div class="kpi-value">560</div>
+          <div class="kpi-delta up">&#9650; +33,3% vs ago (420)</div>
         </div>
         <div class="kpi-card green fade-up">
           <div class="kpi-label">CTR</div>
-          <div class="kpi-value highlight">4,56%</div>
-          <div class="kpi-caption">CPC R$1,35</div>
+          <div class="kpi-value highlight">3,99%</div>
+          <div class="kpi-caption">CPC R$1,55</div>
         </div>
       </div>
 
       <div class="kpi-grid" style="margin-bottom:24px;">
         <div class="kpi-card indigo fade-up">
-          <div class="kpi-label">Impressões</div>
-          <div class="kpi-value">9.210</div>
+          <div class="kpi-label">Impress&#245;es</div>
+          <div class="kpi-value">14.023</div>
+          <div class="kpi-delta up">&#9650; +52,3% vs ago (9.210)</div>
         </div>
         <div class="kpi-card green fade-up">
-          <div class="kpi-label">Taxa Conv. LP</div>
-          <div class="kpi-value highlight">15,24%</div>
-          <div class="kpi-caption">64 conv / 420 cliques</div>
+          <div class="kpi-label">Taxa Conv.</div>
+          <div class="kpi-value highlight">11,96%</div>
+          <div class="kpi-caption">67 conv / 560 cliques</div>
         </div>
         <div class="kpi-card green fade-up">
-          <div class="kpi-label">CPC Médio</div>
-          <div class="kpi-value highlight">R$1,35</div>
-          <div class="kpi-delta good-down">&#9660; -15,1% vs jul (R$1,59)</div>
+          <div class="kpi-label">CPC M&#233;dio</div>
+          <div class="kpi-value highlight">R$1,55</div>
+          <div class="kpi-delta good-down">&#9660; &#8722;82,5% vs hist. (R$8,85)</div>
         </div>
       </div>
 
-      <!-- Semanal Google DC -->
-      <h4 style="font-size:13px;font-weight:600;color:var(--dai-muted);margin-bottom:10px;">Distribuição Semanal — DermaClinic</h4>
-      <div class="week-grid" style="margin-bottom:24px;">
-        <div class="week-card best">
-          <div class="week-label">S1 · 01–07/ago</div>
-          <div class="week-conv best">20,0</div>
-          <div class="week-sub">113 cliques · R$165,89</div>
-        </div>
-        <div class="week-card normal">
-          <div class="week-label">S2 · 08–14/ago</div>
-          <div class="week-conv">18,0</div>
-          <div class="week-sub">109 cliques · R$156,32</div>
-        </div>
-        <div class="week-card normal">
-          <div class="week-label">S3 · 15–21/ago</div>
-          <div class="week-conv">18,0</div>
-          <div class="week-sub">125 cliques · R$155,81</div>
-        </div>
-        <div class="week-card low">
-          <div class="week-label">S4 · 22–26/ago</div>
-          <div class="week-conv low">8,0</div>
-          <div class="week-sub">73 cliques · R$88,10</div>
-        </div>
-      </div>
-
-      <div class="info-box" style="margin-top:8px;margin-bottom:16px;font-size:11px;color:#94A3B8">
-        Dados semanais do CSV Google Ads até 26/ago (data de corte do report do gestor). Totais: 64 conversões · 420 cliques · R$566,12.
-      </div>
-
-      <hr class="divider">
-
-      <!-- Dr. Laércio (NOVO) -->
-      <h3 style="font-size:14px;font-weight:700;color:var(--dai-white);margin:24px 0 14px;">&#127381; Dr. Laércio — Conta Nova (10–30/set)</h3>
-      <div class="kpi-grid-4" style="margin-bottom:20px;">
-        <div class="kpi-card amber fade-up">
-          <div class="kpi-label">Investimento</div>
-          <div class="kpi-value amber-v">R$219,06</div>
-          <div class="kpi-caption">20 dias ativos</div>
-        </div>
-        <div class="kpi-card indigo fade-up">
-          <div class="kpi-label">Cliques</div>
-          <div class="kpi-value">116</div>
-          <div class="kpi-caption">CPC R$1,89</div>
-        </div>
-        <div class="kpi-card indigo fade-up">
-          <div class="kpi-label">Impressões</div>
-          <div class="kpi-value">2.541</div>
-          <div class="kpi-caption">CTR 4,57%</div>
-        </div>
-        <div class="kpi-card amber fade-up">
-          <div class="kpi-label">Status</div>
-          <div class="kpi-value amber-v" style="font-size:16px;">Learning</div>
-          <div class="kpi-caption">Correspondência ampla</div>
-        </div>
-      </div>
-
-      <div class="info-box amber">
-        <strong>&#128161; Conta em fase de aprendizado:</strong> Dr. Laércio iniciou em 10/ago com correspondência ampla de palavras-chave. CTR de 4,57% é excelente para conta nova. CPC de R$1,89 tende a cair conforme o algoritmo otimiza. <strong>Próximo passo:</strong> Acumular ~50 conversões e migrar para "Maximizar Conversões" com palavras-chave negativas refinadas.
+      <div class="info-box green">
+        <strong>&#128640; Google Ads em alta consistente:</strong> Terceiro m&#234;s seguido com CPC abaixo de R$2,00 e taxa de convers&#227;o acima de 10%. O crescimento de cliques (+33,3%) com manuten&#231;&#227;o do CTR (3,99%) indica que a conta est&#225; escalando com qualidade. Google Ads representa <strong>66,4% do investimento total</strong> e entrega <strong>67 convers&#245;es</strong> &#8212; canal priorit&#225;rio a preservar em outubro.
       </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- 10. DIAGNÓSTICO: CONJUNTOS LUXO vs SITE                           -->
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <section class="section" id="quinzena">
-      <div class="section-header">
-        <div class="section-icon amber">&#128260;</div>
-        <div>
-          <div class="section-title">Diagnóstico: LUXO vs SITE</div>
-          <div class="section-subtitle">Análise do gestor de tráfego · Comparativo de conjuntos de anúncios</div>
+    <!-- ROI REAL &#8212; FEEGOW &#215; CHATWOOT INBOX 56 -->
+    <section class="section" id="roi-real">
+      <h2 class="section-title">ROI Real &#8212; Agendamentos Atribu&#237;dos ao Tr&#225;fego Pago</h2>
+      <p class="section-desc">Cruzamento Feegow &#215; Chatwoot (inbox 56 &#183; Tr&#225;fego Pago): pacientes do canal de tr&#225;fego pago com agendamentos realizados em setembro e outubro/26. <strong>Crit&#233;rio rigoroso:</strong> pacientes com conversa no inbox 56 + agendamento no Feegow. Fototerapias exclu&#237;das (sem cobran&#231;a individual). 0 leads novos de setembro converteram &#8212; receita vem de conversas de meses anteriores.</p>
+
+      <div class="kpi-row" style="margin-bottom:24px">
+        <div class="kpi-card green">
+          <div class="kpi-label">Agendamentos Atribu&#237;dos</div>
+          <div class="kpi-value highlight">6</div>
+          <div class="kpi-caption">3 pacientes &#183; set+out/26</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">Receita Confirmada</div>
+          <div class="kpi-value highlight">R$2.200</div>
+          <div class="kpi-caption">Cledir R$1.200 + Elizabeth R$1.000</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">Receita Potencial</div>
+          <div class="kpi-value amber-v">R$404</div>
+          <div class="kpi-caption">Francine &#8212; 2 marcados, valor a confirmar</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">ROI do Per&#237;odo</div>
+          <div class="kpi-value highlight">+68,3%</div>
+          <div class="kpi-delta up">&#9650; R$2.200 vs R$1.307,41 investimento</div>
         </div>
       </div>
 
-      <div class="info-box amber" style="margin-bottom:14px;">
-        <strong>&#127919; Insight principal:</strong> LUXO + DERMATOLOGIA entregou mais leads (47 vs 46) com CPA 21% menor (R$7,13 vs R$9,06) e CPM 21% menor (R$22,19 vs R$28,00). O conjunto SITE sofre com frequência alta (2,29) — público saturado. Em setembro, redistribuir budget priorizando LUXO e renovando criativos do SITE.
+      <div class="info-box amber" style="margin-bottom:20px">
+        <strong>&#128203; Insight de Ciclo &gt; 1 M&#234;s:</strong> Nenhum lead novo captado em setembro converteu em agendamento no mesmo m&#234;s. Os 3 pacientes atribu&#237;dos vieram de conversas de meses anteriores (convs #16622, #17745, #16502). Isso confirma ciclo de decis&#227;o longo para procedimentos est&#233;ticos &#8212; nurturing &#233; essencial para capturar o valor que est&#225; sendo gerado agora mas s&#243; converter&#225; nos pr&#243;ximos meses.
       </div>
 
-      <!-- Comparativo conjuntos -->
-      <div class="compare-strip">
-        <div class="compare-block">
-          <div class="cb-label">&#127919; SITE (Advantage+)</div>
-          <div class="cb-row"><span class="metric">Leads</span><span class="val">46</span></div>
-          <div class="cb-row"><span class="metric">CPA</span><span class="val amber">R$9,06</span></div>
-          <div class="cb-row"><span class="metric">CPM</span><span class="val amber">R$28,00</span></div>
-          <div class="cb-row"><span class="metric">Frequência</span><span class="val red">2,29</span></div>
-          <div class="cb-row"><span class="metric">Melhor criativo</span><span class="val">DHI (21 msgs)</span></div>
-        </div>
-        <div class="compare-block">
-          <div class="cb-label">&#128142; LUXO + DERMATOLOGIA</div>
-          <div class="cb-row"><span class="metric">Leads</span><span class="val green">47</span></div>
-          <div class="cb-row"><span class="metric">CPA</span><span class="val green">R$7,13</span></div>
-          <div class="cb-row"><span class="metric">CPM</span><span class="val green">R$22,19</span></div>
-          <div class="cb-row"><span class="metric">Frequência</span><span class="val">Dentro do limite</span></div>
-          <div class="cb-row"><span class="metric">Melhor criativo</span><span class="val">DRA EODA (27 msgs)</span></div>
-        </div>
-      </div>
-
-      <!-- Top criativos por conjunto -->
-      <h4 style="font-size:13px;font-weight:600;color:var(--dai-muted);margin:20px 0 10px;">Top Criativos por Conjunto</h4>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
-              <th>Conjunto</th>
-              <th>Criativo</th>
-              <th style="text-align:right">Msgs</th>
-              <th style="text-align:right">Gasto</th>
-              <th style="text-align:right">CPA</th>
-              <th>Qualidade</th>
-              <th>Link</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="tag tag-indigo">SITE</span></td>
-              <td class="text-white">DHI | 01</td>
-              <td style="text-align:right" class="text-green">21</td>
-              <td style="text-align:right">R$164,66</td>
-              <td style="text-align:right" class="text-green">R$7,84</td>
-              <td>Abaixo · Na média · Na média</td>
-              <td style="white-space:nowrap"><a href="https://www.instagram.com/p/DcGhcHpAyU9/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:10px;font-weight:600;text-decoration:none;">📷 IG</a> <a href="https://www.facebook.com/61570812722285/videos/4306475786285623" target="_blank" rel="noopener" style="color:#4267B2;font-size:10px;font-weight:600;text-decoration:none;margin-left:3px;">📘 FB</a></td>
-            </tr>
-            <tr>
-              <td><span class="tag tag-indigo">SITE</span></td>
-              <td class="text-white">REJUVENESCER | 01</td>
-              <td style="text-align:right">9</td>
-              <td style="text-align:right">R$83,77</td>
-              <td style="text-align:right">R$9,31</td>
-              <td>Acima · Na média · Na média</td>
-              <td style="white-space:nowrap"><a href="https://www.instagram.com/p/DYBDm1TgDkV/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:10px;font-weight:600;text-decoration:none;">📷 IG</a> <a href="https://www.facebook.com/reel/1228637379345506/" target="_blank" rel="noopener" style="color:#4267B2;font-size:10px;font-weight:600;text-decoration:none;margin-left:3px;">📘 FB</a></td>
-            </tr>
-            <tr>
-              <td><span class="tag tag-indigo">SITE</span></td>
-              <td class="text-white">MMP CAPILAR | 01</td>
-              <td style="text-align:right">7</td>
-              <td style="text-align:right">R$60,71</td>
-              <td style="text-align:right">R$8,67</td>
-              <td>Na média · Na média · Na média</td>
-              <td style="white-space:nowrap"><a href="https://www.instagram.com/p/DbgU8GmA98i/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:10px;font-weight:600;text-decoration:none;">📷 IG</a> <a href="https://www.facebook.com/61570812722285/videos/906037888692906" target="_blank" rel="noopener" style="color:#4267B2;font-size:10px;font-weight:600;text-decoration:none;margin-left:3px;">📘 FB</a></td>
-            </tr>
-            <tr>
-              <td><span class="tag tag-bordo">LUXO</span></td>
-              <td class="text-white">DRA EODA | 01</td>
-              <td style="text-align:right" class="text-green">27</td>
-              <td style="text-align:right">R$160,92</td>
-              <td style="text-align:right" class="text-green">R$5,96</td>
-              <td>Abaixo · Acima · Na média</td>
-              <td style="white-space:nowrap"><a href="https://www.instagram.com/p/DcGhMmPAhMf/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:10px;font-weight:600;text-decoration:none;">📷 IG</a> <a href="https://www.facebook.com/61570812722285/videos/1843936666588642" target="_blank" rel="noopener" style="color:#4267B2;font-size:10px;font-weight:600;text-decoration:none;margin-left:3px;">📘 FB</a></td>
-            </tr>
-            <tr>
-              <td><span class="tag tag-bordo">LUXO</span></td>
-              <td class="text-white">REJUVENESCER | 01</td>
-              <td style="text-align:right">17</td>
-              <td style="text-align:right">R$149,72</td>
-              <td style="text-align:right">R$8,81</td>
-              <td>Acima · Na média · Na média</td>
-              <td style="white-space:nowrap"><a href="https://www.instagram.com/p/DYBDm1TgDkV/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:10px;font-weight:600;text-decoration:none;">📷 IG</a> <a href="https://www.facebook.com/reel/1228637379345506/" target="_blank" rel="noopener" style="color:#4267B2;font-size:10px;font-weight:600;text-decoration:none;margin-left:3px;">📘 FB</a></td>
-            </tr>
-            <tr>
-              <td><span class="tag tag-bordo">LUXO</span></td>
-              <td class="text-white">NOVOS SERVIÇOS | 01</td>
-              <td style="text-align:right">3</td>
-              <td style="text-align:right">R$12,48</td>
-              <td style="text-align:right" class="text-green">R$4,16</td>
-              <td>— · — · —</td>
-              <td style="white-space:nowrap"><a href="https://www.instagram.com/p/DcGiAikgDQ6/" target="_blank" rel="noopener" style="color:var(--dai-indigo);font-size:10px;font-weight:600;text-decoration:none;">📷 IG</a> <a href="https://www.facebook.com/61570812722285/posts/pfbid09WoWDJCy157taRWUwfxeLVDo1QuLcYo86ajgxmdCwzGXpbv2WiXa4oaGYbPoH9uDl" target="_blank" rel="noopener" style="color:#4267B2;font-size:10px;font-weight:600;text-decoration:none;margin-left:3px;">📘 FB</a></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- ROI REAL — FEEGOW × CHATWOOT INBOX 56                             -->
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <section class="section" id="roi-real">
-      <h2 class="section-title">ROI Real — Agendamentos Atribuídos ao Tráfego Pago</h2>
-      <p class="section-desc">Cruzamento Feegow × Chatwoot (inbox 56 · Tráfego Pago 0277): pacientes <strong>novos</strong> que chegaram pelo canal de tráfego pago em setembro e marcaram seu primeiro agendamento no mesmo mês. Critério: sem histórico de agendamentos anteriores a agosto + conversa no inbox 56 em setembro.</p>
-
-      <!-- KPIs ROI -->
-      <div class="kpi-row" style="margin-bottom:24px">
-        <div class="kpi-card green">
-          <div class="kpi-label">Agendamentos Atribuídos</div>
-          <div class="kpi-value highlight">5</div>
-          <div class="kpi-caption">2 pacientes novos · de 593 agendamentos em ago/26</div>
-        </div>
-        <div class="kpi-card green">
-          <div class="kpi-label">Receita Atribuída</div>
-          <div class="kpi-value highlight">R$4.400</div>
-          <div class="kpi-caption">soma dos agendamentos de pacientes novos do tráfego pago</div>
-        </div>
-        <div class="kpi-card green">
-          <div class="kpi-label">ROI do Período</div>
-          <div class="kpi-value highlight">+889%</div>
-          <div class="kpi-delta up">&#9650; R$4.400 receita vs R$444,90 investido (Meta 01–16/ago)</div>
-          <div class="kpi-caption">(Receita − Investimento) / Investimento</div>
-        </div>
-        <div class="kpi-card green">
-          <div class="kpi-label">CAC</div>
-          <div class="kpi-value highlight">R$88,98</div>
-          <div class="kpi-caption">R$444,90 / 5 agendamentos atribuídos</div>
-        </div>
-      </div>
-
-      <!-- Alerta: ciclo longo -->
-      <div class="info-box green" style="margin-bottom:20px">
-        <strong>&#127942; ROI +889% (pacientes novos):</strong> Apenas pacientes que chegaram pelo tráfego pago em setembro e marcaram seu primeiro agendamento. Elizabeth Klemtz gerou R$4.400 em apenas 2 sessões — destaque do mês. Conversas de setembro podem gerar mais agendamentos em setembro.
-      </div>
-
-      <!-- Tabela de pacientes atribuídos -->
-      <div class="table-wrap">
-        <table class="data-table">
-          <thead>
-            <tr>
               <th>Paciente</th>
-              <th>Data Agend.</th>
-              <th>Procedimento</th>
+              <th>Status</th>
+              <th>Agendamentos</th>
               <th style="text-align:right">Valor</th>
               <th>Conversa</th>
-              <th>Links</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>Elizabeth Klemtz</strong></td>
-              <td>24/08/2026</td>
-              <td>Consulta (1ª)</td>
-              <td style="text-align:right;color:#10b981;font-weight:700;">R$400</td>
-              <td>28/08/2026</td>
+              <td><strong>Cledir</strong></td>
+              <td><span class="tag tag-green">Ativo</span></td>
+              <td>1 atendido set &#183; 1 marcado out</td>
+              <td style="text-align:right;color:#10b981;font-weight:700;">R$1.200</td>
               <td>
-                <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17745" target="_blank" style="color:#6366f1;text-decoration:none;font-size:12px;">&#128172; Chat</a>
-                &middot; <a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=21689" target="_blank" style="color:#10b981;text-decoration:none;font-size:12px;">&#128197; Feegow</a>
+                <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/16622" target="_blank" style="color:#6366f1;text-decoration:none;font-size:12px;">&#128172; #16622</a>
               </td>
             </tr>
             <tr>
               <td><strong>Elizabeth Klemtz</strong></td>
-              <td>25/08/2026</td>
-              <td>Procedimento</td>
-              <td style="text-align:right;color:#10b981;font-weight:700;">R$4.000</td>
-              <td>28/08/2026</td>
+              <td><span class="tag tag-green">Ativo</span></td>
+              <td>2 atendidos set &#183; 1 marcado out</td>
+              <td style="text-align:right;color:#10b981;font-weight:700;">R$1.000</td>
               <td>
-                <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17745" target="_blank" style="color:#6366f1;text-decoration:none;font-size:12px;">&#128172; Chat</a>
-                &middot; <a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=21774" target="_blank" style="color:#10b981;text-decoration:none;font-size:12px;">&#128197; Feegow</a>
+                <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17745" target="_blank" style="color:#6366f1;text-decoration:none;font-size:12px;">&#128172; #17745</a>
               </td>
             </tr>
             <tr>
-              <td><strong>Lucas Daniel Galvan</strong></td>
-              <td>20/08/2026</td>
-              <td>Fototerapia (1ª)</td>
-              <td style="text-align:right">R$0</td>
-              <td>25/08/2026</td>
+              <td><strong>Francine Menezes</strong></td>
+              <td><span class="tag tag-amber">Potencial</span></td>
+              <td>2 marcados set (procedimento a confirmar)</td>
+              <td style="text-align:right;color:#F59E0B;font-weight:700;">R$404*</td>
               <td>
-                <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17600" target="_blank" style="color:#6366f1;text-decoration:none;font-size:12px;">&#128172; Chat</a>
-                &middot; <a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=21642" target="_blank" style="color:#10b981;text-decoration:none;font-size:12px;">&#128197; Feegow</a>
-              </td>
-            </tr>
-            <tr>
-              <td><strong>Lucas Daniel Galvan</strong></td>
-              <td>25/08/2026</td>
-              <td>Fototerapia</td>
-              <td style="text-align:right">R$0</td>
-              <td>25/08/2026</td>
-              <td>
-                <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17600" target="_blank" style="color:#6366f1;text-decoration:none;font-size:12px;">&#128172; Chat</a>
-                &middot; <a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=21780" target="_blank" style="color:#10b981;text-decoration:none;font-size:12px;">&#128197; Feegow</a>
-              </td>
-            </tr>
-            <tr>
-              <td><strong>Lucas Daniel Galvan</strong></td>
-              <td>27/08/2026</td>
-              <td>Fototerapia</td>
-              <td style="text-align:right">R$0</td>
-              <td>25/08/2026</td>
-              <td>
-                <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17600" target="_blank" style="color:#6366f1;text-decoration:none;font-size:12px;">&#128172; Chat</a>
-                &middot; <a href="https://app.feegow.com/main/?P=Agenda-1&Pers=1&AgendamentoID=21821" target="_blank" style="color:#10b981;text-decoration:none;font-size:12px;">&#128197; Feegow</a>
+                <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/16502" target="_blank" style="color:#6366f1;text-decoration:none;font-size:12px;">&#128172; #16502</a>
               </td>
             </tr>
           </tbody>
           <tfoot>
             <tr style="font-weight:700;border-top:2px solid #2d3748">
-              <td colspan="3">Total Atribuído (2 pacientes novos)</td>
-              <td style="text-align:right;color:#10b981;">R$4.400</td>
-              <td colspan="2" style="color:#94A3B8;font-size:11px">Investimento: R$444,90 · ROI: +889% · CAC: R$88,98</td>
+              <td colspan="3">Total Atribu&#237;do (3 pacientes &#183; 6 agendamentos)</td>
+              <td style="text-align:right;color:#10b981;">R$2.200 + R$404*</td>
+              <td style="color:#94A3B8;font-size:11px">Investimento: R$1.307,41 &#183; ROI: +68,3%</td>
             </tr>
           </tfoot>
         </table>
       </div>
 
-      <!-- Nota metodológica -->
-      <div class="info-box" style="margin-top:16px;font-size:12px;color:#94A3B8">
-        <strong>Metodologia:</strong> Cruzamento Feegow × Chatwoot com critério rigoroso: apenas pacientes <strong>novos</strong> (sem nenhum agendamento anterior a agosto) que chegaram pelo canal de tráfego pago (inbox 56) em setembro e marcaram agendamento no mesmo mês. 64 conversas do inbox 56 analisadas · 593 agendamentos cruzados · 2 pacientes novos com match confirmado · 5 agendamentos atribuídos. Fototerapias com R$0: sessões de acompanhamento sem cobrança individual.
+      <div class="info-box" style="margin-top:16px;font-size:12px;color:#94A3B8;border-left-color:var(--dai-border);">
+        <strong>Metodologia:</strong> Cruzamento Feegow &#215; Chatwoot com crit&#233;rio: pacientes com conversa registrada no inbox 56 e agendamentos confirmados. *R$404 (Francine): valor potencial estimado &#8212; agendamentos marcados mas procedimento n&#227;o confirmado/realizado at&#233; o fechamento do relat&#243;rio. Fototerapias exclu&#237;das. ROI calculado sobre receita confirmada (R$2.200) vs investimento total do per&#237;odo (R$1.307,41).
       </div>
     </section>
 
@@ -1332,12 +1213,13 @@
     <div class="footer-inner">
       <div>
         <div class="footer-brand"><img src="../../_shared/logo-negative.svg" style="height:20px;vertical-align:middle;opacity:0.9;" alt="Digital AI" /></div>
-        <div style="font-size:11px;color:#5a6778;margin-top:3px;">digital-ai.tech · contato@digital-ai.tech</div>
+        <div style="font-size:11px;color:#5a6778;margin-top:3px;">digital-ai.tech &#183; contato@digital-ai.tech</div>
       </div>
       <div class="footer-meta">
-        Relatório gerado em: 30/09/2026 · Dados: Meta Ads Manager + Google Ads + Feegow + Chatwoot<br>
-        Fonte: Export Meta 01–30/set · Google Ads 01–30/set · Cruzamento ROI Feegow × Chatwoot<br>
-        Próximo relatório: 01/10/2026
+        Gerado por DAI &#8212; Digital AI | Dados: Meta Ads Manager + Google Ads + Feegow + Chatwoot<br>
+        Relat&#243;rio gerado em: 02/10/2026 &#183; Per&#237;odo: 01/09/2026 a 30/09/2026<br>
+        Fonte: Export Meta 01&#8211;30/set &#183; Google Ads 01&#8211;30/set &#183; Cruzamento ROI Feegow &#215; Chatwoot<br>
+        Pr&#243;ximo relat&#243;rio: 01/11/2026
       </div>
     </div>
   </div>
@@ -1354,7 +1236,7 @@
       gateDirect:  'gate-direct',
       gateApp:     'app',
       client:      'dermaclinic',
-      report:      'meta-ads-ago-2026'
+      report:      'meta-ads-set-2026'
     });
   </script>
 </body>
