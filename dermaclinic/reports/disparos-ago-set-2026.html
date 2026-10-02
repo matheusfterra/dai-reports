@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report Disparos — Agosto/Setembro 2026 — DermaClinic</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --primary: #2D52EF;
+  --primary-light: #4F6FF7;
+  --primary-bg: #EEF2FF;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --text: #1e293b;
+  --text-secondary: #64748b;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+.container { max-width:1200px; margin:0 auto; padding:24px 16px; }
+h1 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.75rem; font-weight:700; color:var(--primary); margin-bottom:4px; }
+h2 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.25rem; font-weight:600; color:var(--text); margin:32px 0 16px; padding-bottom:8px; border-bottom:2px solid var(--primary); }
+h3 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1rem; font-weight:600; margin:16px 0 8px; }
+.subtitle { color:var(--text-secondary); font-size:0.9rem; margin-bottom:24px; }
+.kpi-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:24px; }
+.kpi-card { background:var(--card); border-radius:12px; padding:16px; box-shadow:var(--shadow); border-left:4px solid var(--primary); }
+.kpi-value { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.5rem; font-weight:700; color:var(--primary); }
+.kpi-value.success { color:var(--success); }
+.kpi-value.warning { color:var(--warning); }
+.kpi-value.danger { color:var(--danger); }
+.kpi-label { font-size:0.8rem; color:var(--text-secondary); margin-top:4px; }
+.card { background:var(--card); border-radius:12px; padding:20px; box-shadow:var(--shadow); margin-bottom:16px; }
+.insight-box { background:#FFFBEB; border-left:4px solid var(--warning); padding:12px 16px; border-radius:0 8px 8px 0; margin:12px 0; font-size:0.85rem; }
+.insight-box.critical { background:#FEF2F2; border-left-color:var(--danger); }
+.insight-box.positive { background:#F0FDF4; border-left-color:var(--success); }
+.chart-container { position:relative; height:300px; margin:16px 0; }
+.chart-container.small { height:220px; }
+.chart-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+table { width:100%; border-collapse:collapse; font-size:0.8rem; }
+th { background:var(--primary); color:#fff; padding:8px 10px; text-align:left; font-weight:600; position:sticky; top:0; }
+td { padding:6px 10px; border-bottom:1px solid var(--border); }
+tr:hover { background:var(--primary-bg); }
+.table-wrapper { max-height:600px; overflow-y:auto; border-radius:8px; border:1px solid var(--border); }
+.comp-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:16px; margin:16px 0; }
+.comp-card { background:var(--card); border-radius:12px; padding:16px; box-shadow:var(--shadow); text-align:center; }
+.comp-card h4 { font-size:0.85rem; color:var(--text-secondary); margin-bottom:8px; }
+.comp-value { font-family:'Plus Jakarta Sans',sans-serif; font-size:2rem; font-weight:700; }
+.comp-sub { font-size:0.8rem; color:var(--text-secondary); margin-top:4px; }
+.methodology { background:#f1f5f9; border-radius:8px; padding:16px; font-size:0.8rem; color:var(--text-secondary); margin-top:16px; }
+.methodology p { margin-bottom:4px; }
+.case-card { background:var(--card); border-radius:12px; padding:18px; box-shadow:var(--shadow); margin-bottom:12px; border-top:3px solid var(--danger); }
+.case-card.positive { border-top-color:var(--success); }
+.case-name { font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:1rem; margin-bottom:4px; }
+.case-tag { display:inline-block; background:var(--danger); color:#fff; font-size:0.7rem; font-weight:600; padding:2px 8px; border-radius:10px; margin-bottom:8px; }
+.case-tag.positive { background:var(--success); }
+.improvements-list { list-style:none; padding:0; }
+.improvements-list li { padding:10px 0; border-bottom:1px solid var(--border); font-size:0.87rem; display:flex; align-items:flex-start; gap:10px; }
+.improvements-list li:last-child { border-bottom:none; }
+.improvements-list li::before { content:""; display:block; width:8px; height:8px; min-width:8px; border-radius:50%; background:var(--primary); margin-top:6px; }
+@media (max-width:768px) {
+  .kpi-grid { grid-template-columns:repeat(2, 1fr); }
+  .comp-grid { grid-template-columns:1fr; }
+  .chart-row { grid-template-columns:1fr; }
+  h1 { font-size:1.3rem; }
+  table { font-size:0.7rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Report Disparos — Agosto/Setembro 2026</h1>
+<p class="subtitle">DermaClinic — Agosto a Setembro 2026 &nbsp;|&nbsp; 93 disparos analisados &nbsp;|&nbsp; Gerado em 02/10/2026</p>
+
+<!-- KPIs -->
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-value">93</div>
+    <div class="kpi-label">Disparos Enviados</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value" style="color:var(--primary)">17</div>
+    <div class="kpi-label">Responderam (18,3%)</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value success">14</div>
+    <div class="kpi-label">Atendidos pela Clínica</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value danger">3</div>
+    <div class="kpi-label">Ignorados pela Clínica</div>
+  </div>
+</div>
+
+<!-- Breakdown -->
+<h2>Detalhamento por Tipo de Disparo</h2>
+
+<div class="comp-grid">
+  <div class="comp-card" style="border-top:4px solid var(--primary)">
+    <h4>Disparo Proposta</h4>
+    <div class="comp-value" style="color:var(--primary)">15</div>
+    <div class="comp-sub">4 responderam (26,7%) &nbsp;·&nbsp; 4 atendidos</div>
+  </div>
+  <div class="comp-card" style="border-top:4px solid var(--warning)">
+    <h4>Follow-Up</h4>
+    <div class="comp-value" style="color:var(--warning)">78</div>
+    <div class="comp-sub">13 responderam (16,7%) &nbsp;·&nbsp; 10 atendidos</div>
+  </div>
+</div>
+
+<div class="insight-box critical">
+  <strong>Atenção:</strong> 3 pacientes responderam a disparos e não foram atendidos pela clínica — oportunidade desperdiçada.
+</div>
+
+<!-- Charts -->
+<h2>Visão Gráfica</h2>
+<div class="chart-row">
+  <div class="card">
+    <h3>Disparos por Tipo</h3>
+    <div class="chart-container">
+      <canvas id="chartBarras"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Taxa de Resposta Geral</h3>
+    <div class="chart-container">
+      <canvas id="chartDonut"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Summary Table -->
+<h2>Tabela Resumo</h2>
+<div class="card">
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Tipo</th>
+          <th>Enviados</th>
+          <th>Responderam</th>
+          <th>Taxa Resposta</th>
+          <th>Atendidos</th>
+          <th>Taxa Atendimento</th>
+          <th>Ignorados</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Disparo Proposta</strong></td>
+          <td>15</td>
+          <td>4</td>
+          <td>26,7%</td>
+          <td>4</td>
+          <td>100%</td>
+          <td style="color:var(--success)">0</td>
+        </tr>
+        <tr>
+          <td><strong>Follow-Up</strong></td>
+          <td>78</td>
+          <td>13</td>
+          <td>16,7%</td>
+          <td>10</td>
+          <td>76,9%</td>
+          <td style="color:var(--danger)">3</td>
+        </tr>
+        <tr style="font-weight:600;background:var(--primary-bg)">
+          <td><strong>Total</strong></td>
+          <td>93</td>
+          <td>17</td>
+          <td>18,3%</td>
+          <td>14</td>
+          <td>82,4%</td>
+          <td style="color:var(--danger)">3</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Critical Cases -->
+<h2>Casos Críticos — Pacientes Ignorados</h2>
+
+<p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:16px">
+  Os 3 pacientes abaixo <strong>responderam</strong> a um disparo da clínica e não receberam nenhum retorno da equipe.
+</p>
+
+<div class="case-card">
+  <div class="case-tag">IGNORADO</div>
+  <div class="case-name">Simoni Minatto Ghisi</div>
+  <p style="font-size:0.85rem;margin-bottom:8px">Respondeu ao follow-up de confirmação com a mensagem <em>"Oi! Muito obrigada 😊"</em>. Ninguém deu continuidade à conversa.</p>
+  <div class="insight-box critical">
+    Uma resposta gentil e direta — o paciente estava engajado. A ausência de retorno representa falha operacional com oportunidade concreta de agendamento.
+  </div>
+</div>
+
+<div class="case-card">
+  <div class="case-tag">IGNORADO</div>
+  <div class="case-name">Aurea F. de Oliveira</div>
+  <p style="font-size:0.85rem;margin-bottom:8px">Respondeu ao follow-up com <em>"🙏🙏🙏"</em>. Nenhuma resposta da clínica.</p>
+  <div class="insight-box critical">
+    Mesmo uma resposta não-verbal indica que a mensagem foi lida e o paciente a reconheceu. A clínica perdeu a janela de contato aberta pelo disparo.
+  </div>
+</div>
+
+<div class="case-card">
+  <div class="case-tag">IGNORADO</div>
+  <div class="case-name">Silas Santos</div>
+  <p style="font-size:0.85rem;margin-bottom:8px">Paciente antigo que respondeu <em>"Olá"</em> ao follow-up de aniversário. Nenhuma resposta da clínica. (Este caso também aparece no report de Tráfego Pago.)</p>
+  <div class="insight-box critical">
+    Paciente antigo reativado por um disparo de aniversário — momento de alta propensão a retornar. Não aproveitar esse gatilho é uma oportunidade perdida de fidelização.
+  </div>
+</div>
+
+<!-- Positive Cases -->
+<h2>Destaques Positivos</h2>
+
+<div class="case-card positive">
+  <div class="case-tag positive">CONVERTIDO</div>
+  <div class="case-name">Saryta</div>
+  <p style="font-size:0.85rem;margin-bottom:8px">Respondeu ao follow-up pedindo <em>"Preciso agendar botox"</em>. A clínica atendeu e o agendamento foi realizado.</p>
+  <div class="insight-box positive">
+    Exemplo ideal de pipeline funcionando: disparo gerou interesse direto e a clínica capturou a oportunidade.
+  </div>
+</div>
+
+<div class="case-card positive">
+  <div class="case-tag positive">CONVERTIDO</div>
+  <div class="case-name">Patricia Ambos Pereira</div>
+  <p style="font-size:0.85rem;margin-bottom:8px">Respondeu ao disparo proposta pedindo orçamento de laser. A clínica atendeu.</p>
+  <div class="insight-box positive">
+    Disparo Proposta cumprindo seu papel: reaqueceu um lead e gerou uma nova solicitação de orçamento.
+  </div>
+</div>
+
+<div class="case-card positive">
+  <div class="case-tag positive">CONVERTIDO</div>
+  <div class="case-name">Andrea</div>
+  <p style="font-size:0.85rem;margin-bottom:8px">Confirmou agendamento pelo disparo proposta. A clínica atendeu.</p>
+  <div class="insight-box positive">
+    Conversão direta: disparo → confirmação → agendamento. Fluxo sem fricção.
+  </div>
+</div>
+
+<div class="insight-box positive" style="margin-top:8px">
+  <strong>Destaque de performance:</strong> A taxa de resposta do Disparo Proposta (26,7%) é superior à do Follow-Up (16,7%), indicando que mensagens com contexto de orçamento têm maior poder de engajamento.
+</div>
+
+<!-- Improvements -->
+<h2>Melhorias Sugeridas</h2>
+
+<div class="card">
+  <ul class="improvements-list">
+    <li>
+      <span>Quando um paciente responde a qualquer disparo, a equipe deve tratar como prioridade máxima — é o paciente <strong>abrindo a porta</strong>. Os 3 casos ignorados (Simoni, Aurea, Silas) representam oportunidades concretas de agendamento que foram desperdiçadas por falta de atenção operacional.</span>
+    </li>
+    <li>
+      <span>Implementar <strong>alerta automático via WhatsApp</strong>: quando um paciente responde a um disparo e ninguém da equipe atende em 30 minutos, o sistema notifica um grupo responsável. Isso elimina o risco de respostas passarem despercebidas.</span>
+    </li>
+  </ul>
+</div>
+
+<!-- Methodology -->
+<h2>Metodologia</h2>
+<div class="methodology">
+  <p><strong>Período:</strong> Agosto a Setembro 2026</p>
+  <p><strong>Fonte:</strong> Chatwoot API + recall_tasks (PostgreSQL)</p>
+  <p><strong>Tipos de disparo:</strong> Proposta (follow-up de orçamento) e Follow-Up (recall, birthday, confirmação)</p>
+  <p><strong>Critério de "Respondeu":</strong> Paciente enviou ao menos uma mensagem na conversa após o disparo automatizado</p>
+  <p><strong>Critério de "Atendido":</strong> Um membro da equipe DermaClinic respondeu ao paciente na mesma conversa</p>
+  <p><strong>Critério de "Ignorado":</strong> Paciente respondeu, mas nenhum membro da equipe deu continuidade</p>
+  <p><strong>Gerado por:</strong> DAI — Digital AI</p>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// Chart 1 — Grouped Bar: Disparos por Tipo
+(function() {
+  const ctx = document.getElementById('chartBarras').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Disparo Proposta', 'Follow-Up'],
+      datasets: [
+        {
+          label: 'Enviados',
+          data: [15, 78],
+          backgroundColor: '#2D52EF',
+          borderRadius: 4,
+        },
+        {
+          label: 'Responderam',
+          data: [4, 13],
+          backgroundColor: '#f59e0b',
+          borderRadius: 4,
+        },
+        {
+          label: 'Atendidos',
+          data: [4, 10],
+          backgroundColor: '#22c55e',
+          borderRadius: 4,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: { font: { family: 'DM Sans', size: 11 } }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { font: { family: 'DM Sans', size: 11 } }
+        },
+        y: {
+          beginAtZero: true,
+          grid: { color: '#e2e8f0' },
+          ticks: { font: { family: 'DM Sans', size: 11 } }
+        }
+      }
+    }
+  });
+})();
+
+// Chart 2 — Doughnut: Taxa de Resposta Geral
+(function() {
+  const ctx = document.getElementById('chartDonut').getContext('2d');
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Responderam (17)', 'Não Responderam (76)'],
+      datasets: [{
+        data: [17, 76],
+        backgroundColor: ['#2D52EF', '#e2e8f0'],
+        borderWidth: 0,
+        hoverOffset: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '65%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { family: 'DM Sans', size: 11 }, padding: 16 }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+              const pct = ((ctx.raw / total) * 100).toFixed(1);
+              return ` ${ctx.raw} disparos (${pct}%)`;
+            }
+          }
+        }
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>

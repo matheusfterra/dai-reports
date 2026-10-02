@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report Tráfego Pago — Setembro 2026 — DermaClinic</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --primary: #2D52EF;
+  --primary-light: #4F6FF7;
+  --primary-bg: #EEF2FF;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --text: #1e293b;
+  --text-secondary: #64748b;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+.container { max-width:1200px; margin:0 auto; padding:24px 16px; }
+h1 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.75rem; font-weight:700; color:var(--primary); margin-bottom:4px; }
+h2 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.25rem; font-weight:600; color:var(--text); margin:32px 0 16px; padding-bottom:8px; border-bottom:2px solid var(--primary); }
+h3 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1rem; font-weight:600; margin:16px 0 8px; }
+.subtitle { color:var(--text-secondary); font-size:0.9rem; margin-bottom:24px; }
+.kpi-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-bottom:24px; }
+.kpi-card { background:var(--card); border-radius:12px; padding:16px; box-shadow:var(--shadow); border-left:4px solid var(--primary); }
+.kpi-value { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.5rem; font-weight:700; color:var(--primary); }
+.kpi-value.success { color:var(--success); }
+.kpi-value.warning { color:var(--warning); }
+.kpi-value.danger { color:var(--danger); }
+.kpi-label { font-size:0.8rem; color:var(--text-secondary); margin-top:4px; }
+.card { background:var(--card); border-radius:12px; padding:20px; box-shadow:var(--shadow); margin-bottom:16px; }
+.insight-box { background:#FFFBEB; border-left:4px solid var(--warning); padding:12px 16px; border-radius:0 8px 8px 0; margin:12px 0; font-size:0.85rem; }
+.insight-box.critical { background:#FEF2F2; border-left-color:var(--danger); }
+.insight-box.positive { background:#F0FDF4; border-left-color:var(--success); }
+.chart-container { position:relative; height:300px; margin:16px 0; }
+.chart-container.small { height:260px; }
+table { width:100%; border-collapse:collapse; font-size:0.8rem; }
+th { background:var(--primary); color:#fff; padding:8px 10px; text-align:left; font-weight:600; position:sticky; top:0; }
+td { padding:6px 10px; border-bottom:1px solid var(--border); }
+tr:hover { background:var(--primary-bg); }
+.table-wrapper { max-height:600px; overflow-y:auto; border-radius:8px; border:1px solid var(--border); }
+.comp-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin:16px 0; }
+.comp-card { background:var(--card); border-radius:12px; padding:16px; box-shadow:var(--shadow); text-align:center; }
+.comp-card h4 { font-size:0.85rem; color:var(--text-secondary); margin-bottom:8px; }
+.comp-value { font-family:'Plus Jakarta Sans',sans-serif; font-size:2rem; font-weight:700; }
+.comp-sub { font-size:0.8rem; color:var(--text-secondary); margin-top:4px; }
+.methodology { background:#f1f5f9; border-radius:8px; padding:16px; font-size:0.8rem; color:var(--text-secondary); margin-top:16px; }
+.methodology p { margin-bottom:4px; }
+.badge { display:inline-block; padding:2px 8px; border-radius:12px; font-size:0.72rem; font-weight:600; }
+.badge-danger { background:#FEE2E2; color:#b91c1c; }
+.badge-warning { background:#FEF3C7; color:#92400e; }
+.badge-yellow { background:#FFF9C4; color:#7c6f00; }
+.badge-gray { background:#F1F5F9; color:#475569; }
+.badge-success { background:#DCFCE7; color:#166534; }
+.case-card { background:var(--card); border-radius:12px; padding:20px; box-shadow:var(--shadow); margin-bottom:12px; border-top:3px solid var(--danger); }
+.case-card h3 { margin-top:0; color:var(--danger); }
+.chart-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:center; }
+@media (max-width:768px) {
+  .kpi-grid { grid-template-columns:repeat(2, 1fr); }
+  .comp-grid { grid-template-columns:1fr; }
+  .chart-row { grid-template-columns:1fr; }
+  h1 { font-size:1.3rem; }
+  table { font-size:0.7rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Report Tráfego Pago — Setembro 2026</h1>
+<p class="subtitle">DermaClinic — Setembro 2026 | Inbox 56 (Tráfego Pago) | Gerado em 02/10/2026</p>
+
+<!-- SECTION 1: KPIs -->
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-value" style="color:var(--text-secondary)">0</div>
+    <div class="kpi-label">Agendamentos Confirmados</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value danger">5</div>
+    <div class="kpi-label">Conversões Perdidas</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value warning">1</div>
+    <div class="kpi-label">Conversão Parcial</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value" style="color:#ca8a04">1</div>
+    <div class="kpi-label">Lead Morno</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value" style="color:var(--text-secondary)">3</div>
+    <div class="kpi-label">Leads Frios</div>
+  </div>
+</div>
+
+<div class="insight-box critical">
+  <strong>Problema crítico:</strong> Nenhum dos 10 leads do inbox de Tráfego Pago em setembro 2026 converteu em agendamento confirmado. 5 conversões foram perdidas por falha de atendimento — leads com intenção real que não foram respondidos ou tratados adequadamente.
+</div>
+
+<!-- SECTION 2: Classificação -->
+<h2>Classificação dos Leads</h2>
+
+<div class="comp-grid">
+  <div class="comp-card">
+    <h4>🔴 Conversões Perdidas</h4>
+    <div class="comp-value" style="color:var(--danger)">5</div>
+    <div class="comp-sub">Pacientes com interesse real não atendidos</div>
+  </div>
+  <div class="comp-card">
+    <h4>🟠 Conversão Parcial</h4>
+    <div class="comp-value" style="color:var(--warning)">1</div>
+    <div class="comp-sub">Agendou mas cancelou no dia (Rosa Maria)</div>
+  </div>
+  <div class="comp-card">
+    <h4>🟡 Lead Morno</h4>
+    <div class="comp-value" style="color:#ca8a04">1</div>
+    <div class="comp-sub">Pesquisando para familiar</div>
+  </div>
+  <div class="comp-card">
+    <h4>⚪ Leads Frios</h4>
+    <div class="comp-value" style="color:var(--text-secondary)">3</div>
+    <div class="comp-sub">Sem intenção clara de agendamento</div>
+  </div>
+</div>
+
+<!-- SECTION 3: Gráfico -->
+<h2>Distribuição por Classificação</h2>
+
+<div class="card">
+  <div class="chart-row">
+    <div class="chart-container small">
+      <canvas id="chartDistribuicao"></canvas>
+    </div>
+    <div>
+      <div style="margin-bottom:12px;">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <div style="width:14px;height:14px;border-radius:50%;background:#ef4444;flex-shrink:0;"></div>
+          <span style="font-size:0.85rem;"><strong>5</strong> Conversões Perdidas (50%)</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <div style="width:14px;height:14px;border-radius:50%;background:#f59e0b;flex-shrink:0;"></div>
+          <span style="font-size:0.85rem;"><strong>1</strong> Conversão Parcial (10%)</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <div style="width:14px;height:14px;border-radius:50%;background:#eab308;flex-shrink:0;"></div>
+          <span style="font-size:0.85rem;"><strong>1</strong> Lead Morno (10%)</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:14px;height:14px;border-radius:50%;background:#94a3b8;flex-shrink:0;"></div>
+          <span style="font-size:0.85rem;"><strong>3</strong> Leads Frios (30%)</span>
+        </div>
+      </div>
+      <div class="insight-box critical" style="margin-top:16px;">
+        <strong>60% dos leads</strong> tinham intenção de conversão (5 perdidas + 1 parcial). Falha de atendimento, não de qualidade do lead.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4: Casos Críticos -->
+<h2>Casos Críticos — Conversões Perdidas</h2>
+
+<div class="case-card">
+  <h3>Comercial</h3>
+  <p>Escreveu <em>"gostaria de agendar com Dr. Laércio"</em>. Clara transferiu corretamente para a recepção. Ninguém da equipe respondeu após a transferência.</p>
+  <div class="insight-box critical" style="margin-top:12px;">
+    <strong>Falha:</strong> Transferência da Clara para recepção sem follow-up. Lead com intenção explícita de agendamento abandonado após handoff.
+  </div>
+</div>
+
+<div class="case-card">
+  <h3>Valdete</h3>
+  <p>Confirmou data (<strong>20/10</strong>), horário (<strong>09:30</strong>) e médica (<strong>Dra. Raquel</strong>) diretamente no chat. Ninguém registrou o agendamento no sistema. Daniela respondeu 4 dias depois com texto genérico, sem referenciar os dados já confirmados pela paciente.</p>
+  <div class="insight-box critical" style="margin-top:12px;">
+    <strong>Falha grave:</strong> Paciente confirmou todos os dados de agendamento — data, hora e médica. Nenhuma ação tomada. Resposta tardia com mensagem genérica desinformada.
+  </div>
+</div>
+
+<div class="case-card">
+  <h3>Vivi</h3>
+  <p>Queria laser nas mãos e estava ativamente negociando data. Pediu disponibilidade nos dias <strong>15 ou 16</strong>. A resposta ofereceu apenas o dia <strong>22</strong>, sem tentar acomodar a preferência da paciente. Desistiu do agendamento.</p>
+  <div class="insight-box critical" style="margin-top:12px;">
+    <strong>Falha:</strong> Negociação de data mal conduzida. Paciente com intenção real perdida por rigidez de oferta de horário.
+  </div>
+</div>
+
+<div class="case-card">
+  <h3>Marcia Rocha</h3>
+  <p>Enviou <strong>5 mensagens consecutivas</strong> em setembro, incluindo a mensagem explícita <em>"gostaria de agendar"</em>. Nenhuma das mensagens recebeu resposta.</p>
+  <div class="insight-box critical" style="margin-top:12px;">
+    <strong>Falha crítica:</strong> 5 mensagens sem resposta, incluindo intenção de agendamento explícita. Abandono total do lead.
+  </div>
+</div>
+
+<div class="case-card">
+  <h3>Silas</h3>
+  <p>Paciente antigo que respondeu ativamente ao disparo de aniversário enviado pela clínica. Demonstrou engajamento após o disparo. Não recebeu nenhum retorno.</p>
+  <div class="insight-box critical" style="margin-top:12px;">
+    <strong>Falha:</strong> A clínica disparou mensagem e o paciente respondeu — sinal claro de interesse. Lead ignorado após engajamento.
+  </div>
+</div>
+
+<!-- SECTION 5: Destaque Positivo -->
+<h2>Destaques</h2>
+
+<div class="card">
+  <div class="insight-box positive">
+    <strong>Ponto de atenção positivo:</strong> Ao menos uma conversa no inbox recebeu disparo automatizado e o lead respondeu — sinalizando que os disparos estão gerando engajamento. O problema está no atendimento pós-resposta, não na geração de interesse.
+  </div>
+</div>
+
+<!-- SECTION 6: Tabela Resumo -->
+<h2>Resumo das Conversas Analisadas</h2>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Lead</th>
+        <th>Classificação</th>
+        <th>Intenção Expressa</th>
+        <th>Falha Identificada</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Comercial</strong></td>
+        <td><span class="badge badge-danger">Conversão Perdida</span></td>
+        <td>Solicitou agendamento com Dr. Laércio</td>
+        <td>Sem resposta após transferência para recepção</td>
+      </tr>
+      <tr>
+        <td><strong>Valdete</strong></td>
+        <td><span class="badge badge-danger">Conversão Perdida</span></td>
+        <td>Confirmou data, hora e médica</td>
+        <td>Agendamento não registrado; resposta genérica após 4 dias</td>
+      </tr>
+      <tr>
+        <td><strong>Vivi</strong></td>
+        <td><span class="badge badge-danger">Conversão Perdida</span></td>
+        <td>Negociando data para laser nas mãos</td>
+        <td>Recusou datas solicitadas; paciente desistiu</td>
+      </tr>
+      <tr>
+        <td><strong>Marcia Rocha</strong></td>
+        <td><span class="badge badge-danger">Conversão Perdida</span></td>
+        <td>5 msgs incluindo "gostaria de agendar"</td>
+        <td>Zero respostas a todas as mensagens</td>
+      </tr>
+      <tr>
+        <td><strong>Silas</strong></td>
+        <td><span class="badge badge-danger">Conversão Perdida</span></td>
+        <td>Respondeu ao disparo de aniversário</td>
+        <td>Ignorado após engajamento com disparo</td>
+      </tr>
+      <tr>
+        <td><strong>Rosa Maria</strong></td>
+        <td><span class="badge badge-warning">Conversão Parcial</span></td>
+        <td>Agendou consulta</td>
+        <td>Cancelou no dia do agendamento</td>
+      </tr>
+      <tr>
+        <td><strong>Lead Morno</strong></td>
+        <td><span class="badge badge-yellow">Lead Morno</span></td>
+        <td>Pesquisando para familiar</td>
+        <td>Sem intenção imediata própria</td>
+      </tr>
+      <tr>
+        <td><strong>Lead Frio 1</strong></td>
+        <td><span class="badge badge-gray">Lead Frio</span></td>
+        <td>Sem intenção clara</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><strong>Lead Frio 2</strong></td>
+        <td><span class="badge badge-gray">Lead Frio</span></td>
+        <td>Sem intenção clara</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><strong>Lead Frio 3</strong></td>
+        <td><span class="badge badge-gray">Lead Frio</span></td>
+        <td>Sem intenção clara</td>
+        <td>—</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION 7: Análise e Próximos Passos -->
+<h2>Análise e Próximos Passos</h2>
+
+<div class="card">
+  <h3>Diagnóstico Principal</h3>
+  <p style="font-size:0.9rem; margin-bottom:12px;">A qualidade dos leads do Tráfego Pago em setembro <strong>não é o problema</strong>. Pelo menos 6 de 10 leads (60%) demonstraram intenção real — 5 foram perdidos por falha operacional de atendimento, 1 converteu parcialmente.</p>
+
+  <div class="insight-box critical">
+    <strong>Raiz do problema:</strong> Ausência de SLA de resposta para o inbox de Tráfego Pago. Leads com alta intenção ficam sem resposta por horas ou dias. O investimento em mídia paga está sendo desperdiçado na última milha — o atendimento.
+  </div>
+
+  <h3>Ações Recomendadas</h3>
+  <ul style="font-size:0.85rem; padding-left:20px; line-height:2;">
+    <li>Implementar <strong>SLA de resposta de 30 minutos</strong> para o inbox 56 (Tráfego Pago) em horário comercial</li>
+    <li>Configurar <strong>alerta automático</strong> quando conversa no inbox 56 ficar sem resposta por mais de 30 minutos</li>
+    <li>Criar <strong>protocolo de handoff</strong> claro: quando Clara transfere para recepção, a recepção deve acusar recebimento</li>
+    <li>Treinar equipe para <strong>flexibilizar horários</strong> em negociação — não perder lead por rigidez de agenda</li>
+    <li>Revisar caso <strong>Valdete</strong> — caso emblemático: todos os dados confirmados, agendamento não executado</li>
+  </ul>
+</div>
+
+<!-- Metodologia -->
+<div class="methodology">
+  <p><strong>Metodologia</strong></p>
+  <p>Período: Setembro 2026</p>
+  <p>Fonte: Chatwoot API — Inbox 56 (Tráfego Pago)</p>
+  <p>Classificação: Análise manual de cada conversa</p>
+  <p>Total de conversas analisadas: 10</p>
+  <p>Gerado por: DAI — Digital AI</p>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// Doughnut chart — distribuição por classificação
+const ctx = document.getElementById('chartDistribuicao').getContext('2d');
+new Chart(ctx, {
+  type: 'doughnut',
+  data: {
+    labels: ['Conversão Perdida', 'Conversão Parcial', 'Lead Morno', 'Lead Frio'],
+    datasets: [{
+      data: [5, 1, 1, 3],
+      backgroundColor: ['#ef4444', '#f59e0b', '#eab308', '#94a3b8'],
+      borderColor: ['#ffffff', '#ffffff', '#ffffff', '#ffffff'],
+      borderWidth: 3,
+      hoverOffset: 8
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '65%',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+            const pct = Math.round(ctx.parsed / total * 100);
+            return ` ${ctx.label}: ${ctx.parsed} (${pct}%)`;
+          }
+        }
+      }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
