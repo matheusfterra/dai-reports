@@ -66,6 +66,10 @@
       50% { opacity: 1; transform: translateY(4px); }
       100% { opacity: 0.3; transform: translateY(-4px); }
     }
+    @keyframes dedupFlow {
+      0% { stroke-dashoffset: 100; }
+      100% { stroke-dashoffset: 0; }
+    }
 
     .animate-on-scroll {
       opacity: 0;
@@ -801,6 +805,467 @@
     .footer-logos img:hover { opacity: 1; }
     .footer p { font-size: 13px; color: var(--text-muted); }
 
+    /* --- DEDUP SECTION STYLES --- */
+    .dedup-discovery {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 48px;
+      align-items: center;
+    }
+    @media (max-width: 768px) {
+      .dedup-discovery { grid-template-columns: 1fr; }
+    }
+    .dedup-stat-big {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .dedup-stat-big:hover { border-color: rgba(255,87,34,0.3); transform: translateY(-4px); }
+    .dedup-stat-big .big-number {
+      font-size: 72px;
+      font-weight: 800;
+      color: var(--orange);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .dedup-stat-big .big-label {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .dedup-stat-big .big-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+    .dedup-bar-chart {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+    }
+    .dedup-bar-chart h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 24px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .bar-item { margin-bottom: 20px; }
+    .bar-item:last-child { margin-bottom: 0; }
+    .bar-label-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .bar-label-row span:first-child {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .bar-label-row span:last-child {
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .bar-track {
+      background: var(--bg);
+      border-radius: 8px;
+      height: 32px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      padding-left: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.9);
+      white-space: nowrap;
+      transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .bar-fill.orange { background: linear-gradient(90deg, var(--orange), var(--orange-light)); }
+    .bar-fill.green { background: linear-gradient(90deg, var(--green), var(--green-light)); }
+
+    /* Dedup 3 layers */
+    .dedup-layers {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-bottom: 48px;
+      position: relative;
+    }
+    .dedup-layer-connector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 0;
+      position: relative;
+    }
+    .dedup-layer-connector::before {
+      content: '';
+      width: 2px;
+      height: 20px;
+      background: linear-gradient(180deg, var(--orange), var(--blue));
+      display: block;
+    }
+    .dedup-layer-connector span {
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--bg);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      margin: 4px 0;
+      white-space: nowrap;
+    }
+    .dedup-layer-connector::after {
+      content: '';
+      width: 2px;
+      height: 20px;
+      background: linear-gradient(180deg, var(--blue), var(--purple));
+      display: block;
+    }
+    .dedup-layer-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 24px;
+      align-items: center;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .dedup-layer-card:hover {
+      transform: translateX(8px);
+      box-shadow: -4px 0 30px rgba(0,0,0,0.3);
+    }
+    .dedup-layer-card.layer-1 { border-left: 4px solid var(--orange); }
+    .dedup-layer-card.layer-1:hover { border-color: var(--orange); }
+    .dedup-layer-card.layer-2 { border-left: 4px solid var(--blue); }
+    .dedup-layer-card.layer-2:hover { border-color: var(--blue); }
+    .dedup-layer-card.layer-3 { border-left: 4px solid var(--purple); }
+    .dedup-layer-card.layer-3:hover { border-color: var(--purple); }
+    .layer-badge {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 800;
+      color: white;
+      flex-shrink: 0;
+    }
+    .layer-badge.l1 { background: linear-gradient(135deg, var(--orange), var(--orange-dark)); }
+    .layer-badge.l2 { background: linear-gradient(135deg, var(--blue), #1976D2); }
+    .layer-badge.l3 { background: linear-gradient(135deg, var(--purple), #7B1FA2); }
+    .layer-info h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .layer-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .layer-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .layer-chip {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .layer-stat {
+      text-align: right;
+      flex-shrink: 0;
+      min-width: 120px;
+    }
+    .layer-stat .stat-val {
+      font-size: 26px;
+      font-weight: 800;
+      display: block;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .layer-stat .stat-val.orange { color: var(--orange); }
+    .layer-stat .stat-val.blue { color: var(--blue); }
+    .layer-stat .stat-val.purple { color: var(--purple); }
+    .layer-stat .stat-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Cross-category detection */
+    .cross-category-demo {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 48px;
+    }
+    .cross-category-demo h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .cross-category-demo p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .cross-cat-visual {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .cross-cat-node {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 20px;
+      text-align: center;
+      transition: all 0.3s;
+      min-width: 130px;
+    }
+    .cross-cat-node:hover {
+      border-color: rgba(255,87,34,0.4);
+      transform: translateY(-4px);
+    }
+    .cross-cat-node .node-area {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 6px;
+    }
+    .cross-cat-node .node-title {
+      font-size: 13px;
+      color: var(--text-body);
+      line-height: 1.4;
+    }
+    .cross-cat-node .node-badge {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .cross-cat-node .node-badge.canonical {
+      background: rgba(255,87,34,0.15);
+      color: var(--orange);
+      border: 1px solid rgba(255,87,34,0.3);
+    }
+    .cross-cat-node .node-badge.duplicate {
+      background: rgba(158,165,172,0.1);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+    .cross-cat-arrow {
+      font-size: 22px;
+      color: var(--orange);
+      opacity: 0.6;
+      animation: flowArrow 2s ease-in-out infinite;
+    }
+
+    /* Relationship Graph */
+    .rel-graph-section {
+      margin-bottom: 48px;
+    }
+    .rel-graph-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px;
+    }
+    .rel-graph-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .rel-graph-header h4 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .rel-graph-header p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .rel-types-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .rel-type-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-muted);
+      transition: all 0.3s;
+    }
+    .rel-type-chip:hover { border-color: rgba(255,87,34,0.3); color: var(--text); }
+    .rel-type-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .rel-graph-svg-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+    .rel-graph-svg-wrapper svg {
+      max-width: 100%;
+      height: auto;
+    }
+    .schema-tables-dedup {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+    .schema-card-dedup {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      transition: all 0.3s;
+    }
+    .schema-card-dedup:hover { border-color: rgba(66,165,245,0.3); transform: translateY(-3px); }
+    .schema-card-dedup h5 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--blue);
+      font-family: 'Courier New', monospace;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .schema-card-dedup .field-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0;
+      font-size: 12px;
+      border-bottom: 1px solid rgba(31,31,31,0.5);
+    }
+    .schema-card-dedup .field-row:last-child { border-bottom: none; }
+    .schema-card-dedup .field-row .fn {
+      font-family: 'Courier New', monospace;
+      color: var(--text-body);
+    }
+    .schema-card-dedup .field-row .ft {
+      color: var(--text-muted);
+      font-size: 11px;
+      background: var(--surface);
+      padding: 1px 6px;
+      border-radius: 3px;
+    }
+    .schema-card-dedup .field-row .ft.pk { background: rgba(255,87,34,0.1); color: var(--orange); }
+    .schema-card-dedup .field-row .ft.vec { background: rgba(66,165,245,0.1); color: var(--blue); }
+
+    /* 4-phase pipeline */
+    .phase-pipeline {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .phase-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      position: relative;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+    }
+    .phase-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+    .phase-card.ph0::before { background: linear-gradient(90deg, #607D8B, #90A4AE); }
+    .phase-card.ph1::before { background: linear-gradient(90deg, var(--orange), var(--orange-light)); }
+    .phase-card.ph2::before { background: linear-gradient(90deg, var(--blue), var(--blue-light)); }
+    .phase-card.ph3::before { background: linear-gradient(90deg, var(--green), var(--green-light)); }
+    .phase-card:hover {
+      border-color: rgba(255,87,34,0.25);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .phase-num {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .phase-num.ph0 { color: #90A4AE; }
+    .phase-num.ph1 { color: var(--orange); }
+    .phase-num.ph2 { color: var(--blue); }
+    .phase-num.ph3 { color: var(--green); }
+    .phase-card h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .phase-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .phase-output {
+      font-size: 12px;
+      color: var(--text-muted);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      line-height: 1.5;
+    }
+    .phase-output strong { color: var(--peach); }
+
     /* --- RESPONSIVE --- */
     @media (max-width: 768px) {
       .hero h1 { font-size: 32px; }
@@ -817,6 +1282,9 @@
       .nav-inner { padding: 0 16px; }
       .schema-grid { grid-template-columns: 1fr; }
       .cost-grid { grid-template-columns: 1fr; }
+      .dedup-layer-card { grid-template-columns: auto 1fr; }
+      .layer-stat { display: none; }
+      .cross-cat-arrow { display: none; }
     }
   </style>
 </head>
@@ -831,7 +1299,7 @@
         <span class="project-badge">Help File Processor</span>
       </div>
       <div class="header-right">
-        <a href="../" class="back-link">&#8592; Plano de Execucao</a>
+        <a href="../" class="back-link">&#8592; Plano de Execução</a>
         <span class="header-date">Outubro 2026</span>
         <span class="status-pill">Sprint 0</span>
       </div>
@@ -844,23 +1312,24 @@
       <a href="#problema" class="nav-link">Problema</a>
       <a href="#como-funciona" class="nav-link">Como Funciona</a>
       <a href="#pipelines" class="nav-link">Pipelines</a>
-      <a href="#metricas" class="nav-link">Metricas</a>
+      <a href="#deduplicacao" class="nav-link">Deduplicação</a>
+      <a href="#metricas" class="nav-link">Métricas</a>
       <a href="#schema" class="nav-link">Schema</a>
       <a href="#custos" class="nav-link">Custos</a>
       <a href="#riscos" class="nav-link">Riscos</a>
       <a href="#resultados" class="nav-link">Resultados</a>
-      <a href="#proximos-passos" class="nav-link">Proximos Passos</a>
+      <a href="#proximos-passos" class="nav-link">Próximos Passos</a>
     </div>
   </nav>
 
   <!-- HERO -->
   <div class="hero">
     <h1>Processamento <span>Inteligente</span> da Base HELP</h1>
-    <p class="subtitle">Motor de IA que ingere, limpa, deduplica, classifica e pontua 108 mil artigos do Bradesco &mdash; transformando uma base legada em conhecimento estruturado e acionavel.</p>
+    <p class="subtitle">Motor de IA que ingere, limpa, deduplica, classifica e pontua 108 mil artigos do Bradesco. Transforma uma base legada em conhecimento estruturado e acionável.</p>
     <p class="subtitle-small">Powered by Processing Engine &bull; gpt-4.1-mini &bull; pgvector</p>
     <div class="hero-stats">
       <div class="hero-stat"><span class="number">108K</span><span class="label">Artigos</span></div>
-      <div class="hero-stat"><span class="number">26</span><span class="label">Areas</span></div>
+      <div class="hero-stat"><span class="number">26</span><span class="label">Áreas</span></div>
       <div class="hero-stat"><span class="number">4</span><span class="label">Pipelines</span></div>
       <div class="hero-stat"><span class="number">~$58</span><span class="label">Custo LLM Est.</span></div>
     </div>
@@ -872,33 +1341,33 @@
   <div class="section" id="problema">
     <div class="section-title animate-on-scroll">O Desafio</div>
     <h2 class="animate-on-scroll">Por que processar 108 mil artigos?</h2>
-    <p class="section-desc animate-on-scroll">A base HELP do Bradesco e um dos maiores ativos de conhecimento da organizacao &mdash; mas esta presa em formato legado do SharePoint, sem inventario, sem qualidade medida e com duplicacao desconhecida.</p>
+    <p class="section-desc animate-on-scroll">A base HELP do Bradesco é um dos maiores ativos de conhecimento da organização. Está presa em formato legado do SharePoint, sem inventário, sem qualidade medida e com duplicação desconhecida.</p>
 
     <div class="problems-grid">
       <div class="problem-card animate-on-scroll stagger-1">
         <div class="problem-icon">&#128196;</div>
         <h3>Markup Pesado</h3>
-        <p>HTMLs com classes MS-*, estilos inline, tabelas aninhadas e formatacao legada do SharePoint. Impossivel extrair conteudo util diretamente.</p>
+        <p>HTMLs com classes MS-*, estilos inline, tabelas aninhadas e formatação legada do SharePoint. Impossível extrair conteúdo útil diretamente.</p>
       </div>
       <div class="problem-card animate-on-scroll stagger-2">
         <div class="problem-icon">&#128257;</div>
-        <h3>Duplicacao Desconhecida</h3>
-        <p>Sem inventario centralizado, nao se sabe quantos artigos sao duplicatas exatas ou semanticas entre as 26 areas operacionais.</p>
+        <h3>Duplicação Desconhecida</h3>
+        <p>Sem inventário centralizado, não se sabe quantos artigos são duplicatas exatas ou semânticas entre as 26 áreas operacionais.</p>
       </div>
       <div class="problem-card animate-on-scroll stagger-3">
         <div class="problem-icon">&#127991;</div>
-        <h3>Classificacao Rudimentar</h3>
-        <p>Os TXTs trazem classificacao por heuristica simples (TEXTUAL, LINK_ONLY, SHORT_TEXT). Precisa de validacao e refinamento com IA.</p>
+        <h3>Classificação Rudimentar</h3>
+        <p>Os TXTs trazem classificação por heurística simples (TEXTUAL, LINK_ONLY, SHORT_TEXT). Precisa de validação e refinamento com IA.</p>
       </div>
       <div class="problem-card animate-on-scroll stagger-4">
         <div class="problem-icon">&#128202;</div>
         <h3>Sem Quality Score</h3>
-        <p>Nenhum artigo tem avaliacao de completude, clareza ou atualidade. Impossivel priorizar revisao humana sem uma metrica objetiva.</p>
+        <p>Nenhum artigo tem avaliação de completude, clareza ou atualidade. Impossível priorizar revisão humana sem uma métrica objetiva.</p>
       </div>
       <div class="problem-card animate-on-scroll stagger-5">
         <div class="problem-icon">&#128165;</div>
-        <h3>Volume Inviavel</h3>
-        <p>108 mil artigos sao inviaveis para revisao humana direta. Triagem automatizada com IA e pre-requisito para qualquer acao.</p>
+        <h3>Volume Inviável</h3>
+        <p>108 mil artigos são inviáveis para revisão humana direta. Triagem automatizada com IA é pré-requisito para qualquer ação.</p>
       </div>
     </div>
   </div>
@@ -909,18 +1378,18 @@
   <div class="section" id="como-funciona">
     <div class="section-title animate-on-scroll">Arquitetura</div>
     <h2 class="animate-on-scroll">Como funciona o Processing Engine</h2>
-    <p class="section-desc animate-on-scroll">Motor de processamento agnostico, configuravel via YAML, que orquestra ingestao, deduplicacao, analise por LLM e persistencia &mdash; tudo em pipelines paralelos e resilientes.</p>
+    <p class="section-desc animate-on-scroll">Motor de processamento agnóstico, configurável via YAML, que orquestra ingestão, deduplicação, análise por LLM e persistência. Tudo em pipelines paralelos e resilientes.</p>
 
     <div class="arch-diagram animate-on-scroll scale-in">
       <div class="arch-flow">
         <div class="arch-box">
           <h4>&#128193; Filesystem</h4>
-          <p>218.612 arquivos (108K pares HTML + TXT) &bull; 1.4 GB extraidos &bull; 26 areas</p>
+          <p>218.612 arquivos (108K pares HTML + TXT) &bull; 1.4 GB extraídos &bull; 26 áreas</p>
         </div>
         <div class="arch-arrow">&#8595;</div>
         <div class="arch-box highlight">
           <h4>&#9881; Processing Engine</h4>
-          <p>Pipeline configuravel via YAML &bull; Workers com SKIP LOCKED &bull; Rate limiting inteligente</p>
+          <p>Pipeline configurável via YAML &bull; Workers com SKIP LOCKED &bull; Rate limiting inteligente</p>
         </div>
         <div class="arch-arrow">&#8595;</div>
         <div class="arch-cols">
@@ -930,7 +1399,7 @@
           </div>
           <div class="arch-box small">
             <h4>&#128279; Dedup</h4>
-            <p>Hash + Semantico</p>
+            <p>Hash + Semântico</p>
           </div>
           <div class="arch-box small">
             <h4>&#129302; LLM</h4>
@@ -950,8 +1419,8 @@
         </div>
         <div class="arch-arrow">&#8595;</div>
         <div class="arch-box" style="border-color: rgba(76,175,80,0.4); background: rgba(76,175,80,0.05);">
-          <h4>&#128200; Inventario Estruturado</h4>
-          <p>Artigos limpos, classificados, deduplicados e com quality score &bull; Pronto para revisao humana</p>
+          <h4>&#128200; Inventário Estruturado</h4>
+          <p>Artigos limpos, classificados, deduplicados e com quality score &bull; Pronto para revisão humana</p>
         </div>
       </div>
     </div>
@@ -963,7 +1432,7 @@
   <div class="section" id="pipelines">
     <div class="section-title animate-on-scroll">Pipelines</div>
     <h2 class="animate-on-scroll">4 Pipelines Sequenciais</h2>
-    <p class="section-desc animate-on-scroll">Cada pipeline e uma etapa independente do processamento, configurada em YAML e executada pelo Processing Engine. Resultados de um pipeline alimentam o seguinte.</p>
+    <p class="section-desc animate-on-scroll">Cada pipeline é uma etapa independente do processamento, configurada em YAML e executada pelo Processing Engine. Resultados de um pipeline alimentam o seguinte.</p>
 
     <div class="flowchart">
       <div class="flow-line"></div>
@@ -974,19 +1443,19 @@
         <div class="pipeline-content">
           <div class="pipeline-header">
             <span class="pipeline-title">helpcore-ingest</span>
-            <span class="pipeline-badge ingest">Ingestao</span>
+            <span class="pipeline-badge ingest">Ingestão</span>
           </div>
-          <p class="pipeline-desc">Le o filesystem recursivamente, pareia cada HTML com seu TXT pelo nome do arquivo, extrai metadados estruturados e limpa o markup pesado do SharePoint.</p>
+          <p class="pipeline-desc">Lê o filesystem recursivamente, pareia cada HTML com seu TXT pelo nome do arquivo, extrai metadados estruturados e limpa o markup pesado do SharePoint.</p>
           <div class="pipeline-steps">
             <div class="pipeline-step">Leitura recursiva</div>
             <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Pareamento HTML+TXT</div>
             <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Parse metadados</div>
             <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Limpeza HTML</div>
-            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Deteccao encoding</div>
+            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Detecção encoding</div>
           </div>
           <div class="pipeline-output">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            <span><strong>Output:</strong> 108K registros com metadados estruturados + conteudo limpo no PostgreSQL</span>
+            <span><strong>Output:</strong> 108K registros com metadados estruturados e conteúdo limpo no PostgreSQL</span>
           </div>
         </div>
       </div>
@@ -997,9 +1466,9 @@
         <div class="pipeline-content">
           <div class="pipeline-header">
             <span class="pipeline-title">helpcore-dedup</span>
-            <span class="pipeline-badge dedup">Deduplicacao</span>
+            <span class="pipeline-badge dedup">Deduplicação</span>
           </div>
-          <p class="pipeline-desc">Identifica duplicatas exatas via hash SHA-256 do conteudo normalizado e duplicatas semanticas via embeddings pgvector com threshold configuravel.</p>
+          <p class="pipeline-desc">Identifica duplicatas exatas via hash SHA-256 do conteúdo normalizado e duplicatas semânticas via embeddings pgvector com threshold configurável.</p>
           <div class="pipeline-steps">
             <div class="pipeline-step">Hash SHA-256</div>
             <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Embedding (text-embedding-3-small)</div>
@@ -1008,7 +1477,7 @@
           </div>
           <div class="pipeline-output">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            <span><strong>Output:</strong> Grupos de duplicatas + flags canonico/duplicata &bull; Threshold &ge; 0.92</span>
+            <span><strong>Output:</strong> Grupos de duplicatas e flags canônico/duplicata &bull; Threshold &ge; 0.92</span>
           </div>
         </div>
       </div>
@@ -1019,17 +1488,17 @@
         <div class="pipeline-content">
           <div class="pipeline-header">
             <span class="pipeline-title">helpcore-classify</span>
-            <span class="pipeline-badge classify">Classificacao</span>
+            <span class="pipeline-badge classify">Classificação</span>
           </div>
-          <p class="pipeline-desc">Valida e recalcula a classificacao de cada artigo. Heuristicas primeiro para casos claros; LLM so para ambiguos (~10% do total).</p>
+          <p class="pipeline-desc">Valida e recalcula a classificação de cada artigo. Heurísticas primeiro para casos claros. LLM só para ambíguos (cerca de 10% do total).</p>
           <div class="pipeline-steps">
-            <div class="pipeline-step">Heuristica (EMPTY, LINK_ONLY, SHORT_TEXT, MEDIA)</div>
-            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> LLM para ambiguos</div>
+            <div class="pipeline-step">Heurística (EMPTY, LINK_ONLY, SHORT_TEXT, MEDIA)</div>
+            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> LLM para ambíguos</div>
             <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Delta report</div>
           </div>
           <div class="pipeline-output">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            <span><strong>Output:</strong> Classificacao validada para 100% dos artigos + relatorio de divergencias</span>
+            <span><strong>Output:</strong> Classificação validada para 100% dos artigos e relatório de divergências</span>
           </div>
         </div>
       </div>
@@ -1042,15 +1511,15 @@
             <span class="pipeline-title">helpcore-quality-score</span>
             <span class="pipeline-badge quality">Quality Score</span>
           </div>
-          <p class="pipeline-desc">Gera score de qualidade (0-100) para cada artigo TEXTUAL avaliando 5 dimensoes: completude, clareza, atualidade, formatacao e aderencia ao publico-alvo.</p>
+          <p class="pipeline-desc">Gera score de qualidade (0-100) para cada artigo TEXTUAL avaliando 5 dimensões: completude, clareza, atualidade, formatação e aderência ao público-alvo.</p>
           <div class="pipeline-steps">
             <div class="pipeline-step">Filtro: apenas TEXTUAL (48K)</div>
             <div class="pipeline-step"><span class="step-arrow">&#8594;</span> LLM gpt-4.1-mini</div>
-            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Score + breakdown</div>
+            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Score e breakdown</div>
           </div>
           <div class="pipeline-output">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            <span><strong>Output:</strong> Score 0-100 + breakdown por dimensao para 48.363 artigos TEXTUAL</span>
+            <span><strong>Output:</strong> Score 0-100 e breakdown por dimensão para 48.363 artigos TEXTUAL</span>
           </div>
         </div>
       </div>
@@ -1059,18 +1528,351 @@
 
   <div class="section-sep"><hr></div>
 
+  <!-- DEDUPLICAÇÃO -->
+  <div class="section" id="deduplicacao">
+    <div class="section-title animate-on-scroll">Estratégia Técnica</div>
+    <h2 class="animate-on-scroll">Estratégia de Deduplicação</h2>
+    <p class="section-desc animate-on-scroll">A análise preliminar revelou que mais da metade da base é composta por duplicatas exatas. A estratégia em três camadas garante detecção máxima com custo mínimo de processamento.</p>
+
+    <!-- Discovery -->
+    <div class="dedup-discovery animate-on-scroll">
+      <div class="dedup-stat-big">
+        <div class="big-number">51.2%</div>
+        <div class="big-label">da base são duplicatas exatas</div>
+        <div class="big-sub">~55.319 artigos com hash idêntico</div>
+      </div>
+      <div class="dedup-bar-chart">
+        <h4>Composição da Base (108.062 artigos)</h4>
+        <div class="bar-item">
+          <div class="bar-label-row">
+            <span>Duplicatas exatas (hash)</span>
+            <span style="color: var(--orange);">55.319 &nbsp;(51.2%)</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill orange" style="width: 51.2%;">51.2%</div>
+          </div>
+        </div>
+        <div class="bar-item" style="margin-top: 16px;">
+          <div class="bar-label-row">
+            <span>Artigos únicos a processar</span>
+            <span style="color: var(--green);">52.743 &nbsp;(48.8%)</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill green" style="width: 48.8%;">48.8%</div>
+          </div>
+        </div>
+        <div style="margin-top: 16px; padding: 14px; background: var(--bg); border-radius: 8px; border: 1px solid var(--border);">
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+            &#9888;&nbsp; Dos ~52.7K únicos, uma parcela adicional terá duplicatas <strong style="color: var(--blue);">semânticas</strong> detectadas pela Camada 2 (embeddings). Estimativa: 5-10% adicionais com similaridade &ge; 0.95.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Three Layer Strategy -->
+    <div class="section-title animate-on-scroll" style="margin-bottom: 20px;">Detecção em 3 Camadas</div>
+
+    <div class="dedup-layers">
+      <!-- Layer 1 -->
+      <div class="dedup-layer-card layer-1 animate-on-scroll">
+        <div class="layer-badge l1">1</div>
+        <div class="layer-info">
+          <h3>Hash SHA-256</h3>
+          <p>Normalização NFC + lowercase + whitespace collapse antes do hash. Identifica duplicatas exatas de forma determinística. Nenhuma chamada LLM envolvida.</p>
+          <div class="layer-chips">
+            <span class="layer-chip">NFC normalize</span>
+            <span class="layer-chip">lowercase</span>
+            <span class="layer-chip">whitespace collapse</span>
+            <span class="layer-chip">SHA-256</span>
+            <span class="layer-chip">determinístico</span>
+            <span class="layer-chip">custo zero</span>
+          </div>
+        </div>
+        <div class="layer-stat">
+          <span class="stat-val orange">~55K</span>
+          <span class="stat-desc">duplicatas esperadas</span>
+        </div>
+      </div>
+
+      <div class="dedup-layer-connector">
+        <span>&#8595; apenas os ~52.7K únicos passam para a camada 2</span>
+      </div>
+
+      <!-- Layer 2 -->
+      <div class="dedup-layer-card layer-2 animate-on-scroll">
+        <div class="layer-badge l2">2</div>
+        <div class="layer-info">
+          <h3>Embeddings + pgvector</h3>
+          <p>text-embedding-3-small (1536 dimensões). Índice HNSW (m=16, ef_construction=100) para busca KNN eficiente. Blocking via top-5 vizinhos evita comparação O(n²). Threshold &ge; 0.95 para merge automático; 0.92-0.95 vai para revisão humana.</p>
+          <div class="layer-chips">
+            <span class="layer-chip">text-embedding-3-small</span>
+            <span class="layer-chip">1536d</span>
+            <span class="layer-chip">HNSW index</span>
+            <span class="layer-chip">cosine similarity</span>
+            <span class="layer-chip">&ge; 0.95 auto-merge</span>
+            <span class="layer-chip">0.92-0.95 revisão humana</span>
+          </div>
+        </div>
+        <div class="layer-stat">
+          <span class="stat-val blue">~3-5K</span>
+          <span class="stat-desc">duplicatas semânticas est.</span>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; align-items: center; padding: 8px 0;">
+        <div style="width: 2px; height: 20px; background: linear-gradient(180deg, var(--blue), var(--purple));"></div>
+        <span style="font-size: 11px; color: var(--text-muted); background: var(--bg); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border); margin: 4px 0; white-space: nowrap;">&#8595; artigos não semânticos passam para fingerprint estrutural</span>
+        <div style="width: 2px; height: 20px; background: linear-gradient(180deg, var(--purple), #7B1FA2);"></div>
+      </div>
+
+      <!-- Layer 3 -->
+      <div class="dedup-layer-card layer-3 animate-on-scroll">
+        <div class="layer-badge l3">3</div>
+        <div class="layer-info">
+          <h3>SimHash / MinHash (Fingerprint Estrutural)</h3>
+          <p>Detecta artigos com o mesmo conteúdo reorganizado ou reformatado de forma diferente. Complementar à similaridade semântica: captura casos onde a embedding não alcança threshold mas o conteúdo é substancialmente o mesmo.</p>
+          <div class="layer-chips">
+            <span class="layer-chip">SimHash 64-bit</span>
+            <span class="layer-chip">MinHash LSH</span>
+            <span class="layer-chip">Hamming distance &le; 3</span>
+            <span class="layer-chip">conteúdo reorganizado</span>
+            <span class="layer-chip">reformatação</span>
+          </div>
+        </div>
+        <div class="layer-stat">
+          <span class="stat-val purple">~1-2K</span>
+          <span class="stat-desc">duplicatas estruturais est.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cross-Category Detection -->
+    <div class="section-title animate-on-scroll" style="margin-bottom: 20px;">Detecção entre Áreas</div>
+    <div class="cross-category-demo animate-on-scroll">
+      <h4>&#127760; Duplicatas que cruzam áreas operacionais</h4>
+      <p>Um mesmo artigo frequentemente aparece em múltiplas das 26 áreas do SharePoint. A deduplicação identifica esses casos mesmo quando os artigos estão em pastas completamente diferentes.</p>
+      <div class="cross-cat-visual">
+        <div class="cross-cat-node">
+          <div class="node-area">Suporte</div>
+          <div class="node-title">Cartão de Crédito: limite e fatura</div>
+          <span class="node-badge canonical">Canônico</span>
+        </div>
+        <div class="cross-cat-arrow">&#8594;</div>
+        <div class="cross-cat-node">
+          <div class="node-area">FAQ</div>
+          <div class="node-title">Cartão de Crédito: limite e fatura</div>
+          <span class="node-badge duplicate">Duplicata</span>
+        </div>
+        <div class="cross-cat-arrow">&#8594;</div>
+        <div class="cross-cat-node">
+          <div class="node-area">Produtos</div>
+          <div class="node-title">Cartão de Crédito: limite e fatura</div>
+          <span class="node-badge duplicate">Duplicata</span>
+        </div>
+      </div>
+      <p style="margin-top: 20px; margin-bottom: 0; font-size: 13px; padding: 14px; background: var(--bg); border-radius: 8px; border: 1px solid var(--border);">
+        <strong style="color: var(--orange);">Benefício prático:</strong> A equipe de conteúdo identifica qual versão é a mais completa e atualizada (canônico), e pode arquivar ou redirecionar as demais. Isso elimina trabalho de manutenção duplicado entre times de diferentes áreas.
+      </p>
+    </div>
+
+    <!-- Relationship Graph -->
+    <div class="rel-graph-section">
+      <div class="section-title animate-on-scroll" style="margin-bottom: 12px;">Grafo de Relacionamentos</div>
+      <h3 class="animate-on-scroll" style="font-size: 26px; font-weight: 800; color: var(--text); margin-bottom: 16px;">6 Tipos de Vínculo entre Artigos</h3>
+      <p class="animate-on-scroll" style="color: var(--text-muted); font-size: 16px; max-width: 700px; margin-bottom: 32px;">Além de identificar duplicatas, o pipeline constrói um grafo completo de relacionamentos. Cada artigo pode ter vínculos de 6 naturezas distintas com outros artigos da base.</p>
+
+      <div class="rel-graph-container animate-on-scroll scale-in">
+        <div class="rel-graph-header">
+          <div>
+            <h4>Tipos de Relacionamento</h4>
+            <p>Cada aresta do grafo carrega tipo, score de similaridade e metadados de detecção</p>
+          </div>
+          <div class="rel-types-legend">
+            <div class="rel-type-chip"><div class="rel-type-dot" style="background: #FF5722;"></div>link_explicito</div>
+            <div class="rel-type-chip"><div class="rel-type-dot" style="background: #F44336;"></div>duplicata_exata</div>
+            <div class="rel-type-chip"><div class="rel-type-dot" style="background: #42A5F5;"></div>duplicata_semântica</div>
+            <div class="rel-type-chip"><div class="rel-type-dot" style="background: #AB47BC;"></div>duplicata_estrutural</div>
+            <div class="rel-type-chip"><div class="rel-type-dot" style="background: #4CAF50;"></div>mesmo_cluster_temático</div>
+            <div class="rel-type-chip"><div class="rel-type-dot" style="background: #FFC978;"></div>complementar</div>
+          </div>
+        </div>
+
+        <!-- SVG Graph Visualization -->
+        <div class="rel-graph-svg-wrapper">
+          <svg viewBox="0 0 700 380" width="700" height="380" xmlns="http://www.w3.org/2000/svg" style="background: #0A0A0A; border-radius: 12px; border: 1px solid #1F1F1F;">
+            <!-- Background glow -->
+            <defs>
+              <radialGradient id="centerGlow" cx="50%" cy="50%" r="40%">
+                <stop offset="0%" stop-color="#FF5722" stop-opacity="0.08"/>
+                <stop offset="100%" stop-color="#FF5722" stop-opacity="0"/>
+              </radialGradient>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <marker id="arrowOrange" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L6,3 z" fill="#FF5722" opacity="0.7"/>
+              </marker>
+              <marker id="arrowRed" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L6,3 z" fill="#F44336" opacity="0.7"/>
+              </marker>
+              <marker id="arrowBlue" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L6,3 z" fill="#42A5F5" opacity="0.7"/>
+              </marker>
+              <marker id="arrowPurple" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L6,3 z" fill="#AB47BC" opacity="0.7"/>
+              </marker>
+              <marker id="arrowGreen" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L6,3 z" fill="#4CAF50" opacity="0.7"/>
+              </marker>
+              <marker id="arrowPeach" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L6,3 z" fill="#FFC978" opacity="0.7"/>
+              </marker>
+            </defs>
+            <rect width="700" height="380" fill="url(#centerGlow)"/>
+
+            <!-- Edges -->
+            <!-- link_explicito: center -> node A -->
+            <line x1="350" y1="190" x2="195" y2="100" stroke="#FF5722" stroke-width="1.5" stroke-opacity="0.6" marker-end="url(#arrowOrange)" stroke-dasharray="0"/>
+            <!-- duplicata_exata: center -> node B -->
+            <line x1="350" y1="190" x2="510" y2="95" stroke="#F44336" stroke-width="2" stroke-opacity="0.7" marker-end="url(#arrowRed)"/>
+            <!-- duplicata_semantica: center -> node C -->
+            <line x1="350" y1="190" x2="580" y2="240" stroke="#42A5F5" stroke-width="1.5" stroke-opacity="0.6" marker-end="url(#arrowBlue)" stroke-dasharray="5,3"/>
+            <!-- duplicata_estrutural: center -> node D -->
+            <line x1="350" y1="190" x2="460" y2="325" stroke="#AB47BC" stroke-width="1.5" stroke-opacity="0.6" marker-end="url(#arrowPurple)" stroke-dasharray="4,3"/>
+            <!-- mesmo_cluster: center -> node E -->
+            <line x1="350" y1="190" x2="200" y2="310" stroke="#4CAF50" stroke-width="1.5" stroke-opacity="0.5" marker-end="url(#arrowGreen)" stroke-dasharray="6,3"/>
+            <!-- complementar: center -> node F -->
+            <line x1="350" y1="190" x2="120" y2="210" stroke="#FFC978" stroke-width="1.5" stroke-opacity="0.5" marker-end="url(#arrowPeach)" stroke-dasharray="3,3"/>
+            <!-- extra edges between periphery -->
+            <line x1="195" y1="100" x2="510" y2="95" stroke="#1F1F1F" stroke-width="1" stroke-opacity="0.5" stroke-dasharray="3,4"/>
+            <line x1="460" y1="325" x2="200" y2="310" stroke="#1F1F1F" stroke-width="1" stroke-opacity="0.5" stroke-dasharray="3,4"/>
+            <line x1="580" y1="240" x2="460" y2="325" stroke="#1F1F1F" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="3,4"/>
+
+            <!-- Central node -->
+            <circle cx="350" cy="190" r="42" fill="#151515" stroke="#FF5722" stroke-width="2" filter="url(#glow)"/>
+            <circle cx="350" cy="190" r="36" fill="rgba(255,87,34,0.08)"/>
+            <text x="350" y="185" text-anchor="middle" fill="#FFFFFF" font-family="Nunito Sans, sans-serif" font-size="11" font-weight="700">Artigo</text>
+            <text x="350" y="200" text-anchor="middle" fill="#FF8A65" font-family="Nunito Sans, sans-serif" font-size="10">Canônico</text>
+
+            <!-- Node A: link_explicito -->
+            <circle cx="180" cy="88" r="32" fill="#151515" stroke="#FF5722" stroke-width="1.5"/>
+            <text x="180" y="83" text-anchor="middle" fill="#FF5722" font-family="Nunito Sans, sans-serif" font-size="9" font-weight="700">link_</text>
+            <text x="180" y="95" text-anchor="middle" fill="#FF5722" font-family="Nunito Sans, sans-serif" font-size="9" font-weight="700">explicito</text>
+            <text x="180" y="107" text-anchor="middle" fill="#9EA5AC" font-family="Nunito Sans, sans-serif" font-size="8">HTML link</text>
+
+            <!-- Node B: duplicata_exata -->
+            <circle cx="520" cy="82" r="32" fill="#151515" stroke="#F44336" stroke-width="1.5"/>
+            <text x="520" y="77" text-anchor="middle" fill="#F44336" font-family="Nunito Sans, sans-serif" font-size="9" font-weight="700">duplicata_</text>
+            <text x="520" y="89" text-anchor="middle" fill="#F44336" font-family="Nunito Sans, sans-serif" font-size="9" font-weight="700">exata</text>
+            <text x="520" y="101" text-anchor="middle" fill="#9EA5AC" font-family="Nunito Sans, sans-serif" font-size="8">hash match</text>
+
+            <!-- Node C: duplicata_semantica -->
+            <circle cx="590" cy="240" r="32" fill="#151515" stroke="#42A5F5" stroke-width="1.5"/>
+            <text x="590" y="235" text-anchor="middle" fill="#42A5F5" font-family="Nunito Sans, sans-serif" font-size="9" font-weight="700">duplicata_</text>
+            <text x="590" y="247" text-anchor="middle" fill="#42A5F5" font-family="Nunito Sans, sans-serif" font-size="9" font-weight="700">semântica</text>
+            <text x="590" y="259" text-anchor="middle" fill="#9EA5AC" font-family="Nunito Sans, sans-serif" font-size="8">&ge;0.95 cosine</text>
+
+            <!-- Node D: duplicata_estrutural -->
+            <circle cx="460" cy="335" r="32" fill="#151515" stroke="#AB47BC" stroke-width="1.5"/>
+            <text x="460" y="330" text-anchor="middle" fill="#AB47BC" font-family="Nunito Sans, sans-serif" font-size="9" font-weight="700">duplicata_</text>
+            <text x="460" y="342" text-anchor="middle" fill="#AB47BC" font-family="Nunito Sans, sans-serif" font-size="9" font-weight="700">estrutural</text>
+            <text x="460" y="354" text-anchor="middle" fill="#9EA5AC" font-family="Nunito Sans, sans-serif" font-size="8">SimHash</text>
+
+            <!-- Node E: mesmo_cluster -->
+            <circle cx="185" cy="315" r="32" fill="#151515" stroke="#4CAF50" stroke-width="1.5"/>
+            <text x="185" y="308" text-anchor="middle" fill="#4CAF50" font-family="Nunito Sans, sans-serif" font-size="9" font-weight="700">mesmo_cluster</text>
+            <text x="185" y="320" text-anchor="middle" fill="#4CAF50" font-family="Nunito Sans, sans-serif" font-size="9" font-weight="700">_temático</text>
+            <text x="185" y="332" text-anchor="middle" fill="#9EA5AC" font-family="Nunito Sans, sans-serif" font-size="8">topic cluster</text>
+
+            <!-- Node F: complementar -->
+            <circle cx="105" cy="205" r="32" fill="#151515" stroke="#FFC978" stroke-width="1.5"/>
+            <text x="105" y="200" text-anchor="middle" fill="#FFC978" font-family="Nunito Sans, sans-serif" font-size="9" font-weight="700">complemen-</text>
+            <text x="105" y="212" text-anchor="middle" fill="#FFC978" font-family="Nunito Sans, sans-serif" font-size="9" font-weight="700">tar</text>
+            <text x="105" y="224" text-anchor="middle" fill="#9EA5AC" font-family="Nunito Sans, sans-serif" font-size="8">ângulo dif.</text>
+          </svg>
+        </div>
+
+        <!-- SQL Tables -->
+        <div class="schema-tables-dedup">
+          <div class="schema-card-dedup">
+            <h5>article_relationships</h5>
+            <div class="field-row"><span class="fn">id</span><span class="ft pk">UUID PK</span></div>
+            <div class="field-row"><span class="fn">source_id</span><span class="ft pk">UUID FK</span></div>
+            <div class="field-row"><span class="fn">target_id</span><span class="ft pk">UUID FK</span></div>
+            <div class="field-row"><span class="fn">relationship_type</span><span class="ft">TEXT</span></div>
+            <div class="field-row"><span class="fn">similarity_score</span><span class="ft">NUMERIC</span></div>
+            <div class="field-row"><span class="fn">metadata</span><span class="ft">JSONB</span></div>
+            <div class="field-row"><span class="fn">detected_at</span><span class="ft">TIMESTAMP</span></div>
+          </div>
+          <div class="schema-card-dedup">
+            <h5>article_clusters</h5>
+            <div class="field-row"><span class="fn">id</span><span class="ft pk">UUID PK</span></div>
+            <div class="field-row"><span class="fn">cluster_type</span><span class="ft">TEXT</span></div>
+            <div class="field-row"><span class="fn">centroid_embedding</span><span class="ft vec">vector(1536)</span></div>
+            <div class="field-row"><span class="fn">member_count</span><span class="ft">INT</span></div>
+            <div class="field-row"><span class="fn">canonical_id</span><span class="ft pk">UUID FK</span></div>
+            <div class="field-row"><span class="fn">created_at</span><span class="ft">TIMESTAMP</span></div>
+          </div>
+          <div class="schema-card-dedup">
+            <h5>article_cluster_members</h5>
+            <div class="field-row"><span class="fn">cluster_id</span><span class="ft pk">UUID FK</span></div>
+            <div class="field-row"><span class="fn">article_id</span><span class="ft pk">UUID FK</span></div>
+            <div class="field-row"><span class="fn">distance_to_centroid</span><span class="ft">NUMERIC</span></div>
+            <div class="field-row"><span class="fn">is_canonical</span><span class="ft">BOOLEAN</span></div>
+            <div class="field-row"><span class="fn">added_at</span><span class="ft">TIMESTAMP</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4-Phase Pipeline -->
+    <div class="section-title animate-on-scroll" style="margin-bottom: 12px; margin-top: 48px;">Pipeline de 4 Fases</div>
+    <h3 class="animate-on-scroll" style="font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 8px;">Sequência de Execução Recomendada</h3>
+    <p class="animate-on-scroll" style="color: var(--text-muted); font-size: 15px; max-width: 700px; margin-bottom: 0;">Abordagem em 4 fases que garante eficiência máxima. Evita processar com LLM artigos que seriam descartados na fase de hash.</p>
+
+    <div class="phase-pipeline">
+      <div class="phase-card ph0 animate-on-scroll stagger-1">
+        <div class="phase-num ph0">Fase 0</div>
+        <h4>Normalização Pré-Ingestão</h4>
+        <p>Normalização NFC + lowercase + whitespace collapse em todos os 108K artigos antes de qualquer inserção no banco. Geração dos hashes SHA-256.</p>
+        <div class="phase-output"><strong>Output:</strong> 108K hashes. Agrupamento de duplicatas exatas identificado. Apenas ~52.7K únicos avançam.</div>
+      </div>
+      <div class="phase-card ph1 animate-on-scroll stagger-2">
+        <div class="phase-num ph1">Fase 1</div>
+        <h4>Ingestão dos Únicos</h4>
+        <p>Apenas os ~52.7K artigos únicos são ingeridos com limpeza completa de HTML e extração de metadados. Duplicatas exatas recebem apenas flag e referência ao canônico.</p>
+        <div class="phase-output"><strong>Output:</strong> 52.7K artigos no PostgreSQL com metadados estruturados. 55.3K duplicatas registradas com referência.</div>
+      </div>
+      <div class="phase-card ph2 animate-on-scroll stagger-3">
+        <div class="phase-num ph2">Fase 2</div>
+        <h4>Embeddings e Dedup Semântico</h4>
+        <p>Geração de embeddings somente para os ~52.7K únicos via text-embedding-3-small. Construção do índice HNSW. Busca KNN top-5 para cada artigo. Merge automático &ge; 0.95.</p>
+        <div class="phase-output"><strong>Output:</strong> Índice pgvector construído. Duplicatas semânticas e estruturais identificadas e vinculadas.</div>
+      </div>
+      <div class="phase-card ph3 animate-on-scroll stagger-4">
+        <div class="phase-num ph3">Fase 3</div>
+        <h4>Construção do Grafo</h4>
+        <p>Materialização de todos os 6 tipos de vínculo na tabela article_relationships. Identificação de clusters temáticos. Construção de article_cluster_members com distância ao centróide.</p>
+        <div class="phase-output"><strong>Output:</strong> Grafo completo de relacionamentos. Clusters temáticos. Base pronta para classificação e quality score.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-sep"><hr></div>
+
   <!-- METRICAS -->
   <div class="section" id="metricas">
-    <div class="section-title animate-on-scroll">Metricas de Sucesso</div>
-    <h2 class="animate-on-scroll">Objetivos Mensuraveis</h2>
-    <p class="section-desc animate-on-scroll">Cada objetivo tem uma metrica clara e uma meta verificavel. O pipeline so e considerado concluido quando todas as metas sao atingidas.</p>
+    <div class="section-title animate-on-scroll">Métricas de Sucesso</div>
+    <h2 class="animate-on-scroll">Objetivos Mensuráveis</h2>
+    <p class="section-desc animate-on-scroll">Cada objetivo tem uma métrica clara e uma meta verificável. O pipeline só é considerado concluído quando todas as metas são atingidas.</p>
 
     <div class="animate-on-scroll">
       <table class="metrics-table">
         <thead>
           <tr>
             <th>Objetivo</th>
-            <th>Metrica</th>
+            <th>Métrica</th>
             <th>Meta</th>
           </tr>
         </thead>
@@ -1087,7 +1889,7 @@
           </tr>
           <tr>
             <td class="metric-name">Limpar HTML SharePoint</td>
-            <td>Artigos com conteudo limpo</td>
+            <td>Artigos com conteúdo limpo</td>
             <td class="metric-target">100% TEXTUAL + SHORT_TEXT</td>
           </tr>
           <tr>
@@ -1096,13 +1898,13 @@
             <td class="metric-target">Recall &ge; 99%</td>
           </tr>
           <tr>
-            <td class="metric-name">Identificar duplicatas semanticas</td>
+            <td class="metric-name">Identificar duplicatas semânticas</td>
             <td>Pares com similarity &ge; 0.92</td>
             <td class="metric-target">Precision &ge; 85%</td>
           </tr>
           <tr>
             <td class="metric-name">Classificar artigos</td>
-            <td>Artigos com classificacao validada</td>
+            <td>Artigos com classificação validada</td>
             <td class="metric-target">100%</td>
           </tr>
           <tr>
@@ -1126,16 +1928,16 @@
   <div class="section" id="schema">
     <div class="section-title animate-on-scroll">Modelo de Dados</div>
     <h2 class="animate-on-scroll">Schema PostgreSQL</h2>
-    <p class="section-desc animate-on-scroll">Tres tabelas estruturadas em PostgreSQL 16 com pgvector habilitado para buscas semanticas. Todos os dados ficam na infraestrutura interna.</p>
+    <p class="section-desc animate-on-scroll">Três tabelas estruturadas em PostgreSQL 16 com pgvector habilitado para buscas semânticas. Todos os dados ficam na infraestrutura interna.</p>
 
     <div class="schema-grid">
       <div class="schema-card animate-on-scroll stagger-1">
         <h3><span class="table-icon">&#128203;</span> articles</h3>
-        <p class="table-desc">Tabela principal &mdash; um registro por artigo (108K registros)</p>
+        <p class="table-desc">Tabela principal. Um registro por artigo (108K registros).</p>
         <div class="schema-field"><span class="field-name">id</span><span class="field-type pk">UUID PK</span></div>
         <div class="schema-field"><span class="field-name">file_path</span><span class="field-type">TEXT</span></div>
         <div class="schema-field"><span class="field-name">area / subpasta</span><span class="field-type">TEXT</span></div>
-        <div class="schema-field"><span class="field-name">titulo / subtitulo</span><span class="field-type">TEXT</span></div>
+        <div class="schema-field"><span class="field-name">título / subtítulo</span><span class="field-type">TEXT</span></div>
         <div class="schema-field"><span class="field-name">content_raw</span><span class="field-type">TEXT</span></div>
         <div class="schema-field"><span class="field-name">content_clean</span><span class="field-type">TEXT</span></div>
         <div class="schema-field"><span class="field-name">content_hash</span><span class="field-type">TEXT</span></div>
@@ -1148,7 +1950,7 @@
 
       <div class="schema-card animate-on-scroll stagger-2">
         <h3><span class="table-icon">&#128279;</span> dedup_groups</h3>
-        <p class="table-desc">Grupos de artigos duplicados (exatos ou semanticos)</p>
+        <p class="table-desc">Grupos de artigos duplicados (exatos ou semânticos)</p>
         <div class="schema-field"><span class="field-name">id</span><span class="field-type pk">UUID PK</span></div>
         <div class="schema-field"><span class="field-name">dedup_type</span><span class="field-type">TEXT</span></div>
         <div class="schema-field"><span class="field-name">similarity</span><span class="field-type">NUMERIC</span></div>
@@ -1174,13 +1976,13 @@
   <div class="section" id="custos">
     <div class="section-title animate-on-scroll">Estimativa de Custo</div>
     <h2 class="animate-on-scroll">Investimento em LLM por Pipeline</h2>
-    <p class="section-desc animate-on-scroll">Todas as etapas usam gpt-4.1-mini para otimizar custo. Um dry-run de 100 artigos valida a projecao antes do processamento completo.</p>
+    <p class="section-desc animate-on-scroll">Todas as etapas usam gpt-4.1-mini para otimizar custo. Um dry-run de 100 artigos valida a projeção antes do processamento completo.</p>
 
     <div class="cost-grid">
       <div class="cost-card animate-on-scroll stagger-1">
         <div class="cost-value">~$5</div>
-        <div class="cost-label">Classificacao</div>
-        <div class="cost-detail">~10.800 artigos ambiguos<br>~800 tokens input/artigo<br>~100 tokens output/artigo</div>
+        <div class="cost-label">Classificação</div>
+        <div class="cost-detail">~10.800 artigos ambíguos<br>~800 tokens input/artigo<br>~100 tokens output/artigo</div>
       </div>
       <div class="cost-card animate-on-scroll stagger-2">
         <div class="cost-value">~$52</div>
@@ -1190,12 +1992,12 @@
       <div class="cost-card animate-on-scroll stagger-3">
         <div class="cost-value">~$1</div>
         <div class="cost-label">Embeddings</div>
-        <div class="cost-detail">108.062 artigos<br>text-embedding-3-small<br>~500 tokens/artigo</div>
+        <div class="cost-detail">~52.7K artigos únicos<br>text-embedding-3-small<br>~500 tokens/artigo</div>
       </div>
       <div class="cost-card animate-on-scroll stagger-4" style="border-color: rgba(255,87,34,0.3); background: rgba(255,87,34,0.03);">
         <div class="cost-value">~$58</div>
         <div class="cost-label">Total Estimado</div>
-        <div class="cost-detail">Orcamento maximo: US$ 500<br>Margem de seguranca: 8.6x<br>Dry-run valida antes do full run</div>
+        <div class="cost-detail">Orçamento máximo: US$ 500<br>Margem de segurança: 8.6x<br>Dry-run valida antes do full run</div>
       </div>
     </div>
   </div>
@@ -1204,9 +2006,9 @@
 
   <!-- RISCOS -->
   <div class="section" id="riscos">
-    <div class="section-title animate-on-scroll">Riscos e Mitigacoes</div>
-    <h2 class="animate-on-scroll">Gestao de Riscos do Projeto</h2>
-    <p class="section-desc animate-on-scroll">Cada risco identificado tem uma mitigacao planejada. Nenhum risco e ignorado &mdash; todos sao gerenciados ativamente.</p>
+    <div class="section-title animate-on-scroll">Riscos e Mitigações</div>
+    <h2 class="animate-on-scroll">Gestão de Riscos do Projeto</h2>
+    <p class="section-desc animate-on-scroll">Cada risco identificado tem uma mitigação planejada. Nenhum risco é ignorado. Todos são gerenciados ativamente.</p>
 
     <div class="risks-grid">
       <div class="risk-card animate-on-scroll stagger-1">
@@ -1214,42 +2016,42 @@
           <span class="risk-title">Dedup False-Positives</span>
           <span class="risk-level high">Alta</span>
         </div>
-        <div class="risk-mitigation"><strong>Mitigacao:</strong> Bug do PE corrigido e testado ANTES do pipeline. Validacao com amostra de 1.000 artigos antes do full run.</div>
+        <div class="risk-mitigation"><strong>Mitigação:</strong> Bug do PE corrigido e testado ANTES do pipeline. Validação com amostra de 1.000 artigos antes do full run.</div>
       </div>
       <div class="risk-card animate-on-scroll stagger-2">
         <div class="risk-header">
-          <span class="risk-title">Custo LLM excede orcamento</span>
-          <span class="risk-level medium">Media</span>
+          <span class="risk-title">Custo LLM excede orçamento</span>
+          <span class="risk-level medium">Média</span>
         </div>
-        <div class="risk-mitigation"><strong>Mitigacao:</strong> Dry-run de 100 artigos para extrapolar custo real. Heuristicas primeiro; LLM so para ambiguos (~10%).</div>
+        <div class="risk-mitigation"><strong>Mitigação:</strong> Dry-run de 100 artigos para extrapolar custo real. Heurísticas primeiro. LLM só para ambíguos (aproximadamente 10%).</div>
       </div>
       <div class="risk-card animate-on-scroll stagger-3">
         <div class="risk-header">
           <span class="risk-title">Encoding de nomes de pasta</span>
-          <span class="risk-level medium">Media</span>
+          <span class="risk-level medium">Média</span>
         </div>
-        <div class="risk-mitigation"><strong>Mitigacao:</strong> Detector automatico de encoding (chardet). Fallback chain: UTF-8 &rarr; CP1252 &rarr; Latin-1. Log de conversoes.</div>
+        <div class="risk-mitigation"><strong>Mitigação:</strong> Detector automático de encoding (chardet). Fallback chain: UTF-8 &rarr; CP1252 &rarr; Latin-1. Log de conversões.</div>
       </div>
       <div class="risk-card animate-on-scroll stagger-4">
         <div class="risk-header">
-          <span class="risk-title">Artigos sem conteudo processavel</span>
+          <span class="risk-title">Artigos sem conteúdo processável</span>
           <span class="risk-level low">Baixa</span>
         </div>
-        <div class="risk-mitigation"><strong>Mitigacao:</strong> EMPTY_OR_ORPHAN (1.350) e MEDIA (288) catalogados com metadados mas sem score. Flag especial no schema.</div>
+        <div class="risk-mitigation"><strong>Mitigação:</strong> EMPTY_OR_ORPHAN (1.350) e MEDIA (288) catalogados com metadados mas sem score. Flag especial no schema.</div>
       </div>
       <div class="risk-card animate-on-scroll stagger-5">
         <div class="risk-header">
-          <span class="risk-title">Vazamento de conteudo</span>
+          <span class="risk-title">Vazamento de conteúdo</span>
           <span class="risk-level low">Baixa</span>
         </div>
-        <div class="risk-mitigation"><strong>Mitigacao:</strong> Zero logging de conteudo em plaintext. .gitignore para diretorio de dados. Revisao de seguranca antes do full run.</div>
+        <div class="risk-mitigation"><strong>Mitigação:</strong> Zero logging de conteúdo em plaintext. .gitignore para diretório de dados. Revisão de segurança antes do full run.</div>
       </div>
       <div class="risk-card animate-on-scroll">
         <div class="risk-header">
           <span class="risk-title">Performance do pgvector</span>
           <span class="risk-level low">Baixa</span>
         </div>
-        <div class="risk-mitigation"><strong>Mitigacao:</strong> IVFFlat index com nprobes otimizado. Benchmark com 10K artigos. Considerar HNSW se IVFFlat for lento.</div>
+        <div class="risk-mitigation"><strong>Mitigação:</strong> Índice HNSW (m=16) já especificado. Benchmark com 10K artigos. IVFFlat como fallback se HNSW for lento.</div>
       </div>
     </div>
   </div>
@@ -1259,39 +2061,39 @@
   <!-- RESULTADOS -->
   <div class="section" id="resultados">
     <div class="section-title animate-on-scroll">Resultados Esperados</div>
-    <h2 class="animate-on-scroll">O que sera entregue</h2>
-    <p class="section-desc animate-on-scroll">Ao final do processamento, a equipe de conteudo recebe um inventario completo e acionavel &mdash; base para todas as etapas seguintes do HELP CORE.</p>
+    <h2 class="animate-on-scroll">O que será entregue</h2>
+    <p class="section-desc animate-on-scroll">Ao final do processamento, a equipe de conteúdo recebe um inventário completo e acionável. É a base para todas as etapas seguintes do HELP CORE.</p>
 
     <div class="outputs-grid">
       <div class="output-card animate-on-scroll stagger-1">
         <div class="output-icon">&#128203;</div>
-        <h3>Inventario Completo</h3>
-        <p>108K artigos com metadados estruturados: area, titulo, classificacao, status, data de modificacao e path original.</p>
+        <h3>Inventário Completo</h3>
+        <p>108K artigos com metadados estruturados: área, título, classificação, status, data de modificação e path original.</p>
       </div>
       <div class="output-card animate-on-scroll stagger-2">
         <div class="output-icon">&#10024;</div>
-        <h3>Conteudo Limpo</h3>
-        <p>HTML livre do markup SharePoint. Estrutura semantica preservada: headings, listas, paragrafos, links e tabelas de dados.</p>
+        <h3>Conteúdo Limpo</h3>
+        <p>HTML livre do markup SharePoint. Estrutura semântica preservada: headings, listas, parágrafos, links e tabelas de dados.</p>
       </div>
       <div class="output-card animate-on-scroll stagger-3">
         <div class="output-icon">&#128279;</div>
         <h3>Mapa de Duplicatas</h3>
-        <p>Grupos de duplicatas exatas (hash) e semanticas (pgvector). Artigo canonico identificado em cada grupo. Economia na revisao.</p>
+        <p>Grupos de duplicatas exatas (hash) e semânticas (pgvector). Artigo canônico identificado em cada grupo. Economia na revisão.</p>
       </div>
       <div class="output-card animate-on-scroll stagger-4">
         <div class="output-icon">&#127991;</div>
-        <h3>Classificacao Validada</h3>
-        <p>Cada artigo com classificacao final (TEXTUAL, LINK_ONLY, SHORT_TEXT, EMPTY, MEDIA). Delta vs classificacao original reportado.</p>
+        <h3>Classificação Validada</h3>
+        <p>Cada artigo com classificação final (TEXTUAL, LINK_ONLY, SHORT_TEXT, EMPTY, MEDIA). Delta vs classificação original reportado.</p>
       </div>
       <div class="output-card animate-on-scroll stagger-5">
         <div class="output-icon">&#11088;</div>
         <h3>Quality Score</h3>
-        <p>Score 0-100 para 48K artigos TEXTUAL com breakdown: completude, clareza, atualidade, formatacao e aderencia ao publico.</p>
+        <p>Score 0-100 para 48K artigos TEXTUAL com breakdown: completude, clareza, atualidade, formatação e aderência ao público.</p>
       </div>
       <div class="output-card animate-on-scroll">
         <div class="output-icon">&#128200;</div>
-        <h3>Relatorio de Inventario</h3>
-        <p>Total por area, por classificacao, duplicatas encontradas, distribuicao de quality score e artigos com erro. Pronto para decisao.</p>
+        <h3>Relatório de Inventário</h3>
+        <p>Total por área, por classificação, duplicatas encontradas, distribuição de quality score e artigos com erro. Pronto para decisão.</p>
       </div>
     </div>
   </div>
@@ -1300,9 +2102,9 @@
 
   <!-- CLASSIFICACAO DA BASE -->
   <div class="section">
-    <div class="section-title animate-on-scroll">Composicao da Base</div>
-    <h2 class="animate-on-scroll">Distribuicao por Tipo de Conteudo</h2>
-    <p class="section-desc animate-on-scroll">A classificacao preliminar por heuristica mostra que 44.8% dos artigos sao TEXTUAL (conteudo real). O pipeline recalcula e valida cada classificacao.</p>
+    <div class="section-title animate-on-scroll">Composição da Base</div>
+    <h2 class="animate-on-scroll">Distribuição por Tipo de Conteúdo</h2>
+    <p class="section-desc animate-on-scroll">A classificação preliminar por heurística mostra que 44.8% dos artigos são TEXTUAL (conteúdo real). O pipeline recalcula e valida cada classificação.</p>
 
     <div class="animate-on-scroll" style="max-width: 600px;">
       <div style="margin-bottom: 20px;">
@@ -1316,7 +2118,7 @@
       </div>
       <div style="margin-bottom: 20px;">
         <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-          <span style="font-size: 14px; font-weight: 600; color: var(--text);">Outros (nao classificados)</span>
+          <span style="font-size: 14px; font-weight: 600; color: var(--text);">Outros (não classificados)</span>
           <span style="font-size: 14px; font-weight: 700; color: var(--text-muted);">54.221 (50.2%)</span>
         </div>
         <div style="background: var(--surface); border-radius: 8px; height: 28px; overflow: hidden;">
@@ -1357,16 +2159,16 @@
 
   <!-- PROXIMOS PASSOS -->
   <div class="section" id="proximos-passos">
-    <div class="section-title animate-on-scroll">Proximos Passos</div>
-    <h2 class="animate-on-scroll">Plano de Execucao</h2>
-    <p class="section-desc animate-on-scroll">O processamento segue uma sequencia estruturada: validacao com amostra pequena antes do full run para garantir qualidade e controlar custos.</p>
+    <div class="section-title animate-on-scroll">Próximos Passos</div>
+    <h2 class="animate-on-scroll">Plano de Execução</h2>
+    <p class="section-desc animate-on-scroll">O processamento segue uma sequência estruturada. Validação com amostra pequena antes do full run para garantir qualidade e controlar custos.</p>
 
     <div class="steps-list">
       <div class="step-item animate-on-scroll stagger-1">
         <div class="step-num">1</div>
         <div>
           <h4>Corrigir bug de dedup do PE</h4>
-          <p>Fix de false-positives na deduplicacao semantica. Validacao com testes unitarios e integracao.</p>
+          <p>Fix de false-positives na deduplicação semântica. Validação com testes unitários e integração.</p>
         </div>
       </div>
       <div class="step-item animate-on-scroll stagger-2">
@@ -1379,8 +2181,8 @@
       <div class="step-item animate-on-scroll stagger-3">
         <div class="step-num">3</div>
         <div>
-          <h4>Validacao humana da amostra</h4>
-          <p>Revisao dos 100 artigos processados: metadados corretos, HTML limpo, classificacao coerente, score justo.</p>
+          <h4>Validação humana da amostra</h4>
+          <p>Revisão dos 100 artigos processados: metadados corretos, HTML limpo, classificação coerente, score justo.</p>
         </div>
       </div>
       <div class="step-item animate-on-scroll stagger-4">
@@ -1393,8 +2195,8 @@
       <div class="step-item animate-on-scroll stagger-5">
         <div class="step-num">5</div>
         <div>
-          <h4>Relatorio de inventario + entrega</h4>
-          <p>Consolidacao dos resultados em relatorio estruturado. Base pronta para as proximas etapas do HELP CORE.</p>
+          <h4>Relatório de inventário e entrega</h4>
+          <p>Consolidação dos resultados em relatório estruturado. Base pronta para as próximas etapas do HELP CORE.</p>
         </div>
       </div>
     </div>
@@ -1406,7 +2208,6 @@
       <img src="https://elloconsultoria.com/images/ello-logo-orange.png" alt="Ello Consultoria">
     </div>
     <p>Ello Consultoria &bull; Projeto HELP CORE &bull; Outubro 2026</p>
-    <p style="margin-top: 8px; font-size: 12px; color: #555;">Processamento por IA &mdash; Digital AI</p>
   </div>
 
   <!-- SCRIPTS -->
