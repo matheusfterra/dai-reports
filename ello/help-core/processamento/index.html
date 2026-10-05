@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help File Processor | Processamento Inteligente</title>
+  <link rel="icon" type="image/png" href="https://elloconsultoria.com/images/ello-logo-orange.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF5722;
+      --orange-dark: #E64A19;
+      --orange-light: #FF8A65;
+      --peach: #FFC978;
+      --green: #4CAF50;
+      --green-light: #81C784;
+      --blue: #42A5F5;
+      --blue-light: #90CAF9;
+      --purple: #AB47BC;
+      --bg: #0A0A0A;
+      --surface: #151515;
+      --surface-hover: #1A1A1A;
+      --border: #1F1F1F;
+      --text: #FFFFFF;
+      --text-body: #D4D8DD;
+      --text-muted: #9EA5AC;
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Nunito Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-body);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* --- ANIMATIONS --- */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes glowPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.6; }
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 40px rgba(255,87,34,0.3); }
+      50% { box-shadow: 0 0 60px rgba(255,87,34,0.5); }
+    }
+    @keyframes flowArrow {
+      0% { opacity: 0.3; transform: translateY(-4px); }
+      50% { opacity: 1; transform: translateY(4px); }
+      100% { opacity: 0.3; transform: translateY(-4px); }
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .animate-on-scroll.visible { opacity: 1; transform: translateY(0); }
+    .animate-on-scroll.scale-in { transform: scale(0.85); }
+    .animate-on-scroll.scale-in.visible { transform: scale(1); }
+
+    .stagger-1 { transition-delay: 0.1s; }
+    .stagger-2 { transition-delay: 0.2s; }
+    .stagger-3 { transition-delay: 0.3s; }
+    .stagger-4 { transition-delay: 0.4s; }
+    .stagger-5 { transition-delay: 0.5s; }
+
+    /* --- HEADER --- */
+    .header {
+      background: linear-gradient(135deg, var(--surface) 0%, #0D0D0D 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 24px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+      animation: slideDown 0.6s ease-out;
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo-area { display: flex; align-items: center; gap: 16px; }
+    .logo-area img { height: 40px; }
+    .logo-divider { width: 1px; height: 32px; background: var(--border); }
+    .project-badge {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--orange);
+      background: rgba(255,87,34,0.1);
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,87,34,0.2);
+    }
+    .header-right { display: flex; align-items: center; gap: 12px; }
+    .header-date { font-size: 13px; color: var(--text-muted); }
+    .status-pill {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: rgba(76,175,80,0.12);
+      color: var(--green);
+      border: 1px solid rgba(76,175,80,0.25);
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+    .back-link:hover { color: var(--orange); }
+
+    /* --- NAV --- */
+    .nav-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0;
+      overflow-x: auto;
+    }
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 0;
+    }
+    .nav-link {
+      padding: 14px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: var(--orange);
+      border-bottom-color: var(--orange);
+    }
+
+    /* --- HERO --- */
+    .hero {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 32px 60px;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.15;
+      margin-bottom: 20px;
+      animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .hero h1 span { color: var(--orange); }
+    .hero .subtitle {
+      font-size: 20px;
+      color: var(--text-muted);
+      max-width: 750px;
+      margin: 0 auto 16px;
+      line-height: 1.6;
+      animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+    }
+    .hero .subtitle-small {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 40px;
+      opacity: 0.7;
+      animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+    }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    .hero-stat {
+      text-align: center;
+      animation: scaleIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .hero-stat:nth-child(1) { animation-delay: 0.4s; }
+    .hero-stat:nth-child(2) { animation-delay: 0.5s; }
+    .hero-stat:nth-child(3) { animation-delay: 0.6s; }
+    .hero-stat:nth-child(4) { animation-delay: 0.7s; }
+    .hero-stat .number {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--orange);
+      display: block;
+    }
+    .hero-stat .label {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* --- SECTIONS --- */
+    .section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 32px;
+    }
+    .section-title {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 12px;
+    }
+    .section h2 {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .section > p.section-desc {
+      color: var(--text-muted);
+      font-size: 17px;
+      max-width: 700px;
+      margin-bottom: 48px;
+    }
+
+    /* --- PROBLEM CARDS --- */
+    .problems-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .problem-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .problem-card:hover {
+      border-color: rgba(255,87,34,0.3);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .problem-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(255,87,34,0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 16px;
+      transition: transform 0.3s, background 0.3s;
+    }
+    .problem-card:hover .problem-icon {
+      transform: scale(1.15) rotate(5deg);
+      background: rgba(255,87,34,0.2);
+    }
+    .problem-card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .problem-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* --- FLOWCHART --- */
+    .flowchart {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .flow-line {
+      position: absolute;
+      left: 44px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--orange) 0%, var(--orange-light) 50%, var(--peach) 100%);
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+    .pipeline-card {
+      display: flex;
+      gap: 24px;
+      position: relative;
+      padding: 0 0 48px 0;
+    }
+    .pipeline-card:last-child { padding-bottom: 0; }
+    .pipeline-number {
+      flex-shrink: 0;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 800;
+      color: white;
+      position: relative;
+      z-index: 2;
+      animation: pulse 3s ease-in-out infinite;
+      transition: transform 0.3s ease;
+    }
+    .pipeline-card:hover .pipeline-number { transform: scale(1.1); }
+    .pipeline-number.p1 { background: linear-gradient(135deg, var(--orange), var(--orange-dark)); }
+    .pipeline-number.p2 { background: linear-gradient(135deg, var(--blue), #1976D2); }
+    .pipeline-number.p3 { background: linear-gradient(135deg, var(--purple), #7B1FA2); }
+    .pipeline-number.p4 { background: linear-gradient(135deg, var(--green), #388E3C); }
+    .pipeline-content {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .pipeline-content:hover {
+      border-color: rgba(255,87,34,0.3);
+      transform: translateX(8px);
+      box-shadow: -4px 0 30px rgba(255,87,34,0.08);
+    }
+    .pipeline-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .pipeline-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .pipeline-badge {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+    .pipeline-badge.ingest { background: rgba(255,87,34,0.1); color: var(--orange); border: 1px solid rgba(255,87,34,0.2); }
+    .pipeline-badge.dedup { background: rgba(66,165,245,0.1); color: var(--blue); border: 1px solid rgba(66,165,245,0.2); }
+    .pipeline-badge.classify { background: rgba(171,71,188,0.1); color: var(--purple); border: 1px solid rgba(171,71,188,0.2); }
+    .pipeline-badge.quality { background: rgba(76,175,80,0.1); color: var(--green); border: 1px solid rgba(76,175,80,0.2); }
+    .pipeline-desc {
+      color: var(--text-body);
+      font-size: 15px;
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+    .pipeline-steps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .pipeline-step {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 16px;
+      font-size: 13px;
+      color: var(--text-body);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .pipeline-step:hover {
+      border-color: rgba(255,87,34,0.2);
+      background: var(--surface-hover);
+    }
+    .pipeline-step .step-arrow {
+      color: var(--orange);
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .pipeline-output {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--peach);
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .pipeline-output svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+    /* --- ARCHITECTURE DIAGRAM --- */
+    .arch-diagram {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px;
+      margin-top: 32px;
+    }
+    .arch-flow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    .arch-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 20px 32px;
+      text-align: center;
+      width: 100%;
+      max-width: 500px;
+      transition: all 0.3s;
+    }
+    .arch-box:hover {
+      border-color: rgba(255,87,34,0.3);
+      transform: scale(1.02);
+    }
+    .arch-box h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .arch-box p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .arch-box.highlight {
+      border-color: rgba(255,87,34,0.4);
+      background: rgba(255,87,34,0.05);
+    }
+    .arch-arrow {
+      font-size: 28px;
+      color: var(--orange);
+      padding: 8px 0;
+      animation: flowArrow 2s ease-in-out infinite;
+    }
+    .arch-cols {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      width: 100%;
+      max-width: 700px;
+    }
+    .arch-box.small {
+      padding: 16px 20px;
+    }
+    .arch-box.small h4 { font-size: 14px; }
+
+    /* --- METRICS TABLE --- */
+    .metrics-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .metrics-table thead th {
+      background: var(--surface);
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 16px 20px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .metrics-table tbody td {
+      padding: 16px 20px;
+      font-size: 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+      transition: background 0.3s;
+    }
+    .metrics-table tbody tr:last-child td { border-bottom: none; }
+    .metrics-table tbody tr:hover { background: var(--surface-hover); }
+    .metrics-table .metric-name { color: var(--text); font-weight: 600; }
+    .metrics-table .metric-target {
+      color: var(--orange);
+      font-weight: 700;
+      font-family: 'Nunito Sans', monospace;
+    }
+
+    /* --- COST TABLE --- */
+    .cost-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .cost-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .cost-card:hover {
+      border-color: rgba(255,87,34,0.3);
+      transform: translateY(-4px);
+    }
+    .cost-card .cost-value {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--orange);
+      margin-bottom: 4px;
+    }
+    .cost-card .cost-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+    .cost-card .cost-detail {
+      font-size: 13px;
+      color: var(--text-body);
+      line-height: 1.6;
+    }
+
+    /* --- SCHEMA --- */
+    .schema-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .schema-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: all 0.3s;
+    }
+    .schema-card:hover {
+      border-color: rgba(255,87,34,0.3);
+      transform: translateY(-4px);
+    }
+    .schema-card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .schema-card .table-icon {
+      width: 28px;
+      height: 28px;
+      background: rgba(255,87,34,0.1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    .schema-card .table-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+    .schema-field {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .schema-field:last-child { border-bottom: none; }
+    .schema-field .field-name {
+      color: var(--text-body);
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+    }
+    .schema-field .field-type {
+      color: var(--text-muted);
+      font-size: 11px;
+      background: var(--bg);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .schema-field .field-type.pk {
+      background: rgba(255,87,34,0.1);
+      color: var(--orange);
+    }
+    .schema-field .field-type.vector {
+      background: rgba(66,165,245,0.1);
+      color: var(--blue);
+    }
+
+    /* --- RISKS --- */
+    .risks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 16px;
+    }
+    .risk-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 24px;
+      transition: all 0.3s ease;
+    }
+    .risk-card:hover {
+      border-color: rgba(255,87,34,0.2);
+      transform: translateY(-3px);
+    }
+    .risk-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .risk-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .risk-level {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+    .risk-level.high { background: rgba(244,67,54,0.12); color: #F44336; border: 1px solid rgba(244,67,54,0.25); }
+    .risk-level.medium { background: rgba(255,193,7,0.12); color: #FFC107; border: 1px solid rgba(255,193,7,0.25); }
+    .risk-level.low { background: rgba(76,175,80,0.12); color: var(--green); border: 1px solid rgba(76,175,80,0.25); }
+    .risk-mitigation {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .risk-mitigation strong { color: var(--orange-light); }
+
+    /* --- OUTPUTS --- */
+    .outputs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .output-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .output-card:hover {
+      border-color: rgba(76,175,80,0.4);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .output-icon {
+      width: 56px;
+      height: 56px;
+      background: rgba(76,175,80,0.1);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      margin: 0 auto 16px;
+      transition: transform 0.3s;
+    }
+    .output-card:hover .output-icon { transform: scale(1.15) rotate(5deg); }
+    .output-card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .output-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* --- NEXT STEPS --- */
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 700px;
+    }
+    .step-item {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      transition: all 0.3s;
+    }
+    .step-item:hover {
+      border-color: rgba(255,87,34,0.3);
+      transform: translateX(8px);
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      color: white;
+    }
+    .step-item h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .step-item p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* --- SEPARATOR --- */
+    .section-sep {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+    .section-sep hr {
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    /* --- FOOTER --- */
+    .footer {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 32px 40px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    .footer-logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 24px;
+    }
+    .footer-logos img { height: 30px; opacity: 0.6; transition: opacity 0.3s; }
+    .footer-logos img:hover { opacity: 1; }
+    .footer p { font-size: 13px; color: var(--text-muted); }
+
+    /* --- RESPONSIVE --- */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 32px; }
+      .hero .subtitle { font-size: 17px; }
+      .hero-stats { gap: 24px; }
+      .hero-stat .number { font-size: 28px; }
+      .section h2 { font-size: 28px; }
+      .pipeline-card { flex-direction: column; align-items: center; }
+      .pipeline-number { width: 60px; height: 60px; font-size: 20px; }
+      .flow-line { display: none; }
+      .arch-cols { grid-template-columns: 1fr; }
+      .header-inner { flex-wrap: wrap; gap: 12px; }
+      .header-right { width: 100%; justify-content: flex-end; }
+      .nav-inner { padding: 0 16px; }
+      .schema-grid { grid-template-columns: 1fr; }
+      .cost-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-inner">
+      <div class="logo-area">
+        <img src="https://elloconsultoria.com/images/ello-logo-orange.png" alt="Ello Consultoria">
+        <div class="logo-divider"></div>
+        <span class="project-badge">Help File Processor</span>
+      </div>
+      <div class="header-right">
+        <a href="../" class="back-link">&#8592; Plano de Execucao</a>
+        <span class="header-date">Outubro 2026</span>
+        <span class="status-pill">Sprint 0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav-bar">
+    <div class="nav-inner">
+      <a href="#problema" class="nav-link">Problema</a>
+      <a href="#como-funciona" class="nav-link">Como Funciona</a>
+      <a href="#pipelines" class="nav-link">Pipelines</a>
+      <a href="#metricas" class="nav-link">Metricas</a>
+      <a href="#schema" class="nav-link">Schema</a>
+      <a href="#custos" class="nav-link">Custos</a>
+      <a href="#riscos" class="nav-link">Riscos</a>
+      <a href="#resultados" class="nav-link">Resultados</a>
+      <a href="#proximos-passos" class="nav-link">Proximos Passos</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>Processamento <span>Inteligente</span> da Base HELP</h1>
+    <p class="subtitle">Motor de IA que ingere, limpa, deduplica, classifica e pontua 108 mil artigos do Bradesco &mdash; transformando uma base legada em conhecimento estruturado e acionavel.</p>
+    <p class="subtitle-small">Powered by Processing Engine &bull; gpt-4.1-mini &bull; pgvector</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="number">108K</span><span class="label">Artigos</span></div>
+      <div class="hero-stat"><span class="number">26</span><span class="label">Areas</span></div>
+      <div class="hero-stat"><span class="number">4</span><span class="label">Pipelines</span></div>
+      <div class="hero-stat"><span class="number">~$58</span><span class="label">Custo LLM Est.</span></div>
+    </div>
+  </div>
+
+  <div class="section-sep"><hr></div>
+
+  <!-- PROBLEMA -->
+  <div class="section" id="problema">
+    <div class="section-title animate-on-scroll">O Desafio</div>
+    <h2 class="animate-on-scroll">Por que processar 108 mil artigos?</h2>
+    <p class="section-desc animate-on-scroll">A base HELP do Bradesco e um dos maiores ativos de conhecimento da organizacao &mdash; mas esta presa em formato legado do SharePoint, sem inventario, sem qualidade medida e com duplicacao desconhecida.</p>
+
+    <div class="problems-grid">
+      <div class="problem-card animate-on-scroll stagger-1">
+        <div class="problem-icon">&#128196;</div>
+        <h3>Markup Pesado</h3>
+        <p>HTMLs com classes MS-*, estilos inline, tabelas aninhadas e formatacao legada do SharePoint. Impossivel extrair conteudo util diretamente.</p>
+      </div>
+      <div class="problem-card animate-on-scroll stagger-2">
+        <div class="problem-icon">&#128257;</div>
+        <h3>Duplicacao Desconhecida</h3>
+        <p>Sem inventario centralizado, nao se sabe quantos artigos sao duplicatas exatas ou semanticas entre as 26 areas operacionais.</p>
+      </div>
+      <div class="problem-card animate-on-scroll stagger-3">
+        <div class="problem-icon">&#127991;</div>
+        <h3>Classificacao Rudimentar</h3>
+        <p>Os TXTs trazem classificacao por heuristica simples (TEXTUAL, LINK_ONLY, SHORT_TEXT). Precisa de validacao e refinamento com IA.</p>
+      </div>
+      <div class="problem-card animate-on-scroll stagger-4">
+        <div class="problem-icon">&#128202;</div>
+        <h3>Sem Quality Score</h3>
+        <p>Nenhum artigo tem avaliacao de completude, clareza ou atualidade. Impossivel priorizar revisao humana sem uma metrica objetiva.</p>
+      </div>
+      <div class="problem-card animate-on-scroll stagger-5">
+        <div class="problem-icon">&#128165;</div>
+        <h3>Volume Inviavel</h3>
+        <p>108 mil artigos sao inviaveis para revisao humana direta. Triagem automatizada com IA e pre-requisito para qualquer acao.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-sep"><hr></div>
+
+  <!-- COMO FUNCIONA -->
+  <div class="section" id="como-funciona">
+    <div class="section-title animate-on-scroll">Arquitetura</div>
+    <h2 class="animate-on-scroll">Como funciona o Processing Engine</h2>
+    <p class="section-desc animate-on-scroll">Motor de processamento agnostico, configuravel via YAML, que orquestra ingestao, deduplicacao, analise por LLM e persistencia &mdash; tudo em pipelines paralelos e resilientes.</p>
+
+    <div class="arch-diagram animate-on-scroll scale-in">
+      <div class="arch-flow">
+        <div class="arch-box">
+          <h4>&#128193; Filesystem</h4>
+          <p>218.612 arquivos (108K pares HTML + TXT) &bull; 1.4 GB extraidos &bull; 26 areas</p>
+        </div>
+        <div class="arch-arrow">&#8595;</div>
+        <div class="arch-box highlight">
+          <h4>&#9881; Processing Engine</h4>
+          <p>Pipeline configuravel via YAML &bull; Workers com SKIP LOCKED &bull; Rate limiting inteligente</p>
+        </div>
+        <div class="arch-arrow">&#8595;</div>
+        <div class="arch-cols">
+          <div class="arch-box small">
+            <h4>&#128270; Ingestor</h4>
+            <p>HTML + TXT parsing</p>
+          </div>
+          <div class="arch-box small">
+            <h4>&#128279; Dedup</h4>
+            <p>Hash + Semantico</p>
+          </div>
+          <div class="arch-box small">
+            <h4>&#129302; LLM</h4>
+            <p>gpt-4.1-mini</p>
+          </div>
+        </div>
+        <div class="arch-arrow">&#8595;</div>
+        <div class="arch-cols">
+          <div class="arch-box small">
+            <h4>&#9989; Validators</h4>
+            <p>Schema + Grounding</p>
+          </div>
+          <div class="arch-box small">
+            <h4>&#128190; Sink</h4>
+            <p>PostgreSQL + pgvector</p>
+          </div>
+        </div>
+        <div class="arch-arrow">&#8595;</div>
+        <div class="arch-box" style="border-color: rgba(76,175,80,0.4); background: rgba(76,175,80,0.05);">
+          <h4>&#128200; Inventario Estruturado</h4>
+          <p>Artigos limpos, classificados, deduplicados e com quality score &bull; Pronto para revisao humana</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-sep"><hr></div>
+
+  <!-- PIPELINES -->
+  <div class="section" id="pipelines">
+    <div class="section-title animate-on-scroll">Pipelines</div>
+    <h2 class="animate-on-scroll">4 Pipelines Sequenciais</h2>
+    <p class="section-desc animate-on-scroll">Cada pipeline e uma etapa independente do processamento, configurada em YAML e executada pelo Processing Engine. Resultados de um pipeline alimentam o seguinte.</p>
+
+    <div class="flowchart">
+      <div class="flow-line"></div>
+
+      <!-- Pipeline 1 -->
+      <div class="pipeline-card animate-on-scroll">
+        <div class="pipeline-number p1">1</div>
+        <div class="pipeline-content">
+          <div class="pipeline-header">
+            <span class="pipeline-title">helpcore-ingest</span>
+            <span class="pipeline-badge ingest">Ingestao</span>
+          </div>
+          <p class="pipeline-desc">Le o filesystem recursivamente, pareia cada HTML com seu TXT pelo nome do arquivo, extrai metadados estruturados e limpa o markup pesado do SharePoint.</p>
+          <div class="pipeline-steps">
+            <div class="pipeline-step">Leitura recursiva</div>
+            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Pareamento HTML+TXT</div>
+            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Parse metadados</div>
+            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Limpeza HTML</div>
+            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Deteccao encoding</div>
+          </div>
+          <div class="pipeline-output">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span><strong>Output:</strong> 108K registros com metadados estruturados + conteudo limpo no PostgreSQL</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pipeline 2 -->
+      <div class="pipeline-card animate-on-scroll">
+        <div class="pipeline-number p2">2</div>
+        <div class="pipeline-content">
+          <div class="pipeline-header">
+            <span class="pipeline-title">helpcore-dedup</span>
+            <span class="pipeline-badge dedup">Deduplicacao</span>
+          </div>
+          <p class="pipeline-desc">Identifica duplicatas exatas via hash SHA-256 do conteudo normalizado e duplicatas semanticas via embeddings pgvector com threshold configuravel.</p>
+          <div class="pipeline-steps">
+            <div class="pipeline-step">Hash SHA-256</div>
+            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Embedding (text-embedding-3-small)</div>
+            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Cosine similarity</div>
+            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Agrupamento</div>
+          </div>
+          <div class="pipeline-output">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span><strong>Output:</strong> Grupos de duplicatas + flags canonico/duplicata &bull; Threshold &ge; 0.92</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pipeline 3 -->
+      <div class="pipeline-card animate-on-scroll">
+        <div class="pipeline-number p3">3</div>
+        <div class="pipeline-content">
+          <div class="pipeline-header">
+            <span class="pipeline-title">helpcore-classify</span>
+            <span class="pipeline-badge classify">Classificacao</span>
+          </div>
+          <p class="pipeline-desc">Valida e recalcula a classificacao de cada artigo. Heuristicas primeiro para casos claros; LLM so para ambiguos (~10% do total).</p>
+          <div class="pipeline-steps">
+            <div class="pipeline-step">Heuristica (EMPTY, LINK_ONLY, SHORT_TEXT, MEDIA)</div>
+            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> LLM para ambiguos</div>
+            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Delta report</div>
+          </div>
+          <div class="pipeline-output">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span><strong>Output:</strong> Classificacao validada para 100% dos artigos + relatorio de divergencias</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pipeline 4 -->
+      <div class="pipeline-card animate-on-scroll">
+        <div class="pipeline-number p4">4</div>
+        <div class="pipeline-content">
+          <div class="pipeline-header">
+            <span class="pipeline-title">helpcore-quality-score</span>
+            <span class="pipeline-badge quality">Quality Score</span>
+          </div>
+          <p class="pipeline-desc">Gera score de qualidade (0-100) para cada artigo TEXTUAL avaliando 5 dimensoes: completude, clareza, atualidade, formatacao e aderencia ao publico-alvo.</p>
+          <div class="pipeline-steps">
+            <div class="pipeline-step">Filtro: apenas TEXTUAL (48K)</div>
+            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> LLM gpt-4.1-mini</div>
+            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Score + breakdown</div>
+          </div>
+          <div class="pipeline-output">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span><strong>Output:</strong> Score 0-100 + breakdown por dimensao para 48.363 artigos TEXTUAL</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-sep"><hr></div>
+
+  <!-- METRICAS -->
+  <div class="section" id="metricas">
+    <div class="section-title animate-on-scroll">Metricas de Sucesso</div>
+    <h2 class="animate-on-scroll">Objetivos Mensuraveis</h2>
+    <p class="section-desc animate-on-scroll">Cada objetivo tem uma metrica clara e uma meta verificavel. O pipeline so e considerado concluido quando todas as metas sao atingidas.</p>
+
+    <div class="animate-on-scroll">
+      <table class="metrics-table">
+        <thead>
+          <tr>
+            <th>Objetivo</th>
+            <th>Metrica</th>
+            <th>Meta</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="metric-name">Ingerir 100% dos artigos</td>
+            <td>Artigos ingeridos / 108.062</td>
+            <td class="metric-target">&ge; 99.5%</td>
+          </tr>
+          <tr>
+            <td class="metric-name">Extrair metadados estruturados</td>
+            <td>Campos preenchidos / total esperado</td>
+            <td class="metric-target">&ge; 98%</td>
+          </tr>
+          <tr>
+            <td class="metric-name">Limpar HTML SharePoint</td>
+            <td>Artigos com conteudo limpo</td>
+            <td class="metric-target">100% TEXTUAL + SHORT_TEXT</td>
+          </tr>
+          <tr>
+            <td class="metric-name">Identificar duplicatas exatas</td>
+            <td>Pares detectados via hash</td>
+            <td class="metric-target">Recall &ge; 99%</td>
+          </tr>
+          <tr>
+            <td class="metric-name">Identificar duplicatas semanticas</td>
+            <td>Pares com similarity &ge; 0.92</td>
+            <td class="metric-target">Precision &ge; 85%</td>
+          </tr>
+          <tr>
+            <td class="metric-name">Classificar artigos</td>
+            <td>Artigos com classificacao validada</td>
+            <td class="metric-target">100%</td>
+          </tr>
+          <tr>
+            <td class="metric-name">Gerar quality score</td>
+            <td>Artigos TEXTUAL com score</td>
+            <td class="metric-target">100% (48.363)</td>
+          </tr>
+          <tr>
+            <td class="metric-name">Controlar custo LLM</td>
+            <td>Custo total de processamento</td>
+            <td class="metric-target">&le; US$ 500</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section-sep"><hr></div>
+
+  <!-- SCHEMA -->
+  <div class="section" id="schema">
+    <div class="section-title animate-on-scroll">Modelo de Dados</div>
+    <h2 class="animate-on-scroll">Schema PostgreSQL</h2>
+    <p class="section-desc animate-on-scroll">Tres tabelas estruturadas em PostgreSQL 16 com pgvector habilitado para buscas semanticas. Todos os dados ficam na infraestrutura interna.</p>
+
+    <div class="schema-grid">
+      <div class="schema-card animate-on-scroll stagger-1">
+        <h3><span class="table-icon">&#128203;</span> articles</h3>
+        <p class="table-desc">Tabela principal &mdash; um registro por artigo (108K registros)</p>
+        <div class="schema-field"><span class="field-name">id</span><span class="field-type pk">UUID PK</span></div>
+        <div class="schema-field"><span class="field-name">file_path</span><span class="field-type">TEXT</span></div>
+        <div class="schema-field"><span class="field-name">area / subpasta</span><span class="field-type">TEXT</span></div>
+        <div class="schema-field"><span class="field-name">titulo / subtitulo</span><span class="field-type">TEXT</span></div>
+        <div class="schema-field"><span class="field-name">content_raw</span><span class="field-type">TEXT</span></div>
+        <div class="schema-field"><span class="field-name">content_clean</span><span class="field-type">TEXT</span></div>
+        <div class="schema-field"><span class="field-name">content_hash</span><span class="field-type">TEXT</span></div>
+        <div class="schema-field"><span class="field-name">embedding</span><span class="field-type vector">vector(1536)</span></div>
+        <div class="schema-field"><span class="field-name">classification_validated</span><span class="field-type">TEXT</span></div>
+        <div class="schema-field"><span class="field-name">quality_score</span><span class="field-type">NUMERIC</span></div>
+        <div class="schema-field"><span class="field-name">quality_breakdown</span><span class="field-type">JSONB</span></div>
+        <div class="schema-field"><span class="field-name">is_canonical</span><span class="field-type">BOOLEAN</span></div>
+      </div>
+
+      <div class="schema-card animate-on-scroll stagger-2">
+        <h3><span class="table-icon">&#128279;</span> dedup_groups</h3>
+        <p class="table-desc">Grupos de artigos duplicados (exatos ou semanticos)</p>
+        <div class="schema-field"><span class="field-name">id</span><span class="field-type pk">UUID PK</span></div>
+        <div class="schema-field"><span class="field-name">dedup_type</span><span class="field-type">TEXT</span></div>
+        <div class="schema-field"><span class="field-name">similarity</span><span class="field-type">NUMERIC</span></div>
+        <div class="schema-field"><span class="field-name">member_count</span><span class="field-type">INT</span></div>
+        <div class="schema-field"><span class="field-name">canonical_id</span><span class="field-type pk">UUID FK</span></div>
+      </div>
+
+      <div class="schema-card animate-on-scroll stagger-3">
+        <h3><span class="table-icon">&#128279;</span> article_links</h3>
+        <p class="table-desc">Links encontrados em artigos LINK_ONLY</p>
+        <div class="schema-field"><span class="field-name">id</span><span class="field-type pk">UUID PK</span></div>
+        <div class="schema-field"><span class="field-name">article_id</span><span class="field-type pk">UUID FK</span></div>
+        <div class="schema-field"><span class="field-name">url</span><span class="field-type">TEXT</span></div>
+        <div class="schema-field"><span class="field-name">status</span><span class="field-type">TEXT</span></div>
+        <div class="schema-field"><span class="field-name">checked_at</span><span class="field-type">TIMESTAMP</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-sep"><hr></div>
+
+  <!-- CUSTOS -->
+  <div class="section" id="custos">
+    <div class="section-title animate-on-scroll">Estimativa de Custo</div>
+    <h2 class="animate-on-scroll">Investimento em LLM por Pipeline</h2>
+    <p class="section-desc animate-on-scroll">Todas as etapas usam gpt-4.1-mini para otimizar custo. Um dry-run de 100 artigos valida a projecao antes do processamento completo.</p>
+
+    <div class="cost-grid">
+      <div class="cost-card animate-on-scroll stagger-1">
+        <div class="cost-value">~$5</div>
+        <div class="cost-label">Classificacao</div>
+        <div class="cost-detail">~10.800 artigos ambiguos<br>~800 tokens input/artigo<br>~100 tokens output/artigo</div>
+      </div>
+      <div class="cost-card animate-on-scroll stagger-2">
+        <div class="cost-value">~$52</div>
+        <div class="cost-label">Quality Score</div>
+        <div class="cost-detail">48.363 artigos TEXTUAL<br>~1.500 tokens input/artigo<br>~300 tokens output/artigo</div>
+      </div>
+      <div class="cost-card animate-on-scroll stagger-3">
+        <div class="cost-value">~$1</div>
+        <div class="cost-label">Embeddings</div>
+        <div class="cost-detail">108.062 artigos<br>text-embedding-3-small<br>~500 tokens/artigo</div>
+      </div>
+      <div class="cost-card animate-on-scroll stagger-4" style="border-color: rgba(255,87,34,0.3); background: rgba(255,87,34,0.03);">
+        <div class="cost-value">~$58</div>
+        <div class="cost-label">Total Estimado</div>
+        <div class="cost-detail">Orcamento maximo: US$ 500<br>Margem de seguranca: 8.6x<br>Dry-run valida antes do full run</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-sep"><hr></div>
+
+  <!-- RISCOS -->
+  <div class="section" id="riscos">
+    <div class="section-title animate-on-scroll">Riscos e Mitigacoes</div>
+    <h2 class="animate-on-scroll">Gestao de Riscos do Projeto</h2>
+    <p class="section-desc animate-on-scroll">Cada risco identificado tem uma mitigacao planejada. Nenhum risco e ignorado &mdash; todos sao gerenciados ativamente.</p>
+
+    <div class="risks-grid">
+      <div class="risk-card animate-on-scroll stagger-1">
+        <div class="risk-header">
+          <span class="risk-title">Dedup False-Positives</span>
+          <span class="risk-level high">Alta</span>
+        </div>
+        <div class="risk-mitigation"><strong>Mitigacao:</strong> Bug do PE corrigido e testado ANTES do pipeline. Validacao com amostra de 1.000 artigos antes do full run.</div>
+      </div>
+      <div class="risk-card animate-on-scroll stagger-2">
+        <div class="risk-header">
+          <span class="risk-title">Custo LLM excede orcamento</span>
+          <span class="risk-level medium">Media</span>
+        </div>
+        <div class="risk-mitigation"><strong>Mitigacao:</strong> Dry-run de 100 artigos para extrapolar custo real. Heuristicas primeiro; LLM so para ambiguos (~10%).</div>
+      </div>
+      <div class="risk-card animate-on-scroll stagger-3">
+        <div class="risk-header">
+          <span class="risk-title">Encoding de nomes de pasta</span>
+          <span class="risk-level medium">Media</span>
+        </div>
+        <div class="risk-mitigation"><strong>Mitigacao:</strong> Detector automatico de encoding (chardet). Fallback chain: UTF-8 &rarr; CP1252 &rarr; Latin-1. Log de conversoes.</div>
+      </div>
+      <div class="risk-card animate-on-scroll stagger-4">
+        <div class="risk-header">
+          <span class="risk-title">Artigos sem conteudo processavel</span>
+          <span class="risk-level low">Baixa</span>
+        </div>
+        <div class="risk-mitigation"><strong>Mitigacao:</strong> EMPTY_OR_ORPHAN (1.350) e MEDIA (288) catalogados com metadados mas sem score. Flag especial no schema.</div>
+      </div>
+      <div class="risk-card animate-on-scroll stagger-5">
+        <div class="risk-header">
+          <span class="risk-title">Vazamento de conteudo</span>
+          <span class="risk-level low">Baixa</span>
+        </div>
+        <div class="risk-mitigation"><strong>Mitigacao:</strong> Zero logging de conteudo em plaintext. .gitignore para diretorio de dados. Revisao de seguranca antes do full run.</div>
+      </div>
+      <div class="risk-card animate-on-scroll">
+        <div class="risk-header">
+          <span class="risk-title">Performance do pgvector</span>
+          <span class="risk-level low">Baixa</span>
+        </div>
+        <div class="risk-mitigation"><strong>Mitigacao:</strong> IVFFlat index com nprobes otimizado. Benchmark com 10K artigos. Considerar HNSW se IVFFlat for lento.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-sep"><hr></div>
+
+  <!-- RESULTADOS -->
+  <div class="section" id="resultados">
+    <div class="section-title animate-on-scroll">Resultados Esperados</div>
+    <h2 class="animate-on-scroll">O que sera entregue</h2>
+    <p class="section-desc animate-on-scroll">Ao final do processamento, a equipe de conteudo recebe um inventario completo e acionavel &mdash; base para todas as etapas seguintes do HELP CORE.</p>
+
+    <div class="outputs-grid">
+      <div class="output-card animate-on-scroll stagger-1">
+        <div class="output-icon">&#128203;</div>
+        <h3>Inventario Completo</h3>
+        <p>108K artigos com metadados estruturados: area, titulo, classificacao, status, data de modificacao e path original.</p>
+      </div>
+      <div class="output-card animate-on-scroll stagger-2">
+        <div class="output-icon">&#10024;</div>
+        <h3>Conteudo Limpo</h3>
+        <p>HTML livre do markup SharePoint. Estrutura semantica preservada: headings, listas, paragrafos, links e tabelas de dados.</p>
+      </div>
+      <div class="output-card animate-on-scroll stagger-3">
+        <div class="output-icon">&#128279;</div>
+        <h3>Mapa de Duplicatas</h3>
+        <p>Grupos de duplicatas exatas (hash) e semanticas (pgvector). Artigo canonico identificado em cada grupo. Economia na revisao.</p>
+      </div>
+      <div class="output-card animate-on-scroll stagger-4">
+        <div class="output-icon">&#127991;</div>
+        <h3>Classificacao Validada</h3>
+        <p>Cada artigo com classificacao final (TEXTUAL, LINK_ONLY, SHORT_TEXT, EMPTY, MEDIA). Delta vs classificacao original reportado.</p>
+      </div>
+      <div class="output-card animate-on-scroll stagger-5">
+        <div class="output-icon">&#11088;</div>
+        <h3>Quality Score</h3>
+        <p>Score 0-100 para 48K artigos TEXTUAL com breakdown: completude, clareza, atualidade, formatacao e aderencia ao publico.</p>
+      </div>
+      <div class="output-card animate-on-scroll">
+        <div class="output-icon">&#128200;</div>
+        <h3>Relatorio de Inventario</h3>
+        <p>Total por area, por classificacao, duplicatas encontradas, distribuicao de quality score e artigos com erro. Pronto para decisao.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-sep"><hr></div>
+
+  <!-- CLASSIFICACAO DA BASE -->
+  <div class="section">
+    <div class="section-title animate-on-scroll">Composicao da Base</div>
+    <h2 class="animate-on-scroll">Distribuicao por Tipo de Conteudo</h2>
+    <p class="section-desc animate-on-scroll">A classificacao preliminar por heuristica mostra que 44.8% dos artigos sao TEXTUAL (conteudo real). O pipeline recalcula e valida cada classificacao.</p>
+
+    <div class="animate-on-scroll" style="max-width: 600px;">
+      <div style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span style="font-size: 14px; font-weight: 600; color: var(--text);">TEXTUAL</span>
+          <span style="font-size: 14px; font-weight: 700; color: var(--orange);">48.363 (44.8%)</span>
+        </div>
+        <div style="background: var(--surface); border-radius: 8px; height: 28px; overflow: hidden;">
+          <div style="width: 44.8%; height: 100%; background: linear-gradient(90deg, var(--orange), var(--orange-light)); border-radius: 8px;"></div>
+        </div>
+      </div>
+      <div style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span style="font-size: 14px; font-weight: 600; color: var(--text);">Outros (nao classificados)</span>
+          <span style="font-size: 14px; font-weight: 700; color: var(--text-muted);">54.221 (50.2%)</span>
+        </div>
+        <div style="background: var(--surface); border-radius: 8px; height: 28px; overflow: hidden;">
+          <div style="width: 50.2%; height: 100%; background: linear-gradient(90deg, #555, #666); border-radius: 8px;"></div>
+        </div>
+      </div>
+      <div style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span style="font-size: 14px; font-weight: 600; color: var(--text);">LINK_ONLY</span>
+          <span style="font-size: 14px; font-weight: 700; color: var(--blue);">2.240 (2.1%)</span>
+        </div>
+        <div style="background: var(--surface); border-radius: 8px; height: 28px; overflow: hidden;">
+          <div style="width: 2.1%; height: 100%; background: linear-gradient(90deg, var(--blue), var(--blue-light)); border-radius: 8px; min-width: 20px;"></div>
+        </div>
+      </div>
+      <div style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span style="font-size: 14px; font-weight: 600; color: var(--text);">SHORT_TEXT</span>
+          <span style="font-size: 14px; font-weight: 700; color: var(--purple);">1.790 (1.7%)</span>
+        </div>
+        <div style="background: var(--surface); border-radius: 8px; height: 28px; overflow: hidden;">
+          <div style="width: 1.7%; height: 100%; background: linear-gradient(90deg, var(--purple), #CE93D8); border-radius: 8px; min-width: 20px;"></div>
+        </div>
+      </div>
+      <div style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span style="font-size: 14px; font-weight: 600; color: var(--text);">EMPTY_OR_ORPHAN + MEDIA</span>
+          <span style="font-size: 14px; font-weight: 700; color: var(--text-muted);">1.638 (1.5%)</span>
+        </div>
+        <div style="background: var(--surface); border-radius: 8px; height: 28px; overflow: hidden;">
+          <div style="width: 1.5%; height: 100%; background: linear-gradient(90deg, #777, #888); border-radius: 8px; min-width: 20px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-sep"><hr></div>
+
+  <!-- PROXIMOS PASSOS -->
+  <div class="section" id="proximos-passos">
+    <div class="section-title animate-on-scroll">Proximos Passos</div>
+    <h2 class="animate-on-scroll">Plano de Execucao</h2>
+    <p class="section-desc animate-on-scroll">O processamento segue uma sequencia estruturada: validacao com amostra pequena antes do full run para garantir qualidade e controlar custos.</p>
+
+    <div class="steps-list">
+      <div class="step-item animate-on-scroll stagger-1">
+        <div class="step-num">1</div>
+        <div>
+          <h4>Corrigir bug de dedup do PE</h4>
+          <p>Fix de false-positives na deduplicacao semantica. Validacao com testes unitarios e integracao.</p>
+        </div>
+      </div>
+      <div class="step-item animate-on-scroll stagger-2">
+        <div class="step-num">2</div>
+        <div>
+          <h4>Dry-run com 100 artigos</h4>
+          <p>Amostra representativa para validar pipeline completo, medir custo real e calibrar thresholds.</p>
+        </div>
+      </div>
+      <div class="step-item animate-on-scroll stagger-3">
+        <div class="step-num">3</div>
+        <div>
+          <h4>Validacao humana da amostra</h4>
+          <p>Revisao dos 100 artigos processados: metadados corretos, HTML limpo, classificacao coerente, score justo.</p>
+        </div>
+      </div>
+      <div class="step-item animate-on-scroll stagger-4">
+        <div class="step-num">4</div>
+        <div>
+          <h4>Full run: 108K artigos</h4>
+          <p>Processamento completo da base. Estimativa: &le; 48 horas com rate limiting. Monitoramento em tempo real.</p>
+        </div>
+      </div>
+      <div class="step-item animate-on-scroll stagger-5">
+        <div class="step-num">5</div>
+        <div>
+          <h4>Relatorio de inventario + entrega</h4>
+          <p>Consolidacao dos resultados em relatorio estruturado. Base pronta para as proximas etapas do HELP CORE.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-logos">
+      <img src="https://elloconsultoria.com/images/ello-logo-orange.png" alt="Ello Consultoria">
+    </div>
+    <p>Ello Consultoria &bull; Projeto HELP CORE &bull; Outubro 2026</p>
+    <p style="margin-top: 8px; font-size: 12px; color: #555;">Processamento por IA &mdash; Digital AI</p>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script>
+    // Scroll Animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+    // Active nav link on scroll
+    const sections = document.querySelectorAll('.section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
+          });
+        }
+      });
+    }, { threshold: 0.3, rootMargin: '-80px 0px -60% 0px' });
+
+    sections.forEach(section => navObserver.observe(section));
+  </script>
+</body>
+</html>
