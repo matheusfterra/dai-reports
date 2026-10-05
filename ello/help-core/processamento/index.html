@@ -1650,6 +1650,204 @@
        END CONFIG-IA SECTION STYLES
        ========================================================= */
 
+    /* =========================================================
+       CATEGORY TREE VISUALIZATION
+       ========================================================= */
+
+    .cat-tree-section {
+      margin-bottom: 48px;
+    }
+
+    .cat-tree-stats {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      padding: 14px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .cat-tree-stat-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+    }
+    .cat-tree-stat-item .cst-num {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--orange);
+    }
+    .cat-tree-stat-item .cst-label {
+      color: var(--text-muted);
+    }
+    .cat-tree-stat-sep {
+      width: 1px;
+      height: 24px;
+      background: var(--border);
+    }
+
+    .cat-tree-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 900px) {
+      .cat-tree-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .cat-tree-grid { grid-template-columns: 1fr; }
+    }
+
+    .cat-tree-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .cat-tree-item:hover {
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    }
+
+    /* Each category gets a unique hue via inline style on summary */
+    .cat-tree-summary {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      cursor: pointer;
+      user-select: none;
+      list-style: none;
+      border-bottom: 1px solid transparent;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .cat-tree-summary::-webkit-details-marker { display: none; }
+    .cat-tree-item[open] .cat-tree-summary {
+      border-bottom-color: var(--border);
+    }
+    .cat-tree-summary:hover {
+      background: var(--surface-hover);
+    }
+
+    .cat-tree-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .cat-tree-name {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      font-family: 'Courier New', monospace;
+    }
+    .cat-tree-count {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 20px;
+      background: rgba(255,87,34,0.1);
+      color: var(--orange);
+      border: 1px solid rgba(255,87,34,0.2);
+      flex-shrink: 0;
+    }
+    /* override count color per category via CSS custom property */
+    .cat-tree-item { --cat-hue: 20; }
+
+    .cat-tree-toggle {
+      font-size: 11px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      transition: transform 0.25s;
+    }
+    .cat-tree-item[open] .cat-tree-toggle {
+      transform: rotate(90deg);
+    }
+
+    .cat-tree-subs {
+      padding: 14px 16px 16px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      position: relative;
+    }
+    .cat-tree-subs::before {
+      content: '';
+      position: absolute;
+      left: 26px;
+      top: 0;
+      bottom: 16px;
+      width: 1px;
+      border-left: 2px dotted var(--border);
+    }
+
+    .cat-tree-sub {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 5px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-family: 'Courier New', monospace;
+      transition: all 0.2s;
+      cursor: default;
+      white-space: nowrap;
+    }
+    .cat-tree-item:hover .cat-tree-sub {
+      border-color: rgba(var(--cat-r,255), var(--cat-g,87), var(--cat-b,34), 0.25);
+      color: var(--text-body);
+    }
+
+    /* Per-category color accents using hsl classes */
+    .cat-hue-0  .cat-tree-count { background: hsla(20,90%,50%,0.12); color: hsl(20,90%,65%); border-color: hsla(20,90%,50%,0.25); }
+    .cat-hue-1  .cat-tree-count { background: hsla(200,80%,50%,0.12); color: hsl(200,80%,65%); border-color: hsla(200,80%,50%,0.25); }
+    .cat-hue-2  .cat-tree-count { background: hsla(0,75%,50%,0.12); color: hsl(0,75%,65%); border-color: hsla(0,75%,50%,0.25); }
+    .cat-hue-3  .cat-tree-count { background: hsla(220,70%,55%,0.12); color: hsl(220,70%,70%); border-color: hsla(220,70%,55%,0.25); }
+    .cat-hue-4  .cat-tree-count { background: hsla(50,85%,50%,0.12); color: hsl(50,85%,65%); border-color: hsla(50,85%,50%,0.25); }
+    .cat-hue-5  .cat-tree-count { background: hsla(340,75%,50%,0.12); color: hsl(340,75%,65%); border-color: hsla(340,75%,50%,0.25); }
+    .cat-hue-6  .cat-tree-count { background: hsla(155,60%,45%,0.12); color: hsl(155,60%,60%); border-color: hsla(155,60%,45%,0.25); }
+    .cat-hue-7  .cat-tree-count { background: hsla(270,65%,55%,0.12); color: hsl(270,65%,70%); border-color: hsla(270,65%,55%,0.25); }
+    .cat-hue-8  .cat-tree-count { background: hsla(120,55%,45%,0.12); color: hsl(120,55%,60%); border-color: hsla(120,55%,45%,0.25); }
+    .cat-hue-9  .cat-tree-count { background: hsla(185,70%,45%,0.12); color: hsl(185,70%,60%); border-color: hsla(185,70%,45%,0.25); }
+    .cat-hue-10 .cat-tree-count { background: hsla(30,85%,50%,0.12); color: hsl(30,85%,65%); border-color: hsla(30,85%,50%,0.25); }
+    .cat-hue-11 .cat-tree-count { background: hsla(240,65%,60%,0.12); color: hsl(240,65%,75%); border-color: hsla(240,65%,60%,0.25); }
+    .cat-hue-12 .cat-tree-count { background: hsla(170,65%,40%,0.12); color: hsl(170,65%,55%); border-color: hsla(170,65%,40%,0.25); }
+    .cat-hue-13 .cat-tree-count { background: hsla(10,80%,50%,0.12); color: hsl(10,80%,65%); border-color: hsla(10,80%,50%,0.25); }
+    .cat-hue-14 .cat-tree-count { background: hsla(60,75%,45%,0.12); color: hsl(60,75%,60%); border-color: hsla(60,75%,45%,0.25); }
+    .cat-hue-15 .cat-tree-count { background: hsla(290,60%,55%,0.12); color: hsl(290,60%,70%); border-color: hsla(290,60%,55%,0.25); }
+    .cat-hue-16 .cat-tree-count { background: hsla(145,55%,45%,0.12); color: hsl(145,55%,60%); border-color: hsla(145,55%,45%,0.25); }
+    .cat-hue-17 .cat-tree-count { background: hsla(210,75%,55%,0.12); color: hsl(210,75%,70%); border-color: hsla(210,75%,55%,0.25); }
+    .cat-hue-18 .cat-tree-count { background: hsla(90,55%,45%,0.12); color: hsl(90,55%,60%); border-color: hsla(90,55%,45%,0.25); }
+
+    /* Matching border accent on the item itself */
+    .cat-hue-0  { border-left: 3px solid hsl(20,90%,50%); }
+    .cat-hue-1  { border-left: 3px solid hsl(200,80%,50%); }
+    .cat-hue-2  { border-left: 3px solid hsl(0,75%,50%); }
+    .cat-hue-3  { border-left: 3px solid hsl(220,70%,55%); }
+    .cat-hue-4  { border-left: 3px solid hsl(50,85%,50%); }
+    .cat-hue-5  { border-left: 3px solid hsl(340,75%,50%); }
+    .cat-hue-6  { border-left: 3px solid hsl(155,60%,45%); }
+    .cat-hue-7  { border-left: 3px solid hsl(270,65%,55%); }
+    .cat-hue-8  { border-left: 3px solid hsl(120,55%,45%); }
+    .cat-hue-9  { border-left: 3px solid hsl(185,70%,45%); }
+    .cat-hue-10 { border-left: 3px solid hsl(30,85%,50%); }
+    .cat-hue-11 { border-left: 3px solid hsl(240,65%,60%); }
+    .cat-hue-12 { border-left: 3px solid hsl(170,65%,40%); }
+    .cat-hue-13 { border-left: 3px solid hsl(10,80%,50%); }
+    .cat-hue-14 { border-left: 3px solid hsl(60,75%,45%); }
+    .cat-hue-15 { border-left: 3px solid hsl(290,60%,55%); }
+    .cat-hue-16 { border-left: 3px solid hsl(145,55%,45%); }
+    .cat-hue-17 { border-left: 3px solid hsl(210,75%,55%); }
+    .cat-hue-18 { border-left: 3px solid hsl(90,55%,45%); }
+
+    /* =========================================================
+       END CATEGORY TREE VISUALIZATION
+       ========================================================= */
+
     /* --- RESPONSIVE --- */
     @media (max-width: 768px) {
       .hero h1 { font-size: 32px; }
@@ -2250,10 +2448,10 @@
   <div class="section" id="config-ia">
     <div class="section-title animate-on-scroll">Inteligência Artificial</div>
     <h2 class="animate-on-scroll">Configuração da Inteligência Artificial</h2>
-    <p class="section-desc animate-on-scroll">Como o motor de IA vê e analisa cada artigo: os 8 campos extraídos por passagem, os parâmetros do pipeline e os campos adicionais recomendados pelo PM para a próxima fase.</p>
+    <p class="section-desc animate-on-scroll">Como o motor de IA vê e analisa cada artigo: os 9 campos extraídos por passagem, os parâmetros do pipeline e os campos adicionais recomendados pelo PM para a próxima fase.</p>
 
-    <!-- SUBSECTION 1: 8 CAMPOS -->
-    <div class="ia-subsection-label animate-on-scroll">8 Campos Extraídos por Artigo</div>
+    <!-- SUBSECTION 1: 9 CAMPOS -->
+    <div class="ia-subsection-label animate-on-scroll">9 Campos Extraídos por Artigo</div>
 
     <div class="field-cards-grid">
 
@@ -2300,6 +2498,25 @@
         </div>
         <div class="field-card-example-label">Exemplo real</div>
         <div class="field-card-example">"cobranca" — Artigo "Contatos Indevidos de Cobrança"</div>
+      </div>
+
+      <!-- card 2b: subcategory -->
+      <div class="field-card animate-on-scroll stagger-3">
+        <span class="field-card-emoji">🌿</span>
+        <span class="field-card-name">subcategory</span>
+        <div class="field-card-title">Subcategoria Específica</div>
+        <div class="field-card-desc">Detalha a categoria em nível granular, criando uma árvore de classificação hierárquica. Permite análises por subárea sem perder a visão macro.</div>
+        <div class="field-card-utility">Utilidade</div>
+        <div class="field-card-utility-text">Filtrar artigos por subárea dentro de cada categoria. Encontrar sobreposições entre subcategorias de áreas distintas. Medir cobertura por processo específico.</div>
+        <div class="field-card-values">
+          <span class="field-val-chip">segunda_via</span>
+          <span class="field-val-chip">desbloqueio</span>
+          <span class="field-val-chip">phishing</span>
+          <span class="field-val-chip">abertura</span>
+          <span class="field-val-chip special">renegociacao</span>
+        </div>
+        <div class="field-card-example-label">Exemplo real</div>
+        <div class="field-card-example">"segunda_via" dentro de cartão, ou "phishing" dentro de fraude</div>
       </div>
 
       <!-- card 3: target_audience -->
@@ -2426,6 +2643,368 @@
       </div>
 
     </div><!-- /field-cards-grid -->
+
+
+    <!-- SUBSECTION 1b: ÁRVORE DE CATEGORIAS E SUBCATEGORIAS -->
+    <div class="ia-subsection-label animate-on-scroll">Árvore de Categorias e Subcategorias</div>
+
+    <div class="cat-tree-section animate-on-scroll">
+
+      <!-- Stats bar -->
+      <div class="cat-tree-stats">
+        <div class="cat-tree-stat-item">
+          <span class="cst-num">19</span>
+          <span class="cst-label">categorias</span>
+        </div>
+        <div class="cat-tree-stat-sep"></div>
+        <div class="cat-tree-stat-item">
+          <span class="cst-num">103</span>
+          <span class="cst-label">subcategorias</span>
+        </div>
+        <div class="cat-tree-stat-sep"></div>
+        <div class="cat-tree-stat-item">
+          <span class="cst-num">3</span>
+          <span class="cst-label">níveis de profundidade</span>
+        </div>
+        <div class="cat-tree-stat-sep"></div>
+        <div class="cat-tree-stat-item" style="color: var(--text-muted); font-size: 12px;">
+          ▶ Clique em uma categoria para expandir suas subcategorias
+        </div>
+      </div>
+
+      <!-- Tree grid -->
+      <div class="cat-tree-grid">
+
+        <!-- cartão -->
+        <details class="cat-tree-item cat-hue-0 animate-on-scroll stagger-1">
+          <summary class="cat-tree-summary">
+            <span class="cat-tree-icon">💳</span>
+            <span class="cat-tree-name">cartão</span>
+            <span class="cat-tree-count">7</span>
+            <span class="cat-tree-toggle">▶</span>
+          </summary>
+          <div class="cat-tree-subs">
+            <span class="cat-tree-sub" title="segunda_via">segunda via</span>
+            <span class="cat-tree-sub" title="desbloqueio">desbloqueio</span>
+            <span class="cat-tree-sub" title="limite">limite</span>
+            <span class="cat-tree-sub" title="anuidade">anuidade</span>
+            <span class="cat-tree-sub" title="contestacao_fatura">contestação fatura</span>
+            <span class="cat-tree-sub" title="cartao_virtual">cartão virtual</span>
+            <span class="cat-tree-sub" title="aproximacao">aproximação</span>
+          </div>
+        </details>
+
+        <!-- crédito -->
+        <details class="cat-tree-item cat-hue-1 animate-on-scroll stagger-2">
+          <summary class="cat-tree-summary">
+            <span class="cat-tree-icon">💰</span>
+            <span class="cat-tree-name">crédito</span>
+            <span class="cat-tree-count">6</span>
+            <span class="cat-tree-toggle">▶</span>
+          </summary>
+          <div class="cat-tree-subs">
+            <span class="cat-tree-sub" title="analise_risco">análise risco</span>
+            <span class="cat-tree-sub" title="consignado">consignado</span>
+            <span class="cat-tree-sub" title="financiamento">financiamento</span>
+            <span class="cat-tree-sub" title="renegociacao">renegociação</span>
+            <span class="cat-tree-sub" title="limite_credito">limite crédito</span>
+            <span class="cat-tree-sub" title="cheque_especial">cheque especial</span>
+          </div>
+        </details>
+
+        <!-- fraude -->
+        <details class="cat-tree-item cat-hue-2 animate-on-scroll stagger-3">
+          <summary class="cat-tree-summary">
+            <span class="cat-tree-icon">🛡️</span>
+            <span class="cat-tree-name">fraude</span>
+            <span class="cat-tree-count">6</span>
+            <span class="cat-tree-toggle">▶</span>
+          </summary>
+          <div class="cat-tree-subs">
+            <span class="cat-tree-sub" title="clonagem">clonagem</span>
+            <span class="cat-tree-sub" title="phishing">phishing</span>
+            <span class="cat-tree-sub" title="engenharia_social">engenharia social</span>
+            <span class="cat-tree-sub" title="compra_indevida">compra indevida</span>
+            <span class="cat-tree-sub" title="prevencao">prevenção</span>
+            <span class="cat-tree-sub" title="investigacao">investigação</span>
+          </div>
+        </details>
+
+        <!-- conta -->
+        <details class="cat-tree-item cat-hue-3 animate-on-scroll stagger-4">
+          <summary class="cat-tree-summary">
+            <span class="cat-tree-icon">🏦</span>
+            <span class="cat-tree-name">conta</span>
+            <span class="cat-tree-count">7</span>
+            <span class="cat-tree-toggle">▶</span>
+          </summary>
+          <div class="cat-tree-subs">
+            <span class="cat-tree-sub" title="abertura">abertura</span>
+            <span class="cat-tree-sub" title="encerramento">encerramento</span>
+            <span class="cat-tree-sub" title="tarifas">tarifas</span>
+            <span class="cat-tree-sub" title="extrato">extrato</span>
+            <span class="cat-tree-sub" title="atualizacao_cadastral">atualização cadastral</span>
+            <span class="cat-tree-sub" title="conta_salario">conta salário</span>
+            <span class="cat-tree-sub" title="conta_poupanca">conta poupança</span>
+          </div>
+        </details>
+
+        <!-- pix -->
+        <details class="cat-tree-item cat-hue-4 animate-on-scroll stagger-5">
+          <summary class="cat-tree-summary">
+            <span class="cat-tree-icon">⚡</span>
+            <span class="cat-tree-name">pix</span>
+            <span class="cat-tree-count">7</span>
+            <span class="cat-tree-toggle">▶</span>
+          </summary>
+          <div class="cat-tree-subs">
+            <span class="cat-tree-sub" title="cadastro_chave">cadastro chave</span>
+            <span class="cat-tree-sub" title="limite">limite</span>
+            <span class="cat-tree-sub" title="devolucao">devolução</span>
+            <span class="cat-tree-sub" title="agendamento">agendamento</span>
+            <span class="cat-tree-sub" title="pix_saque">pix saque</span>
+            <span class="cat-tree-sub" title="pix_troco">pix troco</span>
+            <span class="cat-tree-sub" title="falha">falha</span>
+          </div>
+        </details>
+
+        <!-- cancelamento -->
+        <details class="cat-tree-item cat-hue-5 animate-on-scroll stagger-1">
+          <summary class="cat-tree-summary">
+            <span class="cat-tree-icon">❌</span>
+            <span class="cat-tree-name">cancelamento</span>
+            <span class="cat-tree-count">5</span>
+            <span class="cat-tree-toggle">▶</span>
+          </summary>
+          <div class="cat-tree-subs">
+            <span class="cat-tree-sub" title="produto">produto</span>
+            <span class="cat-tree-sub" title="servico">serviço</span>
+            <span class="cat-tree-sub" title="seguro">seguro</span>
+            <span class="cat-tree-sub" title="consorcio">consórcio</span>
+            <span class="cat-tree-sub" title="previdencia">previdência</span>
+          </div>
+        </details>
+
+        <!-- atendimento -->
+        <details class="cat-tree-item cat-hue-6 animate-on-scroll stagger-2">
+          <summary class="cat-tree-summary">
+            <span class="cat-tree-icon">🎧</span>
+            <span class="cat-tree-name">atendimento</span>
+            <span class="cat-tree-count">6</span>
+            <span class="cat-tree-toggle">▶</span>
+          </summary>
+          <div class="cat-tree-subs">
+            <span class="cat-tree-sub" title="reclamacao">reclamação</span>
+            <span class="cat-tree-sub" title="ouvidoria">ouvidoria</span>
+            <span class="cat-tree-sub" title="protocolo">protocolo</span>
+            <span class="cat-tree-sub" title="sla">sla</span>
+            <span class="cat-tree-sub" title="escalacao">escalação</span>
+            <span class="cat-tree-sub" title="recontato">recontato</span>
+          </div>
+        </details>
+
+        <!-- bloqueio -->
+        <details class="cat-tree-item cat-hue-7 animate-on-scroll stagger-3">
+          <summary class="cat-tree-summary">
+            <span class="cat-tree-icon">🔒</span>
+            <span class="cat-tree-name">bloqueio</span>
+            <span class="cat-tree-count">5</span>
+            <span class="cat-tree-toggle">▶</span>
+          </summary>
+          <div class="cat-tree-subs">
+            <span class="cat-tree-sub" title="senha">senha</span>
+            <span class="cat-tree-sub" title="cartao">cartão</span>
+            <span class="cat-tree-sub" title="conta">conta</span>
+            <span class="cat-tree-sub" title="judicial">judicial</span>
+            <span class="cat-tree-sub" title="cautelar">cautelar</span>
+          </div>
+        </details>
+
+        <!-- cadastro -->
+        <details class="cat-tree-item cat-hue-8 animate-on-scroll stagger-4">
+          <summary class="cat-tree-summary">
+            <span class="cat-tree-icon">📋</span>
+            <span class="cat-tree-name">cadastro</span>
+            <span class="cat-tree-count">5</span>
+            <span class="cat-tree-toggle">▶</span>
+          </summary>
+          <div class="cat-tree-subs">
+            <span class="cat-tree-sub" title="pessoa_fisica">pessoa física</span>
+            <span class="cat-tree-sub" title="pessoa_juridica">pessoa jurídica</span>
+            <span class="cat-tree-sub" title="procuracao">procuração</span>
+            <span class="cat-tree-sub" title="atualizacao">atualização</span>
+            <span class="cat-tree-sub" title="biometria">biometria</span>
+          </div>
+        </details>
+
+        <!-- transferência -->
+        <details class="cat-tree-item cat-hue-9 animate-on-scroll stagger-5">
+          <summary class="cat-tree-summary">
+            <span class="cat-tree-icon">🔄</span>
+            <span class="cat-tree-name">transferência</span>
+            <span class="cat-tree-count">5</span>
+            <span class="cat-tree-toggle">▶</span>
+          </summary>
+          <div class="cat-tree-subs">
+            <span class="cat-tree-sub" title="ted">ted</span>
+            <span class="cat-tree-sub" title="doc">doc</span>
+            <span class="cat-tree-sub" title="entre_contas">entre contas</span>
+            <span class="cat-tree-sub" title="internacional">internacional</span>
+            <span class="cat-tree-sub" title="agendada">agendada</span>
+          </div>
+        </details>
+
+        <!-- empréstimo -->
+        <details class="cat-tree-item cat-hue-10 animate-on-scroll stagger-1">
+          <summary class="cat-tree-summary">
+            <span class="cat-tree-icon">💸</span>
+            <span class="cat-tree-name">empréstimo</span>
+            <span class="cat-tree-count">5</span>
+            <span class="cat-tree-toggle">▶</span>
+          </summary>
+          <div class="cat-tree-subs">
+            <span class="cat-tree-sub" title="contratacao">contratação</span>
+            <span class="cat-tree-sub" title="simulacao">simulação</span>
+            <span class="cat-tree-sub" title="antecipacao">antecipação</span>
+            <span class="cat-tree-sub" title="quitacao">quitação</span>
+            <span class="cat-tree-sub" title="portabilidade">portabilidade</span>
+          </div>
+        </details>
+
+        <!-- investimento -->
+        <details class="cat-tree-item cat-hue-11 animate-on-scroll stagger-2">
+          <summary class="cat-tree-summary">
+            <span class="cat-tree-icon">📊</span>
+            <span class="cat-tree-name">investimento</span>
+            <span class="cat-tree-count">6</span>
+            <span class="cat-tree-toggle">▶</span>
+          </summary>
+          <div class="cat-tree-subs">
+            <span class="cat-tree-sub" title="renda_fixa">renda fixa</span>
+            <span class="cat-tree-sub" title="renda_variavel">renda variável</span>
+            <span class="cat-tree-sub" title="fundos">fundos</span>
+            <span class="cat-tree-sub" title="previdencia">previdência</span>
+            <span class="cat-tree-sub" title="cdb">cdb</span>
+            <span class="cat-tree-sub" title="lci_lca">lci / lca</span>
+          </div>
+        </details>
+
+        <!-- seguro -->
+        <details class="cat-tree-item cat-hue-12 animate-on-scroll stagger-3">
+          <summary class="cat-tree-summary">
+            <span class="cat-tree-icon">🛡️</span>
+            <span class="cat-tree-name">seguro</span>
+            <span class="cat-tree-count">6</span>
+            <span class="cat-tree-toggle">▶</span>
+          </summary>
+          <div class="cat-tree-subs">
+            <span class="cat-tree-sub" title="vida">vida</span>
+            <span class="cat-tree-sub" title="residencial">residencial</span>
+            <span class="cat-tree-sub" title="auto">auto</span>
+            <span class="cat-tree-sub" title="viagem">viagem</span>
+            <span class="cat-tree-sub" title="prestamista">prestamista</span>
+            <span class="cat-tree-sub" title="sinistro">sinistro</span>
+          </div>
+        </details>
+
+        <!-- cobrança -->
+        <details class="cat-tree-item cat-hue-13 animate-on-scroll stagger-4">
+          <summary class="cat-tree-summary">
+            <span class="cat-tree-icon">📞</span>
+            <span class="cat-tree-name">cobrança</span>
+            <span class="cat-tree-count">5</span>
+            <span class="cat-tree-toggle">▶</span>
+          </summary>
+          <div class="cat-tree-subs">
+            <span class="cat-tree-sub" title="contato_indevido">contato indevido</span>
+            <span class="cat-tree-sub" title="negativacao">negativação</span>
+            <span class="cat-tree-sub" title="acordo">acordo</span>
+            <span class="cat-tree-sub" title="boleto">boleto</span>
+            <span class="cat-tree-sub" title="regularizacao">regularização</span>
+          </div>
+        </details>
+
+        <!-- senha -->
+        <details class="cat-tree-item cat-hue-14 animate-on-scroll stagger-5">
+          <summary class="cat-tree-summary">
+            <span class="cat-tree-icon">🔑</span>
+            <span class="cat-tree-name">senha</span>
+            <span class="cat-tree-count">5</span>
+            <span class="cat-tree-toggle">▶</span>
+          </summary>
+          <div class="cat-tree-subs">
+            <span class="cat-tree-sub" title="desbloqueio">desbloqueio</span>
+            <span class="cat-tree-sub" title="segunda_via">segunda via</span>
+            <span class="cat-tree-sub" title="redefinicao">redefinição</span>
+            <span class="cat-tree-sub" title="senha_eletronica">senha eletrônica</span>
+            <span class="cat-tree-sub" title="token">token</span>
+          </div>
+        </details>
+
+        <!-- contestação -->
+        <details class="cat-tree-item cat-hue-15 animate-on-scroll stagger-1">
+          <summary class="cat-tree-summary">
+            <span class="cat-tree-icon">⚖️</span>
+            <span class="cat-tree-name">contestação</span>
+            <span class="cat-tree-count">4</span>
+            <span class="cat-tree-toggle">▶</span>
+          </summary>
+          <div class="cat-tree-subs">
+            <span class="cat-tree-sub" title="fatura">fatura</span>
+            <span class="cat-tree-sub" title="debito">débito</span>
+            <span class="cat-tree-sub" title="tarifa">tarifa</span>
+            <span class="cat-tree-sub" title="cobranca_indevida">cobrança indevida</span>
+          </div>
+        </details>
+
+        <!-- risco -->
+        <details class="cat-tree-item cat-hue-16 animate-on-scroll stagger-2">
+          <summary class="cat-tree-summary">
+            <span class="cat-tree-icon">📈</span>
+            <span class="cat-tree-name">risco</span>
+            <span class="cat-tree-count">4</span>
+            <span class="cat-tree-toggle">▶</span>
+          </summary>
+          <div class="cat-tree-subs">
+            <span class="cat-tree-sub" title="analise_pf">análise pf</span>
+            <span class="cat-tree-sub" title="analise_pj">análise pj</span>
+            <span class="cat-tree-sub" title="alerta">alerta</span>
+            <span class="cat-tree-sub" title="monitoramento">monitoramento</span>
+          </div>
+        </details>
+
+        <!-- digital -->
+        <details class="cat-tree-item cat-hue-17 animate-on-scroll stagger-3">
+          <summary class="cat-tree-summary">
+            <span class="cat-tree-icon">📱</span>
+            <span class="cat-tree-name">digital</span>
+            <span class="cat-tree-count">5</span>
+            <span class="cat-tree-toggle">▶</span>
+          </summary>
+          <div class="cat-tree-subs">
+            <span class="cat-tree-sub" title="app">app</span>
+            <span class="cat-tree-sub" title="internet_banking">internet banking</span>
+            <span class="cat-tree-sub" title="bia">bia</span>
+            <span class="cat-tree-sub" title="chat">chat</span>
+            <span class="cat-tree-sub" title="totem">totem</span>
+          </div>
+        </details>
+
+        <!-- outro -->
+        <details class="cat-tree-item cat-hue-18 animate-on-scroll stagger-4">
+          <summary class="cat-tree-summary">
+            <span class="cat-tree-icon">📦</span>
+            <span class="cat-tree-name">outro</span>
+            <span class="cat-tree-count">1</span>
+            <span class="cat-tree-toggle">▶</span>
+          </summary>
+          <div class="cat-tree-subs">
+            <span class="cat-tree-sub" title="geral" style="color: var(--text-muted); font-style: italic;">→ geral</span>
+          </div>
+        </details>
+
+      </div><!-- /cat-tree-grid -->
+    </div><!-- /cat-tree-section -->
 
 
     <!-- SUBSECTION 2: MOTOR DE PROCESSAMENTO -->
