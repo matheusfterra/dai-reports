@@ -198,6 +198,24 @@ tbody td{padding:10px 14px;font-size:12px;vertical-align:middle}
 </head>
 <body>
 
+<div id="gate-loading" style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0F172A;">
+  <div style="text-align:center;">
+    <div style="width:40px;height:40px;border:3px solid #1e3a5f;border-top-color:#6366f1;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;"></div>
+    <p style="color:#94a3b8;font-size:0.85rem;font-family:'Inter',system-ui,sans-serif;">Verificando acesso…</p>
+  </div>
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
+<div id="gate-direct" style="display:none;align-items:center;justify-content:center;min-height:100vh;background:#0F172A;">
+  <div style="text-align:center;max-width:380px;padding:40px 32px;background:#1E293B;border:1px solid #334155;border-radius:16px;font-family:'Inter',system-ui,sans-serif;">
+    <div style="font-size:2.5rem;margin-bottom:16px;">🔒</div>
+    <h2 style="color:#e2e8f0;font-size:1.1rem;margin-bottom:8px;">Acesso Restrito</h2>
+    <p style="color:#94a3b8;font-size:0.85rem;line-height:1.5;">Este relatório é exclusivo para a equipe DermaClinic.<br>Acesse pelo link enviado pela Digital AI.</p>
+  </div>
+</div>
+
+<div id="app" style="display:none;">
+
 <header class="header">
   <div class="h-inner">
     <div class="logo">
@@ -1361,6 +1379,19 @@ function scrollToSection(id, btn) {
   document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
 }
+</script>
+
+</div><!-- /app -->
+
+<script src="../../../_shared/auth.js"></script>
+<script>
+  initChatwootAuth({
+    gateLoading: 'gate-loading',
+    gateDirect:  'gate-direct',
+    gateApp:     'app',
+    client:      'dermaclinic',
+    report:      'criativos-set-2026'
+  });
 </script>
 
 </body>
