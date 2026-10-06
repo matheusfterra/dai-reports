@@ -408,52 +408,54 @@ tr:hover { background:var(--primary-bg); }
 
 </div><!-- /container -->
 
-<script>
-// Doughnut chart — distribuição por classificação
-const ctx = document.getElementById('chartDistribuicao').getContext('2d');
-new Chart(ctx, {
-  type: 'doughnut',
-  data: {
-    labels: ['Conversão Perdida', 'Conversão Parcial', 'Lead Morno', 'Lead Frio'],
-    datasets: [{
-      data: [5, 1, 1, 3],
-      backgroundColor: ['#ef4444', '#f59e0b', '#eab308', '#94a3b8'],
-      borderColor: ['#ffffff', '#ffffff', '#ffffff', '#ffffff'],
-      borderWidth: 3,
-      hoverOffset: 8
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    cutout: '65%',
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        callbacks: {
-          label: function(ctx) {
-            const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
-            const pct = Math.round(ctx.parsed / total * 100);
-            return ` ${ctx.label}: ${ctx.parsed} (${pct}%)`;
-          }
-        }
-      }
-    }
-  }
-});
-</script>
-
 </div><!-- /.report-body -->
 </div><!-- /app -->
 
 <script src="../../_shared/auth.js"></script>
 <script>
+  function initChart() {
+    var el = document.getElementById('chartDistribuicao');
+    if (!el) return;
+    var ctx = el.getContext('2d');
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Conversão Perdida', 'Conversão Parcial', 'Lead Morno', 'Lead Frio'],
+        datasets: [{
+          data: [5, 1, 1, 3],
+          backgroundColor: ['#ef4444', '#f59e0b', '#eab308', '#94a3b8'],
+          borderColor: ['#ffffff', '#ffffff', '#ffffff', '#ffffff'],
+          borderWidth: 3,
+          hoverOffset: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '65%',
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(c) {
+                var total = c.dataset.data.reduce(function(a, b) { return a + b; }, 0);
+                var pct = Math.round(c.parsed / total * 100);
+                return ' ' + c.label + ': ' + c.parsed + ' (' + pct + '%)';
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
   initChatwootAuth({
     gateLoading: 'gate-loading',
     gateDirect:  'gate-direct',
     gateApp:     'app',
     client:      'dermaclinic',
-    report:      'trafego-pago-set-2026'
+    report:      'trafego-pago-set-2026',
+    onReady:     initChart
   });
 </script>
 
