@@ -1898,6 +1898,8 @@
       <a href="#config-ia" class="nav-link">Configuração IA</a>
       <a href="#metricas" class="nav-link">Métricas</a>
       <a href="#schema" class="nav-link">Schema</a>
+      <a href="#campos-raw" class="nav-link">Campos RAW</a>
+      <a href="#pipeline-reescrita" class="nav-link">Reescrita</a>
       <a href="#custos" class="nav-link">Custos</a>
       <a href="#riscos" class="nav-link">Riscos</a>
       <a href="#resultados" class="nav-link">Resultados</a>
@@ -1913,8 +1915,8 @@
     <div class="hero-stats">
       <div class="hero-stat"><span class="number">108K</span><span class="label">Artigos</span></div>
       <div class="hero-stat"><span class="number">26</span><span class="label">Áreas</span></div>
-      <div class="hero-stat"><span class="number">4</span><span class="label">Pipelines</span></div>
-      <div class="hero-stat"><span class="number">~$58</span><span class="label">Custo LLM Est.</span></div>
+      <div class="hero-stat"><span class="number">2</span><span class="label">Pipelines</span></div>
+      <div class="hero-stat"><span class="number">~$131</span><span class="label">Custo LLM Est.</span></div>
     </div>
   </div>
 
@@ -1980,24 +1982,23 @@
             <h4>&#128270; Ingestor</h4>
             <p>HTML + TXT parsing</p>
           </div>
-          <div class="arch-box small">
-            <h4>&#128279; Dedup</h4>
-            <p>Hash + Semântico</p>
+          <div class="arch-box small highlight">
+            <h4>&#129302; helpcore-analysis</h4>
+            <p>1 chamada LLM: inventory + quality + dedup_analysis</p>
           </div>
           <div class="arch-box small">
-            <h4>&#129302; LLM</h4>
-            <p>gpt-4.1-mini</p>
+            <h4>&#9989; Validators</h4>
+            <p>Schema + Range</p>
           </div>
+        </div>
+        <div style="margin-top: 8px; padding: 10px 16px; background: rgba(255,87,34,0.06); border: 1px solid rgba(255,87,34,0.2); border-radius: 8px; font-size: 12px; color: var(--orange-light); text-align: center; max-width: 500px; margin-left: auto; margin-right: auto;">
+          Pipeline consolidado: 1 chamada LLM por artigo em vez de 3
         </div>
         <div class="arch-arrow">&#8595;</div>
         <div class="arch-cols">
           <div class="arch-box small">
-            <h4>&#9989; Validators</h4>
-            <p>Schema + Grounding</p>
-          </div>
-          <div class="arch-box small">
             <h4>&#128190; Sink</h4>
-            <p>PostgreSQL + pgvector</p>
+            <p>PostgreSQL (HELPCORE_DATABASE_URL)</p>
           </div>
         </div>
         <div class="arch-arrow">&#8595;</div>
@@ -2014,95 +2015,55 @@
   <!-- PIPELINES -->
   <div class="section" id="pipelines">
     <div class="section-title animate-on-scroll">Pipelines</div>
-    <h2 class="animate-on-scroll">4 Pipelines Sequenciais</h2>
-    <p class="section-desc animate-on-scroll">Cada pipeline é uma etapa independente do processamento, configurada em YAML e executada pelo Processing Engine. Resultados de um pipeline alimentam o seguinte.</p>
+    <h2 class="animate-on-scroll">2 Pipelines de Processamento</h2>
+    <p class="section-desc animate-on-scroll">Dois pipelines LLM complementares. A ingestão de arquivos e a deduplicação por hash e embeddings são processos separados, fora dos pipelines LLM.</p>
+
+    <div style="margin-bottom: 32px; padding: 20px 24px; background: rgba(66,165,245,0.06); border: 1px solid rgba(66,165,245,0.2); border-radius: var(--radius); font-size: 14px; color: var(--text-muted); line-height: 1.7;">
+      <strong style="color: var(--blue);">Nota:</strong> A ingestão (leitura do filesystem e limpeza HTML) e a deduplicação (hash SHA-256 + embeddings pgvector) são processos independentes, não pipelines LLM. Os dois pipelines abaixo tratam exclusivamente do processamento por modelo de linguagem.
+    </div>
 
     <div class="flowchart">
       <div class="flow-line"></div>
 
-      <!-- Pipeline 1 -->
+      <!-- Pipeline 1: helpcore-analysis -->
       <div class="pipeline-card animate-on-scroll">
         <div class="pipeline-number p1">1</div>
         <div class="pipeline-content">
           <div class="pipeline-header">
-            <span class="pipeline-title">helpcore-ingest</span>
-            <span class="pipeline-badge ingest">Ingestão</span>
+            <span class="pipeline-title">helpcore-analysis</span>
+            <span class="pipeline-badge ingest">Consolidado</span>
           </div>
-          <p class="pipeline-desc">Lê o filesystem recursivamente, pareia cada HTML com seu TXT pelo nome do arquivo, extrai metadados estruturados e limpa o markup pesado do SharePoint.</p>
+          <p class="pipeline-desc">Executa 3 análises simultâneas por artigo em 1 única chamada LLM: classificação de inventário (14 campos), avaliação multidimensional de qualidade (10 campos) e análise intra-artigo de deduplicação (8 campos). A mesma entrada serve para as 3 análises, economizando 2/3 dos tokens de input.</p>
           <div class="pipeline-steps">
-            <div class="pipeline-step">Leitura recursiva</div>
-            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Pareamento HTML+TXT</div>
-            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Parse metadados</div>
-            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Limpeza HTML</div>
-            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Detecção encoding</div>
+            <div class="pipeline-step">Inventário — 14 campos</div>
+            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Qualidade — 10 campos</div>
+            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Dedup intra-artigo — 8 campos</div>
+            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> 1 chamada LLM total</div>
           </div>
           <div class="pipeline-output">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            <span><strong>Output:</strong> 108K registros com metadados estruturados e conteúdo limpo no PostgreSQL</span>
+            <span><strong>Output:</strong> 32 campos estruturados em 3 blocos (inventory, quality, dedup_analysis) por artigo &bull; Provedor: OpenAI gpt-4.1-mini</span>
           </div>
         </div>
       </div>
 
-      <!-- Pipeline 2 -->
+      <!-- Pipeline 2: helpcore-rewrite -->
       <div class="pipeline-card animate-on-scroll">
         <div class="pipeline-number p2">2</div>
         <div class="pipeline-content">
           <div class="pipeline-header">
-            <span class="pipeline-title">helpcore-dedup</span>
-            <span class="pipeline-badge dedup">Deduplicação</span>
+            <span class="pipeline-title">helpcore-rewrite</span>
+            <span class="pipeline-badge quality">Sob Demanda</span>
           </div>
-          <p class="pipeline-desc">Identifica duplicatas exatas via hash SHA-256 do conteúdo normalizado e duplicatas semânticas via embeddings pgvector com threshold configurável.</p>
+          <p class="pipeline-desc">Reescreve artigos com overall_score de qualidade abaixo de 70 usando modelo de IA avançado. Ativado apenas para artigos que precisam de melhoria, economizando custo nos artigos de alta qualidade.</p>
           <div class="pipeline-steps">
-            <div class="pipeline-step">Hash SHA-256</div>
-            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Embedding (text-embedding-3-small)</div>
-            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Cosine similarity</div>
-            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Agrupamento</div>
+            <div class="pipeline-step">Filtro: quality overall_score &lt; 70</div>
+            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Reescrita com Claude Sonnet 4</div>
+            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> 12 campos de output</div>
           </div>
           <div class="pipeline-output">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            <span><strong>Output:</strong> Grupos de duplicatas e flags canônico/duplicata &bull; Threshold &ge; 0.92</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Pipeline 3 -->
-      <div class="pipeline-card animate-on-scroll">
-        <div class="pipeline-number p3">3</div>
-        <div class="pipeline-content">
-          <div class="pipeline-header">
-            <span class="pipeline-title">helpcore-classify</span>
-            <span class="pipeline-badge classify">Classificação</span>
-          </div>
-          <p class="pipeline-desc">Valida e recalcula a classificação de cada artigo. Heurísticas primeiro para casos claros. LLM só para ambíguos (cerca de 10% do total).</p>
-          <div class="pipeline-steps">
-            <div class="pipeline-step">Heurística (EMPTY, LINK_ONLY, SHORT_TEXT, MEDIA)</div>
-            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> LLM para ambíguos</div>
-            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Delta report</div>
-          </div>
-          <div class="pipeline-output">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            <span><strong>Output:</strong> Classificação validada para 100% dos artigos e relatório de divergências</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Pipeline 4 -->
-      <div class="pipeline-card animate-on-scroll">
-        <div class="pipeline-number p4">4</div>
-        <div class="pipeline-content">
-          <div class="pipeline-header">
-            <span class="pipeline-title">helpcore-quality-score</span>
-            <span class="pipeline-badge quality">Quality Score</span>
-          </div>
-          <p class="pipeline-desc">Gera score de qualidade (0-100) para cada artigo TEXTUAL avaliando 5 dimensões: completude, clareza, atualidade, formatação e aderência ao público-alvo.</p>
-          <div class="pipeline-steps">
-            <div class="pipeline-step">Filtro: apenas TEXTUAL (48K)</div>
-            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> LLM gpt-4.1-mini</div>
-            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Score e breakdown</div>
-          </div>
-          <div class="pipeline-output">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            <span><strong>Output:</strong> Score 0-100 e breakdown por dimensão para 48.363 artigos TEXTUAL</span>
+            <span><strong>Output:</strong> Conteúdo reescrito + métricas delta de qualidade para ~5-10K artigos &bull; Provedor: Anthropic Claude Sonnet 4</span>
           </div>
         </div>
       </div>
@@ -2448,10 +2409,10 @@
   <div class="section" id="config-ia">
     <div class="section-title animate-on-scroll">Inteligência Artificial</div>
     <h2 class="animate-on-scroll">Configuração da Inteligência Artificial</h2>
-    <p class="section-desc animate-on-scroll">Como o motor de IA vê e analisa cada artigo: os 9 campos extraídos por passagem, os parâmetros do pipeline e os campos adicionais recomendados pelo PM para a próxima fase.</p>
+    <p class="section-desc animate-on-scroll">Como o motor de IA vê e analisa cada artigo: os 32 campos extraídos em 3 blocos por passagem, os parâmetros do pipeline e os campos adicionais recomendados pelo PM para a próxima fase.</p>
 
-    <!-- SUBSECTION 1: 9 CAMPOS -->
-    <div class="ia-subsection-label animate-on-scroll">9 Campos Extraídos por Artigo</div>
+    <!-- SUBSECTION 1: 32 CAMPOS EM 3 BLOCOS -->
+    <div class="ia-subsection-label animate-on-scroll">Bloco 1: Inventário (14 campos) — doc_type, category, subcategory, target_audience, quality_score, completeness_score, key_topics, summary, requires_update + 5 novos</div>
 
     <div class="field-cards-grid">
 
@@ -2642,7 +2603,234 @@
         <div class="field-card-example">true — Artigo com referência "conforme sistema vigente até 2023"</div>
       </div>
 
-    </div><!-- /field-cards-grid -->
+      <!-- card 9: has_mandatory_fields -->
+      <div class="field-card animate-on-scroll stagger-1">
+        <span class="field-card-emoji">&#10003;</span>
+        <span class="field-card-name">has_mandatory_fields</span>
+        <div class="field-card-title">Campos Obrigatórios Presentes</div>
+        <div class="field-card-desc">Indica se o artigo possui título, corpo e procedimento mínimo para ser considerado um artigo completo.</div>
+        <div class="field-card-utility">Utilidade</div>
+        <div class="field-card-utility-text">Identificar artigos estruturalmente incompletos antes de qualquer outra análise. Bloquear da migração artigos que faltam campos fundamentais.</div>
+        <div class="field-card-values">
+          <span class="field-val-chip" style="color: var(--green); border-color: rgba(76,175,80,0.25);">true — completo</span>
+          <span class="field-val-chip special">false — incompleto</span>
+        </div>
+        <div class="field-card-example-label">Tipo</div>
+        <div class="field-card-example">boolean</div>
+      </div>
+
+      <!-- card 10: mandatory_fields_missing -->
+      <div class="field-card animate-on-scroll stagger-2">
+        <span class="field-card-emoji">&#128683;</span>
+        <span class="field-card-name">mandatory_fields_missing</span>
+        <div class="field-card-title">Campos Obrigatórios Ausentes</div>
+        <div class="field-card-desc">Lista os campos obrigatórios que estão faltando no artigo (ex.: título, corpo, procedimento).</div>
+        <div class="field-card-utility">Utilidade</div>
+        <div class="field-card-utility-text">Triagem rápida dos artigos que precisam de complementação humana antes da migração.</div>
+        <div class="field-card-values">
+          <span class="field-val-chip">titulo</span>
+          <span class="field-val-chip">corpo</span>
+          <span class="field-val-chip">procedimento</span>
+        </div>
+        <div class="field-card-example-label">Tipo</div>
+        <div class="field-card-example">string[] — lista de campos ausentes</div>
+      </div>
+
+      <!-- card 11: estimated_word_count -->
+      <div class="field-card animate-on-scroll stagger-3">
+        <span class="field-card-emoji">&#128257;</span>
+        <span class="field-card-name">estimated_word_count</span>
+        <div class="field-card-title">Contagem Estimada de Palavras</div>
+        <div class="field-card-desc">Número estimado de palavras no conteúdo do artigo, sem contar markup ou metadados.</div>
+        <div class="field-card-utility">Utilidade</div>
+        <div class="field-card-utility-text">Segmentar artigos por tamanho. Correlacionar tamanho com qualidade. Estimar esforço de reescrita.</div>
+        <div class="field-card-values">
+          <span class="field-val-chip">integer</span>
+          <span class="field-val-chip special">0 para vazios</span>
+        </div>
+        <div class="field-card-example-label">Tipo</div>
+        <div class="field-card-example">integer — ex: 342</div>
+      </div>
+
+      <!-- card 12: language_issues -->
+      <div class="field-card animate-on-scroll stagger-4">
+        <span class="field-card-emoji">&#9888;</span>
+        <span class="field-card-name">language_issues</span>
+        <div class="field-card-title">Problemas de Linguagem</div>
+        <div class="field-card-desc">Lista de até 5 problemas de linguagem detectados: erros ortográficos, jargão excessivo, linguagem informal, ambiguidade.</div>
+        <div class="field-card-utility">Utilidade</div>
+        <div class="field-card-utility-text">Detectar artigos que precisam de revisão linguística antes da migração. Priorizar reescrita.</div>
+        <div class="field-card-values">
+          <span class="field-val-chip">ortografia</span>
+          <span class="field-val-chip">jargao</span>
+          <span class="field-val-chip">ambiguidade</span>
+          <span class="field-val-chip special">max 5</span>
+        </div>
+        <div class="field-card-example-label">Tipo</div>
+        <div class="field-card-example">string[] — máx 5 itens</div>
+      </div>
+
+      <!-- card 13: confidence -->
+      <div class="field-card animate-on-scroll stagger-5">
+        <span class="field-card-emoji">&#127919;</span>
+        <span class="field-card-name">confidence</span>
+        <div class="field-card-title">Confiança da Classificação</div>
+        <div class="field-card-desc">Nível de confiança do LLM na classificação e análise realizada, de 0.0 a 1.0.</div>
+        <div class="field-card-utility">Utilidade</div>
+        <div class="field-card-utility-text">Identificar artigos onde a IA teve dúvida (confidence &lt; 0.7) para revisão humana prioritária.</div>
+        <div class="score-scale">
+          <div class="score-range"><span class="score-dot green"></span><span class="score-range-desc">0.85–1.0</span><span class="score-range-label">Alta confiança</span></div>
+          <div class="score-range"><span class="score-dot yellow"></span><span class="score-range-desc">0.70–0.84</span><span class="score-range-label">Confiança média</span></div>
+          <div class="score-range"><span class="score-dot red"></span><span class="score-range-desc">0.0–0.69</span><span class="score-range-label">Revisão humana</span></div>
+        </div>
+        <div class="field-card-example-label">Tipo</div>
+        <div class="field-card-example">number 0.0–1.0</div>
+      </div>
+
+    </div><!-- /field-cards-grid (bloco inventory) -->
+
+    <!-- BLOCO 2: QUALITY -->
+    <div class="ia-subsection-label animate-on-scroll" style="margin-top: 48px;">Bloco 2: Qualidade — quality (10 campos)</div>
+
+    <div style="margin-bottom: 24px; padding: 16px 20px; background: rgba(76,175,80,0.05); border: 1px solid rgba(76,175,80,0.2); border-radius: var(--radius-sm); font-size: 14px; color: var(--text-muted); line-height: 1.7;">
+      Avaliação multidimensional de qualidade editorial. Cada dimensão tem peso definido para o cálculo do <strong style="color: var(--green);">overall_score</strong>. Artigos com overall_score &lt; 70 ativam o pipeline de reescrita.
+    </div>
+
+    <div class="animate-on-scroll">
+      <table class="metrics-table">
+        <thead>
+          <tr>
+            <th>Campo</th>
+            <th>Escala</th>
+            <th>Peso</th>
+            <th>Descrição</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="metric-name">clarity</td>
+            <td class="metric-target">0–100</td>
+            <td style="color: var(--orange); font-weight: 700;">30%</td>
+            <td>Clareza das instruções e da linguagem utilizada</td>
+          </tr>
+          <tr>
+            <td class="metric-name">structure</td>
+            <td class="metric-target">0–100</td>
+            <td style="color: var(--orange); font-weight: 700;">25%</td>
+            <td>Organização lógica, uso de seções e formatação</td>
+          </tr>
+          <tr>
+            <td class="metric-name">completeness</td>
+            <td class="metric-target">0–100</td>
+            <td style="color: var(--orange); font-weight: 700;">25%</td>
+            <td>Cobertura de todos os cenários e informações necessárias</td>
+          </tr>
+          <tr>
+            <td class="metric-name">accuracy_signals</td>
+            <td class="metric-target">0–100</td>
+            <td style="color: var(--orange); font-weight: 700;">10%</td>
+            <td>Indícios de precisão e atualidade do conteúdo</td>
+          </tr>
+          <tr>
+            <td class="metric-name">readability</td>
+            <td class="metric-target">0–100</td>
+            <td style="color: var(--orange); font-weight: 700;">10%</td>
+            <td>Facilidade de leitura e compreensão para o público-alvo</td>
+          </tr>
+          <tr>
+            <td class="metric-name">overall_score</td>
+            <td class="metric-target">0–100</td>
+            <td style="color: var(--green); font-weight: 700;">—</td>
+            <td>Média ponderada das 5 dimensões acima</td>
+          </tr>
+          <tr>
+            <td class="metric-name">improvement_suggestions</td>
+            <td class="metric-target">string[]</td>
+            <td style="color: var(--text-muted);">—</td>
+            <td>Até 5 sugestões concretas de melhoria do artigo</td>
+          </tr>
+          <tr>
+            <td class="metric-name">priority_level</td>
+            <td class="metric-target">enum</td>
+            <td style="color: var(--text-muted);">—</td>
+            <td>critical (&lt;30) | high (30-50) | medium (50-70) | low (&gt;70)</td>
+          </tr>
+          <tr>
+            <td class="metric-name">estimated_effort</td>
+            <td class="metric-target">enum</td>
+            <td style="color: var(--text-muted);">—</td>
+            <td>minor (&lt;15min) | moderate (15-60min) | major (&gt;1h) | rewrite</td>
+          </tr>
+          <tr>
+            <td class="metric-name">actionable_items</td>
+            <td class="metric-target">object[]</td>
+            <td style="color: var(--text-muted);">—</td>
+            <td>Lista de ações com type, description e impact para o editor</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- BLOCO 3: DEDUP_ANALYSIS -->
+    <div class="ia-subsection-label animate-on-scroll" style="margin-top: 48px;">Bloco 3: Análise de Deduplicação — dedup_analysis (8 campos)</div>
+
+    <div style="margin-bottom: 24px; padding: 16px 20px; background: rgba(66,165,245,0.05); border: 1px solid rgba(66,165,245,0.2); border-radius: var(--radius-sm); font-size: 14px; color: var(--text-muted); line-height: 1.7;">
+      Análise intra-artigo de deduplicação realizada pelo LLM. A deduplicação real (cross-artigos) é feita separadamente via hash SHA-256 e embeddings pgvector. Este bloco captura sinalização semântica dentro do próprio artigo.
+    </div>
+
+    <div class="animate-on-scroll">
+      <table class="metrics-table">
+        <thead>
+          <tr>
+            <th>Campo</th>
+            <th>Tipo</th>
+            <th>Descrição</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="metric-name">is_duplicate</td>
+            <td class="metric-target">boolean</td>
+            <td>Se o artigo parece ser cópia ou derivação de outro artigo</td>
+          </tr>
+          <tr>
+            <td class="metric-name">duplicate_of</td>
+            <td class="metric-target">string | null</td>
+            <td>Referência textual ao artigo original, se identificado</td>
+          </tr>
+          <tr>
+            <td class="metric-name">duplicate_type</td>
+            <td class="metric-target">enum</td>
+            <td>exact | semantic | structural | partial | null</td>
+          </tr>
+          <tr>
+            <td class="metric-name">similarity_score</td>
+            <td class="metric-target">0.0–1.0</td>
+            <td>Estimativa de similaridade com o artigo original referenciado</td>
+          </tr>
+          <tr>
+            <td class="metric-name">reason</td>
+            <td class="metric-target">string</td>
+            <td>Justificativa da classificação de duplicata</td>
+          </tr>
+          <tr>
+            <td class="metric-name">conflicting_info</td>
+            <td class="metric-target">boolean</td>
+            <td>Se há informações conflitantes com outros artigos da base</td>
+          </tr>
+          <tr>
+            <td class="metric-name">conflict_details</td>
+            <td class="metric-target">string | null</td>
+            <td>Descrição do conflito detectado, se houver</td>
+          </tr>
+          <tr>
+            <td class="metric-name">recommended_action</td>
+            <td class="metric-target">enum</td>
+            <td>keep | merge | archive | review — ação recomendada para o artigo</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
 
     <!-- SUBSECTION 1b: ÁRVORE DE CATEGORIAS E SUBCATEGORIAS -->
@@ -3015,7 +3203,7 @@
       <!-- Grupo 1: IA -->
       <div class="config-group-card cg-ai animate-on-scroll stagger-1">
         <div class="config-group-header">
-          <div class="cg-icon">🤖</div>
+          <div class="cg-icon">&#129302;</div>
           <div>
             <h4>Inteligência Artificial</h4>
             <p>Configuração do modelo LLM e structured output</p>
@@ -3034,8 +3222,8 @@
           </tr>
           <tr>
             <td class="ct-param">Max tokens</td>
-            <td class="ct-value">8.192</td>
-            <td class="ct-meaning">Garante output completo mesmo em artigos longos</td>
+            <td class="ct-value">16.384</td>
+            <td class="ct-meaning">Garante output completo para 32 campos estruturados</td>
           </tr>
           <tr>
             <td class="ct-param">Provider</td>
@@ -3109,7 +3297,7 @@
       <!-- Grupo 4: Custos -->
       <div class="config-group-card cg-cost animate-on-scroll stagger-4">
         <div class="config-group-header">
-          <div class="cg-icon">💰</div>
+          <div class="cg-icon">&#128176;</div>
           <div>
             <h4>Controle de Custo</h4>
             <p>Teto de gastos e eficiência por artigo</p>
@@ -3117,24 +3305,24 @@
         </div>
         <table class="config-table">
           <tr>
-            <td class="ct-param">Budget mensal</td>
-            <td class="ct-value">US$ 100</td>
+            <td class="ct-param">Budget limite</td>
+            <td class="ct-value">US$ 500</td>
             <td class="ct-meaning">Teto automático de gastos configurado no pipeline</td>
           </tr>
           <tr>
             <td class="ct-param">Custo estimado</td>
-            <td class="ct-value">~US$ 50</td>
-            <td class="ct-meaning">Processamento completo da base de 108K artigos</td>
+            <td class="ct-value">~US$ 147–162</td>
+            <td class="ct-meaning">Processamento completo da base + reescrita sob demanda</td>
           </tr>
           <tr>
-            <td class="ct-param">Custo/artigo</td>
-            <td class="ct-value">~$0,0005</td>
-            <td class="ct-meaning">Menos de 1 centavo por artigo classificado</td>
+            <td class="ct-param">Custo/artigo (analysis)</td>
+            <td class="ct-value">~$0,0024</td>
+            <td class="ct-meaning">Pipeline consolidado: 3 análises em 1 chamada</td>
           </tr>
           <tr>
-            <td class="ct-param">Dry-run validado</td>
-            <td class="ct-value">98 arts = $0,05</td>
-            <td class="ct-meaning">Confirmado com amostra real antes do processamento total</td>
+            <td class="ct-param">Dry-run obrigatório</td>
+            <td class="ct-value">100 artigos</td>
+            <td class="ct-meaning">Valida custo real e calibra tokens antes do full run</td>
           </tr>
         </table>
       </div>
@@ -3252,44 +3440,65 @@
   <div class="section" id="schema">
     <div class="section-title animate-on-scroll">Modelo de Dados</div>
     <h2 class="animate-on-scroll">Schema PostgreSQL</h2>
-    <p class="section-desc animate-on-scroll">Três tabelas estruturadas em PostgreSQL 16 com pgvector habilitado para buscas semânticas. Todos os dados ficam na infraestrutura interna.</p>
+    <p class="section-desc animate-on-scroll">Duas tabelas no schema <code style="color: var(--orange); font-size: 15px;">help_core</code> em PostgreSQL 16 com pgvector habilitado. Todos os dados ficam na infraestrutura interna via HELPCORE_DATABASE_URL.</p>
 
     <div class="schema-grid">
-      <div class="schema-card animate-on-scroll stagger-1">
-        <h3><span class="table-icon">&#128203;</span> articles</h3>
-        <p class="table-desc">Tabela principal. Um registro por artigo (108K registros).</p>
-        <div class="schema-field"><span class="field-name">id</span><span class="field-type pk">UUID PK</span></div>
-        <div class="schema-field"><span class="field-name">file_path</span><span class="field-type">TEXT</span></div>
-        <div class="schema-field"><span class="field-name">area / subpasta</span><span class="field-type">TEXT</span></div>
-        <div class="schema-field"><span class="field-name">título / subtítulo</span><span class="field-type">TEXT</span></div>
-        <div class="schema-field"><span class="field-name">content_raw</span><span class="field-type">TEXT</span></div>
-        <div class="schema-field"><span class="field-name">content_clean</span><span class="field-type">TEXT</span></div>
-        <div class="schema-field"><span class="field-name">content_hash</span><span class="field-type">TEXT</span></div>
-        <div class="schema-field"><span class="field-name">embedding</span><span class="field-type vector">vector(1536)</span></div>
-        <div class="schema-field"><span class="field-name">classification_validated</span><span class="field-type">TEXT</span></div>
-        <div class="schema-field"><span class="field-name">quality_score</span><span class="field-type">NUMERIC</span></div>
-        <div class="schema-field"><span class="field-name">quality_breakdown</span><span class="field-type">JSONB</span></div>
-        <div class="schema-field"><span class="field-name">is_canonical</span><span class="field-type">BOOLEAN</span></div>
+      <div class="schema-card animate-on-scroll stagger-1" style="grid-column: 1 / -1;">
+        <h3><span class="table-icon">&#128203;</span> help_core.articles</h3>
+        <p class="table-desc">Tabela master. Um registro por artigo (108K registros). Chave de negócio: source_url (UNIQUE). Status por pipeline. Contém os 15 campos RAW do SharePoint.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0 24px;">
+          <div>
+            <div class="schema-field"><span class="field-name">id</span><span class="field-type pk">UUID PK</span></div>
+            <div class="schema-field"><span class="field-name">source_url</span><span class="field-type pk">TEXT UNIQUE</span></div>
+            <div class="schema-field"><span class="field-name">area</span><span class="field-type">TEXT</span></div>
+            <div class="schema-field"><span class="field-name">lista</span><span class="field-type">TEXT</span></div>
+            <div class="schema-field"><span class="field-name">titulo</span><span class="field-type">TEXT</span></div>
+            <div class="schema-field"><span class="field-name">subtitulo</span><span class="field-type">TEXT</span></div>
+            <div class="schema-field"><span class="field-name">nivel3</span><span class="field-type">TEXT</span></div>
+            <div class="schema-field"><span class="field-name">iid</span><span class="field-type">TEXT</span></div>
+          </div>
+          <div>
+            <div class="schema-field"><span class="field-name">modified</span><span class="field-type">TIMESTAMP</span></div>
+            <div class="schema-field"><span class="field-name">classificacao</span><span class="field-type">TEXT</span></div>
+            <div class="schema-field"><span class="field-name">help_name</span><span class="field-type">TEXT</span></div>
+            <div class="schema-field"><span class="field-name">content</span><span class="field-type">TEXT</span></div>
+            <div class="schema-field"><span class="field-name">content_hash</span><span class="field-type">TEXT</span></div>
+            <div class="schema-field"><span class="field-name">embedding</span><span class="field-type vector">vector(1536)</span></div>
+            <div class="schema-field"><span class="field-name">analysis_status</span><span class="field-type">TEXT</span></div>
+            <div class="schema-field"><span class="field-name">rewrite_status</span><span class="field-type">TEXT</span></div>
+          </div>
+        </div>
       </div>
 
-      <div class="schema-card animate-on-scroll stagger-2">
-        <h3><span class="table-icon">&#128279;</span> dedup_groups</h3>
-        <p class="table-desc">Grupos de artigos duplicados (exatos ou semânticos)</p>
-        <div class="schema-field"><span class="field-name">id</span><span class="field-type pk">UUID PK</span></div>
-        <div class="schema-field"><span class="field-name">dedup_type</span><span class="field-type">TEXT</span></div>
-        <div class="schema-field"><span class="field-name">similarity</span><span class="field-type">NUMERIC</span></div>
-        <div class="schema-field"><span class="field-name">member_count</span><span class="field-type">INT</span></div>
-        <div class="schema-field"><span class="field-name">canonical_id</span><span class="field-type pk">UUID FK</span></div>
-      </div>
-
-      <div class="schema-card animate-on-scroll stagger-3">
-        <h3><span class="table-icon">&#128279;</span> article_links</h3>
-        <p class="table-desc">Links encontrados em artigos LINK_ONLY</p>
-        <div class="schema-field"><span class="field-name">id</span><span class="field-type pk">UUID PK</span></div>
-        <div class="schema-field"><span class="field-name">article_id</span><span class="field-type pk">UUID FK</span></div>
-        <div class="schema-field"><span class="field-name">url</span><span class="field-type">TEXT</span></div>
-        <div class="schema-field"><span class="field-name">status</span><span class="field-type">TEXT</span></div>
-        <div class="schema-field"><span class="field-name">checked_at</span><span class="field-type">TIMESTAMP</span></div>
+      <div class="schema-card animate-on-scroll stagger-2" style="grid-column: 1 / -1;">
+        <h3><span class="table-icon">&#128200;</span> help_core.analysis_results</h3>
+        <p class="table-desc">Tabela de resultados. Um registro por artigo processado. Chave técnica: pe_item_id (UNIQUE). Todos os 32 campos mapeados com rastreabilidade completa.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0 24px;">
+          <div>
+            <div class="schema-field"><span class="field-name">id</span><span class="field-type pk">UUID PK</span></div>
+            <div class="schema-field"><span class="field-name">article_id</span><span class="field-type pk">UUID FK</span></div>
+            <div class="schema-field"><span class="field-name">pe_item_id</span><span class="field-type pk">TEXT UNIQUE</span></div>
+            <div class="schema-field"><span class="field-name">doc_type</span><span class="field-type">TEXT</span></div>
+            <div class="schema-field"><span class="field-name">category / subcategory</span><span class="field-type">TEXT</span></div>
+            <div class="schema-field"><span class="field-name">target_audience</span><span class="field-type">TEXT</span></div>
+            <div class="schema-field"><span class="field-name">quality_score / completeness_score</span><span class="field-type">NUMERIC</span></div>
+            <div class="schema-field"><span class="field-name">key_topics</span><span class="field-type">TEXT[]</span></div>
+            <div class="schema-field"><span class="field-name">summary</span><span class="field-type">TEXT</span></div>
+            <div class="schema-field"><span class="field-name">requires_update</span><span class="field-type">BOOLEAN</span></div>
+          </div>
+          <div>
+            <div class="schema-field"><span class="field-name">clarity / structure / completeness</span><span class="field-type">NUMERIC</span></div>
+            <div class="schema-field"><span class="field-name">accuracy_signals / readability</span><span class="field-type">NUMERIC</span></div>
+            <div class="schema-field"><span class="field-name">overall_score</span><span class="field-type">NUMERIC</span></div>
+            <div class="schema-field"><span class="field-name">priority_level / estimated_effort</span><span class="field-type">TEXT</span></div>
+            <div class="schema-field"><span class="field-name">improvement_suggestions</span><span class="field-type">TEXT[]</span></div>
+            <div class="schema-field"><span class="field-name">dedup_analysis</span><span class="field-type">JSONB</span></div>
+            <div class="schema-field"><span class="field-name">prompt_version</span><span class="field-type">TEXT</span></div>
+            <div class="schema-field"><span class="field-name">prompt_tokens / completion_tokens</span><span class="field-type">INT</span></div>
+            <div class="schema-field"><span class="field-name">cost_usd</span><span class="field-type">NUMERIC</span></div>
+            <div class="schema-field"><span class="field-name">processed_at</span><span class="field-type">TIMESTAMP</span></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -3300,28 +3509,172 @@
   <div class="section" id="custos">
     <div class="section-title animate-on-scroll">Estimativa de Custo</div>
     <h2 class="animate-on-scroll">Investimento em LLM por Pipeline</h2>
-    <p class="section-desc animate-on-scroll">Todas as etapas usam gpt-4.1-mini para otimizar custo. Um dry-run de 100 artigos valida a projeção antes do processamento completo.</p>
+    <p class="section-desc animate-on-scroll">Pipeline consolidado reduz chamadas de 3 para 1 por artigo. Um dry-run de 100 artigos valida a projeção antes do processamento completo.</p>
 
     <div class="cost-grid">
       <div class="cost-card animate-on-scroll stagger-1">
-        <div class="cost-value">~$5</div>
-        <div class="cost-label">Classificação</div>
-        <div class="cost-detail">~10.800 artigos ambíguos<br>~800 tokens input/artigo<br>~100 tokens output/artigo</div>
+        <div class="cost-value">~$131</div>
+        <div class="cost-label">helpcore-analysis</div>
+        <div class="cost-detail">54K artigos únicos processados<br>~700 tokens input/artigo<br>~1.100 tokens output/artigo<br>gpt-4.1-mini</div>
       </div>
       <div class="cost-card animate-on-scroll stagger-2">
-        <div class="cost-value">~$52</div>
-        <div class="cost-label">Quality Score</div>
-        <div class="cost-detail">48.363 artigos TEXTUAL<br>~1.500 tokens input/artigo<br>~300 tokens output/artigo</div>
-      </div>
-      <div class="cost-card animate-on-scroll stagger-3">
         <div class="cost-value">~$1</div>
         <div class="cost-label">Embeddings</div>
         <div class="cost-detail">~52.7K artigos únicos<br>text-embedding-3-small<br>~500 tokens/artigo</div>
       </div>
+      <div class="cost-card animate-on-scroll stagger-3">
+        <div class="cost-value">~$15–30</div>
+        <div class="cost-label">helpcore-rewrite</div>
+        <div class="cost-detail">~5-10K artigos com quality &lt; 70<br>Claude Sonnet 4<br>Ativado apenas sob demanda</div>
+      </div>
       <div class="cost-card animate-on-scroll stagger-4" style="border-color: rgba(255,87,34,0.3); background: rgba(255,87,34,0.03);">
-        <div class="cost-value">~$58</div>
+        <div class="cost-value">~$147–162</div>
         <div class="cost-label">Total Estimado</div>
-        <div class="cost-detail">Orçamento máximo: US$ 500<br>Margem de segurança: 8.6x<br>Dry-run valida antes do full run</div>
+        <div class="cost-detail">Orçamento máximo: US$ 500<br>Margem de segurança: 3x<br>Dry-run valida antes do full run</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-sep"><hr></div>
+
+  <!-- CAMPOS RAW SHAREPOINT -->
+  <div class="section" id="campos-raw" style="scroll-margin-top: 80px;">
+    <div class="section-title animate-on-scroll">Dados de Origem</div>
+    <h2 class="animate-on-scroll">Campos RAW do SharePoint</h2>
+    <p class="section-desc animate-on-scroll">Os 15 campos extraídos diretamente dos arquivos TXT exportados do SharePoint. Estes campos são preservados integralmente na tabela master sem transformação.</p>
+
+    <div class="animate-on-scroll">
+      <table class="metrics-table">
+        <thead>
+          <tr>
+            <th>Campo</th>
+            <th>Tipo</th>
+            <th>Descrição</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="metric-name">area</td>
+            <td class="metric-target">TEXT</td>
+            <td>Área operacional do SharePoint (uma das 26 áreas mapeadas)</td>
+          </tr>
+          <tr>
+            <td class="metric-name">lista</td>
+            <td class="metric-target">TEXT</td>
+            <td>Nome da lista ou biblioteca de documentos dentro da área</td>
+          </tr>
+          <tr>
+            <td class="metric-name">titulo</td>
+            <td class="metric-target">TEXT</td>
+            <td>Título do artigo conforme definido no SharePoint</td>
+          </tr>
+          <tr>
+            <td class="metric-name">subtitulo</td>
+            <td class="metric-target">TEXT</td>
+            <td>Subtítulo ou descrição secundária do artigo</td>
+          </tr>
+          <tr>
+            <td class="metric-name">nivel3</td>
+            <td class="metric-target">TEXT</td>
+            <td>Classificação de terceiro nível na hierarquia do SharePoint</td>
+          </tr>
+          <tr>
+            <td class="metric-name">iid</td>
+            <td class="metric-target">TEXT</td>
+            <td>Identificador interno do item no SharePoint (iid da lista)</td>
+          </tr>
+          <tr>
+            <td class="metric-name">modified</td>
+            <td class="metric-target">TIMESTAMP</td>
+            <td>Data e hora da última modificação do artigo no SharePoint</td>
+          </tr>
+          <tr>
+            <td class="metric-name">classificacao</td>
+            <td class="metric-target">TEXT</td>
+            <td>Classificação heurística original: TEXTUAL, LINK_ONLY, SHORT_TEXT, EMPTY, MEDIA</td>
+          </tr>
+          <tr>
+            <td class="metric-name">help_name</td>
+            <td class="metric-target">TEXT</td>
+            <td>Nome canônico do artigo dentro da base HELP</td>
+          </tr>
+          <tr>
+            <td class="metric-name">list_url</td>
+            <td class="metric-target">TEXT</td>
+            <td>URL da lista no SharePoint que contém este artigo</td>
+          </tr>
+          <tr>
+            <td class="metric-name">links</td>
+            <td class="metric-target">TEXT[]</td>
+            <td>Lista de URLs encontradas no conteúdo do artigo</td>
+          </tr>
+          <tr>
+            <td class="metric-name">source_filename</td>
+            <td class="metric-target">TEXT</td>
+            <td>Nome do arquivo TXT de origem no filesystem exportado</td>
+          </tr>
+          <tr>
+            <td class="metric-name">source_area_path</td>
+            <td class="metric-target">TEXT</td>
+            <td>Caminho completo no filesystem até o arquivo (área/subpasta/arquivo)</td>
+          </tr>
+          <tr>
+            <td class="metric-name">content</td>
+            <td class="metric-target">TEXT</td>
+            <td>Conteúdo textual limpo extraído do HTML SharePoint</td>
+          </tr>
+          <tr>
+            <td class="metric-name">source_url</td>
+            <td class="metric-target">TEXT UNIQUE</td>
+            <td>URL canônica do artigo — chave de negócio para deduplicação e rastreabilidade</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section-sep"><hr></div>
+
+  <!-- PIPELINE REESCRITA -->
+  <div class="section" id="pipeline-reescrita">
+    <div class="section-title animate-on-scroll">Pipeline Secundário</div>
+    <h2 class="animate-on-scroll">Pipeline de Reescrita (helpcore-rewrite)</h2>
+    <p class="section-desc animate-on-scroll">Pipeline sob demanda que melhora artigos de baixa qualidade usando modelo de IA avançado. Ativado automaticamente para artigos com overall_score abaixo de 70.</p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+      <div class="schema-card animate-on-scroll stagger-1">
+        <h3><span class="table-icon">&#127774;</span> Gatilho</h3>
+        <p class="table-desc">Condição de ativação automática do pipeline</p>
+        <div class="schema-field"><span class="field-name">Condição</span><span class="field-type">overall_score &lt; 70</span></div>
+        <div class="schema-field"><span class="field-name">Volume estimado</span><span class="field-type">5.000–10.000 artigos</span></div>
+        <div class="schema-field"><span class="field-name">Percentual</span><span class="field-type">~10–20% da base</span></div>
+        <div class="schema-field"><span class="field-name">Prioridade</span><span class="field-type">priority_level = critical ou high</span></div>
+      </div>
+
+      <div class="schema-card animate-on-scroll stagger-2">
+        <h3><span class="table-icon">&#129302;</span> Modelo</h3>
+        <p class="table-desc">Configuração do modelo de reescrita</p>
+        <div class="schema-field"><span class="field-name">Provedor</span><span class="field-type">Anthropic</span></div>
+        <div class="schema-field"><span class="field-name">Modelo</span><span class="field-type">claude-sonnet-4</span></div>
+        <div class="schema-field"><span class="field-name">Justificativa</span><span class="field-type">Superior em geração de texto PT-BR</span></div>
+        <div class="schema-field"><span class="field-name">Custo estimado</span><span class="field-type">~US$ 15–30 total</span></div>
+      </div>
+
+      <div class="schema-card animate-on-scroll stagger-3">
+        <h3><span class="table-icon">&#128200;</span> Output (12 campos)</h3>
+        <p class="table-desc">Campos produzidos pela reescrita</p>
+        <div class="schema-field"><span class="field-name">rewritten_content</span><span class="field-type">TEXT</span></div>
+        <div class="schema-field"><span class="field-name">rewritten_title</span><span class="field-type">TEXT</span></div>
+        <div class="schema-field"><span class="field-name">clarity_delta</span><span class="field-type">NUMERIC</span></div>
+        <div class="schema-field"><span class="field-name">structure_delta</span><span class="field-type">NUMERIC</span></div>
+        <div class="schema-field"><span class="field-name">completeness_delta</span><span class="field-type">NUMERIC</span></div>
+        <div class="schema-field"><span class="field-name">overall_score_delta</span><span class="field-type">NUMERIC</span></div>
+        <div class="schema-field"><span class="field-name">changes_summary</span><span class="field-type">TEXT</span></div>
+        <div class="schema-field"><span class="field-name">rewrite_rationale</span><span class="field-type">TEXT</span></div>
+        <div class="schema-field"><span class="field-name">preserved_elements</span><span class="field-type">TEXT[]</span></div>
+        <div class="schema-field"><span class="field-name">removed_elements</span><span class="field-type">TEXT[]</span></div>
+        <div class="schema-field"><span class="field-name">rewrite_confidence</span><span class="field-type">NUMERIC 0.0–1.0</span></div>
+        <div class="schema-field"><span class="field-name">requires_human_review</span><span class="field-type">BOOLEAN</span></div>
       </div>
     </div>
   </div>
@@ -3531,7 +3884,7 @@
     <div class="footer-logos">
       <img src="https://elloconsultoria.com/images/ello-logo-orange.png" alt="Ello Consultoria">
     </div>
-    <p>Ello Consultoria &bull; Projeto HELP CORE &bull; Outubro 2026</p>
+    <p>Ello Consultoria &bull; Projeto HELP CORE &bull; Outubro 2026 &bull; v2.0</p>
   </div>
 
   <!-- SCRIPTS -->
