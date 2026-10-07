@@ -1556,95 +1556,6 @@
       line-height: 1.5;
     }
 
-    /* --- PM BONUS CARDS --- */
-    .pm-cards-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
-    @media (max-width: 1100px) {
-      .pm-cards-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 600px) {
-      .pm-cards-grid { grid-template-columns: 1fr; }
-    }
-
-    .pm-bonus-card {
-      background: var(--surface);
-      border: 1px dashed rgba(255,152,0,0.3);
-      border-radius: var(--radius);
-      padding: 24px;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      position: relative;
-      overflow: hidden;
-    }
-    .pm-bonus-card::before {
-      content: 'EM BREVE';
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      color: rgba(255,152,0,0.5);
-      background: rgba(255,152,0,0.08);
-      border: 1px solid rgba(255,152,0,0.2);
-      border-radius: 4px;
-      padding: 3px 7px;
-    }
-    .pm-bonus-card:hover {
-      border-color: rgba(255,152,0,0.55);
-      transform: translateY(-6px);
-      box-shadow: 0 16px 48px rgba(0,0,0,0.3);
-    }
-    .pm-bonus-emoji {
-      font-size: 28px;
-      display: block;
-      margin-bottom: 12px;
-      opacity: 0.75;
-      transition: opacity 0.3s, transform 0.3s;
-    }
-    .pm-bonus-card:hover .pm-bonus-emoji { opacity: 1; transform: scale(1.15); }
-    .pm-bonus-name {
-      font-family: 'Courier New', monospace;
-      font-size: 13px;
-      font-weight: 700;
-      color: rgba(255,152,0,0.7);
-      background: rgba(255,152,0,0.07);
-      border: 1px solid rgba(255,152,0,0.15);
-      border-radius: 5px;
-      padding: 3px 9px;
-      display: inline-block;
-      margin-bottom: 10px;
-    }
-    .pm-bonus-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 8px;
-      opacity: 0.8;
-    }
-    .pm-bonus-desc {
-      font-size: 12px;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 14px;
-      opacity: 0.7;
-    }
-    .pm-recommended-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      color: #FF9800;
-      background: rgba(255,152,0,0.08);
-      border: 1px solid rgba(255,152,0,0.2);
-      border-radius: 5px;
-      padding: 4px 10px;
-    }
 
     /* =========================================================
        END CONFIG-IA SECTION STYLES
@@ -2408,7 +2319,7 @@
   <div class="section" id="config-ia">
     <div class="section-title animate-on-scroll">Inteligência Artificial</div>
     <h2 class="animate-on-scroll">Configuração da Inteligência Artificial</h2>
-    <p class="section-desc animate-on-scroll">Como o motor de IA vê e analisa cada artigo: os 28 campos extraídos em 2 blocos por passagem, os parâmetros do pipeline e os campos adicionais recomendados pelo PM para a próxima fase.</p>
+    <p class="section-desc animate-on-scroll">Como o motor de IA vê e analisa cada artigo: os 28 campos extraídos em 2 blocos por passagem e os parâmetros do pipeline.</p>
 
     <!-- SUBSECTION 1: 28 CAMPOS EM 2 BLOCOS -->
     <div class="ia-subsection-label animate-on-scroll">Bloco 1: Inventário (18 campos) — doc_type, category, subcategory, target_audience, quality_score, completeness_score, key_topics, summary, requires_update + area_operacional, complexity_level, mentions_systems, escalation_present + 5 anteriores</div>
@@ -3346,48 +3257,6 @@
     </div><!-- /config-dashboard -->
 
 
-    <!-- SUBSECTION 3: PM BONUS FIELDS (incorporados) -->
-    <div class="ia-subsection-label animate-on-scroll">Campos do PM — Incorporados ao Bloco 1 (inventory)</div>
-
-    <div style="margin-bottom: 24px; padding: 16px 20px; background: rgba(76,175,80,0.05); border: 1px solid rgba(76,175,80,0.2); border-radius: var(--radius-sm); font-size: 14px; color: var(--text-muted); line-height: 1.7;">
-      <strong style="color: var(--green);">✓ Incorporados ao pipeline v2.1:</strong> Os 4 campos recomendados pelo PM foram incorporados diretamente ao Bloco 1 (inventory), elevando o total de 14 para 18 campos. Passam a ser extraídos em produção junto com os demais campos de inventário.
-    </div>
-
-    <div class="pm-cards-grid">
-
-      <div class="pm-bonus-card animate-on-scroll stagger-1">
-        <span class="pm-bonus-emoji">🏢</span>
-        <span class="pm-bonus-name">area_operacional</span>
-        <div class="pm-bonus-title">Área de Origem</div>
-        <div class="pm-bonus-desc">Área dentro do Help de onde o artigo veio — uma das 26 áreas mapeadas do Bradesco, permitindo segmentação e relatórios por departamento.</div>
-        <span class="pm-recommended-tag" style="background: rgba(76,175,80,0.15); color: var(--green);">✓ Incorporado ao Bloco 1</span>
-      </div>
-
-      <div class="pm-bonus-card animate-on-scroll stagger-2">
-        <span class="pm-bonus-emoji">🎯</span>
-        <span class="pm-bonus-name">complexity_level</span>
-        <div class="pm-bonus-title">Nível de Complexidade</div>
-        <div class="pm-bonus-desc">Complexidade do procedimento descrito: básico, intermediário ou avançado. Essencial para curadoria de onboarding e trilhas de treinamento.</div>
-        <span class="pm-recommended-tag" style="background: rgba(76,175,80,0.15); color: var(--green);">✓ Incorporado ao Bloco 1</span>
-      </div>
-
-      <div class="pm-bonus-card animate-on-scroll stagger-3">
-        <span class="pm-bonus-emoji">💻</span>
-        <span class="pm-bonus-name">mentions_systems</span>
-        <div class="pm-bonus-title">Sistemas Mencionados</div>
-        <div class="pm-bonus-desc">Lista de sistemas internos citados no artigo (SACL, Plástico, BIA, etc.). Permite mapear dependências e artigos afetados por mudanças de sistema.</div>
-        <span class="pm-recommended-tag" style="background: rgba(76,175,80,0.15); color: var(--green);">✓ Incorporado ao Bloco 1</span>
-      </div>
-
-      <div class="pm-bonus-card animate-on-scroll stagger-4">
-        <span class="pm-bonus-emoji">📞</span>
-        <span class="pm-bonus-name">escalation_present</span>
-        <div class="pm-bonus-title">Fluxo de Escalação</div>
-        <div class="pm-bonus-desc">Flag booleana indicando se o artigo contém um fluxo de escalação documentado. Audita cobertura de situações-exceção em toda a base.</div>
-        <span class="pm-recommended-tag" style="background: rgba(76,175,80,0.15); color: var(--green);">✓ Incorporado ao Bloco 1</span>
-      </div>
-
-    </div><!-- /pm-cards-grid -->
 
   </div><!-- /section#config-ia -->
 
