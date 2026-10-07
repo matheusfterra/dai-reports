@@ -1911,7 +1911,7 @@
   <div class="hero">
     <h1>Processamento <span>Inteligente</span> da Base HELP</h1>
     <p class="subtitle">Motor de IA que ingere, limpa, deduplica, classifica e pontua 108 mil artigos do Bradesco. Transforma uma base legada em conhecimento estruturado e acionável.</p>
-    <p class="subtitle-small">Powered by Processing Engine &bull; gpt-4.1-mini &bull; pgvector</p>
+    <p class="subtitle-small">Powered by Processing Engine &bull; claude-sonnet-4-20250514 &bull; pgvector</p>
     <div class="hero-stats">
       <div class="hero-stat"><span class="number">108K</span><span class="label">Artigos</span></div>
       <div class="hero-stat"><span class="number">26</span><span class="label">Áreas</span></div>
@@ -1984,7 +1984,7 @@
           </div>
           <div class="arch-box small highlight">
             <h4>&#129302; helpcore-analysis</h4>
-            <p>1 chamada LLM: inventory + quality + dedup_analysis</p>
+            <p>1 chamada LLM: inventory + quality</p>
           </div>
           <div class="arch-box small">
             <h4>&#9989; Validators</h4>
@@ -2033,16 +2033,15 @@
             <span class="pipeline-title">helpcore-analysis</span>
             <span class="pipeline-badge ingest">Consolidado</span>
           </div>
-          <p class="pipeline-desc">Executa 3 análises simultâneas por artigo em 1 única chamada LLM: classificação de inventário (14 campos), avaliação multidimensional de qualidade (10 campos) e análise intra-artigo de deduplicação (8 campos). A mesma entrada serve para as 3 análises, economizando 2/3 dos tokens de input.</p>
+          <p class="pipeline-desc">Executa 2 análises simultâneas por artigo em 1 única chamada LLM: classificação de inventário (18 campos) e avaliação multidimensional de qualidade (12 campos). A mesma entrada serve para as 2 análises, economizando 50% dos tokens de input.</p>
           <div class="pipeline-steps">
-            <div class="pipeline-step">Inventário — 14 campos</div>
-            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Qualidade — 10 campos</div>
-            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Dedup intra-artigo — 8 campos</div>
+            <div class="pipeline-step">Inventário — 18 campos</div>
+            <div class="pipeline-step"><span class="step-arrow">&#8594;</span> Qualidade — 12 campos</div>
             <div class="pipeline-step"><span class="step-arrow">&#8594;</span> 1 chamada LLM total</div>
           </div>
           <div class="pipeline-output">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            <span><strong>Output:</strong> 32 campos estruturados em 3 blocos (inventory, quality, dedup_analysis) por artigo &bull; Provedor: OpenAI gpt-4.1-mini</span>
+            <span><strong>Output:</strong> 28 campos estruturados em 2 blocos (inventory, quality) por artigo &bull; Provedor: Anthropic (Claude) claude-sonnet-4-20250514</span>
           </div>
         </div>
       </div>
@@ -2409,10 +2408,10 @@
   <div class="section" id="config-ia">
     <div class="section-title animate-on-scroll">Inteligência Artificial</div>
     <h2 class="animate-on-scroll">Configuração da Inteligência Artificial</h2>
-    <p class="section-desc animate-on-scroll">Como o motor de IA vê e analisa cada artigo: os 32 campos extraídos em 3 blocos por passagem, os parâmetros do pipeline e os campos adicionais recomendados pelo PM para a próxima fase.</p>
+    <p class="section-desc animate-on-scroll">Como o motor de IA vê e analisa cada artigo: os 28 campos extraídos em 2 blocos por passagem, os parâmetros do pipeline e os campos adicionais recomendados pelo PM para a próxima fase.</p>
 
-    <!-- SUBSECTION 1: 32 CAMPOS EM 3 BLOCOS -->
-    <div class="ia-subsection-label animate-on-scroll">Bloco 1: Inventário (14 campos) — doc_type, category, subcategory, target_audience, quality_score, completeness_score, key_topics, summary, requires_update + 5 novos</div>
+    <!-- SUBSECTION 1: 28 CAMPOS EM 2 BLOCOS -->
+    <div class="ia-subsection-label animate-on-scroll">Bloco 1: Inventário (18 campos) — doc_type, category, subcategory, target_audience, quality_score, completeness_score, key_topics, summary, requires_update + area_operacional, complexity_level, mentions_systems, escalation_present + 5 anteriores</div>
 
     <div class="field-cards-grid">
 
@@ -2687,10 +2686,77 @@
         <div class="field-card-example">number 0.0–1.0</div>
       </div>
 
+      <!-- card: area_operacional -->
+      <div class="field-card animate-on-scroll stagger-1">
+        <span class="field-card-emoji">🏢</span>
+        <span class="field-card-name">area_operacional</span>
+        <div class="field-card-title">Área Operacional</div>
+        <div class="field-card-desc">Área operacional do Bradesco à qual o artigo pertence — uma das 26 áreas mapeadas do Help, mais "nao_identificada" como fallback.</div>
+        <div class="field-card-utility">Utilidade</div>
+        <div class="field-card-utility-text">Segmentação por departamento. Relatórios de cobertura e qualidade por área. Identificar áreas com lacunas na base de conhecimento.</div>
+        <div class="field-card-values">
+          <span class="field-val-chip">string (enum 28 valores)</span>
+          <span class="field-val-chip special">nao_identificada</span>
+        </div>
+        <div class="field-card-example-label">Tipo</div>
+        <div class="field-card-example">string — ex: "cartoes", "credito_pessoal", "nao_identificada"</div>
+      </div>
+
+      <!-- card: complexity_level -->
+      <div class="field-card animate-on-scroll stagger-2">
+        <span class="field-card-emoji">🎯</span>
+        <span class="field-card-name">complexity_level</span>
+        <div class="field-card-title">Nível de Complexidade</div>
+        <div class="field-card-desc">Complexidade do procedimento descrito: básico, intermediário ou avançado. Mede o grau de especialização exigido do leitor.</div>
+        <div class="field-card-utility">Utilidade</div>
+        <div class="field-card-utility-text">Curadoria de onboarding e trilhas de treinamento. Filtrar artigos adequados ao nível do operador. Mapear cobertura por complexidade.</div>
+        <div class="field-card-values">
+          <span class="field-val-chip">basico</span>
+          <span class="field-val-chip">intermediario</span>
+          <span class="field-val-chip special">avancado</span>
+        </div>
+        <div class="field-card-example-label">Tipo</div>
+        <div class="field-card-example">enum — "basico" | "intermediario" | "avancado"</div>
+      </div>
+
+      <!-- card: mentions_systems -->
+      <div class="field-card animate-on-scroll stagger-3">
+        <span class="field-card-emoji">💻</span>
+        <span class="field-card-name">mentions_systems</span>
+        <div class="field-card-title">Sistemas Mencionados</div>
+        <div class="field-card-desc">Lista de sistemas internos citados no artigo: SACL, Plástico, BIA, e outros sistemas do ambiente Bradesco.</div>
+        <div class="field-card-utility">Utilidade</div>
+        <div class="field-card-utility-text">Mapear dependências entre artigos e sistemas. Identificar artigos afetados por mudanças de sistema. Auditar cobertura de documentação técnica.</div>
+        <div class="field-card-values">
+          <span class="field-val-chip">SACL</span>
+          <span class="field-val-chip">Plástico</span>
+          <span class="field-val-chip">BIA</span>
+          <span class="field-val-chip special">string[]</span>
+        </div>
+        <div class="field-card-example-label">Tipo</div>
+        <div class="field-card-example">string[] — ex: ["SACL", "BIA"]</div>
+      </div>
+
+      <!-- card: escalation_present -->
+      <div class="field-card animate-on-scroll stagger-4">
+        <span class="field-card-emoji">📞</span>
+        <span class="field-card-name">escalation_present</span>
+        <div class="field-card-title">Fluxo de Escalação</div>
+        <div class="field-card-desc">Flag booleana indicando se o artigo contém um fluxo de escalação documentado — situações-exceção que requerem encaminhamento para nível superior.</div>
+        <div class="field-card-utility">Utilidade</div>
+        <div class="field-card-utility-text">Auditar cobertura de situações-exceção em toda a base. Identificar procedimentos sem fluxo de escalação definido.</div>
+        <div class="field-card-values">
+          <span class="field-val-chip">true</span>
+          <span class="field-val-chip special">false</span>
+        </div>
+        <div class="field-card-example-label">Tipo</div>
+        <div class="field-card-example">boolean — true se contém fluxo de escalação</div>
+      </div>
+
     </div><!-- /field-cards-grid (bloco inventory) -->
 
     <!-- BLOCO 2: QUALITY -->
-    <div class="ia-subsection-label animate-on-scroll" style="margin-top: 48px;">Bloco 2: Qualidade — quality (10 campos)</div>
+    <div class="ia-subsection-label animate-on-scroll" style="margin-top: 48px;">Bloco 2: Qualidade — quality (12 campos)</div>
 
     <div style="margin-bottom: 24px; padding: 16px 20px; background: rgba(76,175,80,0.05); border: 1px solid rgba(76,175,80,0.2); border-radius: var(--radius-sm); font-size: 14px; color: var(--text-muted); line-height: 1.7;">
       Avaliação multidimensional de qualidade editorial. Cada dimensão tem peso definido para o cálculo do <strong style="color: var(--green);">overall_score</strong>. Artigos com overall_score &lt; 70 ativam o pipeline de reescrita.
@@ -2767,71 +2833,21 @@
             <td style="color: var(--text-muted);">—</td>
             <td>Lista de ações com type, description e impact para o editor</td>
           </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- BLOCO 3: DEDUP_ANALYSIS -->
-    <div class="ia-subsection-label animate-on-scroll" style="margin-top: 48px;">Bloco 3: Análise de Deduplicação — dedup_analysis (8 campos)</div>
-
-    <div style="margin-bottom: 24px; padding: 16px 20px; background: rgba(66,165,245,0.05); border: 1px solid rgba(66,165,245,0.2); border-radius: var(--radius-sm); font-size: 14px; color: var(--text-muted); line-height: 1.7;">
-      Análise intra-artigo de deduplicação realizada pelo LLM. A deduplicação real (cross-artigos) é feita separadamente via hash SHA-256 e embeddings pgvector. Este bloco captura sinalização semântica dentro do próprio artigo.
-    </div>
-
-    <div class="animate-on-scroll">
-      <table class="metrics-table">
-        <thead>
           <tr>
-            <th>Campo</th>
-            <th>Tipo</th>
-            <th>Descrição</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="metric-name">is_duplicate</td>
+            <td class="metric-name">has_internal_conflicts</td>
             <td class="metric-target">boolean</td>
-            <td>Se o artigo parece ser cópia ou derivação de outro artigo</td>
+            <td style="color: var(--text-muted);">—</td>
+            <td>Se o artigo contém contradições internas (instruções que se contradizem dentro do mesmo artigo)</td>
           </tr>
           <tr>
-            <td class="metric-name">duplicate_of</td>
+            <td class="metric-name">internal_conflict_details</td>
             <td class="metric-target">string | null</td>
-            <td>Referência textual ao artigo original, se identificado</td>
-          </tr>
-          <tr>
-            <td class="metric-name">duplicate_type</td>
-            <td class="metric-target">enum</td>
-            <td>exact | semantic | structural | partial | null</td>
-          </tr>
-          <tr>
-            <td class="metric-name">similarity_score</td>
-            <td class="metric-target">0.0–1.0</td>
-            <td>Estimativa de similaridade com o artigo original referenciado</td>
-          </tr>
-          <tr>
-            <td class="metric-name">reason</td>
-            <td class="metric-target">string</td>
-            <td>Justificativa da classificação de duplicata</td>
-          </tr>
-          <tr>
-            <td class="metric-name">conflicting_info</td>
-            <td class="metric-target">boolean</td>
-            <td>Se há informações conflitantes com outros artigos da base</td>
-          </tr>
-          <tr>
-            <td class="metric-name">conflict_details</td>
-            <td class="metric-target">string | null</td>
-            <td>Descrição do conflito detectado, se houver</td>
-          </tr>
-          <tr>
-            <td class="metric-name">recommended_action</td>
-            <td class="metric-target">enum</td>
-            <td>keep | merge | archive | review — ação recomendada para o artigo</td>
+            <td style="color: var(--text-muted);">—</td>
+            <td>Detalhes da contradição interna detectada, máx 300 caracteres. Null quando has_internal_conflicts = false</td>
           </tr>
         </tbody>
       </table>
     </div>
-
 
     <!-- SUBSECTION 1b: ÁRVORE DE CATEGORIAS E SUBCATEGORIAS -->
     <div class="ia-subsection-label animate-on-scroll">Árvore de Categorias e Subcategorias</div>
@@ -3212,23 +3228,23 @@
         <table class="config-table">
           <tr>
             <td class="ct-param">Modelo</td>
-            <td class="ct-value">gpt-4.1-mini</td>
-            <td class="ct-meaning">95% da qualidade do GPT-4.1 a ~10% do custo</td>
+            <td class="ct-value">claude-sonnet-4-20250514</td>
+            <td class="ct-meaning">Alta qualidade em classificação estruturada PT-BR com structured output</td>
           </tr>
           <tr>
             <td class="ct-param">Temperature</td>
-            <td class="ct-value">0.0</td>
-            <td class="ct-meaning">Máxima consistência: mesmo artigo, mesma classificação</td>
+            <td class="ct-value">0.1</td>
+            <td class="ct-meaning">Alta consistência com leve flexibilidade para raciocínio contextual</td>
           </tr>
           <tr>
             <td class="ct-param">Max tokens</td>
             <td class="ct-value">16.384</td>
-            <td class="ct-meaning">Garante output completo para 32 campos estruturados</td>
+            <td class="ct-meaning">Garante output completo para 28 campos estruturados</td>
           </tr>
           <tr>
             <td class="ct-param">Provider</td>
-            <td class="ct-value">OpenAI</td>
-            <td class="ct-meaning">API oficial com SLA corporativo</td>
+            <td class="ct-value">Anthropic (Claude)</td>
+            <td class="ct-meaning">API oficial Anthropic com SLA corporativo</td>
           </tr>
         </table>
       </div>
@@ -3279,7 +3295,7 @@
           <tr>
             <td class="ct-param">Rate limit</td>
             <td class="ct-value">60 req/min</td>
-            <td class="ct-meaning">Respeita limites da API OpenAI sem throttling</td>
+            <td class="ct-meaning">Respeita limites da API Anthropic sem throttling</td>
           </tr>
           <tr>
             <td class="ct-param">Retries</td>
@@ -3306,18 +3322,18 @@
         <table class="config-table">
           <tr>
             <td class="ct-param">Budget limite</td>
-            <td class="ct-value">US$ 500</td>
+            <td class="ct-value">US$ 2.000</td>
             <td class="ct-meaning">Teto automático de gastos configurado no pipeline</td>
           </tr>
           <tr>
             <td class="ct-param">Custo estimado</td>
-            <td class="ct-value">~US$ 147–162</td>
+            <td class="ct-value">~US$ 1.020–1.035</td>
             <td class="ct-meaning">Processamento completo da base + reescrita sob demanda</td>
           </tr>
           <tr>
             <td class="ct-param">Custo/artigo (analysis)</td>
-            <td class="ct-value">~$0,0024</td>
-            <td class="ct-meaning">Pipeline consolidado: 3 análises em 1 chamada</td>
+            <td class="ct-value">~$0,0186</td>
+            <td class="ct-meaning">Pipeline consolidado: 2 análises em 1 chamada (Claude Sonnet 4)</td>
           </tr>
           <tr>
             <td class="ct-param">Dry-run obrigatório</td>
@@ -3330,8 +3346,12 @@
     </div><!-- /config-dashboard -->
 
 
-    <!-- SUBSECTION 3: PM BONUS FIELDS -->
-    <div class="ia-subsection-label animate-on-scroll">Campos Recomendados pelo PM — Próxima Fase</div>
+    <!-- SUBSECTION 3: PM BONUS FIELDS (incorporados) -->
+    <div class="ia-subsection-label animate-on-scroll">Campos do PM — Incorporados ao Bloco 1 (inventory)</div>
+
+    <div style="margin-bottom: 24px; padding: 16px 20px; background: rgba(76,175,80,0.05); border: 1px solid rgba(76,175,80,0.2); border-radius: var(--radius-sm); font-size: 14px; color: var(--text-muted); line-height: 1.7;">
+      <strong style="color: var(--green);">✓ Incorporados ao pipeline v2.1:</strong> Os 4 campos recomendados pelo PM foram incorporados diretamente ao Bloco 1 (inventory), elevando o total de 14 para 18 campos. Passam a ser extraídos em produção junto com os demais campos de inventário.
+    </div>
 
     <div class="pm-cards-grid">
 
@@ -3340,7 +3360,7 @@
         <span class="pm-bonus-name">area_operacional</span>
         <div class="pm-bonus-title">Área de Origem</div>
         <div class="pm-bonus-desc">Área dentro do Help de onde o artigo veio — uma das 26 áreas mapeadas do Bradesco, permitindo segmentação e relatórios por departamento.</div>
-        <span class="pm-recommended-tag">★ Recomendado pelo PM</span>
+        <span class="pm-recommended-tag" style="background: rgba(76,175,80,0.15); color: var(--green);">✓ Incorporado ao Bloco 1</span>
       </div>
 
       <div class="pm-bonus-card animate-on-scroll stagger-2">
@@ -3348,7 +3368,7 @@
         <span class="pm-bonus-name">complexity_level</span>
         <div class="pm-bonus-title">Nível de Complexidade</div>
         <div class="pm-bonus-desc">Complexidade do procedimento descrito: básico, intermediário ou avançado. Essencial para curadoria de onboarding e trilhas de treinamento.</div>
-        <span class="pm-recommended-tag">★ Recomendado pelo PM</span>
+        <span class="pm-recommended-tag" style="background: rgba(76,175,80,0.15); color: var(--green);">✓ Incorporado ao Bloco 1</span>
       </div>
 
       <div class="pm-bonus-card animate-on-scroll stagger-3">
@@ -3356,7 +3376,7 @@
         <span class="pm-bonus-name">mentions_systems</span>
         <div class="pm-bonus-title">Sistemas Mencionados</div>
         <div class="pm-bonus-desc">Lista de sistemas internos citados no artigo (SACL, Plástico, BIA, etc.). Permite mapear dependências e artigos afetados por mudanças de sistema.</div>
-        <span class="pm-recommended-tag">★ Recomendado pelo PM</span>
+        <span class="pm-recommended-tag" style="background: rgba(76,175,80,0.15); color: var(--green);">✓ Incorporado ao Bloco 1</span>
       </div>
 
       <div class="pm-bonus-card animate-on-scroll stagger-4">
@@ -3364,7 +3384,7 @@
         <span class="pm-bonus-name">escalation_present</span>
         <div class="pm-bonus-title">Fluxo de Escalação</div>
         <div class="pm-bonus-desc">Flag booleana indicando se o artigo contém um fluxo de escalação documentado. Audita cobertura de situações-exceção em toda a base.</div>
-        <span class="pm-recommended-tag">★ Recomendado pelo PM</span>
+        <span class="pm-recommended-tag" style="background: rgba(76,175,80,0.15); color: var(--green);">✓ Incorporado ao Bloco 1</span>
       </div>
 
     </div><!-- /pm-cards-grid -->
@@ -3472,7 +3492,7 @@
 
       <div class="schema-card animate-on-scroll stagger-2" style="grid-column: 1 / -1;">
         <h3><span class="table-icon">&#128200;</span> help_core.analysis_results</h3>
-        <p class="table-desc">Tabela de resultados. Um registro por artigo processado. Chave técnica: pe_item_id (UNIQUE). Todos os 32 campos mapeados com rastreabilidade completa.</p>
+        <p class="table-desc">Tabela de resultados. Um registro por artigo processado. Chave técnica: pe_item_id (UNIQUE). Todos os 28 campos mapeados com rastreabilidade completa.</p>
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0 24px;">
           <div>
             <div class="schema-field"><span class="field-name">id</span><span class="field-type pk">UUID PK</span></div>
@@ -3492,7 +3512,12 @@
             <div class="schema-field"><span class="field-name">overall_score</span><span class="field-type">NUMERIC</span></div>
             <div class="schema-field"><span class="field-name">priority_level / estimated_effort</span><span class="field-type">TEXT</span></div>
             <div class="schema-field"><span class="field-name">improvement_suggestions</span><span class="field-type">TEXT[]</span></div>
-            <div class="schema-field"><span class="field-name">dedup_analysis</span><span class="field-type">JSONB</span></div>
+            <div class="schema-field"><span class="field-name">has_internal_conflicts</span><span class="field-type">BOOLEAN</span></div>
+            <div class="schema-field"><span class="field-name">internal_conflict_details</span><span class="field-type">TEXT</span></div>
+            <div class="schema-field"><span class="field-name">area_operacional</span><span class="field-type">TEXT</span></div>
+            <div class="schema-field"><span class="field-name">complexity_level</span><span class="field-type">TEXT</span></div>
+            <div class="schema-field"><span class="field-name">mentions_systems</span><span class="field-type">TEXT[]</span></div>
+            <div class="schema-field"><span class="field-name">escalation_present</span><span class="field-type">BOOLEAN</span></div>
             <div class="schema-field"><span class="field-name">prompt_version</span><span class="field-type">TEXT</span></div>
             <div class="schema-field"><span class="field-name">prompt_tokens / completion_tokens</span><span class="field-type">INT</span></div>
             <div class="schema-field"><span class="field-name">cost_usd</span><span class="field-type">NUMERIC</span></div>
@@ -3509,13 +3534,13 @@
   <div class="section" id="custos">
     <div class="section-title animate-on-scroll">Estimativa de Custo</div>
     <h2 class="animate-on-scroll">Investimento em LLM por Pipeline</h2>
-    <p class="section-desc animate-on-scroll">Pipeline consolidado reduz chamadas de 3 para 1 por artigo. Um dry-run de 100 artigos valida a projeção antes do processamento completo.</p>
+    <p class="section-desc animate-on-scroll">Pipeline consolidado executa 2 análises em 1 chamada LLM por artigo (claude-sonnet-4-20250514). Um dry-run de 100 artigos valida a projeção antes do processamento completo.</p>
 
     <div class="cost-grid">
       <div class="cost-card animate-on-scroll stagger-1">
-        <div class="cost-value">~$131</div>
+        <div class="cost-value">~$1.004</div>
         <div class="cost-label">helpcore-analysis</div>
-        <div class="cost-detail">54K artigos únicos processados<br>~700 tokens input/artigo<br>~1.100 tokens output/artigo<br>gpt-4.1-mini</div>
+        <div class="cost-detail">54K artigos únicos processados<br>~700 tokens input/artigo ($3.00/1M)<br>~1.100 tokens output/artigo ($15.00/1M)<br>claude-sonnet-4-20250514</div>
       </div>
       <div class="cost-card animate-on-scroll stagger-2">
         <div class="cost-value">~$1</div>
@@ -3528,9 +3553,9 @@
         <div class="cost-detail">~5-10K artigos com quality &lt; 70<br>Claude Sonnet 4<br>Ativado apenas sob demanda</div>
       </div>
       <div class="cost-card animate-on-scroll stagger-4" style="border-color: rgba(255,87,34,0.3); background: rgba(255,87,34,0.03);">
-        <div class="cost-value">~$147–162</div>
+        <div class="cost-value">~$1.020–1.035</div>
         <div class="cost-label">Total Estimado</div>
-        <div class="cost-detail">Orçamento máximo: US$ 500<br>Margem de segurança: 3x<br>Dry-run valida antes do full run</div>
+        <div class="cost-detail">Orçamento máximo: US$ 2.000<br>Margem de segurança: 2x<br>Dry-run valida antes do full run</div>
       </div>
     </div>
   </div>
@@ -3884,7 +3909,7 @@
     <div class="footer-logos">
       <img src="https://elloconsultoria.com/images/ello-logo-orange.png" alt="Ello Consultoria">
     </div>
-    <p>Ello Consultoria &bull; Projeto HELP CORE &bull; Outubro 2026 &bull; v2.0</p>
+    <p>Ello Consultoria &bull; Projeto HELP CORE &bull; Outubro 2026 &bull; v2.1</p>
   </div>
 
   <!-- SCRIPTS -->

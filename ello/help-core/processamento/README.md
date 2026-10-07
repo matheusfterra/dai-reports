@@ -14,7 +14,7 @@
 4. [Campos Raw do SharePoint](#campos-raw-do-sharepoint)
 5. [Pipeline 1: helpcore-analysis (Consolidado)](#pipeline-1-helpcore-analysis)
 6. [Pipeline 2: helpcore-rewrite (Sob Demanda)](#pipeline-2-helpcore-rewrite)
-7. [32 Campos de Output do LLM](#32-campos-de-output-do-llm)
+7. [28 Campos de Output do LLM](#28-campos-de-output-do-llm)
 8. [System Prompt Unificado](#system-prompt-unificado)
 9. [Configuracao YAML Completa](#configuracao-yaml-completa)
 10. [Estrategia de Deduplicacao](#estrategia-de-deduplicacao)
@@ -73,7 +73,7 @@ Processing Engine — Pipeline LLM
     +-- Pipeline 1: helpcore-analysis (1 chamada LLM por artigo)
     |       +-- Ingestor (auto)
     |       +-- Dedup (hash)
-    |       +-- LLM: gpt-4.1-mini (3 analises em 1 chamada)
+    |       +-- LLM: claude-sonnet-4-20250514 (2 analises em 1 chamada)
     |       +-- Validators (schema + range)
     |       +-- Sink: help_core.analysis_results
     |
@@ -111,7 +111,7 @@ Identifica duplicatas em 3 camadas antes de submeter ao LLM. Evita custo duplo p
 
 ### Etapa 3: Pipeline helpcore-analysis (LLM)
 
-1 chamada gpt-4.1-mini por artigo. Executa 3 analises simultaneas: inventario, qualidade multi-dimensional e analise de deduplicacao intra-artigo. Output: 32 campos em 3 blocos.
+1 chamada LLM por artigo. Executa 2 analises simultaneas: inventario e qualidade multi-dimensional. Output: 28 campos em 2 blocos.
 
 ### Etapa 4: Pipeline helpcore-rewrite (LLM, Sob Demanda)
 
@@ -159,18 +159,18 @@ Pipeline consolidado que substitui os 4 pipelines sequenciais da versao anterior
 | Output disperso em multiplas tabelas | Output consolidado em 1 tabela |
 | Sink complexo com JOINs | Sink simples com 1 INSERT/UPSERT |
 
-A justificativa tecnica: inventario, qualidade e analise de deduplicacao intra-artigo usam o mesmo input (o artigo). Enviar o mesmo texto 3 vezes ao LLM desperdicava 2/3 dos tokens de entrada. A consolidacao em 1 chamada mantem os 32 campos de output sem perda de qualidade.
+A justificativa tecnica: inventario e qualidade usam o mesmo input (o artigo). Enviar o mesmo texto multiplas vezes ao LLM desperdicava tokens de entrada. A consolidacao em 1 chamada mantem os 28 campos de output sem perda de qualidade.
 
 ### Especificacoes do Pipeline
 
 | Parametro | Valor |
 |-----------|-------|
 | ID | `helpcore-analysis` |
-| Provedor LLM | OpenAI |
-| Modelo | gpt-4.1-mini |
-| Temperature | 0.0 (deterministico) |
+| Provedor LLM | Anthropic (Claude) |
+| Modelo | claude-sonnet-4-20250514 |
+| Temperature | 0.1 |
 | Max tokens | 16.384 |
-| Campos de output | 32 (3 blocos) |
+| Campos de output | 28 (2 blocos) |
 | Estrategia de dedup | hash |
 | Cache TTL | 720h (30 dias) |
 | Max concorrencia | 5 |
@@ -216,11 +216,11 @@ Artigos com `quality.overall_score < 70` na tabela `help_core.analysis_results` 
 
 ---
 
-## 32 Campos de Output do LLM
+## 28 Campos de Output do LLM
 
-O pipeline `helpcore-analysis` produz 32 campos organizados em 3 blocos no output JSON. Cada bloco e mapeado para colunas tipadas na tabela `help_core.analysis_results`.
+O pipeline `helpcore-analysis` produz 28 campos organizados em 2 blocos no output JSON. Cada bloco e mapeado para colunas tipadas na tabela `help_core.analysis_results`.
 
-### Bloco 1: `inventory` (14 campos)
+### Bloco 1: `inventory` (18 campos)
 
 Classificacao e metadados do artigo.
 
@@ -240,8 +240,12 @@ Classificacao e metadados do artigo.
 | `estimated_word_count` | integer | Contagem estimada de palavras | Inteiro positivo |
 | `language_issues` | string[] | Problemas de linguagem detectados | Max 5 items. Ex: `["frases muito longas", "jargao sem definicao"]` |
 | `confidence` | number 0.0-1.0 | Confianca do LLM na classificacao | Float. Abaixo de 0.7: revisar |
+| `area_operacional` | string | Area operacional Bradesco (dentre as 26 mapeadas) | Enum: `alto_valor`, `atendimento_geral`, `back_office`, `bia`, `canais_digitais`, `cartoes`, `cash_management`, `cobranca`, `comercio_exterior`, `compliance`, `consignado`, `consorcio`, `correspondente`, `credito_imobiliario`, `credito_pj`, `faq_geral`, `financiamento_veiculos`, `fraude`, `investimentos`, `juridico`, `open_finance`, `ouvidoria`, `pix`, `previdencia`, `seguros`, `tesouraria`, `nao_identificada` |
+| `complexity_level` | enum | Complexidade do procedimento | `basico`, `intermediario`, `avancado` |
+| `mentions_systems` | string[] | Sistemas internos citados no artigo | Ex: `["SACL", "Plastico", "BIA", "Internet Banking"]` |
+| `escalation_present` | boolean | Se o artigo contem fluxo de escalonamento | `true` / `false` |
 
-### Bloco 2: `quality` (10 campos)
+### Bloco 2: `quality` (12 campos)
 
 Avaliacao multi-dimensional de qualidade.
 
@@ -262,42 +266,27 @@ Campos de diagnostico e priorizacao:
 | `priority_level` | enum | Urgencia de revisao baseada no overall_score | `critical` (<30), `high` (30-50), `medium` (50-70), `low` (>70) |
 | `estimated_effort` | enum | Estimativa de esforco para revisao | `minor` (<15min), `moderate` (15-60min), `major` (>1h), `rewrite` |
 | `actionable_items` | object[] | Acoes especificas com tipo e impacto | Max 5 items. Cada item: `{type, description, impact}` |
+| `has_internal_conflicts` | boolean | Se o artigo contem informacoes contraditorias internas | `true` / `false` |
+| `internal_conflict_details` | string\|null | Detalhes do conflito interno detectado | Max 300 chars. `null` se sem conflito |
 
 Valores possiveis para `actionable_items.type`: `fix_grammar`, `add_steps`, `restructure`, `update_reference`, `add_context`, `simplify`, `remove_redundancy`
 
 Valores possiveis para `actionable_items.impact`: `high`, `medium`, `low`
 
-### Bloco 3: `dedup_analysis` (8 campos)
-
-Analise de deduplicacao intra-artigo nesta fase. Comparacao cross-artigo e feita pela deduplicacao pre-pipeline (hash + embeddings + simhash). Nesta fase, o LLM analisa apenas conflitos internos e genericidade do artigo.
-
-| Campo | Tipo | Descricao | Valor nesta fase |
-|-------|------|-----------|-----------------|
-| `is_duplicate` | boolean | Se e duplicata de outro artigo | Sempre `false` (determinado pre-pipeline) |
-| `duplicate_of` | string\|null | source_url do artigo canonico | Sempre `null` nesta fase |
-| `duplicate_type` | enum | Tipo de duplicata | Sempre `not_duplicate` nesta fase |
-| `similarity_score` | number 0.0-1.0 | Score de similaridade com canonico | Sempre `0.0` nesta fase |
-| `reason` | string | Nota sobre unicidade ou genericidade do artigo | Max 300 chars |
-| `conflicting_info` | boolean | Se o artigo tem conflitos internos de informacao | Analise real do LLM |
-| `conflict_details` | string\|null | Detalhes do conflito interno detectado | Max 300 chars. `null` se sem conflito |
-| `recommended_action` | enum | Acao recomendada | `merge`, `archive_this`, `archive_other`, `review`, `keep_both` — sempre `keep_both` nesta fase |
-
-Nota sobre o campo `reason`: mesmo que `is_duplicate` seja `false`, o LLM pode identificar que o artigo e excessivamente generico ou que seu conteudo sobrepoem substancialmente outra categoria. Este campo captura essa observacao para revisao humana.
-
 ---
 
 ## System Prompt Unificado
 
-System prompt do pipeline `helpcore-analysis`. O LLM recebe o artigo completo e realiza as 3 analises em uma unica resposta JSON estruturada.
+System prompt do pipeline `helpcore-analysis`. O LLM recebe o artigo completo e realiza 2 analises em uma unica resposta JSON estruturada.
 
 ```
 Voce e um analista especializado em bases de conhecimento corporativas de atendimento bancario.
-Voce recebera um artigo da base de conhecimento do Bradesco e deve fazer 3 analises simultaneas,
-retornando um objeto JSON com 3 blocos: "inventory", "quality" e "dedup_analysis".
+Voce recebera um artigo da base de conhecimento do Bradesco e deve fazer 2 analises simultaneas,
+retornando um objeto JSON com 2 blocos: "inventory" e "quality".
 
 ## ANALISE 1 — INVENTARIO (bloco "inventory")
 
-Classifique o artigo nos seguintes 14 campos:
+Classifique o artigo nos seguintes 18 campos:
 
 - doc_type: formato estrutural. Valores: procedimento, passo_a_passo, checklist, faq,
   referencia, politica, outro.
@@ -325,6 +314,16 @@ Classifique o artigo nos seguintes 14 campos:
   nao houver problemas relevantes.
 - confidence: sua confianca na classificacao de 0.0 a 1.0. Valores abaixo de 0.7 indicam
   ambiguidade e o artigo sera encaminhado para revisao humana.
+- area_operacional: area operacional do Bradesco. Valores: alto_valor, atendimento_geral,
+  back_office, bia, canais_digitais, cartoes, cash_management, cobranca, comercio_exterior,
+  compliance, consignado, consorcio, correspondente, credito_imobiliario, credito_pj, faq_geral,
+  financiamento_veiculos, fraude, investimentos, juridico, open_finance, ouvidoria, pix,
+  previdencia, seguros, tesouraria. Se nao identificavel: "nao_identificada".
+- complexity_level: complexidade do procedimento. Valores: basico, intermediario, avancado.
+- mentions_systems: array de sistemas internos citados no artigo. Ex: SACL, Plastico, BIA,
+  Internet Banking, etc. Array vazio se nenhum sistema identificado.
+- escalation_present: true se o artigo contem fluxo de escalonamento (transferencia para
+  supervisor, gerente, area especializada). false caso contrario.
 
 ## ANALISE 2 — QUALIDADE MULTI-DIMENSIONAL (bloco "quality")
 
@@ -365,26 +364,11 @@ Forneca ate 5 actionable_items, cada um com:
 - description: descricao concisa da acao (max 100 chars)
 - impact: high, medium, low
 
-## ANALISE 3 — ANALISE DE DUPLICATAS (bloco "dedup_analysis")
-
-Nesta fase, a comparacao entre artigos e feita por hash e embeddings (pre-pipeline).
-Neste bloco, analise apenas o artigo internamente.
-
-Campos fixos nesta fase (retorne exatamente estes valores):
-- is_duplicate: false
-- duplicate_of: null
-- duplicate_type: "not_duplicate"
-- similarity_score: 0.0
-- recommended_action: "keep_both"
-
-Campos que voce deve analisar de verdade:
-- conflicting_info: true se o artigo contem informacoes contraditoriascoma ele mesmo
+Analise tambem conflitos internos do artigo:
+- has_internal_conflicts: true se o artigo contem informacoes contraditorias consigo mesmo
   (ex: afirma uma coisa no inicio e contradiz no fim, ou dois passos incompativeis).
-- conflict_details: se conflicting_info for true, descreva o conflito em max 300 chars.
-  null se nao houver conflito.
-- reason: note se o artigo e excessivamente generico, se seu conteudo sobrepoem
-  claramente outra categoria, ou qualquer observacao relevante sobre unicidade.
-  Max 300 chars.
+- internal_conflict_details: se has_internal_conflicts for true, descreva o conflito em
+  max 300 chars. null se nao houver conflito.
 
 ## REGRAS GERAIS
 
@@ -410,7 +394,7 @@ id: helpcore-analysis
 name: helpcore-analysis
 description: >
   Pipeline consolidado de analise de artigos Help Core.
-  Executa inventario, quality score multi-dimensional e analise de dedup intra-artigo
+  Executa inventario e quality score multi-dimensional
   em UMA unica chamada LLM por artigo.
   Substitui os 4 pipelines sequenciais da versao 1.0 (helpcore-ingest, helpcore-dedup,
   helpcore-classify, helpcore-quality-score).
@@ -420,14 +404,14 @@ dedup_strategy: hash
 dedup_config:
   url_normalize: true
 
-llm_provider: openai
-llm_model: gpt-4.1-mini
-llm_temperature: 0.0
+llm_provider: anthropic
+llm_model: claude-sonnet-4-20250514
+llm_temperature: 0.1
 llm_max_tokens: 16384
 
 output_schema:
   type: object
-  required: [inventory, quality, dedup_analysis]
+  required: [inventory, quality]
   additionalProperties: false
   properties:
     inventory:
@@ -447,6 +431,10 @@ output_schema:
         - estimated_word_count
         - language_issues
         - confidence
+        - area_operacional
+        - complexity_level
+        - mentions_systems
+        - escalation_present
       additionalProperties: false
       properties:
         doc_type:
@@ -517,6 +505,46 @@ output_schema:
           type: number
           minimum: 0.0
           maximum: 1.0
+        area_operacional:
+          type: string
+          enum:
+            - alto_valor
+            - atendimento_geral
+            - back_office
+            - bia
+            - canais_digitais
+            - cartoes
+            - cash_management
+            - cobranca
+            - comercio_exterior
+            - compliance
+            - consignado
+            - consorcio
+            - correspondente
+            - credito_imobiliario
+            - credito_pj
+            - faq_geral
+            - financiamento_veiculos
+            - fraude
+            - investimentos
+            - juridico
+            - open_finance
+            - ouvidoria
+            - pix
+            - previdencia
+            - seguros
+            - tesouraria
+            - nao_identificada
+        complexity_level:
+          type: string
+          enum: [basico, intermediario, avancado]
+        mentions_systems:
+          type: array
+          items:
+            type: string
+          maxItems: 20
+        escalation_present:
+          type: boolean
     quality:
       type: object
       required:
@@ -530,6 +558,8 @@ output_schema:
         - priority_level
         - estimated_effort
         - actionable_items
+        - has_internal_conflicts
+        - internal_conflict_details
       additionalProperties: false
       properties:
         clarity:
@@ -591,41 +621,11 @@ output_schema:
               impact:
                 type: string
                 enum: [high, medium, low]
-    dedup_analysis:
-      type: object
-      required:
-        - is_duplicate
-        - duplicate_of
-        - duplicate_type
-        - similarity_score
-        - reason
-        - conflicting_info
-        - conflict_details
-        - recommended_action
-      additionalProperties: false
-      properties:
-        is_duplicate:
+        has_internal_conflicts:
           type: boolean
-        duplicate_of:
-          type: ["string", "null"]
-        duplicate_type:
-          type: string
-          enum: [exact, quasi_duplicate, overlapping, not_duplicate]
-        similarity_score:
-          type: number
-          minimum: 0.0
-          maximum: 1.0
-        reason:
-          type: string
-          maxLength: 300
-        conflicting_info:
-          type: boolean
-        conflict_details:
+        internal_conflict_details:
           type: ["string", "null"]
           maxLength: 300
-        recommended_action:
-          type: string
-          enum: [merge, archive_this, archive_other, review, keep_both]
 
 validators: [schema, range]
 validator_config:
@@ -671,9 +671,12 @@ sink_config:
     quality.priority_level: priority_level
     quality.estimated_effort: estimated_effort
     quality.actionable_items: actionable_items
-    dedup_analysis.conflicting_info: has_internal_conflicts
-    dedup_analysis.conflict_details: internal_conflict_details
-    dedup_analysis.reason: content_genericness
+    quality.has_internal_conflicts: has_internal_conflicts
+    quality.internal_conflict_details: internal_conflict_details
+    inventory.area_operacional: area_operacional
+    inventory.complexity_level: complexity_level
+    inventory.mentions_systems: mentions_systems
+    inventory.escalation_present: escalation_present
   item_field_mapping:
     source_url: source_url
   jsonb_fallback: metadata
@@ -682,6 +685,7 @@ sink_config:
     - improvement_suggestions
     - mandatory_fields_missing
     - language_issues
+    - mentions_systems
   sql_defaults:
     processed_at: "NOW()"
 
@@ -978,7 +982,7 @@ Entidade de negocio. Um registro por artigo. Chave de negocio: `source_url` (UNI
 
 ### Tabela: `help_core.analysis_results`
 
-Resultado do LLM. Um registro por artigo processado. Chave tecnica: `pe_item_id` (UNIQUE). Todos os 32 campos de output mapeados para colunas tipadas.
+Resultado do LLM. Um registro por artigo processado. Chave tecnica: `pe_item_id` (UNIQUE). Todos os 28 campos de output mapeados para colunas tipadas.
 
 | Campo | Tipo | Origem |
 |-------|------|--------|
@@ -1010,9 +1014,12 @@ Resultado do LLM. Um registro por artigo processado. Chave tecnica: `pe_item_id`
 | `priority_level` | TEXT | quality.priority_level |
 | `estimated_effort` | TEXT | quality.estimated_effort |
 | `actionable_items` | JSONB | quality.actionable_items |
-| `has_internal_conflicts` | BOOLEAN | dedup_analysis.conflicting_info |
-| `internal_conflict_details` | TEXT | dedup_analysis.conflict_details |
-| `content_genericness` | TEXT | dedup_analysis.reason |
+| `has_internal_conflicts` | BOOLEAN | quality.has_internal_conflicts |
+| `internal_conflict_details` | TEXT | quality.internal_conflict_details |
+| `area_operacional` | TEXT | inventory.area_operacional |
+| `complexity_level` | TEXT | inventory.complexity_level |
+| `mentions_systems` | TEXT[] | inventory.mentions_systems |
+| `escalation_present` | BOOLEAN | inventory.escalation_present |
 | `prompt_version` | TEXT | Versao do system prompt usado |
 | `prompt_tokens` | INTEGER | Tokens de entrada da chamada LLM |
 | `completion_tokens` | INTEGER | Tokens de saida da chamada LLM |
@@ -1094,17 +1101,17 @@ A consolidacao de 3 pipelines em 1 reduz o custo de tokens de entrada em ~2/3.
 |-------|---------|--------------------|--------------------|----------------|
 | Ingestao (pre-pipeline) | 108.062 | — | — | US$ 0 |
 | Embeddings (52.7K unicos) | 52.743 | ~500 | — | ~US$ 1 |
-| **Pipeline helpcore-analysis** | **54.000** | **~1.800** | **~600** | **~US$ 131** |
+| **Pipeline helpcore-analysis** | **54.000** | **~700** | **~1.100** | **~US$ 1.005** |
 | Pipeline helpcore-rewrite (~10%) | ~5.400 | ~2.000 | ~1.500 | Varia |
-| **Total (sem rewrite)** | — | — | — | **~US$ 132** |
+| **Total (sem rewrite)** | — | — | — | **~US$ 1.006** |
 
 Notas sobre o calculo do helpcore-analysis:
 - 54K artigos = ~52.7K unicos pos-hash, com margem para artigos SHORT_TEXT/ambiguos submetidos ao LLM
-- ~1.800 tokens input: artigo medio (~1.200 tokens) + system prompt overhead (~600 tokens)
-- ~600 tokens output: 32 campos JSON compacto
-- Preco gpt-4.1-mini: input $0.40/M tokens, output $1.60/M tokens
-- Custo por artigo: (1.800 × $0.40 + 600 × $1.60) / 1.000.000 ≈ $0.0024/artigo
-- 54.000 × $0.0024 = **~$131**
+- ~700 tokens input: artigo medio compacto + system prompt overhead
+- ~1.100 tokens output: 28 campos JSON (2 blocos — inventory e quality)
+- Provedor: Anthropic (Claude Sonnet 4) — input $3.00/M tokens, output $15.00/M tokens
+- Custo por artigo: (700 × $3.00 + 1.100 × $15.00) / 1.000.000 ≈ $0.01860/artigo
+- 54.000 × $0.01860 = **~US$ 1.005**
 
 ### Comparativo com Versao Anterior (4 Pipelines)
 
@@ -1112,21 +1119,21 @@ Notas sobre o calculo do helpcore-analysis:
 |----------|-----------|-----------|
 | helpcore-classify (LLM) | ~US$ 5 | Incorporado no analysis |
 | helpcore-quality-score | ~US$ 52 | Incorporado no analysis |
-| helpcore-analysis (novo) | — | ~US$ 131 |
+| helpcore-analysis (novo) | — | ~US$ 1.005 |
 | Embeddings | ~US$ 1 | ~US$ 1 |
-| **Total** | **~US$ 58** | **~US$ 132** |
+| **Total** | **~US$ 58** | **~US$ 1.006** |
 
-O custo maior na versao 2.0 reflete um output muito mais rico: 32 campos com 3 blocos de analise em vez de 9 campos flat. O custo por campo extraido caiu de ~$6.4/campo para ~$4.1/campo.
+O custo mais elevado na versao 2.0 com Claude Sonnet 4 reflete um output muito mais rico (28 campos em 2 blocos) e a qualidade editorial superior do modelo para PT-BR. O pipeline helpcore-rewrite (sob demanda, ~10% dos artigos) usa tambem Claude Sonnet 4 com configuracao dedicada.
 
 ### Budget e Teto de Seguranca
 
 | Custo | Valor |
 |-------|-------|
-| Estimativa base (analysis) | ~US$ 131 |
-| Estimativa com rewrite (10%) | +US$ 20-50 |
-| Estimativa total | ~US$ 150-180 |
+| Estimativa base (analysis) | ~US$ 1.005 |
+| Estimativa com rewrite (10%) | +US$ 100-200 |
+| Estimativa total | ~US$ 1.100-1.200 |
 | Budget maximo configurado | US$ 500/mes |
-| Margem de seguranca | ~2.8x - 3.3x |
+| Margem de seguranca | Execucao em 3 lotes mensais recomendada |
 
 O PE interrompe automaticamente ao atingir `budget_limit_usd: 500.0`. Um dry-run de 100 artigos valida a projecao de custo antes do full run.
 
@@ -1205,7 +1212,7 @@ Ao final do processamento, a equipe de conteudo recebe um inventario completo e 
 | Entregavel | Descricao |
 |------------|-----------|
 | **Inventario Completo** | 108K artigos com metadados estruturados: area, titulo, classificacao, status, data de modificacao e path original em help_core.articles. |
-| **Analise de Qualidade** | 32 campos por artigo em help_core.analysis_results: inventario (14), qualidade multi-dimensional (10) e analise de deduplicacao intra-artigo (8). |
+| **Analise de Qualidade** | 28 campos por artigo em help_core.analysis_results: inventario (18) e qualidade multi-dimensional (12). |
 | **Fila de Revisao Priorizada** | Artigos ordenados por priority_level (critical > high > medium > low) com actionable_items concretos para a equipe editorial. |
 | **Mapa de Duplicatas** | Grupos de duplicatas exatas (hash) e semanticas (pgvector). Artigo canonico identificado em cada grupo. Economia na revisao. |
 | **Candidatos a Reescrita** | Lista de artigos com overall_score < 70, com estimated_effort e improvement_suggestions para planejamento da equipe. |
@@ -1222,4 +1229,4 @@ Ao final do processamento, a equipe de conteudo recebe um inventario completo e 
 | Tecnologia | Processing Engine (Digital AI) |
 | Data | Outubro 2026 |
 | Versao | 2.0 |
-| Alteracoes v2.0 | Consolidacao de 4 pipelines em 2 (1 consolidado + 1 reescrita). 32 campos em 3 blocos vs 9 campos flat. Schema de banco atualizado (articles + analysis_results). 15 campos raw do SharePoint documentados. System prompt unificado. YAML completo do helpcore-analysis. Auditoria PE Sprint 1+2: 10 fixes aplicados. |
+| Alteracoes v2.0 | Consolidacao de 4 pipelines em 2 (1 consolidado + 1 reescrita). 28 campos em 2 blocos vs 9 campos flat. Provider migrado para Anthropic (Claude Sonnet 4). Schema de banco atualizado (articles + analysis_results). 15 campos raw do SharePoint documentados. System prompt unificado. YAML completo do helpcore-analysis. Auditoria PE Sprint 1+2: 10 fixes aplicados. |
