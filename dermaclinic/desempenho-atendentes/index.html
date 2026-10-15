@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Avaliação de Atendentes — DermaClinic | Digital AI</title>
+<title>Avaliacao de Atendentes — DermaClinic | Digital AI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -77,13 +77,26 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 .conv-title a:hover{color:var(--brand);border-bottom-style:solid}
 .conv-badges{display:flex;gap:8px;flex-wrap:wrap}
 
-/* Score bars */
-.scores-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;padding:16px 20px;border-bottom:1px solid var(--border-light)}
-.score-row{display:flex;align-items:center;gap:8px}
-.score-label{font-size:.78rem;color:var(--text-secondary);width:100px;flex-shrink:0}
-.score-bar-track{flex:1;height:8px;background:#E2E8F0;border-radius:4px;overflow:hidden}
-.score-bar-fill{height:100%;border-radius:4px;transition:width .5s}
-.score-value{font-family:var(--font-head);font-weight:700;font-size:.82rem;width:28px;text-align:right}
+/* NEW: Evaluation Cards */
+.eval-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:16px 20px;border-bottom:1px solid var(--border-light)}
+.eval-item{background:var(--bg);border:1px solid var(--border-light);border-radius:10px;padding:12px 14px}
+.eval-label{font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-bottom:4px}
+.eval-value{font-family:var(--font-head);font-weight:700;font-size:.88rem}
+.eval-detail{font-size:.78rem;color:var(--text-secondary);margin-top:3px;line-height:1.4}
+.eval-value.sim{color:#059669}
+.eval-value.nao{color:#DC2626}
+.eval-value.alto{color:#059669}
+.eval-value.medio{color:#D97706}
+.eval-value.baixo{color:#DC2626}
+.eval-value.rapido{color:#059669}
+.eval-value.normal{color:#0891B2}
+.eval-value.demorado{color:#DC2626}
+
+/* Big appointment badge */
+.appt-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:20px;font-family:var(--font-head);font-weight:700;font-size:.82rem}
+.appt-badge.sim{background:#ECFDF5;color:#059669;border:1px solid #A7F3D0}
+.appt-badge.nao{background:#FEF2F2;color:#DC2626;border:1px solid #FECACA}
+.appt-badge.na{background:#F1F5F9;color:#94A3B8;border:1px solid #E2E8F0}
 
 /* GPT Summary */
 .gpt-summary{padding:16px 20px;border-bottom:1px solid var(--border-light)}
@@ -92,7 +105,7 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 .gpt-tag-pos{background:#ECFDF5;color:#059669;padding:3px 10px;border-radius:10px;font-size:.75rem;font-weight:500}
 .gpt-tag-neg{background:#FEF2F2;color:#DC2626;padding:3px 10px;border-radius:10px;font-size:.75rem;font-weight:500}
 
-/* Chat bubbles — ESTILO ANTIGO */
+/* Chat bubbles */
 .chat-container{padding:16px 20px;max-height:500px;overflow-y:auto;background:#f0f2f5}
 .chat-msg{max-width:78%;padding:8px 12px;margin-bottom:6px;border-radius:10px;font-size:.84rem;line-height:1.5;word-wrap:break-word}
 .chat-msg.in{background:#fff;border:1px solid #e0e0e0;margin-right:auto;border-bottom-left-radius:2px}
@@ -114,9 +127,17 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 /* Section title */
 .section-title{font-family:var(--font-head);font-weight:800;font-size:1.25rem;color:var(--brand-dark);margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid var(--brand-accent)}
 
+/* Legend */
+.legend{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:16px 20px;margin-bottom:32px;box-shadow:var(--shadow-sm)}
+.legend-title{font-family:var(--font-head);font-weight:700;font-size:.88rem;color:var(--brand-dark);margin-bottom:10px}
+.legend-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 24px}
+.legend-item{font-size:.82rem;color:var(--text-secondary);display:flex;align-items:flex-start;gap:6px}
+.legend-num{font-family:var(--font-head);font-weight:700;color:var(--brand);min-width:20px}
+
 @media(max-width:768px){
   .kpi-grid{grid-template-columns:repeat(2,1fr)}
-  .scores-grid{grid-template-columns:1fr}
+  .eval-grid{grid-template-columns:1fr}
+  .legend-grid{grid-template-columns:1fr}
   .header-inner{flex-direction:column;align-items:flex-start}
   .period-inner{flex-direction:column}
   .agent-strip{flex-direction:column;text-align:center}
@@ -133,7 +154,7 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
   <div class="header-brand">
     <div>
       <div class="header-title">Avaliacao de Atendentes</div>
-      <div class="header-sub">DermaClinic — Relatorio Avaliativo via IA</div>
+      <div class="header-sub">DermaClinic — Relatorio de Desempenho</div>
     </div>
   </div>
   <div class="header-badge">Amostra: 2 conversas/atendente</div>
@@ -144,11 +165,11 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 <div class="period-banner">
 <div class="container period-inner">
   <div>
-    <div class="period-title">Avaliacao por GPT-4o-mini</div>
-    <div class="period-sub">Analise automatizada de qualidade de atendimento via WhatsApp</div>
+    <div class="period-title">Como nossas atendentes estao se saindo?</div>
+    <div class="period-sub">Analise de conversas reais do WhatsApp — o que esta funcionando e o que pode melhorar</div>
   </div>
   <div class="period-pills">
-    <span class="period-pill">Gerado: 15/10/2026 13:08</span>
+    <span class="period-pill">Gerado: 15/10/2026</span>
     <span class="period-pill">15 conversas</span>
     <span class="period-pill">8 atendentes</span>
   </div>
@@ -157,12 +178,25 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 
 <div class="container">
 
+<!-- Legend: O que avaliamos -->
+<div class="legend">
+  <div class="legend-title">O que avaliamos em cada conversa:</div>
+  <div class="legend-grid">
+    <div class="legend-item"><span class="legend-num">1.</span> <span><strong>Agendou?</strong> — A conversa virou um agendamento de consulta ou procedimento?</span></div>
+    <div class="legend-item"><span class="legend-num">2.</span> <span><strong>Empenho</strong> — A atendente se esforçou para converter o paciente? Mensagens calorosas, atenção?</span></div>
+    <div class="legend-item"><span class="legend-num">3.</span> <span><strong>Escrita</strong> — Erros de ortografia ou frases confusas nas mensagens?</span></div>
+    <div class="legend-item"><span class="legend-num">4.</span> <span><strong>Tempo de Resposta</strong> — A atendente demorou para responder o paciente?</span></div>
+    <div class="legend-item"><span class="legend-num">5.</span> <span><strong>Abordagem do Preco</strong> — Entendeu a necessidade do paciente antes de falar em valor, ou jogou o preco logo de cara?</span></div>
+    <div class="legend-item"><span class="legend-num">6.</span> <span><strong>Resumo</strong> — Visao geral do atendimento nessa conversa</span></div>
+  </div>
+</div>
+
 <!-- KPI Cards -->
 <div class="kpi-grid">
   <div class="kpi-card">
-    <div class="kpi-label">Nota Media Geral</div>
-    <div class="kpi-value" style="color:#D97706">6.6<span style="font-size:.9rem;color:var(--text-muted)">/10</span></div>
-    <div class="kpi-sub">Regular</div>
+    <div class="kpi-label">Conversas com Agendamento</div>
+    <div class="kpi-value" style="color:#059669">7<span style="font-size:.9rem;color:var(--text-muted)">/15</span></div>
+    <div class="kpi-sub">47% de conversao</div>
   </div>
   <div class="kpi-card">
     <div class="kpi-label">Conversas Avaliadas</div>
@@ -175,9 +209,9 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
     <div class="kpi-sub">2 conversas por atendente (amostra)</div>
   </div>
   <div class="kpi-card">
-    <div class="kpi-label">Melhor Desempenho</div>
-    <div class="kpi-value" style="font-size:1.1rem">Ana</div>
-    <div class="kpi-sub">7.7/10 media</div>
+    <div class="kpi-label">Destaque Positivo</div>
+    <div class="kpi-value" style="font-size:1.1rem">Ana Carolina</div>
+    <div class="kpi-sub">2 agendamentos em 2 conversas</div>
   </div>
 </div>
 
@@ -192,134 +226,414 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 <h2 class="section-title">Resumo por Atendente</h2>
 <table class="data-table">
 <thead><tr>
-  <th>Atendente</th><th>Conversas</th><th>Participou</th><th>Nota Media</th><th>Classificacao</th>
+  <th>Atendente</th><th>Conversas</th><th>Agendamentos</th><th>Taxa</th><th>Avaliacao</th>
 </tr></thead>
 <tbody>
-
 <tr>
   <td><strong>Ana Carolina Marquez</strong></td>
   <td>2</td>
   <td>2</td>
-  <td><strong>7.7</strong>/10</td>
-  <td><span class="badge" style="background:#ECFEFF;color:#0891B2">Bom</span></td>
+  <td><strong>100%</strong></td>
+  <td><span class="badge" style="background:#ECFDF5;color:#059669">Otimo</span></td>
 </tr>
 <tr>
   <td><strong>Cristiane Aparecida Joaquim</strong></td>
   <td>2</td>
   <td>2</td>
-  <td><strong>7.6</strong>/10</td>
-  <td><span class="badge" style="background:#ECFEFF;color:#0891B2">Bom</span></td>
+  <td><strong>100%</strong></td>
+  <td><span class="badge" style="background:#ECFDF5;color:#059669">Otimo</span></td>
 </tr>
 <tr>
-  <td><strong>Alessandra</strong></td>
+  <td><strong>Daniela Peixer</strong></td>
   <td>2</td>
   <td>1</td>
-  <td><strong>6.8</strong>/10</td>
+  <td><strong>50%</strong></td>
   <td><span class="badge" style="background:#ECFEFF;color:#0891B2">Bom</span></td>
 </tr>
 <tr>
   <td><strong>Daiane Miranda da Silva</strong></td>
   <td>2</td>
   <td>1</td>
-  <td><strong>6.8</strong>/10</td>
+  <td><strong>50%</strong></td>
   <td><span class="badge" style="background:#ECFEFF;color:#0891B2">Bom</span></td>
-</tr>
-<tr>
-  <td><strong>Daniela Peixer</strong></td>
-  <td>2</td>
-  <td>2</td>
-  <td><strong>7.1</strong>/10</td>
-  <td><span class="badge" style="background:#ECFEFF;color:#0891B2">Bom</span></td>
-</tr>
-<tr>
-  <td><strong>Pauline Meller Vieira</strong></td>
-  <td>1</td>
-  <td>1</td>
-  <td><strong>5.4</strong>/10</td>
-  <td><span class="badge" style="background:#FFFBEB;color:#D97706">Regular</span></td>
 </tr>
 <tr>
   <td><strong>Ellyn Carolini</strong></td>
   <td>2</td>
+  <td>0</td>
+  <td><strong>0%</strong></td>
+  <td><span class="badge" style="background:#FFFBEB;color:#D97706">A melhorar</span></td>
+</tr>
+<tr>
+  <td><strong>Alessandra</strong></td>
   <td>2</td>
-  <td><strong>5.4</strong>/10</td>
-  <td><span class="badge" style="background:#FFFBEB;color:#D97706">Regular</span></td>
+  <td>0</td>
+  <td><strong>0%</strong></td>
+  <td><span class="badge" style="background:#FFFBEB;color:#D97706">A melhorar</span></td>
+</tr>
+<tr>
+  <td><strong>Pauline Meller Vieira</strong></td>
+  <td>1</td>
+  <td>0</td>
+  <td><strong>0%</strong></td>
+  <td><span class="badge" style="background:#FEF2F2;color:#DC2626">Precisa melhorar</span></td>
 </tr>
 <tr>
   <td><strong>Gabriella Hille</strong></td>
   <td>2</td>
   <td>0</td>
-  <td><strong>0.0</strong>/10</td>
-  <td><span class="badge" style="background:#FEF2F2;color:#DC2626">Precisa Melhorar</span></td>
+  <td><strong>0%</strong></td>
+  <td><span class="badge" style="background:#FEF2F2;color:#DC2626">Sem participacao</span></td>
 </tr>
 </tbody></table></div>
+
 <div class="section"><h2 class="section-title">Avaliacoes Detalhadas</h2></div>
 
+<!-- ==================== ANA CAROLINA ==================== -->
+<div id="agent-5" class="section">
+<div class="agent-strip">
+  <div class="agent-avatar" style="background:#0891B2">AM</div>
+  <div class="agent-info">
+    <div class="agent-name">Ana Carolina Marquez</div>
+    <div class="agent-meta">2 conversa(s) · 2 agendamentos convertidos</div>
+  </div>
+  <div class="agent-score">
+    <div class="agent-score-value" style="color:#059669">100%</div>
+    <div class="agent-score-label" style="color:#059669">Conversao</div>
+  </div>
+</div>
+
+<div class="conv-detail">
+  <div class="conv-header">
+    <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/16266" target="_blank">#16266 — Carmem Hartmann</a></div>
+    <div class="conv-badges">
+      <span class="appt-badge sim">Agendou</span>
+      <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
+    </div>
+  </div>
+  <div class="eval-grid">
+    <div class="eval-item">
+      <div class="eval-label">Empenho na Conversao</div>
+      <div class="eval-value alto">Alto</div>
+      <div class="eval-detail">Se apresentou pelo nome, ofereceu data, prometeu confirmar no dia anterior. Atenciosa.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Escrita</div>
+      <div class="eval-value sim">Boa</div>
+      <div class="eval-detail">Sem erros significativos. Mensagens claras e profissionais.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Tempo de Resposta</div>
+      <div class="eval-value normal">Normal</div>
+      <div class="eval-detail">Respondeu em tempo adequado.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Abordagem do Preco</div>
+      <div class="eval-value sim">Adequada</div>
+      <div class="eval-detail">Nao houve discussao de preco — era um retorno/agendamento direto. Abordagem correta.</div>
+    </div>
+    <div class="eval-item" style="grid-column:span 2">
+      <div class="eval-label">Resumo da Conversa</div>
+      <div class="eval-detail">Paciente queria agendar apos viagem. Ana se apresentou, ofereceu data (05/08 14h com Dra. Raquel), confirmou e prometeu lembrar no dia anterior. Agendamento fechado com sucesso.</div>
+    </div>
+  </div>
+  <div class="gpt-tags" style="padding:8px 20px 12px">
+    <span class="gpt-tag-pos">+ Se apresentou com nome</span><span class="gpt-tag-pos">+ Agendamento rapido e eficiente</span><span class="gpt-tag-pos">+ Prometeu confirmar antes</span>
+  </div>
+  <div class="chat-container">
+    <div class="chat-msg in"><span class="sender">Paciente (Carmem Hartmann)</span>Boa tarde
+Sim</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>So posso depois do dia 26/07
+Pois estou indo viajar</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Ana Carolina Marquez </span>Ola Carmem, tudo bem?
+Me chamo Ana Carolina e sou da equipe da dra Raquel.
+Podemos agendar no dia 05/08 as 14hrs?</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Sim
+Obrigada</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Terezinha Irma de Araujo</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Voces me confirma um dia antes
+Por favor</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Ana Carolina Marquez </span>Confirmo sim, pode ficar tranquila.
+Ate la!!</div><div class="chat-clearfix"></div>
+  </div>
+</div>
+
+<div class="conv-detail">
+  <div class="conv-header">
+    <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/16264" target="_blank">#16264 — Samanta</a></div>
+    <div class="conv-badges">
+      <span class="appt-badge sim">Agendou</span>
+      <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
+    </div>
+  </div>
+  <div class="eval-grid">
+    <div class="eval-item">
+      <div class="eval-label">Empenho na Conversao</div>
+      <div class="eval-value alto">Alto</div>
+      <div class="eval-detail">Confirmou agendamento, reagendou quando paciente pediu outro dia, manteve pre-agendamento aguardando confirmacao. Muito flexivel.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Escrita</div>
+      <div class="eval-value sim">Boa</div>
+      <div class="eval-detail">Sem erros. Mensagens claras e simpáticas.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Tempo de Resposta</div>
+      <div class="eval-value normal">Normal</div>
+      <div class="eval-detail">Respondeu rapidamente.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Abordagem do Preco</div>
+      <div class="eval-value sim">Adequada</div>
+      <div class="eval-detail">Paciente ja sabia o que queria (botox). Daiane e Ana focaram no agendamento sem pressionar com preco.</div>
+    </div>
+    <div class="eval-item" style="grid-column:span 2">
+      <div class="eval-label">Resumo da Conversa</div>
+      <div class="eval-detail">Paciente queria botox dia 22/7. Daiane ofereceu 16h com Dra. Eoda, paciente aceitou. Ana confirmou, depois reagendou para 23/7 as 15:30 quando paciente pediu. Manteve pre-agendamento com flexibilidade. Trabalho em equipe eficiente.</div>
+    </div>
+  </div>
+  <div class="gpt-tags" style="padding:8px 20px 12px">
+    <span class="gpt-tag-pos">+ Flexibilidade no reagendamento</span><span class="gpt-tag-pos">+ Pre-agendamento mantido</span><span class="gpt-tag-pos">+ Trabalho em equipe com Daiane</span>
+  </div>
+  <div class="chat-container">
+    <div class="chat-msg in"><span class="sender">Paciente (Samanta)</span>Boa tarde , meninas td bem? Gostaria de agendar um horario pro botox , tem dia 22/7 umas 11h/ 11:30/12:00/12:30?</div><div class="chat-clearfix"></div>
+<div class="chat-msg out clara"><span class="sender">Clara (IA)</span>O botox e um procedimento que voce pode agendar diretamente, sem precisar passar por consulta previa!
+
+O horario que voce pediu, 22/07 pela manha com a Dra. Raquel, nao esta disponivel. No entanto, ha uma disponibilidade no dia 14/07/2026 as 10:30.
+
+Quer que eu encaminhe para a nossa recepcao organizar esse agendamento para voce nesse horario?</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Daiane Miranda da Silva</span>Ola boa tarde</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Daiane Miranda da Silva</span>Meu nome e Daiane, faco parte da equipe DermaClinic</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Daiane Miranda da Silva</span>Dia 22 tenho somente a tarde</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Daiane Miranda da Silva</span>Com a dra Eoda</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Daiane Miranda da Silva</span>as 16hs</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Ooie</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Pode ser 22/7 as 16:00 com a Dra Eoda</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Daiane Miranda da Silva</span>Ok entao, estamos agendando</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Daiane Miranda da Silva</span>So me passa teu nome completa, por favor??</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Samanta Teles de padua</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Ana Carolina Marquez </span>Marcado Samanta!!!
+Ate la!!! </div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Ola uma duvida</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Me equivoquei aqui</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Tem horario dia 23/7?</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Ana Carolina Marquez </span>Dia 23/7 as 15:30, pode ser?</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Eh q eu vou tentar ir no Masto q e ai em Jvlle tb , eu sou de Jaragua , ja q te retorno</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Ana Carolina Marquez </span>Vou manter o pre agendamento e voce me sinaliza direitinho a confirmacao. </div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Isso</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Por favor</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Obrigada</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Ana Carolina Marquez </span>Imagina</div><div class="chat-clearfix"></div>
+  </div>
+</div>
+</div>
+
+<!-- ==================== CRISTIANE ==================== -->
+<div id="agent-1" class="section">
+<div class="agent-strip">
+  <div class="agent-avatar" style="background:#7C3AED">CJ</div>
+  <div class="agent-info">
+    <div class="agent-name">Cristiane Aparecida Joaquim</div>
+    <div class="agent-meta">2 conversa(s) · 2 agendamentos convertidos</div>
+  </div>
+  <div class="agent-score">
+    <div class="agent-score-value" style="color:#059669">100%</div>
+    <div class="agent-score-label" style="color:#059669">Conversao</div>
+  </div>
+</div>
+
+<div class="conv-detail">
+  <div class="conv-header">
+    <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/4438" target="_blank">#4438 — Vivi</a></div>
+    <div class="conv-badges">
+      <span class="appt-badge sim">Agendou</span>
+      <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
+    </div>
+  </div>
+  <div class="eval-grid">
+    <div class="eval-item">
+      <div class="eval-label">Empenho na Conversao</div>
+      <div class="eval-value alto">Alto</div>
+      <div class="eval-detail">Chamou a paciente pelo apelido "Vivi", pediu nome completo para cadastro, ofereceu horario e confirmou agendamento. Gentil e proativa.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Escrita</div>
+      <div class="eval-value sim">Boa</div>
+      <div class="eval-detail">Sem erros significativos. Mensagens claras e educadas.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Tempo de Resposta</div>
+      <div class="eval-value normal">Normal</div>
+      <div class="eval-detail">Respondeu em tempo adequado.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Abordagem do Preco</div>
+      <div class="eval-value sim">Adequada</div>
+      <div class="eval-detail">Era um agendamento de retorno — nao havia necessidade de discutir preco. Focou corretamente no agendamento.</div>
+    </div>
+    <div class="eval-item" style="grid-column:span 2">
+      <div class="eval-label">Resumo da Conversa</div>
+      <div class="eval-detail">Paciente Vivi queria reagendar consulta. Cristiane pediu nome completo, ofereceu dia 26/10 as 17h com Dra. Eoda e confirmou. Paciente depois pediu Dra. Raquel, e Alessandra ofereceu alternativas. Agendamento realizado com sucesso.</div>
+    </div>
+  </div>
+  <div class="gpt-tags" style="padding:8px 20px 12px">
+    <span class="gpt-tag-pos">+ Usou apelido da paciente (Vivi)</span><span class="gpt-tag-pos">+ Agendamento confirmado</span><span class="gpt-tag-pos">+ Gentil e atenciosa</span>
+    <span class="gpt-tag-neg">- Poderia ter perguntado com qual medica antes de agendar</span>
+  </div>
+  <div class="chat-container">
+    <div class="chat-msg in"><span class="sender">Paciente (Vivi)</span>Bom dia, tudo bem e voce?</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Infelizmente nao posso ir</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Oii</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Sim</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Para depois do dia 10/04</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Viviana N Silva</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Preferencia</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Gabriella Hille</span>Dia 16/04 as 09h30, pode ser?</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Tem dia 17?</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Gabriella Hille</span>A Dra nao atende as sextas-feiras</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Bom dia</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Infelizmente nao poderei ir</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Oii, tudo bem e voce?</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Desculpa nao ter respondido antes</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Cristiane Aparecida Joaquim</span>Sem problemas Vivi, so preciso do seu nome completo para eu localizar o seu cadastro e realizar o seu agendamento</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Viviana N Silva</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Cristiane Aparecida Joaquim</span>Grata Vivi</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>No dia 26/10 que horarios vc tem?
+Preciso bem no inicio da manha ou no final da tarde</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Cristiane Aparecida Joaquim</span>Ola, bom dia
+Tudo bem Vivi?</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Cristiane Aparecida Joaquim</span>Para o dia 26/10 O mais tarde e o horario das 17:00, pode ser?</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Bom dia, tudo bem?</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Pode ser esse</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Cristiane Aparecida Joaquim</span>Perfeito Vivi
+
+Fica agendado para dia 26/10 as 17:00 com a Dra. Eoda</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Ah mas eu queria com a Dra Raquel</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Alessandra</span>Com a Dra Raquel vou ter dia 26/10 as 13h30 e dia 27/10 as 14h.</div><div class="chat-clearfix"></div>
+  </div>
+</div>
+
+<div class="conv-detail">
+  <div class="conv-header">
+    <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19133" target="_blank">#19133 — Mateus Freitas</a></div>
+    <div class="conv-badges">
+      <span class="appt-badge sim">Agendou</span>
+      <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
+    </div>
+  </div>
+  <div class="eval-grid">
+    <div class="eval-item">
+      <div class="eval-label">Empenho na Conversao</div>
+      <div class="eval-value alto">Alto</div>
+      <div class="eval-detail">Ofereceu opcoes de horario, perguntou periodo preferido, pediu nome completo. Proativa e educada.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Escrita</div>
+      <div class="eval-value medio">Atencao</div>
+      <div class="eval-detail">Errou a data do agendamento: disse 29/10 quando o paciente tinha pedido 30/10. Paciente precisou corrigir.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Tempo de Resposta</div>
+      <div class="eval-value normal">Normal</div>
+      <div class="eval-detail">Respondeu em tempo adequado.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Abordagem do Preco</div>
+      <div class="eval-value sim">Adequada</div>
+      <div class="eval-detail">Preco ja tinha sido informado por Alessandra no inicio. Cristiane focou no agendamento.</div>
+    </div>
+    <div class="eval-item" style="grid-column:span 2">
+      <div class="eval-label">Resumo da Conversa</div>
+      <div class="eval-detail">Paciente queria mapeamento corporal. Alessandra informou valor (R$2.500) e ofereceu data, mas horario nao serviu. Cristiane assumiu, ofereceu dia 30/10 com opcoes de horario. Agendou, mas errou a data na confirmacao (disse 29 em vez de 30) e disse "consulta" em vez de "mapeamento" — paciente corrigiu.</div>
+    </div>
+  </div>
+  <div class="gpt-tags" style="padding:8px 20px 12px">
+    <span class="gpt-tag-pos">+ Proativa em oferecer alternativas</span><span class="gpt-tag-pos">+ Pediu nome completo</span>
+    <span class="gpt-tag-neg">- Errou a data (29 em vez de 30)</span><span class="gpt-tag-neg">- Disse "consulta" em vez de "mapeamento corporal"</span>
+  </div>
+  <div class="chat-container">
+    <div class="chat-msg in"><span class="sender">Paciente (Mateus Freitas)</span>Bom dia.
+
+Estou interessado na realizacao de um mapeamento corporal</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Qual o preco? Ha data disponivel para realiza-lo ainda em Outubro?</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Alessandra</span>Ola, tudo bem? Realizamos o Mapeamento corporal
+
+O valor do mapeamento e R$2.500,00, que pode ser parcelado em ate 12x. Usamos o IntelliStudio, um equipamento de ultima geracao que avalia todas as pintas e detecta precocemente o cancer de pele e melanoma.</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Alessandra</span>DIA 21/10 AS 16H</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Alessandra</span>Pode ser?</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Pode ser. E possivel fazer o pagamento no dia?</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Alessandra</span>Ola bom dia! Infelizmente nao tenho mais esse horario disponivel. </div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Alessandra</span>Podemos agendar para o dia 28/10 as 10h30 ou as 14h30?</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Alessandra</span>Sim, o pagamento e feito no dia da consulta. </div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Dia 28 nao tenho disponibilidade. Teria dia 29 ou 30? Ou na primeira semana de novembro?</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Cristiane Aparecida Joaquim</span>Temos disponibilidade para o dia 30/10. Qual seria o melhor periodo para voce, Mateus: manha ou tarde?</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Final da tarde, ou final da manha</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Cristiane Aparecida Joaquim</span>Temos disponibilidade no dia 30/10, as 11h30 ou as 17h. Qual desses horarios fica melhor para voce?</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>17h fica bom</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Cristiane Aparecida Joaquim</span>Maravilha! Poderia me informar seu nome completo, por gentileza?</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Mateus Henrique de Freitas</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Cristiane Aparecida Joaquim</span>Grata Mateus
+
+Sua consulta ficou agendada para o dia 29/10, as 17h, com a Dra. Raquel.</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Cristiane Aparecida Joaquim</span>Permaneco a disposicao caso tenha alguma duvida.</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Seria dia 30, nao?</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Nao desejo uma consulta, mas um mapeamento corporal</div><div class="chat-clearfix"></div>
+  </div>
+</div>
+</div>
+
+<!-- ==================== DANIELA ==================== -->
 <div id="agent-0" class="section">
 <div class="agent-strip">
   <div class="agent-avatar" style="background:#2D52EF">DP</div>
   <div class="agent-info">
     <div class="agent-name">Daniela Peixer</div>
-    <div class="agent-meta">2 conversa(s) avaliada(s) · 2 com participacao</div>
+    <div class="agent-meta">2 conversa(s) · 1 agendamento convertido</div>
   </div>
   <div class="agent-score">
-    <div class="agent-score-value" style="color:#0891B2">7.1</div>
-    <div class="agent-score-label" style="color:#0891B2">Bom</div>
+    <div class="agent-score-value" style="color:#0891B2">50%</div>
+    <div class="agent-score-label" style="color:#0891B2">Conversao</div>
   </div>
 </div>
-
 
 <div class="conv-detail">
   <div class="conv-header">
     <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19212" target="_blank">#19212 — Rosane</a></div>
     <div class="conv-badges">
-      <span class="badge" style="background:#ECFEFF;color:#0891B2">Bom — 7.8/10</span>
-
+      <span class="appt-badge sim">Agendou</span>
       <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
     </div>
   </div>
-
-  <div class="scores-grid">
-    <div class="score-row">
-  <span class="score-label">Acolhimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:70.0%;background:#0891B2"></div></div>
-  <span class="score-value">7.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Investigacao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:70.0%;background:#0891B2"></div></div>
-  <span class="score-value">7.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conhecimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:90.0%;background:#059669"></div></div>
-  <span class="score-value">9.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conversao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:90.0%;background:#059669"></div></div>
-  <span class="score-value">9.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Escrita</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:70.0%;background:#0891B2"></div></div>
-  <span class="score-value">7.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">GERAL</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:78.0%;background:#0891B2"></div></div>
-  <span class="score-value">7.8</span>
-</div>
-  </div>
-
-  <div class="gpt-summary">
-    <p><strong>Analise GPT:</strong> Daniela Peixer demonstrou excelente conhecimento tecnico ao apresentar opcoes de tratamento (Fotona e crioescleroterapia) com valores e detalhes. Conduziu bem a conversao, consultando o medico e oferecendo data, horario e parcelamento. Conseguiu fechar o agendamento com sucesso.</p>
-    <div class="gpt-tags">
-      <span class="gpt-tag-pos">+ Excelente conhecimento de procedimentos e valores</span><span class="gpt-tag-pos">+ Agendamento fechado com sucesso</span><span class="gpt-tag-pos">+ Consultou o medico antes de agendar</span>
-      <span class="gpt-tag-neg">- Usar o nome da paciente durante a conversa</span><span class="gpt-tag-neg">- Melhorar acentuacao e formatacao das mensagens</span>
+  <div class="eval-grid">
+    <div class="eval-item">
+      <div class="eval-label">Empenho na Conversao</div>
+      <div class="eval-value alto">Alto</div>
+      <div class="eval-detail">Consultou o medico antes de agendar, apresentou 2 opcoes de tratamento (Fotona e crioescleroterapia) com valores e parcelamento. Fechou o agendamento.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Escrita</div>
+      <div class="eval-value medio">Atencao</div>
+      <div class="eval-detail">Erros de acentuacao: "voce" (falta acento), "Perfeito agendado" (falta virgula).</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Tempo de Resposta</div>
+      <div class="eval-value normal">Normal</div>
+      <div class="eval-detail">Respondeu em tempo adequado.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Abordagem do Preco</div>
+      <div class="eval-value sim">Adequada</div>
+      <div class="eval-detail">Primeiro verificou com o medico se poderia agendar direto, entendeu o caso, e so depois apresentou opcoes com valores.</div>
+    </div>
+    <div class="eval-item" style="grid-column:span 2">
+      <div class="eval-label">Resumo da Conversa</div>
+      <div class="eval-detail">Paciente Rosane ja era paciente da outra clinica. Daniela verificou com o medico, apresentou Fotona (R$1.800/sessao) e crioescleroterapia (R$980/sessao), ofereceu data 03/11 as 16h com parcelamento em 10x. Paciente agendou.</div>
     </div>
   </div>
-
+  <div class="gpt-tags" style="padding:8px 20px 12px">
+    <span class="gpt-tag-pos">+ Consultou medico antes</span><span class="gpt-tag-pos">+ Apresentou opcoes com valores</span><span class="gpt-tag-pos">+ Ofereceu parcelamento</span>
+    <span class="gpt-tag-neg">- Usar o nome da paciente durante a conversa</span><span class="gpt-tag-neg">- Melhorar acentuacao</span>
+  </div>
   <div class="chat-container">
     <div class="chat-msg in"><span class="sender">Paciente (Rosane)</span>Nao</div><div class="chat-clearfix"></div>
 <div class="chat-msg in"><span class="sender">Paciente (Rosane)</span>Eu so marco o procedimento direto</div><div class="chat-clearfix"></div>
@@ -346,1206 +660,435 @@ Mas esses valores sao apenas uma base inicial</div><div class="chat-clearfix"></
   </div>
 </div>
 
-
 <div class="conv-detail">
   <div class="conv-header">
     <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19211" target="_blank">#19211 — Kaoane</a></div>
     <div class="conv-badges">
-      <span class="badge" style="background:#ECFEFF;color:#0891B2">Bom — 6.4/10</span>
-      
+      <span class="appt-badge nao">Nao agendou</span>
       <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
     </div>
   </div>
-
-  <div class="scores-grid">
-    <div class="score-row">
-  <span class="score-label">Acolhimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:60.0%;background:#0891B2"></div></div>
-  <span class="score-value">6.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Investigacao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:70.0%;background:#0891B2"></div></div>
-  <span class="score-value">7.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conhecimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:60.0%;background:#0891B2"></div></div>
-  <span class="score-value">6.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conversao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:70.0%;background:#0891B2"></div></div>
-  <span class="score-value">7.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Escrita</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:60.0%;background:#0891B2"></div></div>
-  <span class="score-value">6.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">GERAL</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:64.0%;background:#0891B2"></div></div>
-  <span class="score-value">6.4</span>
-</div>
-  </div>
-
-  <div class="gpt-summary">
-    <p><strong>Analise GPT:</strong> Daniela Peixer atendeu o paciente de forma cordial, mas poderia ter se apresentado e utilizado o nome do paciente para um melhor acolhimento. Demonstrou conhecimento básico sobre os procedimentos, mas as respostas poderiam ser mais detalhadas e claras. A conversão para agendamento foi tentada, mas não foi efetiva.</p>
-    <div class="gpt-tags">
-      <span class="gpt-tag-pos">+ Atendimento cordial</span><span class="gpt-tag-pos">+ Tentativa de agendamento</span>
-      <span class="gpt-tag-neg">- Falta de apresentação pessoal</span><span class="gpt-tag-neg">- Respostas mais detalhadas sobre os procedimentos</span><span class="gpt-tag-neg">- Melhorar a clareza na comunicação</span>
+  <div class="eval-grid">
+    <div class="eval-item">
+      <div class="eval-label">Empenho na Conversao</div>
+      <div class="eval-value medio">Medio</div>
+      <div class="eval-detail">Respondeu as perguntas, mas de forma breve. Nao ofereceu agendamento de forma proativa. Paciente ficou sem retorno claro.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Escrita</div>
+      <div class="eval-value medio">Atencao</div>
+      <div class="eval-detail">Falta de acentos: "esta" sem acento, pontuacao incompleta.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Tempo de Resposta</div>
+      <div class="eval-value normal">Normal</div>
+      <div class="eval-detail">Respondeu em tempo adequado.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Abordagem do Preco</div>
+      <div class="eval-value nao">Preco direto</div>
+      <div class="eval-detail">Informou R$980 logo na primeira mensagem, sem antes entender melhor a queixa da paciente (acne e rosacea). Paciente tinha dito que queria saber sobre Roacutan — poderia ter explorado mais.</div>
+    </div>
+    <div class="eval-item" style="grid-column:span 2">
+      <div class="eval-label">Resumo da Conversa</div>
+      <div class="eval-detail">Paciente perguntou sobre consulta dermatologica e se aceitava convenio Prever. Daniela informou o valor (R$980 particular, R$400 pelo Prever) mas nao investigou a necessidade. Paciente tinha queixa de acne, rosacea e historico de Roacutan. Daniela foi generica: "depende do caso, pode ser com remedio ou lasers". Nao ofereceu agendamento.</div>
     </div>
   </div>
-
+  <div class="gpt-tags" style="padding:8px 20px 12px">
+    <span class="gpt-tag-pos">+ Respondeu sobre convenio</span>
+    <span class="gpt-tag-neg">- Preco informado sem entender necessidade</span><span class="gpt-tag-neg">- Nao ofereceu agendamento proativamente</span><span class="gpt-tag-neg">- Respostas muito genericas</span>
+  </div>
   <div class="chat-container">
     <div class="chat-msg in"><span class="sender">Paciente (Kaoane)</span>Boa noite, gostaria de saber qual o valor da consulta com dermatologista e se aceita plano prever</div><div class="chat-clearfix"></div>
-<div class="chat-msg out clara"><span class="sender">Clara (IA)</span>Sim! Atendemos pelo convênio Prever, somente com a Dra. Eoda. O valor da consulta pelo Prever é R$ 400,00. Posso verificar os horários disponíveis com ela para você?</div><div class="chat-clearfix"></div>
-<div class="chat-msg out clara"><span class="sender">Clara (IA)</span>Olá! Aqui é a Clara, assistente virtual da Dermaclinic. Seja bem-vindo(a)! 😊
-
-Para te ajudar a escolher, esses são os procedimentos mais procurados aqui na DermaClinic:
-
-🔹 Avaliação Dermatológica — a Dra. analisa sua pele e indica o tratamento ideal
-
-🔹 Botox — rejuvenescimento facial com resultado natural
-
-🔹 Mapeamento Corporal — acompanhamento pre...</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Seria avaliação dermatológica também</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Meu namorado também tem interesse na consulta mas ele seria pelo sc saúde, vocês atendem?</div><div class="chat-clearfix"></div>
-<div class="chat-msg out clara"><span class="sender">Clara (IA)</span>🤖 **ATRIBUIÇÃO AUTOMÁTICA:**
-Houve atribuição automática da conversa devido este motivo:
-
-**Motivo**: RULES VIOLATION
-
-**Descrição:**
-O agente informou corretamente sobre a Consulta Dermatológica, apresentou as médicas, explicou o serviço e os valores conforme o escopo da Dermaclinic, e perguntou sobre preferências de dia, turno e médica para pross...</div><div class="chat-clearfix"></div>
-<div class="chat-msg out clara"><span class="sender">Clara (IA)</span>Me conta um pouquinho — o que ele está buscando ou quais são os objetivos de saúde dele? 😊</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Para mim seria acne e rosácea e para ele seria um problema com pelo encravado, muito frequentemente viram machucados e geram cicatrizes</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Daniela Peixer</span>Ola, bom dia, nesse caso seria indicado uma consulta dermatológica, o valor da consulta esta 980,00, podemos fazer em 2 x no cartão</div><div class="chat-clearfix"></div>
+<div class="chat-msg out clara"><span class="sender">Clara (IA)</span>Sim! Atendemos pelo convenio Prever, somente com a Dra. Eoda. O valor da consulta pelo Prever e R$ 400,00. Posso verificar os horarios disponiveis com ela para voce?</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Seria avaliacao dermatologica tambem</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Meu namorado tambem tem interesse na consulta mas ele seria pelo sc saude, voces atendem?</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Para mim seria acne e rosacea e para ele seria um problema com pelo encravado, muito frequentemente viram machucados e geram cicatrizes</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Daniela Peixer</span>Ola, bom dia, nesse caso seria indicado uma consulta dermatologica, o valor da consulta esta 980,00, podemos fazer em 2 x no cartao</div><div class="chat-clearfix"></div>
 <div class="chat-msg in"><span class="sender">Paciente</span>Ok, obrigada</div><div class="chat-clearfix"></div>
 <div class="chat-msg in"><span class="sender">Paciente</span>Bom dia, acabei perdendo as conversas. Consegue me mandar novamente o valor da consulta com a dermatologista e se aceita Prever</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Daniela Peixer</span>Ola, tudo bem? Atendemos sim pelo prever o valor da consulta fica 400,00
-</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Daniela Peixer</span>Ola, tudo bem? Atendemos sim pelo prever o valor da consulta fica 400,00</div><div class="chat-clearfix"></div>
 <div class="chat-msg in"><span class="sender">Paciente</span>E como funciona a consulta?</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Quanto tempo de duração e tem retorno?</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Meu problema seria para acne e rosácea</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Há uns anos falaram que talvez o tratamento com roacutan fosse necessário</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Quanto tempo de duracao e tem retorno?</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Meu problema seria para acne e rosacea</div><div class="chat-clearfix"></div>
+<div class="chat-msg in"><span class="sender">Paciente</span>Ha uns anos falaram que talvez o tratamento com roacutan fosse necessario</div><div class="chat-clearfix"></div>
 <div class="chat-msg in"><span class="sender">Paciente</span>Como funcionaria caso fosse isso mesmo?</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Daniela Peixer</span>Depende do caso, pode ser com remedio ou lasers, o ideal é vir em consulta medica</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Daniela Peixer</span>Depende do caso, pode ser com remedio ou lasers, o ideal e vir em consulta medica</div><div class="chat-clearfix"></div>
 <div class="chat-msg in"><span class="sender">Paciente</span>Ok</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Alessandra</span>Gostaria de agendar um horário?</div><div class="chat-clearfix"></div>
+<div class="chat-msg out agent"><span class="sender">Alessandra</span>Gostaria de agendar um horario?</div><div class="chat-clearfix"></div>
 <div class="chat-msg in"><span class="sender">Paciente</span>?</div><div class="chat-clearfix"></div>
 <div class="chat-msg out agent"><span class="sender">Daniela Peixer</span>Depende do procedimento em torno de 1 hora, sim o retorno conforme conduta e tempo que a Dra determinar, pode ser 30 dias 15 dias</div><div class="chat-clearfix"></div>
   </div>
 </div>
-
 </div>
 
-<div id="agent-1" class="section">
-<div class="agent-strip">
-  <div class="agent-avatar" style="background:#7C3AED">CJ</div>
-  <div class="agent-info">
-    <div class="agent-name">Cristiane Aparecida Joaquim</div>
-    <div class="agent-meta">2 conversa(s) avaliada(s) · 2 com participacao</div>
-  </div>
-  <div class="agent-score">
-    <div class="agent-score-value" style="color:#0891B2">7.6</div>
-    <div class="agent-score-label" style="color:#0891B2">Bom</div>
-  </div>
-</div>
-
-
-<div class="conv-detail">
-  <div class="conv-header">
-    <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/4438" target="_blank">#4438 — Vivi</a></div>
-    <div class="conv-badges">
-      <span class="badge" style="background:#ECFEFF;color:#0891B2">Bom — 7.4/10</span>
-      
-      <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
-    </div>
-  </div>
-
-  <div class="scores-grid">
-    <div class="score-row">
-  <span class="score-label">Acolhimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:80.0%;background:#059669"></div></div>
-  <span class="score-value">8.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Investigacao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:70.0%;background:#0891B2"></div></div>
-  <span class="score-value">7.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conhecimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:60.0%;background:#0891B2"></div></div>
-  <span class="score-value">6.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conversao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:80.0%;background:#059669"></div></div>
-  <span class="score-value">8.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Escrita</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:80.0%;background:#059669"></div></div>
-  <span class="score-value">8.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">GERAL</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:74.0%;background:#0891B2"></div></div>
-  <span class="score-value">7.4</span>
-</div>
-  </div>
-
-  <div class="gpt-summary">
-    <p><strong>Analise GPT:</strong> Cristiane demonstrou um bom acolhimento ao se dirigir ao paciente pelo nome e foi cordial em suas mensagens. No entanto, poderia ter investigado melhor as preferências do paciente antes de oferecer horários. A comunicação foi clara, mas houve uma troca de atendentes que pode ter causado confusão.</p>
-    <div class="gpt-tags">
-      <span class="gpt-tag-pos">+ Acolhimento cordial e uso do nome do paciente</span><span class="gpt-tag-pos">+ Clareza nas informações sobre agendamento</span>
-      <span class="gpt-tag-neg">- Investigar mais sobre as preferências do paciente antes de oferecer horários</span>
-    </div>
-  </div>
-
-  <div class="chat-container">
-    <div class="chat-msg in"><span class="sender">Paciente (Vivi)</span>Bom dia, tudo bem e você?</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Infelizmente não posso ir</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Oii</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Sim</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Para depois do dia 10/04</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Viviana N Silva</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Preferência</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Gabriella Hille</span>Dia 16/04 as 09h30, pode ser?
-</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Tem dia 17?</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Gabriella Hille</span>A Dra não atende as sextas-feiras 
-</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Bom dia</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Infelizmente não poderei ir</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Oii, tudo bem e você?</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Desculpa não ter respondido antes</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Cristiane Aparecida Joaquim</span>Sem problemas Vivi, só preciso do seu nome completo para eu localizar o seu cadastro e realizar o seu agendamento</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Viviana N Silva</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Cristiane Aparecida Joaquim</span>Grata Vivi</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>No dia 26/10 que horários vc tem? 
-Preciso bem no início da manhã ou no final da tarde</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Cristiane Aparecida Joaquim</span>Olá, bom dia
-Tudo bem Vivi?
-</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Cristiane Aparecida Joaquim</span>Para o dia 26/10 O mais tarde é o horário das 17:00, pode ser?</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Bom dia, tudo bem?</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Pode ser esse</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Cristiane Aparecida Joaquim</span>Perfeito Vivi
-
-Fica agendado para dia 26/10 às 17:00 com a Dra. Eoda</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Ah mas eu queria com a Dra Raquel</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Alessandra</span>Com a Dra Raquel vou ter dia 26/10 as 13h30 e dia 27/10 as 14h.</div><div class="chat-clearfix"></div>
-  </div>
-</div>
-
-
-<div class="conv-detail">
-  <div class="conv-header">
-    <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19133" target="_blank">#19133 — Mateus Freitas</a></div>
-    <div class="conv-badges">
-      <span class="badge" style="background:#ECFEFF;color:#0891B2">Bom — 7.8/10</span>
-      
-      <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
-    </div>
-  </div>
-
-  <div class="scores-grid">
-    <div class="score-row">
-  <span class="score-label">Acolhimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:80.0%;background:#059669"></div></div>
-  <span class="score-value">8.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Investigacao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:70.0%;background:#0891B2"></div></div>
-  <span class="score-value">7.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conhecimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:80.0%;background:#059669"></div></div>
-  <span class="score-value">8.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conversao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:90.0%;background:#059669"></div></div>
-  <span class="score-value">9.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Escrita</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:70.0%;background:#0891B2"></div></div>
-  <span class="score-value">7.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">GERAL</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:78.0%;background:#0891B2"></div></div>
-  <span class="score-value">7.8</span>
-</div>
-  </div>
-
-  <div class="gpt-summary">
-    <p><strong>Analise GPT:</strong> Cristiane demonstrou um bom acolhimento e conhecimento sobre o procedimento, mas houve um pequeno erro ao agendar a data. Ela foi proativa em oferecer horários e fez um bom trabalho ao se comunicar com o paciente.</p>
-    <div class="gpt-tags">
-      <span class="gpt-tag-pos">+ Acolhimento cordial e uso do nome do paciente</span><span class="gpt-tag-pos">+ Proatividade em oferecer horários alternativos</span>
-      <span class="gpt-tag-neg">- Atenção ao agendar a data correta do procedimento</span>
-    </div>
-  </div>
-
-  <div class="chat-container">
-    <div class="chat-msg in"><span class="sender">Paciente (Mateus Freitas)</span>Bom dia. 
-
-Estou interessado na realização de um mapeamento corporal</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Qual o preço? Há data disponível para realizá-lo ainda em Outubro?</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Alessandra</span>Ola, tudo bem? Realizamos o Mapeamento corporal
-
-O valor do mapeamento é R$2.500,00, que pode ser parcelado em até 12x. Usamos o IntelliStudio, um equipamento de última geração que avalia todas as pintas e detecta precocemente o câncer de pele e melanoma.</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Alessandra</span>DIA 21/10 AS 16H</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Alessandra</span>Pode ser?</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Pode ser. É possível fazer o pagamento no dia?</div><div class="chat-clearfix"></div>
-<div class="chat-msg out clara"><span class="sender">Clara (IA)</span>Olá! O Mapeamento Corporal que realizamos aqui na DermaClinic é feito com o IntelliStudio, um equipamento de última geração que avalia todas as pintas e ajuda na detecção precoce de câncer de pele e melanoma.
-
-O valor é R$ 2.500,00 e é possível parcelar em até 12 vezes no cartão.
-
-Sobre o pagamento no dia do exame, aceitamos Pix, débito e crédito, ...</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Pode ser sim</div><div class="chat-clearfix"></div>
-<div class="chat-msg out clara"><span class="sender">Clara (IA)</span>Qual é a sua preferência de dia da semana ou turno para eu verificar os horários disponíveis para o Mapeamento Corporal? 😊</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Dia 21/10 às 16h</div><div class="chat-clearfix"></div>
-<div class="chat-msg out clara"><span class="sender">Clara (IA)</span>Vou te colocar com nossa recepção para finalizar seu agendamento. 😊</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Alessandra</span>Olá bom dia! Infelizmente não tenho mais esse horário disponível. </div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Alessandra</span>Podemos agendar para o dia 28/10 as 10h30 ou as 14h30?</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Alessandra</span>Sim, o pagamento é feito no dia da consulta. </div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Dia 28 não tenho disponibilidade. Teria dia 29 ou 30? Ou na primeira semana de novembro?</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Cristiane Aparecida Joaquim</span>Temos disponibilidade para o dia 30/10. Qual seria o melhor período para você, Mateus: manhã ou tarde?
-
-
-</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Final da tarde, ou final da manhã</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Cristiane Aparecida Joaquim</span>Temos disponibilidade no dia 30/10, às 11h30 ou às 17h. Qual desses horários fica melhor para você?</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>17h fica bom</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Cristiane Aparecida Joaquim</span>Maravilha! Poderia me informar seu nome completo, por gentileza? 😊</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Mateus Henrique de Freitas</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Cristiane Aparecida Joaquim</span>Grata Mateus
-
-Sua consulta ficou agendada para o dia 29/10, às 17h, com a Dra. Raquel. 😊
-
-
-</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Cristiane Aparecida Joaquim</span>Permaneço à disposição caso tenha alguma dúvida. 😊
-
-
-</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Seria dia 30, não?</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Não desejo uma consulta, mas um mapeamento corporal</div><div class="chat-clearfix"></div>
-  </div>
-</div>
-
-</div>
-
-<div id="agent-2" class="section">
-<div class="agent-strip">
-  <div class="agent-avatar" style="background:#059669">AL</div>
-  <div class="agent-info">
-    <div class="agent-name">Alessandra</div>
-    <div class="agent-meta">2 conversa(s) avaliada(s) · 1 com participacao</div>
-  </div>
-  <div class="agent-score">
-    <div class="agent-score-value" style="color:#0891B2">6.8</div>
-    <div class="agent-score-label" style="color:#0891B2">Bom</div>
-  </div>
-</div>
-
-
-<div class="conv-detail">
-  <div class="conv-header">
-    <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18477" target="_blank">#18477 — red-field-792</a></div>
-    <div class="conv-badges">
-      <span class="badge" style="background:#FEF2F2;color:#DC2626">Precisa Melhorar — 0.0/10</span>
-      <span class="badge" style="background:#FEF2F2;color:#DC2626">Nao participou</span>
-      <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
-    </div>
-  </div>
-
-  <div class="scores-grid">
-    <div class="score-row">
-  <span class="score-label">Acolhimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Investigacao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conhecimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conversao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Escrita</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">GERAL</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-  </div>
-
-  <div class="gpt-summary">
-    <p><strong>Analise GPT:</strong> A atendente Alessandra não participou da conversa, portanto não é possível avaliar seu desempenho.</p>
-    <div class="gpt-tags">
-      
-      
-    </div>
-  </div>
-
-  <div class="chat-container">
-    <div class="chat-msg in"><span class="sender">Paciente (red-field-792)</span>Bom dia. Tudo bem e com você? Pode ser sim. 👍</div><div class="chat-clearfix"></div>
-  </div>
-</div>
-
-
-<div class="conv-detail">
-  <div class="conv-header">
-    <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19235" target="_blank">#19235 — Bruna Baptista</a></div>
-    <div class="conv-badges">
-      <span class="badge" style="background:#ECFEFF;color:#0891B2">Bom — 6.8/10</span>
-      
-      <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
-    </div>
-  </div>
-
-  <div class="scores-grid">
-    <div class="score-row">
-  <span class="score-label">Acolhimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:80.0%;background:#059669"></div></div>
-  <span class="score-value">8.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Investigacao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:40.0%;background:#D97706"></div></div>
-  <span class="score-value">4.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conhecimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:70.0%;background:#0891B2"></div></div>
-  <span class="score-value">7.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conversao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:80.0%;background:#059669"></div></div>
-  <span class="score-value">8.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Escrita</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:70.0%;background:#0891B2"></div></div>
-  <span class="score-value">7.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">GERAL</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:68.0%;background:#0891B2"></div></div>
-  <span class="score-value">6.8</span>
-</div>
-  </div>
-
-  <div class="gpt-summary">
-    <p><strong>Analise GPT:</strong> Alessandra foi cordial e se apresentou bem, mas não investigou a necessidade da paciente antes de oferecer o preço. Demonstrou conhecimento sobre o procedimento, mas a escrita poderia ser mais formal.</p>
-    <div class="gpt-tags">
-      <span class="gpt-tag-pos">+ Cordialidade no atendimento</span><span class="gpt-tag-pos">+ Clareza na informação sobre o valor</span>
-      <span class="gpt-tag-neg">- Investigar a necessidade do paciente antes de oferecer preços</span><span class="gpt-tag-neg">- Melhorar a formalidade da escrita</span>
-    </div>
-  </div>
-
-  <div class="chat-container">
-    <div class="chat-msg in"><span class="sender">Paciente (Bruna Baptista)</span>Bom dia, vocês atendem Unimed ?
-Page Title: Home page
-Page URL: https://www.dermatologiajoinville.com.br/</div><div class="chat-clearfix"></div>
-<div class="chat-msg out clara"><span class="sender">Clara (IA)</span>🤖 **ATRIBUIÇÃO AUTOMÁTICA:**
-Houve atribuição automática da conversa devido este motivo:
-
-**Motivo**: RULES VIOLATION
-
-**Descrição:**
-O agente iniciou a jornada consultiva perguntando ao paciente o motivo ou os objetivos de saúde antes de realizar o agendamento.</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Alessandra</span>Olá, tudo bem? Não atendemos por convênios nossa consulta é feita de forma particular personalizada e exclusiva  
-Com investimento de R$980,00. Fico à sua disposição para agendar! ☺️</div><div class="chat-clearfix"></div>
-  </div>
-</div>
-
-</div>
-
+<!-- ==================== DAIANE ==================== -->
 <div id="agent-3" class="section">
 <div class="agent-strip">
   <div class="agent-avatar" style="background:#D97706">DS</div>
   <div class="agent-info">
     <div class="agent-name">Daiane Miranda da Silva</div>
-    <div class="agent-meta">2 conversa(s) avaliada(s) · 1 com participacao</div>
+    <div class="agent-meta">2 conversa(s) · 1 agendamento convertido</div>
   </div>
   <div class="agent-score">
-    <div class="agent-score-value" style="color:#0891B2">6.8</div>
-    <div class="agent-score-label" style="color:#0891B2">Bom</div>
+    <div class="agent-score-value" style="color:#0891B2">50%</div>
+    <div class="agent-score-label" style="color:#0891B2">Conversao</div>
   </div>
 </div>
-
 
 <div class="conv-detail">
   <div class="conv-header">
-    <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18687" target="_blank">#18687 — Sarah B. Pessôa</a></div>
+    <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/16264" target="_blank">#16264 — Samanta (participacao conjunta)</a></div>
     <div class="conv-badges">
-      <span class="badge" style="background:#ECFEFF;color:#0891B2">Bom — 6.8/10</span>
-      
+      <span class="appt-badge sim">Agendou</span>
       <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
     </div>
   </div>
-
-  <div class="scores-grid">
-    <div class="score-row">
-  <span class="score-label">Acolhimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:70.0%;background:#0891B2"></div></div>
-  <span class="score-value">7.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Investigacao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:60.0%;background:#0891B2"></div></div>
-  <span class="score-value">6.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conhecimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:80.0%;background:#059669"></div></div>
-  <span class="score-value">8.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conversao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:70.0%;background:#0891B2"></div></div>
-  <span class="score-value">7.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Escrita</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:60.0%;background:#0891B2"></div></div>
-  <span class="score-value">6.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">GERAL</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:68.0%;background:#0891B2"></div></div>
-  <span class="score-value">6.8</span>
-</div>
-  </div>
-
-  <div class="gpt-summary">
-    <p><strong>Analise GPT:</strong> Daiane demonstrou um bom acolhimento e conhecimento sobre o procedimento, mas poderia ter investigado mais a necessidade do paciente antes de apresentar o valor da consulta. A qualidade da escrita também apresentou algumas falhas.</p>
-    <div class="gpt-tags">
-      <span class="gpt-tag-pos">+ Acolhimento cordial e amigável</span><span class="gpt-tag-pos">+ Conhecimento sobre o procedimento</span>
-      <span class="gpt-tag-neg">- Melhorar a investigação das necessidades do paciente</span><span class="gpt-tag-neg">- Aprimorar a qualidade da escrita e ortografia</span>
+  <div class="eval-grid">
+    <div class="eval-item">
+      <div class="eval-label">Empenho na Conversao</div>
+      <div class="eval-value alto">Alto</div>
+      <div class="eval-detail">Se apresentou pelo nome, ofereceu data e horario, pediu nome completo. Agendamento fechado em conjunto com Ana Carolina.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Escrita</div>
+      <div class="eval-value medio">Atencao</div>
+      <div class="eval-detail">"nome completa" (deveria ser "completo"). Mensagens curtas demais, poderia ser mais detalhada.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Tempo de Resposta</div>
+      <div class="eval-value normal">Normal</div>
+      <div class="eval-detail">Respondeu em tempo adequado.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Abordagem do Preco</div>
+      <div class="eval-value sim">Adequada</div>
+      <div class="eval-detail">Paciente ja sabia o que queria (botox). Focou no agendamento sem discutir preco desnecessariamente.</div>
+    </div>
+    <div class="eval-item" style="grid-column:span 2">
+      <div class="eval-label">Resumo da Conversa</div>
+      <div class="eval-detail">Daiane se apresentou, ofereceu dia 22/7 as 16h com Dra. Eoda e pediu nome completo. Agendamento concluido em parceria com Ana Carolina.</div>
     </div>
   </div>
-
-  <div class="chat-container">
-    <div class="chat-msg out clara"><span class="sender">Clara (IA)</span>Oi 💛 Temos uma atualizacao no seu cadastro DermaClinic.
-
-Sarah! Tudo bem? 😊 Aqui é a Clara, da DermaClinic. Você entrou em contato conosco sobre cirurgia para tratar varizes e mencionou que gostaria de ser encaminhada para um profissional especializado. Gostaríamos de saber se podemos te ajudar com mais alguma informação ou agendar um horário para ...</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>NO_REPLY</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Olá. Sim, gostaria de ser encaminhada para um profissional</div><div class="chat-clearfix"></div>
-<div class="chat-msg out clara"><span class="sender">Clara (IA)</span>🤖 **ATRIBUIÇÃO AUTOMÁTICA:**
-Houve atribuição automática da conversa devido este motivo:
-
-**Motivo**: AGENDAMENTO PERSONALIZADO
-
-**Descrição:**
-Solicitação de transferência para atendimento humano pelo paciente.</div><div class="chat-clearfix"></div>
-<div class="chat-msg out clara"><span class="sender">Clara (IA)</span>Vou te colocar agora com nossa recepção para dar continuidade e organizar isso certinho para você. 😊</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Alessandra</span>Olá, aqui é da equipe DermaClinic. Como posso ajudá-lo?</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Ok. Muito obrigada</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Gostaria de marcar uma consulta para avaliação em relação a cirurgia de varizes</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Daiane Miranda da Silva</span>Ola, tudo bem? Sera um prazer atender!!
-Aqui na temos o medico cirugiao vascular Dr Laercio.
-Vou te explicar como funciona a nossa Consulta  Dermaclinic 😊✨
-A Consulta com Dr Laercio Bazaneella a oferece o mais alto padrão em médica, unindo ciência, tecnologia e experiência clínica para um cuidado.
-Com duração média de 1 hora, é uma avaliação pr...</div><div class="chat-clearfix"></div>
+  <div class="gpt-tags" style="padding:8px 20px 12px">
+    <span class="gpt-tag-pos">+ Se apresentou pelo nome</span><span class="gpt-tag-pos">+ Agendamento fechado</span>
+    <span class="gpt-tag-neg">- Erro: "nome completa" (correto: completo)</span>
   </div>
 </div>
-
 
 <div class="conv-detail">
   <div class="conv-header">
-    <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18667" target="_blank">#18667 — Gabi Gonçalves</a></div>
+    <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18687" target="_blank">#18687 — Sarah B. Pessoa</a></div>
     <div class="conv-badges">
-      <span class="badge" style="background:#FEF2F2;color:#DC2626">Precisa Melhorar — 0.0/10</span>
-      <span class="badge" style="background:#FEF2F2;color:#DC2626">Nao participou</span>
+      <span class="appt-badge nao">Nao agendou</span>
       <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
     </div>
   </div>
-
-  <div class="scores-grid">
-    <div class="score-row">
-  <span class="score-label">Acolhimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Investigacao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conhecimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conversao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Escrita</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">GERAL</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-  </div>
-
-  <div class="gpt-summary">
-    <p><strong>Analise GPT:</strong> A atendente Daiane não participou da conversa, portanto não há como avaliar seu desempenho.</p>
-    <div class="gpt-tags">
-      
-      
+  <div class="eval-grid">
+    <div class="eval-item">
+      <div class="eval-label">Empenho na Conversao</div>
+      <div class="eval-value medio">Medio</div>
+      <div class="eval-detail">Explicou sobre o medico e a consulta, mas a conversa ficou sem conclusao. Nao ofereceu data nem perguntou se queria agendar.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Escrita</div>
+      <div class="eval-value nao">Problemas</div>
+      <div class="eval-detail">Varios erros: "cirugiao" (cirurgiao), "Bazaneella" (grafia estranha do nome do medico), texto parece copiado de modelo com trechos cortados.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Tempo de Resposta</div>
+      <div class="eval-value normal">Normal</div>
+      <div class="eval-detail">Respondeu apos atribuicao automatica.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Abordagem do Preco</div>
+      <div class="eval-value sim">Adequada</div>
+      <div class="eval-detail">Nao mencionou preco — focou em explicar o procedimento. Paciente queria consulta vascular.</div>
+    </div>
+    <div class="eval-item" style="grid-column:span 2">
+      <div class="eval-label">Resumo da Conversa</div>
+      <div class="eval-detail">Paciente Sarah queria consulta para cirurgia de varizes. Daiane explicou que tem o Dr. Laercio (cirurgiao vascular) e descreveu a consulta, mas nao chegou a oferecer data nem fechar agendamento. Conversa ficou aberta.</div>
     </div>
   </div>
-
-  <div class="chat-container">
-    <div class="chat-msg out clara"><span class="sender">Clara (IA)</span>Oi 💛 Temos uma atualizacao no seu cadastro DermaClinic.
-
-Gabi! Tudo bem? 😊 Aqui é a Clara, da DermaClinic. Você entrou em contato conosco sobre tratamento para rugas abaixo dos olhos e mencionou que gostaria de agendar uma consulta para cuidar dessa questão. Gostaríamos de saber se podemos te ajudar com mais alguma informação ou agendar um horário ...</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>NO_REPLY</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>valores</div><div class="chat-clearfix"></div>
-<div class="chat-msg out clara"><span class="sender">Clara (IA)</span>Aqui na DermaClinic, os valores das consultas são os seguintes:
-
-💳 Consulta Dermatológica: R$ 980,00 com a Dra. Raquel e R$ 880,00 com a Dra. Eoda. 💳 Consulta Avaliativa (planejamento estético): R$ 400,00 — e esse valor é abatido integralmente caso você realize o procedimento indicado em até 7 dias.
-
-Também temos:
-
-• Consulta de Recorrência (exempl...</div><div class="chat-clearfix"></div>
+  <div class="gpt-tags" style="padding:8px 20px 12px">
+    <span class="gpt-tag-pos">+ Apresentou o medico especialista</span>
+    <span class="gpt-tag-neg">- Erros de ortografia (cirugiao)</span><span class="gpt-tag-neg">- Texto parece modelo cortado</span><span class="gpt-tag-neg">- Nao ofereceu data para agendamento</span>
   </div>
 </div>
-
 </div>
 
-<div id="agent-4" class="section">
-<div class="agent-strip">
-  <div class="agent-avatar" style="background:#DC2626">GH</div>
-  <div class="agent-info">
-    <div class="agent-name">Gabriella Hille</div>
-    <div class="agent-meta">2 conversa(s) avaliada(s) · 0 com participacao</div>
-  </div>
-  <div class="agent-score">
-    <div class="agent-score-value" style="color:#DC2626">0.0</div>
-    <div class="agent-score-label" style="color:#DC2626">Precisa Melhorar</div>
-  </div>
-</div>
-
-
-<div class="conv-detail">
-  <div class="conv-header">
-    <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/11459" target="_blank">#11459 — Marco Antonio Schueda dr</a></div>
-    <div class="conv-badges">
-      <span class="badge" style="background:#FEF2F2;color:#DC2626">Precisa Melhorar — 0.0/10</span>
-      <span class="badge" style="background:#FEF2F2;color:#DC2626">Nao participou</span>
-      <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
-    </div>
-  </div>
-
-  <div class="scores-grid">
-    <div class="score-row">
-  <span class="score-label">Acolhimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Investigacao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conhecimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conversao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Escrita</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">GERAL</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-  </div>
-
-  <div class="gpt-summary">
-    <p><strong>Analise GPT:</strong> A atendente Gabriella Hille não participou da conversa, portanto não é possível avaliar seu desempenho.</p>
-    <div class="gpt-tags">
-      
-      
-    </div>
-  </div>
-
-  <div class="chat-container">
-    <div class="chat-msg in"><span class="sender">Paciente (Marco Antonio Schueda dr)</span>Muito obrigado Dra</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Já acertei no CEDAP 
-Ficará pronto em no máximo 10dias</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Daniela Peixer</span>Nos que agradecemos</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Já passei para a Ana a requisição dos exames</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Daniela Peixer</span>😊😊</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Bom dia</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Tivemos de refazer os exame x</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Consegues ligar para ela saber quando ficarão prontos</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Daniela Peixer</span>Tem previsao de quanto fica pronto para o retorno</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Daniela Peixer</span>Pode ser para o dia 08/07
-</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Ana Carolina Marquez </span>As 13hrs ou 14:30hrs</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Ana Carolina Marquez </span>As dra estará em viagem, e retorno em julho, podemos já deixar marcado para a Ana Luiza, dia 08/07 as 14:30 pode ser?</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Central de Agendamento Dr Schueda <em>[+mídia anexada]</em></div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Bom dia</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Como estão ?!</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Bom dia</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Dra Raquel analisou?!</div><div class="chat-clearfix"></div>
-  </div>
-</div>
-
-
-<div class="conv-detail">
-  <div class="conv-header">
-    <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/1020" target="_blank">#1020 — Andréia Inacio Faez</a></div>
-    <div class="conv-badges">
-      <span class="badge" style="background:#FEF2F2;color:#DC2626">Precisa Melhorar — 0.0/10</span>
-      <span class="badge" style="background:#FEF2F2;color:#DC2626">Nao participou</span>
-      <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
-    </div>
-  </div>
-
-  <div class="scores-grid">
-    <div class="score-row">
-  <span class="score-label">Acolhimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Investigacao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conhecimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conversao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Escrita</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">GERAL</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-  </div>
-
-  <div class="gpt-summary">
-    <p><strong>Analise GPT:</strong> A atendente Gabriella Hille não participou da conversa.</p>
-    <div class="gpt-tags">
-      
-      
-    </div>
-  </div>
-
-  <div class="chat-container">
-    <div class="chat-msg in"><span class="sender">Paciente (Andréia Inacio Faez)</span>Boa-tarde</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Sim tem prever</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Teria como fazer essa semana</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Daniela Peixer</span>Dr. consegue na terca feira
-pode ser?</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Daniela Peixer</span>Essa semana esta de plantao</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Pode ser</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Seria então 2800 vai ter biopsia</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Seria outro valor</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Ok</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Pode agendar para terça</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Ok</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>A mãe pode fazer o exame de sangue amanhã</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Ok</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Preciso saber certo porque ela precisa fazer o exame de sangue e ela mora em itapoa</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Bom-dia</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>A minha mãe pode fazer o exame de sangue hoje p fazer a cirurgia na terça-feira</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Porque ela mora em itapoa</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Ela vai fazer o exame na terça porque segunda-feira é feriado</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Pode ser</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Ok</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Então confirmado para quarta-feira às 11:00</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Ok</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Daniela Peixer</span>Ola, ficou para quarta dia 11/03 as 11:00</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Ok Obrigada</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Ok</div><div class="chat-clearfix"></div>
-  </div>
-</div>
-
-</div>
-
-<div id="agent-5" class="section">
-<div class="agent-strip">
-  <div class="agent-avatar" style="background:#0891B2">AM</div>
-  <div class="agent-info">
-    <div class="agent-name">Ana Carolina Marquez</div>
-    <div class="agent-meta">2 conversa(s) avaliada(s) · 2 com participacao</div>
-  </div>
-  <div class="agent-score">
-    <div class="agent-score-value" style="color:#0891B2">7.7</div>
-    <div class="agent-score-label" style="color:#0891B2">Bom</div>
-  </div>
-</div>
-
-
-<div class="conv-detail">
-  <div class="conv-header">
-    <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/16266" target="_blank">#16266 — Carmem Hartmann</a></div>
-    <div class="conv-badges">
-      <span class="badge" style="background:#ECFDF5;color:#059669">Excelente — 8.2/10</span>
-      
-      <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
-    </div>
-  </div>
-
-  <div class="scores-grid">
-    <div class="score-row">
-  <span class="score-label">Acolhimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:90.0%;background:#059669"></div></div>
-  <span class="score-value">9.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Investigacao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:60.0%;background:#0891B2"></div></div>
-  <span class="score-value">6.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conhecimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:70.0%;background:#0891B2"></div></div>
-  <span class="score-value">7.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conversao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:100.0%;background:#059669"></div></div>
-  <span class="score-value">10.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Escrita</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:90.0%;background:#059669"></div></div>
-  <span class="score-value">9.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">GERAL</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:82.0%;background:#059669"></div></div>
-  <span class="score-value">8.2</span>
-</div>
-  </div>
-
-  <div class="gpt-summary">
-    <p><strong>Analise GPT:</strong> Ana Carolina demonstrou um bom acolhimento ao se apresentar e usar o nome da paciente. Embora tenha agendado com sucesso, poderia ter investigado mais sobre a necessidade da paciente antes de oferecer o horário.</p>
-    <div class="gpt-tags">
-      <span class="gpt-tag-pos">+ Acolhimento cordial e uso do nome da paciente</span><span class="gpt-tag-pos">+ Agendamento eficiente e confirmação da consulta</span>
-      <span class="gpt-tag-neg">- Investigar mais sobre a necessidade da paciente antes de agendar</span>
-    </div>
-  </div>
-
-  <div class="chat-container">
-    <div class="chat-msg in"><span class="sender">Paciente (Carmem Hartmann)</span>Boa tarde 
-Sim</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Só posso depois do dia 26/07
-Pois estou indo viajar 🙏🙏</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Ana Carolina Marquez </span>Olá Carmem, tudo bem?
-Me chamo Ana Carolina e sou da equipe da dra Raquel.
-Podemos agendar no dia 05/08 as 14hrs?</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Sim 👍 
-Obrigada 🙏</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Terezinha Irmã de Araújo</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Vocês me confirma um dia antes 
-Por favor 🙏🙏</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Ana Carolina Marquez </span>Confirmo sim, pode ficar tranquila.
-Até lá!! 🥰</div><div class="chat-clearfix"></div>
-  </div>
-</div>
-
-
-<div class="conv-detail">
-  <div class="conv-header">
-    <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/16264" target="_blank">#16264 — Samanta</a></div>
-    <div class="conv-badges">
-      <span class="badge" style="background:#ECFEFF;color:#0891B2">Bom — 7.2/10</span>
-      
-      <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
-    </div>
-  </div>
-
-  <div class="scores-grid">
-    <div class="score-row">
-  <span class="score-label">Acolhimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:70.0%;background:#0891B2"></div></div>
-  <span class="score-value">7.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Investigacao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:60.0%;background:#0891B2"></div></div>
-  <span class="score-value">6.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conhecimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:70.0%;background:#0891B2"></div></div>
-  <span class="score-value">7.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conversao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:80.0%;background:#059669"></div></div>
-  <span class="score-value">8.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Escrita</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:80.0%;background:#059669"></div></div>
-  <span class="score-value">8.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">GERAL</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:72.0%;background:#0891B2"></div></div>
-  <span class="score-value">7.2</span>
-</div>
-  </div>
-
-  <div class="gpt-summary">
-    <p><strong>Analise GPT:</strong> Ana Carolina demonstrou um bom acolhimento e conseguiu agendar a consulta, mas poderia ter investigado melhor a necessidade do paciente antes de oferecer horários. A qualidade da escrita foi adequada, mas algumas mensagens poderiam ser mais formais.</p>
-    <div class="gpt-tags">
-      <span class="gpt-tag-pos">+ Acolhimento cordial ao paciente</span><span class="gpt-tag-pos">+ Conseguiu agendar a consulta</span>
-      <span class="gpt-tag-neg">- Investigar mais sobre a necessidade do paciente antes de oferecer horários</span>
-    </div>
-  </div>
-
-  <div class="chat-container">
-    <div class="chat-msg in"><span class="sender">Paciente (Samanta)</span>Boa tarde , meninas td bem? Gostaria de agendar um horário pro botox , tem dia 22/7 umas 11h/ 11:30/12:00/12:30?</div><div class="chat-clearfix"></div>
-<div class="chat-msg out clara"><span class="sender">Clara (IA)</span>O botox é um procedimento que você pode agendar diretamente, sem precisar passar por consulta prévia! 😊
-
-O horário que você pediu, 22/07 pela manhã com a Dra. Raquel, não está disponível. No entanto, há uma disponibilidade no dia 14/07/2026 às 10:30.
-
-Quer que eu encaminhe para a nossa recepção organizar esse agendamento para você nesse horário?</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Daiane Miranda da Silva</span>Olá boa tarde</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Daiane Miranda da Silva</span>Meu nome é Daiane, faço parte da equipe DermaClinic</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Daiane Miranda da Silva</span>Dia 22 tenho somente a tarde</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Daiane Miranda da Silva</span>Com a dra Eoda</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Daiane Miranda da Silva</span>as 16hs</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Ooie</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Pode ser 22/7 às 16:00 com a Dra Eoda</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Daiane Miranda da Silva</span>Ok então, estamos agendando 🥰</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Daiane Miranda da Silva</span>Só me passa teu nome completa, por favor??😍</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Samanta Teles de padua</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Ana Carolina Marquez </span>Marcado Samanta!!!
-Até lá!!! </div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Olá uma dúvida</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Me equivoquei aqui</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Tem horário dia 23/7?</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Ana Carolina Marquez </span>Dia 23/7 as 15:30, pode ser?</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Eh q eu vou tentar ir no Masto q é aí em Jvlle tb , eu sou de Jaraguá , já q te retorno</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Ana Carolina Marquez </span>Vou manter o pré agendamento e você me sinaliza direitinho a confirmação. </div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Isso</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Por favor</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Obrigada</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Ana Carolina Marquez </span>Imagina 🥰</div><div class="chat-clearfix"></div>
-<div class="chat-msg out clara"><span class="sender">Clara (IA)</span>Oi 💛 Atualização no seu cadastro DermaClinic realizado com sucesso.
-
-SAMANTA, espero que você esteja bem... 😀 Aqui é a Clara, assistente virtual da DermaClinic. Estou passando para te lembrar da consulta agendada para o dia 22/07/2026 às 16:00. Ficaremos muito felizes em te receber. Esse é nosso novo endereço: RUA. OTTO BOEHM, 763, SALA 301 B, AMÉR...</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>NO_REPLY</div><div class="chat-clearfix"></div>
-  </div>
-</div>
-
-</div>
-
+<!-- ==================== ELLYN ==================== -->
 <div id="agent-6" class="section">
 <div class="agent-strip">
   <div class="agent-avatar" style="background:#BE185D">EC</div>
   <div class="agent-info">
     <div class="agent-name">Ellyn Carolini</div>
-    <div class="agent-meta">2 conversa(s) avaliada(s) · 2 com participacao</div>
+    <div class="agent-meta">2 conversa(s) · 0 agendamentos</div>
   </div>
   <div class="agent-score">
-    <div class="agent-score-value" style="color:#D97706">5.4</div>
-    <div class="agent-score-label" style="color:#D97706">Regular</div>
+    <div class="agent-score-value" style="color:#D97706">0%</div>
+    <div class="agent-score-label" style="color:#D97706">Conversao</div>
   </div>
 </div>
-
 
 <div class="conv-detail">
   <div class="conv-header">
     <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17864" target="_blank">#17864 — Stephani</a></div>
     <div class="conv-badges">
-      <span class="badge" style="background:#ECFDF5;color:#059669">Excelente — 8.2/10</span>
-      
+      <span class="appt-badge nao">Nao agendou</span>
       <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
     </div>
   </div>
-
-  <div class="scores-grid">
-    <div class="score-row">
-  <span class="score-label">Acolhimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:80.0%;background:#059669"></div></div>
-  <span class="score-value">8.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Investigacao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:70.0%;background:#0891B2"></div></div>
-  <span class="score-value">7.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conhecimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:90.0%;background:#059669"></div></div>
-  <span class="score-value">9.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conversao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:80.0%;background:#059669"></div></div>
-  <span class="score-value">8.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Escrita</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:90.0%;background:#059669"></div></div>
-  <span class="score-value">9.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">GERAL</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:82.0%;background:#059669"></div></div>
-  <span class="score-value">8.2</span>
-</div>
-  </div>
-
-  <div class="gpt-summary">
-    <p><strong>Analise GPT:</strong> Ellyn Carolini demonstrou um bom acolhimento e conhecimento sobre os procedimentos, explicando detalhadamente a consulta e seus valores. No entanto, poderia ter investigado mais a fundo as necessidades da paciente antes de oferecer as informações sobre a consulta estética.</p>
-    <div class="gpt-tags">
-      <span class="gpt-tag-pos">+ Acolhimento cordial e amigável</span><span class="gpt-tag-pos">+ Explicação clara sobre os procedimentos e valores</span>
-      <span class="gpt-tag-neg">- Investigar mais as necessidades da paciente antes de oferecer informações</span>
+  <div class="eval-grid">
+    <div class="eval-item">
+      <div class="eval-label">Empenho na Conversao</div>
+      <div class="eval-value alto">Alto</div>
+      <div class="eval-detail">Explicacao muito detalhada sobre a consulta, valores e funcionamento. Porem, a conversa foi passada para Daniela sem fechar agendamento.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Escrita</div>
+      <div class="eval-value sim">Boa</div>
+      <div class="eval-detail">Escrita clara, bem formatada e profissional.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Tempo de Resposta</div>
+      <div class="eval-value normal">Normal</div>
+      <div class="eval-detail">Respondeu prontamente.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Abordagem do Preco</div>
+      <div class="eval-value medio">Informou antes de entender</div>
+      <div class="eval-detail">Explicou sobre a consulta com valores antes de perguntar se era estetica ou dermatologica. Perguntou depois — a ordem poderia ser invertida.</div>
+    </div>
+    <div class="eval-item" style="grid-column:span 2">
+      <div class="eval-label">Resumo da Conversa</div>
+      <div class="eval-detail">Paciente queria agendar com Dra. Eoda. Ellyn deu explicacao detalhada da consulta e valores, depois perguntou se era estetica ou dermatologica. Paciente disse estetica. Daniela entrou na conversa para continuar, mas nao houve agendamento na amostra.</div>
     </div>
   </div>
-
-  <div class="chat-container">
-    <div class="chat-msg in"><span class="sender">Paciente (Stephani)</span>Bom dia! Gostaria de agendar uma consulta com Dra Eoda, como funciona?</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Bom dia! Gostaria de agendar uma consulta com Dra Eoda, como funciona?</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Ellyn Carolini</span>Ola, tudo bem? Sera um prazer atender!!
-
-Vou te explicar como funciona a nossa Consulta Dermatológica Dermaclinic 😊✨
-
-A Consulta Dermatológica DC oferece o mais alto padrão em dermatologia médica, unindo ciência, tecnologia e experiência clínica para um cuidado completo com pele, cabelo e unhas.
-
-Com duração média de 1 hora, é uma avaliação p...</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Ellyn Carolini</span>Sua queixa seria estética ou para consulta dermatológica?
-</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Estética</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Daniela Peixer</span>Vou explicar para você como funciona a Consulta Avaliativa 😊
-
-Nossa consulta é extremamente detalhada e individualizada! Entendemos que cada paciente possui uma história
-
-A Dra. ouve suas queixas e necessidades, realiza a fotografia 4D  para melhor visualização da sua pele, e juntamente com você,  avalia tanto a área facial, como também, corpor...</div><div class="chat-clearfix"></div>
+  <div class="gpt-tags" style="padding:8px 20px 12px">
+    <span class="gpt-tag-pos">+ Explicacao detalhada e profissional</span><span class="gpt-tag-pos">+ Perguntou se era estetica ou dermatologica</span>
+    <span class="gpt-tag-neg">- Deveria perguntar a necessidade ANTES de explicar valores</span><span class="gpt-tag-neg">- Conversa passou para outra atendente sem conclusao</span>
   </div>
 </div>
-
 
 <div class="conv-detail">
   <div class="conv-header">
-    <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/11503" target="_blank">#11503 — MF CLINIC GERÊNCIA</a></div>
+    <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/11503" target="_blank">#11503 — MF CLINIC GERENCIA</a></div>
     <div class="conv-badges">
-      <span class="badge" style="background:#FEF2F2;color:#DC2626">Precisa Melhorar — 2.6/10</span>
-      
+      <span class="appt-badge nao">Nao agendou</span>
       <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
     </div>
   </div>
-
-  <div class="scores-grid">
-    <div class="score-row">
-  <span class="score-label">Acolhimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:70.0%;background:#0891B2"></div></div>
-  <span class="score-value">7.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Investigacao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conhecimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conversao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:0.0%;background:#DC2626"></div></div>
-  <span class="score-value">0.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Escrita</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:60.0%;background:#0891B2"></div></div>
-  <span class="score-value">6.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">GERAL</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:26.0%;background:#DC2626"></div></div>
-  <span class="score-value">2.6</span>
-</div>
-  </div>
-
-  <div class="gpt-summary">
-    <p><strong>Analise GPT:</strong> A atendente Ellyn Carolini se apresentou de forma cordial, mas não investigou as necessidades do paciente nem ofereceu soluções. Sua participação foi limitada e não houve conversão ou agendamento.</p>
-    <div class="gpt-tags">
-      <span class="gpt-tag-pos">+ Apresentação cordial</span><span class="gpt-tag-pos">+ Uso de saudação</span>
-      <span class="gpt-tag-neg">- Investigar a necessidade do paciente</span><span class="gpt-tag-neg">- Oferecer opções de agendamento</span><span class="gpt-tag-neg">- Melhorar a clareza na comunicação</span>
+  <div class="eval-grid">
+    <div class="eval-item">
+      <div class="eval-label">Empenho na Conversao</div>
+      <div class="eval-value baixo">Baixo</div>
+      <div class="eval-detail">Se apresentou, mas nao investigou a necessidade do paciente. Apenas disse que retornaria na segunda-feira. Nao houve oferta de agendamento nem tentativa de conversao.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Escrita</div>
+      <div class="eval-value nao">Problemas</div>
+      <div class="eval-detail">"Vou de ficar retornar ate segunda-feira" — frase confusa e gramaticalmente incorreta.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Tempo de Resposta</div>
+      <div class="eval-value demorado">Demorado</div>
+      <div class="eval-detail">Adiou o atendimento para a segunda-feira sem motivo claro. Paciente ficou sem solucao.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Abordagem do Preco</div>
+      <div class="eval-value na" style="color:var(--text-muted)">Nao aplicavel</div>
+      <div class="eval-detail">Nao chegou a discutir nenhum procedimento ou valor.</div>
+    </div>
+    <div class="eval-item" style="grid-column:span 2">
+      <div class="eval-label">Resumo da Conversa</div>
+      <div class="eval-detail">Paciente pediu para falar com atendente humano. Ellyn atendeu, se apresentou como "assistente de sala das Dras", mas nao perguntou o que o paciente precisava. Disse que "vai ficar retornar ate segunda" e desejou bom fim de semana. Paciente ficou sem informacao e sem agendamento.</div>
     </div>
   </div>
+  <div class="gpt-tags" style="padding:8px 20px 12px">
+    <span class="gpt-tag-pos">+ Se apresentou ao paciente</span>
+    <span class="gpt-tag-neg">- Nao perguntou o que o paciente precisava</span><span class="gpt-tag-neg">- Frase confusa: "Vou de ficar retornar"</span><span class="gpt-tag-neg">- Adiou sem oferecer alternativa</span>
+  </div>
+</div>
+</div>
 
-  <div class="chat-container">
-    <div class="chat-msg in"><span class="sender">Paciente (MF CLINIC GERÊNCIA)</span>Boa tarde!</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Tudo bem?</div><div class="chat-clearfix"></div>
-<div class="chat-msg out clara"><span class="sender">Clara (IA)</span>Boa tarde! Como posso te ajudar hoje?</div><div class="chat-clearfix"></div>
-<div class="chat-msg out clara"><span class="sender">Clara (IA)</span>Olá! Aqui é a Clara, assistente virtual da Dermaclinic. Seja bem-vindo(a)! Como posso te ajudar hoje?</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>gostaria de falar com algum atendente</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>por gentileza</div><div class="chat-clearfix"></div>
-<div class="chat-msg out clara"><span class="sender">Clara (IA)</span>🤖 **ATRIBUIÇÃO AUTOMÁTICA:**
-Houve atribuição automática da conversa devido este motivo:
-
-**Motivo**: AGENDAMENTO PERSONALIZADO
-
-**Descrição:**
-Paciente solicitou atendimento humano</div><div class="chat-clearfix"></div>
-<div class="chat-msg out clara"><span class="sender">Clara (IA)</span>Vou te colocar agora com nossa recepção para dar continuidade.</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>obrigada</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Ellyn Carolini</span>Olá, Boa tarde! Tudo bem? Vou dar continuidade ao seu atendimento, em que posso ajudar?
-</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Tudo bem, com quem falo por gentileza?</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Ellyn Carolini</span>Com Ellyn, assistente da Dermaclinic
-</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Ellyn Carolini</span>Assistente de sala das Dras
-</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>Está bem. Obrigada</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Ellyn Carolini</span>Vou de ficar retornar até segunda-feira</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Ellyn Carolini</span>Bom final de Semana!</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>ok Obrigaga</div><div class="chat-clearfix"></div>
-<div class="chat-msg in"><span class="sender">Paciente</span>bom final de semana</div><div class="chat-clearfix"></div>
+<!-- ==================== ALESSANDRA ==================== -->
+<div id="agent-2" class="section">
+<div class="agent-strip">
+  <div class="agent-avatar" style="background:#059669">AL</div>
+  <div class="agent-info">
+    <div class="agent-name">Alessandra</div>
+    <div class="agent-meta">2 conversa(s) · 0 agendamentos (1 sem participacao)</div>
+  </div>
+  <div class="agent-score">
+    <div class="agent-score-value" style="color:#D97706">0%</div>
+    <div class="agent-score-label" style="color:#D97706">Conversao</div>
   </div>
 </div>
 
+<div class="conv-detail">
+  <div class="conv-header">
+    <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19235" target="_blank">#19235 — Bruna Baptista</a></div>
+    <div class="conv-badges">
+      <span class="appt-badge nao">Nao agendou</span>
+      <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
+    </div>
+  </div>
+  <div class="eval-grid">
+    <div class="eval-item">
+      <div class="eval-label">Empenho na Conversao</div>
+      <div class="eval-value baixo">Baixo</div>
+      <div class="eval-detail">Respondeu que nao atende convenio e ja informou o preco. Uma unica mensagem, sem perguntar o que a paciente precisava nem insistir no agendamento.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Escrita</div>
+      <div class="eval-value sim">Boa</div>
+      <div class="eval-detail">Sem erros. Mensagem educada.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Tempo de Resposta</div>
+      <div class="eval-value normal">Normal</div>
+      <div class="eval-detail">Respondeu apos atribuicao automatica.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Abordagem do Preco</div>
+      <div class="eval-value nao">Preco direto</div>
+      <div class="eval-detail">Informou R$980 logo na primeira (e unica) mensagem. Nao perguntou qual a necessidade da paciente antes de falar em valor.</div>
+    </div>
+    <div class="eval-item" style="grid-column:span 2">
+      <div class="eval-label">Resumo da Conversa</div>
+      <div class="eval-detail">Paciente Bruna perguntou se atendia Unimed. Alessandra respondeu que nao atendem convenio, que a consulta e particular por R$980, e se colocou a disposicao — tudo em uma unica mensagem. Nao perguntou o que a paciente precisava, nao tentou entender a situacao.</div>
+    </div>
+  </div>
+  <div class="gpt-tags" style="padding:8px 20px 12px">
+    <span class="gpt-tag-pos">+ Cordial na mensagem</span>
+    <span class="gpt-tag-neg">- Preco informado direto sem investigar necessidade</span><span class="gpt-tag-neg">- Apenas uma mensagem na conversa inteira</span><span class="gpt-tag-neg">- Nao tentou converter para agendamento</span>
+  </div>
 </div>
 
+<div class="conv-detail">
+  <div class="conv-header">
+    <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18477" target="_blank">#18477 — red-field-792</a></div>
+    <div class="conv-badges">
+      <span class="appt-badge na">Sem participacao</span>
+      <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
+    </div>
+  </div>
+  <div class="eval-grid">
+    <div class="eval-item" style="grid-column:span 3">
+      <div class="eval-label">Resumo</div>
+      <div class="eval-detail">Conversa com apenas 1 mensagem do paciente. Alessandra nao participou — nao e possivel avaliar.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ==================== PAULINE ==================== -->
 <div id="agent-7" class="section">
 <div class="agent-strip">
   <div class="agent-avatar" style="background:#4338CA">PV</div>
   <div class="agent-info">
     <div class="agent-name">Pauline Meller Vieira</div>
-    <div class="agent-meta">1 conversa(s) avaliada(s) · 1 com participacao</div>
+    <div class="agent-meta">1 conversa · 0 agendamentos</div>
   </div>
   <div class="agent-score">
-    <div class="agent-score-value" style="color:#D97706">5.4</div>
-    <div class="agent-score-label" style="color:#D97706">Regular</div>
+    <div class="agent-score-value" style="color:#DC2626">0%</div>
+    <div class="agent-score-label" style="color:#DC2626">Conversao</div>
   </div>
 </div>
-
 
 <div class="conv-detail">
   <div class="conv-header">
     <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17487" target="_blank">#17487 — JULIANA</a></div>
     <div class="conv-badges">
-      <span class="badge" style="background:#FFFBEB;color:#D97706">Regular — 5.4/10</span>
-      
+      <span class="appt-badge nao">Nao agendou</span>
       <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
     </div>
   </div>
-
-  <div class="scores-grid">
-    <div class="score-row">
-  <span class="score-label">Acolhimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:60.0%;background:#0891B2"></div></div>
-  <span class="score-value">6.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Investigacao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:50.0%;background:#D97706"></div></div>
-  <span class="score-value">5.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conhecimento</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:50.0%;background:#D97706"></div></div>
-  <span class="score-value">5.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Conversao</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:40.0%;background:#D97706"></div></div>
-  <span class="score-value">4.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">Escrita</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:70.0%;background:#0891B2"></div></div>
-  <span class="score-value">7.0</span>
-</div>
-    <div class="score-row">
-  <span class="score-label">GERAL</span>
-  <div class="score-bar-track"><div class="score-bar-fill" style="width:54.0%;background:#D97706"></div></div>
-  <span class="score-value">5.4</span>
-</div>
-  </div>
-
-  <div class="gpt-summary">
-    <p><strong>Analise GPT:</strong> Pauline Meller Vieira atendeu a paciente após um atraso significativo, mas não se apresentou e confundiu o nome da médica. A investigação sobre a necessidade da paciente foi superficial, e não houve direcionamento claro para agendamento.</p>
-    <div class="gpt-tags">
-      <span class="gpt-tag-pos">+ Cordialidade na saudação</span><span class="gpt-tag-pos">+ Tentativa de fornecer informações sobre a consulta</span>
-      <span class="gpt-tag-neg">- Apresentar-se ao paciente</span><span class="gpt-tag-neg">- Investigar melhor a necessidade do paciente</span><span class="gpt-tag-neg">- Corrigir o nome da médica e oferecer agendamento</span>
+  <div class="eval-grid">
+    <div class="eval-item">
+      <div class="eval-label">Empenho na Conversao</div>
+      <div class="eval-value baixo">Baixo</div>
+      <div class="eval-detail">Apenas uma mensagem. Nao se apresentou, nao ofereceu agendamento, nao respondeu a pergunta sobre o valor.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Escrita</div>
+      <div class="eval-value nao">Problemas</div>
+      <div class="eval-detail">Confundiu o nome da medica: disse "dra Ana carolina Nutrologa" quando a paciente perguntou sobre "Dra. Carolina".</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Tempo de Resposta</div>
+      <div class="eval-value demorado">Demorado</div>
+      <div class="eval-detail">Paciente esperou e recebeu apenas uma mensagem sem informacao util.</div>
+    </div>
+    <div class="eval-item">
+      <div class="eval-label">Abordagem do Preco</div>
+      <div class="eval-value nao">Nao informou</div>
+      <div class="eval-detail">Paciente perguntou o valor da consulta. Pauline nao respondeu — apenas perguntou se queria mais informacoes, sem dar nenhuma.</div>
+    </div>
+    <div class="eval-item" style="grid-column:span 2">
+      <div class="eval-label">Resumo da Conversa</div>
+      <div class="eval-detail">Paciente Juliana perguntou o valor da consulta com "Dra. Carolina". Pauline respondeu com uma unica mensagem perguntando se queria informacoes sobre "dra Ana carolina Nutrologa" — possivelmente confundindo a medica. Nao informou valor, nao ofereceu agendamento. Conversa ficou sem conclusao.</div>
     </div>
   </div>
+  <div class="gpt-tags" style="padding:8px 20px 12px">
+    <span class="gpt-tag-neg">- Confundiu o nome da medica</span><span class="gpt-tag-neg">- Nao respondeu a pergunta sobre valor</span><span class="gpt-tag-neg">- Apenas 1 mensagem, sem conclusao</span>
+  </div>
+</div>
+</div>
 
-  <div class="chat-container">
-    <div class="chat-msg in"><span class="sender">Paciente (JULIANA)</span>Boa tarde, tudo bem? Eu gostaria de saber o valor da consulta da Dra. Carolina, por gentileza.</div><div class="chat-clearfix"></div>
-<div class="chat-msg out clara"><span class="sender">Clara (IA)</span>🤖 **ATRIBUIÇÃO AUTOMÁTICA:**
-Houve atribuição automática da conversa devido este motivo:
-
-**Motivo**: RULES VIOLATION
-
-**Descrição:**
-Solicitação de atendimento humano pelo paciente.</div><div class="chat-clearfix"></div>
-<div class="chat-msg out clara"><span class="sender">Clara (IA)</span>Vou te colocar com nossa recepção para te ajudar com esse agendamento. Um instante! 😊</div><div class="chat-clearfix"></div>
-<div class="chat-msg out agent"><span class="sender">Pauline Meller Vieira</span>Olá bom dia! Você gostaria de mais informações a respeito da consulta com dra Ana carolina Nutróloga?</div><div class="chat-clearfix"></div>
+<!-- ==================== GABRIELLA ==================== -->
+<div id="agent-4" class="section">
+<div class="agent-strip">
+  <div class="agent-avatar" style="background:#DC2626">GH</div>
+  <div class="agent-info">
+    <div class="agent-name">Gabriella Hille</div>
+    <div class="agent-meta">2 conversa(s) · Sem participacao em nenhuma</div>
+  </div>
+  <div class="agent-score">
+    <div class="agent-score-value" style="color:#94A3B8">N/A</div>
+    <div class="agent-score-label" style="color:#94A3B8">Sem dados</div>
   </div>
 </div>
 
+<div class="conv-detail">
+  <div class="conv-header">
+    <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/11459" target="_blank">#11459 — Marco Antonio Schueda dr</a></div>
+    <div class="conv-badges">
+      <span class="appt-badge na">Sem participacao</span>
+      <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
+    </div>
+  </div>
+  <div class="eval-grid">
+    <div class="eval-item" style="grid-column:span 3">
+      <div class="eval-label">Resumo</div>
+      <div class="eval-detail">Conversa atribuida a Gabriella, mas ela nao enviou nenhuma mensagem. Quem respondeu foram Daniela Peixer e Ana Carolina. Nao e possivel avaliar o desempenho de Gabriella nesta conversa.</div>
+    </div>
+  </div>
+</div>
+
+<div class="conv-detail">
+  <div class="conv-header">
+    <div class="conv-title"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/1020" target="_blank">#1020 — Andreia Inacio Faez</a></div>
+    <div class="conv-badges">
+      <span class="appt-badge na">Sem participacao</span>
+      <span class="badge" style="background:var(--brand-light);color:var(--brand-dark)">resolved</span>
+    </div>
+  </div>
+  <div class="eval-grid">
+    <div class="eval-item" style="grid-column:span 3">
+      <div class="eval-label">Resumo</div>
+      <div class="eval-detail">Conversa atribuida a Gabriella, mas ela nao enviou nenhuma mensagem. Quem respondeu foi Daniela Peixer. Nao e possivel avaliar o desempenho de Gabriella nesta conversa.</div>
+    </div>
+  </div>
+</div>
 </div>
 
 </div><!-- /container -->
 
 <div class="footer">
   <div class="container">
-    Relatorio gerado automaticamente por Digital AI · Avaliacao via GPT-4o-mini · 15/10/2026 13:08<br>
+    Relatorio gerado por Digital AI · Avaliacao por IA · 15/10/2026<br>
     Amostra de validacao: 2 conversas por atendente · Dados do Chatwoot DermaClinic
   </div>
 </div>
