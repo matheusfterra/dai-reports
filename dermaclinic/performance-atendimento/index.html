@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Performance — Atendimento DermaClinic | Digital AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --profundidade: #1a3a2a;
+            --visao: #2d7a5a;
+            --precisao: #3d9970;
+            --nevoa: #e8f5ee;
+            --branco: #FFFFFF;
+            --cinza-100: #F7F8FC;
+            --cinza-200: #E2E6F0;
+            --cinza-600: #6B7280;
+            --cinza-800: #1F2937;
+            --verde: #10B981;
+            --verde-bg: #ECFDF5;
+            --amarelo: #F59E0B;
+            --amarelo-bg: #FFFBEB;
+            --vermelho: #EF4444;
+            --vermelho-bg: #FEF2F2;
+            --azul: #3B82F6;
+            --azul-bg: #EFF6FF;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--cinza-800);
+            background: var(--cinza-100);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.2;
+        }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--profundidade) 0%, var(--visao) 100%);
+            padding: 48px 0;
+            text-align: center;
+        }
+
+        .header .logo {
+            font-size: 14px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.9);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .header .tag {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--nevoa);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 6px 16px;
+            border-radius: 100px;
+            margin-bottom: 24px;
+        }
+
+        .header h1 {
+            color: var(--branco);
+            font-size: clamp(26px, 5vw, 38px);
+            font-weight: 800;
+            margin-bottom: 12px;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.8);
+            font-size: 17px;
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        .header .date-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.7);
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 100px;
+            margin-top: 16px;
+        }
+
+        /* Sections */
+        .section {
+            background: var(--branco);
+            border-radius: 16px;
+            padding: 40px 36px;
+            margin: 24px auto;
+            max-width: 800px;
+            box-shadow: 0 1px 3px rgba(15, 31, 92, 0.06);
+        }
+
+        .section h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--profundidade);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h2 .icon {
+            width: 32px;
+            height: 32px;
+            background: var(--nevoa);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .section p, .section li { font-size: 15px; color: var(--cinza-800); margin-bottom: 12px; }
+        .section ul { padding-left: 20px; }
+        .section li { margin-bottom: 8px; }
+
+        /* Stat cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: var(--cinza-100);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-card .number {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--precisao);
+            display: block;
+        }
+
+        .stat-card .label {
+            font-size: 13px;
+            color: var(--cinza-600);
+            margin-top: 4px;
+        }
+
+        .stat-card.alert .number { color: var(--vermelho); }
+        .stat-card.alert { background: var(--vermelho-bg); }
+        .stat-card.success .number { color: var(--verde); }
+        .stat-card.success { background: var(--verde-bg); }
+
+        /* Highlight box */
+        .highlight {
+            background: linear-gradient(135deg, var(--profundidade) 0%, var(--visao) 100%);
+            border-radius: 12px;
+            padding: 28px;
+            color: var(--branco);
+            margin: 20px 0;
+        }
+
+        .highlight h3 { font-size: 18px; margin-bottom: 8px; }
+        .highlight p { color: rgba(255, 255, 255, 0.85); font-size: 15px; margin-bottom: 0; }
+
+        .highlight .big-number {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--branco);
+            display: block;
+            margin: 8px 0;
+        }
+
+        /* Chat simulation */
+        .chat-container {
+            background: #f0f0f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 16px 0;
+            max-width: 100%;
+        }
+
+        .chat-container .chat-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--cinza-600);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chat-msg {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+            clear: both;
+        }
+
+        .chat-msg.in {
+            background: var(--branco);
+            float: left;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-msg.out {
+            background: #dcf8c6;
+            float: right;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-msg .sender {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--precisao);
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .chat-msg.out .sender { color: #2d7a5a; }
+
+        .chat-clearfix { clear: both; }
+
+        .chat-verdict {
+            text-align: center;
+            padding: 8px;
+            margin-top: 8px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            clear: both;
+        }
+
+        .chat-verdict.negative {
+            background: var(--vermelho-bg);
+            color: var(--vermelho);
+        }
+
+        .chat-verdict.positive {
+            background: var(--verde-bg);
+            color: var(--verde);
+        }
+
+        /* Comparison */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .comparison-card {
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .comparison-card.before {
+            background: var(--vermelho-bg);
+            border: 2px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .comparison-card.after {
+            background: var(--verde-bg);
+            border: 2px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .comparison-card h4 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .comparison-card.before h4 { color: var(--vermelho); }
+        .comparison-card.after h4 { color: var(--verde); }
+
+        .comparison-card ul {
+            padding-left: 16px;
+            font-size: 13px;
+        }
+
+        .comparison-card li { margin-bottom: 6px; }
+
+        /* Table */
+        .table-wrap { overflow-x: auto; margin: 16px 0; }
+
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+
+        th {
+            background: var(--cinza-100);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--cinza-600);
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--cinza-200);
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--cinza-200);
+            color: var(--cinza-800);
+        }
+
+        tr:last-child td { border-bottom: none; }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-green { background: var(--verde-bg); color: var(--verde); }
+        .badge-yellow { background: var(--amarelo-bg); color: var(--amarelo); }
+        .badge-red { background: var(--vermelho-bg); color: var(--vermelho); }
+        .badge-blue { background: var(--azul-bg); color: var(--azul); }
+
+        /* Flow steps */
+        .flow-steps {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 20px 0;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .flow-step {
+            background: var(--cinza-100);
+            border-radius: 10px;
+            padding: 16px 18px;
+            text-align: center;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .flow-step .step-num {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: var(--precisao);
+            color: var(--branco);
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 24px;
+            margin-bottom: 8px;
+        }
+
+        .flow-step h5 { font-size: 13px; font-weight: 700; color: var(--profundidade); margin-bottom: 4px; }
+        .flow-step p { font-size: 12px; color: var(--cinza-600); margin-bottom: 0; }
+
+        .flow-arrow {
+            color: var(--cinza-200);
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        /* Callout */
+        .callout {
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-left: 4px solid;
+        }
+
+        .callout.warning {
+            background: var(--amarelo-bg);
+            border-left-color: var(--amarelo);
+        }
+
+        .callout.danger {
+            background: var(--vermelho-bg);
+            border-left-color: var(--vermelho);
+        }
+
+        .callout.success {
+            background: var(--verde-bg);
+            border-left-color: var(--verde);
+        }
+
+        .callout.info {
+            background: var(--azul-bg);
+            border-left-color: var(--azul);
+        }
+
+        .callout p { font-size: 14px; margin-bottom: 0; }
+        .callout strong { color: var(--profundidade); }
+
+        /* Checklist */
+        .checklist {
+            list-style: none;
+            padding: 0;
+            margin: 16px 0;
+        }
+
+        .checklist li {
+            padding: 12px 16px;
+            background: var(--cinza-100);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .checklist li .check {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .checklist li .check.green { background: var(--verde); color: white; }
+        .checklist li .check.red { background: var(--vermelho); color: white; }
+
+        /* Progress bar */
+        .progress-bar {
+            background: var(--cinza-200);
+            border-radius: 100px;
+            height: 12px;
+            margin: 8px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar .fill {
+            height: 100%;
+            border-radius: 100px;
+            transition: width 0.3s;
+        }
+
+        .progress-bar .fill.green { background: var(--verde); }
+        .progress-bar .fill.yellow { background: var(--amarelo); }
+        .progress-bar .fill.red { background: var(--vermelho); }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 24px;
+            color: var(--cinza-600);
+            font-size: 13px;
+        }
+
+        .footer .brand {
+            font-weight: 700;
+            color: var(--profundidade);
+        }
+
+        /* Impact section */
+        .impact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .impact-card {
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .impact-card.current {
+            background: var(--cinza-100);
+            border: 2px solid var(--cinza-200);
+        }
+
+        .impact-card.projected {
+            background: var(--verde-bg);
+            border: 2px solid var(--verde);
+        }
+
+        .impact-card .amount {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            display: block;
+            margin: 8px 0;
+        }
+
+        .impact-card.current .amount { color: var(--cinza-800); }
+        .impact-card.projected .amount { color: var(--verde); }
+
+        .impact-card .sublabel { font-size: 12px; color: var(--cinza-600); }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .section { padding: 28px 20px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .comparison-grid { grid-template-columns: 1fr; }
+            .impact-grid { grid-template-columns: 1fr; }
+            .flow-arrow { display: none; }
+            .flow-steps { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="container">
+            <div class="logo">DERMACLINIC + DIGITAL AI</div>
+            <div class="tag">Diagnostico de performance</div>
+            <h1>Como Transformar Atendimentos em Consultas Agendadas</h1>
+            <p>Analise de dados reais do WhatsApp com recomendacoes praticas para a equipe de atendimento</p>
+            <div class="date-badge">Outubro 2026 &mdash; Dados de Set/Out 2026</div>
+        </div>
+    </div>
+
+    <!-- SEÇÃO 1: CENÁRIO ATUAL -->
+    <div class="section">
+        <h2><span class="icon">&#128202;</span> Panorama Atual &mdash; Os Numeros</h2>
+        <p>Nos ultimos 2 meses (Set-Out/2026), a DermaClinic recebeu <strong>1.281 conversas</strong> nos canais de WhatsApp. Cada conversa representa um paciente que demonstrou interesse &mdash; a maioria vindo de trafego pago.</p>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="number">215</span>
+                <span class="label">Conversas Trafego Pago</span>
+            </div>
+            <div class="stat-card">
+                <span class="number">920</span>
+                <span class="label">Conversas Relacionamento</span>
+            </div>
+            <div class="stat-card">
+                <span class="number">146</span>
+                <span class="label">Conversas VIP</span>
+            </div>
+            <div class="stat-card alert">
+                <span class="number">51%</span>
+                <span class="label">Sem resposta (Relacionamento)</span>
+            </div>
+        </div>
+
+        <div class="callout danger">
+            <p><strong>Alerta:</strong> 468 das 920 conversas do canal Relacionamento (51%) nao receberam nenhuma atribuicao a um atendente. Isso significa que metade dos pacientes que entraram em contato nao foram atendidos.</p>
+        </div>
+    </div>
+
+    <!-- SEÇÃO 2: O PROBLEMA CENTRAL -->
+    <div class="section">
+        <h2><span class="icon">&#9888;&#65039;</span> O Problema: Preco sem Contexto</h2>
+        <p>Analisando as conversas reais do WhatsApp, identificamos um padrao recorrente que esta prejudicando as conversoes:</p>
+
+        <div class="flow-steps">
+            <div class="flow-step">
+                <div class="step-num">1</div>
+                <h5>Cliente pergunta</h5>
+                <p>"Quero agendar" ou "Qual o valor?"</p>
+            </div>
+            <span class="flow-arrow">&#8594;</span>
+            <div class="flow-step">
+                <div class="step-num">2</div>
+                <h5>Equipe responde</h5>
+                <p>Envia o preco imediatamente</p>
+            </div>
+            <span class="flow-arrow">&#8594;</span>
+            <div class="flow-step">
+                <div class="step-num">3</div>
+                <h5>Cliente some</h5>
+                <p>Nao responde mais</p>
+            </div>
+        </div>
+
+        <p>O paciente recebe um numero frio (R$ 980 ou R$ 880) sem entender o <strong>valor real</strong> da consulta. Sem contexto, o preco parece alto. Com contexto, o preco faz sentido.</p>
+
+        <div class="highlight">
+            <h3>O que esta acontecendo</h3>
+            <p>A equipe esta <strong>respondendo</strong> os clientes, nao <strong>convertendo</strong>. Existe uma diferenca enorme entre informar e vender. Informar e dizer o preco. Vender e fazer o paciente entender por que aquele investimento vale a pena.</p>
+        </div>
+    </div>
+
+    <!-- SEÇÃO 3: EXEMPLOS REAIS -->
+    <div class="section">
+        <h2><span class="icon">&#128172;</span> Exemplos Reais do WhatsApp</h2>
+        <p>Abaixo, conversas reais (anonimizadas) que ilustram os padroes que encontramos:</p>
+
+        <!-- Exemplo 1: Preço direto -->
+        <h3 style="font-size:16px; margin: 24px 0 8px; color: var(--vermelho);">Caso 1: Preco sem acolhimento</h3>
+        <div class="chat-container">
+            <div class="chat-title">&#128233; Trafego Pago &mdash; Conversa real</div>
+            <div class="chat-msg in">
+                <span class="sender">Paciente M.</span>
+                A Dra Raquel atende pela Cassi?
+            </div>
+            <div class="chat-clearfix"></div>
+            <div class="chat-msg out">
+                <span class="sender">Equipe</span>
+                Ola, tudo bem? Nao atendemos por convenios nossa consulta e feita de forma particular personalizada e exclusiva. Com investimento de R$980,00. Fico a sua disposicao para agendar!
+            </div>
+            <div class="chat-clearfix"></div>
+            <div class="chat-msg in">
+                <span class="sender">Paciente M.</span>
+                Ok, obrigada
+            </div>
+            <div class="chat-clearfix"></div>
+            <div class="chat-verdict negative">&#10060; Conversa encerrada &mdash; Paciente nao agendou</div>
+        </div>
+        <div class="callout warning">
+            <p><strong>O que faltou:</strong> Perguntar qual a queixa, explicar o diferencial da consulta particular vs convenio, mostrar depoimentos de pacientes, apresentar a Dra. Raquel e seus resultados.</p>
+        </div>
+
+        <!-- Exemplo 2: Aposentado -->
+        <h3 style="font-size:16px; margin: 24px 0 8px; color: var(--vermelho);">Caso 2: Aposentado com queixa real &mdash; dispensado com preco</h3>
+        <div class="chat-container">
+            <div class="chat-title">&#128233; Trafego Pago &mdash; Conversa real</div>
+            <div class="chat-msg in">
+                <span class="sender">Paciente J.</span>
+                Pra uma consulta com dermatologista. Pelo social. Aposentado mais 60.
+            </div>
+            <div class="chat-clearfix"></div>
+            <div class="chat-msg out">
+                <span class="sender">Equipe</span>
+                Ola bom dia, tudo bem? As Dras nao atendem pelo social. O valor da consulta esta 980,00.
+            </div>
+            <div class="chat-clearfix"></div>
+            <div class="chat-verdict negative">&#10060; Conversa encerrada &mdash; Sem follow-up, sem entender a queixa</div>
+        </div>
+        <div class="callout warning">
+            <p><strong>O que faltou:</strong> Empatia com a situacao do paciente, perguntar o que esta incomodando, explicar as opcoes de pagamento/parcelamento, mostrar o diferencial do atendimento.</p>
+        </div>
+
+        <!-- Exemplo 3: Promessa nao cumprida -->
+        <h3 style="font-size:16px; margin: 24px 0 8px; color: var(--vermelho);">Caso 3: Promessa de retorno nao cumprida</h3>
+        <div class="chat-container">
+            <div class="chat-title">&#128233; VIP &mdash; Conversa real</div>
+            <div class="chat-msg out">
+                <span class="sender">Equipe</span>
+                A Ellyn nossa assistente medica vai entrar em contato com voce.
+            </div>
+            <div class="chat-clearfix"></div>
+            <div class="chat-msg in" style="margin-top: 16px;">
+                <span class="sender">Paciente P.</span>
+                Oi. Ninguem entrou em contato ainda.
+            </div>
+            <div class="chat-clearfix"></div>
+            <div class="chat-msg out">
+                <span class="sender">Equipe</span>
+                Ola, vamos verificar e ja lhe retorno.
+            </div>
+            <div class="chat-clearfix"></div>
+            <div class="chat-verdict negative">&#10060; Conversa resolvida sem retorno efetivo</div>
+        </div>
+
+        <!-- Exemplo 4: Clara fazendo certo -->
+        <h3 style="font-size:16px; margin: 24px 0 8px; color: var(--verde);">Caso 4: Clara (IA) &mdash; Abordagem consultiva</h3>
+        <div class="chat-container">
+            <div class="chat-title">&#129302; Clara (Assistente IA) &mdash; Conversa real</div>
+            <div class="chat-msg in">
+                <span class="sender">Paciente V.</span>
+                Ola! Queria saber como funcionam os agendamentos
+            </div>
+            <div class="chat-clearfix"></div>
+            <div class="chat-msg out">
+                <span class="sender">Clara (IA)</span>
+                Ola! Para agendar uma consulta conosco, seguimos um processo simples e personalizado para garantir o melhor atendimento. Primeiro, entendemos qual e a sua necessidade ou queixa para indicar o tipo de consulta ideal...
+            </div>
+            <div class="chat-clearfix"></div>
+            <div class="chat-verdict positive">&#9989; Clara primeiro entende a necessidade, depois apresenta opcoes</div>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-title">&#129302; Clara (IA) &mdash; Rapport antes do preco</div>
+            <div class="chat-msg in">
+                <span class="sender">Paciente L.</span>
+                Qual o valor da consulta?
+            </div>
+            <div class="chat-clearfix"></div>
+            <div class="chat-msg out">
+                <span class="sender">Clara (IA)</span>
+                Que otimo que voce veio ate nos! Me conta um pouquinho &mdash; o que esta te incomodando ou o que voce gostaria de tratar?
+            </div>
+            <div class="chat-clearfix"></div>
+            <div class="chat-verdict positive">&#9989; Mesmo quando perguntam o preco, Clara primeiro busca entender a queixa</div>
+        </div>
+    </div>
+
+    <!-- SEÇÃO 4: DIAGNÓSTICO -->
+    <div class="section">
+        <h2><span class="icon">&#128269;</span> Diagnostico: 5 Gaps Identificados</h2>
+
+        <ul class="checklist">
+            <li>
+                <span class="check red">1</span>
+                <div>
+                    <strong>Preco antes do rapport</strong><br>
+                    <span style="font-size:13px; color: var(--cinza-600);">A equipe envia o valor da consulta antes de entender a queixa do paciente. O paciente compara o preco com convenios e clinicas populares sem entender o diferencial.</span>
+                </div>
+            </li>
+            <li>
+                <span class="check red">2</span>
+                <div>
+                    <strong>Ausencia de prova social</strong><br>
+                    <span style="font-size:13px; color: var(--cinza-600);">Nenhuma conversa analisada utilizou depoimentos de pacientes, fotos de resultados, ou conteudos do Instagram da clinica para reforcar o valor do servico.</span>
+                </div>
+            </li>
+            <li>
+                <span class="check red">3</span>
+                <div>
+                    <strong>Perfil das doutoras nao apresentado</strong><br>
+                    <span style="font-size:13px; color: var(--cinza-600);">A Dra. Raquel e a Dra. Eoda tem curriculos de excelencia, mas o paciente nunca recebe essa informacao. Ele so ve "R$ 980,00" sem saber quem e a profissional.</span>
+                </div>
+            </li>
+            <li>
+                <span class="check red">4</span>
+                <div>
+                    <strong>Conversas "resolvidas" sem conversao</strong><br>
+                    <span style="font-size:13px; color: var(--cinza-600);">Conversas sao marcadas como resolvidas apos enviar o preco, mesmo quando o paciente nao agendou. "Resolvida" deveria significar "agendada" ou "follow-up programado".</span>
+                </div>
+            </li>
+            <li>
+                <span class="check red">5</span>
+                <div>
+                    <strong>Sem follow-up estruturado</strong><br>
+                    <span style="font-size:13px; color: var(--cinza-600);">Pacientes que demonstraram interesse mas nao agendaram nao recebem nenhum acompanhamento. A oportunidade simplesmente morre.</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- SEÇÃO 5: DADOS DA CLÍNICA -->
+    <div class="section">
+        <h2><span class="icon">&#128200;</span> Metricas da Clinica &mdash; Jul a Out/2026</h2>
+        <p>Os numeros da clinica mostram que <strong>quando o paciente chega a consulta, o resultado e excelente</strong>. O desafio esta em fazer mais pacientes chegarem ate la.</p>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mes</th>
+                        <th>Agendadas</th>
+                        <th>Realizadas</th>
+                        <th>Taxa</th>
+                        <th>Ticket Medio</th>
+                        <th>Receita</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Jul/26</strong></td>
+                        <td>208</td>
+                        <td>175</td>
+                        <td><span class="badge badge-yellow">84,1%</span></td>
+                        <td>R$ 1.503</td>
+                        <td>R$ 205.850</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ago/26</strong></td>
+                        <td>286</td>
+                        <td>257</td>
+                        <td><span class="badge badge-green">89,9%</span></td>
+                        <td>R$ 1.499</td>
+                        <td>R$ 286.245</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Set/26</strong></td>
+                        <td>245</td>
+                        <td>226</td>
+                        <td><span class="badge badge-green">92,2%</span></td>
+                        <td>R$ 2.005</td>
+                        <td>R$ 304.795</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Out/26*</strong></td>
+                        <td>220</td>
+                        <td>95</td>
+                        <td><span class="badge badge-blue">em andamento</span></td>
+                        <td>R$ 2.171</td>
+                        <td>R$ 145.471</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p style="font-size:12px; color: var(--cinza-600);">*Outubro em andamento (dados ate 15/10). Fonte: Feegow + ETL DermaClinic.</p>
+
+        <div class="stats-grid" style="margin-top:24px;">
+            <div class="stat-card success">
+                <span class="number">92%</span>
+                <span class="label">Taxa de realizacao (Set)</span>
+            </div>
+            <div class="stat-card success">
+                <span class="number">R$ 2.005</span>
+                <span class="label">Ticket medio (Set)</span>
+            </div>
+            <div class="stat-card">
+                <span class="number">41</span>
+                <span class="label">Pacientes novos (Set)</span>
+            </div>
+            <div class="stat-card">
+                <span class="number">3,7%</span>
+                <span class="label">No-show (Set)</span>
+            </div>
+        </div>
+
+        <div class="callout success">
+            <p><strong>Ponto positivo:</strong> A taxa de realizacao cresceu de 84% (Jul) para 92% (Set), e o ticket medio subiu 33% (R$ 1.503 &#8594; R$ 2.005). Quando o paciente chega, a clinica entrega resultado. O gargalo esta <strong>antes</strong> da consulta.</p>
+        </div>
+    </div>
+
+    <!-- SEÇÃO 6: COMPARATIVO ANTES/DEPOIS -->
+    <div class="section">
+        <h2><span class="icon">&#128260;</span> Antes vs. Depois &mdash; O Caminho</h2>
+        <p>A transformacao que estamos implementando com a Clara e o treinamento da equipe:</p>
+
+        <div class="comparison-grid">
+            <div class="comparison-card before">
+                <h4>&#10060; Como esta sendo feito</h4>
+                <ul>
+                    <li>Envia preco na primeira mensagem</li>
+                    <li>Nao pergunta a queixa do paciente</li>
+                    <li>Nao apresenta as doutoras</li>
+                    <li>Nao usa conteudo do Instagram</li>
+                    <li>Nao faz follow-up</li>
+                    <li>Resolve conversa sem agendar</li>
+                    <li>Promete retorno e nao cumpre</li>
+                </ul>
+            </div>
+            <div class="comparison-card after">
+                <h4>&#9989; Como deveria ser feito</h4>
+                <ul>
+                    <li>Primeiro entende a necessidade</li>
+                    <li>Personaliza a resposta pela queixa</li>
+                    <li>Apresenta a doutora especialista</li>
+                    <li>Envia depoimentos e resultados</li>
+                    <li>Programa follow-up em 24-48h</li>
+                    <li>So resolve quando agendou ou descartou</li>
+                    <li>Cumpre todo retorno prometido</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEÇÃO 7: ROTEIRO DE ATENDIMENTO -->
+    <div class="section">
+        <h2><span class="icon">&#128214;</span> Roteiro de Atendimento &mdash; Passo a Passo</h2>
+        <p>Use este roteiro como guia para cada conversa no WhatsApp:</p>
+
+        <div class="flow-steps" style="flex-direction: column; align-items: stretch;">
+            <div class="flow-step" style="text-align:left; padding: 20px 24px;">
+                <div class="step-num" style="float:left; margin-right:12px; margin-top:4px;">1</div>
+                <h5>Acolhimento (primeira mensagem)</h5>
+                <p>"Ola! Que bom que voce entrou em contato! Sou [nome], da equipe DermaClinic. Me conta um pouquinho &mdash; o que esta te incomodando ou o que voce gostaria de tratar?"</p>
+            </div>
+            <div class="flow-step" style="text-align:left; padding: 20px 24px;">
+                <div class="step-num" style="float:left; margin-right:12px; margin-top:4px;">2</div>
+                <h5>Entender a queixa (personalizar)</h5>
+                <p>Ouvir a queixa completa. Fazer perguntas: "Ha quanto tempo voce tem essa queixa?", "Ja fez algum tratamento antes?". Demonstrar interesse genuino.</p>
+            </div>
+            <div class="flow-step" style="text-align:left; padding: 20px 24px;">
+                <div class="step-num" style="float:left; margin-right:12px; margin-top:4px;">3</div>
+                <h5>Apresentar a doutora (prova social)</h5>
+                <p>"Para esse tipo de queixa, a Dra. [Raquel/Eoda] e especialista! Ela tem [X anos] de experiencia e ja tratou centenas de casos como o seu. Vou te enviar um conteudo do Instagram dela para voce conhecer o trabalho."</p>
+            </div>
+            <div class="flow-step" style="text-align:left; padding: 20px 24px;">
+                <div class="step-num" style="float:left; margin-right:12px; margin-top:4px;">4</div>
+                <h5>Explicar o diferencial (ANTES do preco)</h5>
+                <p>"A consulta na DermaClinic e personalizada e detalhada. A doutora analisa sua pele com dermatoscopio digital, monta um plano individual e acompanha cada etapa do tratamento."</p>
+            </div>
+            <div class="flow-step" style="text-align:left; padding: 20px 24px;">
+                <div class="step-num" style="float:left; margin-right:12px; margin-top:4px;">5</div>
+                <h5>Apresentar o investimento (com contexto)</h5>
+                <p>"O investimento na consulta e de R$ [valor]. E um atendimento exclusivo, sem correria, onde voce sai com um plano completo de tratamento. Posso verificar os horarios disponiveis para voce?"</p>
+            </div>
+            <div class="flow-step" style="text-align:left; padding: 20px 24px;">
+                <div class="step-num" style="float:left; margin-right:12px; margin-top:4px;">6</div>
+                <h5>Fechar com oferta de agenda</h5>
+                <p>Sempre terminar com opcoes de horario: "Temos disponibilidade na quarta as 14h ou sexta as 10h. Qual fica melhor para voce?"</p>
+            </div>
+        </div>
+
+        <div class="callout info">
+            <p><strong>Dica:</strong> Quando o paciente perguntar "qual o valor?", a melhor resposta NUNCA e so o numero. A melhor resposta e: "Depende do que voce precisa! Me conta o que te incomoda para eu indicar a consulta ideal &mdash; temos opcoes a partir de R$ 400."</p>
+        </div>
+    </div>
+
+    <!-- SEÇÃO 8: O QUE A CLARA ESTÁ FAZENDO -->
+    <div class="section">
+        <h2><span class="icon">&#129302;</span> Clara (IA) &mdash; O que ja estamos melhorando</h2>
+        <p>A Clara, assistente virtual da DermaClinic, foi programada para seguir o roteiro ideal de atendimento:</p>
+
+        <ul class="checklist">
+            <li>
+                <span class="check green">&#10003;</span>
+                <div>
+                    <strong>Pergunta a queixa antes do preco</strong><br>
+                    <span style="font-size:13px; color: var(--cinza-600);">Mesmo quando o paciente pede o valor, Clara primeiro entende a necessidade para personalizar a resposta.</span>
+                </div>
+            </li>
+            <li>
+                <span class="check green">&#10003;</span>
+                <div>
+                    <strong>Apresenta o diferencial da consulta</strong><br>
+                    <span style="font-size:13px; color: var(--cinza-600);">Clara explica o que esta incluso: dermatoscopio digital, plano individual, acompanhamento, exclusividade do atendimento.</span>
+                </div>
+            </li>
+            <li>
+                <span class="check green">&#10003;</span>
+                <div>
+                    <strong>Direciona por tipo de queixa</strong><br>
+                    <span style="font-size:13px; color: var(--cinza-600);">Queixa estetica (botox, preenchimento) &#8594; Consulta Avaliativa R$ 400. Queixa medica (pele, cabelo) &#8594; Consulta Dermatologica R$ 880-980.</span>
+                </div>
+            </li>
+            <li>
+                <span class="check green">&#10003;</span>
+                <div>
+                    <strong>Atribui ao time quando necessario</strong><br>
+                    <span style="font-size:13px; color: var(--cinza-600);">Para agendamentos, procedimentos especificos ou duvidas complexas, Clara transfere para a equipe com contexto completo do que foi conversado.</span>
+                </div>
+            </li>
+            <li>
+                <span class="check green">&#10003;</span>
+                <div>
+                    <strong>Follow-up automatico</strong><br>
+                    <span style="font-size:13px; color: var(--cinza-600);">Pacientes que demonstraram interesse mas nao agendaram recebem acompanhamento automatico, sem depender da equipe lembrar.</span>
+                </div>
+            </li>
+        </ul>
+
+        <div class="callout success">
+            <p><strong>Resultado esperado:</strong> Com Clara fazendo o primeiro contato e qualificacao, a equipe recebe o paciente ja engajado e com contexto, aumentando a taxa de conversao e reduzindo o tempo de atendimento.</p>
+        </div>
+    </div>
+
+    <!-- SEÇÃO 9: IMPACTO PROJETADO -->
+    <div class="section">
+        <h2><span class="icon">&#127919;</span> Impacto Projetado</h2>
+        <p>Com o ticket medio de R$ 2.005 (Set/2026), cada consulta adicional agendada representa impacto direto na receita:</p>
+
+        <div class="impact-grid">
+            <div class="impact-card current">
+                <span class="sublabel">Cenario Atual (Set)</span>
+                <span class="amount">41 novos</span>
+                <span class="sublabel">pacientes/mes</span>
+            </div>
+            <div class="impact-card projected">
+                <span class="sublabel">Meta com melhorias</span>
+                <span class="amount">55 novos</span>
+                <span class="sublabel">+34% de conversao</span>
+            </div>
+        </div>
+
+        <div class="highlight">
+            <h3>Cada paciente novo convertido vale</h3>
+            <span class="big-number">R$ 2.005</span>
+            <p>14 pacientes novos adicionais por mes = <strong>R$ 28.070/mes</strong> de receita incremental. Em 12 meses: <strong>R$ 336.840</strong> &mdash; apenas com melhoria no atendimento, sem aumentar investimento em trafego.</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="number">215</span>
+                <span class="label">Leads de trafego pago (Set-Out)</span>
+            </div>
+            <div class="stat-card alert">
+                <span class="number">~19%</span>
+                <span class="label">Taxa conversao atual estimada</span>
+            </div>
+            <div class="stat-card success">
+                <span class="number">~26%</span>
+                <span class="label">Meta de conversao</span>
+            </div>
+            <div class="stat-card success">
+                <span class="number">+R$ 28k</span>
+                <span class="label">Receita mensal adicional</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEÇÃO 10: PLANO DE AÇÃO -->
+    <div class="section">
+        <h2><span class="icon">&#128640;</span> Plano de Acao &mdash; Proximos Passos</h2>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Acao</th>
+                        <th>Responsavel</th>
+                        <th>Prazo</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Treinar equipe no roteiro de atendimento</strong><br><span style="font-size:12px;color:var(--cinza-600)">Apresentar este relatorio + praticar o passo-a-passo</span></td>
+                        <td>Gestao</td>
+                        <td>Semana 1</td>
+                        <td><span class="badge badge-yellow">Pendente</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Criar banco de conteudos do Instagram</strong><br><span style="font-size:12px;color:var(--cinza-600)">Separar posts de resultados, depoimentos e perfis das Dras para envio rapido</span></td>
+                        <td>Marketing + Equipe</td>
+                        <td>Semana 1-2</td>
+                        <td><span class="badge badge-yellow">Pendente</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Refinar Clara para qualificar melhor</strong><br><span style="font-size:12px;color:var(--cinza-600)">Ajustar respostas da IA para cada tipo de queixa com mais empatia e contexto</span></td>
+                        <td>Digital AI</td>
+                        <td>Semana 2</td>
+                        <td><span class="badge badge-blue">Em andamento</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Implementar regra: nao resolver sem agendar</strong><br><span style="font-size:12px;color:var(--cinza-600)">Conversa so "resolvida" quando agendou, descartou explicitamente ou follow-up programado</span></td>
+                        <td>Equipe + Digital AI</td>
+                        <td>Semana 1</td>
+                        <td><span class="badge badge-yellow">Pendente</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ativar follow-up automatico (D+1 e D+3)</strong><br><span style="font-size:12px;color:var(--cinza-600)">Pacientes sem resposta recebem mensagem personalizada em 24h e 72h</span></td>
+                        <td>Digital AI</td>
+                        <td>Semana 2-3</td>
+                        <td><span class="badge badge-blue">Em andamento</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Monitorar conversoes semanalmente</strong><br><span style="font-size:12px;color:var(--cinza-600)">Dashboard com taxa lead &#8594; agendamento por atendente</span></td>
+                        <td>Digital AI</td>
+                        <td>Semana 3</td>
+                        <td><span class="badge badge-yellow">Pendente</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>Relatorio preparado por <span class="brand">Digital AI</span> para <span class="brand">DermaClinic</span></p>
+        <p style="margin-top:4px;">Dados coletados via Chatwoot API + Feegow ETL &mdash; Outubro 2026</p>
+        <p style="margin-top:8px; font-size:11px; color: #999;">Documento confidencial. Distribuicao restrita a equipe de gestao.</p>
+    </div>
+
+</body>
+</html>
