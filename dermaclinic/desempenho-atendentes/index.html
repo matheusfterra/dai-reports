@@ -175,6 +175,32 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 .view-section{display:none}
 .view-section.active{display:block}
 
+/* Diary Accordion */
+.diary-section{margin-bottom:48px}
+.diary-day{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);margin-bottom:12px;box-shadow:var(--shadow-sm);overflow:hidden;transition:all .2s}
+.diary-day:hover{box-shadow:var(--shadow)}
+.diary-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;cursor:pointer;gap:12px;flex-wrap:wrap;user-select:none}
+.diary-header:hover{background:var(--brand-light)}
+.diary-date{font-family:var(--font-head);font-weight:800;font-size:1rem;color:var(--brand-dark);white-space:nowrap}
+.diary-summary{font-size:.84rem;color:var(--text-secondary);flex:1;min-width:200px}
+.diary-pills{display:flex;gap:6px;flex-wrap:wrap}
+.diary-pill{padding:3px 10px;border-radius:12px;font-size:.72rem;font-weight:700}
+.diary-pill.alert{background:var(--danger-light);color:var(--danger)}
+.diary-pill.ok{background:var(--success-light);color:var(--success)}
+.diary-pill.neutral{background:#F1F5F9;color:var(--text-secondary)}
+.diary-chevron{width:20px;height:20px;transition:transform .2s;flex-shrink:0;color:var(--text-muted)}
+.diary-body{display:none;padding:0 20px 20px;border-top:1px solid var(--border-light)}
+.diary-day.open .diary-body{display:block}
+.diary-day.open .diary-chevron{transform:rotate(180deg)}
+.diary-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border-light)}
+.diary-item:last-child{border-bottom:none}
+.diary-item-id{font-family:var(--font-head);font-weight:700;font-size:.84rem;white-space:nowrap}
+.diary-item-id a{color:var(--brand);text-decoration:none;border-bottom:1px dashed var(--brand)}
+.diary-item-id a:hover{border-bottom-style:solid}
+.diary-item-text{font-size:.84rem;color:var(--text-secondary);line-height:1.5;flex:1}
+.diary-item-text strong{color:var(--text-primary)}
+.diary-item-badge{flex-shrink:0}
+
 @media(max-width:768px){
   .big-numbers{grid-template-columns:repeat(2,1fr)}
   .chart-row{grid-template-columns:1fr}
@@ -247,11 +273,6 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
   <button class="filter-btn" onclick="showView('daiane')">
     <span class="filter-dot" style="background:linear-gradient(135deg,#8B5CF6,#A78BFA)"></span>
     Daiane
-  </button>
-  <span style="width:1px;height:28px;background:var(--border);margin:0 4px"></span>
-  <button class="filter-btn" onclick="showView('dia-16-10')">
-    <span class="filter-dot" style="background:linear-gradient(135deg,#0EA5E9,#38BDF8)"></span>
-    16/10
   </button>
 </div>
 </div>
@@ -457,6 +478,77 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 <tr style="background:#F1F5F9"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19227" target="_blank">19227</a></td><td>Cristina</td><td>Gabriella</td><td>Relacionamento</td><td><span style="color:var(--text-muted);font-size:.78rem">Fora de escopo</span></td><td>Paciente antiga, esclarecimento</td></tr>
 </tbody>
 </table>
+</div>
+
+<!-- DIARY -->
+<div class="section diary-section">
+<h2 class="section-title">Diario de Atendimento</h2>
+<p style="font-size:.88rem;color:var(--text-secondary);margin-bottom:20px">Analise dia a dia dos atendimentos. Clique no dia para ver os pontos criticos com link direto para o Chatwoot.</p>
+
+<!-- DAY: 16/10 -->
+<div class="diary-day open">
+  <div class="diary-header" onclick="this.parentElement.classList.toggle('open')">
+    <div class="diary-date">16/10/2026</div>
+    <div class="diary-summary">12 conversas com interacao real analisadas</div>
+    <div class="diary-pills">
+      <span class="diary-pill alert">3 alertas</span>
+      <span class="diary-pill ok">4 conversoes</span>
+      <span class="diary-pill neutral">3 convenio</span>
+    </div>
+    <svg class="diary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+  </div>
+  <div class="diary-body">
+
+    <div style="background:var(--danger-light);border-radius:8px;padding:14px 16px;margin-bottom:16px;font-size:.84rem;color:var(--text-primary);line-height:1.6">
+      <strong style="color:var(--danger)">Diagnostico do dia:</strong> Daniela resolveu 7/12 conversas antes de esperar resposta. Labels "3-agendamento" falsas em 3 conversas. Cristiane foi destaque positivo.
+    </div>
+
+    <!-- Critical items -->
+    <div style="font-family:var(--font-head);font-weight:700;font-size:.88rem;color:var(--danger);margin-bottom:10px;display:flex;align-items:center;gap:6px">
+      <span style="width:8px;height:8px;border-radius:50%;background:var(--danger);flex-shrink:0"></span> Conversas criticas
+    </div>
+
+    <div class="diary-item">
+      <div class="diary-item-id"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19246" target="_blank">#19246</a></div>
+      <div class="diary-item-text"><strong>Renato (HPV/crioterapia)</strong> — Queixa sensivel ficou <strong>3h21 sem resposta humana</strong> em horario comercial. Daniela respondeu com template generico. Paciente nunca respondeu.</div>
+      <div class="diary-item-badge"><span class="evidence-tag critica" style="margin:0">ALTA</span></div>
+    </div>
+
+    <div class="diary-item">
+      <div class="diary-item-id"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19257" target="_blank">#19257</a></div>
+      <div class="diary-item-text"><strong>OFA (avaliacao facial)</strong> — Lead <strong>indicado por amigo</strong> tratado com descaso: Daniela resolveu 2x sem responder, adicionou label falsa. Alessandra mandou textao generico.</div>
+      <div class="diary-item-badge"><span class="evidence-tag critica" style="margin:0">ALTA</span></div>
+    </div>
+
+    <div class="diary-item">
+      <div class="diary-item-id"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19239" target="_blank">#19239</a></div>
+      <div class="diary-item-text"><strong>Liciane (laser vasinhos)</strong> — Indicada pela Dra. Ana Maria, choque com preco R$1.800. Daniela confirmou valor sem contextualizar tecnologia, sem antes/depois, sem Instagram.</div>
+      <div class="diary-item-badge"><span class="evidence-tag alerta" style="margin:0">MEDIA</span></div>
+    </div>
+
+    <!-- Positive items -->
+    <div style="font-family:var(--font-head);font-weight:700;font-size:.88rem;color:var(--success);margin:16px 0 10px;display:flex;align-items:center;gap:6px">
+      <span style="width:8px;height:8px;border-radius:50%;background:var(--success);flex-shrink:0"></span> Referencia do dia
+    </div>
+
+    <div class="diary-item">
+      <div class="diary-item-id"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19238" target="_blank">#19238</a></div>
+      <div class="diary-item-text"><strong>Patricia/Helio (mapeamento) — Cristiane</strong> — Adaptou datas (out → nov), pediu nome completo, agendou com Dra. Raquel, enviou orientacoes de preparo e se despediu com carinho. <strong>Atendimento modelo.</strong></div>
+      <div class="diary-item-badge"><span class="evidence-tag positivo" style="margin:0">REF</span></div>
+    </div>
+
+    <!-- Patterns summary -->
+    <div style="background:#F1F5F9;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:.82rem;color:var(--text-secondary);line-height:1.6">
+      <strong style="color:var(--text-primary)">Padroes do dia:</strong>
+      Resolucao prematura (7/12) · Textao copy-paste (4/12) · Labels falsas (3/12) · Sem follow-up (3/12) ·
+      <span style="color:var(--danger)">Erro:</span> copy-paste "cirurgiao vascular" em <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19256" target="_blank">#19256</a> (Melissa e dermatologista)
+    </div>
+
+  </div>
+</div>
+
+<!-- Future days will be added here -->
+
 </div>
 
 <!-- METHODOLOGY -->
@@ -914,179 +1006,6 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 </div><!-- end view-daiane -->
 
 
-<!-- ================================================================ -->
-<!-- ==================== VIEW: DIA 16/10 ========================= -->
-<!-- ================================================================ -->
-<div id="view-dia-16-10" class="view-section">
-
-<!-- Day Header -->
-<div style="background:linear-gradient(135deg,#0EA5E9 0%,#0284C7 100%);border-radius:var(--radius-lg);padding:28px 32px;margin-bottom:28px;color:#fff">
-  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
-    <div>
-      <div style="font-family:var(--font-head);font-weight:800;font-size:1.4rem">Analise do Dia — 16/10/2026</div>
-      <div style="font-size:.88rem;opacity:.8;margin-top:4px">12 conversas com interacao real analisadas | Playbook v7 (23 licoes)</div>
-    </div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap">
-      <span style="background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:16px;padding:5px 14px;font-size:.78rem;font-weight:700">4 conversoes</span>
-      <span style="background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:16px;padding:5px 14px;font-size:.78rem;font-weight:700">5 perdas</span>
-      <span style="background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:16px;padding:5px 14px;font-size:.78rem;font-weight:700">3 convenio</span>
-    </div>
-  </div>
-</div>
-
-<!-- Day Big Numbers -->
-<div class="big-numbers" style="grid-template-columns:repeat(3,1fr)">
-  <div class="big-card red">
-    <div class="big-number">3h21</div>
-    <div class="big-label">Maior Gap de Resposta</div>
-    <div class="big-sub">#19246 — paciente com HPV ficou sem resposta humana</div>
-  </div>
-  <div class="big-card orange">
-    <div class="big-number">7/12</div>
-    <div class="big-label">Resolucao Prematura</div>
-    <div class="big-sub">Daniela resolveu antes de esperar resposta do paciente</div>
-  </div>
-  <div class="big-card green">
-    <div class="big-number">Cristiane</div>
-    <div class="big-label" style="font-size:.75rem">Destaque do Dia</div>
-    <div class="big-sub">#19238 — agendamento referencia com acolhimento</div>
-  </div>
-</div>
-
-<!-- Key Insight -->
-<div class="insight-box">
-  <div class="insight-title">Diagnostico do dia 16/10</div>
-  <div class="insight-text">
-    Dia marcado por um <strong>padrao sistematico de resolucao prematura</strong> — Daniela resolveu 7 de 12 conversas antes de esperar a resposta do paciente. Outro problema recorrente: <strong>textoes genericos copy-paste</strong> enviados para pacientes com queixas especificas, que exigiam acolhimento personalizado.
-  </div>
-  <div class="insight-highlight">
-    <strong>Alerta critico:</strong> Leads indicados por amigos e medicos (os mais quentes!) receberam o mesmo template generico que leads frios. A label "3-agendamento" foi adicionada em 3 conversas SEM conversao real — distorcendo metricas.
-  </div>
-  <div class="insight-highlight success">
-    <strong>Referencia do dia:</strong> Cristiane conduziu #19238 (Patricia/Helio) com maestria — adaptou datas, pediu nome, enviou orientacoes de preparo, fechou com carinho. E o padrao a ser replicado.
-  </div>
-</div>
-
-<!-- CRITICAL CONVERSATIONS -->
-<div class="section">
-<div class="sub-title"><span class="dot" style="background:var(--danger)"></span> Conversas Criticas — Acao Necessaria</div>
-
-<div class="evidence-card" style="border-left:4px solid var(--danger)">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19246" target="_blank">#19246 — Renato Fidencio</a></div>
-    <span class="conv-badge nao">Perdido</span>
-  </div>
-  <div class="eval-grid" style="margin-top:12px;margin-bottom:12px">
-    <div class="eval-item"><div class="eval-label">Queixa</div><div class="eval-value">HPV / Crioterapia</div></div>
-    <div class="eval-item"><div class="eval-label">Gap de Resposta</div><div class="eval-value" style="color:var(--danger)">3h21min</div></div>
-    <div class="eval-item"><div class="eval-label">Atendentes</div><div class="eval-value">Cristiane → Daniela</div></div>
-  </div>
-  <div class="evidence-text">
-    Paciente com queixa <strong>sensivel</strong> (verrugas genitais HPV) enviou mensagem as 08:22 e so recebeu resposta as 11:43 — <strong>3h21 de gap em horario comercial</strong>. Daniela respondeu com texto generico sobre consulta avaliativa R$400, sem nenhum acolhimento para a situacao. Paciente nunca respondeu.<br><br>
-    <strong>O que deveria ter sido feito:</strong> Resposta rapida e empatica ("Entendo, vamos cuidar de voce com total sigilo"), SEM textao generico, oferecer agenda direta.
-  </div>
-  <span class="evidence-tag critica">Gravidade ALTA — queixa sensivel + gap 3h + template generico</span>
-</div>
-
-<div class="evidence-card" style="border-left:4px solid var(--danger)">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19257" target="_blank">#19257 — OFA (avaliacao facial)</a></div>
-    <span class="conv-badge nao">Perdido</span>
-  </div>
-  <div class="eval-grid" style="margin-top:12px;margin-bottom:12px">
-    <div class="eval-item"><div class="eval-label">Origem</div><div class="eval-value" style="color:var(--warning)">Indicado por amigo</div></div>
-    <div class="eval-item"><div class="eval-label">Problema</div><div class="eval-value" style="color:var(--danger)">Resolveu sem responder</div></div>
-    <div class="eval-item"><div class="eval-label">Atendentes</div><div class="eval-value">Daniela → Alessandra</div></div>
-  </div>
-  <div class="evidence-text">
-    Lead <strong>indicado por amigo</strong> (quente!) tratado com descaso. Daniela adicionou label "3-agendamento", atribuiu a si e <strong>resolveu 2x sem enviar nenhuma mensagem</strong>. Quando o paciente voltou ("Fui indicado por um amigo! Gostaria de uma avaliacao facial!"), Alessandra mandou textao generico e resolveu.<br><br>
-    <strong>Problemas:</strong> Label falsa (licao 9), resolucao sem resposta, textao para lead quente (licao 21).
-  </div>
-  <span class="evidence-tag critica">Gravidade ALTA — lead indicado perdido por negligencia</span>
-</div>
-
-<div class="evidence-card" style="border-left:4px solid var(--warning)">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19239" target="_blank">#19239 — Liciane Canei (laser vasinhos)</a></div>
-    <span class="conv-badge nao">Perdido</span>
-  </div>
-  <div class="eval-grid" style="margin-top:12px;margin-bottom:12px">
-    <div class="eval-item"><div class="eval-label">Origem</div><div class="eval-value" style="color:var(--warning)">Indicada por Dra.</div></div>
-    <div class="eval-item"><div class="eval-label">Reacao</div><div class="eval-value" style="color:var(--danger)">Choque de preco</div></div>
-    <div class="eval-item"><div class="eval-label">Atendente</div><div class="eval-value">Daniela</div></div>
-  </div>
-  <div class="evidence-text">
-    Paciente <strong>indicada pela Dra. Ana Maria</strong> demonstrou choque com o preco ("1.800 cada sessao?!") e Daniela apenas confirmou: "sim, parcelamos em 10x". Sem contextualizar a tecnologia (Fotona), sem antes/depois, sem explicar beneficios.<br><br>
-    <strong>Deveria:</strong> Contextualizar o valor (licao 17), enviar midia com resultados reais (licao 21), mostrar Instagram.
-  </div>
-  <span class="evidence-tag alerta">Gravidade MEDIA — indicacao medica perdida por falta de contorno de preco</span>
-</div>
-</div>
-
-<!-- REFERENCE CONVERSATION -->
-<div class="section">
-<div class="sub-title"><span class="dot" style="background:var(--success)"></span> Conversa Referencia do Dia</div>
-
-<div class="evidence-card" style="border-left:4px solid var(--success)">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19238" target="_blank">#19238 — Patricia Costa / Helio (mapeamento)</a></div>
-    <span class="conv-badge sim">Agendou</span>
-  </div>
-  <div class="eval-grid" style="margin-top:12px;margin-bottom:12px">
-    <div class="eval-item"><div class="eval-label">Atendente</div><div class="eval-value" style="color:var(--success)">Cristiane</div></div>
-    <div class="eval-item"><div class="eval-label">Resultado</div><div class="eval-value" style="color:var(--success)">Mapeamento 09/11 14h</div></div>
-    <div class="eval-item"><div class="eval-label">Qualidade</div><div class="eval-value" style="color:var(--success)">Excelente</div></div>
-  </div>
-  <div class="evidence-text">
-    <strong>Atendimento modelo:</strong> Cristiane ofereceu datas em outubro, paciente pediu novembro, adaptou (09/11 14h/15h/16h), paciente escolheu 14h. Pediu nome completo (era para o namorado Helio), confirmou agendamento com Dra. Raquel, enviou orientacoes de preparo detalhadas e se despediu com carinho ("Imagina Patricia, bom final de semana!").<br><br>
-    <strong>Por que e referencia:</strong> Flexibilidade, personalizacao, orientacao proativa, tom caloroso — tudo que os leads perdidos nao tiveram.
-  </div>
-  <span class="evidence-tag positivo">Atendimento referencia — replicar</span>
-</div>
-</div>
-
-<!-- DAY PATTERNS -->
-<div class="section">
-<h2 class="section-title">Padroes do Dia 16/10</h2>
-
-<div class="pattern-card">
-  <div class="pattern-title"><span class="pattern-rank">#1</span> Daniela — resolucao prematura sistematica</div>
-  <div class="pattern-desc">Daniela resolveu conversas antes de esperar resposta do paciente em 7 de 12 interacoes. Nao e um erro pontual — e um habito que precisa de correcao imediata. Resultado: pacientes nao respondidos ficam sem canal de retorno.</div>
-  <div class="pattern-freq">7 de 12 conversas (58%)</div>
-</div>
-<div class="pattern-card">
-  <div class="pattern-title"><span class="pattern-rank">#2</span> Textao generico copy-paste</div>
-  <div class="pattern-desc">Textos longos e padronizados enviados para pacientes com necessidades especificas. Paciente com HPV recebeu o mesmo texto que paciente de avaliacao facial. Zero personalizacao, zero midia visual, zero Instagram.</div>
-  <div class="pattern-freq">4 de 12 conversas (33%)</div>
-</div>
-<div class="pattern-card">
-  <div class="pattern-title"><span class="pattern-rank">#3</span> Label "3-agendamento" sem conversao</div>
-  <div class="pattern-desc">Label de agendamento adicionada em conversas onde o paciente nem respondeu. Distorce metricas e cria falsa sensacao de produtividade.</div>
-  <div class="pattern-freq">3 de 12 conversas (25%)</div>
-</div>
-<div class="pattern-card">
-  <div class="pattern-title"><span class="pattern-rank">#4</span> Follow-up ausente apos silencio</div>
-  <div class="pattern-desc">Em 3 conversas, o paciente parou de responder apos receber texto/preco e ninguem retomou. Leads que poderiam ser recuperados com uma mensagem de acompanhamento em 24h.</div>
-  <div class="pattern-freq">3 de 12 conversas (25%)</div>
-</div>
-<div class="pattern-card" style="border-left:4px solid var(--success)">
-  <div class="pattern-title"><span class="pattern-rank good">+</span> Cristiane — destaque positivo</div>
-  <div class="pattern-desc"><strong>Cristiane foi a melhor atendente do dia.</strong> Conduziu #19238 como referencia e #19247 (Deise) com acolhimento. Demonstra que o padrao de qualidade existe na equipe — precisa ser replicado.</div>
-  <div class="pattern-freq good">3 conversas com qualidade alta</div>
-</div>
-</div>
-
-<!-- Copy-Paste Error Alert -->
-<div class="section">
-<div class="insight-box" style="border-left:4px solid var(--danger)">
-  <div class="insight-title" style="color:var(--danger)">Alerta: erro de copy-paste</div>
-  <div class="insight-text">
-    Na conversa <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19256" target="_blank"><strong>#19256 (Stephani)</strong></a>, Daniela enviou: <em>"Aqui na temos o medico cirugiao vascular Dra Melissa"</em> — porem Melissa e dermatologista, nao cirurgiao vascular. O texto foi claramente copiado de outra conversa. O paciente percebe e perde confianca.
-  </div>
-</div>
-</div>
-
-</div><!-- end view-dia-16-10 -->
 
 
 </div><!-- end container -->
