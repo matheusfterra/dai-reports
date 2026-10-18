@@ -181,6 +181,7 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 <div class="header">
   <div class="container header-inner">
     <div class="header-brand">
+      <img src="https://manager.digital-ai.tech/uploads/company/digital-ai-logo-branca.png" alt="Digital AI" style="height:32px;margin-right:14px;vertical-align:middle" onerror="this.style.display='none'">
       <div>
         <div class="header-title">DermaClinic</div>
         <div class="header-sub">Relatório de Desempenho de Atendimento</div>
@@ -213,6 +214,7 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
   <div class="container nav-inner">
     <div class="nav-tab active" onclick="showView('geral')">Visão Geral</div>
     <div class="nav-tab" onclick="showView('ranking')">Ranking</div>
+    <div class="nav-tab" onclick="showView('fichas')">Fichas Individuais</div>
     <div class="nav-tab" onclick="showView('dimensoes')">Dimensões</div>
     <div class="nav-tab" onclick="showView('criticos')">Casos Críticos</div>
     <div class="nav-tab" onclick="showView('padroes')">Padrões</div>
@@ -476,6 +478,224 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
       <div class="chart-title">Comparativo por Dimensão (Radar)</div>
       <canvas id="chartRadar" style="max-height:350px"></canvas>
     </div>
+  </div>
+
+</div>
+
+<!-- ==================== FICHAS INDIVIDUAIS ==================== -->
+<div id="view-fichas" class="view-section">
+
+  <h2 class="section-title">Fichas Individuais por Atendente</h2>
+  <p style="color:var(--text-secondary);margin-bottom:24px">Diagnóstico detalhado de cada atendente com erros específicos, motivos de perda e tempo de resposta real. Fonte: banco de dados da análise IA.</p>
+
+  <!-- DANIELA -->
+  <div class="card" style="margin-bottom:28px;border-left:4px solid var(--brand)">
+    <h3 style="font-family:var(--font-head);font-size:1.15rem;margin-bottom:16px">Daniela Peixer <span style="color:var(--text-muted);font-weight:400;font-size:.85rem">· 75 conversas analisadas · Score 6.07</span></h3>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+      <div style="background:var(--brand-light);padding:14px;border-radius:var(--radius)">
+        <div style="font-weight:700;color:var(--brand-dark);margin-bottom:6px">Conversão: 40.0%</div>
+        <div style="font-size:.85rem;color:var(--text-secondary)">30 convertidas · 45 perdas</div>
+      </div>
+      <div style="background:var(--danger-light);padding:14px;border-radius:var(--radius)">
+        <div style="font-weight:700;color:var(--danger);margin-bottom:6px">Tempo de resposta</div>
+        <div style="font-size:.85rem;color:var(--text-secondary)">Mediana: <strong>19 min</strong> · P90: 687 min (~11h) · n=36</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:14px">
+      <div style="font-weight:700;color:var(--danger);margin-bottom:6px">Motivos de perda (45 conversas não convertidas)</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <span style="background:var(--danger-light);color:var(--danger);padding:4px 10px;border-radius:20px;font-size:.8rem;font-weight:600">Sem follow-up: 31 (69%)</span>
+        <span style="background:var(--warning-light);color:var(--warning);padding:4px 10px;border-radius:20px;font-size:.8rem;font-weight:600">Indisponibilidade: 5 (11%)</span>
+        <span style="background:var(--warning-light);color:var(--warning);padding:4px 10px;border-radius:20px;font-size:.8rem;font-weight:600">Não classificado: 5 (11%)</span>
+        <span style="background:#FEF3C7;color:#92400E;padding:4px 10px;border-radius:20px;font-size:.8rem;font-weight:600">Preço: 4 (9%)</span>
+      </div>
+    </div>
+
+    <div style="margin-bottom:14px">
+      <div style="font-weight:700;color:var(--danger);margin-bottom:6px">Top erros mais frequentes</div>
+      <ul style="font-size:.85rem;color:var(--text-secondary);padding-left:18px;line-height:1.8">
+        <li><strong>Conversa resolvida sem aguardar resposta do paciente</strong> — 6 ocorrências</li>
+        <li><strong>Template repetido sem personalização</strong> — ex: #18089, #18263, #18438, #19241</li>
+        <li><strong>Paciente ignorado</strong> — ex: #18798 (7 msgs sem resposta humana), #17887 (múltiplas msgs sem resposta)</li>
+        <li><strong>Falta de follow-up</strong> — conversa encerrada sem retorno quando paciente não responde</li>
+      </ul>
+    </div>
+
+    <div style="background:var(--success-light);padding:12px;border-radius:var(--radius);font-size:.85rem">
+      <strong style="color:var(--success)">Pontos fortes:</strong> Atendimento amigável e cordial quando engajada. Bom em confirmações de agendamento. Flexível com reagendamentos.
+    </div>
+  </div>
+
+  <!-- ALESSANDRA -->
+  <div class="card" style="margin-bottom:28px;border-left:4px solid #8B5CF6">
+    <h3 style="font-family:var(--font-head);font-size:1.15rem;margin-bottom:16px">Alessandra <span style="color:var(--text-muted);font-weight:400;font-size:.85rem">· 33 conversas analisadas · Score 5.75</span></h3>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+      <div style="background:var(--brand-light);padding:14px;border-radius:var(--radius)">
+        <div style="font-weight:700;color:var(--brand-dark);margin-bottom:6px">Conversão: 42.4%</div>
+        <div style="font-size:.85rem;color:var(--text-secondary)">14 convertidas · 19 perdas</div>
+      </div>
+      <div style="background:var(--danger-light);padding:14px;border-radius:var(--radius)">
+        <div style="font-weight:700;color:var(--danger);margin-bottom:6px">Tempo de resposta</div>
+        <div style="font-size:.85rem;color:var(--text-secondary)">Mediana: <strong>18 min</strong> · P90: 777 min (~13h) · n=18</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:14px">
+      <div style="font-weight:700;color:var(--danger);margin-bottom:6px">Motivos de perda (19 conversas não convertidas)</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <span style="background:var(--danger-light);color:var(--danger);padding:4px 10px;border-radius:20px;font-size:.8rem;font-weight:600">Sem follow-up: 16 (84%)</span>
+        <span style="background:var(--warning-light);color:var(--warning);padding:4px 10px;border-radius:20px;font-size:.8rem;font-weight:600">Indisponibilidade: 1 (5%)</span>
+        <span style="background:var(--warning-light);color:var(--warning);padding:4px 10px;border-radius:20px;font-size:.8rem;font-weight:600">Preço: 1 (5%)</span>
+        <span style="background:#F1F5F9;color:var(--text-muted);padding:4px 10px;border-radius:20px;font-size:.8rem;font-weight:600">Não classificado: 1 (5%)</span>
+      </div>
+    </div>
+
+    <div style="margin-bottom:14px">
+      <div style="font-weight:700;color:var(--danger);margin-bottom:6px">Top erros mais frequentes</div>
+      <ul style="font-size:.85rem;color:var(--text-secondary);padding-left:18px;line-height:1.8">
+        <li><strong>Conversa resolvida sem aguardar resposta</strong> — padrão recorrente em múltiplas conversas</li>
+        <li><strong>84% das perdas por falta de follow-up</strong> — maior concentração de todas as atendentes</li>
+        <li><strong>Paciente não respondido</strong> — ex: #18306 (resolveu sem responder), #18401 (msgs sem resposta)</li>
+        <li><strong>Mensagens automáticas repetidas</strong> — uso de template sem personalização</li>
+      </ul>
+    </div>
+
+    <div style="background:var(--success-light);padding:12px;border-radius:var(--radius);font-size:.85rem">
+      <strong style="color:var(--success)">Pontos fortes:</strong> Boa taxa de conversão (42.4%, a mais alta). Quando engajada, confirma agendamentos de forma eficiente.
+    </div>
+  </div>
+
+  <!-- CRISTIANE -->
+  <div class="card" style="margin-bottom:28px;border-left:4px solid #059669">
+    <h3 style="font-family:var(--font-head);font-size:1.15rem;margin-bottom:16px">Cristiane <span style="color:var(--text-muted);font-weight:400;font-size:.85rem">· 8 conversas analisadas · Score 5.98</span></h3>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+      <div style="background:var(--brand-light);padding:14px;border-radius:var(--radius)">
+        <div style="font-weight:700;color:var(--brand-dark);margin-bottom:6px">Conversão: 37.5%</div>
+        <div style="font-size:.85rem;color:var(--text-secondary)">3 convertidas · 5 perdas</div>
+      </div>
+      <div style="background:var(--warning-light);padding:14px;border-radius:var(--radius)">
+        <div style="font-weight:700;color:var(--warning);margin-bottom:6px">Amostra pequena</div>
+        <div style="font-size:.85rem;color:var(--text-secondary)">Apenas 8 conversas · Dados insuficientes para conclusões firmes</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:14px">
+      <div style="font-weight:700;color:var(--danger);margin-bottom:6px">Motivos de perda (5 conversas não convertidas)</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <span style="background:var(--danger-light);color:var(--danger);padding:4px 10px;border-radius:20px;font-size:.8rem;font-weight:600">Sem follow-up: 2 (40%)</span>
+        <span style="background:var(--warning-light);color:var(--warning);padding:4px 10px;border-radius:20px;font-size:.8rem;font-weight:600">Não classificado: 2 (40%)</span>
+        <span style="background:var(--warning-light);color:var(--warning);padding:4px 10px;border-radius:20px;font-size:.8rem;font-weight:600">Indisponibilidade: 1 (20%)</span>
+      </div>
+    </div>
+
+    <div style="margin-bottom:14px">
+      <div style="font-weight:700;color:var(--danger);margin-bottom:6px">Erros identificados</div>
+      <ul style="font-size:.85rem;color:var(--text-secondary);padding-left:18px;line-height:1.8">
+        <li><strong>Conversa resolvida sem aguardar resposta</strong> — ex: #18719, #19222</li>
+        <li><strong>Template repetido</strong> — ex: #19222 (enviou mesmo texto duas vezes)</li>
+        <li><strong>Follow-up não proativo</strong> — não retorna quando paciente não responde</li>
+      </ul>
+    </div>
+
+    <div style="background:var(--success-light);padding:12px;border-radius:var(--radius);font-size:.85rem">
+      <strong style="color:var(--success)">Pontos fortes:</strong> Atendimento modelo quando engajada (ex: #19238 — adaptação, orientações, carinho). Boa comunicação textual.
+    </div>
+  </div>
+
+  <!-- DAIANE -->
+  <div class="card" style="margin-bottom:28px;border-left:4px solid #D97706">
+    <h3 style="font-family:var(--font-head);font-size:1.15rem;margin-bottom:16px">Daiane <span style="color:var(--text-muted);font-weight:400;font-size:.85rem">· 4 conversas analisadas · Score 6.14</span></h3>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+      <div style="background:var(--brand-light);padding:14px;border-radius:var(--radius)">
+        <div style="font-weight:700;color:var(--brand-dark);margin-bottom:6px">Conversão: 25.0%</div>
+        <div style="font-size:.85rem;color:var(--text-secondary)">1 convertida · 3 perdas</div>
+      </div>
+      <div style="background:var(--warning-light);padding:14px;border-radius:var(--radius)">
+        <div style="font-weight:700;color:var(--warning);margin-bottom:6px">Amostra muito pequena</div>
+        <div style="font-size:.85rem;color:var(--text-secondary)">Apenas 4 conversas · Não é possível tirar conclusões</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:14px">
+      <div style="font-weight:700;color:var(--danger);margin-bottom:6px">Motivos de perda (3 conversas não convertidas)</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <span style="background:var(--danger-light);color:var(--danger);padding:4px 10px;border-radius:20px;font-size:.8rem;font-weight:600">Sem follow-up: 1</span>
+        <span style="background:var(--warning-light);color:var(--warning);padding:4px 10px;border-radius:20px;font-size:.8rem;font-weight:600">Indisponibilidade: 1</span>
+        <span style="background:#F1F5F9;color:var(--text-muted);padding:4px 10px;border-radius:20px;font-size:.8rem;font-weight:600">Não classificado: 1</span>
+      </div>
+    </div>
+
+    <div style="margin-bottom:14px">
+      <div style="font-weight:700;color:var(--danger);margin-bottom:6px">Erros identificados</div>
+      <ul style="font-size:.85rem;color:var(--text-secondary);padding-left:18px;line-height:1.8">
+        <li><strong>Template repetido</strong> — ex: #18440 (enviou mesmo texto duas vezes)</li>
+        <li><strong>Conversa resolvida sem confirmação do paciente</strong></li>
+        <li><strong>Sem menção a preços ou serviços adicionais</strong></li>
+      </ul>
+    </div>
+
+    <div style="background:var(--success-light);padding:12px;border-radius:var(--radius);font-size:.85rem">
+      <strong style="color:var(--success)">Pontos fortes:</strong> Score mais alto (6.14) apesar da amostra pequena. Maior proporção de mensagens humanas (25.5%).
+    </div>
+  </div>
+
+  <!-- RESUMO COMPARATIVO -->
+  <div class="card" style="border-left:4px solid var(--brand-dark)">
+    <h3 style="font-family:var(--font-head);font-size:1.15rem;margin-bottom:16px">Comparativo: Motivos de Perda por Atendente</h3>
+    <div style="overflow-x:auto">
+      <table style="width:100%;font-size:.85rem;border-collapse:collapse">
+        <thead>
+          <tr style="border-bottom:2px solid var(--border)">
+            <th style="text-align:left;padding:8px 12px;font-weight:700">Atendente</th>
+            <th style="text-align:center;padding:8px 12px;font-weight:700">Perdas</th>
+            <th style="text-align:center;padding:8px 12px;color:var(--danger);font-weight:700">Sem Follow-up</th>
+            <th style="text-align:center;padding:8px 12px;font-weight:700">Preço</th>
+            <th style="text-align:center;padding:8px 12px;font-weight:700">Indisponib.</th>
+            <th style="text-align:center;padding:8px 12px;font-weight:700">Mediana Resp.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border-light)">
+            <td style="padding:8px 12px;font-weight:600">Daniela</td>
+            <td style="text-align:center;padding:8px 12px">45</td>
+            <td style="text-align:center;padding:8px 12px;color:var(--danger);font-weight:700">31 (69%)</td>
+            <td style="text-align:center;padding:8px 12px">4 (9%)</td>
+            <td style="text-align:center;padding:8px 12px">5 (11%)</td>
+            <td style="text-align:center;padding:8px 12px;font-weight:600">19 min</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border-light);background:var(--danger-light)">
+            <td style="padding:8px 12px;font-weight:600">Alessandra</td>
+            <td style="text-align:center;padding:8px 12px">19</td>
+            <td style="text-align:center;padding:8px 12px;color:var(--danger);font-weight:700">16 (84%)</td>
+            <td style="text-align:center;padding:8px 12px">1 (5%)</td>
+            <td style="text-align:center;padding:8px 12px">1 (5%)</td>
+            <td style="text-align:center;padding:8px 12px;font-weight:600">18 min</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border-light)">
+            <td style="padding:8px 12px;font-weight:600">Cristiane</td>
+            <td style="text-align:center;padding:8px 12px">5</td>
+            <td style="text-align:center;padding:8px 12px;color:var(--danger);font-weight:700">2 (40%)</td>
+            <td style="text-align:center;padding:8px 12px">0</td>
+            <td style="text-align:center;padding:8px 12px">1 (20%)</td>
+            <td style="text-align:center;padding:8px 12px;color:var(--text-muted)">n=2*</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 12px;font-weight:600">Daiane</td>
+            <td style="text-align:center;padding:8px 12px">3</td>
+            <td style="text-align:center;padding:8px 12px;color:var(--danger);font-weight:700">1 (33%)</td>
+            <td style="text-align:center;padding:8px 12px">0</td>
+            <td style="text-align:center;padding:8px 12px">1 (33%)</td>
+            <td style="text-align:center;padding:8px 12px;color:var(--text-muted)">n=1*</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:.75rem;color:var(--text-muted);margin-top:10px">* Amostra insuficiente para tempo de resposta confiável. Alessandra destacada: 84% das perdas por falta de follow-up.</p>
   </div>
 
 </div>
@@ -850,7 +1070,7 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
   <div class="container">
     Relatório gerado automaticamente por <strong>Digital AI Analytics</strong> · Pipeline de Análise de Atendimento v1<br>
     Dados: Chatwoot API · Processamento: n8n + GPT-4o-mini · Score: Quality Score v2 (SIGMA)<br>
-    <span style="opacity:.6">Build: 20261018-2</span>
+    <span style="opacity:.6">Build: 20261018-3</span>
   </div>
 </div>
 
@@ -874,7 +1094,7 @@ new Chart(document.getElementById('chartConversao'), {
   data: {
     labels: ['Convertidas', 'Não convertidas'],
     datasets: [{
-      data: [48, 73],
+      data: [48, 74],
       backgroundColor: ['#059669', '#DC2626'],
       borderWidth: 0
     }]
