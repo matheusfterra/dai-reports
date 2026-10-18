@@ -44,14 +44,12 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 .period-pills{display:flex;gap:10px;flex-wrap:wrap}
 .period-pill{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:5px 14px;font-size:.78rem;font-weight:600;letter-spacing:.3px}
 
-/* Filter Bar */
-.filter-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 0;position:sticky;top:68px;z-index:99;box-shadow:var(--shadow-sm)}
-.filter-inner{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.filter-label{font-family:var(--font-head);font-weight:700;font-size:.82rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-right:8px}
-.filter-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:24px;font-family:var(--font-head);font-weight:600;font-size:.84rem;border:2px solid var(--border);background:var(--surface);color:var(--text-secondary);cursor:pointer;transition:all .2s;white-space:nowrap}
-.filter-btn:hover{border-color:var(--brand);color:var(--brand);background:var(--brand-light)}
-.filter-btn.active{border-color:var(--brand);background:var(--brand);color:#fff;box-shadow:0 2px 8px rgba(45,82,239,.3)}
-.filter-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+/* Nav Tabs */
+.nav-tabs{background:var(--surface);border-bottom:1px solid var(--border);padding:0;position:sticky;top:68px;z-index:99;box-shadow:var(--shadow-sm)}
+.nav-inner{display:flex;gap:0;overflow-x:auto}
+.nav-tab{padding:14px 24px;font-family:var(--font-head);font-weight:600;font-size:.88rem;color:var(--text-muted);cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;user-select:none}
+.nav-tab:hover{color:var(--brand);background:var(--brand-light)}
+.nav-tab.active{color:var(--brand);border-bottom-color:var(--brand)}
 
 /* Big Numbers */
 .big-numbers{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:36px}
@@ -80,26 +78,18 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 /* Chart container */
 .chart-row{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:36px}
 .chart-box{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-sm)}
-.chart-box canvas{max-height:220px}
+.chart-box canvas{max-height:240px}
 .chart-title{font-family:var(--font-head);font-weight:700;font-size:.95rem;color:var(--brand-dark);margin-bottom:16px;text-align:center}
-.chart-full{margin-bottom:36px;max-width:400px;margin-left:auto;margin-right:auto}
-.chart-full canvas{max-height:200px}
 
-/* Agent Profile Header */
-.agent-profile{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:28px;margin-bottom:28px;box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:24px}
-.agent-profile-avatar{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.4rem;font-family:var(--font-head);flex-shrink:0}
-.agent-profile-info{flex:1}
-.agent-profile-name{font-family:var(--font-head);font-weight:800;font-size:1.4rem;color:var(--text-primary)}
-.agent-profile-meta{font-size:.88rem;color:var(--text-secondary);margin-top:4px}
-.agent-profile-rate{text-align:right}
-.agent-profile-rate-value{font-family:var(--font-head);font-weight:800;font-size:3rem;line-height:1}
-.agent-profile-rate-label{font-size:.78rem;font-weight:600;color:var(--text-muted);margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
+/* Section Title */
+.section-title{font-family:var(--font-head);font-weight:800;font-size:1.25rem;color:var(--brand-dark);margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid var(--brand-accent)}
 
-/* Agent Metrics Row */
-.agent-metrics-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
-.metric-card{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:20px;text-align:center;box-shadow:var(--shadow-sm)}
-.metric-value{font-family:var(--font-head);font-weight:800;font-size:1.6rem}
-.metric-label{font-size:.78rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;margin-top:6px;font-weight:600}
+/* Ranking table */
+.ranking-table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--border-light)}
+.ranking-table th{background:var(--brand-dark);color:#fff;padding:12px 16px;font-family:var(--font-head);font-weight:600;font-size:.82rem;text-align:left}
+.ranking-table td{padding:14px 16px;border-bottom:1px solid var(--border-light);font-size:.88rem}
+.ranking-table tr:last-child td{border-bottom:none}
+.ranking-table tr:hover td{background:var(--brand-light)}
 
 /* Evidence */
 .evidence-card{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:20px;margin-bottom:14px;box-shadow:var(--shadow-sm);transition:all .2s}
@@ -115,13 +105,18 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 .evidence-tag.alerta{background:#FFFBEB;color:#D97706}
 .evidence-tag.positivo{background:#ECFDF5;color:#059669}
 
+/* Score badge */
+.score-badge{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;font-family:var(--font-head);font-weight:800;font-size:.88rem;color:#fff}
+.score-badge.high{background:var(--success)}
+.score-badge.mid{background:var(--warning)}
+.score-badge.low{background:var(--danger)}
+
 /* Conversion badge */
 .conv-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 12px;border-radius:16px;font-family:var(--font-head);font-weight:700;font-size:.78rem}
 .conv-badge.sim{background:#ECFDF5;color:#059669;border:1px solid #A7F3D0}
 .conv-badge.nao{background:#FEF2F2;color:#DC2626;border:1px solid #FECACA}
-.conv-badge.parcial{background:#FFFBEB;color:#D97706;border:1px solid #FCD34D}
 
-/* Patterns Section */
+/* Pattern card */
 .pattern-card{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:20px 24px;margin-bottom:14px;box-shadow:var(--shadow-sm)}
 .pattern-rank{font-family:var(--font-head);font-weight:800;font-size:1.2rem;color:var(--danger);margin-right:12px}
 .pattern-rank.good{color:var(--success)}
@@ -129,16 +124,6 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 .pattern-desc{font-size:.84rem;color:var(--text-secondary);margin-top:6px;line-height:1.5}
 .pattern-freq{display:inline-block;background:var(--danger-light);color:var(--danger);padding:2px 10px;border-radius:12px;font-size:.72rem;font-weight:700;margin-top:8px}
 .pattern-freq.good{background:var(--success-light);color:var(--success)}
-
-/* Section Title */
-.section-title{font-family:var(--font-head);font-weight:800;font-size:1.25rem;color:var(--brand-dark);margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid var(--brand-accent)}
-
-/* Table */
-.data-table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--border-light)}
-.data-table th{background:var(--brand-dark);color:#fff;padding:12px 16px;font-family:var(--font-head);font-weight:600;font-size:.82rem;text-align:left;letter-spacing:.3px}
-.data-table td{padding:12px 16px;border-bottom:1px solid var(--border-light);font-size:.88rem}
-.data-table tr:last-child td{border-bottom:none}
-.data-table tr:hover td{background:var(--brand-light)}
 
 /* How to read */
 .howto{background:linear-gradient(to right,#F0F4FF,#E8EEFF);border:1px solid #C7D7FD;border-radius:var(--radius-lg);padding:24px 28px;margin-bottom:36px}
@@ -148,1257 +133,940 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 .howto li{font-size:.84rem;color:var(--text-secondary);padding:4px 0;padding-left:20px;position:relative}
 .howto li::before{content:'';position:absolute;left:0;top:10px;width:8px;height:8px;border-radius:50%;background:var(--brand)}
 
-/* Ranking table */
-.ranking-table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--border-light)}
-.ranking-table th{background:var(--brand-dark);color:#fff;padding:12px 16px;font-family:var(--font-head);font-weight:600;font-size:.82rem;text-align:left}
-.ranking-table td{padding:14px 16px;border-bottom:1px solid var(--border-light);font-size:.88rem}
-.ranking-table tr:last-child td{border-bottom:none}
-.ranking-table tr{cursor:pointer;transition:all .15s}
-.ranking-table tr:hover td{background:var(--brand-light)}
-.ranking-table tr.clickable:active td{background:var(--brand-accent)}
+/* Agent card */
+.agent-card{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:24px;margin-bottom:20px;box-shadow:var(--shadow-sm)}
+.agent-card-header{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.agent-avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.1rem;font-family:var(--font-head);flex-shrink:0}
+.agent-name{font-family:var(--font-head);font-weight:800;font-size:1.15rem}
+.agent-meta{font-size:.82rem;color:var(--text-secondary)}
+.agent-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.agent-stat{text-align:center;padding:12px 8px;background:var(--bg);border-radius:10px}
+.agent-stat-value{font-family:var(--font-head);font-weight:800;font-size:1.1rem}
+.agent-stat-label{font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;font-weight:600;margin-top:4px}
+
+/* Heatmap */
+.heatmap-row{display:flex;gap:6px;margin-bottom:6px;align-items:center}
+.heatmap-label{width:50px;font-size:.78rem;font-weight:600;color:var(--text-muted);text-align:right;flex-shrink:0}
+.heatmap-cell{flex:1;height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff;min-width:30px}
+
+/* View sections */
+.view-section{display:none}
+.view-section.active{display:block}
 
 /* Footer */
 .footer{text-align:center;padding:32px 0;color:var(--text-muted);font-size:.78rem;border-top:1px solid var(--border);margin-top:48px}
 
-/* Eval grid */
-.eval-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
-.eval-item{background:var(--surface);border:1px solid var(--border-light);border-radius:10px;padding:14px 16px;box-shadow:var(--shadow-sm)}
-.eval-label{font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-bottom:4px}
-.eval-value{font-family:var(--font-head);font-weight:700;font-size:.88rem}
-.eval-detail{font-size:.78rem;color:var(--text-secondary);margin-top:3px;line-height:1.4}
+/* Progress bar */
+.progress-bar{height:8px;background:var(--border-light);border-radius:4px;overflow:hidden;margin-top:6px}
+.progress-fill{height:100%;border-radius:4px;transition:width .3s}
 
-/* Subsection title */
-.sub-title{font-family:var(--font-head);font-weight:700;font-size:1.05rem;color:var(--text-primary);margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.sub-title .dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
-
-/* Hide sections */
-.view-section{display:none}
-.view-section.active{display:block}
-
-/* Diary Accordion */
-.diary-section{margin-bottom:48px}
-.diary-day{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);margin-bottom:12px;box-shadow:var(--shadow-sm);overflow:hidden;transition:all .2s}
-.diary-day:hover{box-shadow:var(--shadow)}
-.diary-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;cursor:pointer;gap:12px;flex-wrap:wrap;user-select:none}
-.diary-header:hover{background:var(--brand-light)}
-.diary-date{font-family:var(--font-head);font-weight:800;font-size:1rem;color:var(--brand-dark);white-space:nowrap}
-.diary-summary{font-size:.84rem;color:var(--text-secondary);flex:1;min-width:200px}
-.diary-pills{display:flex;gap:6px;flex-wrap:wrap}
-.diary-pill{padding:3px 10px;border-radius:12px;font-size:.72rem;font-weight:700}
-.diary-pill.alert{background:var(--danger-light);color:var(--danger)}
-.diary-pill.ok{background:var(--success-light);color:var(--success)}
-.diary-pill.neutral{background:#F1F5F9;color:var(--text-secondary)}
-.diary-chevron{width:20px;height:20px;transition:transform .2s;flex-shrink:0;color:var(--text-muted)}
-.diary-body{display:none;padding:0 20px 20px;border-top:1px solid var(--border-light)}
-.diary-day.open .diary-body{display:block}
-.diary-day.open .diary-chevron{transform:rotate(180deg)}
-.diary-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border-light)}
-.diary-item:last-child{border-bottom:none}
-.diary-item-id{font-family:var(--font-head);font-weight:700;font-size:.84rem;white-space:nowrap}
-.diary-item-id a{color:var(--brand);text-decoration:none;border-bottom:1px dashed var(--brand)}
-.diary-item-id a:hover{border-bottom-style:solid}
-.diary-item-text{font-size:.84rem;color:var(--text-secondary);line-height:1.5;flex:1}
-.diary-item-text strong{color:var(--text-primary)}
-.diary-item-badge{flex-shrink:0}
-
+/* Responsive */
 @media(max-width:768px){
   .big-numbers{grid-template-columns:repeat(2,1fr)}
   .chart-row{grid-template-columns:1fr}
-  .agent-metrics-row{grid-template-columns:1fr}
-  .eval-grid{grid-template-columns:1fr}
-  .header-inner{flex-direction:column;align-items:flex-start}
-  .period-inner{flex-direction:column}
-  .agent-profile{flex-direction:column;text-align:center}
-  .agent-profile-rate{text-align:center}
-  .data-table{font-size:.78rem}
-  .data-table th,.data-table td{padding:8px 10px}
-  .filter-bar{top:60px}
-  .filter-inner{justify-content:center}
+  .agent-stats{grid-template-columns:repeat(3,1fr)}
+  .ranking-table{font-size:.82rem}
+  .ranking-table th,.ranking-table td{padding:10px 12px}
+}
+@media(max-width:480px){
+  .big-numbers{grid-template-columns:1fr}
+  .agent-stats{grid-template-columns:repeat(2,1fr)}
+  html{font-size:14px}
 }
 </style>
 </head>
 <body>
 
 <!-- Header -->
-<header class="header">
-<div class="container header-inner">
-  <div class="header-brand">
-    <div>
-      <div class="header-title">Desempenho de Atendimento</div>
-      <div class="header-sub">DermaClinic — Analise de Qualidade e Conversao</div>
+<div class="header">
+  <div class="container header-inner">
+    <div class="header-brand">
+      <div>
+        <div class="header-title">DermaClinic</div>
+        <div class="header-sub">Relatório de Desempenho de Atendimento</div>
+      </div>
+    </div>
+    <div class="header-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Digital AI Analytics
     </div>
   </div>
-  <div class="header-badge">Fase de Calibracao — 98 conversas auditadas (94 avaliadas)</div>
 </div>
-</header>
 
 <!-- Period Banner -->
 <div class="period-banner">
-<div class="container period-inner">
-  <div>
-    <div class="period-title">Como esta o atendimento da DermaClinic?</div>
-    <div class="period-sub">Conversas reais do WhatsApp analisadas uma a uma — com evidencias para acao</div>
+  <div class="container period-inner">
+    <div>
+      <div class="period-title">Análise de Atendimento via WhatsApp</div>
+      <div class="period-sub">Período: 25 de agosto a 18 de outubro de 2026</div>
+    </div>
+    <div class="period-pills">
+      <span class="period-pill">197 conversas</span>
+      <span class="period-pill">121 analisadas</span>
+      <span class="period-pill">Pipeline IA v1</span>
+    </div>
   </div>
-  <div class="period-pills">
-    <span class="period-pill">Atualizado: 17/10/2026</span>
-    <span class="period-pill">94 conversas avaliadas</span>
-    <span class="period-pill">5 atendentes</span>
+</div>
+
+<!-- Navigation Tabs -->
+<div class="nav-tabs">
+  <div class="container nav-inner">
+    <div class="nav-tab active" onclick="showView('geral')">Visão Geral</div>
+    <div class="nav-tab" onclick="showView('ranking')">Ranking</div>
+    <div class="nav-tab" onclick="showView('dimensoes')">Dimensões</div>
+    <div class="nav-tab" onclick="showView('criticos')">Casos Críticos</div>
+    <div class="nav-tab" onclick="showView('padroes')">Padrões</div>
+    <div class="nav-tab" onclick="showView('metodologia')">Metodologia</div>
   </div>
 </div>
-</div>
 
-<!-- FILTER BAR -->
-<div class="filter-bar">
-<div class="container filter-inner">
-  <span class="filter-label">Filtrar:</span>
-  <button class="filter-btn active" onclick="showView('geral')">
-    Geral
-  </button>
-  <button class="filter-btn" onclick="showView('daniela')">
-    <span class="filter-dot" style="background:linear-gradient(135deg,#059669,#10B981)"></span>
-    Daniela Peixer
-  </button>
-  <button class="filter-btn" onclick="showView('alessandra')">
-    <span class="filter-dot" style="background:linear-gradient(135deg,#2D52EF,#6366F1)"></span>
-    Alessandra
-  </button>
-  <button class="filter-btn" onclick="showView('cristiane')">
-    <span class="filter-dot" style="background:linear-gradient(135deg,#D97706,#F59E0B)"></span>
-    Cristiane
-  </button>
-  <button class="filter-btn" onclick="showView('gabriella')">
-    <span class="filter-dot" style="background:linear-gradient(135deg,#94A3B8,#CBD5E1)"></span>
-    Gabriella
-  </button>
-  <button class="filter-btn" onclick="showView('daiane')">
-    <span class="filter-dot" style="background:linear-gradient(135deg,#8B5CF6,#A78BFA)"></span>
-    Daiane
-  </button>
-</div>
-</div>
+<div class="container" style="padding-top:32px">
 
-<div style="height:36px"></div>
-<div class="container">
-
-<!-- ================================================================ -->
-<!-- ========================= VIEW: GERAL ========================= -->
-<!-- ================================================================ -->
+<!-- ==================== VISÃO GERAL ==================== -->
 <div id="view-geral" class="view-section active">
 
-<!-- HOW TO READ -->
-<div class="howto">
-  <h3>Como ler este relatorio</h3>
-  <p>Este relatorio analisa conversas reais do WhatsApp da DermaClinic para responder: <strong>estamos convertendo leads em agendamentos?</strong> Cada conversa foi lida integralmente e avaliada em 6 criterios padronizados.</p>
-  <ul>
-    <li><strong>Conversao</strong> = o paciente agendou consulta? (confirmado via Chatwoot + Feegow)</li>
-    <li><strong>Empenho</strong> = a atendente se esforçou para converter ou desistiu rapido?</li>
-    <li><strong>Follow-up</strong> = houve acompanhamento quando o paciente nao respondeu?</li>
-    <li>Use os <strong>botoes acima</strong> para filtrar por atendente e ver detalhes individuais</li>
-    <li>Cada evidencia tem link direto para a conversa no Chatwoot</li>
-  </ul>
-</div>
-
-<!-- BIG NUMBERS -->
-<div class="section">
-<h2 class="section-title">Visao Geral do Atendimento</h2>
-<div class="big-numbers">
-  <div class="big-card green">
-    <div class="big-number">51%</div>
-    <div class="big-label">Taxa de Conversao</div>
-    <div class="big-sub">48 de 94 conversas converteram em agendamento</div>
-  </div>
-  <div class="big-card red">
-    <div class="big-number">49%</div>
-    <div class="big-label">Leads Perdidos</div>
-    <div class="big-sub">46 pacientes nao agendaram</div>
-  </div>
-  <div class="big-card orange">
-    <div class="big-number">33/46</div>
-    <div class="big-label">Sem Follow-up</div>
-    <div class="big-sub">72% das perdas nao tiveram acompanhamento</div>
-  </div>
-  <div class="big-card blue">
-    <div class="big-number">94</div>
-    <div class="big-label">Conversas Avaliadas</div>
-    <div class="big-sub">98 coletadas, 4 excluidas (NO_REPLY + B2B)</div>
-  </div>
-</div>
-
-<!-- Key Insight -->
-<div class="insight-box">
-  <div class="insight-title">O que os dados dizem</div>
-  <div class="insight-text">
-    A DermaClinic converte <strong>51% dos leads</strong> que chegam pelo WhatsApp. O principal problema nao e falta de conhecimento ou simpatia: e a <strong>resolucao prematura da conversa</strong> — atendentes resolvem antes do paciente responder, descartando leads ativos. Analise expandida com pipeline automatizado confirma os padroes identificados na fase de calibracao. <em>(4 conversas excluidas: 3 sem resposta humana e 1 prospeccao B2B.)</em>
-  </div>
-  <div class="insight-highlight">
-    <strong>Padrao critico:</strong> Em 72% dos leads perdidos, nao houve follow-up — sem envio de fotos, sem Instagram, sem prova social. O paciente simplesmente sumiu. Padrao consolidado: resolucao de conversas sem nenhuma resposta humana (leads descartados) e mensagens sem resposta por dias.
-  </div>
-  <div class="insight-highlight success">
-    <strong>O que funciona:</strong> Quando a atendente envia midia (fotos de resultados, Instagram, videos), a conversao e significativamente maior. As 3 melhores conversoes incluiram envio proativo de conteudo visual.
-  </div>
-</div>
-</div>
-
-<!-- CHARTS -->
-<div class="section">
-<h2 class="section-title">Comparativo entre Atendentes</h2>
-<div class="chart-row">
-  <div class="chart-box">
-    <div class="chart-title">Conversao por Atendente</div>
-    <canvas id="chartConversao" height="200"></canvas>
-  </div>
-  <div class="chart-box">
-    <div class="chart-title">Principais Motivos de Perda</div>
-    <canvas id="chartMotivos" height="200"></canvas>
-  </div>
-</div>
-</div>
-
-<!-- RANKING TABLE -->
-<div class="section">
-<h2 class="section-title">Ranking de Atendentes</h2>
-<p style="font-size:.88rem;color:var(--text-secondary);margin-bottom:16px">Clique no nome de uma atendente para ver o detalhamento completo.</p>
-
-<table class="ranking-table">
-<thead>
-<tr>
-  <th>Atendente</th>
-  <th>Conversas</th>
-  <th>Converteu</th>
-  <th>Nao Converteu</th>
-  <th>Taxa</th>
-  <th>Principal Problema</th>
-</tr>
-</thead>
-<tbody>
-<tr class="clickable" onclick="showView('daniela')">
-  <td><strong>Daniela Peixer</strong></td>
-  <td>55</td><td>27</td><td>28</td>
-  <td style="color:var(--danger);font-weight:700">49%</td>
-  <td>Resolucao prematura + template copy-paste</td>
-</tr>
-<tr class="clickable" onclick="showView('alessandra')">
-  <td><strong>Alessandra</strong></td>
-  <td>26</td><td>18</td><td>8</td>
-  <td style="color:var(--success);font-weight:700">69%</td>
-  <td>Copy-paste institucional em leads frios</td>
-</tr>
-<tr class="clickable" onclick="showView('cristiane')">
-  <td><strong>Cristiane</strong></td>
-  <td>8</td><td>2</td><td>6</td>
-  <td style="color:var(--danger);font-weight:700">25%</td>
-  <td>Resolve sem esperar, qualidade alta quando engaja</td>
-</tr>
-<tr class="clickable" onclick="showView('gabriella')">
-  <td><strong>Gabriella Hille</strong></td>
-  <td>1</td><td>0</td><td>0</td>
-  <td style="color:var(--text-muted);font-weight:700">—</td>
-  <td>Amostra insuficiente</td>
-</tr>
-<tr class="clickable" onclick="showView('daiane')">
-  <td><strong>Daiane</strong></td>
-  <td>3</td><td>1</td><td>2</td>
-  <td style="color:var(--danger);font-weight:700">33%</td>
-  <td>Amostra pequena</td>
-</tr>
-</tbody>
-</table>
-<p style="font-size:.78rem;color:var(--text-muted);margin-top:8px">* Muitas conversas envolvem mais de uma atendente (handoff). Os numeros refletem participacao, nao responsabilidade exclusiva.</p>
-</div>
-
-<!-- PATTERNS -->
-<div class="section">
-<h2 class="section-title">Onde estamos perdendo pacientes?</h2>
-<p style="font-size:.88rem;color:var(--text-secondary);margin-bottom:20px">Os 5 padroes mais frequentes que levam a perda de leads, ordenados por impacto.</p>
-
-<div class="pattern-card">
-  <div class="pattern-title"><span class="pattern-rank">#1</span> Preco informado sem construcao de valor</div>
-  <div class="pattern-desc">Paciente pergunta quanto custa, atendente responde o valor, paciente some. Faltou: enviar fotos de resultados, mencionar diferenciais, mostrar Instagram, explicar o que esta incluido na consulta.</div>
-  <div class="pattern-freq">Presente em 12 de 46 perdas (26%)</div>
-</div>
-<div class="pattern-card">
-  <div class="pattern-title"><span class="pattern-rank">#2</span> Ausencia de follow-up apos silencio</div>
-  <div class="pattern-desc">Paciente para de responder e ninguem retoma contato. Nao houve mensagem de acompanhamento em 24-48h. O lead esfria e nao volta mais.</div>
-  <div class="pattern-freq">Presente em 33 de 46 perdas (72%)</div>
-</div>
-<div class="pattern-card">
-  <div class="pattern-title"><span class="pattern-rank">#3</span> Resolucao prematura sem resposta</div>
-  <div class="pattern-desc">Atendente resolve a conversa antes de o paciente responder — ou sem enviar nenhuma mensagem. O lead e descartado sem chance de conversao.</div>
-  <div class="pattern-freq">Presente em 15 de 46 perdas (33%) — padrao consolidado na analise do pipeline</div>
-</div>
-<div class="pattern-card">
-  <div class="pattern-title"><span class="pattern-rank">#4</span> Copy-paste institucional no primeiro contato</div>
-  <div class="pattern-desc">Atendente envia bloco de texto padrao sem adaptar a necessidade do paciente. O paciente sente que esta falando com um robo.</div>
-  <div class="pattern-freq">Presente em 10 de 46 perdas (22%)</div>
-</div>
-<div class="pattern-card">
-  <div class="pattern-title"><span class="pattern-rank">#5</span> Handoff entre atendentes sem contexto</div>
-  <div class="pattern-desc">Paciente transferido de uma atendente para outra sem a nova ter lido o historico. Paciente precisa repetir o que ja disse.</div>
-  <div class="pattern-freq">Presente em 5 de 46 perdas (11%)</div>
-</div>
-<div class="pattern-card" style="border-left:4px solid var(--success)">
-  <div class="pattern-title"><span class="pattern-rank good">+</span> O que funciona (replicar)</div>
-  <div class="pattern-desc"><strong>Acolhimento + escuta ativa + midia:</strong> Quando a atendente pergunta sobre a necessidade, envia fotos de resultados e Instagram antes de falar em preco, a taxa de conversao sobe significativamente. Conversas modelo: #19205, #19119.</div>
-  <div class="pattern-freq good">Presente nas conversoes de maior qualidade</div>
-</div>
-</div>
-
-<!-- COMPLETE TABLE -->
-<div class="section">
-<h2 class="section-title">Todas as Conversas Analisadas</h2>
-<p style="font-size:.88rem;color:var(--text-secondary);margin-bottom:16px">Lista completa com resultado de conversao e atendente(s). Links abrem no Chatwoot.</p>
-
-<table class="data-table">
-<thead>
-<tr><th>#</th><th>Paciente</th><th>Atendente(s)</th><th>Origem</th><th>Conversao</th><th>Observacao</th></tr>
-</thead>
-<tbody>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19205" target="_blank">19205</a></td><td>Mara</td><td>Alessandra, Cristiane</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Conversa modelo</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19236" target="_blank">19236</a></td><td>Daniela M.</td><td>Alessandra, Daniela P.</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Mensagem deletada, mas converteu</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19221" target="_blank">19221</a></td><td>Maicon</td><td>Alessandra</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Agil — horarios em 40min</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19119" target="_blank">19119</a></td><td>Bruna</td><td>Daniela P.</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Conversa modelo</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19138" target="_blank">19138</a></td><td>Gabriela</td><td>Daniela P.</td><td>Birthday</td><td><span class="conv-badge sim">Agendou</span></td><td>ROI do dispatch automatico</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19109" target="_blank">19109</a></td><td>Telmo</td><td>Alessandra, Daniela P.</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmado</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18974" target="_blank">18974</a></td><td>Gabriel</td><td>Cristiane, Daniela P.</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Reagendamento valido</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18946" target="_blank">18946</a></td><td>Diego</td><td>Alessandra</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Conversao rapida</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18893" target="_blank">18893</a></td><td>Nadja</td><td>Alessandra, Daniela P.</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Msg deletada, converteu</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18887" target="_blank">18887</a></td><td>Luisa</td><td>Daniela P.</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Audios nao transcritos</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18875" target="_blank">18875</a></td><td>Rosimeri</td><td>Alessandra, Daniela P.</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Conversao limpa</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18150" target="_blank">18150</a></td><td>Greicy</td><td>Daiane, Daniela P.</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Via outro canal</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19200" target="_blank">19200</a></td><td>Oscalino</td><td>Daniela P.</td><td>Relacionamento</td><td><span class="conv-badge parcial">Interesse</span></td><td>Sem data confirmada, interesse mantido</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19147" target="_blank">19147</a></td><td>Cris</td><td>Daniela P.</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Demora 1h23 + zero retencao</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19130" target="_blank">19130</a></td><td>Gustavo</td><td>Alessandra</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Copy-paste institucional</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19115" target="_blank">19115</a></td><td>Adriano</td><td>Alessandra, Daniela P.</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Preco direto + zero follow-up</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18996" target="_blank">18996</a></td><td>Thalita</td><td>Cristiane</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Label falso-positivo</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18894" target="_blank">18894</a></td><td>Jessica</td><td>Daniela P.</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Intencao sem follow-up</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19020" target="_blank">19020</a></td><td>Selesia</td><td>Cristiane, Alessandra</td><td>Campanhas</td><td><span class="conv-badge nao">Perdido</span></td><td>Protocolo campanha incompleto</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19004" target="_blank">19004</a></td><td>Valdete</td><td>Daniela P., Cristiane</td><td>Campanhas</td><td><span class="conv-badge nao">Perdido</span></td><td>Handoff + abandono</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19026" target="_blank">19026</a></td><td>Simone</td><td>Alessandra</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Intermediaria nao convertida</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19238" target="_blank">19238</a></td><td>Patricia/Helio</td><td>Cristiane</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Atendimento modelo — orientacoes + carinho</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19233" target="_blank">19233</a></td><td>Camile</td><td>Daniela P.</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Flexivel com reagendamento</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19219" target="_blank">19219</a></td><td>Paulo H.</td><td>Daniela P., Alessandra</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Vitiligo — template generico mas converteu</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19232" target="_blank">19232</a></td><td>Amanda Ribeiro</td><td>—</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendamento interno</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19242" target="_blank">19242</a></td><td>Cita</td><td>Daniela P.</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Resolveu sem responder (3 seg)</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19228" target="_blank">19228</a></td><td>Bruno Farias</td><td>Daniela P.</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Ignorado — mandou oi 3x</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19218" target="_blank">19218</a></td><td>Maria Jesus</td><td>Daniela P.</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Resolveu sem interagir (manchas/flacidez)</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19241" target="_blank">19241</a></td><td>Alberto</td><td>Daniela P.</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Mesmo template 2x, sem agendar</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19216" target="_blank">19216</a></td><td>Alexandre</td><td>Daniela P.</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Template CO2, sem resposta</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19231" target="_blank">19231</a></td><td>Fernando Simas</td><td>Daniela P.</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Preco direto R$3.500-5.000</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19239" target="_blank">19239</a></td><td>Liciane</td><td>Daniela P.</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Indicada por medica, choque preco R$1.800</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19240" target="_blank">19240</a></td><td>Thalyson</td><td>Daniela P.</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Paciente de MG, encaminhado</td></tr>
-<tr style="background:#FFFBEB"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19244" target="_blank">19244</a></td><td>Clarisse</td><td>Cristiane</td><td>Relacionamento</td><td><span class="conv-badge parcial">Incompleta</span></td><td>Resolveu sem esperar resposta</td></tr>
-<tr style="background:#FFFBEB"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19243" target="_blank">19243</a></td><td>Edilson</td><td>Clara/bot</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Sem follow-up humano</td></tr>
-<tr style="background:#FFFBEB"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19214" target="_blank">19214</a></td><td>Nany</td><td>Daniela P., Cristiane</td><td>Relacionamento</td><td><span class="conv-badge parcial">Incompleta</span></td><td>Label 3-agendamento falsa</td></tr>
-<tr style="background:#FFFBEB"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18941" target="_blank">18941</a></td><td>Islana</td><td>Daniela P., Alessandra</td><td>Relacionamento</td><td><span class="conv-badge parcial">No-show</span></td><td>Agendou mas nao compareceu (Feegow)</td></tr>
-<tr style="background:#F1F5F9"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19227" target="_blank">19227</a></td><td>Cristina</td><td>Gabriella</td><td>Relacionamento</td><td><span style="color:var(--text-muted);font-size:.78rem">Fora de escopo</span></td><td>Paciente antiga, esclarecimento</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17591" target="_blank">17591</a></td><td>Francine Menezes</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Conversa encerrada sem esperar resposta do paciente.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17598" target="_blank">17598</a></td><td>Priscila Advogada</td><td>Cristiane</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Paciente desmarcou por problemas de saude, atendente compree</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17610" target="_blank">17610</a></td><td>Beatriz</td><td>Alessandra</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendou Botox para 12/11 as 10:30. Atendente ofereceu opcoes</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17646" target="_blank">17646</a></td><td>Greice</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Confirmacao + novo tratamento apresentado, mas resolvida sem</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17654" target="_blank">17654</a></td><td>Carolina</td><td>Alessandra</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Tentativas de agendamento e documentacao, resolvida sem espe</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17670" target="_blank">17670</a></td><td>Liliane Lika</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Alteracao de horario confirmada para 27/10 as 13:30.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17746" target="_blank">17746</a></td><td>Eduardo</td><td>Daiane</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Confirmacao de horario de consulta agendada anteriormente.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17821" target="_blank">17821</a></td><td>Jessica</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmou agendamento 19/10 as 17:00, respondeu duvidas sobr</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17823" target="_blank">17823</a></td><td>Zamoel</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmou consulta 15/10 as 15:30.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17855" target="_blank">17855</a></td><td>Maria Eduarda Souza</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendamento confirmado 28/10 as 15h. Atendimento atencioso.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17887" target="_blank">17887</a></td><td>Felipe Lubeck</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Paciente enviou multiplas mensagens sobre equipamentos sem r</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17911" target="_blank">17911</a></td><td>Carolina Borini Cherem</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendou consulta 05/11 as 17h. Boa comunicacao.</td></tr>
-<tr style="background:#F1F5F9"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18023" target="_blank">18023</a></td><td>Adelir</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge parcial">Excluida</span></td><td>Paciente nao respondeu (NO_REPLY). Excluida.</td></tr>
-<tr style="background:#F1F5F9"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18024" target="_blank">18024</a></td><td>Adelir</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge parcial">Excluida</span></td><td>Paciente demonstrou interesse mas 3 mensagens ficaram sem re</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18034" target="_blank">18034</a></td><td>Bruna Tartaglia</td><td>Alessandra</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendou avaliacao 20/10 as 10h30.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18044" target="_blank">18044</a></td><td>Ester Loureiro Muller</td><td>Alessandra</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendou consulta 23/09 as 10:00. Atendimento proativo.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18046" target="_blank">18046</a></td><td>Katarini</td><td>Alessandra</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendamento confirmado 14/09 as 13:00. Proativa no ajuste de</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18064" target="_blank">18064</a></td><td>Raquel</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Conversa de operadora TIM, sem relacao com DermaClinic.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18076" target="_blank">18076</a></td><td>Mayara Cristina</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Remarcou consulta por imprevisto (pneu). Atendente atenciosa</td></tr>
-<tr style="background:#F1F5F9"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18083" target="_blank">18083</a></td><td>Lilian</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge parcial">Excluida</span></td><td>Paciente nao respondeu (NO_REPLY). Excluida.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18089" target="_blank">18089</a></td><td>KENEDY</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Paciente recusou valor R$980 ("Ta louco quero nao"). Template repetido 2x</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18091" target="_blank">18091</a></td><td>Fabiana</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Buscava falar com gestao. Sem interesse em atendimento medic</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18096" target="_blank">18096</a></td><td>Elaine</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Solicitou valor de consulta, recebeu preco mas sem follow-up</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18111" target="_blank">18111</a></td><td>Ilana</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Solicitou informacoes sobre consulta. Respondida prontamente</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18119" target="_blank">18119</a></td><td>Ana Luiza</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendou avaliacao para mae 28/09 as 13:30.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18131" target="_blank">18131</a></td><td>Thayse</td><td>Digital AI</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Template repetido 3x sem personalizacao. Campanha.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18137" target="_blank">18137</a></td><td>Ivonete</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmou agendamento 29/09 as 14:30. Acolhedor e personaliz</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18140" target="_blank">18140</a></td><td>Paciente</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Perguntas sobre custos sem respostas claras. Resolvida sem f</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18156" target="_blank">18156</a></td><td>Duda Vasques</td><td>Cristiane</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmou consulta online. Atendimento amigavel.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18251" target="_blank">18251</a></td><td>Elaine</td><td>Alessandra</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Conversa cordial, confirmou recebimento de emails. Sem agend</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18254" target="_blank">18254</a></td><td>Paciente</td><td>Alessandra</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Interesse em sardas e furinhos. Agendou avaliacao.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18263" target="_blank">18263</a></td><td>Transligue Transportes</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Perguntou sobre capilaroscopia (nao realizam). Template repe</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18265" target="_blank">18265</a></td><td>Cleia</td><td>Alessandra</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendou consulta apos informacoes detalhadas.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18267" target="_blank">18267</a></td><td>Ester Rodrigues da Silva</td><td>Alessandra</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Demonstrou interesse mas resolvida sem aguardar resposta apo</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18268" target="_blank">18268</a></td><td>Junior</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>4 mensagens completamente sem resposta humana.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18269" target="_blank">18269</a></td><td>Cleia</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Interacao bot + humano sem confirmacao de agendamento.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18270" target="_blank">18270</a></td><td>Israel De Souza</td><td>Alessandra</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Perguntou sobre Aquapure, recebeu informacoes. Sem confirmac</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18271" target="_blank">18271</a></td><td>Lucca Fiamoncini</td><td>Alessandra</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Interesse em manchas de pele, 3 mensagens sem resposta.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18272" target="_blank">18272</a></td><td>Solange</td><td>Alessandra</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Solicitou consulta urgente, completamente sem resposta.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18296" target="_blank">18296</a></td><td>CESAR ALBERTO SCHMITT</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Interesse em avaliacao, resolvida sem resposta.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18373" target="_blank">18373</a></td><td>Ilana</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Mensagens repetidas para agendamento errado. Paciente insati</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18383" target="_blank">18383</a></td><td>Francine Menezes</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Tentou agendar mas nao confirmou nova data.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18425" target="_blank">18425</a></td><td>Yasmin de Amorim</td><td>Alessandra</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendou consulta para amanha as 10:00. Atenciosa e eficiente</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18437" target="_blank">18437</a></td><td>Julita</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmou agendamento 28/10 as 14:00. Tom amigavel.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18439" target="_blank">18439</a></td><td>Alexandre B Sgrott</td><td>Alessandra</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmou agendamento mesmo dia. Informou novo endereco.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18457" target="_blank">18457</a></td><td>Victoria Martins</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendou consulta 22/10 as 13:30. Atenciosa e amigavel.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18477" target="_blank">18477</a></td><td>Adriane</td><td>Alessandra</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmou agendamento retorno. Cordial.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18504" target="_blank">18504</a></td><td>Camila</td><td>Alessandra</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Remanejou consulta para 09/11 as 13:30. Comunicacao clara.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18547" target="_blank">18547</a></td><td>Luma Bertao de Oliveira</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendou com Dra. Raquel 14/10 as 10h30.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18653" target="_blank">18653</a></td><td>Suely Nobrega Janini</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendou consulta 22/10 as 10:00. Adaptou horarios.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18701" target="_blank">18701</a></td><td>Fabiane</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Interesse em estetica, recebeu precos. Sem confirmacao.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18708" target="_blank">18708</a></td><td>frosty-silence-585</td><td>Cristiane</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Multiplos anexos sem respostas significativas.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18719" target="_blank">18719</a></td><td>Monica</td><td>Cristiane</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Sem agendamento confirmado. Follow-up sobre nota fiscal nece</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18768" target="_blank">18768</a></td><td>Sergio Lenzi</td><td>Alessandra</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmou agendamento 15/10 as 17:30. Cordial e atenta.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18797" target="_blank">18797</a></td><td>Thalita Domingos</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Consulta confirmada mas follow-up falhou apos multiplas tent</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18798" target="_blank">18798</a></td><td>Ieda</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>7 mensagens da paciente sem resposta humana.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18799" target="_blank">18799</a></td><td>Debora</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendou 26/10 as 15:30 com Dra. Eoda. Duvidas respondidas.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18836" target="_blank">18836</a></td><td>Liliane Lika</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmou consulta 09/10. Cordial e eficiente.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18948" target="_blank">18948</a></td><td>Bruno</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmou agendamento 14/10. Empatia quando ficou doente.</td></tr>
-<tr style="background:#F1F5F9"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19237" target="_blank">19237</a></td><td>Isabelli</td><td>Daniela Peixer</td><td>Pipeline</td><td><span class="conv-badge" style="background:#94A3B8;color:#fff">Excluida</span></td><td>Prospeccao B2B (vendedora CheckApp) — nao e paciente</td></tr>
-</tbody>
-</table>
-</div>
-
-<!-- DIARY -->
-<div class="section diary-section">
-<h2 class="section-title">Diario de Atendimento</h2>
-<p style="font-size:.88rem;color:var(--text-secondary);margin-bottom:20px">Analise dia a dia dos atendimentos. Clique no dia para ver os pontos criticos com link direto para o Chatwoot.</p>
-
-<!-- DAY: 15/10 -->
-<div class="diary-day">
-  <div class="diary-header" onclick="this.parentElement.classList.toggle('open')">
-    <div class="diary-date">15/10/2026</div>
-    <div class="diary-summary">17 conversas com interacao humana analisadas</div>
-    <div class="diary-pills">
-      <span class="diary-pill alert">4 alertas</span>
-      <span class="diary-pill ok">6 conversoes</span>
-      <span class="diary-pill neutral">4 convenio</span>
+  <!-- Big Numbers -->
+  <div class="big-numbers">
+    <div class="big-card blue">
+      <div class="big-number">197</div>
+      <div class="big-label">Conversas Totais</div>
+      <div class="big-sub">121 analisadas · 76 excluídas</div>
     </div>
-    <svg class="diary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-  </div>
-  <div class="diary-body">
-
-    <div style="background:var(--danger-light);border-radius:8px;padding:14px 16px;margin-bottom:16px;font-size:.84rem;color:var(--text-primary);line-height:1.6">
-      <strong style="color:var(--danger)">Diagnostico do dia:</strong> 4 leads descartados sem resposta humana (Daniela resolveu sem interagir). Taxa de conversao 46% — abaixo da media. Cristiane destaque positivo novamente.
+    <div class="big-card green">
+      <div class="big-number">39.7%</div>
+      <div class="big-label">Taxa de Conversão</div>
+      <div class="big-sub">48 de 121 convertidas</div>
     </div>
-
-    <div style="font-family:var(--font-head);font-weight:700;font-size:.88rem;color:var(--danger);margin-bottom:10px;display:flex;align-items:center;gap:6px">
-      <span style="width:8px;height:8px;border-radius:50%;background:var(--danger);flex-shrink:0"></span> Conversas criticas
+    <div class="big-card orange">
+      <div class="big-number">5.94</div>
+      <div class="big-label">Score Médio</div>
+      <div class="big-sub">Escala 0–10 (Quality Score v2)</div>
     </div>
-
-    <div class="diary-item">
-      <div class="diary-item-id"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19242" target="_blank">#19242</a></div>
-      <div class="diary-item-text"><strong>Cita (agendar consulta)</strong> — Lead pediu para agendar. Daniela <strong>resolveu sem enviar nenhuma mensagem</strong> — descartou o lead.</div>
-      <div class="diary-item-badge"><span class="evidence-tag critica" style="margin:0">ALTA</span></div>
+    <div class="big-card red">
+      <div class="big-number">69.9%</div>
+      <div class="big-label">Follow-up Falho</div>
+      <div class="big-sub">54 de 121 sem follow-up (excl. N/A)</div>
     </div>
+  </div>
 
-    <div class="diary-item">
-      <div class="diary-item-id"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19228" target="_blank">#19228</a></div>
-      <div class="diary-item-text"><strong>Bruno (oi 3x)</strong> — Paciente mandou "oi" 3 vezes em 21 minutos. <strong>Completamente ignorado</strong>. Daniela resolveu 2h depois sem responder.</div>
-      <div class="diary-item-badge"><span class="evidence-tag critica" style="margin:0">ALTA</span></div>
+  <!-- Insight principal -->
+  <div class="insight-box">
+    <div class="insight-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      Diagnóstico Executivo
     </div>
-
-    <div class="diary-item">
-      <div class="diary-item-id"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19218" target="_blank">#19218</a></div>
-      <div class="diary-item-text"><strong>Maria Jesus (manchas e flacidez)</strong> — Lead com interesse claro. Clara atendeu bem. <strong>Daniela resolveu sem interagir</strong> — lead descartada.</div>
-      <div class="diary-item-badge"><span class="evidence-tag critica" style="margin:0">ALTA</span></div>
+    <div class="insight-text">
+      Das <strong>197 conversas</strong> no período, <strong>76 foram excluídas</strong> automaticamente (44 campanhas sem resposta, 24 convênios, 8 prospecções B2B). Das 121 analisadas, o principal problema identificado é a <strong>ausência de follow-up</strong>: 54 conversas (44.6%) tiveram follow-up classificado como "falhou" — o paciente demonstrou interesse mas a equipe não retomou o contato.
+      <div class="insight-highlight">
+        <strong>Problema #1:</strong> Follow-up falho é responsável por <strong>69.9% das perdas</strong> (51 de 73 não-convertidas). Pacientes interessados são abandonados sem retorno, representando receita diretamente perdida.
+      </div>
+      <div class="insight-highlight success">
+        <strong>Ponto positivo:</strong> A qualidade de escrita está alta — <strong>74.4% das conversas</strong> tiveram escrita classificada como "boa", demonstrando profissionalismo na comunicação textual.
+      </div>
     </div>
+  </div>
 
-    <div class="diary-item">
-      <div class="diary-item-id"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19241" target="_blank">#19241</a></div>
-      <div class="diary-item-text"><strong>Alberto (peeling de fenol)</strong> — Voltou <strong>2x pedindo consulta</strong>, recebeu o mesmo template identico as 2 vezes. Nenhuma tentativa de agendar. Label "3-agendamento" falsa.</div>
-      <div class="diary-item-badge"><span class="evidence-tag critica" style="margin:0">ALTA</span></div>
+  <!-- Charts Row 1: Conversão + Severidade -->
+  <div class="chart-row">
+    <div class="chart-box">
+      <div class="chart-title">Distribuição de Conversão</div>
+      <canvas id="chartConversao"></canvas>
     </div>
-
-    <div style="font-family:var(--font-head);font-weight:700;font-size:.88rem;color:var(--warning);margin:16px 0 10px;display:flex;align-items:center;gap:6px">
-      <span style="width:8px;height:8px;border-radius:50%;background:var(--warning);flex-shrink:0"></span> Atencao
+    <div class="chart-box">
+      <div class="chart-title">Severidade dos Atendimentos</div>
+      <canvas id="chartSeveridade"></canvas>
     </div>
+  </div>
 
-    <div class="diary-item">
-      <div class="diary-item-id"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19239" target="_blank">#19239</a></div>
-      <div class="diary-item-text"><strong>Liciane (laser vasinhos)</strong> — Indicada por Dra. Ana Maria. Choque com R$1.800/sessao. Daniela confirmou valor sem contextualizar. <strong>Gap de 3h16</strong> na resposta do dia seguinte.</div>
-      <div class="diary-item-badge"><span class="evidence-tag alerta" style="margin:0">MEDIA</span></div>
+  <!-- Charts Row 2: Motivos de Perda + Follow-up -->
+  <div class="chart-row">
+    <div class="chart-box">
+      <div class="chart-title">Motivos de Perda (Não-Convertidas)</div>
+      <canvas id="chartMotivos"></canvas>
     </div>
-
-    <div class="diary-item">
-      <div class="diary-item-id"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19231" target="_blank">#19231</a></div>
-      <div class="diary-item-text"><strong>Fernando (remocao cirurgica)</strong> — Preco direto (R$3.500-5.000) sem propor avaliacao primeiro. Sem follow-up.</div>
-      <div class="diary-item-badge"><span class="evidence-tag alerta" style="margin:0">MEDIA</span></div>
+    <div class="chart-box">
+      <div class="chart-title">Distribuição de Follow-up</div>
+      <canvas id="chartFollowup"></canvas>
     </div>
+  </div>
 
-    <div style="font-family:var(--font-head);font-weight:700;font-size:.88rem;color:var(--success);margin:16px 0 10px;display:flex;align-items:center;gap:6px">
-      <span style="width:8px;height:8px;border-radius:50%;background:var(--success);flex-shrink:0"></span> Referencias do dia
+  <!-- Charts Row 3: Dia da Semana + Hora do Dia -->
+  <div class="chart-row">
+    <div class="chart-box">
+      <div class="chart-title">Score Médio por Dia da Semana</div>
+      <canvas id="chartDow"></canvas>
     </div>
-
-    <div class="diary-item">
-      <div class="diary-item-id"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19238" target="_blank">#19238</a></div>
-      <div class="diary-item-text"><strong>Patricia/Helio (mapeamento) — Cristiane</strong> — Adaptou out→nov, agendou 09/11, enviou orientacoes de preparo, despedida calorosa. <strong>Atendimento modelo.</strong></div>
-      <div class="diary-item-badge"><span class="evidence-tag positivo" style="margin:0">REF</span></div>
+    <div class="chart-box">
+      <div class="chart-title">Score Médio por Hora do Dia</div>
+      <canvas id="chartHour"></canvas>
     </div>
+  </div>
 
-    <div class="diary-item">
-      <div class="diary-item-id"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19233" target="_blank">#19233</a></div>
-      <div class="diary-item-text"><strong>Camile (mapeamento) — Daniela</strong> — Flexivel com reagendamento 13h→14h por transito. Atendimento atencioso.</div>
-      <div class="diary-item-badge"><span class="evidence-tag positivo" style="margin:0">REF</span></div>
+  <!-- Exclusões -->
+  <div class="insight-box" style="background:var(--bg)">
+    <div class="insight-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 14.14 14.14"/></svg>
+      Conversas Excluídas (76)
     </div>
-
-    <div style="background:#F1F5F9;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:.82rem;color:var(--text-secondary);line-height:1.6">
-      <strong style="color:var(--text-primary)">Padroes do dia:</strong>
-      Resolucao sem resposta (4/17) · Template copy-paste (3/17) · Labels falsas (2/17: <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19214" target="_blank">#19214</a>, <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19241" target="_blank">#19241</a>) · Preco sem contexto (2/17) · Sem follow-up (6/6 perdas)
+    <div class="insight-text">
+      <strong>44 campanhas sem resposta</strong> — mensagens de campanha onde o paciente não interagiu<br>
+      <strong>24 convênios</strong> — atendimentos via convênio com dinâmica diferente<br>
+      <strong>8 prospecções B2B</strong> — vendedores de sistemas/serviços (não pacientes)
     </div>
-
   </div>
+
 </div>
 
-<!-- DAY: 16/10 -->
-<div class="diary-day open">
-  <div class="diary-header" onclick="this.parentElement.classList.toggle('open')">
-    <div class="diary-date">16/10/2026</div>
-    <div class="diary-summary">12 conversas com interacao real analisadas</div>
-    <div class="diary-pills">
-      <span class="diary-pill alert">3 alertas</span>
-      <span class="diary-pill ok">4 conversoes</span>
-      <span class="diary-pill neutral">3 convenio</span>
+<!-- ==================== RANKING ==================== -->
+<div id="view-ranking" class="view-section">
+
+  <h2 class="section-title">Ranking de Atendentes</h2>
+
+  <!-- Daniela -->
+  <div class="agent-card">
+    <div class="agent-card-header">
+      <div class="agent-avatar" style="background:var(--brand)">DP</div>
+      <div style="flex:1">
+        <div class="agent-name">Daniela Peixer</div>
+        <div class="agent-meta">75 conversas analisadas · 40.0% conversão · Score 6.07</div>
+      </div>
+      <div class="score-badge mid">6.1</div>
     </div>
-    <svg class="diary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-  </div>
-  <div class="diary-body">
-
-    <div style="background:var(--danger-light);border-radius:8px;padding:14px 16px;margin-bottom:16px;font-size:.84rem;color:var(--text-primary);line-height:1.6">
-      <strong style="color:var(--danger)">Diagnostico do dia:</strong> Daniela resolveu 7/12 conversas antes de esperar resposta. Labels "3-agendamento" falsas em 3 conversas. Cristiane foi destaque positivo.
+    <div class="agent-stats">
+      <div class="agent-stat">
+        <div class="agent-stat-value" style="color:var(--brand)">6.7</div>
+        <div class="agent-stat-label">Empenho</div>
+      </div>
+      <div class="agent-stat">
+        <div class="agent-stat-value" style="color:var(--danger)">4.4</div>
+        <div class="agent-stat-label">Follow-up</div>
+      </div>
+      <div class="agent-stat">
+        <div class="agent-stat-value" style="color:var(--warning)">5.9</div>
+        <div class="agent-stat-label">Tempo Resp.</div>
+      </div>
+      <div class="agent-stat">
+        <div class="agent-stat-value" style="color:var(--warning)">5.7</div>
+        <div class="agent-stat-label">Preço</div>
+      </div>
+      <div class="agent-stat">
+        <div class="agent-stat-value" style="color:var(--success)">8.9</div>
+        <div class="agent-stat-label">Escrita</div>
+      </div>
     </div>
-
-    <!-- Critical items -->
-    <div style="font-family:var(--font-head);font-weight:700;font-size:.88rem;color:var(--danger);margin-bottom:10px;display:flex;align-items:center;gap:6px">
-      <span style="width:8px;height:8px;border-radius:50%;background:var(--danger);flex-shrink:0"></span> Conversas criticas
+    <div style="margin-top:12px;font-size:.84rem;color:var(--text-secondary)">
+      <strong>Severidade:</strong> 26 baixa · 20 média · 15 alta · 14 crítica
     </div>
+  </div>
 
-    <div class="diary-item">
-      <div class="diary-item-id"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19246" target="_blank">#19246</a></div>
-      <div class="diary-item-text"><strong>Renato (HPV/crioterapia)</strong> — Queixa sensivel ficou <strong>3h21 sem resposta humana</strong> em horario comercial. Daniela respondeu com template generico. Paciente nunca respondeu.</div>
-      <div class="diary-item-badge"><span class="evidence-tag critica" style="margin:0">ALTA</span></div>
+  <!-- Alessandra -->
+  <div class="agent-card">
+    <div class="agent-card-header">
+      <div class="agent-avatar" style="background:#8B5CF6">AL</div>
+      <div style="flex:1">
+        <div class="agent-name">Alessandra</div>
+        <div class="agent-meta">33 conversas analisadas · 42.4% conversão · Score 5.75</div>
+      </div>
+      <div class="score-badge mid">5.8</div>
     </div>
-
-    <div class="diary-item">
-      <div class="diary-item-id"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19257" target="_blank">#19257</a></div>
-      <div class="diary-item-text"><strong>OFA (avaliacao facial)</strong> — Lead <strong>indicado por amigo</strong> tratado com descaso: Daniela resolveu 2x sem responder, adicionou label falsa. Alessandra mandou textao generico.</div>
-      <div class="diary-item-badge"><span class="evidence-tag critica" style="margin:0">ALTA</span></div>
+    <div class="agent-stats">
+      <div class="agent-stat">
+        <div class="agent-stat-value" style="color:var(--brand)">6.1</div>
+        <div class="agent-stat-label">Empenho</div>
+      </div>
+      <div class="agent-stat">
+        <div class="agent-stat-value" style="color:var(--danger)">4.0</div>
+        <div class="agent-stat-label">Follow-up</div>
+      </div>
+      <div class="agent-stat">
+        <div class="agent-stat-value" style="color:var(--warning)">5.9</div>
+        <div class="agent-stat-label">Tempo Resp.</div>
+      </div>
+      <div class="agent-stat">
+        <div class="agent-stat-value" style="color:var(--warning)">5.3</div>
+        <div class="agent-stat-label">Preço</div>
+      </div>
+      <div class="agent-stat">
+        <div class="agent-stat-value" style="color:var(--success)">9.4</div>
+        <div class="agent-stat-label">Escrita</div>
+      </div>
     </div>
-
-    <div class="diary-item">
-      <div class="diary-item-id"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19239" target="_blank">#19239</a></div>
-      <div class="diary-item-text"><strong>Liciane (laser vasinhos)</strong> — Indicada pela Dra. Ana Maria, choque com preco R$1.800. Daniela confirmou valor sem contextualizar tecnologia, sem antes/depois, sem Instagram.</div>
-      <div class="diary-item-badge"><span class="evidence-tag alerta" style="margin:0">MEDIA</span></div>
+    <div style="margin-top:12px;font-size:.84rem;color:var(--text-secondary)">
+      <strong>Severidade:</strong> 9 baixa · 7 média · 13 alta · 4 crítica
     </div>
+  </div>
 
-    <!-- Positive items -->
-    <div style="font-family:var(--font-head);font-weight:700;font-size:.88rem;color:var(--success);margin:16px 0 10px;display:flex;align-items:center;gap:6px">
-      <span style="width:8px;height:8px;border-radius:50%;background:var(--success);flex-shrink:0"></span> Referencia do dia
+  <!-- Cristiane -->
+  <div class="agent-card">
+    <div class="agent-card-header">
+      <div class="agent-avatar" style="background:#EC4899">CR</div>
+      <div style="flex:1">
+        <div class="agent-name">Cristiane</div>
+        <div class="agent-meta">8 conversas analisadas · 37.5% conversão · Score 5.98</div>
+      </div>
+      <div class="score-badge mid">6.0</div>
     </div>
-
-    <div class="diary-item">
-      <div class="diary-item-id"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19238" target="_blank">#19238</a></div>
-      <div class="diary-item-text"><strong>Patricia/Helio (mapeamento) — Cristiane</strong> — Adaptou datas (out → nov), pediu nome completo, agendou com Dra. Raquel, enviou orientacoes de preparo e se despediu com carinho. <strong>Atendimento modelo.</strong></div>
-      <div class="diary-item-badge"><span class="evidence-tag positivo" style="margin:0">REF</span></div>
+    <div class="agent-stats">
+      <div class="agent-stat">
+        <div class="agent-stat-value" style="color:var(--brand)">6.5</div>
+        <div class="agent-stat-label">Empenho</div>
+      </div>
+      <div class="agent-stat">
+        <div class="agent-stat-value" style="color:var(--warning)">5.5</div>
+        <div class="agent-stat-label">Follow-up</div>
+      </div>
+      <div class="agent-stat">
+        <div class="agent-stat-value" style="color:var(--warning)">5.0</div>
+        <div class="agent-stat-label">Tempo Resp.</div>
+      </div>
+      <div class="agent-stat">
+        <div class="agent-stat-value" style="color:var(--warning)">5.0</div>
+        <div class="agent-stat-label">Preço</div>
+      </div>
+      <div class="agent-stat">
+        <div class="agent-stat-value" style="color:var(--success)">9.0</div>
+        <div class="agent-stat-label">Escrita</div>
+      </div>
     </div>
-
-    <!-- Patterns summary -->
-    <div style="background:#F1F5F9;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:.82rem;color:var(--text-secondary);line-height:1.6">
-      <strong style="color:var(--text-primary)">Padroes do dia:</strong>
-      Resolucao prematura (7/12) · Textao copy-paste (4/12) · Labels falsas (3/12) · Sem follow-up (3/12) ·
-      <span style="color:var(--danger)">Erro:</span> copy-paste "cirurgiao vascular" em <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19256" target="_blank">#19256</a> (Melissa e dermatologista)
+    <div style="margin-top:12px;font-size:.84rem;color:var(--text-secondary)">
+      <strong>Severidade:</strong> 1 baixa · 4 média · 1 alta · 2 crítica
     </div>
-
   </div>
-</div>
 
-<!-- Future days will be added here -->
-
-</div>
-
-<!-- METHODOLOGY -->
-<div class="section">
-<h2 class="section-title">Metodologia</h2>
-<div style="background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:20px 24px;box-shadow:var(--shadow-sm)">
-  <div style="font-size:.84rem;color:var(--text-secondary);line-height:1.7">
-    <p>Cada conversa foi lida na integra via API do Chatwoot e analisada em 6 criterios padronizados: <strong>Conversao</strong>, <strong>Empenho</strong>, <strong>Escrita</strong>, <strong>Tempo de Resposta</strong>, <strong>Abordagem do Preco</strong> e <strong>Follow-up</strong>.</p>
-    <p style="margin-top:8px">A conversao foi verificada cruzando com dados do <strong>Feegow</strong> (sistema de agendamento) para confirmar se o paciente realmente compareceu.</p>
-    <p style="margin-top:8px">O processo de calibracao incluiu <strong>5 sessoes de validacao humana</strong> pela gestao da clinica, gerando 18 licoes que refinaram os criterios.</p>
-    <p style="margin-top:12px;font-size:.78rem;color:var(--text-muted)">Relatorio gerado pela Digital AI — digital-ai.tech</p>
+  <!-- Daiane -->
+  <div class="agent-card">
+    <div class="agent-card-header">
+      <div class="agent-avatar" style="background:#F59E0B">DA</div>
+      <div style="flex:1">
+        <div class="agent-name">Daiane</div>
+        <div class="agent-meta">4 conversas analisadas · 25.0% conversão · Score 6.14</div>
+      </div>
+      <div class="score-badge mid">6.1</div>
+    </div>
+    <div class="agent-stats">
+      <div class="agent-stat">
+        <div class="agent-stat-value" style="color:var(--brand)">6.0</div>
+        <div class="agent-stat-label">Empenho</div>
+      </div>
+      <div class="agent-stat">
+        <div class="agent-stat-value" style="color:var(--brand)">6.3</div>
+        <div class="agent-stat-label">Follow-up</div>
+      </div>
+      <div class="agent-stat">
+        <div class="agent-stat-value" style="color:var(--success)">7.0</div>
+        <div class="agent-stat-label">Tempo Resp.</div>
+      </div>
+      <div class="agent-stat">
+        <div class="agent-stat-value" style="color:var(--danger)">4.5</div>
+        <div class="agent-stat-label">Preço</div>
+      </div>
+      <div class="agent-stat">
+        <div class="agent-stat-value" style="color:var(--success)">7.0</div>
+        <div class="agent-stat-label">Escrita</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;font-size:.84rem;color:var(--text-secondary)">
+      <strong>Severidade:</strong> 1 baixa · 2 média · 0 alta · 1 crítica
+    </div>
   </div>
-</div>
-</div>
 
-</div><!-- end view-geral -->
-
-
-<!-- ================================================================ -->
-<!-- ====================== VIEW: DANIELA ========================== -->
-<!-- ================================================================ -->
-<div id="view-daniela" class="view-section">
-
-<div class="agent-profile">
-  <div class="agent-profile-avatar" style="background:linear-gradient(135deg,#059669,#10B981)">DP</div>
-  <div class="agent-profile-info">
-    <div class="agent-profile-name">Daniela Peixer</div>
-    <div class="agent-profile-meta">Maior volume de atendimento — 55 conversas analisadas</div>
+  <!-- Radar Chart -->
+  <div class="chart-row" style="margin-top:32px">
+    <div class="chart-box" style="grid-column:1/-1">
+      <div class="chart-title">Comparativo por Dimensão (Radar)</div>
+      <canvas id="chartRadar" style="max-height:350px"></canvas>
+    </div>
   </div>
-  <div class="agent-profile-rate">
-    <div class="agent-profile-rate-value" style="color:var(--danger)">49%</div>
-    <div class="agent-profile-rate-label">Taxa de Conversao</div>
+
+</div>
+
+<!-- ==================== DIMENSÕES ==================== -->
+<div id="view-dimensoes" class="view-section">
+
+  <h2 class="section-title">Análise por Dimensão</h2>
+
+  <!-- Effort -->
+  <div class="insight-box">
+    <div class="insight-title">Empenho (Peso: 30%)</div>
+    <div style="display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap">
+      <div style="flex:1;min-width:120px">
+        <div style="font-size:.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase">Alto</div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:1.4rem;color:var(--success)">59</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:48.8%;background:var(--success)"></div></div>
+      </div>
+      <div style="flex:1;min-width:120px">
+        <div style="font-size:.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase">Médio</div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:1.4rem;color:var(--warning)">18</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:14.9%;background:var(--warning)"></div></div>
+      </div>
+      <div style="flex:1;min-width:120px">
+        <div style="font-size:.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase">Baixo</div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:1.4rem;color:var(--danger)">44</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:36.4%;background:var(--danger)"></div></div>
+      </div>
+    </div>
+    <div class="insight-text">
+      <strong>48.8%</strong> dos atendimentos tiveram empenho alto, indicando que quando engajadas, as atendentes se dedicam. Porém, <strong>36.4%</strong> com empenho baixo sugere conversas abandonadas ou com respostas genéricas.
+    </div>
   </div>
-</div>
 
-<div class="agent-metrics-row">
-  <div class="metric-card">
-    <div class="metric-value" style="color:var(--success)">27</div>
-    <div class="metric-label">Agendamentos</div>
+  <!-- Follow-up -->
+  <div class="insight-box">
+    <div class="insight-title" style="color:var(--danger)">Follow-up (Peso: 25%) — Ponto Crítico</div>
+    <div style="display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap">
+      <div style="flex:1;min-width:100px">
+        <div style="font-size:.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase">N/A</div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:1.4rem;color:var(--text-muted)">57</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:47.1%;background:var(--text-muted)"></div></div>
+      </div>
+      <div style="flex:1;min-width:100px">
+        <div style="font-size:.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase">Falhou</div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:1.4rem;color:var(--danger)">54</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:44.6%;background:var(--danger)"></div></div>
+      </div>
+      <div style="flex:1;min-width:100px">
+        <div style="font-size:.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase">Bom</div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:1.4rem;color:var(--success)">7</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:5.8%;background:var(--success)"></div></div>
+      </div>
+      <div style="flex:1;min-width:100px">
+        <div style="font-size:.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase">Atenção</div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:1.4rem;color:var(--warning)">3</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:2.5%;background:var(--warning)"></div></div>
+      </div>
+    </div>
+    <div class="insight-highlight">
+      <strong>Apenas 5.8%</strong> das conversas tiveram follow-up classificado como "bom". Das 64 conversas onde o follow-up era aplicável (excluindo N/A), <strong>84.4% falharam</strong>. Este é o maior gargalo de conversão da equipe.
+    </div>
   </div>
-  <div class="metric-card">
-    <div class="metric-value" style="color:var(--danger)">28</div>
-    <div class="metric-label">Perdas</div>
+
+  <!-- Tempo de Resposta -->
+  <div class="insight-box">
+    <div class="insight-title">Tempo de Resposta (Peso: 20%)</div>
+    <div style="display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap">
+      <div style="flex:1;min-width:120px">
+        <div style="font-size:.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase">Normal</div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:1.4rem;color:var(--brand)">79</div>
+      </div>
+      <div style="flex:1;min-width:120px">
+        <div style="font-size:.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase">Demorado</div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:1.4rem;color:var(--danger)">23</div>
+      </div>
+      <div style="flex:1;min-width:120px">
+        <div style="font-size:.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase">Rápido</div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:1.4rem;color:var(--success)">19</div>
+      </div>
+    </div>
+    <div class="insight-text">
+      A maioria (65.3%) tem tempo de resposta dentro do normal. <strong>19% com resposta demorada</strong> correlaciona com os casos críticos — geralmente conversas onde o paciente enviou múltiplas mensagens sem resposta.
+    </div>
   </div>
-  <div class="metric-card">
-    <div class="metric-value" style="color:var(--danger)">Baixo</div>
-    <div class="metric-label">Follow-up</div>
+
+  <!-- Abordagem de Preço -->
+  <div class="insight-box">
+    <div class="insight-title">Abordagem de Preço (Peso: 15%)</div>
+    <div style="display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap">
+      <div style="flex:1;min-width:100px">
+        <div style="font-size:.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase">Não informou</div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:1.4rem;color:var(--text-muted)">73</div>
+      </div>
+      <div style="flex:1;min-width:100px">
+        <div style="font-size:.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase">Adequada</div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:1.4rem;color:var(--success)">23</div>
+      </div>
+      <div style="flex:1;min-width:100px">
+        <div style="font-size:.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase">Preço direto</div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:1.4rem;color:var(--warning)">17</div>
+      </div>
+      <div style="flex:1;min-width:100px">
+        <div style="font-size:.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase">Problemática</div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:1.4rem;color:var(--danger)">6</div>
+      </div>
+    </div>
+    <div class="insight-text">
+      Em <strong>60.3%</strong> das conversas o preço não foi mencionado (N/A — consultas gerais, dúvidas). Quando o preço entra na conversa, <strong>19% abordam adequadamente</strong> com contextualização, enquanto 14% informam o preço de forma direta sem valor agregado.
+    </div>
   </div>
-</div>
 
-<div class="chart-box chart-full">
-  <div class="chart-title">Resultado das Conversas — Daniela</div>
-  <canvas id="chartDaniela" height="180"></canvas>
-</div>
-
-<!-- Pontos Fortes -->
-<div class="section">
-<div class="sub-title"><span class="dot" style="background:var(--success)"></span> Pontos Fortes</div>
-
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19119" target="_blank">#19119 — Bruna</a></div>
-    <span class="conv-badge sim">Agendou</span>
+  <!-- Escrita -->
+  <div class="insight-box">
+    <div class="insight-title" style="color:var(--success)">Escrita (Peso: 10%) — Destaque Positivo</div>
+    <div style="display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap">
+      <div style="flex:1;min-width:120px">
+        <div style="font-size:.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase">Boa</div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:1.4rem;color:var(--success)">90</div>
+      </div>
+      <div style="flex:1;min-width:120px">
+        <div style="font-size:.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase">Informal</div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:1.4rem;color:var(--warning)">29</div>
+      </div>
+      <div style="flex:1;min-width:120px">
+        <div style="font-size:.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase">Com problemas</div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:1.4rem;color:var(--danger)">2</div>
+      </div>
+    </div>
+    <div class="insight-text">
+      <strong>74.4%</strong> das conversas com escrita boa. A equipe domina a comunicação escrita e mantém profissionalismo textual. A informalidade (24%) não é necessariamente negativa — em contextos de WhatsApp, uma linguagem mais próxima pode aumentar rapport.
+    </div>
   </div>
-  <div class="evidence-text">Conversa modelo. Daniela acolheu a paciente, entendeu a necessidade, explicou o procedimento com detalhes e agendou. Bom uso de emojis sem exagero, tom caloroso e profissional.</div>
-  <span class="evidence-tag positivo">Modelo de atendimento</span>
+
 </div>
 
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19138" target="_blank">#19138 — Gabriela</a></div>
-    <span class="conv-badge sim">Agendou</span>
+<!-- ==================== CASOS CRÍTICOS ==================== -->
+<div id="view-criticos" class="view-section">
+
+  <h2 class="section-title">Casos Críticos (22 conversas)</h2>
+
+  <div class="insight-box" style="background:var(--danger-light);border-color:var(--danger)">
+    <div class="insight-text" style="color:var(--text-primary)">
+      Conversas com severidade <strong>crítica</strong> representam situações onde o atendimento falhou de forma significativa — pacientes ignorados, mensagens repetidas sem personalização, conversas encerradas sem resolução. Cada caso abaixo inclui link direto para a conversa no Chatwoot.
+    </div>
   </div>
-  <div class="evidence-text">Birthday dispatch converteu. Paciente recebeu mensagem de aniversario automatica e Daniela aproveitou o gancho para oferecer agendamento. ROI direto da automacao.</div>
-  <span class="evidence-tag positivo">Aproveitou automacao</span>
-</div>
 
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18875" target="_blank">#18875 — Rosimeri</a></div>
-    <span class="conv-badge sim">Agendou</span>
+  <!-- Critical case cards -->
+  <div class="evidence-card">
+    <div class="evidence-header">
+      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18131" target="_blank">#18131</a> · Thayse · <strong>Bot</strong></div>
+      <span class="evidence-tag critica">Score 2.2</span>
+    </div>
+    <div class="evidence-text">Paciente solicitou agendamento com Dr. Laercio, mas a conversa foi resolvida sem efetivação. <strong>Mensagens automáticas repetidas 3 vezes</strong> — falta total de personalização.</div>
   </div>
-  <div class="evidence-text">Conversao limpa e direta. Paciente chegou com intencao, Daniela conduziu com agilidade.</div>
-  <span class="evidence-tag positivo">Conversao rapida</span>
-</div>
 
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19233" target="_blank">#19233 — Camile</a> <span style="font-size:.72rem;color:var(--text-muted)">(15/10)</span></div>
-    <span class="conv-badge sim">Agendou</span>
+  <div class="evidence-card">
+    <div class="evidence-header">
+      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18401" target="_blank">#18401</a> · Broccato Uniformes · <strong>Alessandra</strong></div>
+      <span class="evidence-tag critica">Score 2.6</span>
+    </div>
+    <div class="evidence-text">Atendimento falhou em responder a várias mensagens do paciente, resultando em experiência negativa. <strong>Múltiplas mensagens sem resposta humana.</strong></div>
   </div>
-  <div class="evidence-text">Respondeu duvida sobre duracao do mapeamento, pegou nome completo e reagendou 13h→14h por causa do transito. Flexivel e atenciosa.</div>
-  <span class="evidence-tag positivo">Flexibilidade com reagendamento</span>
-</div>
-</div>
 
-<!-- Pontos de Melhoria -->
-<div class="section">
-<div class="sub-title"><span class="dot" style="background:var(--danger)"></span> Pontos de Melhoria</div>
-
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19147" target="_blank">#19147 — Cris</a></div>
-    <span class="conv-badge nao">Perdido</span>
+  <div class="evidence-card">
+    <div class="evidence-header">
+      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18263" target="_blank">#18263</a> · Transligue Transportes · <strong>Daniela</strong></div>
+      <span class="evidence-tag critica">Score 2.6</span>
+    </div>
+    <div class="evidence-text">Paciente perguntou sobre exame que a clínica não realiza. Resposta automatizada, sem personalização. <strong>Mesmo template enviado duas vezes.</strong></div>
   </div>
-  <div class="evidence-text"><strong>Demora de 1h23min</strong> para primeira resposta humana. Paciente ficou surpresa com o custo e Daniela nao tentou reter — zero contra-argumentacao. Lead perdido por falta de agilidade + falta de retencao.</div>
-  <span class="evidence-tag critica">Critica — demora + zero retencao</span>
-</div>
 
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18894" target="_blank">#18894 — Jessica</a></div>
-    <span class="conv-badge nao">Perdido</span>
+  <div class="evidence-card">
+    <div class="evidence-header">
+      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17591" target="_blank">#17591</a> · Francine Menezes · <strong>Daniela</strong></div>
+      <span class="evidence-tag critica">Score 2.6</span>
+    </div>
+    <div class="evidence-text">Resposta genérica sem se aprofundar nas necessidades do paciente. <strong>Conversa marcada como resolvida sem aguardar resposta.</strong></div>
   </div>
-  <div class="evidence-text">Paciente demonstrou intencao ("quero consulta avaliativa") mas nao houve follow-up apos silencio. Lead com alta probabilidade perdido por omissao.</div>
-  <span class="evidence-tag alerta">Alerta — sem follow-up</span>
-</div>
 
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18941" target="_blank">#18941 — Islana</a></div>
-    <span class="conv-badge parcial">No-show</span>
+  <div class="evidence-card">
+    <div class="evidence-header">
+      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19222" target="_blank">#19222</a> · Aline Thaís · <strong>Cristiane</strong></div>
+      <span class="evidence-tag critica">Score 2.6</span>
+    </div>
+    <div class="evidence-text">Paciente solicitou agendamento, mas a atendente não concluiu. <strong>Template repetido 2 vezes.</strong></div>
   </div>
-  <div class="evidence-text">Agendou consulta para 08/10 16h, mas a paciente <strong>nao compareceu</strong> (Feegow: "Desmarcado pelo paciente"). Follow-up do "esta chegando?" foi bom, mas nao houve reagendamento depois do no-show.</div>
-  <span class="evidence-tag alerta">Alerta — no-show sem reagendamento</span>
-</div>
 
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19004" target="_blank">#19004 — Valdete</a></div>
-    <span class="conv-badge nao">Perdido</span>
+  <div class="evidence-card">
+    <div class="evidence-header">
+      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17887" target="_blank">#17887</a> · Felipe Lübeck · <strong>Daniela</strong></div>
+      <span class="evidence-tag critica">Score 3.0</span>
+    </div>
+    <div class="evidence-text">Paciente entrou em contato sobre equipamentos dermatológicos. <strong>Conversa resolvida sem qualquer interação — zero resposta humana.</strong></div>
   </div>
-  <div class="evidence-text">Lead de campanha. Daniela iniciou mas repassou para Cristiane (handoff). Paciente respondeu "consulta avaliativa" e nao houve mais contato. Lead abandonado.</div>
-  <span class="evidence-tag critica">Critica — handoff sem continuidade</span>
-</div>
 
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19242" target="_blank">#19242 — Cita</a> <span style="font-size:.72rem;color:var(--text-muted)">(15/10)</span></div>
-    <span class="conv-badge nao">Perdido</span>
+  <div class="evidence-card">
+    <div class="evidence-header">
+      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18708" target="_blank">#18708</a> · Paciente não identificado · <strong>Cristiane</strong></div>
+      <span class="evidence-tag critica">Score 3.0</span>
+    </div>
+    <div class="evidence-text">Paciente enviou múltiplos anexos sem receber respostas significativas. <strong>Atendimento encerrado sem resolução.</strong></div>
   </div>
-  <div class="evidence-text"><strong>Resolveu a conversa 3 segundos apos a primeira mensagem</strong> sem enviar nenhuma resposta. Lead pediu para agendar consulta e foi descartado.</div>
-  <span class="evidence-tag critica">Critica — descarte sem resposta</span>
-</div>
 
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19228" target="_blank">#19228 — Bruno</a> <span style="font-size:.72rem;color:var(--text-muted)">(15/10)</span></div>
-    <span class="conv-badge nao">Perdido</span>
+  <div class="evidence-card">
+    <div class="evidence-header">
+      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18798" target="_blank">#18798</a> · Ieda · <strong>Daniela</strong></div>
+      <span class="evidence-tag critica">Score 3.0</span>
+    </div>
+    <div class="evidence-text">Agendamento não confirmado, conversa resolvida sem interação adicional. <strong>Paciente enviou 7 mensagens sem resposta humana.</strong></div>
   </div>
-  <div class="evidence-text">Paciente mandou "oi" 3x em 21 minutos (11:55, 12:07, 12:16). <strong>Completamente ignorado.</strong> Daniela resolveu 2h depois sem responder.</div>
-  <span class="evidence-tag critica">Critica — lead ignorado</span>
-</div>
 
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19239" target="_blank">#19239 — Liciane</a> <span style="font-size:.72rem;color:var(--text-muted)">(15/10)</span></div>
-    <span class="conv-badge nao">Perdido</span>
+  <div class="evidence-card">
+    <div class="evidence-header">
+      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18454" target="_blank">#18454</a> · Bruna Krieck · <strong>Daniela</strong></div>
+      <span class="evidence-tag critica">Score 3.0</span>
+    </div>
+    <div class="evidence-text"><strong>Conversa marcada como resolvida sem interação adicional</strong> com o paciente.</div>
   </div>
-  <div class="evidence-text">Indicada pela Dra. Ana Maria. Choque com R$1.800/sessao. Daniela confirmou valor sem contextualizar — sem antes/depois, sem Instagram, sem explicar poucas sessoes. Gap de 3h16 na resposta. Sem follow-up apos "Ok obrigada".</div>
-  <span class="evidence-tag critica">Critica — indicacao medica perdida</span>
-</div>
-</div>
 
-<!-- All Daniela conversations -->
-<div class="section">
-<h2 class="section-title">Todas as Conversas — Daniela</h2>
-<table class="data-table">
-<thead><tr><th>#</th><th>Paciente</th><th>Origem</th><th>Conversao</th><th>Observacao</th></tr></thead>
-<tbody>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19119" target="_blank">19119</a></td><td>Bruna</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Conversa modelo</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19138" target="_blank">19138</a></td><td>Gabriela</td><td>Birthday</td><td><span class="conv-badge sim">Agendou</span></td><td>ROI do dispatch</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19236" target="_blank">19236</a></td><td>Daniela M.</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Msg deletada, converteu</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19109" target="_blank">19109</a></td><td>Telmo</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmado</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18974" target="_blank">18974</a></td><td>Gabriel</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Reagendamento valido</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18893" target="_blank">18893</a></td><td>Nadja</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Msg deletada, converteu</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18887" target="_blank">18887</a></td><td>Luisa</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Audios nao transcritos</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18875" target="_blank">18875</a></td><td>Rosimeri</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Conversao limpa</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18150" target="_blank">18150</a></td><td>Greicy</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Via outro canal</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19233" target="_blank">19233</a></td><td>Camile</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Reagendamento flexivel (15/10)</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19219" target="_blank">19219</a></td><td>Paulo H.</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Vitiligo — template mas converteu (15/10)</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19115" target="_blank">19115</a></td><td>Adriano</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Preco direto + zero follow-up</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19200" target="_blank">19200</a></td><td>Oscalino</td><td>Relacionamento</td><td><span class="conv-badge parcial">Interesse</span></td><td>Sem data confirmada</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19147" target="_blank">19147</a></td><td>Cris</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Demora 1h23 + zero retencao</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18894" target="_blank">18894</a></td><td>Jessica</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Intencao sem follow-up</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19004" target="_blank">19004</a></td><td>Valdete</td><td>Campanhas</td><td><span class="conv-badge nao">Perdido</span></td><td>Handoff + abandono</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19242" target="_blank">19242</a></td><td>Cita</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Resolveu sem responder (15/10)</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19228" target="_blank">19228</a></td><td>Bruno</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Ignorado — oi 3x (15/10)</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19218" target="_blank">19218</a></td><td>Maria Jesus</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Resolveu sem interagir (15/10)</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19241" target="_blank">19241</a></td><td>Alberto</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Template 2x sem agendar (15/10)</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19216" target="_blank">19216</a></td><td>Alexandre</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Template CO2 generico (15/10)</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19231" target="_blank">19231</a></td><td>Fernando</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Preco direto R$3.500-5.000 (15/10)</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19239" target="_blank">19239</a></td><td>Liciane</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Indicada medica, choque preco (15/10)</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19240" target="_blank">19240</a></td><td>Thalyson</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Outro estado MG (15/10)</td></tr>
-<tr style="background:#FFFBEB"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19214" target="_blank">19214</a></td><td>Nany</td><td>Relacionamento</td><td><span class="conv-badge parcial">Incompleta</span></td><td>Label falsa (15/10)</td></tr>
-<tr style="background:#FFFBEB"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18941" target="_blank">18941</a></td><td>Islana</td><td>Relacionamento</td><td><span class="conv-badge parcial">No-show</span></td><td>Agendou mas nao compareceu</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17591" target="_blank">17591</a></td><td>Francine Menezes</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Conversa encerrada sem esperar resposta do paciente.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17646" target="_blank">17646</a></td><td>Greice</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Confirmacao + novo tratamento apresentado, mas resolvid</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17670" target="_blank">17670</a></td><td>Liliane Lika</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Alteracao de horario confirmada para 27/10 as 13:30.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17821" target="_blank">17821</a></td><td>Jessica</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmou agendamento 19/10 as 17:00, respondeu duvidas</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17823" target="_blank">17823</a></td><td>Zamoel</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmou consulta 15/10 as 15:30.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17855" target="_blank">17855</a></td><td>Maria Eduarda Souza</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendamento confirmado 28/10 as 15h. Atendimento atenci</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17887" target="_blank">17887</a></td><td>Felipe Lubeck</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Paciente enviou multiplas mensagens sobre equipamentos </td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17911" target="_blank">17911</a></td><td>Carolina Borini Cherem</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendou consulta 05/11 as 17h. Boa comunicacao.</td></tr>
-<tr style="background:#F1F5F9"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18023" target="_blank">18023</a></td><td>Adelir</td><td>Pipeline</td><td><span class="conv-badge parcial">Excluida</span></td><td>Paciente nao respondeu (NO_REPLY). Excluida.</td></tr>
-<tr style="background:#F1F5F9"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18024" target="_blank">18024</a></td><td>Adelir</td><td>Pipeline</td><td><span class="conv-badge parcial">Excluida</span></td><td>Paciente demonstrou interesse mas 3 mensagens ficaram s</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18064" target="_blank">18064</a></td><td>Raquel</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Conversa de operadora TIM, sem relacao com DermaClinic.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18076" target="_blank">18076</a></td><td>Mayara Cristina</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Remarcou consulta por imprevisto (pneu). Atendente aten</td></tr>
-<tr style="background:#F1F5F9"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18083" target="_blank">18083</a></td><td>Lilian</td><td>Pipeline</td><td><span class="conv-badge parcial">Excluida</span></td><td>Paciente nao respondeu (NO_REPLY). Excluida.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18089" target="_blank">18089</a></td><td>KENEDY</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Paciente recusou valor R$980. Template repetido 2x</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18091" target="_blank">18091</a></td><td>Fabiana</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Buscava falar com gestao. Sem interesse em atendimento </td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18096" target="_blank">18096</a></td><td>Elaine</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Solicitou valor de consulta, recebeu preco mas sem foll</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18111" target="_blank">18111</a></td><td>Ilana</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Solicitou informacoes sobre consulta. Respondida pronta</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18119" target="_blank">18119</a></td><td>Ana Luiza</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendou avaliacao para mae 28/09 as 13:30.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18137" target="_blank">18137</a></td><td>Ivonete</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmou agendamento 29/09 as 14:30. Acolhedor e perso</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18140" target="_blank">18140</a></td><td>Paciente</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Perguntas sobre custos sem respostas claras. Resolvida </td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18263" target="_blank">18263</a></td><td>Transligue Transportes</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Perguntou sobre capilaroscopia (nao realizam). Template</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18268" target="_blank">18268</a></td><td>Junior</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>4 mensagens completamente sem resposta humana.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18269" target="_blank">18269</a></td><td>Cleia</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Interacao bot + humano sem confirmacao de agendamento.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18296" target="_blank">18296</a></td><td>CESAR ALBERTO SCHMITT</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Interesse em avaliacao, resolvida sem resposta.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18373" target="_blank">18373</a></td><td>Ilana</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Mensagens repetidas para agendamento errado. Paciente i</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18383" target="_blank">18383</a></td><td>Francine Menezes</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Tentou agendar mas nao confirmou nova data.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18437" target="_blank">18437</a></td><td>Julita</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmou agendamento 28/10 as 14:00. Tom amigavel.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18457" target="_blank">18457</a></td><td>Victoria Martins</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendou consulta 22/10 as 13:30. Atenciosa e amigavel.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18547" target="_blank">18547</a></td><td>Luma Bertao de Oliveira</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendou com Dra. Raquel 14/10 as 10h30.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18653" target="_blank">18653</a></td><td>Suely Nobrega Janini</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendou consulta 22/10 as 10:00. Adaptou horarios.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18701" target="_blank">18701</a></td><td>Fabiane</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Interesse em estetica, recebeu precos. Sem confirmacao.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18797" target="_blank">18797</a></td><td>Thalita Domingos</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Consulta confirmada mas follow-up falhou apos multiplas</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18798" target="_blank">18798</a></td><td>Ieda</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>7 mensagens da paciente sem resposta humana.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18799" target="_blank">18799</a></td><td>Debora</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendou 26/10 as 15:30 com Dra. Eoda. Duvidas respondid</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18836" target="_blank">18836</a></td><td>Liliane Lika</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmou consulta 09/10. Cordial e eficiente.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18948" target="_blank">18948</a></td><td>Bruno</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmou agendamento 14/10. Empatia quando ficou doent</td></tr>
-<tr style="background:#F1F5F9"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19237" target="_blank">19237</a></td><td>Isabelli</td><td>Pipeline</td><td><span class="conv-badge" style="background:#94A3B8;color:#fff">Excluida</span></td><td>Prospeccao B2B (vendedora CheckApp) — nao e paciente</td></tr>
-</tbody>
-</table>
-</div>
-</div><!-- end view-daniela -->
-
-
-<!-- ================================================================ -->
-<!-- ===================== VIEW: ALESSANDRA ========================= -->
-<!-- ================================================================ -->
-<div id="view-alessandra" class="view-section">
-
-<div class="agent-profile">
-  <div class="agent-profile-avatar" style="background:linear-gradient(135deg,#2D52EF,#6366F1)">AL</div>
-  <div class="agent-profile-info">
-    <div class="agent-profile-name">Alessandra</div>
-    <div class="agent-profile-meta">Segundo maior volume — 26 conversas analisadas</div>
+  <div class="evidence-card">
+    <div class="evidence-header">
+      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18252" target="_blank">#18252</a> · Pam · <strong>Daniela</strong></div>
+      <span class="evidence-tag critica">Score 3.4</span>
+    </div>
+    <div class="evidence-text">Paciente perguntou sobre vagas, foi orientada a enviar currículo. <strong>Template repetido 2 vezes, conversa resolvida sem continuidade.</strong></div>
   </div>
-  <div class="agent-profile-rate">
-    <div class="agent-profile-rate-value" style="color:var(--success)">69%</div>
-    <div class="agent-profile-rate-label">Taxa de Conversao</div>
+
+  <div class="evidence-card">
+    <div class="evidence-header">
+      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18440" target="_blank">#18440</a> · Paciente não identificado · <strong>Daiane</strong></div>
+      <span class="evidence-tag critica">Score 3.4</span>
+    </div>
+    <div class="evidence-text">Pergunta sobre betaterapia — recebeu contato de fototerapia. <strong>Template repetido 2 vezes, resolvida sem aguardar resposta.</strong></div>
   </div>
-</div>
 
-<div class="agent-metrics-row">
-  <div class="metric-card">
-    <div class="metric-value" style="color:var(--success)">18</div>
-    <div class="metric-label">Agendamentos</div>
+  <div class="evidence-card">
+    <div class="evidence-header">
+      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19241" target="_blank">#19241</a> · Alberto Reis Miki · <strong>Daniela</strong></div>
+      <span class="evidence-tag critica">Score 3.5</span>
+    </div>
+    <div class="evidence-text">Paciente queria agendar consulta. <strong>Mesma mensagem repetida 2 vezes sem personalização, resolvida sem aguardar resposta.</strong></div>
   </div>
-  <div class="metric-card">
-    <div class="metric-value" style="color:var(--danger)">8</div>
-    <div class="metric-label">Perdas</div>
+
+  <div class="evidence-card">
+    <div class="evidence-header">
+      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18089" target="_blank">#18089</a> · Kenedy · <strong>Daniela</strong></div>
+      <span class="evidence-tag critica">Score 3.6</span>
+    </div>
+    <div class="evidence-text">Paciente interessado em remoção de cisto pilar, insatisfeito com valor. <strong>Template repetido 2 vezes, abordagem de preço problemática.</strong></div>
   </div>
-  <div class="metric-card">
-    <div class="metric-value" style="color:var(--danger)">Baixo</div>
-    <div class="metric-label">Follow-up</div>
+
+  <div class="evidence-card">
+    <div class="evidence-header">
+      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18438" target="_blank">#18438</a> · Ana Caroline Luciano · <strong>Daniela</strong></div>
+      <span class="evidence-tag critica">Score 3.8</span>
+    </div>
+    <div class="evidence-text">Interesse em estágio na clínica. Recebeu informações mas <strong>template repetido 2 vezes.</strong></div>
   </div>
-</div>
 
-<div class="chart-box chart-full">
-  <div class="chart-title">Resultado das Conversas — Alessandra</div>
-  <canvas id="chartAlessandra" height="180"></canvas>
-</div>
-
-<div class="section">
-<div class="sub-title"><span class="dot" style="background:var(--success)"></span> Pontos Fortes</div>
-
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19205" target="_blank">#19205 — Mara</a></div>
-    <span class="conv-badge sim">Agendou</span>
+  <div class="evidence-card">
+    <div class="evidence-header">
+      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18426" target="_blank">#18426</a> · Márcio Souza · <strong>Alessandra</strong></div>
+      <span class="evidence-tag critica">Score 3.8</span>
+    </div>
+    <div class="evidence-text">Perguntou sobre Dra. Simone Muller. <strong>Mensagens repetidas, conversa encerrada sem aguardar resposta.</strong></div>
   </div>
-  <div class="evidence-text">Conversa modelo junto com Cristiane. Alessandra fez a abordagem inicial com acolhimento, entendeu que a paciente queria toxina e agendou. Bom fluxo multi-atendente.</div>
-  <span class="evidence-tag positivo">Modelo — acolhimento + conversao</span>
+
 </div>
 
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19221" target="_blank">#19221 — Maicon</a></div>
-    <span class="conv-badge sim">Agendou</span>
+<!-- ==================== PADRÕES ==================== -->
+<div id="view-padroes" class="view-section">
+
+  <h2 class="section-title">Padrões Identificados</h2>
+
+  <div class="pattern-card">
+    <div class="pattern-title"><span class="pattern-rank">#1</span> Follow-up Ausente</div>
+    <div class="pattern-desc">Paciente demonstra interesse (pergunta sobre procedimento, preço, disponibilidade) mas a equipe não retoma o contato após a primeira interação. A conversa morre naturalmente.</div>
+    <div class="pattern-freq">51 ocorrências (69.9% das perdas)</div>
   </div>
-  <div class="evidence-text">Atendimento agil. Maicon descreveu o problema (retracao gengival), Alessandra consultou a Dra e voltou com horarios em 40 minutos. Agendou 19/10 11h.</div>
-  <span class="evidence-tag positivo">Agilidade na consulta + oferta de horarios</span>
-</div>
 
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18946" target="_blank">#18946 — Diego</a></div>
-    <span class="conv-badge sim">Agendou</span>
+  <div class="pattern-card">
+    <div class="pattern-title"><span class="pattern-rank">#2</span> Template Repetido</div>
+    <div class="pattern-desc">Atendente envia o mesmo texto/template 2-3 vezes na mesma conversa. Gera percepção de automação desumana e desinteresse. Presente em quase todos os casos críticos.</div>
+    <div class="pattern-freq">Presente em 14 dos 15 piores scores</div>
   </div>
-  <div class="evidence-text">Conversao rapida. Paciente ja veio com intencao, Alessandra confirmou o agendamento sem enrolacao.</div>
-  <span class="evidence-tag positivo">Conversao direta</span>
-</div>
-</div>
 
-<div class="section">
-<div class="sub-title"><span class="dot" style="background:var(--danger)"></span> Pontos de Melhoria</div>
-
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19130" target="_blank">#19130 — Gustavo</a></div>
-    <span class="conv-badge nao">Perdido</span>
+  <div class="pattern-card">
+    <div class="pattern-title"><span class="pattern-rank">#3</span> Resolução Prematura</div>
+    <div class="pattern-desc">Conversa marcada como "resolvida" no Chatwoot sem aguardar resposta do paciente. O paciente fica sem retorno e a clínica perde a oportunidade.</div>
+    <div class="pattern-freq">Recorrente em conversas com score &lt; 4.0</div>
   </div>
-  <div class="evidence-text"><strong>Copy-paste institucional puro.</strong> Paciente perguntou sobre dermatologista e Alessandra enviou bloco de texto padrao sobre a clinica. Nao perguntou qual era a necessidade do paciente. Gustavo nao respondeu mais.</div>
-  <span class="evidence-tag critica">Critica — copy-paste sem personalizacao</span>
-</div>
 
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19115" target="_blank">#19115 — Adriano</a></div>
-    <span class="conv-badge nao">Perdido</span>
+  <div class="pattern-card">
+    <div class="pattern-title"><span class="pattern-rank">#4</span> Abandono Fora do Horário</div>
+    <div class="pattern-desc">Conversas iniciadas no final do dia (17h-22h) e aos sábados têm scores significativamente mais baixos. Sem cobertura no horário, leads esfriam.</div>
+    <div class="pattern-freq">Score médio 3.20 aos sábados vs 5.91 às quintas</div>
   </div>
-  <div class="evidence-text">Alessandra informou o preco diretamente e o paciente sumiu. Nao houve follow-up apos o silencio. Junto com Daniela, mas nenhuma das duas retomou o contato.</div>
-  <span class="evidence-tag critica">Critica — preco direto + zero follow-up</span>
-</div>
 
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19026" target="_blank">#19026 — Simone</a></div>
-    <span class="conv-badge nao">Perdido</span>
+  <div class="pattern-card">
+    <div class="pattern-title"><span class="pattern-rank good">#5</span> Escrita Profissional</div>
+    <div class="pattern-desc">74.4% das conversas com escrita classificada como "boa". A equipe mantém tom profissional e cordial na comunicação escrita, gerando confiança.</div>
+    <div class="pattern-freq good">90 de 121 conversas</div>
   </div>
-  <div class="evidence-text">Simone buscava informacoes de hiperidrose para outra pessoa. Alessandra respondeu de forma generica sem tentar converter a intermediaria ou sugerir que a pessoa interessada entre em contato.</div>
-  <span class="evidence-tag alerta">Alerta — oportunidade nao explorada</span>
-</div>
 
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19020" target="_blank">#19020 — Selesia</a></div>
-    <span class="conv-badge nao">Perdido</span>
+  <div class="pattern-card">
+    <div class="pattern-title"><span class="pattern-rank good">#6</span> Empenho Quando Engajada</div>
+    <div class="pattern-desc">Quando a atendente se engaja na conversa, o empenho é alto (48.8%). O problema não é falta de capacidade — é falta de follow-up para manter o engajamento.</div>
+    <div class="pattern-freq good">59 de 121 conversas com empenho alto</div>
   </div>
-  <div class="evidence-text">Lead de campanha. Paciente disse o que precisava, recebeu o preco e desistiu. <strong>Nao houve acolhimento, midia, Instagram, prova social — apenas "necessidade → preco → tchau".</strong></div>
-  <span class="evidence-tag critica">Critica — protocolo campanha incompleto</span>
-</div>
+
 </div>
 
-<div class="section">
-<h2 class="section-title">Todas as Conversas — Alessandra</h2>
-<table class="data-table">
-<thead><tr><th>#</th><th>Paciente</th><th>Origem</th><th>Conversao</th><th>Observacao</th></tr></thead>
-<tbody>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19205" target="_blank">19205</a></td><td>Mara</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Conversa modelo</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19236" target="_blank">19236</a></td><td>Daniela M.</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Msg deletada, converteu</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19221" target="_blank">19221</a></td><td>Maicon</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Agil — 40min</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19219" target="_blank">19219</a></td><td>Paulo H.</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Vitiligo — template mas converteu (15/10)</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19109" target="_blank">19109</a></td><td>Telmo</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmado</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18946" target="_blank">18946</a></td><td>Diego</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Conversao rapida</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18893" target="_blank">18893</a></td><td>Nadja</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Msg deletada, converteu</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18875" target="_blank">18875</a></td><td>Rosimeri</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Conversao limpa</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19130" target="_blank">19130</a></td><td>Gustavo</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Copy-paste institucional</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19115" target="_blank">19115</a></td><td>Adriano</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Preco direto + zero follow-up</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19020" target="_blank">19020</a></td><td>Selesia</td><td>Campanhas</td><td><span class="conv-badge nao">Perdido</span></td><td>Protocolo campanha incompleto</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19026" target="_blank">19026</a></td><td>Simone</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Intermediaria nao convertida</td></tr>
-<tr style="background:#FFFBEB"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18941" target="_blank">18941</a></td><td>Islana</td><td>Relacionamento</td><td><span class="conv-badge parcial">No-show</span></td><td>Agendou mas nao compareceu</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17610" target="_blank">17610</a></td><td>Beatriz</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendou Botox para 12/11 as 10:30. Atendente ofereceu o</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17654" target="_blank">17654</a></td><td>Carolina</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Tentativas de agendamento e documentacao, resolvida sem</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18034" target="_blank">18034</a></td><td>Bruna Tartaglia</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendou avaliacao 20/10 as 10h30.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18044" target="_blank">18044</a></td><td>Ester Loureiro Muller</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendou consulta 23/09 as 10:00. Atendimento proativo.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18046" target="_blank">18046</a></td><td>Katarini</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendamento confirmado 14/09 as 13:00. Proativa no ajus</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18251" target="_blank">18251</a></td><td>Elaine</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Conversa cordial, confirmou recebimento de emails. Sem </td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18254" target="_blank">18254</a></td><td>Paciente</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Interesse em sardas e furinhos. Agendou avaliacao.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18265" target="_blank">18265</a></td><td>Cleia</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendou consulta apos informacoes detalhadas.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18267" target="_blank">18267</a></td><td>Ester Rodrigues da Silva</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Demonstrou interesse mas resolvida sem aguardar respost</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18270" target="_blank">18270</a></td><td>Israel De Souza</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Perguntou sobre Aquapure, recebeu informacoes. Sem conf</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18271" target="_blank">18271</a></td><td>Lucca Fiamoncini</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Interesse em manchas de pele, 3 mensagens sem resposta.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18272" target="_blank">18272</a></td><td>Solange</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Solicitou consulta urgente, completamente sem resposta.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18425" target="_blank">18425</a></td><td>Yasmin de Amorim</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Agendou consulta para amanha as 10:00. Atenciosa e efic</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18439" target="_blank">18439</a></td><td>Alexandre B Sgrott</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmou agendamento mesmo dia. Informou novo endereco</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18477" target="_blank">18477</a></td><td>Adriane</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmou agendamento retorno. Cordial.</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18504" target="_blank">18504</a></td><td>Camila</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Remanejou consulta para 09/11 as 13:30. Comunicacao cla</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18768" target="_blank">18768</a></td><td>Sergio Lenzi</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmou agendamento 15/10 as 17:30. Cordial e atenta.</td></tr>
-</tbody>
-</table>
-</div>
-</div><!-- end view-alessandra -->
+<!-- ==================== METODOLOGIA ==================== -->
+<div id="view-metodologia" class="view-section">
 
+  <h2 class="section-title">Metodologia</h2>
 
-<!-- ================================================================ -->
-<!-- ===================== VIEW: CRISTIANE ========================== -->
-<!-- ================================================================ -->
-<div id="view-cristiane" class="view-section">
-
-<div class="agent-profile">
-  <div class="agent-profile-avatar" style="background:linear-gradient(135deg,#D97706,#F59E0B)">CR</div>
-  <div class="agent-profile-info">
-    <div class="agent-profile-name">Cristiane</div>
-    <div class="agent-profile-meta">8 conversas analisadas</div>
+  <div class="howto">
+    <h3>Como este relatório foi gerado</h3>
+    <p>As conversas foram coletadas automaticamente da API do Chatwoot (conta DermaClinic), filtradas por presença de atendente humano, e analisadas individualmente por um pipeline de IA (GPT-4o-mini) com critérios padronizados.</p>
+    <ul>
+      <li><strong>Coleta:</strong> Webhook n8n busca conversas do período via Chatwoot Filter API</li>
+      <li><strong>Filtragem:</strong> Apenas conversas com pelo menos 1 mensagem de atendente humano</li>
+      <li><strong>Exclusão automática:</strong> Campanhas sem resposta, convênios, prospecções B2B</li>
+      <li><strong>Análise:</strong> LLM classifica cada conversa em 5 dimensões + conversão</li>
+      <li><strong>Score:</strong> Quality Score v2 (ponderado): Empenho 30% + Follow-up 25% + Tempo 20% + Preço 15% + Escrita 10%</li>
+    </ul>
   </div>
-  <div class="agent-profile-rate">
-    <div class="agent-profile-rate-value" style="color:var(--danger)">25%</div>
-    <div class="agent-profile-rate-label">Taxa de Conversao</div>
+
+  <div class="insight-box">
+    <div class="insight-title">Fórmula do Quality Score v2</div>
+    <div class="insight-text" style="font-family:monospace;background:var(--bg);padding:16px;border-radius:8px;font-size:.84rem;line-height:1.8">
+      Score = (Empenho_nota * 0.30) + (Followup_nota * 0.25) + (Tempo_nota * 0.20) + (Preco_nota * 0.15) + (Escrita_nota * 0.10)<br><br>
+      <strong>Escala das notas por dimensão:</strong><br>
+      Empenho: alto=10, medio=6, baixo=2<br>
+      Follow-up: bom=10, na=7, atencao=4, falhou=1<br>
+      Tempo Resposta: rapido=10, normal=6, demorado=2<br>
+      Abordagem Preço: adequada=10, aceitavel=7, nao_informou=5, preco_direto=3, problematica=1<br>
+      Escrita: boa=10, informal=6, problemas=2
+    </div>
   </div>
-</div>
 
-<div class="agent-metrics-row">
-  <div class="metric-card">
-    <div class="metric-value" style="color:var(--success)">2</div>
-    <div class="metric-label">Agendamentos</div>
+  <div class="insight-box">
+    <div class="insight-title">Escala de Severidade</div>
+    <div class="insight-text">
+      <strong>Baixa (37)</strong> — Atendimento funcional, sem falhas graves<br>
+      <strong>Média (33)</strong> — Pequenas falhas que não comprometem o resultado<br>
+      <strong>Alta (29)</strong> — Falhas significativas que impactam experiência do paciente<br>
+      <strong>Crítica (22)</strong> — Falha grave: paciente ignorado, perda evidente de oportunidade
+    </div>
   </div>
-  <div class="metric-card">
-    <div class="metric-value" style="color:var(--danger)">6</div>
-    <div class="metric-label">Perdas</div>
+
+  <div class="insight-box">
+    <div class="insight-title">Período e Cobertura</div>
+    <div class="insight-text">
+      <strong>Período:</strong> 25/08/2026 a 18/10/2026 (55 dias)<br>
+      <strong>Total de conversas:</strong> 197<br>
+      <strong>Analisadas:</strong> 121 (61.4%)<br>
+      <strong>Excluídas:</strong> 76 (38.6%) — com critério documentado<br>
+      <strong>Pipeline:</strong> n8n workflow ulER6Sv7FHtOwu8n · GPT-4o-mini · Quality Score v2 SIGMA<br>
+      <strong>Gerado em:</strong> 18 de outubro de 2026 · Digital AI Analytics
+    </div>
   </div>
-  <div class="metric-card">
-    <div class="metric-value" style="color:var(--danger)">Baixo</div>
-    <div class="metric-label">Follow-up</div>
-  </div>
+
 </div>
 
-<div class="chart-box chart-full">
-  <div class="chart-title">Resultado das Conversas — Cristiane</div>
-  <canvas id="chartCristiane" height="180"></canvas>
-</div>
-
-<div class="section">
-<div class="sub-title"><span class="dot" style="background:var(--success)"></span> Pontos Fortes</div>
-
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19205" target="_blank">#19205 — Mara</a></div>
-    <span class="conv-badge sim">Agendou</span>
-  </div>
-  <div class="evidence-text">Participou da conversao junto com Alessandra. Bom complemento no atendimento multi-atendente.</div>
-  <span class="evidence-tag positivo">Trabalho em equipe</span>
-</div>
-
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19238" target="_blank">#19238 — Patricia/Helio</a> <span style="font-size:.72rem;color:var(--text-muted)">(15/10)</span></div>
-    <span class="conv-badge sim">Agendou</span>
-  </div>
-  <div class="evidence-text"><strong>Atendimento modelo.</strong> Adaptou datas (out→nov), pediu nome completo, agendou com Dra. Raquel, enviou orientacoes de preparo e se despediu com carinho. Referencia para toda a equipe.</div>
-  <span class="evidence-tag positivo">Modelo — orientacoes + adaptacao + carinho</span>
-</div>
-</div>
-
-<div class="section">
-<div class="sub-title"><span class="dot" style="background:var(--danger)"></span> Pontos de Melhoria</div>
-
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18996" target="_blank">#18996 — Thalita</a></div>
-    <span class="conv-badge nao">Perdido</span>
-  </div>
-  <div class="evidence-text">Conversa com label "3-agendamento" mas a paciente <strong>nunca confirmou o agendamento</strong>. Label falso-positivo — a atendente pode ter entendido uma intencao como confirmacao.</div>
-  <span class="evidence-tag alerta">Alerta — label nao corresponde a realidade</span>
-</div>
-
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19020" target="_blank">#19020 — Selesia</a></div>
-    <span class="conv-badge nao">Perdido</span>
-  </div>
-  <div class="evidence-text">Lead de campanha (Instagram). Cristiane atendeu junto com Alessandra. Protocolo completamente incompleto: nao enviou fotos, nao mandou Instagram, nao fez acolhimento.</div>
-  <span class="evidence-tag critica">Critica — protocolo campanha incompleto</span>
-</div>
-
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19004" target="_blank">#19004 — Valdete</a></div>
-    <span class="conv-badge nao">Perdido</span>
-  </div>
-  <div class="evidence-text">Recebeu handoff de Daniela mas enviou mensagem institucional longa (copy-paste). Paciente nao respondeu e ninguem retomou contato. Lead de campanha perdido.</div>
-  <span class="evidence-tag critica">Critica — handoff com copy-paste + abandono</span>
-</div>
-</div>
-
-<div class="section">
-<h2 class="section-title">Todas as Conversas — Cristiane</h2>
-<table class="data-table">
-<thead><tr><th>#</th><th>Paciente</th><th>Origem</th><th>Conversao</th><th>Observacao</th></tr></thead>
-<tbody>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19205" target="_blank">19205</a></td><td>Mara</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Conversa modelo</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18974" target="_blank">18974</a></td><td>Gabriel</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Reagendamento valido</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19238" target="_blank">19238</a></td><td>Patricia/Helio</td><td>Relacionamento</td><td><span class="conv-badge sim">Agendou</span></td><td>Atendimento modelo (15/10)</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18996" target="_blank">18996</a></td><td>Thalita</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Label falso-positivo</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19020" target="_blank">19020</a></td><td>Selesia</td><td>Campanhas</td><td><span class="conv-badge nao">Perdido</span></td><td>Protocolo incompleto</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19004" target="_blank">19004</a></td><td>Valdete</td><td>Campanhas</td><td><span class="conv-badge nao">Perdido</span></td><td>Handoff + abandono</td></tr>
-<tr style="background:#FFFBEB"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19244" target="_blank">19244</a></td><td>Clarisse</td><td>Relacionamento</td><td><span class="conv-badge parcial">Incompleta</span></td><td>Resolveu sem esperar (15/10)</td></tr>
-<tr style="background:#FFFBEB"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19243" target="_blank">19243</a></td><td>Edilson</td><td>Relacionamento</td><td><span class="conv-badge nao">Perdido</span></td><td>Resolveu sem interagir (15/10)</td></tr>
-<tr style="background:#FFFBEB"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19214" target="_blank">19214</a></td><td>Nany</td><td>Relacionamento</td><td><span class="conv-badge parcial">Incompleta</span></td><td>Label falsa (15/10)</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17598" target="_blank">17598</a></td><td>Priscila Advogada</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Paciente desmarcou por problemas de saude, atendente co</td></tr>
-<tr><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18156" target="_blank">18156</a></td><td>Duda Vasques</td><td>Pipeline</td><td><span class="conv-badge sim">Agendou</span></td><td>Confirmou consulta online. Atendimento amigavel.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18708" target="_blank">18708</a></td><td>frosty-silence-585</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Multiplos anexos sem respostas significativas.</td></tr>
-<tr style="background:#FEF2F2"><td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18719" target="_blank">18719</a></td><td>Monica</td><td>Pipeline</td><td><span class="conv-badge nao">Perdido</span></td><td>Sem agendamento confirmado. Follow-up sobre nota fiscal</td></tr>
-</tbody>
-</table>
-</div>
-</div><!-- end view-cristiane -->
-
-
-<!-- ================================================================ -->
-<!-- ===================== VIEW: GABRIELLA ========================== -->
-<!-- ================================================================ -->
-<div id="view-gabriella" class="view-section">
-
-<div class="agent-profile">
-  <div class="agent-profile-avatar" style="background:linear-gradient(135deg,#94A3B8,#CBD5E1)">GH</div>
-  <div class="agent-profile-info">
-    <div class="agent-profile-name">Gabriella Hille</div>
-    <div class="agent-profile-meta">1 conversa analisada — amostra insuficiente para avaliacao</div>
-  </div>
-  <div class="agent-profile-rate">
-    <div class="agent-profile-rate-value" style="color:var(--text-muted)">—</div>
-    <div class="agent-profile-rate-label">Amostra Pequena</div>
-  </div>
-</div>
-
-<div class="insight-box" style="border-left:4px solid var(--warning)">
-  <div class="insight-title">Aviso: amostra insuficiente</div>
-  <div class="insight-text">Gabriella tem apenas <strong>1 conversa analisada</strong>, que e de esclarecimento com paciente antiga (fora do escopo de vendas). Nao e possivel avaliar taxa de conversao nem qualidade de atendimento com esta amostra. Mais conversas serao analisadas nos proximos ciclos.</div>
-</div>
-
-<div class="section">
-<div class="sub-title"><span class="dot" style="background:var(--text-muted)"></span> Conversas</div>
-
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19227" target="_blank">#19227 — Cristina</a></div>
-    <span style="color:var(--text-muted);font-size:.78rem">Fora de escopo</span>
-  </div>
-  <div class="evidence-text">Conversa de paciente antiga (relacionamento). Esclarecimento sobre exame dermatologico. Nao e lead de vendas.</div>
-  <span class="evidence-tag" style="background:#F1F5F9;color:#94A3B8">Esclarecimento</span>
-</div>
-</div>
-</div><!-- end view-gabriella -->
-
-
-<!-- ================================================================ -->
-<!-- ======================== VIEW: DAIANE ========================= -->
-<!-- ================================================================ -->
-<div id="view-daiane" class="view-section">
-
-<div class="agent-profile">
-  <div class="agent-profile-avatar" style="background:linear-gradient(135deg,#8B5CF6,#A78BFA)">DA</div>
-  <div class="agent-profile-info">
-    <div class="agent-profile-name">Daiane</div>
-    <div class="agent-profile-meta">1 conversa analisada — amostra insuficiente para avaliacao</div>
-  </div>
-  <div class="agent-profile-rate">
-    <div class="agent-profile-rate-value" style="color:var(--text-muted)">—</div>
-    <div class="agent-profile-rate-label">Amostra Pequena</div>
-  </div>
-</div>
-
-<div class="insight-box" style="border-left:4px solid var(--warning)">
-  <div class="insight-title">Aviso: amostra insuficiente</div>
-  <div class="insight-text">Daiane tem <strong>2 conversas analisadas</strong> (1 calibracao + 1 pipeline). O pipeline adicionou Eduardo (#17746), conversa de confirmacao de horario sem resultado de agendamento. Amostra ainda insuficiente para avaliacao de tendencias.</div>
-</div>
-
-<div class="section">
-<div class="sub-title"><span class="dot" style="background:var(--success)"></span> Conversas</div>
-
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18150" target="_blank">#18150 — Greicy</a></div>
-    <span class="conv-badge sim">Agendou</span>
-  </div>
-  <div class="evidence-text">Conversao via outro canal. Daiane participou inicialmente, a conversa converteu com Daniela.</div>
-  <span class="evidence-tag positivo">Converteu</span>
-</div>
-
-<div class="evidence-card">
-  <div class="evidence-header">
-    <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17746" target="_blank">#17746 — Eduardo</a> <span style="font-size:.72rem;color:var(--text-muted)">(Pipeline)</span></div>
-    <span class="conv-badge nao">Perdido</span>
-  </div>
-  <div class="evidence-text">Confirmacao de horario de consulta agendada anteriormente. Sem conversao registrada no periodo analisado.</div>
-  <span class="evidence-tag alerta">Pipeline — sem agendamento</span>
-</div>
-</div>
-</div><!-- end view-daiane -->
-
-
-
-
-</div><!-- end container -->
+</div><!-- /.container -->
 
 <!-- Footer -->
 <div class="footer">
   <div class="container">
-    Digital AI — Analise de Atendimento DermaClinic<br>
-    Dados de outubro/2026 — Fase de calibracao + pipeline automatizado (98 coletadas, 94 avaliadas)<br>
-    <span style="opacity:.6">reports.digital-ai.tech/dermaclinic/desempenho-atendentes/</span>
+    Relatório gerado automaticamente por <strong>Digital AI Analytics</strong> · Pipeline de Análise de Atendimento v1<br>
+    Dados: Chatwoot API · Processamento: n8n + GPT-4o-mini · Score: Quality Score v2 (SIGMA)<br>
+    <span style="opacity:.6">Build: 20261018-1</span>
   </div>
 </div>
 
 <script>
-// View switching
-function showView(view) {
-  // Hide all views
-  document.querySelectorAll('.view-section').forEach(function(el) { el.classList.remove('active'); });
-  // Show target
-  var target = document.getElementById('view-' + view);
-  if (target) target.classList.add('active');
-  // Update buttons
-  document.querySelectorAll('.filter-btn').forEach(function(btn) { btn.classList.remove('active'); });
-  event.currentTarget ? event.currentTarget.classList.add('active') : null;
-  // Also handle ranking table clicks
-  document.querySelectorAll('.filter-btn').forEach(function(btn) {
-    if (btn.textContent.trim().toLowerCase().indexOf(view) !== -1 || (view === 'geral' && btn.textContent.trim() === 'Geral')) {
-      btn.classList.add('active');
+// === NAV TABS ===
+function showView(id) {
+  document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// === CHART DEFAULTS ===
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+Chart.defaults.font.size = 13;
+Chart.defaults.color = '#475569';
+
+// === Conversão (Doughnut) ===
+new Chart(document.getElementById('chartConversao'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Convertidas', 'Não convertidas'],
+    datasets: [{
+      data: [48, 73],
+      backgroundColor: ['#059669', '#DC2626'],
+      borderWidth: 0
+    }]
+  },
+  options: {
+    cutout: '65%',
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyle: 'circle' } }
     }
-  });
-  // Scroll to top
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  // Initialize charts for individual views
-  initAgentCharts(view);
-}
+  }
+});
 
-// Chart instances
-var chartInstances = {};
-
-function destroyChart(id) {
-  if (chartInstances[id]) { chartInstances[id].destroy(); delete chartInstances[id]; }
-}
-
-function initAgentCharts(view) {
-  var chartConfigs = {
-    daniela: { id: 'chartDaniela', labels: ['Agendou','Perdido','Excluida'], data: [27,28,3], colors: ['#059669','#DC2626','#94A3B8'] },
-    alessandra: { id: 'chartAlessandra', labels: ['Agendou','Perdido'], data: [18,8], colors: ['#059669','#DC2626'] },
-    cristiane: { id: 'chartCristiane', labels: ['Agendou','Perdido'], data: [2,6], colors: ['#059669','#DC2626'] }
-  };
-  var cfg = chartConfigs[view];
-  if (!cfg) return;
-  var el = document.getElementById(cfg.id);
-  if (!el) return;
-  destroyChart(cfg.id);
-  chartInstances[cfg.id] = new Chart(el, {
-    type: 'doughnut',
-    data: {
-      labels: cfg.labels,
-      datasets: [{ data: cfg.data, backgroundColor: cfg.colors, borderWidth: 0 }]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { position: 'bottom', labels: { font: { family: 'DM Sans', size: 13 }, padding: 16 } } }
+// === Severidade (Bar) ===
+new Chart(document.getElementById('chartSeveridade'), {
+  type: 'bar',
+  data: {
+    labels: ['Baixa', 'Média', 'Alta', 'Crítica'],
+    datasets: [{
+      data: [37, 33, 29, 22],
+      backgroundColor: ['#059669', '#D97706', '#EA580C', '#DC2626'],
+      borderRadius: 6,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, grid: { color: '#EEF2F8' } },
+      x: { grid: { display: false } }
     }
-  });
-}
+  }
+});
 
-// Main charts (Geral view)
-document.addEventListener('DOMContentLoaded', function() {
-  // Conversion by attendant
-  new Chart(document.getElementById('chartConversao'), {
-    type: 'bar',
-    data: {
-      labels: ['Alessandra\n69%', 'Daniela P.\n49%', 'Cristiane\n25%', 'Gabriella\n—', 'Daiane\n33%'],
-      datasets: [
-        { label: 'Agendou', data: [18, 27, 2, 0, 1], backgroundColor: '#059669', borderRadius: 6 },
-        { label: 'Nao agendou', data: [8, 28, 6, 1, 2], backgroundColor: '#DC2626', borderRadius: 6 }
-      ]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { position: 'bottom', labels: { font: { family: 'DM Sans' } } } },
-      scales: {
-        x: { stacked: true, grid: { display: false } },
-        y: { stacked: true, beginAtZero: true, ticks: { stepSize: 2 } }
+// === Motivos de Perda (Horizontal Bar) ===
+new Chart(document.getElementById('chartMotivos'), {
+  type: 'bar',
+  data: {
+    labels: ['Sem follow-up', 'Não classificado', 'Indisponibilidade', 'Preço'],
+    datasets: [{
+      data: [51, 9, 8, 5],
+      backgroundColor: ['#DC2626', '#94A3B8', '#D97706', '#EA580C'],
+      borderRadius: 6,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { beginAtZero: true, grid: { color: '#EEF2F8' } },
+      y: { grid: { display: false } }
+    }
+  }
+});
+
+// === Follow-up (Doughnut) ===
+new Chart(document.getElementById('chartFollowup'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Falhou', 'N/A', 'Bom', 'Atenção'],
+    datasets: [{
+      data: [54, 57, 7, 3],
+      backgroundColor: ['#DC2626', '#94A3B8', '#059669', '#D97706'],
+      borderWidth: 0
+    }]
+  },
+  options: {
+    cutout: '65%',
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyle: 'circle' } }
+    }
+  }
+});
+
+// === Dia da Semana (Bar) ===
+new Chart(document.getElementById('chartDow'), {
+  type: 'bar',
+  data: {
+    labels: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+    datasets: [{
+      label: 'Score Médio',
+      data: [4.80, 5.48, 5.06, 5.54, 5.91, 5.75, 3.20],
+      backgroundColor: [
+        '#D97706', '#2D52EF', '#D97706', '#2D52EF', '#059669', '#2D52EF', '#DC2626'
+      ],
+      borderRadius: 6,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, max: 10, grid: { color: '#EEF2F8' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// === Hora do Dia (Line) ===
+const hourLabels = [0,4,6,7,8,9,10,11,12,13,14,15,16,17,18,20,21,22];
+const hourScores = [8.05,2.60,3.83,7.27,6.38,5.37,5.99,5.51,6.62,4.68,6.31,6.65,4.23,2.67,3.92,3.75,2.70,3.60];
+const hourCounts = [2,1,2,3,4,5,4,12,5,6,11,8,6,3,3,1,1,2];
+
+new Chart(document.getElementById('chartHour'), {
+  type: 'line',
+  data: {
+    labels: hourLabels.map(h => h + 'h'),
+    datasets: [{
+      label: 'Score Médio',
+      data: hourScores,
+      borderColor: '#2D52EF',
+      backgroundColor: 'rgba(45,82,239,.1)',
+      fill: true,
+      tension: .4,
+      pointRadius: 4,
+      pointBackgroundColor: hourScores.map(s => s >= 6 ? '#059669' : s >= 4 ? '#D97706' : '#DC2626')
+    }]
+  },
+  options: {
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          afterLabel: function(ctx) {
+            return hourCounts[ctx.dataIndex] + ' conversas';
+          }
+        }
       }
-    }
-  });
-
-  // Loss reasons
-  new Chart(document.getElementById('chartMotivos'), {
-    type: 'doughnut',
-    data: {
-      labels: ['Sem follow-up', 'Preco sem valor', 'Resolucao prematura', 'Copy-paste', 'Handoff ruim'],
-      datasets: [{ data: [33, 12, 15, 10, 5], backgroundColor: ['#DC2626', '#F97316', '#EAB308', '#6366F1', '#94A3B8'], borderWidth: 0 }] /* out of 46 perdas */
     },
-    options: {
-      responsive: true,
-      plugins: { legend: { position: 'bottom', labels: { font: { family: 'DM Sans', size: 12 }, padding: 16 } } }
+    scales: {
+      y: { beginAtZero: true, max: 10, grid: { color: '#EEF2F8' } },
+      x: { grid: { display: false } }
     }
-  });
+  }
+});
+
+// === Radar Chart ===
+new Chart(document.getElementById('chartRadar'), {
+  type: 'radar',
+  data: {
+    labels: ['Empenho', 'Follow-up', 'Tempo Resp.', 'Preço', 'Escrita'],
+    datasets: [
+      {
+        label: 'Daniela',
+        data: [6.7, 4.4, 5.9, 5.7, 8.9],
+        borderColor: '#2D52EF',
+        backgroundColor: 'rgba(45,82,239,.1)',
+        borderWidth: 2,
+        pointRadius: 3
+      },
+      {
+        label: 'Alessandra',
+        data: [6.1, 4.0, 5.9, 5.3, 9.4],
+        borderColor: '#8B5CF6',
+        backgroundColor: 'rgba(139,92,246,.1)',
+        borderWidth: 2,
+        pointRadius: 3
+      },
+      {
+        label: 'Cristiane',
+        data: [6.5, 5.5, 5.0, 5.0, 9.0],
+        borderColor: '#EC4899',
+        backgroundColor: 'rgba(236,72,153,.1)',
+        borderWidth: 2,
+        pointRadius: 3
+      },
+      {
+        label: 'Daiane',
+        data: [6.0, 6.3, 7.0, 4.5, 7.0],
+        borderColor: '#F59E0B',
+        backgroundColor: 'rgba(245,158,11,.1)',
+        borderWidth: 2,
+        pointRadius: 3
+      }
+    ]
+  },
+  options: {
+    scales: {
+      r: {
+        beginAtZero: true,
+        max: 10,
+        ticks: { stepSize: 2, backdropColor: 'transparent' },
+        grid: { color: '#E2E8F0' },
+        pointLabels: { font: { family: "'Plus Jakarta Sans'", size: 13, weight: '600' } }
+      }
+    },
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 20, usePointStyle: true, pointStyle: 'circle' } }
+    }
+  }
 });
 </script>
 
 </body>
-<!-- build:20261017140000 -->
 </html>
