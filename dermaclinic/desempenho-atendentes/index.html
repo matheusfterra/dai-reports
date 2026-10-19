@@ -837,116 +837,92 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 
   <h2 class="section-title">Casos de Destaque</h2>
 
-  <!-- CRÍTICOS — Conversões perdidas reais por falha da equipe -->
+  <!-- Stats banner -->
+  <div id="casos-stats" style="display:none;margin-bottom:1.5rem;padding:1rem 1.5rem;background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--border);display:flex;flex-wrap:wrap;gap:1.5rem"></div>
 
-  <div class="evidence-card">
-    <div class="evidence-header">
-      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/inbox/56/conversations/19055" target="_blank">#19055</a> · Sessão Capilar com Fótons · <strong>Equipe</strong></div>
-      <span class="evidence-tag critica">Crítico</span>
-    </div>
-    <div class="evidence-text">Cliente perguntou sobre sessão capilar com fótons. Clara transferiu a conversa para a recepção, mas <strong>o cliente não recebeu nenhum retorno da equipe</strong>. Lead perdido por falta de resposta após transferência.</div>
-  </div>
+  <!-- Dynamic cards container -->
+  <div id="casos-loading" style="text-align:center;padding:2rem;color:var(--text-muted)">Carregando casos...</div>
+  <div id="casos-container"></div>
+  <div id="casos-error" style="display:none;text-align:center;padding:2rem;color:var(--danger)"></div>
 
-  <div class="evidence-card">
-    <div class="evidence-header">
-      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/inbox/56/conversations/19042" target="_blank">#19042</a> · Consulta Dr. Laércio · <strong>Equipe</strong></div>
-      <span class="evidence-tag critica">Crítico</span>
-    </div>
-    <div class="evidence-text">Cliente perguntou sobre o Dr. Laércio — intenção clara de agendamento com médico específico. Clara fez a transferência corretamente, mas <strong>o cliente não recebeu retorno da equipe</strong>. Lead perdido por falta de resposta.</div>
-  </div>
+  <script>
+  (function(){
+    var API_URL = 'https://webhook.digital-ai.tech/webhook/dermaclinic-casos-criticos';
+    var CHATWOOT_BASE = 'https://chat.digital-ai.tech/app/accounts/4/conversations/';
 
-  <div class="evidence-card">
-    <div class="evidence-header">
-      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/inbox/56/conversations/18976" target="_blank">#18976</a> · Consulta Vascular · <strong>Equipe</strong></div>
-      <span class="evidence-tag critica">Crítico</span>
-    </div>
-    <div class="evidence-text">Cliente perguntou sobre consulta com vascular. <strong>Recebeu logo de cara o preço, sem conversação ou sensação de acolhimento</strong>, e não respondeu mais. Faltou abordagem consultiva antes de informar valores.</div>
-  </div>
+    function tagHTML(severity) {
+      if (severity === 'critica') return '<span class="evidence-tag critica">Cr\u00edtico</span>';
+      if (severity === 'alta') return '<span class="evidence-tag" style="background:#fef3c7;color:#92400e">Aten\u00e7\u00e3o</span>';
+      return '<span class="evidence-tag positivo">Positivo</span>';
+    }
 
-  <div class="evidence-card">
-    <div class="evidence-header">
-      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/inbox/56/conversations/18968" target="_blank">#18968</a> · Consulta · <strong>Equipe</strong></div>
-      <span class="evidence-tag critica">Crítico</span>
-    </div>
-    <div class="evidence-text">Cliente perguntou sobre consulta. <strong>Recebeu o preço logo de cara, sem conversação ou acolhimento</strong>, e não respondeu mais. Mesmo padrão: informar valores sem antes entender a necessidade do paciente afasta o lead.</div>
-  </div>
+    function renderCard(c, type) {
+      var sev = type === 'positivos' ? 'positivo' : c.severity;
+      var assignee = c.assignee_name || 'Equipe';
+      var topic = c.topic || 'Atendimento';
+      var url = CHATWOOT_BASE + c.conversation_id;
+      return '<div class="evidence-card">' +
+        '<div class="evidence-header">' +
+          '<div class="evidence-conv"><a href="' + url + '" target="_blank">#' + c.conversation_id + '</a> \u00b7 ' + topic + ' \u00b7 <strong>' + assignee + '</strong></div>' +
+          tagHTML(sev) +
+        '</div>' +
+        '<div class="evidence-text">' + (c.summary || c.loss_reason || 'Sem descri\u00e7\u00e3o dispon\u00edvel') + '</div>' +
+      '</div>';
+    }
 
-  <div class="evidence-card">
-    <div class="evidence-header">
-      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/inbox/56/conversations/18847" target="_blank">#18847</a> · Atendimento Humano · <strong>Equipe</strong></div>
-      <span class="evidence-tag critica">Crítico</span>
-    </div>
-    <div class="evidence-text">Cliente quis falar com uma pessoa real. Clara transferiu corretamente. <strong>Cliente retornou enviando "alo", mas não recebeu retorno da equipe.</strong> Lead perdido por abandono após transferência.</div>
-  </div>
+    function renderStats(s) {
+      var el = document.getElementById('casos-stats');
+      if (!s) { el.style.display = 'none'; return; }
+      el.style.display = 'flex';
+      var items = [
+        { label: 'Analisadas', value: s.total_analisadas, color: 'var(--text)' },
+        { label: 'Convertidas', value: s.total_convertidas, color: 'var(--success)' },
+        { label: 'Perdas', value: s.total_perdas, color: 'var(--danger)' },
+        { label: 'Cr\u00edticas', value: s.total_criticas, color: 'var(--danger)' },
+        { label: 'Score M\u00e9dio', value: s.avg_quality_score || '-', color: 'var(--warning)' }
+      ];
+      el.innerHTML = items.map(function(i){
+        return '<div style="flex:1;min-width:100px;text-align:center">' +
+          '<div style="font-size:.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase">' + i.label + '</div>' +
+          '<div style="font-family:var(--font-head);font-weight:800;font-size:1.4rem;color:' + i.color + '">' + i.value + '</div>' +
+        '</div>';
+      }).join('');
+    }
 
-  <!-- ATENÇÃO — Oportunidades de melhoria / follow-up ausente -->
+    fetch(API_URL)
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        document.getElementById('casos-loading').style.display = 'none';
+        renderStats(data.stats);
 
-  <div class="evidence-card">
-    <div class="evidence-header">
-      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/inbox/56/conversations/18989" target="_blank">#18989</a> · Contato por Ligação · <strong>Equipe</strong></div>
-      <span class="evidence-tag" style="background:#fef3c7;color:#92400e">Atenção</span>
-    </div>
-    <div class="evidence-text">Cliente pediu contato para fazer ligação, mas <strong>recebeu retorno da equipe sobre como funcionam as consultas</strong> — desalinhamento entre o que o cliente pediu e o que foi respondido.</div>
-  </div>
+        var html = '';
 
-  <div class="evidence-card">
-    <div class="evidence-header">
-      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/inbox/56/conversations/18973" target="_blank">#18973</a> · Interesse em Agendar · <strong>Equipe</strong></div>
-      <span class="evidence-tag" style="background:#fef3c7;color:#92400e">Atenção</span>
-    </div>
-    <div class="evidence-text">Cliente demonstrou interesse em agendar consulta. Ao ser perguntado sobre o tipo, respondeu "amanhã conversamos". <strong>Não houve follow-up no dia seguinte</strong> — a conversa morreu.</div>
-  </div>
+        if (data.criticos && data.criticos.length) {
+          html += '<h3 style="margin:1.5rem 0 .75rem;font-size:1rem;color:var(--danger)">Cr\u00edticos (' + data.criticos.length + ')</h3>';
+          data.criticos.forEach(function(c){ html += renderCard(c, 'criticos'); });
+        }
 
-  <div class="evidence-card">
-    <div class="evidence-header">
-      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/inbox/56/conversations/18972" target="_blank">#18972</a> · Interesse em Agendar · <strong>Equipe</strong></div>
-      <span class="evidence-tag" style="background:#fef3c7;color:#92400e">Atenção</span>
-    </div>
-    <div class="evidence-text">Cliente demonstrou interesse em agendar, mas respondeu "Eu vou verificar e volto a entrar em contato novamente. Obrigada". <strong>Não houve follow-up para retomar o interesse</strong> — oportunidade esfriou.</div>
-  </div>
+        if (data.atencao && data.atencao.length) {
+          html += '<h3 style="margin:1.5rem 0 .75rem;font-size:1rem;color:#92400e">Aten\u00e7\u00e3o (' + data.atencao.length + ')</h3>';
+          data.atencao.forEach(function(c){ html += renderCard(c, 'atencao'); });
+        }
 
-  <div class="evidence-card">
-    <div class="evidence-header">
-      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/inbox/56/conversations/18751" target="_blank">#18751</a> · Especialista · <strong>Equipe</strong></div>
-      <span class="evidence-tag" style="background:#fef3c7;color:#92400e">Atenção</span>
-    </div>
-    <div class="evidence-text">Cliente solicitou atendimento com especialista. Clara transferiu, equipe respondeu, mas cliente não retornou. <strong>Faltou follow-up para incentivar o cliente a dar sequência à dúvida.</strong></div>
-  </div>
+        if (data.positivos && data.positivos.length) {
+          html += '<h3 style="margin:1.5rem 0 .75rem;font-size:1rem;color:var(--success)">Positivos (' + data.positivos.length + ')</h3>';
+          data.positivos.forEach(function(c){ html += renderCard(c, 'positivos'); });
+        }
 
-  <div class="evidence-card">
-    <div class="evidence-header">
-      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/inbox/56/conversations/18702" target="_blank">#18702</a> · Processo de Agendamento · <strong>Equipe</strong></div>
-      <span class="evidence-tag" style="background:#fef3c7;color:#92400e">Atenção</span>
-    </div>
-    <div class="evidence-text">Cliente em processo de agendamento — Clara trouxe datas, mas nenhuma servia. Clara transferiu para a equipe aproveitar a oportunidade. Equipe retornou com pergunta, <strong>cliente não respondeu e não houve follow-up</strong>.</div>
-  </div>
+        if (!html) html = '<div style="text-align:center;padding:2rem;color:var(--text-muted)">Nenhum caso de destaque encontrado.</div>';
 
-  <div class="evidence-card">
-    <div class="evidence-header">
-      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/inbox/56/conversations/18640" target="_blank">#18640</a> · Agendamento Novembro · <strong>Equipe</strong></div>
-      <span class="evidence-tag" style="background:#fef3c7;color:#92400e">Atenção</span>
-    </div>
-    <div class="evidence-text">Cliente demonstrou interesse em agendar para novembro. Equipe retornou informando que não havia datas disponíveis, <strong>mas prometeu que entraria em contato</strong>. Acompanhar se o retorno foi feito.</div>
-  </div>
-
-  <!-- POSITIVOS — Exemplos de bom atendimento -->
-
-  <div class="evidence-card">
-    <div class="evidence-header">
-      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/inbox/56/conversations/18939" target="_blank">#18939</a> · Exemplo de Acolhimento · <strong>Equipe</strong></div>
-      <span class="evidence-tag positivo">Positivo</span>
-    </div>
-    <div class="evidence-text">Embora não tenha convertido em agendamento, <strong>este atendimento é exemplo de quando o acolhimento funciona bem</strong>: o cliente interage, volta a responder e tem a sensação de que a clínica está com ele. Contraste com os casos onde o preço é informado logo de cara.</div>
-  </div>
-
-  <div class="evidence-card">
-    <div class="evidence-header">
-      <div class="evidence-conv"><a href="https://chat.digital-ai.tech/app/accounts/4/inbox/56/conversations/18802" target="_blank">#18802</a> · Agendamento Concluído · <strong>Equipe</strong></div>
-      <span class="evidence-tag positivo">Positivo</span>
-    </div>
-    <div class="evidence-text"><strong>Agendamento realizado com sucesso</strong> — cliente foi de fato atendido. Exemplo de fluxo completo funcionando corretamente.</div>
-  </div>
-
+        document.getElementById('casos-container').innerHTML = html;
+      })
+      .catch(function(err){
+        document.getElementById('casos-loading').style.display = 'none';
+        document.getElementById('casos-error').style.display = 'block';
+        document.getElementById('casos-error').textContent = 'Erro ao carregar casos: ' + err.message;
+      });
+  })();
+  </script>
 
 </div>
 
