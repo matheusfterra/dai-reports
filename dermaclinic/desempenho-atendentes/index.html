@@ -858,15 +858,15 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 
     function renderCard(c, type) {
       var sev = type === 'positivos' ? 'positivo' : c.severity;
-      var assignee = c.assignee_name || 'Equipe';
-      var topic = c.topic || 'Atendimento';
-      var url = CHATWOOT_BASE + c.conversation_id;
+      var attendant = c.attendant || 'Equipe';
+      var patient = c.patient || 'Atendimento';
+      var url = c.url || (CHATWOOT_BASE + c.id);
       return '<div class="evidence-card">' +
         '<div class="evidence-header">' +
-          '<div class="evidence-conv"><a href="' + url + '" target="_blank">#' + c.conversation_id + '</a> \u00b7 ' + topic + ' \u00b7 <strong>' + assignee + '</strong></div>' +
+          '<div class="evidence-conv"><a href="' + url + '" target="_blank">#' + c.id + '</a> \u00b7 ' + patient + ' \u00b7 <strong>' + attendant + '</strong></div>' +
           tagHTML(sev) +
         '</div>' +
-        '<div class="evidence-text">' + (c.summary || c.loss_reason || 'Sem descri\u00e7\u00e3o dispon\u00edvel') + '</div>' +
+        '<div class="evidence-text">' + (c.description || c.loss_reason || 'Sem descri\u00e7\u00e3o dispon\u00edvel') + '</div>' +
       '</div>';
     }
 
