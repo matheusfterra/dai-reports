@@ -425,14 +425,17 @@ function exclusionLabel(key) {
 
 function fmtDatePtBR(isoStr) {
   if (!isoStr) return '';
-  var d = new Date(isoStr);
+  var parts = isoStr.substring(0, 10).split('-');
+  var d = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
   return d.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
 function fmtPeriod(start, end) {
   if (!start || !end) return '';
-  var ds = new Date(start);
-  var de = new Date(end);
+  var sp = start.substring(0, 10).split('-');
+  var ep = end.substring(0, 10).split('-');
+  var ds = new Date(Number(sp[0]), Number(sp[1]) - 1, Number(sp[2]));
+  var de = new Date(Number(ep[0]), Number(ep[1]) - 1, Number(ep[2]));
   var months = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
   var sDay = ds.getDate();
   var sMon = months[ds.getMonth()];
