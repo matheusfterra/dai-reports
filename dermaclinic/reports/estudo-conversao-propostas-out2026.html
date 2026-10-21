@@ -103,7 +103,10 @@ body {
 /* Charts */
 .chart-container {
   position: relative; width: 100%; max-width: 600px;
-  margin: 0 auto 20px; height: 300px;
+  margin: 0 auto 20px; height: 300px; min-height: 300px;
+}
+.chart-container canvas {
+  display: block; width: 100% !important; height: 100% !important;
 }
 .chart-row {
   display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
@@ -282,7 +285,7 @@ a.patient-link:hover { text-decoration: underline; }
   </div>
   <div class="kpi-card">
     <div class="kpi-value">R$ 4.815</div>
-    <div class="kpi-label">Ticket Medio</div>
+    <div class="kpi-label">Ticket M&eacute;dio</div>
   </div>
 </div>
 
@@ -291,10 +294,10 @@ a.patient-link:hover { text-decoration: underline; }
   <h2>Panorama das Propostas</h2>
   <div class="chart-row">
     <div class="chart-container">
-      <canvas id="chartStatus"></canvas>
+      <canvas id="chartStatus" width="600" height="300"></canvas>
     </div>
     <div class="chart-container">
-      <canvas id="chartMensal"></canvas>
+      <canvas id="chartMensal" width="600" height="300"></canvas>
     </div>
   </div>
   <div class="insight-box">
@@ -310,10 +313,10 @@ a.patient-link:hover { text-decoration: underline; }
   <h2>Cobertura de Follow-up por Agente</h2>
   <div class="chart-row">
     <div class="chart-container">
-      <canvas id="chartCoverage"></canvas>
+      <canvas id="chartCoverage" width="600" height="300"></canvas>
     </div>
     <div class="chart-container">
-      <canvas id="chartAgentDist"></canvas>
+      <canvas id="chartAgentDist" width="600" height="300"></canvas>
     </div>
   </div>
   <div class="insight-box warning">
@@ -328,10 +331,10 @@ a.patient-link:hover { text-decoration: underline; }
   <h2>Taxa de Conversão por Agente</h2>
   <div class="chart-row">
     <div class="chart-container">
-      <canvas id="chartConvRate"></canvas>
+      <canvas id="chartConvRate" width="600" height="300"></canvas>
     </div>
     <div class="chart-container">
-      <canvas id="chartFaturamento"></canvas>
+      <canvas id="chartFaturamento" width="600" height="300"></canvas>
     </div>
   </div>
   <div class="insight-box success">
@@ -372,7 +375,7 @@ a.patient-link:hover { text-decoration: underline; }
     </div>
   </div>
   <div class="chart-container" style="max-width:500px;">
-    <canvas id="chartComparativo"></canvas>
+    <canvas id="chartComparativo" width="500" height="300"></canvas>
   </div>
   <div class="insight-box purple">
     <strong>Análise Daniela:</strong> Considerando TODAS as propostas onde Daniela atuou
@@ -617,7 +620,7 @@ a.patient-link:hover { text-decoration: underline; }
     </div>
   </div>
   <div class="chart-container" style="max-width:400px;">
-    <canvas id="chartObjecoes"></canvas>
+    <canvas id="chartObjecoes" width="400" height="300"></canvas>
   </div>
   <h3>Detalhamento por Paciente</h3>
   <table>
@@ -1765,6 +1768,15 @@ a.patient-link:hover { text-decoration: underline; }
 // ============================================================
 // AUTH + CHART INITIALIZATION (onReady pattern)
 // ============================================================
+
+// waitForChart: garante que Chart.js carregou (CDN pode demorar em iframe)
+function waitForChart(cb, attempts) {
+  attempts = attempts || 0;
+  if (typeof Chart !== 'undefined') return cb();
+  if (attempts > 50) return; // 5s max
+  setTimeout(function() { waitForChart(cb, attempts + 1); }, 100);
+}
+
 initChatwootAuth({
   gateLoading: 'gate-loading',
   gateDirect:  'gate-direct',
@@ -1772,11 +1784,30 @@ initChatwootAuth({
   client:      'dermaclinic',
   report:      'estudo-conversao-propostas-out2026',
   onReady: function(auth) {
-    // Double rAF: garante que o browser pintou o #app (display:block)
-    // antes do Chart.js medir as dimensões dos canvas
-    requestAnimationFrame(function() {
+    // Espera Chart.js estar disponivel (CDN pode carregar async em iframe)
+    waitForChart(function() {
+      // Forca reflow apos display:block para que canvas tenham dimensoes
+      var appEl = document.getElementById('app');
+      void appEl.offsetWidth;
+
+      // Forca dimensoes explicitas em cada canvas ANTES de inicializar Chart.js
+      var canvases = document.querySelectorAll('.chart-container canvas');
+      for (var i = 0; i < canvases.length; i++) {
+        var c = canvases[i];
+        var rect = c.parentElement.getBoundingClientRect();
+        // Se o container tem dimensao 0, forcar minimo
+        if (rect.width < 10) c.parentElement.style.width = '100%';
+        if (rect.height < 10) c.parentElement.style.height = '300px';
+        c.style.display = 'block';
+        c.style.width = '100%';
+        c.style.height = '100%';
+      }
+
+      // rAF duplo para garantir paint antes de Chart.js medir
       requestAnimationFrame(function() {
-        initAllCharts();
+        requestAnimationFrame(function() {
+          initAllCharts();
+        });
       });
     });
   }
@@ -1990,6 +2021,20 @@ function initAllCharts() {
       }
     }
   });
+
+  // Force resize de TODOS os charts apos criacao
+  // Necessario porque em iframes o layout pode nao estar estavel
+  setTimeout(function() {
+    Object.keys(Chart.instances).forEach(function(key) {
+      Chart.instances[key].resize();
+    });
+  }, 100);
+  // Segundo resize apos 500ms como fallback extra para iframes lentos
+  setTimeout(function() {
+    Object.keys(Chart.instances).forEach(function(key) {
+      Chart.instances[key].resize();
+    });
+  }, 500);
 }
 </script>
 </body>
