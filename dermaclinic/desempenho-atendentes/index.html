@@ -414,13 +414,55 @@ function lossReasonLabel(key) {
   return map[key] || key;
 }
 
-function exclusionLabel(key) {
-  var map = {
+// Agrupa exclusões técnicas em categorias amigáveis ao cliente
+function groupExclusions(exclusions) {
+  if (!exclusions) return {};
+  var groups = {
+    'Campanhas sem resposta': 0,
+    'Convênio': 0,
+    'Prospecção B2B / Empresas': 0,
+    'Currículo / Vaga de emprego': 0,
+    'Fora do escopo clínico': 0,
+    'Automações do sistema': 0,
+    'Outros': 0
+  };
+  var mapping = {
     campanha_sem_resposta: 'Campanhas sem resposta',
     convenio: 'Convênio',
-    prospeccao_b2b: 'Prospecção B2B'
+    convenio_incompativel: 'Convênio',
+    convenio_sem_interacao: 'Convênio',
+    prospeccao_b2b: 'Prospecção B2B / Empresas',
+    marketing_spam_empresa: 'Prospecção B2B / Empresas',
+    curriculo_vaga_emprego: 'Currículo / Vaga de emprego',
+    fora_escopo: 'Fora do escopo clínico',
+    fora_escopo_clinico: 'Fora do escopo clínico',
+    fora_do_escopo_clinico: 'Fora do escopo clínico',
+    bot_only: 'Automações do sistema',
+    sem_interacao_humana: 'Automações do sistema',
+    confirmacao_automatica: 'Automações do sistema',
+    confirmacao_agendamento: 'Automações do sistema',
+    aniversario: 'Automações do sistema',
+    aniversario_automatico: 'Automações do sistema',
+    disparo_campanha: 'Automações do sistema',
+    administrativo: 'Automações do sistema',
+    dado_invalido: 'Automações do sistema',
+    desistencia_explicita: 'Outros'
   };
-  return map[key] || key;
+  Object.keys(exclusions).forEach(function(k) {
+    var group = mapping[k] || 'Outros';
+    groups[group] += exclusions[k];
+  });
+  // Remove grupos com zero
+  var result = {};
+  Object.keys(groups).forEach(function(g) {
+    if (groups[g] > 0) result[g] = groups[g];
+  });
+  return result;
+}
+
+function exclusionLabel(key) {
+  // Usado apenas como fallback — preferir groupExclusions()
+  return key;
 }
 
 function fmtDatePtBR(isoStr) {
@@ -536,13 +578,12 @@ function renderInsight(stats, exclusions, lossReasons) {
 
   var sfPct = lossReasons && stats.lost > 0 ? Math.round(((lossReasons.sem_followup||0) / stats.lost) * 100) : 0;
 
-  // Build exclusions text
+  // Build exclusions text (grouped, client-friendly)
+  var grouped = groupExclusions(exclusions);
   var exclParts = [];
-  if (exclusions) {
-    Object.keys(exclusions).forEach(function(k) {
-      exclParts.push(exclusions[k] + ' ' + exclusionLabel(k).toLowerCase());
-    });
-  }
+  Object.keys(grouped).forEach(function(g) {
+    exclParts.push(grouped[g] + ' ' + g.toLowerCase());
+  });
 
   document.getElementById('insight-container').innerHTML =
     '<div class="insight-box">' +
@@ -648,12 +689,11 @@ function renderChartsGeral(stats, lossReasons) {
 // ============================================================
 function renderExclusoes(stats, exclusions) {
   var excluded = stats.excluded || (stats.total - stats.analyzed);
+  var grouped = groupExclusions(exclusions);
   var parts = [];
-  if (exclusions) {
-    Object.keys(exclusions).forEach(function(k) {
-      parts.push('<strong>' + exclusions[k] + ' ' + exclusionLabel(k).toLowerCase() + '</strong>');
-    });
-  }
+  Object.keys(grouped).forEach(function(g) {
+    parts.push('<strong>' + grouped[g] + ' ' + g.toLowerCase() + '</strong>');
+  });
   document.getElementById('exclusoes-container').innerHTML =
     '<div class="insight-box" style="background:var(--bg)">' +
       '<div class="insight-title">' +
