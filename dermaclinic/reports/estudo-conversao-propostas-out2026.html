@@ -92,6 +92,26 @@ body {
   font-size: 1.1rem; color: var(--gray-800); margin: 16px 0 10px;
 }
 
+/* Avaliação detalhada */
+.criterio-block { margin-bottom: 28px; }
+.criterio-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.criterio-nota { font-size: 1.3rem; font-weight: 700; min-width: 50px; text-align: center; padding: 4px 10px; border-radius: 8px; color: #fff; }
+.nota-alta { background: var(--success); }
+.nota-media { background: var(--warning); }
+.nota-baixa { background: var(--danger); }
+.criterio-titulo { font-size: 1.05rem; font-weight: 700; color: var(--gray-800); }
+.criterio-desc { color: var(--gray-600); font-size: 0.92rem; margin-bottom: 12px; line-height: 1.5; }
+.exemplo-card { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; }
+.exemplo-card.positivo { border-left: 4px solid var(--success); }
+.exemplo-card.negativo { border-left: 4px solid var(--danger); }
+.exemplo-card.neutro { border-left: 4px solid var(--warning); }
+.exemplo-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; font-size: 0.85rem; color: var(--gray-500); }
+.exemplo-meta a { color: var(--primary); text-decoration: none; font-weight: 600; }
+.exemplo-meta a:hover { text-decoration: underline; }
+.exemplo-citacao { font-style: italic; color: var(--gray-700); background: #fff; padding: 8px 12px; border-radius: 6px; margin: 8px 0; font-size: 0.9rem; border-left: 3px solid var(--gray-300); }
+.exemplo-analise { color: var(--gray-800); font-size: 0.9rem; }
+.exemplo-analise strong { color: var(--danger); }
+
 /* Charts */
 .chart-container {
   position: relative; width: 100%; max-width: 600px;
@@ -395,45 +415,260 @@ a.patient-link:hover { text-decoration: underline; }
     </div>
   </div>
 
-  <h3>Avaliação Qualitativa (baseada em leitura das conversas)</h3>
-  <table>
-    <thead>
-      <tr><th>Critério</th><th>Nota</th><th>Observação</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><strong>Tempo de resposta</strong></td>
-        <td style="text-align:center; font-weight:700; color:var(--success);">9/10</td>
-        <td>Responde em minutos quando o paciente entra em contato</td>
-      </tr>
-      <tr>
-        <td><strong>Personalização</strong></td>
-        <td style="text-align:center; font-weight:700; color:var(--primary);">7/10</td>
-        <td>Passa valores e detalhes dos procedimentos, mas nem sempre personaliza a abertura</td>
-      </tr>
-      <tr>
-        <td><strong>Técnica de venda</strong></td>
-        <td style="text-align:center; font-weight:700; color:var(--warning);">5/10</td>
-        <td>Envia orçamento e espera decisão do paciente &mdash; não usa técnicas de fechamento</td>
-      </tr>
-      <tr>
-        <td><strong>Follow-up proativo</strong></td>
-        <td style="text-align:center; font-weight:700; color:var(--danger);">3/10</td>
-        <td>Pacientes ficam semanas sem retorno após silêncio &mdash; não persegue propostas pendentes</td>
-      </tr>
-      <tr>
-        <td><strong>Tratamento de objeções</strong></td>
-        <td style="text-align:center; font-weight:700; color:var(--warning);">5/10</td>
-        <td>Trata hesitações como logística (parcelamento, datas), não como objeção comercial</td>
-      </tr>
-    </tbody>
-  </table>
+  <h3>Avaliação Qualitativa Detalhada (baseada em leitura real das conversas)</h3>
+  <p style="color: var(--gray-600); font-size: 0.9rem; margin-bottom: 20px;">
+    Cada critério abaixo foi avaliado pela leitura das conversas no Chatwoot. Os links levam direto para a conversa citada.
+  </p>
+
+  <!-- CRITÉRIO 1: Tempo de resposta -->
+  <div class="criterio-block">
+    <div class="criterio-header">
+      <span class="criterio-nota nota-alta">9/10</span>
+      <span class="criterio-titulo">Tempo de Resposta</span>
+    </div>
+    <p class="criterio-desc">
+      Daniela responde a maioria das mensagens em menos de 5 minutos durante horário comercial.
+      Quando está online, o tempo médio é inferior a 2 minutos. Fora do expediente, responde na manhã seguinte.
+    </p>
+    <div class="exemplo-card positivo">
+      <div class="exemplo-meta">
+        <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17654" target="_blank">Conv #17654</a>
+        <span>Carolina Tomazi &bull; R$ 6.800</span>
+      </div>
+      <div class="exemplo-citacao">
+        Paciente 09:24: "Bom dia!! 😊😁"<br>
+        Daniela 09:25: "Seria o megaderme, quando o centro cirurgico estiver pronto😊😊"
+      </div>
+      <div class="exemplo-analise">Resposta em <strong style="color:var(--success);">58 segundos</strong>. Manteve ritmo em todas as perguntas seguintes da paciente.</div>
+    </div>
+    <div class="exemplo-card positivo">
+      <div class="exemplo-meta">
+        <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/16964" target="_blank">Conv #16964</a>
+        <span>Patricia Ambos &bull; R$ 4.700</span>
+      </div>
+      <div class="exemplo-citacao">
+        Paciente 13:41: "Nesses valores já está incluso anestesia?"<br>
+        Daniela 13:42: "Sera com local, voce gostaria de fazer no centro cirurgico com o medico anestesista junto"
+      </div>
+      <div class="exemplo-analise">Resposta em <strong style="color:var(--success);">1 minuto</strong>, já com contra-oferta (centro cirúrgico).</div>
+    </div>
+    <div class="exemplo-card positivo">
+      <div class="exemplo-meta">
+        <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17759" target="_blank">Conv #17759</a>
+        <span>Micheli Guszak &bull; Reagendamento</span>
+      </div>
+      <div class="exemplo-citacao">
+        Paciente 19:16: "Olá | Eu trabalho na parte da manhã"<br>
+        Daniela 19:28: "Dia 23/09 as 15.30"
+      </div>
+      <div class="exemplo-analise">Resposta em <strong style="color:var(--success);">12 minutos</strong> (fora do expediente, 19h) com proposta concreta de horário.</div>
+    </div>
+  </div>
+
+  <!-- CRITÉRIO 2: Personalização -->
+  <div class="criterio-block">
+    <div class="criterio-header">
+      <span class="criterio-nota nota-media">7/10</span>
+      <span class="criterio-titulo">Personalização</span>
+    </div>
+    <p class="criterio-desc">
+      Quando já conhece a paciente (Tania, Micheli), Daniela personaliza com nome e tom acolhedor.
+      Porém em contatos de primeiro orçamento, passa lista de preços como catálogo &mdash; sem mencionar a indicação médica,
+      sem nomear a paciente no corpo, sem contextualizar por quê cada procedimento foi indicado.
+    </p>
+    <div class="exemplo-card positivo">
+      <div class="exemplo-meta">
+        <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/16598" target="_blank">Conv #16598</a>
+        <span>Tania Steuernagel &bull; Cliente VIP</span>
+      </div>
+      <div class="exemplo-citacao">
+        Daniela: "Ola, Tania querida, claro vamos agendar o retorno, pode ser na quinta as 18:00"
+      </div>
+      <div class="exemplo-analise">Usou "querida", reconheceu pedido de retorno e propôs horário. Tom pessoal e relacional.</div>
+    </div>
+    <div class="exemplo-card negativo">
+      <div class="exemplo-meta">
+        <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/16345" target="_blank">Conv #16345</a>
+        <span>Camila Garcia &bull; R$ 10.490</span>
+      </div>
+      <div class="exemplo-citacao">
+        Daniela: "Ola, boa tarde, tudo bem? | Claro passo sim | magaderme 2500,00 + 600,00 colo | spectra a cada 15 dias 6 sessoes 3140.00 ou por sessao 525,00 | 2 seringas de preecnhimento 3100,00 | Botox face 1750,00"
+      </div>
+      <div class="exemplo-analise"><strong>Orçamento-catálogo:</strong> lista de preços sem mencionar a receita da Dra., sem usar o nome da paciente no corpo, sem contextualizar a indicação de cada procedimento.</div>
+    </div>
+    <div class="exemplo-card negativo">
+      <div class="exemplo-meta">
+        <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17216" target="_blank">Conv #17216</a>
+        <span>Samir Rosa &bull; R$ 9.250</span>
+      </div>
+      <div class="exemplo-citacao">
+        Daniela: "Preenchimento 4 seringas 5800,00 | Botox face 1750,00 | Fotona Rosacea 1200,00 sessao ou Dra indicou fazer o fotona 4d e inclui a rosacea 4500,00" / "Fico a disposicao para qualquer duvida"
+      </div>
+      <div class="exemplo-analise"><strong>Sem nome do paciente, sem call-to-action, sem ancoragem.</strong> Encerrou com genérico "fico a disposição". Paciente sumiu por 16 dias.</div>
+    </div>
+  </div>
+
+  <!-- CRITÉRIO 3: Técnica de venda -->
+  <div class="criterio-block">
+    <div class="criterio-header">
+      <span class="criterio-nota nota-media">5/10</span>
+      <span class="criterio-titulo">Técnica de Venda / Fechamento</span>
+    </div>
+    <p class="criterio-desc">
+      Padrão dominante: envia lista de preços &rarr; fecha conversa como "resolvida" &rarr; não propõe próximo passo.
+      Não usa técnicas de ancoragem de valor, urgência, perguntas qualificadoras ou confirmação de intenção.
+    </p>
+    <div class="exemplo-card negativo">
+      <div class="exemplo-meta">
+        <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17216" target="_blank">Conv #17216</a>
+        <span>Samir Rosa &bull; R$ 9.250</span>
+      </div>
+      <div class="exemplo-citacao">
+        Orçamento enviado 18:29. Conversa marcada como "resolvida" às 18:39 (10 min depois).<br>
+        Daniela: "Fico a disposicao para qualquer duvida"
+      </div>
+      <div class="exemplo-analise"><strong>Orçamento de R$ 9.250 encerrado em 10 minutos</strong> sem CTA, sem proposta de agendamento, sem pergunta de qualificação. Paciente sumiu por 16 dias.</div>
+    </div>
+    <div class="exemplo-card negativo">
+      <div class="exemplo-meta">
+        <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/16345" target="_blank">Conv #16345</a>
+        <span>Camila Garcia &bull; R$ 10.490</span>
+      </div>
+      <div class="exemplo-citacao">
+        Paciente: "Ótimo, obrigada"<br>
+        Daniela: "😊😊" &rarr; conversa resolvida
+      </div>
+      <div class="exemplo-analise"><strong>Proposta de R$ 10.490 encerrada com emoji.</strong> Sem "vamos agendar?", sem confirmar interesse, sem próximo passo.</div>
+    </div>
+    <div class="exemplo-card negativo">
+      <div class="exemplo-meta">
+        <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/16964" target="_blank">Conv #16964</a>
+        <span>Patricia Ambos &bull; R$ 4.700</span>
+      </div>
+      <div class="exemplo-citacao">
+        Paciente: "Qdo tiver informações me avisa"<br>
+        Daniela: "Claro vamos avisar" &rarr; conversa encerra
+      </div>
+      <div class="exemplo-analise"><strong>Aceita passivamente a hesitação</strong> sem propor alternativa ("podemos começar com pescoço/colo por enquanto?").</div>
+    </div>
+  </div>
+
+  <!-- CRITÉRIO 4: Follow-up proativo -->
+  <div class="criterio-block">
+    <div class="criterio-header">
+      <span class="criterio-nota nota-baixa">3/10</span>
+      <span class="criterio-titulo">Follow-up Proativo</span>
+    </div>
+    <p class="criterio-desc">
+      <strong>O maior gap.</strong> Daniela não retorna proativamente após silêncio do paciente.
+      Quando o paciente para de responder, quem faz follow-up é a Clara (bot) &mdash; nunca a Daniela.
+      O recorde é 16 dias sem contato após orçamento de R$ 9.250.
+    </p>
+    <div class="exemplo-card negativo">
+      <div class="exemplo-meta">
+        <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17216" target="_blank">Conv #17216</a>
+        <span>Samir Rosa &bull; R$ 9.250</span>
+      </div>
+      <div class="exemplo-citacao">
+        Daniela (24/08): "Fico a disposicao para qualquer duvida"<br>
+        &mdash; 16 dias de silêncio &mdash;<br>
+        Mãe do Samir (09/09): "Oiiiiii!!! Nossa agora que vi a mensagem!!!"
+      </div>
+      <div class="exemplo-analise"><strong>16 dias sem retorno</strong> após orçamento de R$ 9.250. A mãe nem sabia do valor. O follow-up veio da Clara (bot), não da Daniela.</div>
+    </div>
+    <div class="exemplo-card negativo">
+      <div class="exemplo-meta">
+        <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/16345" target="_blank">Conv #16345</a>
+        <span>Camila Garcia &bull; R$ 10.490</span>
+      </div>
+      <div class="exemplo-citacao">
+        Daniela (18/08): "😊😊"<br>
+        &mdash; 6 dias sem contato humano &mdash;<br>
+        Clara bot (24/08): "Olá, Camila de Almeida Garcia 🤍 Estávamos revisando seu planejamento…"
+      </div>
+      <div class="exemplo-analise"><strong>6 dias sem follow-up humano</strong> em proposta de R$ 10.490. Retomada veio da automação, não da Daniela.</div>
+    </div>
+    <div class="exemplo-card negativo">
+      <div class="exemplo-meta">
+        <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/16964" target="_blank">Conv #16964</a>
+        <span>Patricia Ambos &bull; R$ 4.700</span>
+      </div>
+      <div class="exemplo-citacao">
+        Daniela (17/09): "Claro vamos avisar"<br>
+        &mdash; 13 dias sem retorno &mdash;<br>
+        Conversa reaberta por Matheus Terra (30/09)
+      </div>
+      <div class="exemplo-analise"><strong>13 dias sem cumprir a promessa</strong> de avisar quando o CC estivesse pronto. Nem para dizer que continuava pendente.</div>
+    </div>
+    <div class="exemplo-card negativo">
+      <div class="exemplo-meta">
+        <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17578" target="_blank">Conv #17578</a>
+        <span>Elizabeth Klemtz &bull; Despigmentação</span>
+      </div>
+      <div class="exemplo-citacao">
+        Paciente (08/09): "Blza. Obrigada!"<br>
+        &mdash; 5 dias e 22 horas &mdash;<br>
+        Daniela (14/09): mensagem seguinte sobre cuidados
+      </div>
+      <div class="exemplo-analise"><strong>Quase 6 dias de gap</strong> entre confirmação da paciente e próximo contato.</div>
+    </div>
+  </div>
+
+  <!-- CRITÉRIO 5: Tratamento de objeções -->
+  <div class="criterio-block">
+    <div class="criterio-header">
+      <span class="criterio-nota nota-media">5/10</span>
+      <span class="criterio-titulo">Tratamento de Objeções</span>
+    </div>
+    <p class="criterio-desc">
+      Quando surgem hesitações, Daniela as trata como questões logísticas (prazo, equipamento) em vez de objeções comerciais
+      (valor, confiança, urgência). Não há mapeamento da real objeção, nem reancoragem de valor, nem criação de urgência.
+    </p>
+    <div class="exemplo-card negativo">
+      <div class="exemplo-meta">
+        <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/16964" target="_blank">Conv #16964</a>
+        <span>Patricia Ambos &bull; R$ 4.700</span>
+      </div>
+      <div class="exemplo-citacao">
+        Paciente: "Anestesia local é insuportável" &rarr; quer centro cirúrgico com anestesista (indisponível)<br>
+        Daniela: "Claro vamos avisar" (quando CC ficar pronto)
+      </div>
+      <div class="exemplo-analise"><strong>Tratou como problema de infraestrutura.</strong> Não explorou: poderia fazer só pescoço/colo por enquanto? O valor também era fator? Paciente saiu sem nenhuma alternativa.</div>
+    </div>
+    <div class="exemplo-card negativo">
+      <div class="exemplo-meta">
+        <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17216" target="_blank">Conv #17216</a>
+        <span>Samir Rosa &bull; R$ 9.250</span>
+      </div>
+      <div class="exemplo-citacao">
+        Mãe: "Eu não pude estar junto para entender, como é o fotona 4d, não conheço"<br>
+        Daniela: "Vou passar o video para voce conhecer um pouco a tecnologia" + link Instagram
+      </div>
+      <div class="exemplo-analise"><strong>Objeção era de confiança/entendimento, não de informação técnica.</strong> Deveria ter perguntado "o que o Samir está em dúvida?" ou proposto consulta de esclarecimento &mdash; não um vídeo genérico do Instagram.</div>
+    </div>
+    <div class="exemplo-card neutro">
+      <div class="exemplo-meta">
+        <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17654" target="_blank">Conv #17654</a>
+        <span>Carolina Tomazi &bull; R$ 6.800</span>
+      </div>
+      <div class="exemplo-citacao">
+        Paciente: "Mas aquele que tem que fazer com sedação qual é?"<br>
+        Daniela: "Seria o megaderme, quando o centro cirurgico estiver pronto😊😊" / "Acredito que final do ano"
+      </div>
+      <div class="exemplo-analise"><strong>Informou corretamente mas não redirecionou:</strong> "enquanto isso, podemos começar com Fotona já disponível?" Paciente mostrou interesse em procedimento invasivo mas não recebeu alternativa disponível.</div>
+    </div>
+  </div>
+
+  <!-- NOTA GERAL -->
   <div class="insight-box" style="background: #faf5ff; border-left: 4px solid var(--purple); color: var(--gray-800);">
     <strong>Nota geral: 6/10.</strong> A taxa de 96,7% é alta porque Daniela atua principalmente em casos
     que já estão quase fechados (paciente respondeu, demonstrou interesse). O papel atual é de
-    <strong>recepcionista consultiva</strong> &mdash; ela responde rápido e com detalhes quando o paciente
+    <strong>recepcionista consultiva</strong> &mdash; responde rápido e com detalhes quando o paciente
     procura, mas não faz venda ativa nem persegue propostas de alto valor que ficam em silêncio.
-    Das 16 propostas pendentes, <strong>nenhuma teve follow-up proativo da Daniela</strong>.
+    Das 16 propostas pendentes, <strong>nenhuma teve follow-up proativo da Daniela</strong>.<br><br>
+    <strong>Gaps principais:</strong> (1) Follow-up pós-orçamento inexistente &mdash; propostas de até R$ 10.490 sem retorno por dias/semanas;
+    (2) Fechamentos substituídos por "fico a disposição" + emoji;
+    (3) Objeções tratadas como logística em vez de oportunidade de venda.
   </div>
   <h3>Pacientes Abordados pela Daniela</h3>
   <table>
