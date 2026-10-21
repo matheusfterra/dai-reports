@@ -375,7 +375,7 @@ a.patient-link:hover { text-decoration: underline; }
 
 <!-- Seção Daniela Detalhada -->
 <div class="section">
-  <h2>Daniela &mdash; Detalhamento (Inclusiva)</h2>
+  <h2>Daniela &mdash; Desempenho em Propostas</h2>
   <div class="kpi-grid">
     <div class="kpi-card purple">
       <div class="kpi-value">30</div>
@@ -393,6 +393,47 @@ a.patient-link:hover { text-decoration: underline; }
       <div class="kpi-value">83</div>
       <div class="kpi-label">Total de FUPs Enviados</div>
     </div>
+  </div>
+
+  <h3>Avaliação Qualitativa (baseada em leitura das conversas)</h3>
+  <table>
+    <thead>
+      <tr><th>Critério</th><th>Nota</th><th>Observação</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Tempo de resposta</strong></td>
+        <td style="text-align:center; font-weight:700; color:var(--success);">9/10</td>
+        <td>Responde em minutos quando o paciente entra em contato</td>
+      </tr>
+      <tr>
+        <td><strong>Personalização</strong></td>
+        <td style="text-align:center; font-weight:700; color:var(--primary);">7/10</td>
+        <td>Passa valores e detalhes dos procedimentos, mas nem sempre personaliza a abertura</td>
+      </tr>
+      <tr>
+        <td><strong>Técnica de venda</strong></td>
+        <td style="text-align:center; font-weight:700; color:var(--warning);">5/10</td>
+        <td>Envia orçamento e espera decisão do paciente &mdash; não usa técnicas de fechamento</td>
+      </tr>
+      <tr>
+        <td><strong>Follow-up proativo</strong></td>
+        <td style="text-align:center; font-weight:700; color:var(--danger);">3/10</td>
+        <td>Pacientes ficam semanas sem retorno após silêncio &mdash; não persegue propostas pendentes</td>
+      </tr>
+      <tr>
+        <td><strong>Tratamento de objeções</strong></td>
+        <td style="text-align:center; font-weight:700; color:var(--warning);">5/10</td>
+        <td>Trata hesitações como logística (parcelamento, datas), não como objeção comercial</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="insight-box" style="background: #faf5ff; border-left: 4px solid var(--purple); color: var(--gray-800);">
+    <strong>Nota geral: 6/10.</strong> A taxa de 96,7% é alta porque Daniela atua principalmente em casos
+    que já estão quase fechados (paciente respondeu, demonstrou interesse). O papel atual é de
+    <strong>recepcionista consultiva</strong> &mdash; ela responde rápido e com detalhes quando o paciente
+    procura, mas não faz venda ativa nem persegue propostas de alto valor que ficam em silêncio.
+    Das 16 propostas pendentes, <strong>nenhuma teve follow-up proativo da Daniela</strong>.
   </div>
   <h3>Pacientes Abordados pela Daniela</h3>
   <table>
@@ -586,7 +627,10 @@ a.patient-link:hover { text-decoration: underline; }
 
 <!-- Mapa de Objeções -->
 <div class="section">
-  <h2>Mapa de Objeções &mdash; Propostas Pendentes</h2>
+  <h2>Mapa de Objeções &mdash; Propostas Pendentes (Análise Real)</h2>
+  <p style="color: var(--gray-600); margin-bottom: 16px; font-size: 0.9rem;">
+    Objeções identificadas por leitura das conversas reais no Chatwoot, não por classificação automática.
+  </p>
   <div class="kpi-grid">
     <div class="kpi-card warning">
       <div class="kpi-value">16</div>
@@ -598,124 +642,147 @@ a.patient-link:hover { text-decoration: underline; }
     </div>
     <div class="kpi-card">
       <div class="kpi-value">10</div>
-      <div class="kpi-label">Sem Contato</div>
+      <div class="kpi-label">Nunca Abordadas</div>
     </div>
-    <div class="kpi-card">
-      <div class="kpi-value">5</div>
-      <div class="kpi-label">Indecisão</div>
+    <div class="kpi-card danger">
+      <div class="kpi-value">1</div>
+      <div class="kpi-label">Falha Técnica (n&ordm; inválido)</div>
     </div>
   </div>
   <div class="chart-container" style="max-width:400px;">
     <canvas id="chartObjecoes" width="400" height="300"></canvas>
   </div>
-  <h3>Detalhamento por Paciente</h3>
+
+  <h3>Diagnóstico Real &mdash; 6 Propostas com Contato</h3>
+  <p style="color: var(--gray-600); margin-bottom: 12px; font-size: 0.9rem;">
+    Pacientes que receberam follow-up de Clara e/ou Daniela mas não converteram.
+  </p>
   <table>
     <thead>
-      <tr><th>Paciente</th><th>Valor</th><th>Categoria</th><th>Agente FUP</th></tr>
+      <tr><th>Paciente</th><th>Valor</th><th>Objeção Real</th><th>Agente</th><th>Ação Sugerida</th></tr>
     </thead>
     <tbody>
       <tr>
-  <td><a href="https://chat.digital-ai.tech/app/accounts/4/contacts/15535" target="_blank" class="patient-link">Tatiana Goulart Florduardo Mueller</a></td>
+  <td><a href="https://chat.digital-ai.tech/app/accounts/4/contacts/15535" target="_blank" class="patient-link">Tatiana Goulart F. Mueller</a></td>
   <td class="value">R$ 20.250</td>
-  <td>&#129300; Indecisão</td>
+  <td style="color: var(--gray-800);"><strong>Ignorou templates genéricos</strong> &mdash; leu 2 disparos da Clara sem menção ao procedimento/valor e não respondeu</td>
   <td><span class="agent-badge agent-clara">Clara</span></td>
+  <td style="color: var(--danger); font-weight: 600;">Ligação humana urgente</td>
 </tr>
 <tr>
   <td><a href="https://chat.digital-ai.tech/app/accounts/4/contacts/18399" target="_blank" class="patient-link">GISLENI DOS SANTOS VIEIRA</a></td>
   <td class="value">R$ 10.540</td>
-  <td>&#129300; Indecisão</td>
+  <td style="color: var(--gray-800);"><strong>Proposta nunca mencionada</strong> &mdash; conversas existentes são de confirmação de consulta, não de follow-up da proposta</td>
   <td><span class="agent-badge agent-clara">Clara</span></td>
-</tr>
-<tr>
-  <td><a href="https://chat.digital-ai.tech/app/accounts/4/contacts/26953" target="_blank" class="patient-link">DJEFREI FERNANDO PASCH</a></td>
-  <td class="value">R$ 10.200</td>
-  <td>&#128683; Sem Contato</td>
-  <td><span class="agent-badge agent-nenhum">Sem FUP</span></td>
-</tr>
-<tr>
-  <td><a href="https://chat.digital-ai.tech/app/accounts/4/contacts/78948" target="_blank" class="patient-link">DINARA PAULA PANINI ANDRIOTI</a></td>
-  <td class="value">R$ 9.500</td>
-  <td>&#128683; Sem Contato</td>
-  <td><span class="agent-badge agent-nenhum">Sem FUP</span></td>
-</tr>
-<tr>
-  <td>Cristiane Joaquim</td>
-  <td class="value">R$ 8.655</td>
-  <td>&#128683; Sem Contato</td>
-  <td><span class="agent-badge agent-nenhum">Sem FUP</span></td>
-</tr>
-<tr>
-  <td><a href="https://chat.digital-ai.tech/app/accounts/4/contacts/41281" target="_blank" class="patient-link">PATRICIA KONRAD (DRA)</a></td>
-  <td class="value">R$ 7.600</td>
-  <td>&#128683; Sem Contato</td>
-  <td><span class="agent-badge agent-nenhum">Sem FUP</span></td>
+  <td style="color: var(--danger); font-weight: 600;">Abordagem direta sobre proposta</td>
 </tr>
 <tr>
   <td><a href="https://chat.digital-ai.tech/app/accounts/4/contacts/15586" target="_blank" class="patient-link">Ioni Pavesi Dos Passos</a></td>
   <td class="value">R$ 6.400</td>
-  <td>&#129300; Indecisão</td>
+  <td style="color: var(--gray-800);"><strong>Proposta nunca mencionada</strong> &mdash; conversa é sobre confirmação de consulta, proposta não foi abordada</td>
   <td><span class="agent-badge agent-clara">Clara</span></td>
-</tr>
-<tr>
-  <td><a href="https://chat.digital-ai.tech/app/accounts/4/contacts/109830" target="_blank" class="patient-link">ALESSANDRA CARDOSO KRIEGER</a></td>
-  <td class="value">R$ 5.400</td>
-  <td>&#128683; Sem Contato</td>
-  <td><span class="agent-badge agent-nenhum">Sem FUP</span></td>
-</tr>
-<tr>
-  <td><a href="https://chat.digital-ai.tech/app/accounts/4/contacts/22282" target="_blank" class="patient-link">Maria Clotilde Andreotti Zingali</a></td>
-  <td class="value">R$ 5.150</td>
-  <td>&#128683; Sem Contato</td>
-  <td><span class="agent-badge agent-nenhum">Sem FUP</span></td>
+  <td style="color: var(--danger); font-weight: 600;">Abordagem direta sobre proposta</td>
 </tr>
 <tr>
   <td><a href="https://chat.digital-ai.tech/app/accounts/4/contacts/103186" target="_blank" class="patient-link">ANA LUIZA DE ASSIS BALDUSSI</a></td>
   <td class="value">R$ 4.800</td>
-  <td>&#129300; Indecisão</td>
+  <td style="color: var(--danger);"><strong>Falha técnica</strong> &mdash; mensagens retornam erro <code>131026: Message undeliverable</code>. Número inválido/desatualizado</td>
   <td><span class="agent-badge agent-clara">Clara</span></td>
+  <td style="color: var(--warning); font-weight: 600;">Corrigir número ou outro canal</td>
 </tr>
 <tr>
   <td><a href="https://chat.digital-ai.tech/app/accounts/4/contacts/80051" target="_blank" class="patient-link">PASCAL TANNER</a></td>
   <td class="value">R$ 4.800</td>
-  <td>&#128556; Sem Resposta</td>
+  <td style="color: var(--gray-800);"><strong>Ignorou templates genéricos</strong> &mdash; leu 2 disparos idênticos da Clara e não respondeu. Mesmo padrão de Tatiana</td>
   <td><span class="agent-badge agent-clara">Clara</span></td>
+  <td style="color: var(--warning); font-weight: 600;">Mensagem personalizada</td>
+</tr>
+<tr>
+  <td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17753" target="_blank" class="patient-link">LETICIA FERREIRA DE LIMA</a></td>
+  <td class="value">R$ 400</td>
+  <td style="color: var(--gray-800);"><strong>Canal operacional</strong> &mdash; conversa em inbox VIP (92), contexto diferente da proposta</td>
+  <td><span class="agent-badge agent-ambos">Ambos</span></td>
+  <td style="color: var(--gray-500);">Baixa prioridade (valor baixo)</td>
+</tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top: 24px;">10 Propostas Nunca Abordadas (R$ 48.135)</h3>
+  <p style="color: var(--gray-600); margin-bottom: 12px; font-size: 0.9rem;">
+    Nenhum agente (Clara ou Daniela) entrou em contato sobre estas propostas.
+  </p>
+  <table>
+    <thead>
+      <tr><th>Paciente</th><th>Valor</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+  <td><a href="https://chat.digital-ai.tech/app/accounts/4/contacts/26953" target="_blank" class="patient-link">DJEFREI FERNANDO PASCH</a></td>
+  <td class="value">R$ 10.200</td>
+  <td style="color: var(--danger);">Nunca abordado</td>
+</tr>
+<tr>
+  <td><a href="https://chat.digital-ai.tech/app/accounts/4/contacts/78948" target="_blank" class="patient-link">DINARA PAULA PANINI ANDRIOTI</a></td>
+  <td class="value">R$ 9.500</td>
+  <td style="color: var(--danger);">Nunca abordada</td>
+</tr>
+<tr>
+  <td>Cristiane Joaquim</td>
+  <td class="value">R$ 8.655</td>
+  <td style="color: var(--danger);">Nunca abordada</td>
+</tr>
+<tr>
+  <td><a href="https://chat.digital-ai.tech/app/accounts/4/contacts/41281" target="_blank" class="patient-link">PATRICIA KONRAD (DRA)</a></td>
+  <td class="value">R$ 7.600</td>
+  <td style="color: var(--danger);">Nunca abordada</td>
+</tr>
+<tr>
+  <td><a href="https://chat.digital-ai.tech/app/accounts/4/contacts/109830" target="_blank" class="patient-link">ALESSANDRA CARDOSO KRIEGER</a></td>
+  <td class="value">R$ 5.400</td>
+  <td style="color: var(--danger);">Nunca abordada</td>
+</tr>
+<tr>
+  <td><a href="https://chat.digital-ai.tech/app/accounts/4/contacts/22282" target="_blank" class="patient-link">Maria Clotilde Andreotti Zingali</a></td>
+  <td class="value">R$ 5.150</td>
+  <td style="color: var(--danger);">Nunca abordada</td>
 </tr>
 <tr>
   <td><a href="https://chat.digital-ai.tech/app/accounts/4/contacts/10136" target="_blank" class="patient-link">PATRICIA DIAS BIRCKHOLZ</a></td>
   <td class="value">R$ 1.600</td>
-  <td>&#128683; Sem Contato</td>
-  <td><span class="agent-badge agent-nenhum">Sem FUP</span></td>
-</tr>
-<tr>
-  <td><a href="https://chat.digital-ai.tech/app/accounts/4/conversations/17753" target="_blank" class="patient-link">LETICIA FERREIRA DE LIMA</a></td>
-  <td class="value">R$ 400,00</td>
-  <td>&#129300; Indecisão</td>
-  <td><span class="agent-badge agent-ambos">Ambos</span></td>
+  <td style="color: var(--danger);">Nunca abordada</td>
 </tr>
 <tr>
   <td><a href="https://chat.digital-ai.tech/app/accounts/4/contacts/26247" target="_blank" class="patient-link">CLEOCI MORESCO CARELLI</a></td>
-  <td class="value">R$ 30,00</td>
-  <td>&#128683; Sem Contato</td>
-  <td><span class="agent-badge agent-nenhum">Sem FUP</span></td>
+  <td class="value">R$ 30</td>
+  <td style="color: var(--danger);">Nunca abordada</td>
 </tr>
 <tr>
   <td><a href="https://chat.digital-ai.tech/app/accounts/4/contacts/42707" target="_blank" class="patient-link">JULIA DE MACEDO PEREIRA DALBOSCO</a></td>
-  <td class="value">R$ 0,00</td>
-  <td>&#128683; Sem Contato</td>
-  <td><span class="agent-badge agent-nenhum">Sem FUP</span></td>
+  <td class="value">R$ 0</td>
+  <td style="color: var(--danger);">Nunca abordada</td>
 </tr>
 <tr>
   <td><a href="https://chat.digital-ai.tech/app/accounts/4/contacts/73574" target="_blank" class="patient-link">Viviane da Silveira Veiga Fachini</a></td>
-  <td class="value">R$ 0,00</td>
-  <td>&#128683; Sem Contato</td>
-  <td><span class="agent-badge agent-nenhum">Sem FUP</span></td>
+  <td class="value">R$ 0</td>
+  <td style="color: var(--danger);">Nunca abordada</td>
 </tr>
     </tbody>
   </table>
-  <div class="insight-box danger">
-    <strong>Ação Recomendada:</strong> 10 pacientes com propostas pendentes
-    ainda não foram contatados (R$ 48.135). Priorizar abordagem
-    imediata via Daniela ou Clara pode recuperar parte significativa desse valor.
+
+  <div class="insight-box danger" style="color: var(--gray-800);">
+    <strong>Diagnóstico:</strong> Das 16 propostas pendentes, os rótulos automáticos (Indecisão, Sem Resposta)
+    não refletem a realidade. Após leitura das conversas reais:<br><br>
+    &bull; <strong>10 pacientes (R$ 48.135)</strong> nunca foram abordados por ninguém sobre a proposta<br>
+    &bull; <strong>2 pacientes (R$ 25.050)</strong> ignoraram templates genéricos da Clara &mdash; precisam de abordagem humana personalizada<br>
+    &bull; <strong>2 pacientes (R$ 16.940)</strong> tiveram conversas sobre outros assuntos, a proposta nunca foi mencionada<br>
+    &bull; <strong>1 paciente (R$ 4.800)</strong> tem número de WhatsApp inválido &mdash; falha técnica<br>
+    &bull; <strong>1 paciente (R$ 400)</strong> em canal VIP/operacional &mdash; baixa prioridade
+  </div>
+  <div class="insight-box" style="background: #f0fdf4; border-left: 4px solid var(--success); color: var(--gray-800);">
+    <strong>Ação Prioritária &mdash; R$ 41.990 recuperáveis:</strong><br>
+    1. <strong>Tatiana Goulart (R$ 20.250)</strong> &mdash; ligação humana, maior valor pendente<br>
+    2. <strong>Gisleni dos Santos (R$ 10.540)</strong> e <strong>Ioni Pavesi (R$ 6.400)</strong> &mdash; abordar a proposta diretamente (nunca foi mencionada)<br>
+    3. <strong>Ana Luiza Baldussi (R$ 4.800)</strong> &mdash; corrigir número no Chatwoot ou contatar por outro canal
   </div>
 </div>
 
@@ -1957,17 +2024,17 @@ function initAllCharts() {
   new Chart(document.getElementById('chartObjecoes'), {
     type: 'doughnut',
     data: {
-      labels: ["Sem Contato", "Indecisão", "Sem Resposta"],
+      labels: ["Nunca abordadas", "Ignoraram template", "Proposta não mencionada", "Falha técnica (nº inválido)", "Canal operacional"],
       datasets: [{
-        data: [10, 5, 1],
-        backgroundColor: ["#ef4444", "#f59e0b", "#6b7280"],
+        data: [10, 2, 2, 1, 1],
+        backgroundColor: ["#ef4444", "#f59e0b", "#8b5cf6", "#6b7280", "#94a3b8"],
         borderWidth: 0
       }]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: {
-        title: { display: true, text: 'Distribuição de Objeções', color: fontColor, font: { size: 14 } },
+        title: { display: true, text: 'Diagnóstico Real das Propostas Pendentes', color: fontColor, font: { size: 14 } },
         legend: { position: 'bottom' }
       }
     }
