@@ -1766,17 +1766,73 @@ a.patient-link:hover { text-decoration: underline; }
 
 <script>
 // ============================================================
-// AUTH + CHART INITIALIZATION (onReady pattern)
+// CHART INITIALIZATION — BULLETPROOF (v6)
+// Estrategia: charts inicializam assim que #app estiver visivel,
+// independente de como ficou visivel (auth gate, timeout, qualquer caminho).
+// Usa MutationObserver + polling como fallbacks redundantes.
 // ============================================================
 
-// waitForChart: garante que Chart.js carregou (CDN pode demorar em iframe)
-function waitForChart(cb, attempts) {
-  attempts = attempts || 0;
-  if (typeof Chart !== 'undefined') return cb();
-  if (attempts > 50) return; // 5s max
-  setTimeout(function() { waitForChart(cb, attempts + 1); }, 100);
+var chartsInitialized = false;
+
+function tryInitCharts() {
+  if (chartsInitialized) return;
+  // Prerequisitos: #app visivel + Chart.js carregado
+  var appEl = document.getElementById('app');
+  if (!appEl) return;
+  var style = window.getComputedStyle(appEl);
+  if (style.display === 'none') return;
+  if (typeof Chart === 'undefined') return;
+
+  chartsInitialized = true;
+  console.log('[charts] Iniciando charts — app visivel, Chart.js presente');
+
+  // Forca reflow
+  void appEl.offsetHeight;
+
+  // Garante dimensoes nos containers
+  var containers = document.querySelectorAll('.chart-container');
+  for (var i = 0; i < containers.length; i++) {
+    containers[i].style.minHeight = '300px';
+    containers[i].style.minWidth = '200px';
+  }
+
+  // Espera 1 frame de paint real depois do reflow
+  requestAnimationFrame(function() {
+    initAllCharts();
+    // Resize de seguranca apos 300ms e 1s
+    setTimeout(function() { resizeAll(); }, 300);
+    setTimeout(function() { resizeAll(); }, 1000);
+  });
 }
 
+function resizeAll() {
+  if (typeof Chart === 'undefined') return;
+  Object.keys(Chart.instances).forEach(function(key) {
+    try { Chart.instances[key].resize(); } catch(e) {}
+  });
+}
+
+// TRIGGER 1: MutationObserver no #app (detecta quando fica visivel)
+(function() {
+  var appEl = document.getElementById('app');
+  if (!appEl) return;
+  var observer = new MutationObserver(function() {
+    tryInitCharts();
+  });
+  observer.observe(appEl, { attributes: true, attributeFilter: ['class', 'style'] });
+})();
+
+// TRIGGER 2: Polling a cada 200ms por 15s (fallback robusto)
+(function() {
+  var attempts = 0;
+  var interval = setInterval(function() {
+    attempts++;
+    tryInitCharts();
+    if (chartsInitialized || attempts > 75) clearInterval(interval);
+  }, 200);
+})();
+
+// TRIGGER 3: Auth gate (caminho normal)
 initChatwootAuth({
   gateLoading: 'gate-loading',
   gateDirect:  'gate-direct',
@@ -1784,32 +1840,8 @@ initChatwootAuth({
   client:      'dermaclinic',
   report:      'estudo-conversao-propostas-out2026',
   onReady: function(auth) {
-    // Espera Chart.js estar disponivel (CDN pode carregar async em iframe)
-    waitForChart(function() {
-      // Forca reflow apos display:block para que canvas tenham dimensoes
-      var appEl = document.getElementById('app');
-      void appEl.offsetWidth;
-
-      // Forca dimensoes explicitas em cada canvas ANTES de inicializar Chart.js
-      var canvases = document.querySelectorAll('.chart-container canvas');
-      for (var i = 0; i < canvases.length; i++) {
-        var c = canvases[i];
-        var rect = c.parentElement.getBoundingClientRect();
-        // Se o container tem dimensao 0, forcar minimo
-        if (rect.width < 10) c.parentElement.style.width = '100%';
-        if (rect.height < 10) c.parentElement.style.height = '300px';
-        c.style.display = 'block';
-        c.style.width = '100%';
-        c.style.height = '100%';
-      }
-
-      // rAF duplo para garantir paint antes de Chart.js medir
-      requestAnimationFrame(function() {
-        requestAnimationFrame(function() {
-          initAllCharts();
-        });
-      });
-    });
+    // Auth gate ja mostrou #app — tenta iniciar (pode ja ter sido feito pelo observer/polling)
+    setTimeout(function() { tryInitCharts(); }, 50);
   }
 });
 
@@ -2022,19 +2054,7 @@ function initAllCharts() {
     }
   });
 
-  // Force resize de TODOS os charts apos criacao
-  // Necessario porque em iframes o layout pode nao estar estavel
-  setTimeout(function() {
-    Object.keys(Chart.instances).forEach(function(key) {
-      Chart.instances[key].resize();
-    });
-  }, 100);
-  // Segundo resize apos 500ms como fallback extra para iframes lentos
-  setTimeout(function() {
-    Object.keys(Chart.instances).forEach(function(key) {
-      Chart.instances[key].resize();
-    });
-  }, 500);
+  console.log('[charts] Todos os 8 charts criados com sucesso');
 }
 </script>
 </body>
