@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estudo de Conversao de Propostas - DermaClinic Out 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --primary: #2D52EF;
+      --primary-light: #EEF2FF;
+      --primary-dark: #1a3ad4;
+      --daniela: #7C3AED;
+      --daniela-light: #F5F3FF;
+      --success: #22c55e;
+      --success-light: #dcfce7;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --danger: #ef4444;
+      --danger-light: #fee2e2;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-400: #94a3b8;
+      --gray-500: #64748b;
+      --gray-600: #475569;
+      --gray-700: #334155;
+      --gray-800: #1e293b;
+      --gray-900: #0f172a;
+      --radius: 12px;
+      --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+      --shadow-md: 0 4px 6px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.05);
+      --shadow-lg: 0 10px 15px rgba(0,0,0,.1), 0 4px 6px rgba(0,0,0,.05);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+    h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .report-body {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px 48px;
+    }
+
+    /* HEADER */
+    .report-header {
+      background: linear-gradient(135deg, #1a1f3a 0%, #2D52EF 60%, #4f77f6 100%);
+      color: #fff;
+      padding: 40px 48px;
+      margin-bottom: 32px;
+      border-radius: 0 0 24px 24px;
+    }
+    .report-header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .report-header .subtitle {
+      opacity: .82;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .report-header .tags {
+      margin-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tag {
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* SECTION */
+    .section {
+      margin-bottom: 32px;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--gray-800);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 22px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    /* KPI GRID */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+    .kpi-card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--gray-200);
+    }
+    .kpi-card .kpi-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--gray-500);
+      margin-bottom: 8px;
+    }
+    .kpi-card .kpi-value {
+      font-size: 26px;
+      font-weight: 800;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--gray-900);
+      line-height: 1.1;
+    }
+    .kpi-card .kpi-sub {
+      font-size: 12px;
+      color: var(--gray-400);
+      margin-top: 4px;
+    }
+    .kpi-card.accent-blue { border-top: 3px solid var(--primary); }
+    .kpi-card.accent-green { border-top: 3px solid var(--success); }
+    .kpi-card.accent-purple { border-top: 3px solid var(--daniela); }
+    .kpi-card.accent-amber { border-top: 3px solid var(--warning); }
+    .kpi-card.accent-red { border-top: 3px solid var(--danger); }
+
+    /* CARD */
+    .card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--gray-200);
+    }
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gray-700);
+      margin-bottom: 16px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .comp-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .comp-card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--gray-200);
+      text-align: center;
+    }
+    .comp-card .agent-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gray-600);
+      margin-bottom: 12px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .comp-card .big-rate {
+      font-size: 36px;
+      font-weight: 800;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      line-height: 1;
+    }
+    .comp-card .rate-sub {
+      font-size: 12px;
+      color: var(--gray-400);
+      margin-top: 4px;
+    }
+    .comp-card .rate-detail {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--gray-500);
+    }
+
+    /* INSIGHT BOX */
+    .insight-box {
+      background: linear-gradient(135deg, var(--primary-light), #dde6ff);
+      border: 1px solid #c7d4fb;
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-top: 16px;
+      font-size: 13px;
+      color: var(--primary-dark);
+      line-height: 1.6;
+    }
+    .insight-box.purple {
+      background: linear-gradient(135deg, var(--daniela-light), #ede9fe);
+      border-color: #c4b5fd;
+      color: #5b21b6;
+    }
+    .insight-box.green {
+      background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+      border-color: #86efac;
+      color: #15803d;
+    }
+    .insight-box.amber {
+      background: linear-gradient(135deg, var(--warning-light), #fde68a);
+      border-color: #fcd34d;
+      color: #92400e;
+    }
+    .insight-box strong { font-weight: 700; }
+    .insight-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      opacity: .7;
+      margin-bottom: 6px;
+    }
+
+    /* CHARTS */
+    .chart-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .chart-card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--gray-200);
+    }
+    .chart-card .chart-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gray-600);
+      margin-bottom: 16px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    canvas { max-height: 260px; }
+
+    /* BADGES */
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .badge-executada { background: #dcfce7; color: #15803d; }
+    .badge-aprovada { background: #dbeafe; color: #1d4ed8; }
+    .badge-aguardando { background: #fef3c7; color: #92400e; }
+    .badge-daniela { background: #f5f3ff; color: #6d28d9; }
+    .badge-clara { background: #eff6ff; color: #1d4ed8; }
+    .badge-ambos { background: linear-gradient(90deg, #f5f3ff, #eff6ff); color: #4338ca; }
+    .badge-outros { background: #f8fafc; color: #475569; }
+    .badge-nenhum { background: #f1f5f9; color: #64748b; }
+    .conv-yes { color: var(--success); font-weight: 700; }
+    .conv-no { color: var(--danger); font-weight: 700; }
+
+    /* TABLE */
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--gray-200);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      font-size: 13px;
+    }
+    thead tr {
+      background: var(--gray-50);
+      border-bottom: 2px solid var(--gray-200);
+    }
+    thead th {
+      padding: 12px 14px;
+      text-align: left;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--gray-500);
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+    thead th:hover { color: var(--primary); }
+    tbody tr {
+      border-bottom: 1px solid var(--gray-100);
+      transition: background .15s;
+    }
+    tbody tr:hover { background: var(--gray-50); }
+    tbody td { padding: 11px 14px; }
+    tbody tr.hidden { display: none; }
+
+    /* FILTER BUTTONS */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .filter-btn {
+      padding: 7px 16px;
+      border-radius: 20px;
+      border: 1.5px solid var(--gray-200);
+      background: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--gray-600);
+    }
+    .filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    /* DANIELA SECTION */
+    .daniela-header {
+      background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 40%, #7C3AED 100%);
+      color: #fff;
+      padding: 28px 32px;
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+    }
+    .daniela-header h2 {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .daniela-header .sub {
+      opacity: .8;
+      font-size: 13px;
+    }
+    .daniela-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .daniela-kpi {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .daniela-kpi .dk-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      opacity: .75;
+      margin-bottom: 6px;
+    }
+    .daniela-kpi .dk-value {
+      font-size: 24px;
+      font-weight: 800;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .daniela-kpi .dk-sub {
+      font-size: 11px;
+      opacity: .65;
+      margin-top: 2px;
+    }
+
+    /* COMPARISON TABLE */
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .comp-table th, .comp-table td { padding: 10px 14px; text-align: right; }
+    .comp-table th:first-child, .comp-table td:first-child { text-align: left; font-weight: 600; }
+    .comp-table thead tr { background: var(--gray-50); }
+    .comp-table th { font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--gray-500); font-weight: 700; }
+    .comp-table tbody tr { border-top: 1px solid var(--gray-100); }
+    .comp-table .highlight { color: var(--daniela); font-weight: 700; }
+    .comp-table .highlight-green { color: var(--success); font-weight: 700; }
+
+    /* OBJECOES */
+    .objecao-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .objecao-card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--gray-200);
+      text-align: center;
+    }
+    .objecao-card .ob-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 8px;
+    }
+    .objecao-card .ob-count {
+      font-size: 40px;
+      font-weight: 800;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      line-height: 1;
+    }
+    .objecao-card .ob-pct {
+      font-size: 13px;
+      color: var(--gray-400);
+      margin-top: 4px;
+    }
+    .objecao-card .ob-val {
+      font-size: 12px;
+      color: var(--gray-500);
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--gray-100);
+    }
+    .objecao-card.ob-sem-contato { border-top: 3px solid var(--danger); }
+    .objecao-card.ob-indecisao { border-top: 3px solid var(--warning); }
+    .objecao-card.ob-sem-resposta { border-top: 3px solid #8b5cf6; }
+
+    /* FUNNEL */
+    .funnel-grid {
+      display: flex;
+      gap: 0;
+      align-items: stretch;
+    }
+    .funnel-step {
+      flex: 1;
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      padding: 16px 12px;
+      text-align: center;
+      position: relative;
+    }
+    .funnel-step:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+    .funnel-step:last-child { border-radius: 0 var(--radius) var(--radius) 0; }
+    .funnel-step:not(:last-child)::after {
+      content: '\203A';
+      position: absolute;
+      right: -10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+      color: var(--gray-300);
+      z-index: 1;
+    }
+    .funnel-step .fn-label { font-size: 10px; text-transform: uppercase; letter-spacing: .5px; color: var(--gray-400); font-weight: 700; margin-bottom: 4px; }
+    .funnel-step .fn-value { font-size: 22px; font-weight: 800; font-family: 'Plus Jakarta Sans', sans-serif; color: var(--primary); }
+    .funnel-step .fn-pct { font-size: 11px; color: var(--gray-400); }
+
+    /* METODOLOGIA */
+    .metodologia-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .met-card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 20px;
+      border: 1px solid var(--gray-200);
+    }
+    .met-card h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .met-card p, .met-card li { font-size: 12px; color: var(--gray-600); line-height: 1.6; }
+    .met-card ul { padding-left: 16px; }
+
+    @media (max-width: 768px) {
+      .chart-grid { grid-template-columns: 1fr; }
+      .report-header { padding: 24px 20px; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .funnel-grid { flex-direction: column; }
+      .funnel-step:not(:last-child)::after { display: none; }
+      .funnel-step:first-child { border-radius: var(--radius) var(--radius) 0 0; }
+      .funnel-step:last-child { border-radius: 0 0 var(--radius) var(--radius); }
+    }
+  </style>
+</head>
+<body>
+<div class="report-body">
+
+<!-- HEADER -->
+<div class="report-header">
+  <h1>Estudo de Conversao de Propostas</h1>
+  <div class="subtitle">DermaClinic &mdash; Agosto a Outubro 2026 | 139 propostas | 111 pacientes unicos | Gerado em 21/10/2026</div>
+  <div class="tags">
+    <span class="tag">139 Propostas</span>
+    <span class="tag">87.8% Conversao</span>
+    <span class="tag">R$ 669.305 Valor Total</span>
+    <span class="tag">Daniela + Clara IA</span>
+    <span class="tag">Ago &mdash; Out 2026</span>
+  </div>
+</div>
+
+<!-- SECAO 1: KPIs -->
+<div class="section">
+  <div class="section-title">Resumo Executivo</div>
+  <div class="kpi-grid">
+    <div class="kpi-card accent-blue">
+      <div class="kpi-label">Total de Propostas</div>
+      <div class="kpi-value">139</div>
+      <div class="kpi-sub">Ago - Out 2026</div>
+    </div>
+    <div class="kpi-card accent-blue">
+      <div class="kpi-label">Valor Total</div>
+      <div class="kpi-value">R$ 669k</div>
+      <div class="kpi-sub">R$ 669.305,24</div>
+    </div>
+    <div class="kpi-card accent-green">
+      <div class="kpi-label">Faturamento Convertido</div>
+      <div class="kpi-value">R$ 559k</div>
+      <div class="kpi-sub">R$ 559.130 (122 proposts)</div>
+    </div>
+    <div class="kpi-card accent-green">
+      <div class="kpi-label">Taxa de Conversao</div>
+      <div class="kpi-value">87.8%</div>
+      <div class="kpi-sub">122 de 139 propostas</div>
+    </div>
+    <div class="kpi-card accent-amber">
+      <div class="kpi-label">Cobertura de FUP</div>
+      <div class="kpi-value">57.6%</div>
+      <div class="kpi-sub">80 de 139 com follow-up</div>
+    </div>
+    <div class="kpi-card accent-purple">
+      <div class="kpi-label">Ticket Medio</div>
+      <div class="kpi-value">R$ 4.815</div>
+      <div class="kpi-sub">Por proposta</div>
+    </div>
+    <div class="kpi-card accent-blue">
+      <div class="kpi-label">Pacientes Unicos</div>
+      <div class="kpi-value">111</div>
+      <div class="kpi-sub">Pacientes atendidos</div>
+    </div>
+    <div class="kpi-card accent-amber">
+      <div class="kpi-label">Pendentes</div>
+      <div class="kpi-value">15</div>
+      <div class="kpi-sub">R$ 86.670 em risco</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECAO 2: PANORAMA -->
+<div class="section">
+  <div class="section-title">Panorama das Propostas</div>
+  <div class="chart-grid">
+    <div class="chart-card">
+      <div class="chart-title">Distribuicao por Status</div>
+      <canvas id="chartStatus"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Evolucao Mensal de Propostas</div>
+      <canvas id="chartMensal"></canvas>
+    </div>
+  </div>
+  <div class="kpi-grid" style="margin-top:0">
+    <div class="kpi-card accent-green">
+      <div class="kpi-label">Executadas</div>
+      <div class="kpi-value">81</div>
+      <div class="kpi-sub">58.3% do total</div>
+    </div>
+    <div class="kpi-card accent-blue">
+      <div class="kpi-label">Aprovadas pelo Cliente</div>
+      <div class="kpi-value">41</div>
+      <div class="kpi-sub">29.5% do total</div>
+    </div>
+    <div class="kpi-card accent-amber">
+      <div class="kpi-label">Aguardando Aprovacao</div>
+      <div class="kpi-value">15</div>
+      <div class="kpi-sub">10.8% do total</div>
+    </div>
+  </div>
+  <div class="insight-box">
+    <div class="insight-label">Insight</div>
+    <strong>15 propostas aguardam aprovacao totalizando R$ 86.670.</strong> A maioria (9 de 15) ainda nao recebeu nenhum follow-up. Acionar contato ativo nestas propostas pode elevar a taxa de conversao geral de 87.8% para proximo de 95%.
+  </div>
+</div>
+
+<!-- SECAO 3: COBERTURA FUP -->
+<div class="section">
+  <div class="section-title">Cobertura de Follow-up por Agente</div>
+  <div class="chart-grid">
+    <div class="chart-card">
+      <div class="chart-title">Distribuicao de Propostas por Agente FUP</div>
+      <canvas id="chartCoverage"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Taxa de Conversao por Agente</div>
+      <canvas id="chartComparativo"></canvas>
+    </div>
+  </div>
+  <div class="insight-box">
+    <div class="insight-label">Cobertura</div>
+    <strong>57.6% das propostas (80/139) tiveram follow-up identificado.</strong> Daniela cobre 18 propostas com 100% de conversao, Clara 66 com 90.9%, Ambos 12 com 100%. As 59 propostas sem FUP ainda converteram 84.7%, indicando forte demanda espontanea.
+  </div>
+</div>
+
+<!-- SECAO 4: COMPARATIVO -->
+<div class="section">
+  <div class="section-title">Comparativo de Efetividade por Agente</div>
+  <div class="comp-grid">
+    <div class="comp-card">
+      <div class="agent-name" style="color:#7C3AED">Daniela</div>
+      <div class="big-rate" style="color:#7C3AED">100%</div>
+      <div class="rate-sub">taxa de conversao</div>
+      <div class="rate-detail">18 / 18 propostas convertidas<br>Ticket medio: R$ 5.441<br>Valor total: R$ 97.940</div>
+    </div>
+    <div class="comp-card">
+      <div class="agent-name" style="color:#2D52EF">Clara IA</div>
+      <div class="big-rate" style="color:#2D52EF">90.9%</div>
+      <div class="rate-sub">taxa de conversao</div>
+      <div class="rate-detail">60 / 66 propostas convertidas<br>Ticket medio: R$ 5.203<br>Valor total: R$ 343.370</div>
+    </div>
+    <div class="comp-card">
+      <div class="agent-name" style="color:#6366f1">Ambos (D+C)</div>
+      <div class="big-rate" style="color:#6366f1">100%</div>
+      <div class="rate-sub">taxa de conversao</div>
+      <div class="rate-detail">12 / 12 propostas convertidas<br>Ticket medio: R$ 6.937<br>Valor total: R$ 83.240</div>
+    </div>
+    <div class="comp-card">
+      <div class="agent-name" style="color:#94a3b8">Outros</div>
+      <div class="big-rate" style="color:#94a3b8">100%</div>
+      <div class="rate-sub">taxa de conversao</div>
+      <div class="rate-detail">8 / 8 propostas convertidas<br>Ticket medio: R$ 6.118<br>Valor total: R$ 48.940</div>
+    </div>
+    <div class="comp-card">
+      <div class="agent-name" style="color:#64748b">Sem FUP</div>
+      <div class="big-rate" style="color:#64748b">84.7%</div>
+      <div class="rate-sub">taxa de conversao</div>
+      <div class="rate-detail">50 / 59 propostas convertidas<br>Ticket medio: R$ 3.930<br>Valor total: R$ 231.880</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECAO 5: FATURAMENTO -->
+<div class="section">
+  <div class="section-title">Faturamento por Grupo</div>
+  <div class="chart-grid">
+    <div class="chart-card" style="grid-column: 1 / -1">
+      <div class="chart-title">Valor Total de Propostas por Agente FUP</div>
+      <canvas id="chartFaturamento" style="max-height:200px"></canvas>
+    </div>
+  </div>
+  <div class="comp-grid">
+    <div class="kpi-card accent-purple">
+      <div class="kpi-label">Daniela</div>
+      <div class="kpi-value" style="font-size:20px">R$ 97.940</div>
+      <div class="kpi-sub">100% convertido | 18 props</div>
+    </div>
+    <div class="kpi-card accent-blue">
+      <div class="kpi-label">Clara IA</div>
+      <div class="kpi-value" style="font-size:20px">R$ 343.370</div>
+      <div class="kpi-sub">90.9% conversao | 66 props</div>
+    </div>
+    <div class="kpi-card accent-blue">
+      <div class="kpi-label">Ambos (D+C)</div>
+      <div class="kpi-value" style="font-size:20px">R$ 83.240</div>
+      <div class="kpi-sub">100% convertido | 12 props</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Outros</div>
+      <div class="kpi-value" style="font-size:20px">R$ 48.940</div>
+      <div class="kpi-sub">100% convertido | 8 props</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Sem FUP</div>
+      <div class="kpi-value" style="font-size:20px">R$ 231.880</div>
+      <div class="kpi-sub">84.7% conversao | 59 props</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECAO 6: ENGAJAMENTO -->
+<div class="section">
+  <div class="section-title">Funil de Engajamento</div>
+  <div class="funnel-grid">
+    <div class="funnel-step">
+      <div class="fn-label">Propostas</div>
+      <div class="fn-value">139</div>
+      <div class="fn-pct">100%</div>
+    </div>
+    <div class="funnel-step">
+      <div class="fn-label">Com Contato</div>
+      <div class="fn-value">92</div>
+      <div class="fn-pct">66.2%</div>
+    </div>
+    <div class="funnel-step">
+      <div class="fn-label">Com FUP</div>
+      <div class="fn-value">78</div>
+      <div class="fn-pct">56.1%</div>
+    </div>
+    <div class="funnel-step">
+      <div class="fn-label">Responderam</div>
+      <div class="fn-value">70</div>
+      <div class="fn-pct">89.7% do FUP</div>
+    </div>
+    <div class="funnel-step">
+      <div class="fn-label">Positivo</div>
+      <div class="fn-value">53</div>
+      <div class="fn-pct">75.7%</div>
+    </div>
+    <div class="funnel-step">
+      <div class="fn-label">Convertidas</div>
+      <div class="fn-value" style="color:var(--success)">122</div>
+      <div class="fn-pct">87.8%</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECAO 7: ATUACAO DA DANIELA -->
+<div class="section">
+  <div class="daniela-header">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:48px;height:48px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px">D</div>
+      <div>
+        <h2>Atuacao da Daniela</h2>
+        <div class="sub">Analise detalhada do follow-up humano especializado</div>
+      </div>
+    </div>
+    <div class="daniela-kpi-grid" style="margin-top:20px">
+      <div class="daniela-kpi">
+        <div class="dk-label">Pacientes</div>
+        <div class="dk-value">13</div>
+        <div class="dk-sub">abordados</div>
+      </div>
+      <div class="daniela-kpi">
+        <div class="dk-label">Propostas FUP</div>
+        <div class="dk-value">18</div>
+        <div class="dk-sub">com follow-up</div>
+      </div>
+      <div class="daniela-kpi">
+        <div class="dk-label">Valor Total</div>
+        <div class="dk-value">R$ 97k</div>
+        <div class="dk-sub">R$ 97.940</div>
+      </div>
+      <div class="daniela-kpi">
+        <div class="dk-label">Conversao</div>
+        <div class="dk-value">100%</div>
+        <div class="dk-sub">18 de 18</div>
+      </div>
+      <div class="daniela-kpi">
+        <div class="dk-label">Resposta</div>
+        <div class="dk-value">94.4%</div>
+        <div class="dk-sub">17 de 18</div>
+      </div>
+      <div class="daniela-kpi">
+        <div class="dk-label">FUPs Total</div>
+        <div class="dk-value">56</div>
+        <div class="dk-sub">4.3 por paciente</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-title">Comparativo: Daniela vs Clara vs Geral</div>
+    <div class="chart-grid">
+      <div>
+        <canvas id="chartDaniela"></canvas>
+      </div>
+      <div>
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th>Metrica</th>
+              <th style="color:#7C3AED">Daniela</th>
+              <th style="color:#2D52EF">Clara</th>
+              <th>Geral</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Propostas</td>
+              <td class="highlight">18</td>
+              <td>66</td>
+              <td>139</td>
+            </tr>
+            <tr>
+              <td>Conversao</td>
+              <td class="highlight-green">100%</td>
+              <td>90.9%</td>
+              <td>87.8%</td>
+            </tr>
+            <tr>
+              <td>Ticket Medio</td>
+              <td class="highlight">R$ 5.441</td>
+              <td>R$ 5.203</td>
+              <td>R$ 4.815</td>
+            </tr>
+            <tr>
+              <td>Taxa Resposta</td>
+              <td class="highlight">94.4%</td>
+              <td>92.4%</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>FUPs/Paciente</td>
+              <td class="highlight">4.3</td>
+              <td>3.9</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>Sentim. Positivo</td>
+              <td class="highlight-green">100%</td>
+              <td>72.1%</td>
+              <td>-</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-title">Pacientes atendidos pela Daniela (13 pacientes unicos, 18 propostas)</div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Paciente</th>
+            <th>Valor</th>
+            <th>Status</th>
+            <th>Agente</th>
+            <th>Respondeu</th>
+            <th>Converteu</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Patricia Ambos Pereira</td><td>R$ 600</td><td><span class="badge badge-executada">Executada</span></td><td><span class="badge" style="background:#7C3AED;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Daniela</span></td><td>Sim</td><td class="conv-yes">&#10003; Sim</td></tr>
+<tr><td>Janilson Ferreira Leite</td><td>R$ 550</td><td><span class="badge badge-executada">Executada</span></td><td><span class="badge" style="background:#7C3AED;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Daniela</span></td><td>Nao</td><td class="conv-yes">&#10003; Sim</td></tr>
+<tr><td>Maria Regina Runze</td><td>R$ 4.500</td><td><span class="badge badge-executada">Executada</span></td><td><span class="badge" style="background:#6366f1;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Daniela + Clara</span></td><td>Sim</td><td class="conv-yes">&#10003; Sim</td></tr>
+<tr><td>Camila De Almeida Garcia</td><td>R$ 10.490</td><td><span class="badge badge-aprovada">Aprovada pelo cliente</span></td><td><span class="badge" style="background:#6366f1;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Daniela + Clara</span></td><td>Sim</td><td class="conv-yes">&#10003; Sim</td></tr>
+<tr><td>Carolina Silveira Tomazi</td><td>R$ 16.800</td><td><span class="badge badge-aprovada">Aprovada pelo cliente</span></td><td><span class="badge" style="background:#6366f1;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Daniela + Clara</span></td><td>Sim</td><td class="conv-yes">&#10003; Sim</td></tr>
+<tr><td>Jessica Fagundes De Souza</td><td>R$ 13.550</td><td><span class="badge badge-aprovada">Aprovada pelo cliente</span></td><td><span class="badge" style="background:#6366f1;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Daniela + Clara</span></td><td>Sim</td><td class="conv-yes">&#10003; Sim</td></tr>
+<tr><td>Saionara Nandi Medeiros Machado</td><td>R$ 0</td><td><span class="badge badge-executada">Executada</span></td><td><span class="badge" style="background:#6366f1;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Daniela + Clara</span></td><td>Sim</td><td class="conv-yes">&#10003; Sim</td></tr>
+<tr><td>Micheli Farias Guszak</td><td>R$ 8.700</td><td><span class="badge badge-aprovada">Aprovada pelo cliente</span></td><td><span class="badge" style="background:#6366f1;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Daniela + Clara</span></td><td>Sim</td><td class="conv-yes">&#10003; Sim</td></tr>
+<tr><td>Renata Tridapalli</td><td>R$ 4.100</td><td><span class="badge badge-executada">Executada</span></td><td><span class="badge" style="background:#6366f1;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Daniela + Clara</span></td><td>Sim</td><td class="conv-yes">&#10003; Sim</td></tr>
+<tr><td>Tania Marise Steuernagel</td><td>R$ 5.700</td><td><span class="badge badge-executada">Executada</span></td><td><span class="badge" style="background:#6366f1;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Daniela + Clara</span></td><td>Sim</td><td class="conv-yes">&#10003; Sim</td></tr>
+<tr><td>Janaína Alves Teixeira Costa</td><td>R$ 1.750</td><td><span class="badge badge-executada">Executada</span></td><td><span class="badge" style="background:#7C3AED;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Daniela</span></td><td>Sim</td><td class="conv-yes">&#10003; Sim</td></tr>
+<tr><td>Elizabeth Klemtz</td><td>R$ 6.900</td><td><span class="badge badge-executada">Executada</span></td><td><span class="badge" style="background:#6366f1;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Daniela + Clara</span></td><td>Sim</td><td class="conv-yes">&#10003; Sim</td></tr>
+<tr><td>Jessica Holz</td><td>R$ 3.800</td><td><span class="badge badge-aprovada">Aprovada pelo cliente</span></td><td><span class="badge" style="background:#7C3AED;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Daniela</span></td><td>Sim</td><td class="conv-yes">&#10003; Sim</td></tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="insight-box purple">
+    <div class="insight-label">Destaque</div>
+    <strong>Daniela atingiu 100% de conversao em 18 propostas (R$ 97.940).</strong> Com 4.3 FUPs por paciente em media e 94.4% de taxa de resposta, a atuacao humana especializada demonstra impacto superior, especialmente em casos de maior valor (ticket medio R$ 5.441 vs R$ 4.815 geral). Proposta: ampliar a atuacao da Daniela para propostas acima de R$ 5.000 que estejam pendentes.
+  </div>
+</div>
+
+<!-- SECAO 8: MAPA DE OBJECOES -->
+<div class="section">
+  <div class="section-title">Mapa de Objecoes</div>
+  <div class="insight-box amber" style="margin-bottom:20px">
+    <div class="insight-label">Risco Identificado</div>
+    <strong>R$ 86.670 em propostas pendentes distribuidas em 15 registros.</strong> A principal barreira nao e resistencia do paciente, mas falta de contato: 9 de 15 propostas pendentes (60%) nunca receberam follow-up. Uma campanha de contato ativo neste grupo pode recuperar ate R$ 52.000.
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <div class="chart-title">Distribuicao de Objecoes</div>
+      <canvas id="chartObjecoes"></canvas>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="objecao-card ob-sem-contato">
+        <div class="ob-label" style="color:var(--danger)">Sem Contato</div>
+        <div class="ob-count" style="color:var(--danger)">9</div>
+        <div class="ob-pct">60% das pendentes</div>
+        <div class="ob-val">R$ 51.150 em risco</div>
+      </div>
+      <div class="objecao-card ob-indecisao">
+        <div class="ob-label" style="color:var(--warning)">Indecisao</div>
+        <div class="ob-count" style="color:var(--warning)">5</div>
+        <div class="ob-pct">33.3% das pendentes</div>
+        <div class="ob-val">R$ 31.120 em risco</div>
+      </div>
+      <div class="objecao-card ob-sem-resposta">
+        <div class="ob-label" style="color:#8b5cf6">Sem Resposta</div>
+        <div class="ob-count" style="color:#8b5cf6">1</div>
+        <div class="ob-pct">6.7% das pendentes</div>
+        <div class="ob-val">R$ 4.800 em risco</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">Detalhamento das 15 Propostas Pendentes</div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Paciente</th>
+            <th>Valor</th>
+            <th>Objecao</th>
+            <th>Agente FUP</th>
+            <th>Detalhamento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Maria Clotilde Andreotti Zingali</td><td>R$ 5.150</td><td><span class="badge" style="background:#ef4444;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Sem Contato</span></td><td><span class="badge" style="background:#94a3b8;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Sem FUP</span></td><td style="font-size:12px;color:#64748b">Proposta sem follow-up e sem resposta do paciente</td></tr>
+<tr><td>Patricia Dias Birckholz</td><td>R$ 1.600</td><td><span class="badge" style="background:#ef4444;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Sem Contato</span></td><td><span class="badge" style="background:#94a3b8;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Sem FUP</span></td><td style="font-size:12px;color:#64748b">Proposta sem follow-up e sem resposta do paciente</td></tr>
+<tr><td>Patricia Konrad (Dra)</td><td>R$ 7.600</td><td><span class="badge" style="background:#ef4444;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Sem Contato</span></td><td><span class="badge" style="background:#94a3b8;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Sem FUP</span></td><td style="font-size:12px;color:#64748b">Proposta sem follow-up e sem resposta do paciente</td></tr>
+<tr><td>Cleoci Moresco Carelli</td><td>R$ 30</td><td><span class="badge" style="background:#ef4444;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Sem Contato</span></td><td><span class="badge" style="background:#94a3b8;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Sem FUP</span></td><td style="font-size:12px;color:#64748b">Proposta sem follow-up e sem resposta do paciente</td></tr>
+<tr><td>Ioni Pavesi Dos Passos</td><td>R$ 6.400</td><td><span class="badge" style="background:#f59e0b;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Indecisao</span></td><td><span class="badge" style="background:#2D52EF;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Clara</span></td><td style="font-size:12px;color:#64748b">Paciente interagiu mas nao fechou a proposta</td></tr>
+<tr><td>Dinara Paula Panini Andrioti</td><td>R$ 9.500</td><td><span class="badge" style="background:#ef4444;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Sem Contato</span></td><td><span class="badge" style="background:#94a3b8;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Sem FUP</span></td><td style="font-size:12px;color:#64748b">Proposta sem follow-up e sem resposta do paciente</td></tr>
+<tr><td>Julia De Macedo Pereira Dalbosco</td><td>R$ 0</td><td><span class="badge" style="background:#ef4444;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Sem Contato</span></td><td><span class="badge" style="background:#94a3b8;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Sem FUP</span></td><td style="font-size:12px;color:#64748b">Proposta sem follow-up e sem resposta do paciente</td></tr>
+<tr><td>Tatiana Goulart Florduardo Mueller</td><td>R$ 20.250</td><td><span class="badge" style="background:#f59e0b;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Indecisao</span></td><td><span class="badge" style="background:#2D52EF;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Clara</span></td><td style="font-size:12px;color:#64748b">Paciente interagiu mas nao fechou a proposta</td></tr>
+<tr><td>Leticia Ferreira De Lima</td><td>R$ 400</td><td><span class="badge" style="background:#f59e0b;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Indecisao</span></td><td><span class="badge" style="background:#2D52EF;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Clara</span></td><td style="font-size:12px;color:#64748b">Paciente interagiu mas nao fechou a proposta</td></tr>
+<tr><td>Ana Luiza De Assis Baldussi</td><td>R$ 4.800</td><td><span class="badge" style="background:#f59e0b;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Indecisao</span></td><td><span class="badge" style="background:#2D52EF;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Clara</span></td><td style="font-size:12px;color:#64748b">Paciente interagiu mas nao fechou a proposta</td></tr>
+<tr><td>Djefrei Fernando Pasch</td><td>R$ 10.200</td><td><span class="badge" style="background:#ef4444;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Sem Contato</span></td><td><span class="badge" style="background:#94a3b8;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Sem FUP</span></td><td style="font-size:12px;color:#64748b">Proposta sem follow-up e sem resposta do paciente</td></tr>
+<tr><td>Alessandra Cardoso Krieger</td><td>R$ 5.400</td><td><span class="badge" style="background:#ef4444;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Sem Contato</span></td><td><span class="badge" style="background:#94a3b8;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Sem FUP</span></td><td style="font-size:12px;color:#64748b">Proposta sem follow-up e sem resposta do paciente</td></tr>
+<tr><td>Gisleni Dos Santos Vieira</td><td>R$ 10.540</td><td><span class="badge" style="background:#f59e0b;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Indecisao</span></td><td><span class="badge" style="background:#2D52EF;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Clara</span></td><td style="font-size:12px;color:#64748b">Paciente interagiu mas nao fechou a proposta</td></tr>
+<tr><td>Pascal Tanner</td><td>R$ 4.800</td><td><span class="badge" style="background:#8b5cf6;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Sem Resposta</span></td><td><span class="badge" style="background:#2D52EF;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Clara</span></td><td style="font-size:12px;color:#64748b">Follow-up enviado mas paciente nao respondeu</td></tr>
+<tr><td>Viviane Da Silveira Veiga Fachini</td><td>R$ 0</td><td><span class="badge" style="background:#ef4444;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Sem Contato</span></td><td><span class="badge" style="background:#94a3b8;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px">Sem FUP</span></td><td style="font-size:12px;color:#64748b">Proposta sem follow-up e sem resposta do paciente</td></tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- SECAO 9: LISTAGEM COMPLETA -->
+<div class="section">
+  <div class="section-title">Listagem Completa de Propostas (137 registros)</div>
+  <div class="filter-bar" id="filterBar">
+    <button class="filter-btn active" data-filter="all">Todos (139)</button>
+    <button class="filter-btn" data-filter="converted">Convertidos (122)</button>
+    <button class="filter-btn" data-filter="pending">Pendentes (15)</button>
+    <button class="filter-btn" data-filter="daniela">FUP Daniela (18)</button>
+    <button class="filter-btn" data-filter="clara">FUP Clara (66)</button>
+    <button class="filter-btn" data-filter="nenhum">Sem FUP (59)</button>
+  </div>
+  <div class="table-wrapper">
+    <table id="mainTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)">Paciente &#8597;</th>
+          <th onclick="sortTable(1)">Valor &#8597;</th>
+          <th onclick="sortTable(2)">Status</th>
+          <th onclick="sortTable(3)">Mes &#8597;</th>
+          <th onclick="sortTable(4)">Agente FUP</th>
+          <th onclick="sortTable(5)">Respondeu</th>
+          <th onclick="sortTable(6)">Converteu</th>
+          <th>Objecao</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SECAO 10: METODOLOGIA -->
+<div class="section">
+  <div class="section-title">Metodologia</div>
+  <div class="metodologia-grid">
+    <div class="met-card">
+      <h4>Fonte de Dados</h4>
+      <ul>
+        <li>Propostas: API Feegow <code>proposal/list</code></li>
+        <li>Follow-up: Chatwoot API (conversas e mensagens)</li>
+        <li>Agentes: identificacao por <code>sender.name</code></li>
+        <li>Periodo: 01/08/2026 a 21/10/2026</li>
+      </ul>
+    </div>
+    <div class="met-card">
+      <h4>Classificacao de Agentes</h4>
+      <ul>
+        <li><strong>Daniela:</strong> mensagens com <code>sender.name == "Daniela"</code></li>
+        <li><strong>Clara IA:</strong> sender.name "Clara" ou templates de follow-up</li>
+        <li><strong>Ambos:</strong> proposta com FUP de ambos os agentes</li>
+        <li><strong>Outros:</strong> outros atendentes humanos</li>
+        <li><strong>Sem FUP:</strong> nenhuma mensagem de follow-up identificada</li>
+      </ul>
+    </div>
+    <div class="met-card">
+      <h4>Definicoes</h4>
+      <ul>
+        <li><strong>Conversao:</strong> proposta com status "Executada" ou "Aprovada pelo cliente"</li>
+        <li><strong>Pendente:</strong> status "Aguardando aprovacao do cliente"</li>
+        <li><strong>Respondeu:</strong> paciente enviou ao menos 1 mensagem no periodo</li>
+        <li><strong>FUP:</strong> mensagem enviada ap&oacute;s criacao da proposta</li>
+      </ul>
+    </div>
+    <div class="met-card">
+      <h4>Limitacoes</h4>
+      <ul>
+        <li>Alguns pacientes sem telefone no Chatwoot nao foram rastreados</li>
+        <li>Classificacao de sentimento baseada em heuristica de keywords</li>
+        <li>Propostas com valor R$ 0 incluidas (procedimentos sem cobranca)</li>
+        <li>Objecoes inferidas por regra, nao por analise manual</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div><!-- .report-body -->
+
+<script>
+// ===== TABLE DATA =====
+const tableData = [{"name": "LUCIANA REINERT DOS SANTOS", "value": 30000, "status": "Aprovada pelo cliente", "agent": "clara", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "Tatiana Goulart Florduardo Mueller", "value": 20250, "status": "Aguardando aprovação do cliente", "agent": "clara", "responded": true, "converted": false, "objecao": "INDECISAO", "month": "2026-08"}, {"name": "Rossana Gasperin Ferrreira", "value": 17500, "status": "Aprovada pelo cliente", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "EVELIN RODRIGUES PATRUNE DE SOUSA", "value": 17500, "status": "Aprovada pelo cliente", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "Mônica Alvim Mendonça", "value": 17200, "status": "Aprovada pelo cliente", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "Carolina Silveira Tomazi", "value": 16800, "status": "Aprovada pelo cliente", "agent": "ambos", "responded": true, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "Kátia Regina Fernandes", "value": 16500, "status": "Aprovada pelo cliente", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "Jessica Fagundes de Souza", "value": 13550, "status": "Aprovada pelo cliente", "agent": "ambos", "responded": true, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "Jéssica Thaize Duarte Nickel", "value": 13250, "status": "Aprovada pelo cliente", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "Graziela morgana silva tavares", "value": 12800, "status": "Aprovada pelo cliente", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "GISLENI DOS SANTOS VIEIRA", "value": 10540, "status": "Aguardando aprovação do cliente", "agent": "clara", "responded": true, "converted": false, "objecao": "INDECISAO", "month": "2026-08"}, {"name": "Camila de Almeida Garcia", "value": 10490, "status": "Aprovada pelo cliente", "agent": "ambos", "responded": true, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "Maria de Fátima Arruda Vieira de Oliveira", "value": 10450, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "DJEFREI FERNANDO PASCH", "value": 10200, "status": "Aguardando aprovação do cliente", "agent": "nenhum", "responded": false, "converted": false, "objecao": "SEM_CONTATO", "month": "2026-09"}, {"name": "BARBARA ELISA HEISE", "value": 10000, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "DINARA PAULA PANINI ANDRIOTI", "value": 9500, "status": "Aguardando aprovação do cliente", "agent": "nenhum", "responded": false, "converted": false, "objecao": "SEM_CONTATO", "month": "2026-08"}, {"name": "SAMIR DA SILVA ROSA", "value": 9350, "status": "Aprovada pelo cliente", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "Micheli Farias Guszak", "value": 8700, "status": "Aprovada pelo cliente", "agent": "ambos", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "MARIANA GRANDI MONTEIRO Dtancredo", "value": 8700, "status": "Aprovada pelo cliente", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "BRUNA TARTAGLIA", "value": 8400, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "Priscila Pereira Lima", "value": 8200, "status": "Aprovada pelo cliente", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "Rakelli Allig", "value": 8000, "status": "Aprovada pelo cliente", "agent": "clara", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "IZAURA TEREZINHA FIAMONCINI", "value": 7900, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "HECTOR OLTRAMARI", "value": 7800, "status": "Aprovada pelo cliente", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "PATRICIA KONRAD (DRA)", "value": 7600, "status": "Aguardando aprovação do cliente", "agent": "nenhum", "responded": false, "converted": false, "objecao": "SEM_CONTATO", "month": "2026-10"}, {"name": "Julita Rodrigues", "value": 7200, "status": "Aprovada pelo cliente", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "ELIZABETH KLEMTZ", "value": 6900, "status": "Executada", "agent": "ambos", "responded": true, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "Ioni Pavesi Dos Passos", "value": 6400, "status": "Aguardando aprovação do cliente", "agent": "clara", "responded": true, "converted": false, "objecao": "INDECISAO", "month": "2026-09"}, {"name": "SILVIA APARECIDA MARQUES", "value": 6350, "status": "Aprovada pelo cliente", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "Andrea Del Bianco Ribaski", "value": 6250, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "Thalita Domingos", "value": 6250, "status": "Aprovada pelo cliente", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "CARLOS HOEGEN", "value": 5950, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "Andrea Del Bianco Ribaski", "value": 5700, "status": "Aprovada pelo cliente", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "TANIA MARISE STEUERNAGEL", "value": 5700, "status": "Executada", "agent": "ambos", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "Claudia Valéria Lopes Gabardo", "value": 5650, "status": "Aprovada pelo cliente", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "Bruna da silva ramos", "value": 5640, "status": "Aprovada pelo cliente", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "FABIANE SCHIOCCHERT", "value": 5550, "status": "Aprovada pelo cliente", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "Isabel dos Santos Ramos", "value": 5500, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "SARYTA DE KASSIA OLIVEIRA", "value": 5450, "status": "Executada", "agent": "clara", "responded": false, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "ALESSANDRA CARDOSO KRIEGER", "value": 5400, "status": "Aguardando aprovação do cliente", "agent": "nenhum", "responded": false, "converted": false, "objecao": "SEM_CONTATO", "month": "2026-09"}, {"name": "Denise Teresinha  Bizzi Guterres", "value": 5250, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "Maria Clotilde Andreotti Zingali", "value": 5150, "status": "Aguardando aprovação do cliente", "agent": "nenhum", "responded": false, "converted": false, "objecao": "SEM_CONTATO", "month": "2026-08"}, {"name": "Paloma Souto", "value": 5000, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "ANA LUIZA DE ASSIS BALDUSSI", "value": 4800, "status": "Aguardando aprovação do cliente", "agent": "clara", "responded": true, "converted": false, "objecao": "INDECISAO", "month": "2026-09"}, {"name": "PASCAL TANNER", "value": 4800, "status": "Aguardando aprovação do cliente", "agent": "clara", "responded": false, "converted": false, "objecao": "SEM_RESPOSTA", "month": "2026-08"}, {"name": "Raquel Camila Cauvilla", "value": 4620, "status": "Aprovada pelo cliente", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "GABRIELA NASCIMENTO FERREIRA DA SILVA", "value": 4500, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "CATIA BORATTI", "value": 4500, "status": "Aprovada pelo cliente", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "Maria Regina Runze", "value": 4500, "status": "Executada", "agent": "ambos", "responded": true, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "Maria Regina Runze", "value": 4500, "status": "Aprovada pelo cliente", "agent": "ambos", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "Maria Regina Runze", "value": 4500, "status": "Aprovada pelo cliente", "agent": "ambos", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "IZAURA TEREZINHA FIAMONCINI", "value": 4500, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "Carolina Borini Cherem", "value": 4500, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "Janaína Alves Teixeira Costa", "value": 4500, "status": "Aprovada pelo cliente", "agent": "daniela", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "Luisana Sfredo de Castro", "value": 4500, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "Juliana Bachmann", "value": 4500, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "Rossana Gasperin Ferrreira", "value": 4500, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "FERNANDA HERMES", "value": 4500, "status": "Aprovada pelo cliente", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "DJEFREI FERNANDO PASCH", "value": 4280, "status": "Aprovada pelo cliente", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "Renata Tridapalli", "value": 4100, "status": "Executada", "agent": "ambos", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "Mônica Alvim Mendonça", "value": 4100, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "SINESIA  NASARIO VIEIRA DE MEDEIROS", "value": 4100, "status": "Executada", "agent": "clara", "responded": false, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "FLAVIA DA NOBREGA JANNINI", "value": 4000, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "ALESSANDRA CARDOSO KRIEGER", "value": 3800, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "JESSICA HOLZ", "value": 3800, "status": "Aprovada pelo cliente", "agent": "daniela", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "Regina Helena da Silva Rosa", "value": 3700, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "CLEDIR APARECIDA FORMULO DOS SANTOS", "value": 3700, "status": "Aprovada pelo cliente", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "PATRICIA AMBOS PEREIRA", "value": 3500, "status": "Aprovada pelo cliente", "agent": "daniela", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "Marilza Stammerjohann Schmitz", "value": 3500, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "BERNADETE CONCEICAO CIDRAL", "value": 3500, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "Priscila Pereira Lima", "value": 3500, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "SAIONARA NANDI MEDEIROS MACHADO", "value": 3500, "status": "Aprovada pelo cliente", "agent": "ambos", "responded": true, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "Ilana Thaís de Andrade", "value": 3500, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "JUSSARA NASCIMENTO DOMINGOS", "value": 3500, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "JEANETE CRISTINE PAUL", "value": 3500, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "LILIANE CARLA ROCHA DE ALMEIDA", "value": 3150, "status": "Aprovada pelo cliente", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "JACINIRA MARQUES", "value": 3140, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "Douglas Henrique Lima Dutra", "value": 3140, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "Isabel Cristina Carrara", "value": 3100, "status": "Aprovada pelo cliente", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "SONIA MARIA TAVARES VIEIRA", "value": 3100, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "DANIELE FERREIRA DE SOUZA", "value": 3100, "status": "Aprovada pelo cliente", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "Vera Lúcia teixeira de Oliveira", "value": 2700, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "LEILA CRISTINA HENRIQUE", "value": 2500, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "Alexsandra Fabiana da Maia", "value": 2500, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "Fabiana Ferreira Ignácio", "value": 2500, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "MARLUSI RENATA NUNES", "value": 2500, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "VIVIANE ISABEL DANIEL SPECK DE SOUZA", "value": 2400, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "Julita Rodrigues", "value": 2400, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "KARINE HELOUISA EBERHARDT ZEHNPFENNIG", "value": 2400, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "MARCOS ROBERTO FERREIRA", "value": 2250, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "Amanda Portella Segalla", "value": 2000, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "CATIA BORATTI", "value": 1900, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "LETÍCIA PAZ RIBEIRO", "value": 1800, "status": "Aprovada pelo cliente", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "IVONETE ALVES FANTON", "value": 1750, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "JAQUELINE ALVES DE SOUZA", "value": 1750, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "Ioni Pavesi Dos Passos", "value": 1750, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "ANA DOS SANTOS", "value": 1750, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "DINARA PAULA PANINI ANDRIOTI", "value": 1750, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "VANESSA MARA  SCHULTZ BOMFIM", "value": 1750, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "FABIANE SCHIOCCHERT", "value": 1750, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "Cristiane De Vita", "value": 1750, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "Janaína Alves Teixeira Costa", "value": 1750, "status": "Executada", "agent": "daniela", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "AMANDA CRISTINA RIBEIRO SOUTO", "value": 1750, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "SOLANGE CLAUDINO RIBEIRO", "value": 1750, "status": "Executada", "agent": "clara", "responded": false, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "Luisana Sfredo de Castro", "value": 1750, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "Denise Teresinha  Bizzi Guterres", "value": 1750, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "Juliana Cecconello", "value": 1750, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "ZENILDA DUMA", "value": 1750, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "DOROTEA RODRIGUES", "value": 1750, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "FERNANDA HERMES", "value": 1750, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "PATRICIA DIAS BIRCKHOLZ", "value": 1600, "status": "Aguardando aprovação do cliente", "agent": "nenhum", "responded": false, "converted": false, "objecao": "SEM_CONTATO", "month": "2026-08"}, {"name": "JULIANA PESSATE PEREIRA*", "value": 1600, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "Isabel dos Santos Ramos", "value": 1600, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "ANA LUIZA DE ASSIS BALDUSSI", "value": 1600, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "JEAN NOEL ANDRE OTT", "value": 1600, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "Ilana Thaís de Andrade", "value": 1500, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "Yasmin de Amorim Santos", "value": 1350, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "SERGIO LUIZ STEUERNAGEL", "value": 1200, "status": "Executada", "agent": "clara", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "Diego José Caetano", "value": 1200, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "Maicon Varella", "value": 1200, "status": "Aprovada pelo cliente", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "DAIANI COELHO GOMES BOBATTO", "value": 1180, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "Maria Eduarda girola", "value": 950, "status": "Executada", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "GISLENI DOS SANTOS VIEIRA", "value": 700, "status": "Aprovada pelo cliente", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "JEANETE CRISTINE PAUL", "value": 650, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "JOSEANE FRANCINE PAUL", "value": 650, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "PATRICIA AMBOS PEREIRA", "value": 600, "status": "Executada", "agent": "daniela", "responded": true, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "JANILSON FERREIRA LEITE", "value": 550, "status": "Executada", "agent": "daniela", "responded": false, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "JAISSON VIDAL", "value": 550, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "DJEFREI FERNANDO PASCH", "value": 490, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "LETICIA FERREIRA DE LIMA", "value": 400, "status": "Aguardando aprovação do cliente", "agent": "clara", "responded": true, "converted": false, "objecao": "INDECISAO", "month": "2026-09"}, {"name": "CLEOCI MORESCO CARELLI", "value": 30, "status": "Aguardando aprovação do cliente", "agent": "nenhum", "responded": false, "converted": false, "objecao": "SEM_CONTATO", "month": "2026-08"}, {"name": "Fabiana Bourdokan Valiente", "value": 0, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "Ednete Pereira da Silva Okano Gimenes", "value": 0, "status": "Executada", "agent": "nenhum", "responded": false, "converted": true, "objecao": "", "month": "2026-09"}, {"name": "JULIA DE MACEDO PEREIRA DALBOSCO", "value": 0, "status": "Aguardando aprovação do cliente", "agent": "nenhum", "responded": false, "converted": false, "objecao": "SEM_CONTATO", "month": "2026-08"}, {"name": "Kamily Fernandes", "value": 0, "status": "Aprovada pelo cliente", "agent": "clara", "responded": true, "converted": true, "objecao": "", "month": "2026-08"}, {"name": "SAIONARA NANDI MEDEIROS MACHADO", "value": 0, "status": "Executada", "agent": "ambos", "responded": true, "converted": true, "objecao": "", "month": "2026-10"}, {"name": "Viviane da Silveira Veiga Fachini", "value": 0, "status": "Aguardando aprovação do cliente", "agent": "nenhum", "responded": false, "converted": false, "objecao": "SEM_CONTATO", "month": "2026-08"}];
+
+// ===== RENDER TABLE =====
+function formatVal(v) {
+  return 'R$ ' + v.toLocaleString('pt-BR', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+}
+
+function agentBadge(a) {
+  const map = {
+    'daniela': ['#7C3AED', '#F5F3FF', 'Daniela'],
+    'clara':   ['#2D52EF', '#EEF2FF', 'Clara IA'],
+    'ambos':   ['#6366f1', '#EEF2FF', 'D + C'],
+    'outros':  ['#6b7280', '#F8FAFC', 'Outros'],
+    'nenhum':  ['#94a3b8', '#F1F5F9', 'Sem FUP'],
+  };
+  const [bg_text, bg_bg, label] = map[a] || ['#94a3b8', '#F1F5F9', a];
+  return `<span class="badge" style="background:${bg_bg};color:${bg_text};border:1px solid ${bg_text}20">${label}</span>`;
+}
+
+function statusBadge(s) {
+  if (s.includes('Execut')) return `<span class="badge badge-executada">Executada</span>`;
+  if (s.includes('Aprovada')) return `<span class="badge badge-aprovada">Aprovada</span>`;
+  return `<span class="badge badge-aguardando">Aguardando</span>`;
+}
+
+function objecaoBadge(o) {
+  if (!o) return '-';
+  const map = {
+    'SEM_CONTATO': ['#ef4444', 'Sem Contato'],
+    'INDECISAO': ['#f59e0b', 'Indecisao'],
+    'SEM_RESPOSTA': ['#8b5cf6', 'Sem Resp.'],
+  };
+  const [c, l] = map[o] || ['#94a3b8', o];
+  return `<span class="badge" style="background:${c}20;color:${c};border:1px solid ${c}40">${l}</span>`;
+}
+
+function renderTable(rows) {
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = rows.map(r => `
+    <tr data-agent="${r.agent}" data-converted="${r.converted}" data-month="${r.month}">
+      <td>${r.name.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')}</td>
+      <td>${formatVal(r.value)}</td>
+      <td>${statusBadge(r.status)}</td>
+      <td>${r.month}</td>
+      <td>${agentBadge(r.agent)}</td>
+      <td>${r.responded ? '<span style="color:#22c55e">Sim</span>' : '<span style="color:#94a3b8">Nao</span>'}</td>
+      <td>${r.converted ? '<span class="conv-yes">&#10003; Sim</span>' : '<span class="conv-no">&#10007; Nao</span>'}</td>
+      <td>${objecaoBadge(r.objecao)}</td>
+    </tr>
+  `).join('');
+}
+
+renderTable(tableData);
+
+// ===== FILTER =====
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    const f = this.dataset.filter;
+    document.querySelectorAll('#tableBody tr').forEach(row => {
+      let show = true;
+      if (f === 'converted') show = row.dataset.converted === 'true';
+      else if (f === 'pending') show = row.dataset.converted === 'false';
+      else if (f === 'daniela') show = ['daniela','ambos'].includes(row.dataset.agent);
+      else if (f === 'clara') show = ['clara','ambos'].includes(row.dataset.agent);
+      else if (f === 'nenhum') show = row.dataset.agent === 'nenhum';
+      row.classList.toggle('hidden', !show);
+    });
+  });
+});
+
+// ===== SORT =====
+let sortDir = {};
+function sortTable(col) {
+  const rows = [...document.querySelectorAll('#tableBody tr')];
+  const dir = sortDir[col] = !(sortDir[col]);
+  rows.sort((a, b) => {
+    let av = a.cells[col].textContent.trim();
+    let bv = b.cells[col].textContent.trim();
+    if (col === 1) {
+      av = parseFloat(av.replace(/[^0-9.]/g,'')) || 0;
+      bv = parseFloat(bv.replace(/[^0-9.]/g,'')) || 0;
+      return dir ? av - bv : bv - av;
+    }
+    return dir ? av.localeCompare(bv) : bv.localeCompare(av);
+  });
+  const tbody = document.getElementById('tableBody');
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+// ===== CHARTS =====
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+Chart.defaults.plugins.legend.position = 'bottom';
+Chart.defaults.plugins.legend.labels.padding = 16;
+Chart.defaults.plugins.legend.labels.usePointStyle = true;
+
+// Chart Status
+new Chart(document.getElementById('chartStatus'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Executadas', 'Aprovadas', 'Aguardando'],
+    datasets: [{ data: [81, 41, 15], backgroundColor: ['#22c55e','#2D52EF','#f59e0b'], borderWidth: 0, hoverOffset: 8 }]
+  },
+  options: { cutout: '62%', plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: c => ' ' + c.label + ': ' + c.parsed + ' (' + Math.round(c.parsed/139*100) + '%)' } } } }
+});
+
+// Chart Mensal
+new Chart(document.getElementById('chartMensal'), {
+  type: 'bar',
+  data: {
+    labels: ['Agosto', 'Setembro', 'Outubro'],
+    datasets: [
+      { label: 'Total', data: [41, 62, 34], backgroundColor: '#2D52EF', borderRadius: 6 },
+      { label: 'Convertidas', data: [32, 57, 33], backgroundColor: '#22c55e', borderRadius: 6 }
+    ]
+  },
+  options: {
+    plugins: { legend: { position: 'bottom' } },
+    scales: { y: { beginAtZero: true, grid: { color: '#f1f5f9' } } }
+  }
+});
+
+// Chart Coverage
+new Chart(document.getElementById('chartCoverage'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Daniela (18)', 'Clara IA (66)', 'Ambos (12)', 'Outros (8)', 'Sem FUP (59)'],
+    datasets: [{ data: [18, 66, 12, 8, 59], backgroundColor: ['#7C3AED','#2D52EF','#6366f1','#94a3b8','#e2e8f0'], borderWidth: 0, hoverOffset: 8 }]
+  },
+  options: { cutout: '60%', plugins: { legend: { position: 'bottom' } } }
+});
+
+// Chart Comparativo
+new Chart(document.getElementById('chartComparativo'), {
+  type: 'bar',
+  data: {
+    labels: ['Daniela', 'Clara IA', 'Ambos', 'Outros', 'Sem FUP'],
+    datasets: [{ label: 'Conversao (%)', data: [100, 90.9, 100, 100, 84.7], backgroundColor: ['#7C3AED','#2D52EF','#6366f1','#94a3b8','#e2e8f0'], borderRadius: 6 }]
+  },
+  options: {
+    plugins: { legend: { display: false } },
+    scales: { y: { min: 70, max: 105, grid: { color: '#f1f5f9' }, ticks: { callback: v => v + '%' } } },
+    indexAxis: 'y'
+  }
+});
+
+// Chart Faturamento
+new Chart(document.getElementById('chartFaturamento'), {
+  type: 'bar',
+  data: {
+    labels: ['Clara IA', 'Sem FUP', 'Daniela', 'Ambos', 'Outros'],
+    datasets: [{ label: 'Valor Total (R$)', data: [343370, 231880, 97940, 83240, 48940], backgroundColor: ['#2D52EF','#e2e8f0','#7C3AED','#6366f1','#94a3b8'], borderRadius: 6 }]
+  },
+  options: {
+    plugins: { legend: { display: false } },
+    scales: { y: { grid: { color: '#f1f5f9' }, ticks: { callback: v => 'R$ ' + (v/1000).toFixed(0) + 'k' } } }
+  }
+});
+
+// Chart Daniela
+new Chart(document.getElementById('chartDaniela'), {
+  type: 'bar',
+  data: {
+    labels: ['Conversao %', 'Resposta %', 'Ticket Medio (R$/100)'],
+    datasets: [
+      { label: 'Daniela', data: [100, 94.4, 54.4], backgroundColor: '#7C3AED', borderRadius: 4 },
+      { label: 'Clara IA', data: [90.9, 92.4, 52.0], backgroundColor: '#2D52EF', borderRadius: 4 },
+      { label: 'Geral', data: [87.8, null, 48.2], backgroundColor: '#94a3b8', borderRadius: 4 }
+    ]
+  },
+  options: {
+    plugins: { legend: { position: 'bottom' } },
+    scales: { y: { beginAtZero: true, max: 110, grid: { color: '#f1f5f9' } } }
+  }
+});
+
+// Chart Objecoes
+new Chart(document.getElementById('chartObjecoes'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Sem Contato (9)', 'Indecisao (5)', 'Sem Resposta (1)'],
+    datasets: [{ data: [9, 5, 1], backgroundColor: ['#ef4444','#f59e0b','#8b5cf6'], borderWidth: 0, hoverOffset: 8 }]
+  },
+  options: { cutout: '62%', plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: c => ' ' + c.label + ': ' + Math.round(c.parsed/15*100) + '%' } } } }
+});
+</script>
+</body>
+</html>
