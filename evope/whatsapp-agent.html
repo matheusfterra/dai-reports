@@ -364,6 +364,7 @@
         <a href="#fluxo-auth"   class="nav-link">Fluxo de Autenticação</a>
         <a href="#permissoes"   class="nav-link">Matriz de Permissões</a>
         <a href="#stack"        class="nav-link">Stack Técnica</a>
+        <a href="#mcp-server"   class="nav-link">MCP Server — EVOPE</a>
       </div>
       <div class="nav-section">
         <div class="nav-label">User Stories</div>
@@ -748,6 +749,166 @@
           </tbody>
         </table>
       </div>
+
+      <h3 id="mcp-server">MCP Server — EVOPE</h3>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">🔌</span>
+        <p>
+          O <strong>MCP Server</strong> (Model Context Protocol) é a peça central que permite ao agente de IA executar ações reais na plataforma EVOPE. Ele expõe os endpoints da API EVOPE como <strong>tools</strong> que o LLM pode invocar diretamente durante a conversa — autenticar, consultar jornadas, desbloquear máquinas, gerar relatórios, etc.
+        </p>
+      </div>
+
+      <h4>O que é o MCP</h4>
+      <p style="margin:12px 0 16px;color:var(--text-muted)">
+        MCP é o protocolo padrão que conecta modelos de linguagem (LLMs) a APIs externas. Em vez de o agente "adivinhar" como chamar a API, o MCP Server <strong>registra cada operação como uma tool com nome, parâmetros e descrição</strong>. O LLM sabe exatamente o que pode fazer, quais dados precisa, e recebe a resposta estruturada de volta.
+      </p>
+
+      <h4>Arquitetura do MCP EVOPE</h4>
+      <div class="flow" style="flex-direction: column; align-items: flex-start; gap: 4px;">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          <div class="flow-node hi">Agente WhatsApp</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node hi">MCP Server (n8n)</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node ok">API EVOPE</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px;">
+          <div class="flow-node">LLM decide a tool</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node hi">MCP valida + autentica</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node">HTTP Request → EVOPE</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node ok">Resposta → LLM</div>
+        </div>
+      </div>
+
+      <h4>Implementação</h4>
+      <p style="margin:12px 0 8px;color:var(--text-muted)">
+        O MCP Server será construído em <strong>n8n</strong> usando o node <code>MCP Server Trigger</code> — mesmo padrão já validado em outros projetos. Cada endpoint da API EVOPE vira uma tool MCP com:
+      </p>
+      <ul style="margin:0 0 16px 20px;color:var(--text-muted);line-height:1.8">
+        <li><strong>Nome</strong> descritivo (ex: <code>getUserByEmail</code>, <code>getJourneyStatus</code>, <code>unlockMachine</code>)</li>
+        <li><strong>Descrição</strong> que orienta o LLM sobre quando usar cada tool</li>
+        <li><strong>Parâmetros tipados</strong> com validação (ex: email obrigatório, datas no formato correto)</li>
+        <li><strong>Autenticação centralizada</strong> — o MCP gerencia o JWT automaticamente (renovação a cada 25 min)</li>
+      </ul>
+
+      <h4>Tools Planejadas (MVP)</h4>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Tool MCP</th>
+              <th>Endpoint EVOPE</th>
+              <th>Funcionalidade</th>
+              <th>Permissão</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>authenticate</code></td>
+              <td><code>POST /auth</code></td>
+              <td>Login e obtenção de JWT</td>
+              <td>Todos</td>
+            </tr>
+            <tr>
+              <td><code>getUserByEmail</code></td>
+              <td><code>GET /user/{email}</code></td>
+              <td>Dados do usuário (nome, perfil, grupos)</td>
+              <td>Todos</td>
+            </tr>
+            <tr>
+              <td><code>getPermissions</code></td>
+              <td><code>GET /FunctionalityGroup</code></td>
+              <td>Perfis de acesso do usuário</td>
+              <td>Todos</td>
+            </tr>
+            <tr>
+              <td><code>getJourneyStatus</code></td>
+              <td><code>GET /journey</code></td>
+              <td>Status da jornada de trabalho</td>
+              <td>Admin, Gestor</td>
+            </tr>
+            <tr>
+              <td><code>getFilteredJourneys</code></td>
+              <td><code>GET /journey/GetFilteredList</code></td>
+              <td>Jornadas filtradas por período/grupo</td>
+              <td>Admin, Gestor</td>
+            </tr>
+            <tr>
+              <td><code>unlockMachine</code></td>
+              <td><code>POST /machine/unlock</code> <span class="pill pill-red">NOVO</span></td>
+              <td>Desbloquear máquina de colaborador</td>
+              <td>Admin, Gestor</td>
+            </tr>
+            <tr>
+              <td><code>getMachineStatus</code></td>
+              <td><code>GET /machine/{id}/status</code> <span class="pill pill-red">NOVO</span></td>
+              <td>Status atual da máquina (bloqueada/livre)</td>
+              <td>Admin, Gestor</td>
+            </tr>
+            <tr>
+              <td><code>getActiveHoursReport</code></td>
+              <td><code>POST /activehoursreport</code></td>
+              <td>Relatório de horas ativas (max 31 dias)</td>
+              <td>Admin, Gestor</td>
+            </tr>
+            <tr>
+              <td><code>getApplicationReport</code></td>
+              <td><code>POST /applicationreport</code></td>
+              <td>Relatório de aplicativos utilizados</td>
+              <td>Admin, Gestor</td>
+            </tr>
+            <tr>
+              <td><code>getClientGroups</code></td>
+              <td><code>GET /ClientGroup/{filtro}</code></td>
+              <td>Listar grupos/equipes da empresa</td>
+              <td>Admin</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Segurança</h4>
+      <ul style="margin:0 0 16px 20px;color:var(--text-muted);line-height:1.8">
+        <li><strong>Bearer Token</strong> — o MCP Server é protegido por token de autenticação; apenas o workflow do agente pode invocar as tools</li>
+        <li><strong>Validação de permissão</strong> — antes de executar qualquer tool, o MCP verifica o perfil do usuário autenticado na sessão</li>
+        <li><strong>JWT renovado automaticamente</strong> — a cada 25 minutos, evitando expiração durante a conversa</li>
+        <li><strong>Audit trail</strong> — toda invocação de tool é logada com timestamp, usuário, parâmetros e resultado</li>
+        <li><strong>Rate limiting</strong> — proteção contra abuso (ex: tentativas repetidas de desbloqueio)</li>
+      </ul>
+
+      <h4>Vantagens do MCP vs. chamadas diretas</h4>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Aspecto</th><th>Chamadas diretas no workflow</th><th>MCP Server</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>Manutenção</strong></td>
+              <td>Cada ação é um branch no workflow — cresce rápido</td>
+              <td>Tools independentes, cada uma no seu node</td>
+            </tr>
+            <tr>
+              <td><strong>Extensibilidade</strong></td>
+              <td>Novo endpoint = reescrever lógica de roteamento</td>
+              <td>Nova tool = adicionar 1 node no n8n</td>
+            </tr>
+            <tr>
+              <td><strong>Decisão do LLM</strong></td>
+              <td>LLM precisa "saber" quais funções existem via prompt</td>
+              <td>LLM recebe lista de tools automaticamente com descrições</td>
+            </tr>
+            <tr>
+              <td><strong>Reutilização</strong></td>
+              <td>Preso ao workflow do agente</td>
+              <td>Mesmo MCP pode servir outros agentes EVOPE no futuro</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
     </section>
 
     <!-- ══ USER STORIES ══ -->
