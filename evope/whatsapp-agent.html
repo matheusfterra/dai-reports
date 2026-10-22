@@ -360,8 +360,7 @@
       </div>
       <div class="nav-section">
         <div class="nav-label">Arquitetura</div>
-        <a href="#opcoes"       class="nav-link">3 Opções Comparadas</a>
-        <a href="#opcao-c"      class="nav-link">Opção C — Híbrida (Recomendada)</a>
+        <a href="#arquitetura"   class="nav-link">Diagrama de Componentes</a>
         <a href="#fluxo-auth"   class="nav-link">Fluxo de Autenticação</a>
         <a href="#permissoes"   class="nav-link">Matriz de Permissões</a>
         <a href="#stack"        class="nav-link">Stack Técnica</a>
@@ -402,7 +401,7 @@
       <span class="meta-chip active-chip">● Planejamento</span>
       <span class="meta-chip">~80h</span>
       <span class="meta-chip">4 semanas</span>
-      <span class="meta-chip">Opção C — Híbrida</span>
+      <span class="meta-chip">Arquitetura Híbrida</span>
       <span class="meta-chip">Outubro 2026</span>
     </div>
 
@@ -419,7 +418,7 @@
         <div class="hero-badge">PRD — PLANEJAMENTO</div>
         <p class="hero-desc">
           <strong>Público-alvo:</strong> Gestores, administradores e técnicos das empresas que contratam a plataforma EVOPE.<br>
-          <strong>Canal:</strong> WhatsApp Business (Evolution API ou Meta Cloud API, a definir).<br>
+          <strong>Canal:</strong> WhatsApp Business (UAZAPI).<br>
           <strong>Orquestração:</strong> n8n (Digital AI) → API EVOPE (openrest.evope.com.br).
         </p>
       </div>
@@ -475,7 +474,7 @@
       <p>Construir um agente de IA conversacional no WhatsApp que permita ao cliente da EVOPE:</p>
 
       <div class="flow">
-        <div class="flow-node hi">1. Autenticar via email</div>
+        <div class="flow-node hi">1. Autenticar via telefone ou email</div>
         <span class="flow-arrow">→</span>
         <div class="flow-node hi">2. Verificar permissões</div>
         <span class="flow-arrow">→</span>
@@ -500,7 +499,7 @@
               <td><span class="pill pill-blue">F1</span></td>
               <td><strong>Autenticação via WhatsApp</strong></td>
               <td><code>POST /auth</code> · <code>GET /user/{email}</code></td>
-              <td>Cliente informa email corporativo, agente valida contra API EVOPE, armazena sessão</td>
+              <td>Cliente se identifica por telefone cadastrado ou email corporativo, agente valida contra API EVOPE, armazena sessão</td>
             </tr>
             <tr>
               <td><span class="pill pill-blue">F2</span></td>
@@ -569,85 +568,27 @@
       </div>
     </section>
 
-    <!-- ══ ARQUITETURA — 3 OPÇÕES ══ -->
-    <section id="opcoes">
-      <h2><span class="sec-num">3</span>Arquitetura — 3 Opções Comparadas <a class="anchor" href="#opcoes">#</a></h2>
+    <!-- ══ ARQUITETURA ══ -->
+    <section id="arquitetura">
+      <h2><span class="sec-num">3</span>Arquitetura <a class="anchor" href="#arquitetura">#</a></h2>
 
-      <div class="tbl-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Aspecto</th>
-              <th>Opção A — n8n EVOPE</th>
-              <th>Opção B — n8n DAI</th>
-              <th>Opção C — Híbrida ✓</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Autonomia EVOPE</strong></td>
-              <td><span class="pill pill-green">ALTA</span> — controlam tudo</td>
-              <td><span class="pill pill-red">BAIXA</span> — dependem da DAI</td>
-              <td><span class="pill pill-amber">MÉDIA</span> — ações deles, inteligência nossa</td>
-            </tr>
-            <tr>
-              <td><strong>Controle DAI</strong></td>
-              <td><span class="pill pill-red">BAIXO</span></td>
-              <td><span class="pill pill-green">ALTO</span></td>
-              <td><span class="pill pill-green">ALTO</span> — orquestração e LLM</td>
-            </tr>
-            <tr>
-              <td><strong>Manutenção</strong></td>
-              <td>EVOPE mantém</td>
-              <td>DAI mantém</td>
-              <td><strong>Compartilhada</strong></td>
-            </tr>
-            <tr>
-              <td><strong>Risco</strong></td>
-              <td><span class="pill pill-red">ALTO</span> — EVOPE sem expertise n8n</td>
-              <td><span class="pill pill-green">BAIXO</span></td>
-              <td><span class="pill pill-green">BAIXO</span> — cada lado cuida do seu</td>
-            </tr>
-            <tr>
-              <td><strong>Segurança</strong></td>
-              <td>BOA — dados na infra EVOPE</td>
-              <td><span class="pill pill-amber">ATENÇÃO</span> — dados via infra DAI</td>
-              <td>BALANCEADA — agente envia comandos, API EVOPE executa</td>
-            </tr>
-            <tr>
-              <td><strong>Prazo estimado</strong></td>
-              <td>5 semanas</td>
-              <td>3 semanas</td>
-              <td><strong>4 semanas</strong></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="callout callout-success" id="opcao-c">
-        <span class="callout-icon">✅</span>
-        <p>
-          <strong>Opção C — Híbrida é a recomendada.</strong> Já operamos workflows EVOPE no nosso n8n (agente mapa-processos, gerador de relatórios). Expertise em prompt engineering e LLM é da Digital AI. Ações críticas (desbloqueio) executam na infra EVOPE via API — segurança. Modelo SaaS natural: cobra-se pela orquestração + inteligência. Evolução independente: novos endpoints da EVOPE = registrar no agente; melhorias LLM = automáticas.
-        </p>
-      </div>
-
-      <h3>Diagrama de Componentes (Opção C)</h3>
+      <h3>Diagrama de Componentes</h3>
 
       <div class="node-grid">
         <div class="node-card highlight">
           <div class="node-name">1. Receptor WhatsApp</div>
           <div class="node-type">n8n Webhook</div>
-          <div class="node-desc">Recebe mensagens via Evolution API ou Meta Cloud API</div>
+          <div class="node-desc">Recebe mensagens via UAZAPI</div>
         </div>
         <div class="node-card highlight">
           <div class="node-name">2. Session Manager</div>
           <div class="node-type">Redis · TTL 24h</div>
-          <div class="node-desc">Armazena sessão: phone → {email, userId, groups, profile, token, expiry}</div>
+          <div class="node-desc">Armazena sessão: phone → {phone, email, userId, groups, profile, token, expiry}</div>
         </div>
         <div class="node-card highlight">
           <div class="node-name">3. Auth Module</div>
           <div class="node-type">POST /auth · GET /user</div>
-          <div class="node-desc">Valida email contra API EVOPE, renova JWT a cada 25 min</div>
+          <div class="node-desc">Valida telefone/email contra API EVOPE, renova JWT a cada 25 min</div>
         </div>
         <div class="node-card highlight">
           <div class="node-name">4. Permission Checker</div>
@@ -689,9 +630,11 @@
         <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px;">
           <div class="flow-node warn">Sem sessão:</div>
           <span class="flow-arrow">→</span>
-          <div class="flow-node">Pede email</div>
+          <div class="flow-node">Busca por telefone</div>
           <span class="flow-arrow">→</span>
-          <div class="flow-node hi">GET /user/{email}</div>
+          <div class="flow-node">Não achou? Pede email</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node hi">Valida na API EVOPE</div>
           <span class="flow-arrow">→</span>
           <div class="flow-node ok">Sessão criada (TTL 24h)</div>
         </div>
@@ -779,8 +722,8 @@
             </tr>
             <tr>
               <td><strong>WhatsApp</strong></td>
-              <td>Evolution API <em>ou</em> WhatsApp Cloud API</td>
-              <td>Decisão pendente (D-04). Evolution = grátis; Meta = por mensagem</td>
+              <td>UAZAPI</td>
+              <td>Gateway WhatsApp definido</td>
             </tr>
             <tr>
               <td><strong>LLM</strong></td>
@@ -795,7 +738,7 @@
             <tr>
               <td><strong>Memória de conversa</strong></td>
               <td>PostgreSQL Chat Memory</td>
-              <td>Padrão consolidado (Health Copilot)</td>
+              <td>Padrão consolidado dos agentes de IA EVOPE</td>
             </tr>
             <tr>
               <td><strong>Logs/Auditoria</strong></td>
@@ -820,13 +763,14 @@
         <div class="us-body">
           <div class="us-story">
             <em>Como</em> gestor de uma empresa cliente da EVOPE,
-            <em>quero</em> me identificar no WhatsApp informando meu email corporativo,
+            <em>quero</em> me identificar no WhatsApp pelo meu telefone cadastrado ou email corporativo,
             <em>para que</em> o agente reconheça quem sou e meu nível de acesso.
           </div>
           <ul class="us-criteria">
-            <li><strong>A1.</strong> Usuário envia email → agente valida via <code>GET /user/{email}</code> → confirma nome e perfil</li>
-            <li><strong>A2.</strong> Email não encontrado → agente responde "Email não encontrado no sistema EVOPE."</li>
-            <li><strong>A3.</strong> Sessão persiste por 24h (não pedir email a cada interação)</li>
+            <li><strong>A1.</strong> Agente verifica se o telefone do remetente está cadastrado na EVOPE → se sim, autentica automaticamente</li>
+            <li><strong>A2.</strong> Telefone não cadastrado → agente solicita email → valida via <code>GET /user/{email}</code> → confirma nome e perfil</li>
+            <li><strong>A3.</strong> Telefone/email não encontrado → agente responde "Não foi possível identificar seu cadastro no sistema EVOPE."</li>
+            <li><strong>A4.</strong> Sessão persiste por 24h (não pedir identificação a cada interação)</li>
             <li><strong>A4.</strong> Token EVOPE renovado automaticamente (TTL 30 min, renovar a cada 25 min)</li>
           </ul>
         </div>
@@ -932,7 +876,7 @@
               <tr><td>1.1</td><td>Reunião kick-off com EVOPE (escopo, decisões D-01 a D-05)</td><td>2h</td></tr>
               <tr><td>1.2</td><td>Definir provider WhatsApp e número</td><td>1h</td></tr>
               <tr><td>1.3</td><td>Configurar webhook WhatsApp no n8n</td><td>3h</td></tr>
-              <tr><td>1.4</td><td>Implementar fluxo de autenticação (sessão + validação email)</td><td>6h</td></tr>
+              <tr><td>1.4</td><td>Implementar fluxo de autenticação (sessão + validação por telefone e email)</td><td>6h</td></tr>
               <tr><td>1.5</td><td>Implementar renovação automática de token EVOPE (ciclo 25 min)</td><td>3h</td></tr>
               <tr><td>1.6</td><td>Configurar Redis para sessões (TTL 24h)</td><td>2h</td></tr>
               <tr><td>1.7</td><td>Testes de autenticação end-to-end</td><td>3h</td></tr>
@@ -1096,11 +1040,11 @@
               <td>Bloqueia F3</td>
             </tr>
             <tr>
-              <td><span class="pill pill-amber">D-04</span></td>
-              <td><strong>Provider WhatsApp</strong> — Evolution API (grátis, self-hosted) vs Meta Cloud API (pago, oficial).</td>
+              <td><span class="pill pill-green">D-04</span></td>
+              <td><strong>Provider WhatsApp</strong> — UAZAPI (definido).</td>
               <td>EVOPE + DAI</td>
-              <td><span class="pill pill-amber">A DEFINIR</span></td>
-              <td>Bloqueia início</td>
+              <td><span class="pill pill-green">DEFINIDO</span></td>
+              <td>—</td>
             </tr>
             <tr>
               <td><span class="pill pill-amber">D-05</span></td>
@@ -1173,9 +1117,9 @@
           <tbody>
             <tr><td><span class="pill pill-red">H-01</span></td><td>Confirmar criação de endpoints de desbloqueio (D-01, D-02) + prazo</td><td>decision</td><td><span class="pill pill-red">CRÍTICA</span></td></tr>
             <tr><td><span class="pill pill-amber">H-02</span></td><td>Informar mapeamento <code>identificationKey</code> ↔ email (D-03)</td><td>deliverable</td><td><span class="pill pill-amber">ALTA</span></td></tr>
-            <tr><td><span class="pill pill-amber">H-03</span></td><td>Escolher provider WhatsApp (Evolution API vs Meta Cloud API)</td><td>decision</td><td><span class="pill pill-amber">ALTA</span></td></tr>
+            <tr><td><span class="pill pill-green">H-03</span></td><td>Provider WhatsApp — UAZAPI (definido)</td><td>decision</td><td><span class="pill pill-green">RESOLVIDO</span></td></tr>
             <tr><td><span class="pill pill-amber">H-04</span></td><td>Criar conta de serviço (email/senha) para o agente</td><td>deliverable</td><td><span class="pill pill-amber">ALTA</span></td></tr>
-            <tr><td><span class="pill pill-amber">H-05</span></td><td>Aprovar opção arquitetural (A, B ou C)</td><td>decision</td><td><span class="pill pill-amber">ALTA</span></td></tr>
+            <tr><td><span class="pill pill-green">H-05</span></td><td>Arquitetura definida — Híbrida (n8n DAI + API EVOPE)</td><td>decision</td><td><span class="pill pill-green">RESOLVIDO</span></td></tr>
             <tr><td><span class="pill pill-gray">H-06</span></td><td>Lista completa de ações desejadas além de desbloqueio</td><td>questionnaire</td><td><span class="pill pill-gray">MÉDIA</span></td></tr>
             <tr><td><span class="pill pill-gray">H-07</span></td><td>Número WhatsApp Business dedicado</td><td>deliverable</td><td><span class="pill pill-gray">MÉDIA</span></td></tr>
             <tr><td><span class="pill pill-gray">H-08</span></td><td>Grupo de beta testers (5–10 gestores)</td><td>decision</td><td><span class="pill pill-gray">BAIXA</span></td></tr>
@@ -1183,16 +1127,7 @@
         </table>
       </div>
 
-      <p><strong>Digital AI precisa definir:</strong></p>
-      <div class="tbl-wrap">
-        <table>
-          <thead><tr><th>#</th><th>Decisão</th><th>Tipo</th></tr></thead>
-          <tbody>
-            <tr><td><span class="pill pill-blue">H-09</span></td><td>Precificação comercial para EVOPE</td><td>decision</td></tr>
-            <tr><td><span class="pill pill-blue">H-10</span></td><td>Alocação de desenvolvedor</td><td>decision</td></tr>
-          </tbody>
-        </table>
-      </div>
+      <!-- Decisões internas removidas -->
     </section>
 
     <!-- ══ API EVOPE ══ -->
