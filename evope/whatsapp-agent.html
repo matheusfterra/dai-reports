@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="assets/favicon-32.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EVOPE — WhatsApp Support Agent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:   #2D52EF;
+      --secondary: #3B2FC9;
+      --dark:      #0F1F5C;
+      --accent:    #E8EEFF;
+      --accent2:   #D0DAFD;
+
+      --bg:        #080E2A;
+      --surface:   #0D1736;
+      --surface2:  #111E42;
+      --surface3:  #172350;
+      --border:    rgba(45,82,239,.18);
+      --border2:   rgba(45,82,239,.10);
+
+      --text:      #F0F3FF;
+      --text-muted:#9AAAD4;
+      --text-dim:  #5B6FA4;
+
+      --green:  #34D399;
+      --amber:  #FBBF24;
+      --red:    #F87171;
+
+      --font-head: 'Plus Jakarta Sans', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --r: 10px; --rs: 6px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.65; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    /* ── Layout ── */
+    .layout { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: 268px; flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      position: sticky; top: 0; height: 100vh;
+      overflow-y: auto; padding: 0 0 32px;
+      display: flex; flex-direction: column;
+    }
+
+    .content { flex: 1; max-width: 860px; padding: 52px 60px; min-width: 0; }
+
+    /* ── Sidebar header ── */
+    .sidebar-top {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+    .back-link {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--text-dim);
+      text-decoration: none;
+      margin-bottom: 16px;
+      transition: color .15s;
+    }
+    .back-link:hover { color: var(--primary); }
+
+    .sidebar-logo { height: 22px; width: auto; display: block; margin: 8px 0 10px; }
+    .logo-name { font-family: var(--font-head); font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.3; }
+    .logo-sub  { font-size: 11px; color: var(--text-dim); margin-top: 3px; line-height: 1.3; }
+
+    /* ── Nav ── */
+    .nav-section { padding: 0 14px; margin-top: 6px; }
+    .nav-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.1px;
+      text-transform: uppercase; color: var(--text-dim);
+      padding: 8px 8px 4px;
+    }
+    .nav-link {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 8px;
+      font-size: 12.5px; color: var(--text-muted);
+      text-decoration: none; border-radius: var(--rs);
+      transition: color .15s, background .15s;
+      line-height: 1.3;
+    }
+    .nav-link:hover { color: var(--text); background: var(--surface3); }
+    .nav-link.active { color: #fff; background: rgba(45,82,239,.18); }
+    .nav-link.active::before {
+      content: ''; width: 3px; height: 14px;
+      background: var(--primary); border-radius: 2px; flex-shrink: 0;
+    }
+
+    /* ── Meta badge ── */
+    .meta-bar {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border2);
+      margin-bottom: 0;
+    }
+    .meta-chip {
+      font-size: 11px; font-weight: 600;
+      padding: 3px 9px; border-radius: 100px;
+      background: var(--surface2); color: var(--text-muted);
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+    }
+    .meta-chip.active-chip { background: rgba(251,191,36,.1); color: var(--amber); border-color: rgba(251,191,36,.25); }
+
+    /* ── Typography ── */
+    h1 {
+      font-family: var(--font-head);
+      font-size: 34px; font-weight: 800; letter-spacing: -.6px;
+      color: var(--text); margin-bottom: 10px; line-height: 1.2;
+    }
+    h1 span { color: var(--primary); }
+    h2 {
+      font-family: var(--font-head);
+      font-size: 20px; font-weight: 700;
+      margin: 52px 0 16px; padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    h2 .sec-num { color: var(--primary); font-size: 12px; font-weight: 600; letter-spacing: .5px; margin-right: 8px; }
+    h3 {
+      font-family: var(--font-head);
+      font-size: 14px; font-weight: 700;
+      margin: 28px 0 10px; color: var(--text);
+    }
+    h3::before { content: '▸ '; color: var(--primary); }
+    p { font-size: 14px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.75; }
+    p strong { color: var(--text); }
+    .lead { font-size: 15px; color: var(--text-muted); margin-bottom: 28px; line-height: 1.75; }
+
+    /* ── Section anchor ── */
+    section { padding-top: 8px; }
+    .anchor { color: var(--text-dim); text-decoration: none; margin-left: 8px; font-size: 14px; opacity: 0; }
+    h2:hover .anchor { opacity: 1; }
+
+    /* ── Table ── */
+    .tbl-wrap { overflow-x: auto; margin: 12px 0 22px; border-radius: var(--r); border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead tr { background: var(--surface2); }
+    th {
+      text-align: left; padding: 9px 14px;
+      color: var(--text-dim); font-size: 10.5px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .8px;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-head);
+    }
+    td {
+      padding: 9px 14px; border-bottom: 1px solid var(--border2);
+      color: var(--text-muted); vertical-align: top; line-height: 1.55;
+    }
+    tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: var(--surface2); }
+    td code { font-family: var(--font-mono); font-size: 11.5px; color: #93C5FD; background: rgba(147,197,253,.08); padding: 1px 6px; border-radius: 4px; }
+    td strong { color: var(--text); }
+    .pill {
+      display: inline-block; padding: 1px 8px; border-radius: 100px;
+      font-size: 10.5px; font-weight: 700; white-space: nowrap;
+    }
+    .pill-blue   { background: rgba(45,82,239,.15); color: #93C5FD; }
+    .pill-green  { background: rgba(52,211,153,.12); color: #34D399; }
+    .pill-amber  { background: rgba(251,191,36,.12); color: #FBBF24; }
+    .pill-red    { background: rgba(248,113,113,.12); color: #F87171; }
+    .pill-gray   { background: var(--surface2); color: var(--text-dim); }
+
+    /* ── Code block ── */
+    .code-wrap { position: relative; margin: 14px 0 22px; border-radius: var(--r); overflow: hidden; border: 1px solid var(--border); }
+    .code-header {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--surface2); padding: 8px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .code-lang { font-family: var(--font-mono); font-size: 10.5px; color: var(--primary); }
+    .code-copy { background: none; border: none; color: var(--text-dim); font-size: 11px; cursor: pointer; font-family: var(--font-body); transition: color .15s; }
+    .code-copy:hover { color: var(--primary); }
+    pre {
+      background: var(--surface); padding: 16px 18px; overflow-x: auto;
+      font-family: var(--font-mono); font-size: 12.5px; line-height: 1.7;
+      color: var(--text-muted);
+    }
+    .hl-c  { color: var(--text-dim); font-style: italic; }
+    .hl-k  { color: #818CF8; }
+    .hl-s  { color: #34D399; }
+    .hl-n  { color: #93C5FD; }
+    .hl-v  { color: #FBBF24; }
+    .hl-p  { color: #F97316; }
+
+    /* ── Callout ── */
+    .callout {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 14px 16px; border-radius: var(--r); margin: 14px 0;
+      font-size: 13px; line-height: 1.65;
+    }
+    .callout-info    { background: rgba(45,82,239,.09);  border: 1px solid rgba(45,82,239,.25); }
+    .callout-warn    { background: rgba(251,191,36,.08);  border: 1px solid rgba(251,191,36,.25); }
+    .callout-success { background: rgba(52,211,153,.08);  border: 1px solid rgba(52,211,153,.25); }
+    .callout-danger  { background: rgba(248,113,113,.08); border: 1px solid rgba(248,113,113,.25); }
+    .callout-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+    .callout p { margin: 0; color: var(--text-muted); }
+    .callout strong { color: var(--text); }
+    .callout code { font-family: var(--font-mono); font-size: 12px; color: #93C5FD; }
+
+    /* ── Flow diagram ── */
+    .flow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 18px 0; }
+    .flow-node {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--rs); padding: 7px 13px;
+      font-size: 12px; font-weight: 600; color: var(--text-muted); white-space: nowrap;
+    }
+    .flow-node.hi { border-color: rgba(45,82,239,.5); color: #93C5FD; background: rgba(45,82,239,.12); }
+    .flow-node.ok { border-color: rgba(52,211,153,.4); color: #34D399; background: rgba(52,211,153,.08); }
+    .flow-node.warn { border-color: rgba(248,113,113,.4); color: #F87171; background: rgba(248,113,113,.08); }
+    .flow-arrow { color: var(--text-dim); font-size: 15px; }
+
+    /* ── KPI grid ── */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 10px; margin: 14px 0 22px; }
+    .kpi-card {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 14px 16px;
+    }
+    .kpi-card.blue  { border-top: 2px solid var(--primary); }
+    .kpi-card.green { border-top: 2px solid var(--green); }
+    .kpi-card.amber { border-top: 2px solid var(--amber); }
+    .kpi-card.red   { border-top: 2px solid var(--red); }
+    .kpi-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; color: var(--text-dim); margin-bottom: 6px; }
+    .kpi-value { font-family: var(--font-head); font-size: 26px; font-weight: 800; color: var(--text); line-height: 1.1; }
+    .kpi-sub   { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+
+    /* ── Node map grid ── */
+    .node-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0 22px; }
+    .node-card {
+      background: var(--surface2); border: 1px solid var(--border2);
+      border-radius: var(--rs); padding: 10px 13px;
+    }
+    .node-name { font-family: var(--font-head); font-size: 12.5px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .node-type { font-family: var(--font-mono); font-size: 10px; color: var(--primary); margin-bottom: 4px; }
+    .node-desc { font-size: 11.5px; color: var(--text-dim); line-height: 1.5; }
+    .node-card.highlight { border-color: rgba(45,82,239,.4); background: rgba(45,82,239,.08); }
+
+    /* ── Hero banner ── */
+    .hero-banner {
+      background: linear-gradient(135deg, var(--surface2) 0%, rgba(45,82,239,.15) 100%);
+      border: 1px solid rgba(45,82,239,.3);
+      border-radius: 14px; padding: 28px 32px;
+      margin-bottom: 36px; position: relative; overflow: hidden;
+    }
+    .hero-banner::before {
+      content: '';
+      position: absolute; top: -40px; right: -40px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(45,82,239,.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block; font-size: 10.5px; font-weight: 700;
+      padding: 3px 10px; border-radius: 100px;
+      background: rgba(45,82,239,.2); color: #93C5FD;
+      border: 1px solid rgba(45,82,239,.3);
+      margin-bottom: 12px; font-family: var(--font-head); letter-spacing: .5px;
+    }
+    .hero-desc { font-size: 14px; color: var(--text-muted); margin: 0; line-height: 1.7; }
+
+    /* ── US Card ── */
+    .us-card {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--r); margin: 14px 0; overflow: hidden;
+    }
+    .us-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px; background: var(--surface3);
+      border-bottom: 1px solid var(--border);
+    }
+    .us-num {
+      font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+      color: var(--primary); background: rgba(45,82,239,.15);
+      padding: 2px 8px; border-radius: 4px; flex-shrink: 0;
+    }
+    .us-title { font-family: var(--font-head); font-size: 13px; font-weight: 700; color: var(--text); }
+    .us-body { padding: 14px 16px; }
+    .us-story {
+      font-size: 13px; color: var(--text-muted); line-height: 1.7;
+      padding: 10px 14px; background: rgba(45,82,239,.06);
+      border-radius: var(--rs); border-left: 3px solid var(--primary);
+      margin-bottom: 12px;
+    }
+    .us-story em { color: var(--text); font-style: normal; font-weight: 600; }
+    .us-criteria { list-style: none; padding: 0; }
+    .us-criteria li {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 12.5px; color: var(--text-muted); padding: 5px 0;
+      border-bottom: 1px solid var(--border2);
+      line-height: 1.55;
+    }
+    .us-criteria li:last-child { border-bottom: none; }
+    .us-criteria li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .us-criteria li code { font-family: var(--font-mono); font-size: 11px; color: #93C5FD; }
+
+    /* ── Phase card ── */
+    .phase-card {
+      border: 1px solid var(--border); border-radius: var(--r);
+      overflow: hidden; margin: 10px 0;
+    }
+    .phase-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 16px; background: var(--surface3);
+      border-bottom: 1px solid var(--border);
+    }
+    .phase-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--primary); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-head); font-size: 12px; font-weight: 800;
+      flex-shrink: 0;
+    }
+    .phase-title { font-family: var(--font-head); font-size: 13px; font-weight: 700; color: var(--text); }
+    .phase-meta { margin-left: auto; display: flex; gap: 8px; }
+
+    /* ── Responsive ── */
+    @media (max-width: 960px) {
+      .sidebar { display: none; }
+      .content { padding: 32px 24px; max-width: 100%; }
+      .node-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      h1 { font-size: 26px; }
+      h2 { font-size: 17px; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- ════ SIDEBAR ════ -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <a href="index.html" class="back-link">← Voltar ao Hub</a>
+      <img src="assets/logo-negative.svg" alt="Digital AI" class="sidebar-logo" />
+      <div class="logo-name">EVOPE</div>
+      <div class="logo-sub">WhatsApp Support Agent</div>
+    </div>
+
+    <nav>
+      <div class="nav-section">
+        <div class="nav-label">Visão Geral</div>
+        <a href="#problema"     class="nav-link active">Problema &amp; Objetivo</a>
+        <a href="#escopo"       class="nav-link">Escopo (IN/OUT)</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Arquitetura</div>
+        <a href="#opcoes"       class="nav-link">3 Opções Comparadas</a>
+        <a href="#opcao-c"      class="nav-link">Opção C — Híbrida (Recomendada)</a>
+        <a href="#fluxo-auth"   class="nav-link">Fluxo de Autenticação</a>
+        <a href="#permissoes"   class="nav-link">Matriz de Permissões</a>
+        <a href="#stack"        class="nav-link">Stack Técnica</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">User Stories</div>
+        <a href="#us01"         class="nav-link">US-01: Autenticação</a>
+        <a href="#us02"         class="nav-link">US-02: Consultar Jornada</a>
+        <a href="#us03"         class="nav-link">US-03: Desbloquear Máquina</a>
+        <a href="#us04"         class="nav-link">US-04: Métricas Produtividade</a>
+        <a href="#us05"         class="nav-link">US-05: Escalar Humano</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Planejamento</div>
+        <a href="#cronograma"   class="nav-link">Cronograma (5 Fases)</a>
+        <a href="#custos"       class="nav-link">Estimativa de Custos</a>
+        <a href="#nfr"          class="nav-link">Requisitos Não-Funcionais</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Dependências</div>
+        <a href="#bloqueadores" class="nav-link">Bloqueadores Críticos</a>
+        <a href="#riscos"       class="nav-link">Riscos &amp; Mitigações</a>
+        <a href="#proximos"     class="nav-link">Próximos Passos</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">API EVOPE</div>
+        <a href="#endpoints"    class="nav-link">Endpoints Utilizados</a>
+        <a href="#endpoints-novos" class="nav-link">Endpoints Novos Necessários</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- ════ CONTENT ════ -->
+  <main class="content">
+
+    <!-- META BAR -->
+    <div class="meta-bar" style="margin: -52px -60px 48px; padding: 10px 60px;">
+      <span class="meta-chip active-chip">● Planejamento</span>
+      <span class="meta-chip">~96h</span>
+      <span class="meta-chip">5 semanas</span>
+      <span class="meta-chip">Opção C — Híbrida</span>
+      <span class="meta-chip">Outubro 2026</span>
+    </div>
+
+    <!-- ══ VISÃO GERAL ══ -->
+    <section id="problema">
+      <h1>WhatsApp <span>Support Agent</span></h1>
+      <p class="lead">
+        Agente de IA conversacional que permite aos <strong>clientes da EVOPE</strong> executar ações
+        operacionais diretamente via WhatsApp — sem acessar o portal web. Autenticação, consultas
+        e desbloqueio de máquinas em menos de 30 segundos.
+      </p>
+
+      <div class="hero-banner">
+        <div class="hero-badge">PRD — PLANEJAMENTO</div>
+        <p class="hero-desc">
+          <strong>Público-alvo:</strong> Gestores, administradores e técnicos das empresas que contratam a plataforma EVOPE.<br>
+          <strong>Canal:</strong> WhatsApp Business (Evolution API ou Meta Cloud API, a definir).<br>
+          <strong>Orquestração:</strong> n8n (Digital AI) → API EVOPE (openrest.evope.com.br).
+        </p>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card blue">
+          <div class="kpi-label">Desenvolvimento</div>
+          <div class="kpi-value">~96h</div>
+          <div class="kpi-sub">5 fases · 5 semanas</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">Implementação</div>
+          <div class="kpi-value">R$ 14-19k</div>
+          <div class="kpi-sub">One-time · Opção C</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">Recorrente</div>
+          <div class="kpi-value">R$ 200-400</div>
+          <div class="kpi-sub">Por mês · Opção C</div>
+        </div>
+        <div class="kpi-card blue">
+          <div class="kpi-label">Funcionalidades</div>
+          <div class="kpi-value">8</div>
+          <div class="kpi-sub">F1–F8 no MVP v1</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">User Stories</div>
+          <div class="kpi-value">5</div>
+          <div class="kpi-sub">15 critérios de aceite</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">Redução de atrito</div>
+          <div class="kpi-value">~80%</div>
+          <div class="kpi-sub">3-5 min → &lt;30s</div>
+        </div>
+      </div>
+
+      <h3>O Problema</h3>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">ℹ️</span>
+        <p>
+          A EVOPE é uma plataforma SaaS de monitoramento de produtividade (<strong>evope.com.br</strong>).
+          Seus clientes (empresas) precisam realizar ações operacionais como desbloquear computadores de
+          colaboradores, consultar jornadas e verificar métricas. Hoje, isso exige acesso ao portal web
+          <code>portal.evope.com.br</code> — gerando atrito de <strong>3–5 minutos por ação</strong>.
+        </p>
+      </div>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Problema</th><th>Impacto</th></tr></thead>
+          <tbody>
+            <tr><td>Gestores precisam abrir portal, navegar, executar e voltar</td><td>3–5 min de atrito por ação</td></tr>
+            <tr><td>Ações urgentes (desbloqueio) presas ao acesso desktop</td><td>Colaborador parado esperando</td></tr>
+            <tr><td>Clientes ligam/mandam email à equipe EVOPE por ações simples</td><td>Carga no suporte humano</td></tr>
+            <tr><td>API REST (v1.3.9, 20+ endpoints) não explorada conversacionalmente</td><td>Subutilização de infraestrutura</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Objetivo &amp; Capacidades do Agente</h3>
+      <p>Construir um agente de IA conversacional no WhatsApp que permita ao cliente da EVOPE:</p>
+
+      <div class="flow">
+        <div class="flow-node hi">1. Autenticar via email</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node hi">2. Verificar permissões</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node hi">3. Executar ações na API</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node ok">4. Tirar dúvidas</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node ok">5. Escalar para humano</div>
+      </div>
+    </section>
+
+    <!-- ══ ESCOPO ══ -->
+    <section id="escopo">
+      <h2><span class="sec-num">2</span>Escopo — MVP v1 <a class="anchor" href="#escopo">#</a></h2>
+
+      <h3>IN-SCOPE (8 funcionalidades)</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Funcionalidade</th><th>Endpoints API EVOPE</th><th>Descrição</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="pill pill-blue">F1</span></td>
+              <td><strong>Autenticação via WhatsApp</strong></td>
+              <td><code>POST /auth</code> · <code>GET /user/{email}</code></td>
+              <td>Cliente informa email corporativo, agente valida contra API EVOPE, armazena sessão</td>
+            </tr>
+            <tr>
+              <td><span class="pill pill-blue">F2</span></td>
+              <td><strong>Verificação de permissões</strong></td>
+              <td><code>GET /FunctionalityGroup</code></td>
+              <td>Agente consulta perfil (Admin, Gestor, User, Técnico) e libera ações conforme matriz</td>
+            </tr>
+            <tr>
+              <td><span class="pill pill-blue">F3</span></td>
+              <td><strong>Consulta de jornada</strong></td>
+              <td><code>GET /journey</code> · <code>GET /journey/GetFilteredList</code></td>
+              <td>Gestor consulta jornada de colaboradores da sua equipe</td>
+            </tr>
+            <tr>
+              <td><span class="pill pill-amber">F4</span></td>
+              <td><strong>Desbloqueio de computador</strong></td>
+              <td><span class="pill pill-red">NOVO — EVOPE precisa criar</span></td>
+              <td>Gestor solicita desbloqueio de máquina de membro da equipe</td>
+            </tr>
+            <tr>
+              <td><span class="pill pill-blue">F5</span></td>
+              <td><strong>Consulta de métricas</strong></td>
+              <td><code>POST /activehoursreport</code> · <code>POST /applicationreport</code></td>
+              <td>Resumo de horas ativas, apps utilizados no período</td>
+            </tr>
+            <tr>
+              <td><span class="pill pill-blue">F6</span></td>
+              <td><strong>Consulta de equipe/grupos</strong></td>
+              <td><code>GET /ClientGroup/</code> · <code>GET /user/{email}</code></td>
+              <td>Listar membros da equipe com status</td>
+            </tr>
+            <tr>
+              <td><span class="pill pill-blue">F7</span></td>
+              <td><strong>Fallback para suporte humano</strong></td>
+              <td>—</td>
+              <td>Comando <code>/humano</code> transfere para atendente EVOPE com contexto da conversa</td>
+            </tr>
+            <tr>
+              <td><span class="pill pill-blue">F8</span></td>
+              <td><strong>Audit trail</strong></td>
+              <td>—</td>
+              <td>Log de todas as ações executadas (quem, quando, o que, resultado)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>OUT-OF-SCOPE (v1)</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Item</th><th>Motivo</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Criação/edição de usuários via WhatsApp</td><td>Ação administrativa sensível — manter no portal</td></tr>
+            <tr><td>2</td><td>Alteração de jornadas (férias, folgas, exceções)</td><td>Complexidade de validação trabalhista</td></tr>
+            <tr><td>3</td><td>Envio de ponto (timecard) via WhatsApp</td><td>Compliance/LGPD — fase futura</td></tr>
+            <tr><td>4</td><td>Mapa de Processos interativo</td><td>Visualização gráfica não cabe no WhatsApp</td></tr>
+            <tr><td>5</td><td>Multi-tenancy automático</td><td>v1: isolamento por sessão; multi-tenant automático em v2</td></tr>
+            <tr><td>6</td><td>Integração com outros canais (Telegram, email)</td><td>Foco WhatsApp na v1</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">⚠️</span>
+        <p><strong>Complexidade L (Large).</strong> Integração com API terceira, endpoints novos pelo lado EVOPE, autenticação customizada, permissionamento multi-perfil e orquestração de ações.</p>
+      </div>
+    </section>
+
+    <!-- ══ ARQUITETURA — 3 OPÇÕES ══ -->
+    <section id="opcoes">
+      <h2><span class="sec-num">3</span>Arquitetura — 3 Opções Comparadas <a class="anchor" href="#opcoes">#</a></h2>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Aspecto</th>
+              <th>Opção A — n8n EVOPE</th>
+              <th>Opção B — n8n DAI</th>
+              <th>Opção C — Híbrida ✓</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Autonomia EVOPE</strong></td>
+              <td><span class="pill pill-green">ALTA</span> — controlam tudo</td>
+              <td><span class="pill pill-red">BAIXA</span> — dependem da DAI</td>
+              <td><span class="pill pill-amber">MÉDIA</span> — ações deles, inteligência nossa</td>
+            </tr>
+            <tr>
+              <td><strong>Controle DAI</strong></td>
+              <td><span class="pill pill-red">BAIXO</span></td>
+              <td><span class="pill pill-green">ALTO</span></td>
+              <td><span class="pill pill-green">ALTO</span> — orquestração e LLM</td>
+            </tr>
+            <tr>
+              <td><strong>Custo recorrente</strong></td>
+              <td>R$ 50–250/mês (só LLM)</td>
+              <td>R$ 300–500/mês</td>
+              <td><strong>R$ 200–400/mês</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Risco</strong></td>
+              <td><span class="pill pill-red">ALTO</span> — EVOPE sem expertise n8n</td>
+              <td><span class="pill pill-green">BAIXO</span></td>
+              <td><span class="pill pill-green">BAIXO</span> — cada lado cuida do seu</td>
+            </tr>
+            <tr>
+              <td><strong>Segurança</strong></td>
+              <td>BOA — dados na infra EVOPE</td>
+              <td><span class="pill pill-amber">ATENÇÃO</span> — dados via infra DAI</td>
+              <td>BALANCEADA — agente envia comandos, API EVOPE executa</td>
+            </tr>
+            <tr>
+              <td><strong>Implementação</strong></td>
+              <td>80–100h · R$ 16–20k</td>
+              <td>60–80h · R$ 12–16k</td>
+              <td><strong>70–96h · R$ 14–19,2k</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout-success" id="opcao-c">
+        <span class="callout-icon">✅</span>
+        <p>
+          <strong>Opção C — Híbrida é a recomendada.</strong> Já operamos workflows EVOPE no nosso n8n (agente mapa-processos, gerador de relatórios). Expertise em prompt engineering e LLM é da Digital AI. Ações críticas (desbloqueio) executam na infra EVOPE via API — segurança. Modelo SaaS natural: cobra-se pela orquestração + inteligência. Evolução independente: novos endpoints da EVOPE = registrar no agente; melhorias LLM = automáticas.
+        </p>
+      </div>
+
+      <h3>Diagrama de Componentes (Opção C)</h3>
+
+      <div class="node-grid">
+        <div class="node-card highlight">
+          <div class="node-name">1. Receptor WhatsApp</div>
+          <div class="node-type">n8n Webhook</div>
+          <div class="node-desc">Recebe mensagens via Evolution API ou Meta Cloud API</div>
+        </div>
+        <div class="node-card highlight">
+          <div class="node-name">2. Session Manager</div>
+          <div class="node-type">Redis · TTL 24h</div>
+          <div class="node-desc">Armazena sessão: phone → {email, userId, groups, profile, token, expiry}</div>
+        </div>
+        <div class="node-card highlight">
+          <div class="node-name">3. Auth Module</div>
+          <div class="node-type">POST /auth · GET /user</div>
+          <div class="node-desc">Valida email contra API EVOPE, renova JWT a cada 25 min</div>
+        </div>
+        <div class="node-card highlight">
+          <div class="node-name">4. Permission Checker</div>
+          <div class="node-type">GET /FunctionalityGroup</div>
+          <div class="node-desc">Valida perfil antes de qualquer ação (Admin/Gestor/User/Técnico)</div>
+        </div>
+        <div class="node-card highlight">
+          <div class="node-name">5. LLM Router</div>
+          <div class="node-type">GPT-4.1-mini</div>
+          <div class="node-desc">Classifica intenção: consulta | ação | dúvida | escalar</div>
+        </div>
+        <div class="node-card highlight">
+          <div class="node-name">6. Action Dispatcher</div>
+          <div class="node-type">n8n HTTP Request</div>
+          <div class="node-desc">Executa chamadas na API EVOPE conforme intenção classificada</div>
+        </div>
+        <div class="node-card">
+          <div class="node-name">7. Response Formatter</div>
+          <div class="node-type">Code Node</div>
+          <div class="node-desc">Formata respostas da API em linguagem natural acessível</div>
+        </div>
+        <div class="node-card">
+          <div class="node-name">8. Audit Logger</div>
+          <div class="node-type">PostgreSQL</div>
+          <div class="node-desc">Registra todas as ações: quem, quando, o que, resultado, IP</div>
+        </div>
+      </div>
+
+      <h3 id="fluxo-auth">Fluxo de Autenticação</h3>
+
+      <div class="flow" style="flex-direction: column; align-items: flex-start; gap: 4px;">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          <div class="flow-node hi">1. Mensagem WhatsApp</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node hi">2. Webhook n8n</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node hi">3. Busca sessão Redis</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px;">
+          <div class="flow-node warn">Sem sessão:</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node">Pede email</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node hi">GET /user/{email}</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node ok">Sessão criada (TTL 24h)</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px;">
+          <div class="flow-node ok">Com sessão:</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node">Renova JWT (25 min)</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node hi">LLM classifica</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node hi">Permission Check</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node ok">Action Dispatcher</div>
+        </div>
+      </div>
+
+      <h3 id="permissoes">Matriz de Permissões</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Ação</th>
+              <th style="text-align:center">Admin (2)</th>
+              <th style="text-align:center">Gestor (4)</th>
+              <th style="text-align:center">User Padrão (3)</th>
+              <th style="text-align:center">Técnico (5)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Consultar própria jornada</td>
+              <td style="text-align:center;color:var(--green)">✅</td>
+              <td style="text-align:center;color:var(--green)">✅</td>
+              <td style="text-align:center;color:var(--green)">✅</td>
+              <td style="text-align:center;color:var(--green)">✅</td>
+            </tr>
+            <tr>
+              <td>Consultar jornada da equipe</td>
+              <td style="text-align:center;color:var(--green)">✅</td>
+              <td style="text-align:center;color:var(--green)">✅ <small style="color:var(--text-dim)">(seus grupos)</small></td>
+              <td style="text-align:center;color:var(--red)">❌</td>
+              <td style="text-align:center;color:var(--red)">❌</td>
+            </tr>
+            <tr>
+              <td>Desbloquear máquina</td>
+              <td style="text-align:center;color:var(--green)">✅</td>
+              <td style="text-align:center;color:var(--green)">✅ <small style="color:var(--text-dim)">(seus grupos)</small></td>
+              <td style="text-align:center;color:var(--red)">❌</td>
+              <td style="text-align:center;color:var(--green)">✅</td>
+            </tr>
+            <tr>
+              <td>Métricas de produtividade</td>
+              <td style="text-align:center;color:var(--green)">✅</td>
+              <td style="text-align:center;color:var(--green)">✅ <small style="color:var(--text-dim)">(seus grupos)</small></td>
+              <td style="text-align:center;color:var(--red)">❌</td>
+              <td style="text-align:center;color:var(--red)">❌</td>
+            </tr>
+            <tr>
+              <td>Listar equipe/membros</td>
+              <td style="text-align:center;color:var(--green)">✅</td>
+              <td style="text-align:center;color:var(--green)">✅ <small style="color:var(--text-dim)">(seus grupos)</small></td>
+              <td style="text-align:center;color:var(--red)">❌</td>
+              <td style="text-align:center;color:var(--red)">❌</td>
+            </tr>
+            <tr>
+              <td>Escalar para humano</td>
+              <td style="text-align:center;color:var(--green)">✅</td>
+              <td style="text-align:center;color:var(--green)">✅</td>
+              <td style="text-align:center;color:var(--green)">✅</td>
+              <td style="text-align:center;color:var(--green)">✅</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="stack">Stack Técnica</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Componente</th><th>Tecnologia</th><th>Justificativa</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>Orquestração</strong></td>
+              <td><code>n8n</code> — webhook.digital-ai.tech</td>
+              <td>Já operamos workflows EVOPE (agente mapa-processos, gerador de relatórios)</td>
+            </tr>
+            <tr>
+              <td><strong>WhatsApp</strong></td>
+              <td>Evolution API <em>ou</em> WhatsApp Cloud API</td>
+              <td>Decisão pendente (D-04). Evolution = grátis; Meta = por mensagem</td>
+            </tr>
+            <tr>
+              <td><strong>LLM</strong></td>
+              <td><code>gpt-4.1-mini</code></td>
+              <td>Custo/performance — já usado nos workflows EVOPE</td>
+            </tr>
+            <tr>
+              <td><strong>Memória de sessão</strong></td>
+              <td>Redis (Digital AI) · TTL 24h</td>
+              <td>TTL nativo, alta performance, já em produção na infra DAI</td>
+            </tr>
+            <tr>
+              <td><strong>Memória de conversa</strong></td>
+              <td>PostgreSQL Chat Memory</td>
+              <td>Padrão consolidado (Health Copilot)</td>
+            </tr>
+            <tr>
+              <td><strong>Logs/Auditoria</strong></td>
+              <td>PostgreSQL</td>
+              <td>Tabela dedicada de audit trail com todas as ações</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ══ USER STORIES ══ -->
+    <section id="us01">
+      <h2><span class="sec-num">4</span>User Stories <a class="anchor" href="#us01">#</a></h2>
+
+      <div class="us-card">
+        <div class="us-header">
+          <span class="us-num">US-01</span>
+          <span class="us-title">Autenticação via WhatsApp</span>
+          <span class="pill pill-green" style="margin-left:auto">F1 · F2</span>
+        </div>
+        <div class="us-body">
+          <div class="us-story">
+            <em>Como</em> gestor de uma empresa cliente da EVOPE,
+            <em>quero</em> me identificar no WhatsApp informando meu email corporativo,
+            <em>para que</em> o agente reconheça quem sou e meu nível de acesso.
+          </div>
+          <ul class="us-criteria">
+            <li><strong>A1.</strong> Usuário envia email → agente valida via <code>GET /user/{email}</code> → confirma nome e perfil</li>
+            <li><strong>A2.</strong> Email não encontrado → agente responde "Email não encontrado no sistema EVOPE."</li>
+            <li><strong>A3.</strong> Sessão persiste por 24h (não pedir email a cada interação)</li>
+            <li><strong>A4.</strong> Token EVOPE renovado automaticamente (TTL 30 min, renovar a cada 25 min)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="us-card" id="us02">
+        <div class="us-header">
+          <span class="us-num">US-02</span>
+          <span class="us-title">Consultar Jornada de Colaborador</span>
+          <span class="pill pill-blue" style="margin-left:auto">F3</span>
+        </div>
+        <div class="us-body">
+          <div class="us-story">
+            <em>Como</em> gestor,
+            <em>quero</em> perguntar "qual a jornada do colaborador X?",
+            <em>para que</em> eu veja horários, tipo de jornada, férias e folgas.
+          </div>
+          <ul class="us-criteria">
+            <li><strong>A5.</strong> Agente consulta <code>/journey?IdentificationKey={key}</code> e retorna resumo formatado</li>
+            <li><strong>A6.</strong> Gestor só vê jornadas dos grupos aos quais tem acesso (campo <code>groups</code> do usuário)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="us-card" id="us03">
+        <div class="us-header">
+          <span class="us-num">US-03</span>
+          <span class="us-title">Desbloquear Computador</span>
+          <span class="pill pill-amber" style="margin-left:auto">F4 — depende D-01</span>
+        </div>
+        <div class="us-body">
+          <div class="us-story">
+            <em>Como</em> gestor,
+            <em>quero</em> pedir "desbloquear a máquina do João",
+            <em>para que</em> o colaborador volte a trabalhar sem que eu precise acessar o portal.
+          </div>
+          <ul class="us-criteria">
+            <li><strong>A7.</strong> Agente verifica se solicitante tem perfil Gestor ou Administrador</li>
+            <li><strong>A8.</strong> Agente verifica se colaborador-alvo pertence ao grupo do solicitante</li>
+            <li><strong>A9.</strong> Agente executa desbloqueio via endpoint API (a ser criado pela EVOPE — D-01)</li>
+            <li><strong>A10.</strong> Agente confirma "Máquina de [nome] desbloqueada" ou reporta erro detalhado</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="us-card" id="us04">
+        <div class="us-header">
+          <span class="us-num">US-04</span>
+          <span class="us-title">Consultar Métricas de Produtividade</span>
+          <span class="pill pill-blue" style="margin-left:auto">F5</span>
+        </div>
+        <div class="us-body">
+          <div class="us-story">
+            <em>Como</em> gestor,
+            <em>quero</em> perguntar "como foi a produtividade da equipe esta semana?",
+            <em>para que</em> eu tenha um resumo rápido sem acessar o portal.
+          </div>
+          <ul class="us-criteria">
+            <li><strong>A11.</strong> Agente consulta <code>/activehoursreport</code> para o período solicitado</li>
+            <li><strong>A12.</strong> Retorna resumo: total horas ativas, média por colaborador, destaques</li>
+            <li><strong>A13.</strong> Respeita limite de 31 dias por chamada (divide automaticamente se necessário)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="us-card" id="us05">
+        <div class="us-header">
+          <span class="us-num">US-05</span>
+          <span class="us-title">Escalar para Humano</span>
+          <span class="pill pill-blue" style="margin-left:auto">F7</span>
+        </div>
+        <div class="us-body">
+          <div class="us-story">
+            <em>Como</em> cliente da EVOPE,
+            <em>quero</em> digitar "/humano" ou "falar com atendente",
+            <em>para que</em> um atendente EVOPE assuma a conversa quando o agente não resolve.
+          </div>
+          <ul class="us-criteria">
+            <li><strong>A14.</strong> Agente transfere conversa para fila de atendimento humano</li>
+            <li><strong>A15.</strong> Agente envia contexto da conversa ao atendente (resumo do que foi tentado)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ CRONOGRAMA ══ -->
+    <section id="cronograma">
+      <h2><span class="sec-num">5</span>Cronograma — 5 Fases <a class="anchor" href="#cronograma">#</a></h2>
+
+      <div class="phase-card">
+        <div class="phase-header">
+          <div class="phase-num">0</div>
+          <div class="phase-title">Discovery e Alinhamento</div>
+          <div class="phase-meta">
+            <span class="pill pill-gray">1 semana</span>
+            <span class="pill pill-blue">4h DAI</span>
+          </div>
+        </div>
+        <div class="tbl-wrap" style="margin:0; border:none; border-radius:0;">
+          <table>
+            <thead><tr><th>#</th><th>Tarefa</th><th>Horas</th><th>Responsável</th></tr></thead>
+            <tbody>
+              <tr><td>0.1</td><td>Reunião kick-off com EVOPE (escopo, decisões D-01 a D-05)</td><td>2h</td><td>PM + EVOPE</td></tr>
+              <tr><td>0.2</td><td>EVOPE documenta endpoints novos (desbloqueio, status máquina)</td><td>—</td><td>EVOPE</td></tr>
+              <tr><td>0.3</td><td>Definir provider WhatsApp e número</td><td>1h</td><td>PM + EVOPE</td></tr>
+              <tr><td>0.4</td><td>EVOPE cria conta de serviço para o agente</td><td>—</td><td>EVOPE</td></tr>
+              <tr><td>0.5</td><td>Mapear <code>identificationKey</code> por colaborador</td><td>1h</td><td>EVOPE</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-header">
+          <div class="phase-num">1</div>
+          <div class="phase-title">Infraestrutura e Autenticação</div>
+          <div class="phase-meta">
+            <span class="pill pill-gray">1 semana</span>
+            <span class="pill pill-blue">20h DAI</span>
+          </div>
+        </div>
+        <div class="tbl-wrap" style="margin:0; border:none; border-radius:0;">
+          <table>
+            <thead><tr><th>#</th><th>Tarefa</th><th>Horas</th></tr></thead>
+            <tbody>
+              <tr><td>1.1</td><td>Configurar webhook WhatsApp no n8n</td><td>4h</td></tr>
+              <tr><td>1.2</td><td>Implementar fluxo de autenticação (sessão + validação email)</td><td>8h</td></tr>
+              <tr><td>1.3</td><td>Implementar renovação automática de token EVOPE (ciclo 25 min)</td><td>3h</td></tr>
+              <tr><td>1.4</td><td>Configurar Redis para sessões (TTL 24h)</td><td>2h</td></tr>
+              <tr><td>1.5</td><td>Testes de autenticação end-to-end</td><td>3h</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-header">
+          <div class="phase-num">2</div>
+          <div class="phase-title">Consultas</div>
+          <div class="phase-meta">
+            <span class="pill pill-gray">1 semana</span>
+            <span class="pill pill-blue">30h DAI</span>
+          </div>
+        </div>
+        <div class="tbl-wrap" style="margin:0; border:none; border-radius:0;">
+          <table>
+            <thead><tr><th>#</th><th>Tarefa</th><th>Horas</th></tr></thead>
+            <tbody>
+              <tr><td>2.1</td><td>Implementar consulta de jornada (<code>GET /journey</code>)</td><td>6h</td></tr>
+              <tr><td>2.2</td><td>Implementar consulta de métricas (<code>POST /activehoursreport</code>, <code>/applicationreport</code>)</td><td>8h</td></tr>
+              <tr><td>2.3</td><td>Implementar consulta de equipe/grupos (<code>GET /ClientGroup</code>)</td><td>4h</td></tr>
+              <tr><td>2.4</td><td>Implementar LLM router (classificação de intenção + formatação de respostas)</td><td>8h</td></tr>
+              <tr><td>2.5</td><td>Testes com dados reais</td><td>4h</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-header">
+          <div class="phase-num">3</div>
+          <div class="phase-title">Ações DevOps</div>
+          <div class="phase-meta">
+            <span class="pill pill-gray">1 semana</span>
+            <span class="pill pill-blue">18h DAI</span>
+            <span class="pill pill-amber">depende D-01/D-02</span>
+          </div>
+        </div>
+        <div class="tbl-wrap" style="margin:0; border:none; border-radius:0;">
+          <table>
+            <thead><tr><th>#</th><th>Tarefa</th><th>Horas</th></tr></thead>
+            <tbody>
+              <tr><td>3.1</td><td>Integrar endpoint de desbloqueio (quando EVOPE entregar)</td><td>6h</td></tr>
+              <tr><td>3.2</td><td>Implementar verificação de permissões antes de ações</td><td>4h</td></tr>
+              <tr><td>3.3</td><td>Implementar audit trail completo</td><td>4h</td></tr>
+              <tr><td>3.4</td><td>Testes de ações end-to-end</td><td>4h</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-header">
+          <div class="phase-num">4</div>
+          <div class="phase-title">Polish e Lançamento</div>
+          <div class="phase-meta">
+            <span class="pill pill-gray">1 semana</span>
+            <span class="pill pill-blue">24h DAI</span>
+          </div>
+        </div>
+        <div class="tbl-wrap" style="margin:0; border:none; border-radius:0;">
+          <table>
+            <thead><tr><th>#</th><th>Tarefa</th><th>Horas</th></tr></thead>
+            <tbody>
+              <tr><td>4.1</td><td>Prompt engineering e tuning do agente</td><td>6h</td></tr>
+              <tr><td>4.2</td><td>Fallback humano (<code>/humano</code> + contexto ao atendente)</td><td>2h</td></tr>
+              <tr><td>4.3</td><td>Rate limiting e proteções (anti-flood, anti-abuse)</td><td>2h</td></tr>
+              <tr><td>4.4</td><td>Documentação do agente (para equipe e clientes EVOPE)</td><td>4h</td></tr>
+              <tr><td>4.5</td><td>Beta com 5–10 gestores de clientes</td><td>4h</td></tr>
+              <tr><td>4.6</td><td>Ajustes pós-beta</td><td>4h</td></tr>
+              <tr><td>4.7</td><td>Lançamento geral + handoff</td><td>2h</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <h3>Resumo Consolidado</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Fase</th><th>Horas DAI</th><th>Prazo</th><th>Pré-requisito</th></tr></thead>
+          <tbody>
+            <tr><td><strong>0 — Discovery</strong></td><td>4h</td><td>1 semana</td><td>Disponibilidade EVOPE</td></tr>
+            <tr><td><strong>1 — Infra + Auth</strong></td><td>20h</td><td>1 semana</td><td>D-04, D-05 resolvidos</td></tr>
+            <tr><td><strong>2 — Consultas</strong></td><td>30h</td><td>1 semana</td><td>D-03 resolvido</td></tr>
+            <tr><td><strong>3 — Ações</strong></td><td>18h</td><td>1 semana</td><td>D-01, D-02 resolvidos</td></tr>
+            <tr><td><strong>4 — Polish + Launch</strong></td><td>24h</td><td>1 semana</td><td>Fase 3 concluída</td></tr>
+            <tr><td><strong style="color:var(--text)">TOTAL</strong></td><td><strong style="color:var(--text)">~96h</strong></td><td><strong style="color:var(--text)">~5 semanas</strong></td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">💡</span>
+        <p>
+          <strong>Paralelização possível:</strong> A Fase 3 pode ser executada em paralelo com a Fase 2 se os endpoints de desbloqueio (D-01/D-02) estiverem prontos antes. Se atrasarem, Fases 0–2 + 4 entregam um agente funcional de consultas (sem desbloqueio) em <strong>4 semanas</strong>.
+        </p>
+      </div>
+    </section>
+
+    <!-- ══ CUSTOS ══ -->
+    <section id="custos">
+      <h2><span class="sec-num">6</span>Estimativa de Custos <a class="anchor" href="#custos">#</a></h2>
+
+      <h3>Implementação (one-time)</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Item</th><th>Horas</th><th>Valor/h</th><th>Total</th></tr></thead>
+          <tbody>
+            <tr><td>Desenvolvimento (workflows n8n, integração API, LLM)</td><td>72h</td><td>R$ 200</td><td><strong>R$ 14.400</strong></td></tr>
+            <tr><td>Discovery, PM, documentação</td><td>12h</td><td>R$ 200</td><td><strong>R$ 2.400</strong></td></tr>
+            <tr><td>Testes e QA</td><td>12h</td><td>R$ 200</td><td><strong>R$ 2.400</strong></td></tr>
+            <tr><td><strong>Total</strong></td><td><strong>96h</strong></td><td>—</td><td><strong style="color:var(--text)">R$ 19.200</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Custos Recorrentes (mensais)</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Item</th><th>Estimativa</th><th>Observação</th></tr></thead>
+          <tbody>
+            <tr><td>LLM (GPT-4.1-mini)</td><td>R$ 50–150/mês</td><td>~2.000–5.000 msgs/mês, ~500 tokens/msg</td></tr>
+            <tr><td>Infra (n8n, Redis, Postgres)</td><td>R$ 0–100/mês</td><td>Compartilha infra existente DAI</td></tr>
+            <tr><td>WhatsApp Business API</td><td>R$ 0–200/mês</td><td>Evolution = grátis; Meta = por mensagem</td></tr>
+            <tr><td>Suporte e manutenção</td><td>R$ 500–1.000/mês</td><td>Monitoramento, ajustes, evoluções</td></tr>
+            <tr><td><strong>Total recorrente</strong></td><td colspan="2"><strong style="color:var(--text)">R$ 550–1.450/mês</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Comparativo por Opção</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Cenário</th><th>Implementação</th><th>Recorrente/mês</th><th>Melhor para</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>A — n8n EVOPE</td>
+              <td>R$ 16.000–20.000</td>
+              <td>R$ 50–250</td>
+              <td>EVOPE quer autonomia total</td>
+            </tr>
+            <tr>
+              <td>B — n8n DAI</td>
+              <td>R$ 12.000–16.000</td>
+              <td>R$ 300–500</td>
+              <td>Sem expertise interna</td>
+            </tr>
+            <tr style="background:rgba(52,211,153,.04)">
+              <td><strong>C — Híbrida ✓</strong></td>
+              <td><strong>R$ 14.000–19.200</strong></td>
+              <td><strong>R$ 200–400</strong></td>
+              <td><strong>Equilíbrio (recomendado)</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ══ REQUISITOS NÃO-FUNCIONAIS ══ -->
+    <section id="nfr">
+      <h2><span class="sec-num">7</span>Requisitos Não-Funcionais <a class="anchor" href="#nfr">#</a></h2>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Requisito</th><th>Meta</th></tr></thead>
+          <tbody>
+            <tr><td><span class="pill pill-blue">NF-01</span></td><td><strong>Tempo de resposta</strong></td><td>&lt; 5s consultas · &lt; 15s ações</td></tr>
+            <tr><td><span class="pill pill-blue">NF-02</span></td><td><strong>Disponibilidade</strong></td><td>99.5%</td></tr>
+            <tr><td><span class="pill pill-blue">NF-03</span></td><td><strong>Segurança</strong></td><td>Token JWT (30 min TTL), renovação automática, sessão isolada por usuário</td></tr>
+            <tr><td><span class="pill pill-blue">NF-04</span></td><td><strong>LGPD</strong></td><td>Nenhum dado pessoal armazenado além da sessão (email + nome + perfil). Dados agregados.</td></tr>
+            <tr><td><span class="pill pill-blue">NF-05</span></td><td><strong>Auditoria</strong></td><td>Log de TODAS as ações (quem, quando, o que, resultado, IP)</td></tr>
+            <tr><td><span class="pill pill-blue">NF-06</span></td><td><strong>Idioma</strong></td><td>Português (BR) — tom profissional e acessível</td></tr>
+            <tr><td><span class="pill pill-blue">NF-07</span></td><td><strong>Rate limiting</strong></td><td>Max 60 msgs/min por usuário (anti-flood)</td></tr>
+            <tr><td><span class="pill pill-blue">NF-08</span></td><td><strong>Fallback humano</strong></td><td>Sempre disponível via <code>/humano</code></td></tr>
+            <tr><td><span class="pill pill-blue">NF-09</span></td><td><strong>Isolamento multi-tenant</strong></td><td>Cada empresa-cliente tem dados isolados por sessão (campos <code>groups</code> e <code>functionalityGroupID</code> da API)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ══ DEPENDÊNCIAS / BLOQUEADORES ══ -->
+    <section id="bloqueadores">
+      <h2><span class="sec-num">8</span>Dependências &amp; Bloqueadores <a class="anchor" href="#bloqueadores">#</a></h2>
+
+      <h3>Bloqueadores Críticos</h3>
+
+      <div class="callout callout-danger">
+        <span class="callout-icon">🚨</span>
+        <p><strong>5 dependências críticas</strong> precisam ser resolvidas antes ou durante o desenvolvimento. D-04 e D-05 bloqueiam o início imediato. D-01/D-02 bloqueiam a funcionalidade de desbloqueio (F4).</p>
+      </div>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Dependência</th><th>Responsável</th><th>Status</th><th>Impacto</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="pill pill-red">D-01</span></td>
+              <td><strong>Endpoint desbloqueio de máquina</strong> — API v1.3.9 NÃO possui. EVOPE precisa criar e documentar.</td>
+              <td>EVOPE (dev)</td>
+              <td><span class="pill pill-red">NÃO EXISTE</span></td>
+              <td>Bloqueia F4</td>
+            </tr>
+            <tr>
+              <td><span class="pill pill-red">D-02</span></td>
+              <td><strong>Endpoint listagem de máquinas</strong> por colaborador/grupo — necessário para saber QUAL máquina desbloquear.</td>
+              <td>EVOPE (dev)</td>
+              <td><span class="pill pill-red">NÃO EXISTE</span></td>
+              <td>Bloqueia F4</td>
+            </tr>
+            <tr>
+              <td><span class="pill pill-amber">D-03</span></td>
+              <td><strong>Mapeamento <code>identificationKey</code></strong> — endpoint de jornada usa <code>identificationKey</code>, não claro como obter via email.</td>
+              <td>EVOPE (dev)</td>
+              <td><span class="pill pill-amber">A CONFIRMAR</span></td>
+              <td>Bloqueia F3</td>
+            </tr>
+            <tr>
+              <td><span class="pill pill-amber">D-04</span></td>
+              <td><strong>Provider WhatsApp</strong> — Evolution API (grátis, self-hosted) vs Meta Cloud API (pago, oficial).</td>
+              <td>EVOPE + DAI</td>
+              <td><span class="pill pill-amber">A DEFINIR</span></td>
+              <td>Bloqueia início</td>
+            </tr>
+            <tr>
+              <td><span class="pill pill-amber">D-05</span></td>
+              <td><strong>Credenciais de API</strong> — Conta de serviço (email/senha) dedicada ao agente com perfil Administrador.</td>
+              <td>EVOPE</td>
+              <td><span class="pill pill-amber">A CRIAR</span></td>
+              <td>Bloqueia tudo</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="riscos">Riscos &amp; Mitigações</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Risco</th><th>Prob</th><th>Impacto</th><th>Mitigação</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="pill pill-gray">R-01</span></td>
+              <td>EVOPE não cria endpoints de desbloqueio a tempo</td>
+              <td><span class="pill pill-red">Alta</span></td>
+              <td><span class="pill pill-red">Crítico</span></td>
+              <td>Iniciar com consultas (Fases 0–2); ações entram quando endpoints prontos</td>
+            </tr>
+            <tr>
+              <td><span class="pill pill-gray">R-02</span></td>
+              <td>Token JWT 30 min causa falhas de sessão</td>
+              <td><span class="pill pill-amber">Média</span></td>
+              <td><span class="pill pill-amber">Médio</span></td>
+              <td>Renovação proativa a cada 25 min; retry com re-auth em 401</td>
+            </tr>
+            <tr>
+              <td><span class="pill pill-gray">R-03</span></td>
+              <td><code>identificationKey</code> não mapeável por email</td>
+              <td><span class="pill pill-amber">Média</span></td>
+              <td><span class="pill pill-red">Alto</span></td>
+              <td>Pedir <code>GET /user/{email}/identificationKey</code> ou padronizar key=email</td>
+            </tr>
+            <tr>
+              <td><span class="pill pill-gray">R-04</span></td>
+              <td>Volume alto de mensagens → custo LLM elevado</td>
+              <td><span class="pill pill-green">Baixa</span></td>
+              <td><span class="pill pill-amber">Médio</span></td>
+              <td>Rate limiting; cache de respostas frequentes</td>
+            </tr>
+            <tr>
+              <td><span class="pill pill-gray">R-05</span></td>
+              <td>LGPD — dados de produtividade via WhatsApp</td>
+              <td><span class="pill pill-amber">Média</span></td>
+              <td><span class="pill pill-red">Alto</span></td>
+              <td>Consentimento no onboarding; dados sempre agregados; compliance review</td>
+            </tr>
+            <tr>
+              <td><span class="pill pill-gray">R-06</span></td>
+              <td>EVOPE muda API sem avisar (breaking change)</td>
+              <td><span class="pill pill-amber">Média</span></td>
+              <td><span class="pill pill-red">Alto</span></td>
+              <td>Versionamento; healthcheck periódico; gotcha no Cortex</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="proximos">Próximos Passos — Decisões Pendentes</h3>
+
+      <p><strong>EVOPE precisa resolver:</strong></p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Decisão</th><th>Tipo</th><th>Urgência</th></tr></thead>
+          <tbody>
+            <tr><td><span class="pill pill-red">H-01</span></td><td>Confirmar criação de endpoints de desbloqueio (D-01, D-02) + prazo</td><td>decision</td><td><span class="pill pill-red">CRÍTICA</span></td></tr>
+            <tr><td><span class="pill pill-amber">H-02</span></td><td>Informar mapeamento <code>identificationKey</code> ↔ email (D-03)</td><td>deliverable</td><td><span class="pill pill-amber">ALTA</span></td></tr>
+            <tr><td><span class="pill pill-amber">H-03</span></td><td>Escolher provider WhatsApp (Evolution API vs Meta Cloud API)</td><td>decision</td><td><span class="pill pill-amber">ALTA</span></td></tr>
+            <tr><td><span class="pill pill-amber">H-04</span></td><td>Criar conta de serviço (email/senha) para o agente</td><td>deliverable</td><td><span class="pill pill-amber">ALTA</span></td></tr>
+            <tr><td><span class="pill pill-amber">H-05</span></td><td>Aprovar opção arquitetural (A, B ou C)</td><td>decision</td><td><span class="pill pill-amber">ALTA</span></td></tr>
+            <tr><td><span class="pill pill-gray">H-06</span></td><td>Lista completa de ações desejadas além de desbloqueio</td><td>questionnaire</td><td><span class="pill pill-gray">MÉDIA</span></td></tr>
+            <tr><td><span class="pill pill-gray">H-07</span></td><td>Número WhatsApp Business dedicado</td><td>deliverable</td><td><span class="pill pill-gray">MÉDIA</span></td></tr>
+            <tr><td><span class="pill pill-gray">H-08</span></td><td>Grupo de beta testers (5–10 gestores)</td><td>decision</td><td><span class="pill pill-gray">BAIXA</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p><strong>Digital AI precisa definir:</strong></p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Decisão</th><th>Tipo</th></tr></thead>
+          <tbody>
+            <tr><td><span class="pill pill-blue">H-09</span></td><td>Precificação comercial para EVOPE</td><td>decision</td></tr>
+            <tr><td><span class="pill pill-blue">H-10</span></td><td>Alocação de desenvolvedor</td><td>decision</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ══ API EVOPE ══ -->
+    <section id="endpoints">
+      <h2><span class="sec-num">9</span>API EVOPE — Endpoints <a class="anchor" href="#endpoints">#</a></h2>
+
+      <p>Referência completa: <code>/cortex/clients/evope/api-reference.md</code> — API v1.3.9 · Base URL: <code>https://openrest.evope.com.br/api/v0</code></p>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Grupo</th>
+              <th>Método</th>
+              <th>Endpoint</th>
+              <th>Descrição</th>
+              <th>Usado?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Auth</td>
+              <td><span class="pill pill-green">POST</span></td>
+              <td><code>/auth</code></td>
+              <td>Login → JWT 30 min</td>
+              <td><span class="pill pill-green">✅ F1</span></td>
+            </tr>
+            <tr>
+              <td>User</td>
+              <td><span class="pill pill-blue">GET</span></td>
+              <td><code>/user/{email}</code></td>
+              <td>Dados do usuário (nome, perfil, grupos)</td>
+              <td><span class="pill pill-green">✅ F1 F2</span></td>
+            </tr>
+            <tr>
+              <td>User</td>
+              <td><span class="pill pill-green">POST</span></td>
+              <td><code>/user</code></td>
+              <td>Criar usuário</td>
+              <td><span class="pill pill-gray">❌ out-of-scope</span></td>
+            </tr>
+            <tr>
+              <td>User</td>
+              <td><span class="pill pill-amber">PATCH</span></td>
+              <td><code>/user/enable</code></td>
+              <td>Ativar usuário</td>
+              <td><span class="pill pill-gray">❌ out-of-scope</span></td>
+            </tr>
+            <tr>
+              <td>User</td>
+              <td><span class="pill pill-amber">PATCH</span></td>
+              <td><code>/user/disable</code></td>
+              <td>Desativar usuário</td>
+              <td><span class="pill pill-gray">❌ out-of-scope</span></td>
+            </tr>
+            <tr>
+              <td>User</td>
+              <td><span class="pill pill-amber">PATCH</span></td>
+              <td><code>/user/profile</code></td>
+              <td>Alterar perfil</td>
+              <td><span class="pill pill-gray">❌ out-of-scope</span></td>
+            </tr>
+            <tr>
+              <td>User</td>
+              <td><span class="pill pill-amber">PATCH</span></td>
+              <td><code>/user/group</code></td>
+              <td>Alterar grupos</td>
+              <td><span class="pill pill-gray">❌ out-of-scope</span></td>
+            </tr>
+            <tr>
+              <td>Groups</td>
+              <td><span class="pill pill-blue">GET</span></td>
+              <td><code>/ClientGroup/{filtro}</code></td>
+              <td>Grupos da empresa</td>
+              <td><span class="pill pill-green">✅ F6</span></td>
+            </tr>
+            <tr>
+              <td>Profiles</td>
+              <td><span class="pill pill-blue">GET</span></td>
+              <td><code>/FunctionalityGroup</code></td>
+              <td>Perfis de acesso</td>
+              <td><span class="pill pill-green">✅ F2</span></td>
+            </tr>
+            <tr>
+              <td>Journey</td>
+              <td><span class="pill pill-blue">GET</span></td>
+              <td><code>/journey</code></td>
+              <td>Jornada do colaborador</td>
+              <td><span class="pill pill-green">✅ F3</span></td>
+            </tr>
+            <tr>
+              <td>Journey</td>
+              <td><span class="pill pill-blue">GET</span></td>
+              <td><code>/journey/GetFilteredList</code></td>
+              <td>Jornadas filtradas</td>
+              <td><span class="pill pill-green">✅ F3</span></td>
+            </tr>
+            <tr>
+              <td>Journey</td>
+              <td><span class="pill pill-green">POST</span></td>
+              <td><code>/journey</code></td>
+              <td>Criar jornada</td>
+              <td><span class="pill pill-gray">❌ out-of-scope</span></td>
+            </tr>
+            <tr>
+              <td>Journey</td>
+              <td><span class="pill pill-amber">PUT</span></td>
+              <td><code>/journey</code></td>
+              <td>Atualizar jornada</td>
+              <td><span class="pill pill-gray">❌ out-of-scope</span></td>
+            </tr>
+            <tr>
+              <td>Journey</td>
+              <td><span class="pill pill-green">POST</span></td>
+              <td><code>/journey/vacation</code></td>
+              <td>Atualizar férias</td>
+              <td><span class="pill pill-gray">❌ out-of-scope</span></td>
+            </tr>
+            <tr>
+              <td>Journey</td>
+              <td><span class="pill pill-green">POST</span></td>
+              <td><code>/journey/dayoff</code></td>
+              <td>Atualizar folgas</td>
+              <td><span class="pill pill-gray">❌ out-of-scope</span></td>
+            </tr>
+            <tr>
+              <td>Reports</td>
+              <td><span class="pill pill-green">POST</span></td>
+              <td><code>/activehoursreport</code></td>
+              <td>Horas ativas (max 31 dias)</td>
+              <td><span class="pill pill-green">✅ F5</span></td>
+            </tr>
+            <tr>
+              <td>Reports</td>
+              <td><span class="pill pill-green">POST</span></td>
+              <td><code>/applicationreport</code></td>
+              <td>Apps utilizados</td>
+              <td><span class="pill pill-green">✅ F5</span></td>
+            </tr>
+            <tr>
+              <td>Reports</td>
+              <td><span class="pill pill-green">POST</span></td>
+              <td><code>/sitereport</code></td>
+              <td>Sites utilizados</td>
+              <td><span class="pill pill-gray">❌ v2</span></td>
+            </tr>
+            <tr>
+              <td>Reports</td>
+              <td><span class="pill pill-green">POST</span></td>
+              <td><code>/tracereport</code></td>
+              <td>Teclado/mouse</td>
+              <td><span class="pill pill-gray">❌ v2</span></td>
+            </tr>
+            <tr>
+              <td>TimeCard</td>
+              <td><span class="pill pill-green">POST</span></td>
+              <td><code>/timecard</code></td>
+              <td>Enviar ponto</td>
+              <td><span class="pill pill-gray">❌ out-of-scope</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="endpoints-novos">Endpoints Novos Necessários</h3>
+
+      <div class="callout callout-danger">
+        <span class="callout-icon">🚨</span>
+        <p>
+          <strong>2 endpoints críticos precisam ser criados pela EVOPE</strong> para habilitar a funcionalidade de desbloqueio de máquina (F4). Sem eles, a Fase 3 do projeto não pode ser executada.
+        </p>
+      </div>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Grupo</th>
+              <th>Método</th>
+              <th>Endpoint</th>
+              <th>Descrição</th>
+              <th>Status</th>
+              <th>Bloqueia</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background:rgba(248,113,113,.04)">
+              <td><strong>Machine</strong></td>
+              <td><span class="pill pill-amber">???</span></td>
+              <td><code>/machine/unlock</code></td>
+              <td>Desbloquear máquina de um colaborador por ID/identificador</td>
+              <td><span class="pill pill-red">NÃO EXISTE — D-01</span></td>
+              <td>F4 · US-03</td>
+            </tr>
+            <tr style="background:rgba(248,113,113,.04)">
+              <td><strong>Machine</strong></td>
+              <td><span class="pill pill-amber">???</span></td>
+              <td><code>/machine/status</code></td>
+              <td>Status da(s) máquina(s) de um colaborador (bloqueada/desbloqueada)</td>
+              <td><span class="pill pill-red">NÃO EXISTE — D-02</span></td>
+              <td>F4 · US-03</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Os endpoints devem ser documentados com: método HTTP, URL completa, headers necessários (Bearer JWT), body de request (identificador do colaborador + grupo), body de response (sucesso/erro), e códigos de status esperados.</p>
+
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // Highlight active nav link on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  function updateActiveLink() {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop - 80;
+      if (window.scrollY >= sectionTop) {
+        current = section.getAttribute('id');
+      }
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      const href = link.getAttribute('href');
+      if (href && href === '#' + current) {
+        link.classList.add('active');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', updateActiveLink);
+  updateActiveLink();
+</script>
+</body>
+</html>
