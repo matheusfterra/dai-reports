@@ -377,7 +377,7 @@
       <div class="nav-section">
         <div class="nav-label">Planejamento</div>
         <a href="#cronograma"   class="nav-link">Cronograma (5 Fases)</a>
-        <a href="#custos"       class="nav-link">Estimativa de Custos</a>
+        <!-- Custos removido -->
         <a href="#nfr"          class="nav-link">Requisitos Não-Funcionais</a>
       </div>
       <div class="nav-section">
@@ -400,8 +400,8 @@
     <!-- META BAR -->
     <div class="meta-bar" style="margin: -52px -60px 48px; padding: 10px 60px;">
       <span class="meta-chip active-chip">● Planejamento</span>
-      <span class="meta-chip">~96h</span>
-      <span class="meta-chip">5 semanas</span>
+      <span class="meta-chip">~80h</span>
+      <span class="meta-chip">4 semanas</span>
       <span class="meta-chip">Opção C — Híbrida</span>
       <span class="meta-chip">Outubro 2026</span>
     </div>
@@ -427,18 +427,8 @@
       <div class="kpi-grid">
         <div class="kpi-card blue">
           <div class="kpi-label">Desenvolvimento</div>
-          <div class="kpi-value">~96h</div>
-          <div class="kpi-sub">5 fases · 5 semanas</div>
-        </div>
-        <div class="kpi-card amber">
-          <div class="kpi-label">Implementação</div>
-          <div class="kpi-value">R$ 14-19k</div>
-          <div class="kpi-sub">One-time · Opção C</div>
-        </div>
-        <div class="kpi-card green">
-          <div class="kpi-label">Recorrente</div>
-          <div class="kpi-value">R$ 200-400</div>
-          <div class="kpi-sub">Por mês · Opção C</div>
+          <div class="kpi-value">~80h</div>
+          <div class="kpi-sub">5 fases · 4 semanas</div>
         </div>
         <div class="kpi-card blue">
           <div class="kpi-label">Funcionalidades</div>
@@ -607,10 +597,10 @@
               <td><span class="pill pill-green">ALTO</span> — orquestração e LLM</td>
             </tr>
             <tr>
-              <td><strong>Custo recorrente</strong></td>
-              <td>R$ 50–250/mês (só LLM)</td>
-              <td>R$ 300–500/mês</td>
-              <td><strong>R$ 200–400/mês</strong></td>
+              <td><strong>Manutenção</strong></td>
+              <td>EVOPE mantém</td>
+              <td>DAI mantém</td>
+              <td><strong>Compartilhada</strong></td>
             </tr>
             <tr>
               <td><strong>Risco</strong></td>
@@ -625,10 +615,10 @@
               <td>BALANCEADA — agente envia comandos, API EVOPE executa</td>
             </tr>
             <tr>
-              <td><strong>Implementação</strong></td>
-              <td>80–100h · R$ 16–20k</td>
-              <td>60–80h · R$ 12–16k</td>
-              <td><strong>70–96h · R$ 14–19,2k</strong></td>
+              <td><strong>Prazo estimado</strong></td>
+              <td>5 semanas</td>
+              <td>3 semanas</td>
+              <td><strong>4 semanas</strong></td>
             </tr>
           </tbody>
         </table>
@@ -928,33 +918,10 @@
 
       <div class="phase-card">
         <div class="phase-header">
-          <div class="phase-num">0</div>
-          <div class="phase-title">Discovery e Alinhamento</div>
-          <div class="phase-meta">
-            <span class="pill pill-gray">1 semana</span>
-            <span class="pill pill-blue">4h DAI</span>
-          </div>
-        </div>
-        <div class="tbl-wrap" style="margin:0; border:none; border-radius:0;">
-          <table>
-            <thead><tr><th>#</th><th>Tarefa</th><th>Horas</th><th>Responsável</th></tr></thead>
-            <tbody>
-              <tr><td>0.1</td><td>Reunião kick-off com EVOPE (escopo, decisões D-01 a D-05)</td><td>2h</td><td>PM + EVOPE</td></tr>
-              <tr><td>0.2</td><td>EVOPE documenta endpoints novos (desbloqueio, status máquina)</td><td>—</td><td>EVOPE</td></tr>
-              <tr><td>0.3</td><td>Definir provider WhatsApp e número</td><td>1h</td><td>PM + EVOPE</td></tr>
-              <tr><td>0.4</td><td>EVOPE cria conta de serviço para o agente</td><td>—</td><td>EVOPE</td></tr>
-              <tr><td>0.5</td><td>Mapear <code>identificationKey</code> por colaborador</td><td>1h</td><td>EVOPE</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="phase-card">
-        <div class="phase-header">
           <div class="phase-num">1</div>
-          <div class="phase-title">Infraestrutura e Autenticação</div>
+          <div class="phase-title">Discovery + Infraestrutura + Autenticação</div>
           <div class="phase-meta">
-            <span class="pill pill-gray">1 semana</span>
+            <span class="pill pill-gray">Semana 1</span>
             <span class="pill pill-blue">20h DAI</span>
           </div>
         </div>
@@ -962,11 +929,13 @@
           <table>
             <thead><tr><th>#</th><th>Tarefa</th><th>Horas</th></tr></thead>
             <tbody>
-              <tr><td>1.1</td><td>Configurar webhook WhatsApp no n8n</td><td>4h</td></tr>
-              <tr><td>1.2</td><td>Implementar fluxo de autenticação (sessão + validação email)</td><td>8h</td></tr>
-              <tr><td>1.3</td><td>Implementar renovação automática de token EVOPE (ciclo 25 min)</td><td>3h</td></tr>
-              <tr><td>1.4</td><td>Configurar Redis para sessões (TTL 24h)</td><td>2h</td></tr>
-              <tr><td>1.5</td><td>Testes de autenticação end-to-end</td><td>3h</td></tr>
+              <tr><td>1.1</td><td>Reunião kick-off com EVOPE (escopo, decisões D-01 a D-05)</td><td>2h</td></tr>
+              <tr><td>1.2</td><td>Definir provider WhatsApp e número</td><td>1h</td></tr>
+              <tr><td>1.3</td><td>Configurar webhook WhatsApp no n8n</td><td>3h</td></tr>
+              <tr><td>1.4</td><td>Implementar fluxo de autenticação (sessão + validação email)</td><td>6h</td></tr>
+              <tr><td>1.5</td><td>Implementar renovação automática de token EVOPE (ciclo 25 min)</td><td>3h</td></tr>
+              <tr><td>1.6</td><td>Configurar Redis para sessões (TTL 24h)</td><td>2h</td></tr>
+              <tr><td>1.7</td><td>Testes de autenticação end-to-end</td><td>3h</td></tr>
             </tbody>
           </table>
         </div>
@@ -977,8 +946,8 @@
           <div class="phase-num">2</div>
           <div class="phase-title">Consultas</div>
           <div class="phase-meta">
-            <span class="pill pill-gray">1 semana</span>
-            <span class="pill pill-blue">30h DAI</span>
+            <span class="pill pill-gray">Semana 2</span>
+            <span class="pill pill-blue">24h DAI</span>
           </div>
         </div>
         <div class="tbl-wrap" style="margin:0; border:none; border-radius:0;">
@@ -1000,8 +969,8 @@
           <div class="phase-num">3</div>
           <div class="phase-title">Ações DevOps</div>
           <div class="phase-meta">
-            <span class="pill pill-gray">1 semana</span>
-            <span class="pill pill-blue">18h DAI</span>
+            <span class="pill pill-gray">Semana 3</span>
+            <span class="pill pill-blue">16h DAI</span>
             <span class="pill pill-amber">depende D-01/D-02</span>
           </div>
         </div>
@@ -1023,8 +992,8 @@
           <div class="phase-num">4</div>
           <div class="phase-title">Polish e Lançamento</div>
           <div class="phase-meta">
-            <span class="pill pill-gray">1 semana</span>
-            <span class="pill pill-blue">24h DAI</span>
+            <span class="pill pill-gray">Semana 4</span>
+            <span class="pill pill-blue">20h DAI</span>
           </div>
         </div>
         <div class="tbl-wrap" style="margin:0; border:none; border-radius:0;">
@@ -1048,12 +1017,11 @@
         <table>
           <thead><tr><th>Fase</th><th>Horas DAI</th><th>Prazo</th><th>Pré-requisito</th></tr></thead>
           <tbody>
-            <tr><td><strong>0 — Discovery</strong></td><td>4h</td><td>1 semana</td><td>Disponibilidade EVOPE</td></tr>
-            <tr><td><strong>1 — Infra + Auth</strong></td><td>20h</td><td>1 semana</td><td>D-04, D-05 resolvidos</td></tr>
-            <tr><td><strong>2 — Consultas</strong></td><td>30h</td><td>1 semana</td><td>D-03 resolvido</td></tr>
-            <tr><td><strong>3 — Ações</strong></td><td>18h</td><td>1 semana</td><td>D-01, D-02 resolvidos</td></tr>
-            <tr><td><strong>4 — Polish + Launch</strong></td><td>24h</td><td>1 semana</td><td>Fase 3 concluída</td></tr>
-            <tr><td><strong style="color:var(--text)">TOTAL</strong></td><td><strong style="color:var(--text)">~96h</strong></td><td><strong style="color:var(--text)">~5 semanas</strong></td><td>—</td></tr>
+            <tr><td><strong>1 — Discovery + Infra + Auth</strong></td><td>20h</td><td>Semana 1</td><td>Disponibilidade EVOPE, D-04, D-05</td></tr>
+            <tr><td><strong>2 — Consultas</strong></td><td>24h</td><td>Semana 2</td><td>D-03 resolvido</td></tr>
+            <tr><td><strong>3 — Ações</strong></td><td>16h</td><td>Semana 3</td><td>D-01, D-02 resolvidos</td></tr>
+            <tr><td><strong>4 — Polish + Launch</strong></td><td>20h</td><td>Semana 4</td><td>Fase 3 concluída</td></tr>
+            <tr><td><strong style="color:var(--text)">TOTAL</strong></td><td><strong style="color:var(--text)">~80h</strong></td><td><strong style="color:var(--text)">4 semanas</strong></td><td>—</td></tr>
           </tbody>
         </table>
       </div>
@@ -1067,67 +1035,11 @@
     </section>
 
     <!-- ══ CUSTOS ══ -->
-    <section id="custos">
-      <h2><span class="sec-num">6</span>Estimativa de Custos <a class="anchor" href="#custos">#</a></h2>
-
-      <h3>Implementação (one-time)</h3>
-      <div class="tbl-wrap">
-        <table>
-          <thead><tr><th>Item</th><th>Horas</th><th>Valor/h</th><th>Total</th></tr></thead>
-          <tbody>
-            <tr><td>Desenvolvimento (workflows n8n, integração API, LLM)</td><td>72h</td><td>R$ 200</td><td><strong>R$ 14.400</strong></td></tr>
-            <tr><td>Discovery, PM, documentação</td><td>12h</td><td>R$ 200</td><td><strong>R$ 2.400</strong></td></tr>
-            <tr><td>Testes e QA</td><td>12h</td><td>R$ 200</td><td><strong>R$ 2.400</strong></td></tr>
-            <tr><td><strong>Total</strong></td><td><strong>96h</strong></td><td>—</td><td><strong style="color:var(--text)">R$ 19.200</strong></td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h3>Custos Recorrentes (mensais)</h3>
-      <div class="tbl-wrap">
-        <table>
-          <thead><tr><th>Item</th><th>Estimativa</th><th>Observação</th></tr></thead>
-          <tbody>
-            <tr><td>LLM (GPT-4.1-mini)</td><td>R$ 50–150/mês</td><td>~2.000–5.000 msgs/mês, ~500 tokens/msg</td></tr>
-            <tr><td>Infra (n8n, Redis, Postgres)</td><td>R$ 0–100/mês</td><td>Compartilha infra existente DAI</td></tr>
-            <tr><td>WhatsApp Business API</td><td>R$ 0–200/mês</td><td>Evolution = grátis; Meta = por mensagem</td></tr>
-            <tr><td>Suporte e manutenção</td><td>R$ 500–1.000/mês</td><td>Monitoramento, ajustes, evoluções</td></tr>
-            <tr><td><strong>Total recorrente</strong></td><td colspan="2"><strong style="color:var(--text)">R$ 550–1.450/mês</strong></td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h3>Comparativo por Opção</h3>
-      <div class="tbl-wrap">
-        <table>
-          <thead><tr><th>Cenário</th><th>Implementação</th><th>Recorrente/mês</th><th>Melhor para</th></tr></thead>
-          <tbody>
-            <tr>
-              <td>A — n8n EVOPE</td>
-              <td>R$ 16.000–20.000</td>
-              <td>R$ 50–250</td>
-              <td>EVOPE quer autonomia total</td>
-            </tr>
-            <tr>
-              <td>B — n8n DAI</td>
-              <td>R$ 12.000–16.000</td>
-              <td>R$ 300–500</td>
-              <td>Sem expertise interna</td>
-            </tr>
-            <tr style="background:rgba(52,211,153,.04)">
-              <td><strong>C — Híbrida ✓</strong></td>
-              <td><strong>R$ 14.000–19.200</strong></td>
-              <td><strong>R$ 200–400</strong></td>
-              <td><strong>Equilíbrio (recomendado)</strong></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+    <!-- Seção de custos removida — cliente existente -->
 
     <!-- ══ REQUISITOS NÃO-FUNCIONAIS ══ -->
     <section id="nfr">
-      <h2><span class="sec-num">7</span>Requisitos Não-Funcionais <a class="anchor" href="#nfr">#</a></h2>
+      <h2><span class="sec-num">6</span>Requisitos Não-Funcionais <a class="anchor" href="#nfr">#</a></h2>
 
       <div class="tbl-wrap">
         <table>
@@ -1149,7 +1061,7 @@
 
     <!-- ══ DEPENDÊNCIAS / BLOQUEADORES ══ -->
     <section id="bloqueadores">
-      <h2><span class="sec-num">8</span>Dependências &amp; Bloqueadores <a class="anchor" href="#bloqueadores">#</a></h2>
+      <h2><span class="sec-num">7</span>Dependências &amp; Bloqueadores <a class="anchor" href="#bloqueadores">#</a></h2>
 
       <h3>Bloqueadores Críticos</h3>
 
@@ -1285,7 +1197,7 @@
 
     <!-- ══ API EVOPE ══ -->
     <section id="endpoints">
-      <h2><span class="sec-num">9</span>API EVOPE — Endpoints <a class="anchor" href="#endpoints">#</a></h2>
+      <h2><span class="sec-num">8</span>API EVOPE — Endpoints <a class="anchor" href="#endpoints">#</a></h2>
 
       <p>Referência completa: <code>/cortex/clients/evope/api-reference.md</code> — API v1.3.9 · Base URL: <code>https://openrest.evope.com.br/api/v0</code></p>
 
