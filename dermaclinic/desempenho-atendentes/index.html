@@ -169,6 +169,11 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 /* Error state */
 .error-box{background:var(--danger-light);border:1px solid #FECACA;border-radius:var(--radius);padding:24px;text-align:center;color:var(--danger);font-weight:600}
 
+.period-selector{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.period-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:6px 16px;font-size:.78rem;font-weight:600;letter-spacing:.3px;color:#fff;cursor:pointer;transition:all .2s}
+.period-btn:hover{background:rgba(255,255,255,.25)}
+.period-btn.active{background:#fff;color:var(--brand-dark)}
+
 /* Responsive */
 @media(max-width:768px){
   .big-numbers{grid-template-columns:repeat(2,1fr)}
@@ -210,8 +215,15 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
       <div class="period-title">Análise de Atendimento via WhatsApp</div>
       <div class="period-sub" id="banner-period">Carregando período...</div>
     </div>
-    <div class="period-pills" id="banner-pills">
-      <span class="period-pill">Carregando...</span>
+    <div>
+      <div class="period-pills" id="banner-pills">
+        <span class="period-pill">Carregando...</span>
+      </div>
+      <div class="period-selector" id="period-selector">
+        <div class="period-btn active" onclick="switchPeriod('consolidated')">Consolidado</div>
+        <div class="period-btn" onclick="switchPeriod('2026-09')">Setembro 2026</div>
+        <div class="period-btn" onclick="switchPeriod('2026-10')">Outubro 2026</div>
+      </div>
     </div>
   </div>
 </div>
@@ -346,7 +358,7 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 <div class="footer" id="footer">
   <div class="container">
     Relatório gerado por <strong>Digital AI Analytics</strong><br>
-    <span style="opacity:.6" id="footer-date">Carregando...</span>
+    <span style="opacity:.6" id="footer-date">Dados extraídos em 31 de outubro de 2026 · Pipeline IA v1 · Processamento parcial (1.516 de 3.963 conversas)</span>
   </div>
 </div>
 
@@ -409,9 +421,15 @@ function lossReasonLabel(key) {
     preco: 'Preço',
     indisponibilidade: 'Indisponibilidade',
     sem_resposta: 'Sem Resposta',
-    nao_classificado: 'Não Classificado'
+    nao_classificado: 'Não Classificado',
+    trafego_pago_perdido: 'Tráfego Pago Perdido',
+    interesse_nao_trabalhado: 'Interesse Não Trabalhado',
+    ghostou_apos_preco: 'Ghostou Após Preço',
+    preco_direto_sem_acolhimento: 'Preço Direto s/ Acolhimento',
+    sem_resposta_humana: 'Sem Resposta Humana',
+    desistencia_paciente: 'Desistência do Paciente'
   };
-  return map[key] || key;
+  return map[key] || key.replace(/_/g, ' ').replace(/\b\w/g, function(c){ return c.toUpperCase(); });
 }
 
 // Agrupa exclusões técnicas em categorias amigáveis ao cliente
@@ -1192,66 +1210,281 @@ function renderMetodologia(stats) {
 }
 
 // ============================================================
-// MAIN: FETCH + RENDER ALL
+// EMBEDDED DATA (extracted 2026-10-31)
 // ============================================================
+var MONTHLY_DATA = {
+  'consolidated': {
+    stats: {
+      total: 1516, analyzed: 786, excluded: 730, converted: 97, lost: 689,
+      conversion_rate: 12.3, avg_score: 4.80,
+      period_start: '2026-09-01', period_end: '2026-10-31',
+      severity: { baixa: 104, media: 103, alta: 243, critica: 336 },
+      dimensions: {
+        effort: { alto: 62, medio: 204, baixo: 520 },
+        followup: { bom: 24, atencao: 17, falhou: 512, na: 233 },
+        time: { rapido: 79, normal: 421, demorado: 286 },
+        writing: { boa: 561, informal: 212, problemas: 13 },
+        price: { adequada: 135, aceitavel: 4, preco_direto: 67, problematica: 58, nao_informou: 522 }
+      }
+    },
+    loss_reasons: {
+      sem_followup: 482, trafego_pago_perdido: 44, interesse_nao_trabalhado: 32,
+      indisponibilidade: 27, ghostou_apos_preco: 21, preco: 16, sem_resposta: 11,
+      nao_classificado: 7, preco_direto_sem_acolhimento: 5
+    },
+    exclusions: {
+      campanha_sem_resposta: 510, convenio: 145, prospeccao_b2b: 32,
+      aniversario_automatico: 7, curriculo_vaga_emprego: 7, bot_only: 6,
+      fora_escopo: 5, confirmacao_automatica: 3, fora_escopo_clinico: 2,
+      aniversario: 2, convenio_sem_interacao: 2, marketing_spam_empresa: 1,
+      outros: 8
+    },
+    ranking: [
+      {
+        name: 'Daniela Peixer', total: 428, converted: 42, lost: 386,
+        conversion_rate: 9.8, avg_score: 4.60,
+        effort: { alto: 23, medio: 123, baixo: 282 },
+        followup: { bom: 8, atencao: 11, falhou: 304, na: 105 },
+        writing: { boa: 301, informal: 117, problemas: 10 },
+        time: { rapido: 42, normal: 212, demorado: 174 },
+        price: { adequada: 79, aceitavel: 0, preco_direto: 37, problematica: 43, nao_informou: 267 },
+        severity: { baixa: 48, media: 56, alta: 153, critica: 171 }
+      },
+      {
+        name: 'Alessandra', total: 136, converted: 30, lost: 106,
+        conversion_rate: 22.1, avg_score: 5.14,
+        effort: { alto: 18, medio: 45, baixo: 73 },
+        followup: { bom: 8, atencao: 5, falhou: 86, na: 37 },
+        writing: { boa: 111, informal: 24, problemas: 1 },
+        time: { rapido: 16, normal: 83, demorado: 37 },
+        price: { adequada: 32, aceitavel: 1, preco_direto: 20, problematica: 11, nao_informou: 72 },
+        severity: { baixa: 31, media: 16, alta: 52, critica: 37 }
+      },
+      {
+        name: 'Clara (Bot)', total: 148, converted: 1, lost: 147,
+        conversion_rate: 0.7, avg_score: 4.40,
+        effort: { alto: 4, medio: 6, baixo: 138 },
+        followup: { bom: 0, atencao: 0, falhou: 91, na: 57 },
+        writing: { boa: 96, informal: 50, problemas: 2 },
+        time: { rapido: 12, normal: 75, demorado: 61 },
+        price: { adequada: 6, aceitavel: 1, preco_direto: 8, problematica: 3, nao_informou: 130 },
+        severity: { baixa: 2, media: 20, alta: 13, critica: 113 }
+      },
+      {
+        name: 'Cristiane', total: 42, converted: 7, lost: 35,
+        conversion_rate: 16.7, avg_score: 5.71,
+        effort: { alto: 6, medio: 20, baixo: 16 },
+        followup: { bom: 3, atencao: 1, falhou: 18, na: 20 },
+        writing: { boa: 31, informal: 11, problemas: 0 },
+        time: { rapido: 3, normal: 30, demorado: 9 },
+        price: { adequada: 9, aceitavel: 0, preco_direto: 1, problematica: 1, nao_informou: 31 },
+        severity: { baixa: 8, media: 6, alta: 21, critica: 7 }
+      },
+      {
+        name: 'Daiane', total: 21, converted: 7, lost: 14,
+        conversion_rate: 33.3, avg_score: 5.63,
+        effort: { alto: 4, medio: 9, baixo: 8 },
+        followup: { bom: 1, atencao: 0, falhou: 12, na: 8 },
+        writing: { boa: 14, informal: 7, problemas: 0 },
+        time: { rapido: 3, normal: 14, demorado: 4 },
+        price: { adequada: 6, aceitavel: 0, preco_direto: 1, problematica: 0, nao_informou: 14 },
+        severity: { baixa: 8, media: 2, alta: 4, critica: 7 }
+      }
+    ],
+    criticos: [], atencao: [], positivos: []
+  },
+  '2026-09': {
+    stats: {
+      total: 756, analyzed: 379, excluded: 377, converted: 50, lost: 329,
+      conversion_rate: 13.2, avg_score: 4.40,
+      period_start: '2026-09-01', period_end: '2026-09-30',
+      severity: { baixa: 46, media: 31, alta: 119, critica: 183 },
+      dimensions: {
+        effort: { alto: 14, medio: 93, baixo: 272 },
+        followup: { bom: 12, atencao: 0, falhou: 300, na: 67 },
+        time: { rapido: 20, normal: 195, demorado: 164 },
+        writing: { boa: 287, informal: 83, problemas: 9 },
+        price: { adequada: 59, aceitavel: 2, preco_direto: 37, problematica: 31, nao_informou: 250 }
+      }
+    },
+    loss_reasons: {
+      sem_followup: 296, ghostou_apos_preco: 16, indisponibilidade: 10,
+      interesse_nao_trabalhado: 4, desistencia_paciente: 2, nao_classificado: 2,
+      preco_direto_sem_acolhimento: 2, preco: 1, trafego_pago_perdido: 1
+    },
+    exclusions: {
+      campanha_sem_resposta: 268, convenio: 89, prospeccao_b2b: 12,
+      curriculo_vaga_emprego: 5, fora_escopo: 3
+    },
+    ranking: [
+      {
+        name: 'Daniela Peixer', total: 230, converted: 20, lost: 210,
+        conversion_rate: 8.7, avg_score: 4.22,
+        effort: { alto: 3, medio: 55, baixo: 172 },
+        followup: { bom: 3, atencao: 0, falhou: 190, na: 37 },
+        writing: { boa: 162, informal: 61, problemas: 7 },
+        time: { rapido: 11, normal: 109, demorado: 110 },
+        price: { adequada: 36, aceitavel: 0, preco_direto: 17, problematica: 26, nao_informou: 151 },
+        severity: { baixa: 21, media: 18, alta: 80, critica: 111 }
+      },
+      {
+        name: 'Alessandra', total: 72, converted: 16, lost: 56,
+        conversion_rate: 22.2, avg_score: 4.95,
+        effort: { alto: 7, medio: 25, baixo: 40 },
+        followup: { bom: 7, atencao: 0, falhou: 50, na: 15 },
+        writing: { boa: 59, informal: 13, problemas: 0 },
+        time: { rapido: 4, normal: 47, demorado: 21 },
+        price: { adequada: 15, aceitavel: 1, preco_direto: 14, problematica: 3, nao_informou: 39 },
+        severity: { baixa: 16, media: 6, alta: 25, critica: 25 }
+      },
+      {
+        name: 'Clara (Bot)', total: 50, converted: 0, lost: 50,
+        conversion_rate: 0.0, avg_score: 3.89,
+        effort: { alto: 0, medio: 2, baixo: 48 },
+        followup: { bom: 0, atencao: 0, falhou: 44, na: 6 },
+        writing: { boa: 47, informal: 1, problemas: 2 },
+        time: { rapido: 3, normal: 21, demorado: 26 },
+        price: { adequada: 1, aceitavel: 1, preco_direto: 5, problematica: 2, nao_informou: 41 },
+        severity: { baixa: 0, media: 5, alta: 6, critica: 39 }
+      },
+      {
+        name: 'Daiane', total: 19, converted: 7, lost: 12,
+        conversion_rate: 36.8, avg_score: 5.56,
+        effort: { alto: 3, medio: 9, baixo: 7 },
+        followup: { bom: 1, atencao: 0, falhou: 11, na: 7 },
+        writing: { boa: 13, informal: 6, problemas: 0 },
+        time: { rapido: 2, normal: 13, demorado: 4 },
+        price: { adequada: 6, aceitavel: 0, preco_direto: 1, problematica: 0, nao_informou: 12 },
+        severity: { baixa: 7, media: 2, alta: 4, critica: 6 }
+      },
+      {
+        name: 'Cristiane', total: 6, converted: 1, lost: 5,
+        conversion_rate: 16.7, avg_score: 4.86,
+        effort: { alto: 0, medio: 2, baixo: 4 },
+        followup: { bom: 1, atencao: 0, falhou: 4, na: 1 },
+        writing: { boa: 4, informal: 2, problemas: 0 },
+        time: { rapido: 0, normal: 4, demorado: 2 },
+        price: { adequada: 0, aceitavel: 0, preco_direto: 0, problematica: 0, nao_informou: 6 },
+        severity: { baixa: 1, media: 0, alta: 4, critica: 1 }
+      }
+    ],
+    criticos: [], atencao: [], positivos: []
+  },
+  '2026-10': {
+    stats: {
+      total: 760, analyzed: 407, excluded: 353, converted: 47, lost: 360,
+      conversion_rate: 11.5, avg_score: 5.14,
+      period_start: '2026-10-01', period_end: '2026-10-31',
+      severity: { baixa: 58, media: 72, alta: 124, critica: 153 },
+      dimensions: {
+        effort: { alto: 48, medio: 111, baixo: 248 },
+        followup: { bom: 12, atencao: 17, falhou: 212, na: 166 },
+        time: { rapido: 59, normal: 226, demorado: 122 },
+        writing: { boa: 274, informal: 129, problemas: 4 },
+        price: { adequada: 76, aceitavel: 2, preco_direto: 30, problematica: 27, nao_informou: 272 }
+      }
+    },
+    loss_reasons: {
+      sem_followup: 186, trafego_pago_perdido: 43, interesse_nao_trabalhado: 28,
+      indisponibilidade: 17, preco: 15, sem_resposta: 11,
+      ghostou_apos_preco: 5, nao_classificado: 5, sem_resposta_humana: 5,
+      preco_direto_sem_acolhimento: 3
+    },
+    exclusions: {
+      campanha_sem_resposta: 242, convenio: 56, prospeccao_b2b: 20,
+      aniversario_automatico: 7, bot_only: 6, confirmacao_automatica: 3,
+      fora_escopo_clinico: 2, fora_escopo: 2, aniversario: 2,
+      convenio_sem_interacao: 2, curriculo_vaga_emprego: 2,
+      marketing_spam_empresa: 1, outros: 8
+    },
+    ranking: [
+      {
+        name: 'Daniela Peixer', total: 198, converted: 22, lost: 176,
+        conversion_rate: 11.1, avg_score: 5.05,
+        effort: { alto: 20, medio: 68, baixo: 110 },
+        followup: { bom: 5, atencao: 11, falhou: 114, na: 68 },
+        writing: { boa: 139, informal: 56, problemas: 3 },
+        time: { rapido: 31, normal: 103, demorado: 64 },
+        price: { adequada: 43, aceitavel: 2, preco_direto: 20, problematica: 17, nao_informou: 116 },
+        severity: { baixa: 27, media: 38, alta: 73, critica: 60 }
+      },
+      {
+        name: 'Clara (Bot)', total: 98, converted: 1, lost: 97,
+        conversion_rate: 1.0, avg_score: 4.66,
+        effort: { alto: 4, medio: 4, baixo: 90 },
+        followup: { bom: 0, atencao: 0, falhou: 47, na: 51 },
+        writing: { boa: 49, informal: 49, problemas: 0 },
+        time: { rapido: 9, normal: 54, demorado: 35 },
+        price: { adequada: 5, aceitavel: 0, preco_direto: 3, problematica: 1, nao_informou: 89 },
+        severity: { baixa: 2, media: 15, alta: 7, critica: 74 }
+      },
+      {
+        name: 'Alessandra', total: 64, converted: 14, lost: 50,
+        conversion_rate: 21.9, avg_score: 5.35,
+        effort: { alto: 11, medio: 20, baixo: 33 },
+        followup: { bom: 1, atencao: 5, falhou: 36, na: 22 },
+        writing: { boa: 52, informal: 11, problemas: 1 },
+        time: { rapido: 12, normal: 36, demorado: 16 },
+        price: { adequada: 17, aceitavel: 0, preco_direto: 6, problematica: 8, nao_informou: 33 },
+        severity: { baixa: 15, media: 10, alta: 27, critica: 12 }
+      },
+      {
+        name: 'Cristiane', total: 36, converted: 6, lost: 30,
+        conversion_rate: 16.7, avg_score: 5.85,
+        effort: { alto: 6, medio: 18, baixo: 12 },
+        followup: { bom: 2, atencao: 1, falhou: 14, na: 19 },
+        writing: { boa: 27, informal: 9, problemas: 0 },
+        time: { rapido: 3, normal: 26, demorado: 7 },
+        price: { adequada: 9, aceitavel: 0, preco_direto: 1, problematica: 1, nao_informou: 25 },
+        severity: { baixa: 7, media: 6, alta: 17, critica: 6 }
+      },
+      {
+        name: 'Daiane', total: 2, converted: 0, lost: 2,
+        conversion_rate: 0.0, avg_score: 6.28,
+        effort: { alto: 1, medio: 0, baixo: 1 },
+        followup: { bom: 0, atencao: 0, falhou: 1, na: 1 },
+        writing: { boa: 1, informal: 1, problemas: 0 },
+        time: { rapido: 1, normal: 1, demorado: 0 },
+        price: { adequada: 0, aceitavel: 0, preco_direto: 0, problematica: 0, nao_informou: 2 },
+        severity: { baixa: 1, media: 0, alta: 0, critica: 1 }
+      }
+    ],
+    criticos: [], atencao: [], positivos: []
+  }
+};
+
+var currentPeriod = 'consolidated';
+
+function switchPeriod(key) {
+  currentPeriod = key;
+  document.querySelectorAll('.period-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelector('.period-btn[onclick*="' + key + '"]').classList.add('active');
+  renderAll(MONTHLY_DATA[key]);
+}
+
+function renderAll(data) {
+  var stats = data.stats || {};
+  var lossReasons = data.loss_reasons || {};
+  var exclusions = data.exclusions || {};
+  var ranking = data.ranking || [];
+  stats.generated_at = '2026-10-31';
+
+  renderBanner(stats);
+  renderBigNumbers(stats);
+  renderInsight(stats, exclusions, lossReasons);
+  renderChartsGeral(stats, lossReasons);
+  renderExclusoes(stats, exclusions);
+  renderRankingCards(ranking);
+  renderRadar(ranking);
+  renderFichas(ranking, lossReasons);
+  renderDimensoes(stats);
+  renderCasos(data);
+  renderPadroes(stats, lossReasons);
+  renderMetodologia(stats);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-  fetch(API_URL)
-    .then(function(r) {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.json();
-    })
-    .then(function(data) {
-      var stats = data.stats || {};
-      var lossReasons = data.loss_reasons || {};
-      var exclusions = data.exclusions || {};
-      var ranking = data.ranking || [];
-
-      // Attach generated_at to stats for metodologia
-      stats.generated_at = data.generated_at;
-
-      // Period Banner
-      renderBanner(stats);
-
-      // Visão Geral
-      renderBigNumbers(stats);
-      renderInsight(stats, exclusions, lossReasons);
-      renderChartsGeral(stats, lossReasons);
-      renderExclusoes(stats, exclusions);
-
-      // Ranking
-      renderRankingCards(ranking);
-      renderRadar(ranking);
-
-      // Fichas
-      renderFichas(ranking, lossReasons);
-
-      // Dimensões
-      renderDimensoes(stats);
-
-      // Casos críticos
-      renderCasos(data);
-
-      // Padrões
-      renderPadroes(stats, lossReasons);
-
-      // Metodologia
-      renderMetodologia(stats);
-    })
-    .catch(function(err) {
-      var errMsg = '<div class="error-box">Erro ao carregar dados: ' + err.message + '. Por favor, tente recarregar a página.</div>';
-      document.getElementById('big-numbers-container').innerHTML = errMsg;
-      document.getElementById('insight-container').innerHTML = '';
-      document.getElementById('exclusoes-container').innerHTML = '';
-      document.getElementById('ranking-cards-container').innerHTML = errMsg;
-      document.getElementById('fichas-container').innerHTML = errMsg;
-      document.getElementById('dimensoes-container').innerHTML = errMsg;
-      document.getElementById('padroes-container').innerHTML = errMsg;
-      document.getElementById('casos-loading').style.display = 'none';
-      document.getElementById('casos-error').style.display = 'block';
-      document.getElementById('casos-error').textContent = 'Erro ao carregar casos: ' + err.message;
-      document.getElementById('banner-period').textContent = 'Erro ao carregar período';
-      document.getElementById('banner-pills').innerHTML = '<span class="period-pill">Indisponível</span>';
-    });
+  renderAll(MONTHLY_DATA['consolidated']);
 });
 </script>
 
