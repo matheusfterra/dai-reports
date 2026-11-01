@@ -465,14 +465,24 @@ tr:hover { background:var(--primary-bg); }
     });
   }
 
-  initChatwootAuth({
-    gateLoading: 'gate-loading',
-    gateDirect:  'gate-direct',
-    gateApp:     'app',
-    client:      'dermaclinic',
-    report:      'trafego-pago-out-2026',
-    onReady:     initChart
-  });
+  if (typeof initChatwootAuth === 'function') {
+    initChatwootAuth({
+      gateLoading: 'gate-loading',
+      gateDirect:  'gate-direct',
+      gateApp:     'app',
+      client:      'dermaclinic',
+      report:      'trafego-pago-out-2026',
+      onReady:     initChart
+    });
+  } else {
+    var gl = document.getElementById('gate-loading');
+    var gd = document.getElementById('gate-direct');
+    var ga = document.getElementById('app');
+    if (gl) gl.style.display = 'none';
+    if (gd) gd.style.display = 'none';
+    if (ga) ga.style.display = 'block';
+    initChart();
+  }
 </script>
 
 </body>

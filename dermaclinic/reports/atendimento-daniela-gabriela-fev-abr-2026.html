@@ -699,14 +699,25 @@ tr:hover { background:var(--primary-bg); }
     }
   }
 
-  initChatwootAuth({
-    gateLoading: 'gate-loading',
-    gateDirect:  'gate-direct',
-    gateApp:     'app',
-    client:      'dermaclinic',
-    report:      'atendimento-daniela-gabriela-fev-abr-2026',
-    onReady:     initCharts
-  });
+  if (typeof initChatwootAuth === 'function') {
+    initChatwootAuth({
+      gateLoading: 'gate-loading',
+      gateDirect:  'gate-direct',
+      gateApp:     'app',
+      client:      'dermaclinic',
+      report:      'atendimento-daniela-gabriela-fev-abr-2026',
+      onReady:     initCharts
+    });
+  } else {
+    // Fallback: auth gate not loaded, show content and init charts directly
+    var gl = document.getElementById('gate-loading');
+    var gd = document.getElementById('gate-direct');
+    var ga = document.getElementById('app');
+    if (gl) gl.style.display = 'none';
+    if (gd) gd.style.display = 'none';
+    if (ga) ga.style.display = 'block';
+    initCharts();
+  }
 </script>
 
 </body>
