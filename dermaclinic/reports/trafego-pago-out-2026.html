@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report Tráfego Pago — Outubro 2026 — DermaClinic</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --primary: #2D52EF;
+  --primary-light: #4F6FF7;
+  --primary-bg: #EEF2FF;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --text: #1e293b;
+  --text-secondary: #64748b;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+.container { max-width:1200px; margin:0 auto; padding:24px 16px; }
+h1 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.75rem; font-weight:700; color:var(--primary); margin-bottom:4px; }
+h2 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.25rem; font-weight:600; color:var(--text); margin:32px 0 16px; padding-bottom:8px; border-bottom:2px solid var(--primary); }
+h3 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1rem; font-weight:600; margin:16px 0 8px; }
+.subtitle { color:var(--text-secondary); font-size:0.9rem; margin-bottom:24px; }
+.kpi-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-bottom:24px; }
+.kpi-card { background:var(--card); border-radius:12px; padding:16px; box-shadow:var(--shadow); border-left:4px solid var(--primary); }
+.kpi-value { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.5rem; font-weight:700; color:var(--primary); }
+.kpi-value.success { color:var(--success); }
+.kpi-value.warning { color:var(--warning); }
+.kpi-value.danger { color:var(--danger); }
+.kpi-label { font-size:0.8rem; color:var(--text-secondary); margin-top:4px; }
+.card { background:var(--card); border-radius:12px; padding:20px; box-shadow:var(--shadow); margin-bottom:16px; }
+.insight-box { background:#FFFBEB; border-left:4px solid var(--warning); padding:12px 16px; border-radius:0 8px 8px 0; margin:12px 0; font-size:0.85rem; }
+.insight-box.critical { background:#FEF2F2; border-left-color:var(--danger); }
+.insight-box.positive { background:#F0FDF4; border-left-color:var(--success); }
+.chart-container { position:relative; height:300px; margin:16px 0; }
+.chart-container.small { height:260px; }
+table { width:100%; border-collapse:collapse; font-size:0.8rem; }
+th { background:var(--primary); color:#fff; padding:8px 10px; text-align:left; font-weight:600; position:sticky; top:0; }
+td { padding:6px 10px; border-bottom:1px solid var(--border); }
+tr:hover { background:var(--primary-bg); }
+.table-wrapper { max-height:600px; overflow-y:auto; border-radius:8px; border:1px solid var(--border); }
+.comp-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin:16px 0; }
+.comp-card { background:var(--card); border-radius:12px; padding:16px; box-shadow:var(--shadow); text-align:center; }
+.comp-card h4 { font-size:0.85rem; color:var(--text-secondary); margin-bottom:8px; }
+.comp-value { font-family:'Plus Jakarta Sans',sans-serif; font-size:2rem; font-weight:700; }
+.comp-sub { font-size:0.8rem; color:var(--text-secondary); margin-top:4px; }
+.methodology { background:#f1f5f9; border-radius:8px; padding:16px; font-size:0.8rem; color:var(--text-secondary); margin-top:16px; }
+.methodology p { margin-bottom:4px; }
+.badge { display:inline-block; padding:2px 8px; border-radius:12px; font-size:0.72rem; font-weight:600; }
+.badge-danger { background:#FEE2E2; color:#b91c1c; }
+.badge-warning { background:#FEF3C7; color:#92400e; }
+.badge-yellow { background:#FFF9C4; color:#7c6f00; }
+.badge-gray { background:#F1F5F9; color:#475569; }
+.badge-success { background:#DCFCE7; color:#166534; }
+.case-card { background:var(--card); border-radius:12px; padding:20px; box-shadow:var(--shadow); margin-bottom:12px; border-top:3px solid var(--danger); }
+.case-card h3 { margin-top:0; color:var(--danger); }
+.chart-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:center; }
+@media (max-width:768px) {
+  .kpi-grid { grid-template-columns:repeat(2, 1fr); }
+  .comp-grid { grid-template-columns:1fr; }
+  .chart-row { grid-template-columns:1fr; }
+  h1 { font-size:1.3rem; }
+  table { font-size:0.7rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="gate-loading" style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0d1117;">
+  <div style="text-align:center;">
+    <div style="width:40px;height:40px;border:3px solid #1e3a5f;border-top-color:#58a6ff;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;"></div>
+    <p style="color:#7db3d8;font-size:0.85rem;font-family:'Segoe UI',system-ui,sans-serif;">Verificando acesso…</p>
+  </div>
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
+<div id="gate-direct" style="display:none;align-items:center;justify-content:center;min-height:100vh;background:#0d1117;">
+  <div style="text-align:center;max-width:380px;padding:40px 32px;background:#161b22;border:1px solid #1e3a5f;border-radius:16px;font-family:'Segoe UI',system-ui,sans-serif;">
+    <div style="font-size:2.5rem;margin-bottom:16px;">🔒</div>
+    <h2 style="color:#e6edf3;font-size:1.1rem;margin-bottom:8px;">Acesso Restrito</h2>
+    <p style="color:#8b949e;font-size:0.85rem;line-height:1.5;">Este relatório é exclusivo para a equipe DermaClinic.<br>Acesse pelo link enviado pela Digital AI.</p>
+  </div>
+</div>
+
+<div id="app" style="display:none;">
+<div class="report-body">
+<div class="container">
+
+<h1>Report Tráfego Pago — Outubro 2026</h1>
+<p class="subtitle">DermaClinic — Outubro 2026 | Inbox 56 (Tráfego Pago) | Gerado em 31/10/2026</p>
+
+<!-- SECTION 1: KPIs de Atendimento -->
+<h2>Análise de Atendimento — Inbox 56</h2>
+
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-value" style="color:var(--primary)">182</div>
+    <div class="kpi-label">Total de Conversas (Outubro)</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value" style="color:var(--text-secondary)">167</div>
+    <div class="kpi-label">Válidas (excluindo convênio)</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value success">3</div>
+    <div class="kpi-label">Convertidas (1,8%)</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value danger">100</div>
+    <div class="kpi-label">Sem resposta ao final (59,9%)</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value warning">15</div>
+    <div class="kpi-label">Excluídas (convênio)</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value" style="color:var(--text-secondary)">4,9/10</div>
+    <div class="kpi-label">Quality Score Médio</div>
+  </div>
+</div>
+
+<div class="insight-box" style="background:#EEF2FF;border-left-color:var(--primary);">
+  <strong>Contexto:</strong> O inbox 56 (Tráfego Pago) recebeu <strong>182 conversas</strong> em outubro 2026. Das 167 válidas (excluídas 15 por convênio), apenas <strong>3 converteram</strong> — taxa de conversão de <strong>1,8%</strong>. O principal gargalo permanece no atendimento: 100 leads (59,9%) ficaram sem resposta ao final da conversa.
+</div>
+
+<div class="insight-box critical">
+  <strong>Problema crítico:</strong> 102 leads foram perdidos por <strong>sem_retorno_da_clínica</strong> — o motivo de perda mais frequente (61% dos não convertidos). Isso indica falha operacional sistemática, não de qualidade do lead ou da campanha.
+</div>
+
+<!-- SECTION 2: Classificação dos Leads -->
+<h2>Classificação dos Leads</h2>
+
+<div class="comp-grid" style="grid-template-columns:repeat(auto-fit, minmax(160px, 1fr))">
+  <div class="comp-card">
+    <h4>🔴 Sem Retorno da Clínica</h4>
+    <div class="comp-value" style="color:var(--danger)">102</div>
+    <div class="comp-sub">Leads sem retorno pelo time</div>
+  </div>
+  <div class="comp-card">
+    <h4>⚪ Indefinido</h4>
+    <div class="comp-value" style="color:var(--text-secondary)">36</div>
+    <div class="comp-sub">Motivo de perda não identificado</div>
+  </div>
+  <div class="comp-card">
+    <h4>💸 Preço</h4>
+    <div class="comp-value" style="color:var(--warning)">16</div>
+    <div class="comp-sub">Objeção de valor/custo</div>
+  </div>
+  <div class="comp-card">
+    <h4>🏥 Convênio</h4>
+    <div class="comp-value" style="color:#64748b">4</div>
+    <div class="comp-sub">Busca por convênio (não excluídos)</div>
+  </div>
+  <div class="comp-card">
+    <h4>🚫 Fora de Escopo</h4>
+    <div class="comp-value" style="color:#64748b">3</div>
+    <div class="comp-sub">Procedimentos não realizados</div>
+  </div>
+  <div class="comp-card">
+    <h4>✅ Convertidos</h4>
+    <div class="comp-value" style="color:var(--success)">3</div>
+    <div class="comp-sub">Agendamentos confirmados</div>
+  </div>
+</div>
+
+<!-- SECTION 3: Gráfico -->
+<h2>Distribuição por Motivo de Perda</h2>
+
+<div class="card">
+  <div class="chart-row">
+    <div class="chart-container small">
+      <canvas id="chartDistribuicao"></canvas>
+    </div>
+    <div>
+      <div style="margin-bottom:12px;">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <div style="width:14px;height:14px;border-radius:50%;background:#ef4444;flex-shrink:0;"></div>
+          <span style="font-size:0.85rem;"><strong>102</strong> Sem retorno da clínica (61,1%)</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <div style="width:14px;height:14px;border-radius:50%;background:#94a3b8;flex-shrink:0;"></div>
+          <span style="font-size:0.85rem;"><strong>36</strong> Indefinido (21,6%)</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <div style="width:14px;height:14px;border-radius:50%;background:#f59e0b;flex-shrink:0;"></div>
+          <span style="font-size:0.85rem;"><strong>16</strong> Preço (9,6%)</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <div style="width:14px;height:14px;border-radius:50%;background:#64748b;flex-shrink:0;"></div>
+          <span style="font-size:0.85rem;"><strong>4</strong> Convênio (2,4%)</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <div style="width:14px;height:14px;border-radius:50%;background:#cbd5e1;flex-shrink:0;"></div>
+          <span style="font-size:0.85rem;"><strong>3</strong> Fora de escopo + <strong>2</strong> Horário + <strong>1</strong> Desistência (3,6%)</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:14px;height:14px;border-radius:50%;background:#22c55e;flex-shrink:0;"></div>
+          <span style="font-size:0.85rem;"><strong>3</strong> Convertidos (1,8%)</span>
+        </div>
+      </div>
+      <div class="insight-box critical" style="margin-top:16px;">
+        <strong>61% dos leads perdidos</strong> têm como causa direta a falta de retorno da clínica — problema operacional corrigível.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4: Casos Críticos -->
+<h2>Casos Críticos — Conversões Perdidas</h2>
+
+<div class="case-card">
+  <h3>Oscalino — <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18932" target="_blank" style="font-size:0.8rem;color:var(--danger);text-decoration:underline;">ver conversa</a></h3>
+  <p>Queria agendar remoção de cicatriz. O bot respondeu, mas a atendente Daniela não interagiu em nenhum momento. Lead abandonado após resposta automática.</p>
+  <div class="insight-box critical" style="margin-top:12px;">
+    <strong>Falha:</strong> Intenção clara de agendamento (procedimento específico solicitado). Bot respondeu, atendente não assumiu a conversa. Quality score: 3,5/10.
+  </div>
+</div>
+
+<div class="case-card">
+  <h3>Edilson Francisco — <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19243" target="_blank" style="font-size:0.8rem;color:var(--danger);text-decoration:underline;">ver conversa</a></h3>
+  <p>Queria consulta dermatológica e informou que precisava verificar disponibilidade com o patrão. Aguardava contato para confirmar. Nenhum follow-up foi realizado.</p>
+  <div class="insight-box critical" style="margin-top:12px;">
+    <strong>Falha:</strong> Lead sinalizou retorno iminente e aguardava follow-up da clínica. Nenhuma ação tomada. Oportunidade de conversão desperdiçada. Quality score: 3,5/10.
+  </div>
+</div>
+
+<div class="case-card">
+  <h3>Josiane Goettmann Coelho — <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19050" target="_blank" style="font-size:0.8rem;color:var(--danger);text-decoration:underline;">ver conversa</a></h3>
+  <p>Queria agendar consulta e perguntou sobre o preço de tratamento para as mãos. Nenhuma resposta foi dada após a pergunta de preço.</p>
+  <div class="insight-box critical" style="margin-top:12px;">
+    <strong>Falha:</strong> Lead com intenção de agendamento e dúvida de preço — momento ideal para converter. Pergunta ignorada, conversa abandonada. Quality score: 3,8/10.
+  </div>
+</div>
+
+<div class="case-card">
+  <h3>Val Jacks — <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18931" target="_blank" style="font-size:0.8rem;color:var(--danger);text-decoration:underline;">ver conversa</a></h3>
+  <p>Queria agendar consulta. Recebeu resposta do bot mas nenhum atendimento humano foi realizado. Daniela listada como responsável sem interação registrada.</p>
+  <div class="insight-box critical" style="margin-top:12px;">
+    <strong>Falha:</strong> Intenção explícita de agendamento. Atendente responsável não assumiu a conversa após o bot. Quality score: 3,8/10.
+  </div>
+</div>
+
+<div class="case-card">
+  <h3>Maria Borges — <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19051" target="_blank" style="font-size:0.8rem;color:var(--danger);text-decoration:underline;">ver conversa</a></h3>
+  <p>Buscava consulta para manchas no rosto. Nenhuma resposta da equipe após contato inicial.</p>
+  <div class="insight-box critical" style="margin-top:12px;">
+    <strong>Falha:</strong> Lead com queixa estética específica e intenção de consulta. Sem retorno da clínica. Daniela listada como responsável sem contato. Quality score: 3,8/10.
+  </div>
+</div>
+
+<!-- SECTION 5: Destaques Positivos -->
+<h2>Destaques</h2>
+
+<div class="card">
+  <div class="insight-box positive">
+    <strong>Marilei Gomes</strong> (att: Cristiane Aparecida Joaquim) — Agendou consulta + botox no dia 08/10. Atendimento completo e eficaz. Quality score: 8,0/10.
+    <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/18802" target="_blank" style="color:var(--success);text-decoration:underline;display:block;margin-top:6px;">Ver conversa →</a>
+  </div>
+
+  <div class="insight-box positive">
+    <strong>Victor</strong> (att: Alessandra) — Agendou consulta dermatológica. Atendente informou proativamente sobre o novo endereço da clínica, demonstrando atenção ao cliente. Quality score: 8,0/10.
+    <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19437" target="_blank" style="color:var(--success);text-decoration:underline;display:block;margin-top:6px;">Ver conversa →</a>
+  </div>
+
+  <div class="insight-box positive">
+    <strong>Virginia</strong> (att: Daniela Peixer) — Agendou avaliação para 05/11. Atendente proativa e eficiente na condução. Quality score: 8,0/10.
+    <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/19440" target="_blank" style="color:var(--success);text-decoration:underline;display:block;margin-top:6px;">Ver conversa →</a>
+  </div>
+
+  <div class="insight-box" style="background:#EEF2FF;border-left-color:var(--primary);margin-top:16px;">
+    <strong>Padrão das conversões:</strong> As 3 conversões bem-sucedidas têm quality score 8,0/10 e todas envolveram atendimento humano ativo. A diferença entre converter e perder está na qualidade do toque humano — não na intenção do lead.
+  </div>
+</div>
+
+<!-- SECTION 6: Resumo Semanal -->
+<h2>Resumo Semanal</h2>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Semana</th>
+        <th>Total</th>
+        <th>Convertidos</th>
+        <th>Sem Resposta</th>
+        <th>Quality Médio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Semana 1</strong></td>
+        <td>5</td>
+        <td><span class="badge badge-success">1</span></td>
+        <td>2</td>
+        <td>5,4</td>
+      </tr>
+      <tr>
+        <td><strong>Semana 2</strong></td>
+        <td>43</td>
+        <td><span class="badge badge-gray">0</span></td>
+        <td>29</td>
+        <td>4,7</td>
+      </tr>
+      <tr>
+        <td><strong>Semana 3</strong></td>
+        <td>28</td>
+        <td><span class="badge badge-gray">0</span></td>
+        <td>15</td>
+        <td>4,8</td>
+      </tr>
+      <tr>
+        <td><strong>Semana 4</strong></td>
+        <td>60</td>
+        <td><span class="badge badge-success">2</span></td>
+        <td>36</td>
+        <td>4,9</td>
+      </tr>
+      <tr>
+        <td><strong>Semana 5</strong></td>
+        <td>31</td>
+        <td><span class="badge badge-gray">0</span></td>
+        <td>18</td>
+        <td>4,9</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION 7: Desempenho por Atendente -->
+<h2>Desempenho por Atendente</h2>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Atendente</th>
+        <th>Total</th>
+        <th>Convertidos</th>
+        <th>Quality Médio</th>
+        <th>Tempo 1ª Resposta</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Daniela Peixer</strong></td>
+        <td>83</td>
+        <td><span class="badge badge-success">1</span></td>
+        <td>4,8</td>
+        <td>~10h (37.026s)</td>
+      </tr>
+      <tr>
+        <td><strong>Equipe</strong></td>
+        <td>56</td>
+        <td><span class="badge badge-gray">0</span></td>
+        <td>4,8</td>
+        <td>~8,8h (31.760s)</td>
+      </tr>
+      <tr>
+        <td><strong>Alessandra</strong></td>
+        <td>15</td>
+        <td><span class="badge badge-success">1</span></td>
+        <td>5,0</td>
+        <td>~28h (100.928s)</td>
+      </tr>
+      <tr>
+        <td><strong>Cristiane Aparecida Joaquim</strong></td>
+        <td>13</td>
+        <td><span class="badge badge-success">1</span></td>
+        <td>5,1</td>
+        <td>~52h (187.036s)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="insight-box" style="margin-top:12px;">
+  <strong>Observação:</strong> Cristiane teve o maior tempo de primeira resposta (~52h) mas o maior quality score médio (5,1) e a maior taxa de conversão relativa (1/13 = 7,7%). Alessandra e Daniela também converteram. A <strong>Equipe</strong> (56 leads) não converteu nenhum — merece atenção especial.
+</div>
+
+<!-- SECTION 8: Análise e Próximos Passos -->
+<h2>Análise e Próximos Passos</h2>
+
+<div class="card">
+  <h3>Diagnóstico Principal</h3>
+  <p style="font-size:0.9rem; margin-bottom:12px;">O problema de outubro é estrutural e mensurável: <strong>102 de 164 leads não convertidos</strong> (62%) foram perdidos simplesmente por falta de retorno da clínica. O quality score médio de 4,9/10 indica leads com potencial médio-alto. A taxa de conversão de 1,8% está muito abaixo do potencial real do canal.</p>
+
+  <div class="insight-box critical">
+    <strong>Gargalo principal:</strong> "sem_retorno_da_clínica" como motivo de perda em 61% dos casos. Este é um problema de processo, não de qualidade de lead — o tráfego pago está gerando interesse, mas o atendimento não está capturando essa demanda.
+  </div>
+
+  <div class="insight-box" style="background:#EEF2FF;border-left-color:var(--primary);">
+    <strong>Dado positivo:</strong> O atendimento <strong>misto</strong> (bot + humano) gerou as 3 conversões (3/68 = 4,4% de conversão). O atendimento <strong>só bot</strong> (89 conversas) gerou 0 conversões. A presença humana é determinante para converter leads de tráfego pago.
+  </div>
+
+  <h3>Ações Recomendadas</h3>
+  <ul style="font-size:0.85rem; padding-left:20px; line-height:2;">
+    <li>Implementar <strong>SLA de resposta de 30 minutos</strong> para o inbox 56 em horário comercial — 10h é inaceitável</li>
+    <li>Configurar <strong>alerta automático</strong> quando conversa no inbox 56 ficar sem resposta humana por mais de 30 minutos</li>
+    <li>Revisar o fluxo do <strong>bot → atendente</strong>: 89 conversas ficaram apenas no bot, sem nenhum atendimento humano</li>
+    <li>Criar <strong>protocolo de follow-up proativo</strong> para leads que sinalizaram interesse mas não agendaram (ex: Edilson)</li>
+    <li>Treinar equipe para <strong>abordar objeção de preço</strong>: 16 leads perdidos por preço — oportunidade de script de contorno</li>
+    <li>Investigar <strong>Equipe (56 leads, 0 conversões)</strong> — entender quem compõe essa categoria e implementar melhoria</li>
+    <li>Considerar automação de <strong>primeiro contato humano</strong> via Clara para leads que o bot não converte em 15 minutos</li>
+  </ul>
+</div>
+
+<!-- Metodologia -->
+<div class="methodology">
+  <p><strong>Metodologia</strong></p>
+  <p>Período: Outubro 2026</p>
+  <p>Fonte: inbox_analysis — Inbox 56 (Tráfego Pago)</p>
+  <p>Total de conversas no inbox: <strong>182</strong> | Válidas (excluindo convênio): <strong>167</strong></p>
+  <p>Análise via IA (LLM) — classificação automática com revisão de casos críticos</p>
+  <p>Dados de investimento Meta Ads / Google Ads: não disponíveis para outubro 2026</p>
+  <p>Gerado por: DAI — Digital AI</p>
+</div>
+
+</div><!-- /container -->
+
+</div><!-- /.report-body -->
+</div><!-- /app -->
+
+<script src="../../_shared/auth.js"></script>
+<script>
+  function initChart() {
+    var el = document.getElementById('chartDistribuicao');
+    if (!el) return;
+    var ctx = el.getContext('2d');
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Sem retorno da clínica', 'Indefinido', 'Preço', 'Convênio', 'Outros', 'Convertidos'],
+        datasets: [{
+          data: [102, 36, 16, 4, 6, 3],
+          backgroundColor: ['#ef4444', '#94a3b8', '#f59e0b', '#64748b', '#cbd5e1', '#22c55e'],
+          borderColor: ['#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff'],
+          borderWidth: 3,
+          hoverOffset: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '65%',
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(c) {
+                var total = c.dataset.data.reduce(function(a, b) { return a + b; }, 0);
+                var pct = Math.round(c.parsed / total * 100);
+                return ' ' + c.label + ': ' + c.parsed + ' (' + pct + '%)';
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  initChatwootAuth({
+    gateLoading: 'gate-loading',
+    gateDirect:  'gate-direct',
+    gateApp:     'app',
+    client:      'dermaclinic',
+    report:      'trafego-pago-out-2026',
+    onReady:     initChart
+  });
+</script>
+
+</body>
+</html>

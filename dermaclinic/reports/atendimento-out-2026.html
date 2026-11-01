@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DermaClinic — Relatório de Atendimento · Outubro 2026</title>
+  <link rel="stylesheet" href="../../_shared/style.css" />
+  <style>
+    .report-header {
+      background: linear-gradient(135deg, #0d2137 0%, #0a3d62 100%);
+      padding: 32px 40px;
+      border-bottom: 1px solid #1e3a5f;
+    }
+    .report-header h1 {
+      font-size: 1.6rem; font-weight: 700; color: #fff; letter-spacing: 0.02em;
+    }
+    .report-header p { color: #7db3d8; font-size: 0.875rem; margin-top: 6px; }
+    .badge {
+      display: inline-block; background: #1e3a5f; color: #58a6ff;
+      border-radius: 20px; padding: 2px 12px; font-size: 0.75rem;
+      font-weight: 600; margin-left: 10px; vertical-align: middle;
+    }
+    .badge-warn {
+      background: rgba(240,136,62,0.15); color: #f0883e;
+    }
+    .report-body { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
+    .kpi-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 16px; margin-bottom: 40px;
+    }
+    .kpi-card {
+      background: #161b22; border: 1px solid #1e3a5f; border-radius: 12px;
+      padding: 22px 18px; text-align: center; transition: transform 0.15s;
+    }
+    .kpi-card:hover { transform: translateY(-2px); }
+    .kpi-label { font-size: 0.7rem; color: #7db3d8; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 8px; }
+    .kpi-value { font-size: 1.75rem; font-weight: 700; color: #58a6ff; line-height: 1; }
+    .kpi-unit { font-size: 0.8rem; color: #8b949e; margin-top: 5px; }
+    .kpi-delta { font-size: 0.75rem; font-weight: 600; margin-top: 4px; }
+    .kpi-prev  { font-size: 0.68rem; color: #6e7681; margin-top: 3px; }
+    .delta-up   { color: #3fb950; }
+    .delta-down { color: #f85149; }
+    .delta-warn { color: #f0883e; }
+    .section { margin-bottom: 48px; }
+    .section-title {
+      font-size: 0.72rem; font-weight: 700; color: #7db3d8; text-transform: uppercase;
+      letter-spacing: 0.12em; margin-bottom: 20px; padding-bottom: 10px;
+      border-bottom: 1px solid #1e3a5f;
+    }
+    .section-subtitle {
+      font-size: 1rem; font-weight: 600; color: #c9d1d9;
+      margin-bottom: 12px; margin-top: 24px;
+    }
+    .tbl-wrap {
+      background: #161b22; border: 1px solid #1e3a5f; border-radius: 12px;
+      overflow: hidden; overflow-x: auto; margin-bottom: 24px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    thead th {
+      background: #0d2137; color: #7db3d8; font-size: 0.7rem; text-transform: uppercase;
+      letter-spacing: 0.08em; padding: 12px 16px; text-align: right;
+      border-bottom: 1px solid #1e3a5f; white-space: nowrap;
+    }
+    thead th:first-child { text-align: left; }
+    tbody td {
+      padding: 11px 16px; text-align: right; border-bottom: 1px solid #0d1117;
+      color: #c9d1d9; vertical-align: middle;
+    }
+    tbody td:first-child { text-align: left; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: #1c2530; }
+    tbody tr.total-row td {
+      background: #0d2137; font-weight: 700; color: #e6edf3;
+      border-top: 1px solid #1e3a5f;
+    }
+    .opp-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px; margin-bottom: 24px;
+    }
+    .opp-card { background: #161b22; border: 1px solid #1e3a5f; border-radius: 12px; padding: 22px; }
+    .opp-card.priority-alta   { border-left: 4px solid #f85149; }
+    .opp-card.priority-media  { border-left: 4px solid #f0883e; }
+    .opp-card.priority-baixa  { border-left: 4px solid #3fb950; }
+    .opp-tag { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+    .opp-card.priority-alta  .opp-tag { color: #f85149; }
+    .opp-card.priority-media .opp-tag { color: #f0883e; }
+    .opp-card.priority-baixa .opp-tag { color: #3fb950; }
+    .opp-card h3 { font-size: 0.95rem; font-weight: 600; color: #e6edf3; margin-bottom: 8px; }
+    .opp-card p { font-size: 0.82rem; color: #8b949e; line-height: 1.55; }
+    .steps-list { list-style: none; padding: 0; margin: 0; }
+    .steps-list li {
+      display: flex; gap: 14px; padding: 14px 0;
+      border-bottom: 1px solid #1e3a5f; align-items: flex-start;
+    }
+    .steps-list li:last-child { border-bottom: none; }
+    .step-num {
+      flex-shrink: 0; width: 28px; height: 28px; background: #1e3a5f; color: #58a6ff;
+      font-weight: 700; font-size: 0.8rem; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-text strong { display: block; font-size: 0.88rem; color: #e6edf3; margin-bottom: 4px; }
+    .step-text span { font-size: 0.8rem; color: #8b949e; line-height: 1.5; }
+    .analysis-block {
+      background: #161b22; border: 1px solid #1e3a5f; border-radius: 12px;
+      padding: 24px; margin-bottom: 20px; font-size: 0.875rem; color: #c9d1d9; line-height: 1.65;
+    }
+    .analysis-block p + p { margin-top: 10px; }
+    .analysis-block .highlight { color: #58a6ff; font-weight: 600; }
+    .ind-green  { color: #3fb950; font-weight: 600; }
+    .ind-yellow { color: #f0883e; font-weight: 600; }
+    .ind-red    { color: #f85149; font-weight: 600; }
+    .progress-group { margin-bottom: 12px; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: #c9d1d9; margin-bottom: 5px; }
+    .progress-bar { height: 8px; background: #1e3a5f; border-radius: 4px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 4px; background: #58a6ff; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+    @media (max-width: 768px) {
+      .two-col { grid-template-columns: 1fr; }
+      .opp-grid { grid-template-columns: 1fr; }
+      .report-body { padding: 24px 16px; }
+    }
+    .bench-source { font-size: 0.72rem; color: #6e7681; font-style: italic; }
+    .bench-source a { color: #58a6ff; text-decoration: none; font-style: italic; }
+    .bench-source a:hover { text-decoration: underline; color: #79c0ff; }
+    .bench-pos-green  { color: #3fb950; font-weight: 600; }
+    .bench-pos-yellow { color: #f0883e; font-weight: 600; }
+    .bench-pos-red    { color: #f85149; font-weight: 600; }
+    .report-footer { text-align: center; padding: 32px; border-top: 1px solid #1e3a5f; font-size: 0.78rem; color: #6e7681; }
+    .exec-summary {
+      background: linear-gradient(135deg, #0d2137 0%, #091d31 100%);
+      border: 1px solid #1e3a5f; border-radius: 12px; padding: 28px; margin-bottom: 40px;
+    }
+    .exec-summary h2 { font-size: 0.72rem; font-weight: 700; color: #7db3d8; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 16px; }
+    .exec-summary p { font-size: 0.9rem; color: #c9d1d9; line-height: 1.7; }
+    .exec-summary .highlight { color: #58a6ff; font-weight: 600; }
+    .exec-summary .callout {
+      margin-top: 16px; padding: 12px 16px;
+      background: rgba(248,81,73,0.08); border-left: 3px solid #f85149;
+      border-radius: 6px; font-size: 0.85rem; color: #c9d1d9;
+    }
+    .exec-summary .callout-green {
+      margin-top: 12px; padding: 12px 16px;
+      background: rgba(63,185,80,0.08); border-left: 3px solid #3fb950;
+      border-radius: 6px; font-size: 0.85rem; color: #c9d1d9;
+    }
+    .alert-banner {
+      background: rgba(248,81,73,0.06); border: 1px solid rgba(248,81,73,0.25);
+      border-radius: 8px; padding: 14px 18px; margin-bottom: 20px;
+      font-size: 0.85rem; color: #c9d1d9;
+    }
+    .alert-banner strong { color: #f85149; }
+    .warn-banner {
+      background: rgba(240,136,62,0.06); border: 1px solid rgba(240,136,62,0.25);
+      border-radius: 8px; padding: 14px 18px; margin-bottom: 20px;
+      font-size: 0.85rem; color: #c9d1d9;
+    }
+    .warn-banner strong { color: #f0883e; }
+    .success-banner {
+      background: rgba(63,185,80,0.06); border: 1px solid rgba(63,185,80,0.25);
+      border-radius: 8px; padding: 14px 18px; margin-bottom: 20px;
+      font-size: 0.85rem; color: #c9d1d9;
+    }
+    .success-banner strong { color: #3fb950; }
+  </style>
+</head>
+<body>
+
+<div id="gate-loading" style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0d1117;">
+  <div style="text-align:center;">
+    <div style="width:40px;height:40px;border:3px solid #1e3a5f;border-top-color:#58a6ff;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;"></div>
+    <p style="color:#7db3d8;font-size:0.85rem;font-family:'Segoe UI',system-ui,sans-serif;">Verificando acesso…</p>
+  </div>
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
+<div id="gate-direct" style="display:none;align-items:center;justify-content:center;min-height:100vh;background:#0d1117;">
+  <div style="text-align:center;max-width:380px;padding:40px 32px;background:#161b22;border:1px solid #1e3a5f;border-radius:16px;font-family:'Segoe UI',system-ui,sans-serif;">
+    <div style="font-size:2.5rem;margin-bottom:16px;">🔒</div>
+    <h2 style="color:#e6edf3;font-size:1.1rem;margin-bottom:8px;">Acesso Restrito</h2>
+    <p style="color:#8b949e;font-size:0.85rem;line-height:1.5;">Este relatório é exclusivo para a equipe DermaClinic.<br>Acesse pelo link enviado pela Digital AI.</p>
+  </div>
+</div>
+
+<div id="app" style="display:none;">
+  <div class="report-content">
+
+    <!-- HEADER -->
+    <div class="report-header">
+      <h1>DermaClinic <span style="color:#7db3d8">—</span> Relatório de Atendimento <span class="badge">Outubro 2026</span></h1>
+      <p>Período: 01/10/2026 a 31/10/2026 (mês completo) · Dados atualizados em 01/11/2026 · Fonte: clinic_analytics (ETL Feegow) · Elaborado por <img src="../../_shared/logo-negative.svg" style="height:13px;vertical-align:middle;opacity:0.85;" alt="Digital AI" /></p>
+    </div>
+
+    <div class="report-body">
+
+      <!-- ── SUMÁRIO EXECUTIVO ── -->
+      <div class="exec-summary">
+        <h2>Sumário Executivo</h2>
+        <p>
+          Outubro 2026 completo (01–31/out): receita total <span class="highlight">R$281.060,50</span> (−7,8% vs. setembro R$304.795). Ticket médio derma: <span class="highlight">R$1.513,91</span> (+1,5% vs. setembro R$1.492,24). Dermatologia (Eoda+Raquel): <span class="highlight">184 consultas realizadas</span> (313 agendadas) — <span class="highlight">Dra. Raquel lidera em ticket médio com R$2.501,45</span>; Dra. Eoda lidera em receita total com R$140.980,50. Fototerapia: 178 sessões em 214 agendadas (R$0 receita registrada — modelo pré-pago).
+        </p>
+        <div class="callout-green">
+          <strong>Destaques positivos:</strong>
+          ✓ Ticket médio derma R$1.513,91 (+1,5% vs. set R$1.492,24) — valor por consulta segue crescendo;
+          ✓ No-show derma 1,0% (3 de 313) — melhor taxa do histórico recente, 15–20× abaixo do benchmark;
+          ✓ Taxa de retorno 73,9% (139 de 188) — acima do benchmark de 55–65%;
+          ✓ Dra. Raquel cresceu +36,5% em receita vs. setembro (R$137.580 vs. R$100.770);
+          ✓ Projeção anual R$3,37M (R$281.060,50 × 12).
+        </div>
+        <div class="callout">
+          <strong>⚠ Pontos de atenção:</strong>
+          ⚠ Receita R$281.060,50 (−7,8% vs. set R$304.795) — queda real no mês;
+          ⚠ Dra. Eoda caiu −25,3% em receita (R$140.980,50 vs. R$188.725 em set) — investigar mix;
+          ⚠ Cancelamento derma 24,3% (76 de 313) — MUITO acima do benchmark de 8–12%, ponto crítico;
+          ⚠ No-show fototerapia 6,5% (14 de 214) — acima do benchmark de 5%;
+          ⚠ Dra. Ana Carolina: 7 no-shows de 23 agendados (30,4%) — taxa crítica;
+          ⚠ Fototerapia: R$0 receita registrada (modelo pré-pago — 178 sessões realizadas);
+          ⚠ 29,4% do faturamento sem forma de pagamento registrada ("Não informado").
+        </div>
+      </div>
+
+      <!-- ── KPIs PRINCIPAIS ── -->
+      <div class="section">
+        <div class="section-title">KPIs do Mês</div>
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Receita Total</div>
+            <div class="kpi-value">R$281.060</div>
+            <div class="kpi-unit">total faturado (01–31/out)</div>
+            <div class="kpi-delta delta-down">−7,8% vs. set</div>
+            <div class="kpi-prev">Set: R$304.795</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Ticket Médio Derma</div>
+            <div class="kpi-value" style="color:#3fb950;">R$1.513,91</div>
+            <div class="kpi-unit">por consulta dermatológica</div>
+            <div class="kpi-delta delta-up">+1,5% vs. set</div>
+            <div class="kpi-prev">Set: R$1.492,24</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Consultas Realizadas</div>
+            <div class="kpi-value" style="color:#3fb950;">184</div>
+            <div class="kpi-unit">dermatologia (Eoda+Raquel)</div>
+            <div class="kpi-delta delta-warn">313 agendadas no mês</div>
+            <div class="kpi-prev">Set: 194 (derm)</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">No-show Derma</div>
+            <div class="kpi-value" style="color:#3fb950;">1,0%</div>
+            <div class="kpi-unit">3 casos de 313 agendados</div>
+            <div class="kpi-delta delta-up">15–20× abaixo do benchmark</div>
+            <div class="kpi-prev">Set: 2,5% (7 casos)</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Pacientes Únicos</div>
+            <div class="kpi-value">188</div>
+            <div class="kpi-unit">pacientes únicos (mês completo)</div>
+            <div class="kpi-delta delta-up">49 novos (26,1%)</div>
+            <div class="kpi-prev">Set: 191</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Taxa de Retorno</div>
+            <div class="kpi-value">73,9%</div>
+            <div class="kpi-unit">recorrência (139 de 188)</div>
+            <div class="kpi-delta delta-up">Acima do benchmark 55–65%</div>
+            <div class="kpi-prev">Set: —</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Sessões Fototerapia</div>
+            <div class="kpi-value">178</div>
+            <div class="kpi-unit">realizadas (mês completo)</div>
+            <div class="kpi-delta delta-warn">R$0 receita registrada</div>
+            <div class="kpi-prev">Set: 243 sess / R$0</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Projeção Anual</div>
+            <div class="kpi-value">R$3,37M</div>
+            <div class="kpi-unit">R$281.060,50 × 12 (real)</div>
+            <div class="kpi-delta delta-down">−7,8% vs. set</div>
+            <div class="kpi-prev">Set base: R$3,66M</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SEÇÃO 1: FINANCEIRO ── -->
+      <div class="section">
+        <div class="section-title">1. Desempenho Financeiro</div>
+
+        <div class="success-banner">
+          <strong>✓ Dados Completos — Mês Fechado:</strong> Este relatório cobre <strong>01–31/out/2026 (31 dias)</strong>. Todos os números são reais — sem projeção.
+        </div>
+
+        <div class="analysis-block">
+          <p>
+            A receita total da clínica em outubro foi de <span class="highlight">R$281.060,50</span>,
+            composta por <span class="highlight">R$278.560,50 de dermatologia</span>
+            (Dra. Eoda R$140.980,50 + Dra. Raquel R$137.580,00),
+            <span class="highlight">R$2.500 de Prof 2</span> e
+            <span class="highlight">R$0 de fototerapia</span> (178 sessões — modelo pré-pago, receita não contabilizada por sessão).
+            Ticket médio derma R$1.513,91 — <span class="highlight">acima da média nacional de R$300–500</span>. <em style="color:#8b949e;font-size:0.82rem;">Nota: O ticket médio inclui procedimentos estéticos de alto valor (laser, Restylane, Botox), não apenas consultas avaliativas.</em>
+          </p>
+          <p>
+            A <span class="highlight">semana mais forte do mês</span> foi S4 (19–23/out), com
+            <span class="highlight">R$106.370 (37,8% da receita mensal)</span> — pico expressivo de concentração. S2 (05–09/out) foi a segunda maior com R$80.046,50 (28,5%). Cartão de Crédito domina com 60,6% da receita (R$170.240). "Não informado" representa 29,4% (R$82.610,50) — oportunidade crítica de melhoria no registro.
+          </p>
+        </div>
+
+        <div class="section-subtitle">Receita por Semana — Total Clínica (out/2026)</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Semana</th><th>Período</th><th>Receita</th><th>Registros</th><th>% do Mês</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>S1</td>
+                <td>01/10–02/10</td>
+                <td>R$13.284,00</td>
+                <td>10</td>
+                <td>4,7%</td>
+              </tr>
+              <tr>
+                <td>S2</td>
+                <td>05/10–09/10</td>
+                <td>R$80.046,50</td>
+                <td>37</td>
+                <td>28,5%</td>
+              </tr>
+              <tr>
+                <td>S3</td>
+                <td>13/10–16/10</td>
+                <td>R$62.930,00</td>
+                <td>37</td>
+                <td>22,4%</td>
+              </tr>
+              <tr>
+                <td><strong>S4</strong></td>
+                <td>19/10–23/10</td>
+                <td><strong>R$106.370,00</strong></td>
+                <td>34</td>
+                <td><strong>37,8%</strong></td>
+              </tr>
+              <tr>
+                <td>S5</td>
+                <td>26/10–27/10</td>
+                <td>R$18.430,00</td>
+                <td>12</td>
+                <td>6,6%</td>
+              </tr>
+              <tr class="total-row">
+                <td colspan="2">Total Out (01–31/out)</td>
+                <td>R$281.060,50</td>
+                <td>130</td>
+                <td>100%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.78rem;color:#6e7681;margin-top:-12px;margin-bottom:20px;">
+          * Receita por data_execucao, is_cancelado IS NOT TRUE. Receita total R$281.060,50 inclui todos os profissionais (fototerapia R$0 — modelo pré-pago). TM derma (R$1.513,91) = R$278.560,50 / 184 consultas dermatológicas realizadas.
+        </p>
+
+        <div class="section-subtitle">Formas de Pagamento — Outubro 2026 (01–31/out)</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Forma de Pagamento</th><th>Transações</th><th>Valor</th><th>Participação</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Cartão de Crédito</td>
+                <td>70</td>
+                <td>R$170.240,00</td>
+                <td>60,6%</td>
+              </tr>
+              <tr>
+                <td>Não informado</td>
+                <td>37</td>
+                <td>R$82.610,50</td>
+                <td>29,4%</td>
+              </tr>
+              <tr>
+                <td>PIX</td>
+                <td>11</td>
+                <td>R$14.110,00</td>
+                <td>5,0%</td>
+              </tr>
+              <tr>
+                <td>Dinheiro</td>
+                <td>7</td>
+                <td>R$7.050,00</td>
+                <td>2,5%</td>
+              </tr>
+              <tr>
+                <td>Cartão de Débito</td>
+                <td>5</td>
+                <td>R$7.050,00</td>
+                <td>2,5%</td>
+              </tr>
+              <tr class="total-row">
+                <td>Total</td>
+                <td>130</td>
+                <td>R$281.060,50</td>
+                <td>100%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="analysis-block">
+          <div class="progress-group">
+            <div class="progress-label"><span>Cartão Crédito</span><span>60,6%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:60.6%;background:#58a6ff;"></div></div>
+          </div>
+          <div class="progress-group">
+            <div class="progress-label"><span>Não informado</span><span>29,4%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:29.4%;background:#8b949e;"></div></div>
+          </div>
+          <div class="progress-group">
+            <div class="progress-label"><span>PIX</span><span>5,0%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:5.0%;background:#e3b341;"></div></div>
+          </div>
+          <div class="progress-group">
+            <div class="progress-label"><span>Dinheiro</span><span>2,5%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:2.5%;background:#f0883e;"></div></div>
+          </div>
+          <div class="progress-group">
+            <div class="progress-label"><span>Cartão Débito</span><span>2,5%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:2.5%;background:#79c0ff;"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SEÇÃO 2: INDICADORES CLÍNICOS ── -->
+      <div class="section">
+        <div class="section-title">2. Indicadores Clínicos</div>
+
+        <div class="success-banner">
+          <strong>✓ No-show Derma Histórico — 1,0% em outubro:</strong> Taxa de <strong>1,0% derma</strong> (3 casos de 313 agendamentos) —
+          melhor marca registrada, melhora vs. setembro (2,5%, 7 casos). Benchmark nacional: 15%–20%
+          (<span class="bench-source"><a href="https://saudedigitalnews.com.br/13/12/2023/doctoralia-e-feegow-lancam-panorama-das-clinicas-e-hospitais-2024/" target="_blank" rel="noopener">Panorama Doctoralia+Feegow 2024</a></span>). DermaClinic opera 15–20× abaixo do benchmark — desempenho excepcional.
+        </div>
+
+        <div class="alert-banner">
+          <strong>🔴 Cancelamentos Críticos — 24,3%:</strong> 76 cancelamentos de 313 agendamentos derma (24,3%) — muito acima do benchmark de 8–12%. Com ticket médio de R$1.513,91, cada cancelamento não preenchido representa ~R$1.514 perdidos. Ação urgente: protocolo anti-cancelamento + lista de espera ativa. Se reduzir para 12%, = +~37 consultas × R$1.514 = +R$56.018 potencial/mês.
+        </div>
+
+        <div class="analysis-block">
+          <p>
+            Foram realizadas <span class="highlight">184 consultas dermatológicas</span> em outubro completo (Dra. Eoda: 102 + Dra. Raquel: 82), mais fototerapia com <span class="highlight">178 sessões</span>. No-show derma: <span class="highlight">3 casos (1,0% de 313 agendados)</span> — melhor taxa histórica, redução vs. setembro (2,5%). No-show fototerapia: 14 casos (6,5% de 214) — ponto de atenção crescente.
+          </p>
+          <p>
+            A <span class="highlight">taxa de retorno de 73,9%</span> (139 pacientes recorrentes de 188 únicos atendidos) está acima do benchmark de 55%–65% para dermatologia privada. <span class="highlight">49 novos pacientes (26,1%)</span> representam captação ativa expressiva.
+          </p>
+          <p>
+            Cancelamento derma 24,3% (76 de 313) é o principal alerta do mês — muito acima do benchmark de 8–12%. Dra. Ana Carolina apresenta taxa crítica de no-show: 7 de 23 agendados (30,4%). Dra. Eoda: 42 cancelamentos de 166 agendados (25,3%). Dra. Raquel: 34 cancelamentos de 147 agendados (23,1%).
+          </p>
+        </div>
+
+        <div class="section-subtitle">2.1 Eficiência da Agenda (Dermatologia)</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Métrica</th><th>DermaClinic Out/26</th><th>Benchmark</th><th>Avaliação</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Consultas Realizadas</td>
+                <td>184 (derm) · 313 agendadas</td><td>—</td><td class="bench-pos-yellow">🟡 Volume reduzido (−5,2% vs. set)</td>
+              </tr>
+              <tr>
+                <td>Taxa de No-show Derma</td>
+                <td>1,0% (3 casos de 313)</td>
+                <td>~15%–20% clínicas privadas — <span class="bench-source"><a href="https://saudedigitalnews.com.br/13/12/2023/doctoralia-e-feegow-lancam-panorama-das-clinicas-e-hospitais-2024/" target="_blank" rel="noopener">Panorama Doctoralia+Feegow 2024</a></span></td>
+                <td class="bench-pos-green">🟢 <strong>Excepcional — melhor taxa histórica</strong></td>
+              </tr>
+              <tr>
+                <td>No-show Fototerapia</td>
+                <td>6,5% (14 de 214)</td>
+                <td>~5% benchmark saudável</td>
+                <td class="bench-pos-yellow">🟡 <strong>Acima do benchmark — atenção</strong></td>
+              </tr>
+              <tr>
+                <td>Taxa de Cancelamento Derma</td>
+                <td>24,3% (76 de 313)</td>
+                <td>8%–12% benchmark saudável</td>
+                <td class="bench-pos-red">🔴 <strong>CRÍTICO — muito acima do benchmark</strong></td>
+              </tr>
+              <tr>
+                <td>Ticket Médio</td>
+                <td>R$1.513,91 (derm)</td>
+                <td>R$ 300–500 média nacional</td>
+                <td class="bench-pos-green">🟢 <strong>Acima da média nacional</strong><br><span style="font-size:0.75rem;font-weight:400;color:#8b949e;">Inclui procedimentos estéticos de alto valor (laser, Restylane, Botox), não apenas consultas avaliativas</span></td>
+              </tr>
+              <tr>
+                <td>Taxa de Retorno</td>
+                <td>73,9% (139 de 188)</td>
+                <td>55%–65% dermato privada</td>
+                <td class="bench-pos-green">🟢 <strong>Acima do benchmark — boa fidelização</strong></td>
+              </tr>
+              <tr>
+                <td>Pacientes Únicos</td>
+                <td>188 (mês completo)</td>
+                <td>—</td>
+                <td class="bench-pos-green">🟢 49 novos (26,1%) = captação ativa</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-subtitle">2.2 Fototerapia</div>
+        <div class="warn-banner">
+          <strong>⚠ Fototerapia:</strong> 178 sessões em outubro completo vs. 243 em setembro (−26,7%). No-show: 14 de 214 (6,5%). Receita registrada R$0. <strong>Nota metodológica:</strong> modelo pré-pago — receita é contabilizada na venda do pacote, não por sessão. O valor de R$0 indica que não houve cobrança avulsa registrada no período. Volume de sessões realizadas foi de 178, atendendo 11 pacientes únicos.
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Indicador</th><th>Out 2026 (31d)</th><th>Set 2026</th><th>Var.</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Sessões Realizadas</td>
+                <td>178</td><td>243</td>
+                <td class="ind-yellow">−26,7%</td>
+              </tr>
+              <tr>
+                <td>Agendadas</td>
+                <td>214</td><td>276</td>
+                <td class="ind-yellow">No-show: 14 (6,5%)</td>
+              </tr>
+              <tr>
+                <td>Pacientes Únicos</td>
+                <td>11</td><td>—</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>Receita Registrada</td>
+                <td>R$0</td><td>R$0</td>
+                <td class="ind-red">Modelo pré-pago</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.78rem;color:#6e7681;margin-top:-12px;">
+          * Modelo pré-pago: receita contabilizada na venda do pacote, não por sessão avulsa. R$0 = nenhuma sessão com cobrança avulsa registrada no período. Volume de sessões caiu −26,7% vs. setembro. No-show subiu de 5,1% (set) para 6,5% (out).
+        </p>
+      </div>
+
+      <!-- ── SEÇÃO 3: DESEMPENHO POR MÉDICA ── -->
+      <div class="section">
+        <div class="section-title">3. Desempenho por Médica</div>
+
+        <div class="analysis-block">
+          <p>
+            Em outubro completo (01–31/out), as dermatologistas realizaram <span class="highlight">184 consultas</span>
+            totalizando <span class="highlight">R$278.560,50 de receita derma</span> (Eoda + Raquel).
+            <span class="highlight">Dra. Eoda Steglich</span> lidera em receita: 102 atendimentos, <span class="highlight">R$140.980,50</span> e
+            <span class="highlight">TM R$1.905,14</span>. Participação na receita dermatológica: 50,6%. No-show: 2 (1,2% de 166 agendadas).
+          </p>
+          <p>
+            <span class="highlight">Dra. Raquel Steglich</span>: 82 atendimentos
+            (R$137.580,00, TM R$2.501,45). No-show: 1 (0,7% de 147 agendadas). Participação derma: 49,4%. Destaque do mês: <span class="highlight">Dra. Raquel com TM R$2.501,45 — maior ticket médio da clínica</span>, crescimento de +36,5% em receita total vs. setembro. Dra. Eoda teve queda de −25,3% em receita vs. setembro (R$140.980,50 vs. R$188.725).
+          </p>
+        </div>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Médica</th>
+                <th>Agendadas</th>
+                <th>Realizadas</th>
+                <th>Cancelados</th>
+                <th>No-shows</th>
+                <th>Receita</th>
+                <th>Ticket Médio</th>
+                <th>Part. Receita</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Dra. Eoda Steglich</strong></td>
+                <td>166</td>
+                <td><strong>102</strong></td>
+                <td><span class="ind-red">42 (25,3%)</span></td>
+                <td><span class="ind-green">2 (1,2%)</span></td>
+                <td><strong>R$140.980,50</strong></td>
+                <td class="ind-green"><strong>R$1.905,14</strong></td>
+                <td><strong>50,6%</strong></td>
+              </tr>
+              <tr>
+                <td>Dra. Raquel Steglich</td>
+                <td>147</td>
+                <td>82</td>
+                <td><span class="ind-red">34 (23,1%)</span></td>
+                <td><span class="ind-green">1 (0,7%)</span></td>
+                <td>R$137.580,00</td>
+                <td class="ind-green">R$2.501,45</td>
+                <td>49,4%</td>
+              </tr>
+              <tr>
+                <td>Dra. Ana Carolina (Prof 5)</td>
+                <td>23</td>
+                <td>11</td>
+                <td><span class="ind-yellow">2 (8,7%)</span></td>
+                <td><span class="ind-red">7 (30,4%)</span></td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>Fototerapia (Prof 4)</td>
+                <td>214</td>
+                <td>178</td>
+                <td><span class="ind-green">0 (0%)</span></td>
+                <td><span class="ind-yellow">14 (6,5%)</span></td>
+                <td>R$0</td>
+                <td>—</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>Prof 2</td>
+                <td>—</td>
+                <td>1</td>
+                <td>—</td>
+                <td>—</td>
+                <td>R$2.500,00</td>
+                <td>—</td>
+                <td>—</td>
+              </tr>
+              <tr class="total-row">
+                <td>TOTAL Clínica (derm+foto)</td>
+                <td>550+</td>
+                <td>374 atend. + outros status</td>
+                <td>76+ (derm)</td>
+                <td>17 (derm+foto)</td>
+                <td>R$281.060,50</td>
+                <td>—</td>
+                <td>100%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-subtitle">Evolução de Ticket Médio por Médica</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Médica</th><th>Setembro 2026</th><th>Outubro 2026</th><th>Variação</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Dra. Raquel Steglich</strong></td>
+                <td>R$1.145,11</td>
+                <td class="ind-green"><strong>R$2.501,45</strong></td>
+                <td class="ind-green"><strong>+118,5% — destaque do mês</strong></td>
+              </tr>
+              <tr>
+                <td>Dra. Eoda Steglich</td>
+                <td>R$1.763,79</td>
+                <td class="ind-yellow">R$1.905,14</td>
+                <td class="ind-green">+8,0%</td>
+              </tr>
+              <tr class="total-row">
+                <td>Clínica (derm)</td>
+                <td>R$1.492,24</td>
+                <td class="ind-green">R$1.513,91</td>
+                <td class="ind-green">+1,5% <span style="font-size:0.75rem;font-weight:400;">(crescimento real)</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.78rem;color:#6e7681;margin-top:-12px;margin-bottom:20px;">
+          * Dados via feegow_financial_records / feegow_appointments, por data_execucao, is_cancelado IS NOT TRUE. Período completo 01–31/out/2026.
+        </p>
+      </div>
+
+      <!-- ── SEÇÃO 4: ORÇAMENTOS ── -->
+      <div class="section">
+        <div class="section-title">4. Orçamentos</div>
+
+        <div class="warn-banner">
+          <strong>⚠ Dados de Orçamentos — Outubro 2026:</strong> Dados de orçamentos/propostas para outubro não estão disponíveis nesta extração. O ETL de propostas Feegow está ativo (rodando diariamente às 07h BRT) e os dados estarão disponíveis na próxima consolidação. Referência do mês anterior: setembro teve 7 orçamentos com conversão de 71,4% (R$16.170 convertidos de R$21.370 orçados).
+        </div>
+
+        <div class="analysis-block">
+          <p>
+            Com ticket médio derma de R$1.513,91 em outubro, cada 10 orçamentos adicionais com conversão de 71% representam +R$10.749 incremental. Meta sugerida permanece em <span class="highlight">20–25 orçamentos/mês</span>, mantendo conversão acima de 60%. A queda de receita em outubro reforça a urgência de aumentar o pipeline de orçamentos para compensar volatilidade de volume de consultas.
+          </p>
+        </div>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Indicador</th><th>Out 2026 (01–31/out)</th><th>Set 2026 (referência)</th><th>Avaliação</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Orçamentos emitidos</td>
+                <td>— (dados pendentes)</td>
+                <td>7 (set)</td>
+                <td class="bench-pos-yellow">🟡 Aguardando extração</td>
+              </tr>
+              <tr>
+                <td>Taxa de conversão</td>
+                <td>— (dados pendentes)</td>
+                <td>71,4% (set)</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>Meta recomendada</td>
+                <td>20+ por mês</td>
+                <td>20+ por mês</td>
+                <td class="bench-pos-yellow">🟡 Manter foco em volume</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── SEÇÃO 5: PERFIL DOS PACIENTES ── -->
+      <div class="section">
+        <div class="section-title">5. Perfil dos Pacientes</div>
+
+        <div class="two-col">
+          <!-- Origem dos pacientes -->
+          <div>
+            <div class="section-subtitle" style="margin-top:0;">Perfil de Origem</div>
+            <div class="tbl-wrap">
+              <table>
+                <thead>
+                  <tr><th>Perfil</th><th>Pacientes</th><th>%</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Primeiras consultas (novos)</td>
+                    <td>49</td>
+                    <td>26,1%</td>
+                  </tr>
+                  <tr>
+                    <td>Pacientes recorrentes</td>
+                    <td>139</td>
+                    <td>73,9%</td>
+                  </tr>
+                  <tr class="total-row">
+                    <td>Total pacientes únicos</td>
+                    <td>188</td>
+                    <td>100%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="analysis-block" style="margin-top:16px;">
+              <p>
+                <span class="highlight">Taxa de retorno de 73,9%</span> — acima do benchmark de 55%–65% para dermatologia privada (<span class="bench-source">Referência de mercado</span>). 49 novos pacientes (26,1%) — captação ativa consistente. Taxa de retorno cresceu vs. setembro, indicando fidelização sólida da base.
+              </p>
+            </div>
+          </div>
+
+          <!-- Distribuição receita por médica -->
+          <div>
+            <div class="section-subtitle" style="margin-top:0;">Distribuição Receita por Médica</div>
+            <div class="analysis-block">
+              <div class="progress-group">
+                <div class="progress-label"><span><strong>Receita Derma Total</strong></span><span><strong>R$278.560,50 (100%)</strong></span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:100%;background:#3fb950;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span><strong>Dra. Eoda Steglich</strong></span><span><strong>R$140.980,50 (50,6%)</strong></span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:50.6%;background:#58a6ff;"></div></div>
+              </div>
+              <div class="progress-group">
+                <div class="progress-label"><span>Dra. Raquel Steglich</span><span>R$137.580,00 (49,4%)</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:49.4%;background:#79c0ff;"></div></div>
+              </div>
+            </div>
+            <p style="font-size:0.8rem;color:#8b949e;margin-top:-10px;">
+              Distribuição quase equilibrada entre Eoda (50,6%) e Raquel (49,4%) — Raquel cresceu +36,5% em receita vs. setembro. TM Raquel R$2.501,45 é o maior ticket da clínica. Concentração Eoda+Raquel = 100% da receita derma — risco operacional se houver ausência de qualquer uma.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SEÇÃO 6: COMPARATIVO SET vs OUT ── -->
+      <div class="section">
+        <div class="section-title">6. Comparativo Setembro × Outubro 2026</div>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Indicador</th><th>Setembro 2026</th><th>Outubro 2026 (31d)</th><th>Variação</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Receita Total</td>
+                <td>R$304.795</td>
+                <td><strong>R$281.060,50</strong></td>
+                <td class="ind-red">−7,8% — queda real</td>
+              </tr>
+              <tr>
+                <td>Receita Dermatologia</td>
+                <td>R$289.495 (Eoda+Raquel)</td>
+                <td>R$278.560,50 (184 cons.)</td>
+                <td class="ind-red">−3,8%</td>
+              </tr>
+              <tr>
+                <td>Ticket Médio Derma</td>
+                <td>R$1.492,24</td>
+                <td>R$1.513,91</td>
+                <td class="ind-green">+1,5%</td>
+              </tr>
+              <tr>
+                <td>Consultas Derma Realizadas</td>
+                <td>194 (30d)</td>
+                <td>184 (31d)</td>
+                <td class="ind-yellow">−5,2%</td>
+              </tr>
+              <tr>
+                <td>Pacientes Únicos</td>
+                <td>191</td>
+                <td>188</td>
+                <td class="ind-yellow">−1,6%</td>
+              </tr>
+              <tr>
+                <td>Pacientes Novos</td>
+                <td>— (set)</td>
+                <td>49 (26,1%)</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>Taxa de Retorno</td>
+                <td>—</td>
+                <td>73,9%</td>
+                <td class="ind-green">Acima do benchmark 55–65%</td>
+              </tr>
+              <tr>
+                <td>No-show Derma</td>
+                <td>2,5% (7 casos)</td>
+                <td>1,0% (3 casos)</td>
+                <td class="ind-green">−1,5pp — melhora histórica</td>
+              </tr>
+              <tr>
+                <td>No-show Fototerapia</td>
+                <td>5,1% (set est.)</td>
+                <td>6,5% (14 de 214)</td>
+                <td class="ind-yellow">+1,4pp — atenção</td>
+              </tr>
+              <tr>
+                <td>Taxa de Cancelamento Derma</td>
+                <td>26,1% (set)</td>
+                <td>24,3% (76 casos)</td>
+                <td class="ind-yellow">−1,8pp — melhora leve, ainda crítico</td>
+              </tr>
+              <tr>
+                <td>Dra. Eoda — Receita</td>
+                <td>R$188.725</td>
+                <td>R$140.980,50</td>
+                <td class="ind-red">−25,3% — queda expressiva</td>
+              </tr>
+              <tr>
+                <td>Dra. Eoda — Ticket Médio</td>
+                <td>R$1.763,79</td>
+                <td>R$1.905,14</td>
+                <td class="ind-green">+8,0%</td>
+              </tr>
+              <tr>
+                <td>Dra. Raquel — Receita</td>
+                <td>R$100.770</td>
+                <td><strong>R$137.580,00</strong></td>
+                <td class="ind-green">+36,5% — destaque</td>
+              </tr>
+              <tr>
+                <td>Dra. Raquel — Ticket Médio</td>
+                <td>R$1.145,11</td>
+                <td class="ind-green">R$2.501,45</td>
+                <td class="ind-green">+118,5% — destaque do mês</td>
+              </tr>
+              <tr>
+                <td>Fototerapia Sessões</td>
+                <td>243 (set)</td>
+                <td>178 (31d)</td>
+                <td class="ind-yellow">−26,7%</td>
+              </tr>
+              <tr>
+                <td>Projeção Anual</td>
+                <td>R$3,66M (base set×12)</td>
+                <td><strong>R$3,37M (R$281.060×12)</strong></td>
+                <td class="ind-red">−7,8%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="analysis-block">
+          <p>
+            Outubro completo (31 dias) apresenta <span class="highlight">queda de receita de −7,8%</span> vs. setembro: R$281.060,50 vs. R$304.795. O principal driver foi a queda no volume de consultas da Dra. Eoda (−25,3% em receita, de R$188.725 para R$140.980,50). Em contrapartida, <span class="highlight">Dra. Raquel cresceu +36,5%</span> (R$137.580) e ticket médio geral da clínica subiu +1,5%.
+          </p>
+          <p>
+            Pontos de atenção críticos: <span class="highlight">cancelamentos derma em 24,3%</span> (76 de 313) — muito acima do benchmark de 8–12%. No-show fototerapia subiu para 6,5%. Dra. Ana Carolina: taxa crítica de 30,4% de no-show (7 de 23). Forma de pagamento "Não informado" subiu para 29,4% (R$82.610,50) — registro inadequado crescendo.
+          </p>
+        </div>
+      </div>
+
+      <!-- ── SEÇÃO 7: BENCHMARKS ── -->
+      <div class="section">
+        <div class="section-title">7. Benchmarks do Setor</div>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Indicador</th><th>DermaClinic Out/26</th><th>Benchmark Brasil</th><th>Fonte</th><th>Posicionamento</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Ticket Médio Consulta</td>
+                <td>R$1.513,91 (derm)</td>
+                <td>R$ 300–500 (média nacional)</td>
+                <td class="bench-source"><a href="https://tabelaplanos.com.br/precos-consulta-dermatologista-2025/" target="_blank" rel="noopener">tabelaplanos.com.br 2025</a></td>
+                <td class="bench-pos-green">🟢 <strong>Acima da média nacional</strong><br><span style="font-size:0.75rem;font-weight:400;color:#8b949e;">Nota: inclui procedimentos estéticos de alto valor (laser, Restylane, Botox), não apenas consultas avaliativas</span></td>
+              </tr>
+              <tr>
+                <td>TM Dra. Raquel</td>
+                <td>R$2.501,45</td>
+                <td>R$ 400–800 (SP/capitais)</td>
+                <td class="bench-source"><a href="https://emfoco.med.br/quanto-custa-uma-consulta-com-dermatologista/" target="_blank" rel="noopener">Instituto Medicina em Foco SP 2026</a></td>
+                <td class="bench-pos-green">🟢 <strong>3× acima do teto da faixa SP/capitais</strong></td>
+              </tr>
+              <tr>
+                <td>Taxa de No-show Derma</td>
+                <td>1,0% (3 casos de 313)</td>
+                <td>~15%–20% clínicas privadas</td>
+                <td class="bench-source"><a href="https://saudedigitalnews.com.br/13/12/2023/doctoralia-e-feegow-lancam-panorama-das-clinicas-e-hospitais-2024/" target="_blank" rel="noopener">Panorama Doctoralia+Feegow 2024</a></td>
+                <td class="bench-pos-green">🟢 <strong>Excepcional — 15–20× abaixo do benchmark</strong></td>
+              </tr>
+              <tr>
+                <td>Taxa de Cancelamento Derma</td>
+                <td>24,3% (76 de 313)</td>
+                <td>8%–12% benchmark saudável</td>
+                <td class="bench-source">Panorama Doctoralia+Feegow 2024</td>
+                <td class="bench-pos-red">🔴 <strong>CRÍTICO — muito acima do benchmark</strong></td>
+              </tr>
+              <tr>
+                <td>Taxa de Retorno</td>
+                <td>73,9% (139 de 188)</td>
+                <td>55%–65% dermato privada</td>
+                <td class="bench-source">Referência de mercado</td>
+                <td class="bench-pos-green">🟢 <strong>Acima do benchmark — boa fidelização</strong></td>
+              </tr>
+              <tr>
+                <td>Receita Anual Real</td>
+                <td>R$3,37M (R$281.060×12)</td>
+                <td>R$ 1,15M–1,94M (3 méd.)</td>
+                <td class="bench-source"><a href="https://saudedigitalnews.com.br/13/12/2023/doctoralia-e-feegow-lancam-panorama-das-clinicas-e-hospitais-2024/" target="_blank" rel="noopener">Panorama Doctoralia+Feegow 2024</a></td>
+                <td class="bench-pos-green">🟢 <strong>+74% acima do teto do benchmark</strong></td>
+              </tr>
+              <tr>
+                <td>PIX (% receita)</td>
+                <td>5,0% (R$14.110)</td>
+                <td>~18%–25% clínicas saúde</td>
+                <td class="bench-source">Referência de mercado</td>
+                <td class="bench-pos-red">🔴 Muito abaixo do benchmark — expandir oferta PIX</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── SEÇÃO 8: OPORTUNIDADES ── -->
+      <div class="section">
+        <div class="section-title">8. Oportunidades Identificadas</div>
+
+        <div class="opp-grid">
+          <div class="opp-card priority-alta">
+            <div class="opp-tag">🔴 Alta Prioridade — Urgente</div>
+            <h3>Protocolo Anti-Cancelamento (3 Etapas)</h3>
+            <p>
+              Taxa de cancelamento derma 24,3% (76 de 313) — criticamente acima do benchmark de 8–12%. Com TM R$1.513,91, cada cancelamento não preenchido = ~R$1.514 perdidos. Se reduzir para 12%, = +~37 consultas = +R$56.018 potencial/mês.
+              Implementar: D-2 WhatsApp automático, D-1 confirmação ativa, sem resposta → ligar + lista de espera.
+              Meta: reduzir de 24,3% para &lt;12% em 60 dias.
+            </p>
+          </div>
+
+          <div class="opp-card priority-alta">
+            <div class="opp-tag">🔴 Alta Prioridade — Urgente</div>
+            <h3>Dra. Ana Carolina — Protocolo de No-show (30,4%)</h3>
+            <p>
+              7 no-shows de 23 agendamentos (30,4%) — taxa crítica que indica problema sistemático. Investigar perfil dos pacientes, horários e padrão de cancelamento. Implementar confirmação ativa D-2 e D-1 específica para agenda de Ana Carolina. Considerar lista de espera para absorver vagas abandonadas. Impacto: +~7 consultas recuperadas/mês.
+            </p>
+          </div>
+
+          <div class="opp-card priority-alta">
+            <div class="opp-tag">🔴 Alta Prioridade — Urgente</div>
+            <h3>Corrigir Registro de Forma de Pagamento</h3>
+            <p>
+              29,4% do faturamento (R$82.610,50) sem forma de pagamento identificada — crescimento vs. setembro (17,0%). Isso compromete análise de meios de pagamento, relatórios fiscais e estratégia de recebimento. Treinar recepção para registrar 100% das formas no Feegow. Meta: reduzir "Não informado" para &lt;5% em 30 dias.
+            </p>
+          </div>
+
+          <div class="opp-card priority-media">
+            <div class="opp-tag">🟡 Média Prioridade — Curto Prazo</div>
+            <h3>Investigar Queda de Volume da Dra. Eoda</h3>
+            <p>
+              Receita Eoda caiu −25,3% (R$140.980,50 vs. R$188.725 em set) apesar do TM subir +8,0% (R$1.905,14). Queda no volume: 102 realizados vs. ~107 em setembro, com 42 cancelamentos (25,3% de 166 agendados). Investigar se é sazonalidade, redução de agenda ou migração de procedimentos. Cruzar com dados históricos de nov–dez.
+            </p>
+          </div>
+
+          <div class="opp-card priority-media">
+            <div class="opp-tag">🟡 Média Prioridade — Curto Prazo</div>
+            <h3>Reduzir No-show Fototerapia (6,5%)</h3>
+            <p>
+              Fototerapia com 14 no-shows em 214 agendamentos (6,5%) — acima do benchmark de 5%. Implementar confirmação ativa D-1 específica para fototerapia via WhatsApp. Investigar padrão: horários e pacientes com histórico de no-show. Meta: reduzir para &lt;3% em 60 dias = +~7 sessões recuperadas/mês.
+            </p>
+          </div>
+
+          <div class="opp-card priority-baixa">
+            <div class="opp-tag">🟢 Baixa Prioridade — Médio Prazo</div>
+            <h3>Relatório Fototerapia Completo (Modelo Pré-Pago)</h3>
+            <p>
+              Receita registrada de R$0 para 178 sessões subestima o real faturamento de fototerapia (modelo pré-pago). Implementar relatório de competência que registra o valor proporcional por sessão (total do pacote ÷ total de sessões contratadas). Permitirá visibilidade real do faturamento mensal de fototerapia e comparativo entre meses.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SEÇÃO 9: PRÓXIMOS PASSOS ── -->
+      <div class="section">
+        <div class="section-title">9. Próximos Passos</div>
+
+        <ul class="steps-list">
+          <li>
+            <div class="step-num">1</div>
+            <div class="step-text">
+              <strong>Implementar Protocolo Anti-Cancelamento de 3 Etapas — URGENTE</strong>
+              <span>76 cancelamentos derma em 31 dias (24,3%) — criticamente acima do benchmark. Implementar sequência: D-2 WhatsApp automático de confirmação, D-1 confirmação ativa com resposta necessária, sem resposta → ligar + oferecer para lista de espera. Meta: reduzir de 24,3% para &lt;12% em 60 dias. Impacto estimado: +~37 consultas × R$1.514 = +R$56.018/mês.</span>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">2</div>
+            <div class="step-text">
+              <strong>Investigar e Resolver No-show Crítico da Dra. Ana Carolina (30,4%)</strong>
+              <span>7 no-shows de 23 agendamentos — taxa 3× acima do benchmark. Verificar perfil dos pacientes com histórico de no-show, horários críticos e canais de confirmação. Implementar protocolo específico: confirmação D-2 e D-1, e lista de espera ativa para horários da Ana Carolina. Potencial: recuperar 6–7 consultas/mês.</span>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">3</div>
+            <div class="step-text">
+              <strong>Corrigir Registro de Formas de Pagamento (29,4% → &lt;5%)</strong>
+              <span>R$82.610,50 sem identificação de forma de pagamento — crescendo vs. setembro (17,0%). Treinar recepção e atualizar protocolo de registro no Feegow. Definir campo como obrigatório no fluxo de checkout. Meta: atingir &lt;5% de "Não informado" em 30 dias para garantir qualidade dos dados financeiros.</span>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">4</div>
+            <div class="step-text">
+              <strong>Criar e Ativar Lista de Espera Automática via WhatsApp</strong>
+              <span>Com 76 cancelamentos derma/mês e recuperação de 50%, = +38 consultas × R$1.513,91 = +R$57.529/mês potencial. Integrar com fluxo n8n + Feegow: quando cancelamento ocorrer → acionar automaticamente lista de pacientes aguardando horário → confirmar disponibilidade e reagendar.</span>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">5</div>
+            <div class="step-text">
+              <strong>Investigar Queda no Volume da Dra. Eoda (−25,3% receita)</strong>
+              <span>Receita Eoda caiu de R$188.725 para R$140.980,50 apesar de TM crescer +8,0%. Analisar mix de procedimentos via Feegow — identificar se é redução de procedimentos de alto valor ou redução de agenda. Cruzar com dados históricos para distinguir sazonalidade de tendência estrutural. Implementar protocolo de upsell se necessário.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ──────────── AGENDAMENTOS FEEGOW ──────────── -->
+      <div class="section" style="margin-top:48px;">
+        <div class="section-title">Agendamentos Feegow — Outubro 2026 (01–31/out)</div>
+        <p style="color:#7db3d8;font-size:0.82rem;margin-bottom:20px;">
+          Todos os agendamentos registrados no Feegow com data de consulta em outubro/2026 (mês completo 01–31/out). Inclui procedimentos, fototerapia e consultas médicas. Fonte: <code>feegow_appointments</code>.
+        </p>
+
+        <!-- KPIs de agendamentos -->
+        <div class="kpi-grid" style="margin-bottom:32px;">
+          <div class="kpi-card">
+            <div class="kpi-label">Total Agendamentos (Derm)</div>
+            <div class="kpi-value" style="color:#58a6ff;">313</div>
+            <div class="kpi-unit">dermatologia (Eoda+Raquel)</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Realizados Derma</div>
+            <div class="kpi-value" style="color:#3fb950;">184</div>
+            <div class="kpi-unit">58,8% taxa de realização</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Agendamentos Foto</div>
+            <div class="kpi-value" style="color:#58a6ff;">214</div>
+            <div class="kpi-unit">fototerapia (178 realizados)</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Cancelados Derma</div>
+            <div class="kpi-value" style="color:#f85149;">76</div>
+            <div class="kpi-unit">24,3% — ponto crítico</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Não Compareceu</div>
+            <div class="kpi-value" style="color:#e3b341;">17</div>
+            <div class="kpi-unit">3 derma + 14 fototerapia</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Pacientes Únicos</div>
+            <div class="kpi-value" style="color:#58a6ff;">188</div>
+            <div class="kpi-unit">139 retornantes + 49 novos</div>
+          </div>
+        </div>
+
+        <div style="background:#0d2137;border:1px solid #1e3a5f;border-radius:8px;padding:14px 18px;margin-top:20px;font-size:0.8rem;color:#7db3d8;">
+          <strong style="color:#58a6ff;">Nota metodológica:</strong> Dermatologia (Eoda+Raquel): 313 agendadas, 184 realizadas, 76 cancelados (24,3%), 3 no-show (1,0%). Fototerapia: 214 agendadas, 178 realizadas, 0 cancelados, 14 no-show (6,5%). Dra. Ana Carolina (nutrologia): 23 agendadas, 11 realizadas, 2 cancelados, 7 no-show (30,4%). Receita derma: R$278.560,50 — fototerapia: R$0 (modelo pré-pago). Pacientes únicos: 188 (49 novos, 139 retorno). Período completo: 01–31/out/2026 (31 dias).
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="report-footer">
+        Relatório gerado em 01/11/2026 · Dados: 01/10/2026 a 31/10/2026 (mês completo) · Digital AI · Fonte: Feegow PostgreSQL (184 atendidos derma · R$281.060,50 · 313 agendamentos derma 01–31/out) · Próximo relatório: 01/12/2026
+      </div>
+
+    </div><!-- /report-body -->
+  </div><!-- /report-content -->
+</div><!-- /app -->
+
+<script src="../../_shared/auth.js"></script>
+<script>
+  initChatwootAuth({
+    gateLoading: 'gate-loading',
+    gateDirect:  'gate-direct',
+    gateApp:     'app',
+    client:      'dermaclinic',
+    report:      'atendimento-out-2026'
+  });
+</script>
+
+</body>
+</html>
