@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Análise de Atendimento — Daniela e Gabriella — DermaClinic</title>
+<title>An&#225;lise de Atendimento &#8212; Daniela e Gabriella &#8212; DermaClinic</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -36,7 +36,7 @@ h3 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1rem; font-weight:600
 .kpi-value.danger { color:var(--danger); }
 .kpi-label { font-size:0.8rem; color:var(--text-secondary); margin-top:4px; }
 .card { background:var(--card); border-radius:12px; padding:20px; box-shadow:var(--shadow); margin-bottom:16px; }
-.insight-box { background:#FFFBEB; border-left:4px solid var(--warning); padding:12px 16px; border-radius:0 8px 8px 0; margin:12px 0; font-size:0.85rem; }
+.insight-box { background:#FFFBEB; border-left:4px solid var(--warning); padding:12px 16px; border-radius:0 8px 8px 0; margin:12px 0; font-size:0.85rem; color:#334155; }
 .insight-box.critical { background:#FEF2F2; border-left-color:var(--danger); }
 .insight-box.positive { background:#F0FDF4; border-left-color:var(--success); }
 .chart-container { position:relative; height:300px; margin:16px 0; }
@@ -51,7 +51,7 @@ tr:hover { background:var(--primary-bg); }
 .comp-card h4 { font-size:0.85rem; color:var(--text-secondary); margin-bottom:8px; }
 .comp-value { font-family:'Plus Jakarta Sans',sans-serif; font-size:2rem; font-weight:700; }
 .comp-sub { font-size:0.8rem; color:var(--text-secondary); margin-top:4px; }
-.methodology { background:#f1f5f9; border-radius:8px; padding:16px; font-size:0.8rem; color:var(--text-secondary); margin-top:16px; }
+.methodology { background:#f1f5f9; border-radius:8px; padding:16px; font-size:0.8rem; color:#475569; margin-top:16px; }
 .methodology p { margin-bottom:4px; }
 .badge { display:inline-block; padding:2px 8px; border-radius:12px; font-size:0.72rem; font-weight:600; }
 .badge-danger { background:#FEE2E2; color:#b91c1c; }
@@ -62,6 +62,9 @@ tr:hover { background:var(--primary-bg); }
 .case-card { background:var(--card); border-radius:12px; padding:20px; box-shadow:var(--shadow); margin-bottom:12px; border-top:3px solid var(--danger); }
 .case-card h3 { margin-top:0; color:var(--danger); }
 .chart-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:center; }
+/* Bug fix: auth.js uses classList.add('visible') and classList.add('hidden') */
+.hidden { display: none !important; }
+.visible { display: block !important; }
 @media (max-width:768px) {
   .kpi-grid { grid-template-columns:repeat(2, 1fr); }
   .comp-grid { grid-template-columns:1fr; }
@@ -94,32 +97,32 @@ tr:hover { background:var(--primary-bg); }
 <div class="container">
 
 <h1>An&#225;lise de Atendimento &#8212; Daniela e Gabriella</h1>
-<p class="subtitle">DermaClinic &#8212; Fevereiro a Abril 2026 | An&#225;lise por Atendente | Gerado em 31/10/2026</p>
+<p class="subtitle">DermaClinic &#8212; Fevereiro a Abril 2026 | An&#225;lise por Atendente | Gerado em 02/11/2026</p>
 
 <!-- SECTION 1: Visão Geral do Período -->
 <h2>Vis&#227;o Geral do Per&#237;odo</h2>
 
 <div class="kpi-grid">
   <div class="kpi-card" style="border-left-color:var(--primary)">
-    <div class="kpi-value" style="color:var(--primary)">675</div>
+    <div class="kpi-value" style="color:var(--primary)">897</div>
     <div class="kpi-label">Conversas V&#225;lidas (Fev&#8211;Abr)</div>
   </div>
   <div class="kpi-card" style="border-left-color:var(--success)">
-    <div class="kpi-value success">105</div>
-    <div class="kpi-label">Convertidas (15.6%)</div>
+    <div class="kpi-value success">133</div>
+    <div class="kpi-label">Convertidas (14.8%)</div>
   </div>
   <div class="kpi-card" style="border-left-color:var(--warning)">
     <div class="kpi-value warning">6.9</div>
     <div class="kpi-label">Quality Score M&#233;dio</div>
   </div>
   <div class="kpi-card" style="border-left-color:#3b82f6">
-    <div class="kpi-value" style="color:#3b82f6">~5.4h</div>
+    <div class="kpi-value" style="color:#3b82f6">~5.6h</div>
     <div class="kpi-label">Tempo M&#233;dio 1&#170; Resposta</div>
   </div>
 </div>
 
 <div class="insight-box" style="background:#EEF2FF;border-left-color:var(--primary);">
-  <strong>Contexto:</strong> An&#225;lise consolidada do atendimento de <strong>Daniela Peixer</strong> (662 conversas, Fev&#8211;Abr) e <strong>Gabriella Hille</strong> (12 conversas, apenas Abril). Os dados s&#227;o provenientes do m&#243;dulo <em>atendimento_analysis</em> e classificados por IA com crit&#233;rios padronizados de qualidade, esfor&#231;o, tempo de resposta e follow-up.
+  <strong>Mudan&#231;a de metodologia:</strong> Este relat&#243;rio adota o crit&#233;rio <strong>attendants array</strong> &#8212; inclui todas as conversas em que a atendente enviou ao menos 1 mensagem, independente de estar como respons&#225;vel designada. O relat&#243;rio anterior usava <em>primary_attendant</em> (apenas conversas atribu&#237;das). Com isso, o universo analisado &#233; mais amplo e repr&#233;sentativo da contribui&#231;&#227;o real de cada atendente. Gabriella agora cobre todo o per&#237;odo Fev&#8211;Abr (215 conversas), e n&#227;o apenas Abril. Total de conversas &#250;nicas: <strong>838</strong> (Daniela 669 + Gabriella 215 &#8722; 46 de overlap).
 </div>
 
 <!-- SECTION 2: Evolução Mensal -->
@@ -143,49 +146,49 @@ tr:hover { background:var(--primary-bg); }
       <tr>
         <td><strong>Fevereiro</strong></td>
         <td>271</td>
-        <td>36</td>
-        <td>13.3%</td>
+        <td>35</td>
+        <td>12.9%</td>
         <td>6.9</td>
-        <td>~7.2h</td>
-        <td>271 (36 conv.)</td>
-        <td>&#8212;</td>
+        <td>~7.1h</td>
+        <td>271 (35 conv.)</td>
+        <td>53 (9 conv.)</td>
       </tr>
       <tr>
         <td><strong>Mar&#231;o</strong></td>
-        <td>198</td>
-        <td>33</td>
-        <td>16.7%</td>
+        <td>197</td>
+        <td>32</td>
+        <td>16.2%</td>
         <td>6.8</td>
-        <td>~5.6h</td>
-        <td>198 (33 conv.)</td>
-        <td>&#8212;</td>
+        <td>~5.1h</td>
+        <td>197 (32 conv.)</td>
+        <td>111 (18 conv.)</td>
       </tr>
       <tr>
         <td><strong>Abril</strong></td>
-        <td>206</td>
-        <td>36</td>
-        <td>17.5%</td>
+        <td>201</td>
+        <td>37</td>
+        <td>18.4%</td>
         <td>7.0</td>
-        <td>~3.2h</td>
-        <td>193 (34 conv.)</td>
-        <td>12 (2 conv.)</td>
+        <td>~3.3h</td>
+        <td>201 (37 conv.)</td>
+        <td>51 (11 conv.)</td>
       </tr>
       <tr style="background:var(--primary-bg);font-weight:600;">
         <td><strong>Total</strong></td>
-        <td><strong>675</strong></td>
-        <td><strong>105</strong></td>
-        <td><strong>15.6%</strong></td>
+        <td><strong>897</strong></td>
+        <td><strong>133</strong></td>
+        <td><strong>14.8%</strong></td>
         <td><strong>6.9</strong></td>
-        <td><strong>~5.4h</strong></td>
-        <td>662 (103 conv.)</td>
-        <td>12 (2 conv.)</td>
+        <td><strong>~5.6h</strong></td>
+        <td>669 (104 conv.)</td>
+        <td>215 (38 conv.)</td>
       </tr>
     </tbody>
   </table>
 </div>
 
 <div class="insight-box positive">
-  <strong>Tend&#234;ncia positiva de Daniela:</strong> O tempo de primeira resposta caiu consistentemente ao longo do per&#237;odo: <strong>7.2h (Fev) &#8594; 5.6h (Mar) &#8594; 3.2h (Abr)</strong> &#8212; redu&#231;&#227;o de 55% em tr&#234;s meses. A taxa de convers&#227;o tamb&#233;m subiu: 13.3% &#8594; 16.7% &#8594; 17.5%.
+  <strong>Tend&#234;ncia positiva de ambas:</strong> O tempo de primeira resposta de Daniela caiu consistentemente: <strong>7.1h (Fev) &#8594; 5.1h (Mar) &#8594; 3.3h (Abr)</strong> &#8212; redu&#231;&#227;o de 53% em tr&#234;s meses. A taxa de convers&#227;o subiu de 12.9% para 18.4%. Gabriella tamb&#233;m mostrou melhora: 17.0% (Fev) &#8594; 16.2% (Mar) &#8594; 21.6% (Abr).
 </div>
 
 <!-- SECTION 3: Daniela Peixer -->
@@ -193,19 +196,19 @@ tr:hover { background:var(--primary-bg); }
 
 <div class="kpi-grid">
   <div class="kpi-card" style="border-left-color:var(--primary)">
-    <div class="kpi-value" style="color:var(--primary)">662</div>
+    <div class="kpi-value" style="color:var(--primary)">669</div>
     <div class="kpi-label">Conversas V&#225;lidas (Fev&#8211;Abr)</div>
   </div>
   <div class="kpi-card" style="border-left-color:var(--success)">
-    <div class="kpi-value success">103</div>
-    <div class="kpi-label">Convertidas (15.6%)</div>
+    <div class="kpi-value success">104</div>
+    <div class="kpi-label">Convertidas (15.5%)</div>
   </div>
   <div class="kpi-card" style="border-left-color:var(--warning)">
     <div class="kpi-value warning">6.9</div>
     <div class="kpi-label">Quality Score M&#233;dio</div>
   </div>
   <div class="kpi-card" style="border-left-color:#3b82f6">
-    <div class="kpi-value" style="color:#3b82f6">~5.6h</div>
+    <div class="kpi-value" style="color:#3b82f6">~5.4h</div>
     <div class="kpi-label">Tempo M&#233;dio 1&#170; Resposta</div>
   </div>
 </div>
@@ -222,103 +225,135 @@ tr:hover { background:var(--primary-bg); }
       <div style="margin-bottom:16px;">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
           <div style="width:14px;height:14px;border-radius:50%;background:#ef4444;flex-shrink:0;"></div>
-          <span style="font-size:0.85rem;"><strong>76</strong> Esfor&#231;o Alto (11.5%)</span>
+          <span style="font-size:0.85rem;"><strong>77</strong> Esfor&#231;o Alto (11.5%)</span>
         </div>
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
           <div style="width:14px;height:14px;border-radius:50%;background:#f59e0b;flex-shrink:0;"></div>
-          <span style="font-size:0.85rem;"><strong>471</strong> Esfor&#231;o M&#233;dio (71.1%)</span>
+          <span style="font-size:0.85rem;"><strong>474</strong> Esfor&#231;o M&#233;dio (70.9%)</span>
         </div>
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
           <div style="width:14px;height:14px;border-radius:50%;background:#22c55e;flex-shrink:0;"></div>
-          <span style="font-size:0.85rem;"><strong>115</strong> Esfor&#231;o Baixo (17.4%)</span>
+          <span style="font-size:0.85rem;"><strong>118</strong> Esfor&#231;o Baixo (17.6%)</span>
         </div>
       </div>
       <div style="margin-bottom:12px;">
         <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:6px;font-weight:600;">Tempo de Resposta</div>
-        <div style="font-size:0.82rem;margin-bottom:4px;">R&#225;pido: <strong>166</strong> &nbsp;|&nbsp; Normal: <strong>139</strong> &nbsp;|&nbsp; Demorado: <strong>357</strong></div>
+        <div style="font-size:0.82rem;margin-bottom:4px;">R&#225;pido: <strong>167</strong> (25.0%) &nbsp;|&nbsp; Normal: <strong>139</strong> (20.8%) &nbsp;|&nbsp; Demorado: <strong>363</strong> (54.3%)</div>
         <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:6px;margin-top:8px;font-weight:600;">Follow-up</div>
-        <div style="font-size:0.82rem;margin-bottom:4px;">Bom: <strong>50</strong> &nbsp;|&nbsp; Falhou: <strong>9</strong> &nbsp;|&nbsp; N/A: <strong>595</strong></div>
+        <div style="font-size:0.82rem;margin-bottom:4px;">Bom: <strong>49</strong> &nbsp;|&nbsp; Falhou: <strong>11</strong> &nbsp;|&nbsp; N/A: <strong>609</strong></div>
         <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:6px;margin-top:8px;font-weight:600;">Escrita</div>
-        <div style="font-size:0.82rem;">Boa: <strong>655</strong> &nbsp;|&nbsp; Regular: <strong>0</strong> &nbsp;|&nbsp; Ruim: <strong>0</strong></div>
+        <div style="font-size:0.82rem;">Boa: <strong>662</strong> (98.9%) &nbsp;|&nbsp; Regular: <strong>0</strong> &nbsp;|&nbsp; Ruim: <strong>0</strong></div>
       </div>
     </div>
   </div>
-  <div class="insight-box" style="background:#FEF2F2;border-left-color:var(--danger);">
-    <strong>Principal oportunidade:</strong> <strong>357 conversas (53.9%)</strong> tiveram tempo de resposta classificado como demorado. Este &#233; o principal vetor de melhoria &#8212; resposta mais r&#225;pida tem correla&#231;&#227;o direta com taxa de convers&#227;o. A tend&#234;ncia de Abril (3.2h) mostra que a melhoria j&#225; est&#225; acontecendo.
+  <div class="insight-box critical">
+    <strong>Principal oportunidade:</strong> <strong>363 conversas (54.3%)</strong> tiveram tempo de resposta classificado como demorado. Este &#233; o principal vetor de melhoria &#8212; resposta mais r&#225;pida tem correla&#231;&#227;o direta com taxa de convers&#227;o. A tend&#234;ncia de Abril (3.3h) mostra que a melhoria j&#225; est&#225; acontecendo.
   </div>
 </div>
 
 <div class="comp-grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr))">
   <div class="comp-card">
     <h4>Severidade Alta</h4>
-    <div class="comp-value" style="color:var(--danger);font-size:1.5rem">21</div>
-    <div class="comp-sub">3.2% das conversas</div>
+    <div class="comp-value" style="color:var(--danger);font-size:1.5rem">23</div>
+    <div class="comp-sub">3.4% das conversas</div>
   </div>
   <div class="comp-card">
     <h4>Severidade M&#233;dia</h4>
-    <div class="comp-value" style="color:var(--warning);font-size:1.5rem">288</div>
-    <div class="comp-sub">43.5% das conversas</div>
+    <div class="comp-value" style="color:var(--warning);font-size:1.5rem">290</div>
+    <div class="comp-sub">43.3% das conversas</div>
   </div>
   <div class="comp-card">
     <h4>Severidade Baixa</h4>
-    <div class="comp-value" style="color:var(--success);font-size:1.5rem">353</div>
-    <div class="comp-sub">53.3% das conversas</div>
+    <div class="comp-value" style="color:var(--success);font-size:1.5rem">356</div>
+    <div class="comp-sub">53.2% das conversas</div>
   </div>
   <div class="comp-card">
-    <h4>Dura&#231;&#227;o M&#233;dia</h4>
-    <div class="comp-value" style="color:var(--primary);font-size:1.5rem">~14.5h</div>
-    <div class="comp-sub">por conversa</div>
+    <h4>Follow-up Efetivo</h4>
+    <div class="comp-value" style="color:var(--primary);font-size:1.5rem">49</div>
+    <div class="comp-sub">vs. 11 que falharam</div>
   </div>
 </div>
 
 <!-- SECTION 4: Gabriella Hille -->
-<h2>Gabriella Hille &#8212; Desempenho (Abril)</h2>
-
-<div class="insight-box" style="background:#EEF2FF;border-left-color:var(--primary);">
-  <strong>Amostra preliminar:</strong> Gabriella Hille possui apenas <strong>12 conversas</strong> registradas, todas em Abril de 2026. As m&#233;tricas abaixo devem ser interpretadas como indica&#231;&#227;o inicial, n&#227;o como avalia&#231;&#227;o definitiva. Volume insuficiente para conclus&#245;es estat&#237;sticas robustas.
-</div>
+<h2>Gabriella Hille &#8212; Desempenho Detalhado (Fev&#8211;Abr)</h2>
 
 <div class="kpi-grid">
   <div class="kpi-card" style="border-left-color:var(--primary)">
-    <div class="kpi-value" style="color:var(--primary)">12</div>
-    <div class="kpi-label">Conversas V&#225;lidas (Abr)</div>
+    <div class="kpi-value" style="color:var(--primary)">215</div>
+    <div class="kpi-label">Conversas V&#225;lidas (Fev&#8211;Abr)</div>
   </div>
   <div class="kpi-card" style="border-left-color:var(--success)">
-    <div class="kpi-value success">2</div>
-    <div class="kpi-label">Convertidas (16.7%)</div>
+    <div class="kpi-value success">38</div>
+    <div class="kpi-label">Convertidas (17.7%)</div>
   </div>
   <div class="kpi-card" style="border-left-color:var(--warning)">
-    <div class="kpi-value warning">6.8</div>
+    <div class="kpi-value warning">6.7</div>
     <div class="kpi-label">Quality Score M&#233;dio</div>
   </div>
   <div class="kpi-card" style="border-left-color:#10b981">
-    <div class="kpi-value" style="color:#10b981">~1.9h</div>
+    <div class="kpi-value" style="color:#10b981">~7.2h</div>
     <div class="kpi-label">Tempo M&#233;dio 1&#170; Resposta</div>
   </div>
 </div>
 
 <div class="card">
-  <h3>Indicadores &#8212; Gabriella (Abril)</h3>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:8px;">
+  <div class="chart-row">
     <div>
-      <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:6px;font-weight:600;">Esfor&#231;o</div>
-      <div style="font-size:0.85rem;">Alto: <strong>0</strong> &nbsp;|&nbsp; M&#233;dio: <strong>11</strong> &nbsp;|&nbsp; Baixo: <strong>1</strong></div>
+      <h3>Distribui&#231;&#227;o de Esfor&#231;o</h3>
+      <div class="chart-container small">
+        <canvas id="chartEsforcoGabriela"></canvas>
+      </div>
     </div>
     <div>
-      <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:6px;font-weight:600;">Tempo de Resposta</div>
-      <div style="font-size:0.85rem;">R&#225;pido: <strong>3</strong> &nbsp;|&nbsp; Normal: <strong>2</strong> &nbsp;|&nbsp; Demorado: <strong>7</strong></div>
-    </div>
-    <div>
-      <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:6px;font-weight:600;">Escrita</div>
-      <div style="font-size:0.85rem;">Boa: <strong>12</strong> &nbsp;|&nbsp; Regular: <strong>0</strong> &nbsp;|&nbsp; Ruim: <strong>0</strong></div>
-    </div>
-    <div>
-      <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:6px;font-weight:600;">Severidade</div>
-      <div style="font-size:0.85rem;">Alta: <strong>0</strong> &nbsp;|&nbsp; M&#233;dia: <strong>7</strong> &nbsp;|&nbsp; Baixa: <strong>5</strong></div>
+      <div style="margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <div style="width:14px;height:14px;border-radius:50%;background:#ef4444;flex-shrink:0;"></div>
+          <span style="font-size:0.85rem;"><strong>26</strong> Esfor&#231;o Alto (12.1%)</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <div style="width:14px;height:14px;border-radius:50%;background:#f59e0b;flex-shrink:0;"></div>
+          <span style="font-size:0.85rem;"><strong>154</strong> Esfor&#231;o M&#233;dio (71.6%)</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <div style="width:14px;height:14px;border-radius:50%;background:#22c55e;flex-shrink:0;"></div>
+          <span style="font-size:0.85rem;"><strong>35</strong> Esfor&#231;o Baixo (16.3%)</span>
+        </div>
+      </div>
+      <div style="margin-bottom:12px;">
+        <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:6px;font-weight:600;">Tempo de Resposta</div>
+        <div style="font-size:0.82rem;margin-bottom:4px;">R&#225;pido: <strong>41</strong> (19.1%) &nbsp;|&nbsp; Normal: <strong>36</strong> (16.7%) &nbsp;|&nbsp; Demorado: <strong>138</strong> (64.2%)</div>
+        <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:6px;margin-top:8px;font-weight:600;">Follow-up</div>
+        <div style="font-size:0.82rem;margin-bottom:4px;">Bom: <strong>15</strong> &nbsp;|&nbsp; Falhou: <strong>5</strong> &nbsp;|&nbsp; N/A: <strong>195</strong></div>
+        <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:6px;margin-top:8px;font-weight:600;">Escrita</div>
+        <div style="font-size:0.82rem;">Boa: <strong>212</strong> (98.6%) &nbsp;|&nbsp; Regular: <strong>0</strong> &nbsp;|&nbsp; Ruim: <strong>0</strong></div>
+      </div>
     </div>
   </div>
-  <div class="insight-box positive" style="margin-top:16px;">
-    <strong>Ponto positivo:</strong> Gabriella responde em m&#233;dia em <strong>1.9h</strong>, consideravelmente mais r&#225;pido do que a m&#233;dia de Daniela no per&#237;odo (5.6h). Escrita 100% classificada como boa. Nenhum caso de severidade alta. Esses indicadores iniciais s&#227;o promissores.
+  <div class="insight-box critical">
+    <strong>Principal oportunidade:</strong> <strong>138 conversas (64.2%)</strong> tiveram tempo de resposta classificado como demorado &#8212; propor&#231;&#227;o superior &#224; de Daniela (54.3%). Com taxa de convers&#227;o de 17.7% j&#225; acima da m&#233;dia, melhorar o tempo de resposta pode elevar significativamente este indicador.
+  </div>
+</div>
+
+<div class="comp-grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr))">
+  <div class="comp-card">
+    <h4>Severidade Alta</h4>
+    <div class="comp-value" style="color:var(--danger);font-size:1.5rem">11</div>
+    <div class="comp-sub">5.1% das conversas</div>
+  </div>
+  <div class="comp-card">
+    <h4>Severidade M&#233;dia</h4>
+    <div class="comp-value" style="color:var(--warning);font-size:1.5rem">107</div>
+    <div class="comp-sub">49.8% das conversas</div>
+  </div>
+  <div class="comp-card">
+    <h4>Severidade Baixa</h4>
+    <div class="comp-value" style="color:var(--success);font-size:1.5rem">97</div>
+    <div class="comp-sub">45.1% das conversas</div>
+  </div>
+  <div class="comp-card">
+    <h4>Follow-up Efetivo</h4>
+    <div class="comp-value" style="color:var(--primary);font-size:1.5rem">15</div>
+    <div class="comp-sub">vs. 5 que falharam</div>
   </div>
 </div>
 
@@ -330,11 +365,11 @@ tr:hover { background:var(--primary-bg); }
     <h4>Taxa de Convers&#227;o</h4>
     <div style="display:flex;justify-content:center;gap:24px;margin:8px 0;">
       <div>
-        <div class="comp-value" style="color:var(--primary)">15.6%</div>
+        <div class="comp-value" style="color:var(--primary)">15.5%</div>
         <div class="comp-sub">Daniela</div>
       </div>
       <div>
-        <div class="comp-value" style="color:#10b981">16.7%</div>
+        <div class="comp-value" style="color:#10b981">17.7%</div>
         <div class="comp-sub">Gabriella</div>
       </div>
     </div>
@@ -347,7 +382,7 @@ tr:hover { background:var(--primary-bg); }
         <div class="comp-sub">Daniela</div>
       </div>
       <div>
-        <div class="comp-value" style="color:#10b981">6.8</div>
+        <div class="comp-value" style="color:#10b981">6.7</div>
         <div class="comp-sub">Gabriella</div>
       </div>
     </div>
@@ -356,11 +391,11 @@ tr:hover { background:var(--primary-bg); }
     <h4>Tempo 1&#170; Resposta</h4>
     <div style="display:flex;justify-content:center;gap:24px;margin:8px 0;">
       <div>
-        <div class="comp-value" style="color:var(--warning);font-size:1.4rem">5.6h</div>
+        <div class="comp-value" style="color:var(--warning);font-size:1.4rem">5.4h</div>
         <div class="comp-sub">Daniela</div>
       </div>
       <div>
-        <div class="comp-value" style="color:var(--success);font-size:1.4rem">1.9h</div>
+        <div class="comp-value" style="color:var(--danger);font-size:1.4rem">7.2h</div>
         <div class="comp-sub">Gabriella</div>
       </div>
     </div>
@@ -369,11 +404,11 @@ tr:hover { background:var(--primary-bg); }
     <h4>Volume (Fev&#8211;Abr)</h4>
     <div style="display:flex;justify-content:center;gap:24px;margin:8px 0;">
       <div>
-        <div class="comp-value" style="color:var(--primary)">662</div>
+        <div class="comp-value" style="color:var(--primary)">669</div>
         <div class="comp-sub">Daniela</div>
       </div>
       <div>
-        <div class="comp-value" style="color:var(--text-secondary);font-size:1.5rem">12</div>
+        <div class="comp-value" style="color:var(--text-secondary);font-size:1.5rem">215</div>
         <div class="comp-sub">Gabriella</div>
       </div>
     </div>
@@ -381,7 +416,7 @@ tr:hover { background:var(--primary-bg); }
 </div>
 
 <div class="insight-box">
-  <strong>Interpreta&#231;&#227;o do comparativo:</strong> Os volumes s&#227;o incompar&#225;veis (662 vs. 12 conversas). A taxa de convers&#227;o de Gabriella (16.7%) &#233; ligeiramente superior, mas com base em amostra muito pequena. O destaque objetivo &#233; o <strong>tempo de resposta de Gabriella (1.9h)</strong>, que pode ser uma refer&#234;ncia de SLA interno para a equipe.
+  <strong>Interpreta&#231;&#227;o do comparativo:</strong> Com 215 conversas no per&#237;odo, Gabriella j&#225; tem volume suficiente para avalia&#231;&#227;o estat&#237;stica robusta. A taxa de convers&#227;o de Gabriella (17.7%) supera a de Daniela (15.5%). O quality score &#233; ligeiramente inferior (6.7 vs. 6.9). O ponto de aten&#231;&#227;o de Gabriella &#233; o <strong>tempo de resposta (7.2h)</strong>, superior ao de Daniela (5.4h) &#8212; nenhuma das duas atingiu ainda o SLA ideal de 2h.
 </div>
 
 <!-- SECTION 6: Motivos de Perda -->
@@ -396,33 +431,33 @@ tr:hover { background:var(--primary-bg); }
       <div style="margin-bottom:12px;">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
           <div style="width:14px;height:14px;border-radius:50%;background:#94a3b8;flex-shrink:0;"></div>
-          <span style="font-size:0.85rem;"><strong>378</strong> Indefinido (67.8%)</span>
+          <span style="font-size:0.85rem;"><strong>459</strong> Indefinido (61.1%)</span>
         </div>
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
           <div style="width:14px;height:14px;border-radius:50%;background:#ef4444;flex-shrink:0;"></div>
-          <span style="font-size:0.85rem;"><strong>109</strong> Sem retorno da cl&#237;nica (19.5%)</span>
+          <span style="font-size:0.85rem;"><strong>134</strong> Sem retorno da cl&#237;nica (17.8%)</span>
         </div>
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
           <div style="width:14px;height:14px;border-radius:50%;background:#f59e0b;flex-shrink:0;"></div>
-          <span style="font-size:0.85rem;"><strong>48</strong> Pre&#231;o (8.6%)</span>
+          <span style="font-size:0.85rem;"><strong>67</strong> Pre&#231;o (8.9%)</span>
         </div>
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
           <div style="width:14px;height:14px;border-radius:50%;background:#3b82f6;flex-shrink:0;"></div>
-          <span style="font-size:0.85rem;"><strong>12</strong> Conv&#234;nio (2.2%)</span>
+          <span style="font-size:0.85rem;"><strong>13</strong> Conv&#234;nio (1.7%)</span>
         </div>
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
           <div style="width:14px;height:14px;border-radius:50%;background:#8b5cf6;flex-shrink:0;"></div>
-          <span style="font-size:0.85rem;"><strong>11</strong> Fora do escopo (2.0%)</span>
+          <span style="font-size:0.85rem;"><strong>17</strong> Fora do escopo (2.3%)</span>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
           <div style="width:14px;height:14px;border-radius:50%;background:#64748b;flex-shrink:0;"></div>
-          <span style="font-size:0.85rem;"><strong>9</strong> Outros (hor&#225;rio, desist&#234;ncia, outro) (1.6%)</span>
+          <span style="font-size:0.85rem;"><strong>16</strong> Outros (hor&#225;rio, desist&#234;ncia, outro) (2.1%)</span>
         </div>
       </div>
     </div>
   </div>
   <div class="insight-box critical">
-    <strong>Aten&#231;&#227;o:</strong> <strong>109 conversas perdidas (19.5%)</strong> foram classificadas como <em>sem_retorno_da_clinica</em> &#8212; ou seja, o lead chegou, mas a equipe n&#227;o retornou. S&#227;o oportunidades perdidas por falha operacional, n&#227;o por inten&#231;&#227;o do paciente. Este &#233; o segundo maior motivo de perda (excluindo indefinido).
+    <strong>Aten&#231;&#227;o:</strong> <strong>134 conversas perdidas (17.8%)</strong> foram classificadas como <em>sem_retorno_da_clinica</em> &#8212; o lead chegou, mas a equipe n&#227;o retornou. S&#227;o oportunidades perdidas por falha operacional, n&#227;o por inten&#231;&#227;o do paciente. Daniela responde por 108 destas ocorr&#234;ncias e Gabriella por 32.
   </div>
 </div>
 
@@ -434,71 +469,62 @@ tr:hover { background:var(--primary-bg); }
         <th>Total</th>
         <th>Daniela</th>
         <th>Gabriella</th>
-        <th>% do Total (perda+N/A)</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td>Indefinido / N&#227;o aplica</td>
-        <td>378</td>
-        <td>370</td>
-        <td>8</td>
-        <td>67.8%</td>
+        <td>459</td>
+        <td>369</td>
+        <td>109</td>
       </tr>
       <tr>
         <td><span class="badge badge-danger">Sem retorno da cl&#237;nica</span></td>
-        <td>109</td>
-        <td>109</td>
-        <td>0</td>
-        <td>19.5%</td>
+        <td>134</td>
+        <td>108</td>
+        <td>32</td>
       </tr>
       <tr>
         <td><span class="badge badge-warning">Pre&#231;o</span></td>
-        <td>48</td>
-        <td>48</td>
-        <td>0</td>
-        <td>8.6%</td>
-      </tr>
-      <tr>
-        <td><span class="badge badge-gray">Conv&#234;nio</span></td>
-        <td>12</td>
-        <td>12</td>
-        <td>0</td>
-        <td>2.2%</td>
+        <td>67</td>
+        <td>51</td>
+        <td>23</td>
       </tr>
       <tr>
         <td><span class="badge badge-gray">Fora do escopo</span></td>
-        <td>11</td>
-        <td>11</td>
-        <td>0</td>
-        <td>2.0%</td>
+        <td>17</td>
+        <td>13</td>
+        <td>6</td>
       </tr>
       <tr>
-        <td><span class="badge badge-gray">Hor&#225;rio</span></td>
-        <td>4</td>
-        <td>3</td>
+        <td><span class="badge badge-gray">Conv&#234;nio</span></td>
+        <td>13</td>
+        <td>12</td>
         <td>1</td>
-        <td>0.7%</td>
       </tr>
       <tr>
         <td><span class="badge badge-gray">Outro</span></td>
+        <td>8</td>
+        <td>6</td>
+        <td>3</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-gray">Hor&#225;rio</span></td>
+        <td>5</td>
         <td>4</td>
-        <td>4</td>
-        <td>0</td>
-        <td>0.7%</td>
+        <td>2</td>
       </tr>
       <tr>
         <td><span class="badge badge-gray">Desist&#234;ncia</span></td>
         <td>3</td>
         <td>2</td>
         <td>1</td>
-        <td>0.5%</td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<!-- SECTION 7: Casos Críticos -->
+<!-- SECTION 7: Casos Críticos Daniela -->
 <h2>Casos Cr&#237;ticos &#8212; Severity Alta (Daniela)</h2>
 
 <div class="case-card">
@@ -546,11 +572,59 @@ tr:hover { background:var(--primary-bg); }
   </div>
 </div>
 
-<!-- SECTION 8: Destaques Positivos -->
+<!-- SECTION 8: Casos Críticos Gabriella -->
+<h2>Casos Cr&#237;ticos &#8212; Severity Alta (Gabriella)</h2>
+
+<div class="case-card">
+  <h3>manipulare gerente Anna Paula &#8212; Quality 3.0</h3>
+  <p>O paciente iniciou a conversa solicitando informa&#231;&#245;es sobre um pagamento e o envio de comprovante, mas a atendente n&#227;o deu continuidade ao atendimento. Sem retorno da cl&#237;nica ap&#243;s o contato inicial.</p>
+  <div style="margin:8px 0;font-size:0.82rem;color:var(--text-secondary);">01/04/2026 &nbsp;|&nbsp; Loss: sem_retorno_da_clinica &nbsp;|&nbsp; <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/4483" target="_blank" style="color:var(--primary);">Ver conversa #4483</a></div>
+  <div class="insight-box critical" style="margin-top:8px;">
+    <strong>Falha:</strong> Demanda administrativa (comprovante de pagamento) ignorada. Paciente n&#227;o recebeu confirma&#231;&#227;o nem encaminhamento adequado.
+  </div>
+</div>
+
+<div class="case-card">
+  <h3>misty-haze-959 &#8212; Quality 3.0</h3>
+  <p>O paciente enviou or&#231;amentos e perguntou se estavam dentro do que ele buscava, mas n&#227;o obteve resposta da atendente. Contato com inten&#231;&#227;o clara de avali&#231;&#227;o e poss&#237;vel contrata&#231;&#227;o abandonado.</p>
+  <div style="margin:8px 0;font-size:0.82rem;color:var(--text-secondary);">08/04/2026 &nbsp;|&nbsp; Loss: sem_retorno_da_clinica &nbsp;|&nbsp; <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/4660" target="_blank" style="color:var(--primary);">Ver conversa #4660</a></div>
+  <div class="insight-box critical" style="margin-top:8px;">
+    <strong>Falha:</strong> Or&#231;amento enviado pelo paciente sem nenhuma resposta. Lead qualificado perdido por aus&#234;ncia total de retorno.
+  </div>
+</div>
+
+<div class="case-card">
+  <h3>Let&#237;cia Pavanello Junkes &#8212; Quality 4.2</h3>
+  <p>A paciente entrou em contato para discutir a <strong>medica&#231;&#227;o da m&#227;e e a pr&#243;xima aplica&#231;&#227;o</strong>. A atendente respondeu algumas perguntas, mas n&#227;o conseguiu resolver as preocupa&#231;&#245;es da paciente sobre o tratamento.</p>
+  <div style="margin:8px 0;font-size:0.82rem;color:var(--text-secondary);">24/02/2026 &nbsp;|&nbsp; Loss: indefinido &nbsp;|&nbsp; <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/777" target="_blank" style="color:var(--primary);">Ver conversa #777</a></div>
+  <div class="insight-box critical" style="margin-top:8px;">
+    <strong>Falha:</strong> D&#250;vidas cl&#237;nicas sobre medicamento e aplica&#231;&#227;o n&#227;o foram resolvidas. Paciente ficou sem orienta&#231;&#227;o clara sobre o tratamento em andamento.
+  </div>
+</div>
+
+<div class="case-card">
+  <h3>Eliane &#8212; Quality 4.2</h3>
+  <p>O paciente pediu a <strong>nota fiscal</strong> e depois solicitou <strong>agendamento de retorno</strong>. A atendente respondeu sobre a nota, mas n&#227;o atendeu ao pedido de agendamento.</p>
+  <div style="margin:8px 0;font-size:0.82rem;color:var(--text-secondary);">04/03/2026 &nbsp;|&nbsp; Loss: sem_retorno_da_clinica &nbsp;|&nbsp; <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/1036" target="_blank" style="color:var(--primary);">Ver conversa #1036</a></div>
+  <div class="insight-box critical" style="margin-top:8px;">
+    <strong>Falha:</strong> Atendimento parcial &#8212; resolveu a nota fiscal mas n&#227;o concluiu o agendamento de retorno, que era a solicita&#231;&#227;o principal. Paciente saiu sem confirma&#231;&#227;o de consulta.
+  </div>
+</div>
+
+<div class="case-card">
+  <h3>Dra Sandra Dermato Secretara &#8212; Quality 4.5</h3>
+  <p>O paciente perguntou sobre a <strong>disponibilidade de Dysport</strong> e fez v&#225;rias solicita&#231;&#245;es, mas a atendente n&#227;o respondeu a essas perguntas espec&#237;ficas.</p>
+  <div style="margin:8px 0;font-size:0.82rem;color:var(--text-secondary);">02/03/2026 &nbsp;|&nbsp; Loss: sem_retorno_da_clinica &nbsp;|&nbsp; <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/953" target="_blank" style="color:var(--primary);">Ver conversa #953</a></div>
+  <div class="insight-box critical" style="margin-top:8px;">
+    <strong>Falha:</strong> Demanda espec&#237;fica sobre produto (Dysport) sem resposta. M&#233;dica parceira sem retorno adequado &#8212; risco relacional al&#233;m da convers&#227;o perdida.
+  </div>
+</div>
+
+<!-- SECTION 9: Destaques Positivos -->
 <h2>Destaques Positivos &#8212; Melhores Atendimentos (Daniela)</h2>
 
 <div class="insight-box positive">
-  <strong>Qualidade de escrita e conversa&#231;&#227;o:</strong> Daniela demonstra contin&#250;a evolu&#231;&#227;o na qualidade do atendimento. As 5 melhores convers&#245;es foram classificadas com quality 9.25 a 10 &#8212; n&#237;vel de excel&#234;ncia.
+  <strong>Qualidade de escrita e conversa&#231;&#227;o:</strong> Daniela demonstra cont&#237;nua evolu&#231;&#227;o na qualidade do atendimento. As 5 melhores convers&#245;es foram classificadas com quality 9.25 a 10 &#8212; n&#237;vel de excel&#234;ncia.
 </div>
 
 <div class="card">
@@ -583,28 +657,29 @@ tr:hover { background:var(--primary-bg); }
   <div style="margin:8px 0;font-size:0.82rem;color:var(--text-secondary);">09/02/2026 &nbsp;|&nbsp; <a href="https://chat.digital-ai.tech/app/accounts/4/conversations/389" target="_blank" style="color:var(--primary);">Ver conversa #389</a></div>
 </div>
 
-<!-- SECTION 9: Análise e Próximos Passos -->
+<!-- SECTION 10: Análise e Próximos Passos -->
 <h2>An&#225;lise e Pr&#243;ximos Passos</h2>
 
 <div class="card">
   <h3>Diagn&#243;stico Principal</h3>
-  <p style="font-size:0.9rem;margin-bottom:12px;">Daniela Peixer &#233; a <strong>atendente principal da DermaClinic</strong> com amplo volume e demonstra evolu&#231;&#227;o consistente: quality score est&#225;vel (6.9), tempo de resposta em queda expressiva e escrita sem pontos negativos. O principal desafio est&#225; na gest&#227;o de fila &#8212; 53.9% das conversas com resposta demorada e 109 casos de <em>sem_retorno_da_clinica</em>.</p>
+  <p style="font-size:0.9rem;margin-bottom:12px;">Daniela Peixer &#233; a <strong>atendente principal da DermaClinic</strong> com amplo volume (669 conversas) e demonstra evolu&#231;&#227;o consistente: quality score est&#225;vel (6.9), tempo de resposta em queda expressiva e escrita sem pontos negativos. Gabriella Hille, com 215 conversas no per&#237;odo, j&#225; apresenta taxa de convers&#227;o superior (17.7% vs. 15.5%), mas com tempo de resposta mais alto (7.2h vs. 5.4h) e 5 casos cr&#237;ticos identificados.</p>
 
   <div class="insight-box critical">
-    <strong>Padr&#227;o cr&#237;tico identificado:</strong> <strong>109 conversas (16.5% do total de Daniela)</strong> foram perdidas por aus&#234;ncia de retorno da cl&#237;nica. Este n&#250;mero representa oportunidades concretas de agendamento que saem da fila sem atendimento &#8212; n&#227;o por rejei&#231;&#227;o do paciente, mas por falha operacional.
+    <strong>Padr&#227;o cr&#237;tico &#8212; sem_retorno_da_clinica:</strong> <strong>134 conversas (108 Daniela + 32 Gabriella)</strong> foram perdidas por aus&#234;ncia de retorno. S&#227;o oportunidades concretas de agendamento que sa&#237;ram da fila sem atendimento &#8212; n&#227;o por rejei&#231;&#227;o do paciente, mas por falha operacional. Gabriella tem taxa proporcional de sem_retorno mais elevada: 32 de 215 (14.9%) vs. 108 de 669 (16.1%) de Daniela.
   </div>
 
   <div class="insight-box positive">
-    <strong>Evolu&#231;&#227;o de Daniela &#233; real:</strong> A compara&#231;&#227;o Fev&#8594;Mar&#8594;Abr mostra progress&#227;o em tr&#234;s m&#233;tricas simultaneamente: tempo de resposta (-55%), taxa de convers&#227;o (+31%) e quality score (+0.2). Essa trajet&#243;ria deve ser reconhecida e encorajada.
+    <strong>Evolu&#231;&#227;o de Daniela &#233; real:</strong> A compara&#231;&#227;o Fev&#8594;Mar&#8594;Abr mostra progress&#227;o em tr&#234;s m&#233;tricas simultaneamente: tempo de resposta (-53%), taxa de convers&#227;o (+43%) e quality score (+0.1). Gabriella tamb&#233;m melhorou convers&#227;o: 17.0% &#8594; 16.2% &#8594; 21.6% em Abril.
   </div>
 
   <h3>A&#231;&#245;es Recomendadas</h3>
   <ul style="font-size:0.85rem;padding-left:20px;line-height:2;">
-    <li>Implementar <strong>SLA de resposta de 2 horas</strong> para todas as conversas entrantes &#8212; Gabriella j&#225; opera nesse n&#237;vel (1.9h), tornando-o uma refer&#234;ncia interna via&#225;vel</li>
-    <li>Investigar e <strong>mapear as 109 conversas sem_retorno</strong> para identificar padr&#245;es: hor&#225;rio do dia, dia da semana, tipo de demanda &#8212; e criar regras de triagem autom&#225;tica</li>
+    <li>Implementar <strong>SLA de resposta de 2 horas</strong> para ambas as atendentes &#8212; nenhuma das duas atingiu esse patamar consistentemente no per&#237;odo</li>
+    <li>Investigar e <strong>mapear as 134 conversas sem_retorno</strong> para identificar padr&#245;es: hor&#225;rio do dia, dia da semana, tipo de demanda &#8212; e criar regras de triagem autom&#225;tica</li>
+    <li>Para Gabriella: <strong>treinar gest&#227;o de demandas m&#233;ltiplas</strong> (casos Eliane e Dra. Sandra) &#8212; atendimento parcial &#233; t&#227;o problem&#225;tico quanto aus&#234;ncia total</li>
     <li>Criar <strong>script de resposta r&#225;pida</strong> para demandas fora do escopo (como nevus) com encaminhamento ativo para parceiros ou agendamento de consulta diagn&#243;stica</li>
-    <li>Reconhecer formalmente os <strong>atendimentos nota 10</strong> de Daniela (Nicolle, Eduardo, Rossana, Cilmara) como padr&#227;o de excelˆencia e usar como refer&#234;ncia de treinamento</li>
-    <li>Ampliar o volume de Gabriella para valida&#231;&#227;o est&#225;stica e ava&#8203;lia&#231;&#227;o mais precisa &#8212; os indicadores iniciais (1.9h de resposta, 16.7% convers&#227;o) justificam maior exposi&#231;&#227;o</li>
+    <li>Reconhecer formalmente os <strong>atendimentos nota 10</strong> de Daniela (Nicolle, Eduardo, Rossana, Cilmara) como padr&#227;o de excel&#234;ncia e usar como refer&#234;ncia de treinamento para Gabriella</li>
+    <li>Com taxa de convers&#227;o de 17.7%, <strong>ampliar progressivamente o volume de Gabriella</strong> &#8212; os dados justificam maior exposi&#231;&#227;o, desde que o tempo de resposta seja trabalhado em paralelo</li>
   </ul>
 </div>
 
@@ -612,11 +687,12 @@ tr:hover { background:var(--primary-bg); }
 <div class="methodology">
   <p><strong>Metodologia</strong></p>
   <p>Per&#237;odo: Fevereiro a Abril 2026</p>
-  <p>Fonte: atendimento_analysis &#8212; 675 conversas v&#225;lidas (662 Daniela Peixer + 12 Gabriella Hille + 1 outro)</p>
+  <p>Fonte: atendimento_analysis &#8212; 897 conversas v&#225;lidas no per&#237;odo (excluded IS NOT TRUE)</p>
+  <p>Crit&#233;rio de atribui&#231;&#227;o: <strong>attendants array</strong> &#8212; inclui todas as conversas em que a atendente enviou ao menos 1 mensagem, independente de estar como respons&#225;vel designada. Difere do relat&#243;rio anterior que usava primary_attendant.</p>
+  <p>Overlap: 46 conversas com participa&#231;&#227;o de ambas as atendentes. Daniela: 669 conversas | Gabriella: 215 conversas | &#218;nicas combinadas: 838.</p>
   <p>An&#225;lise via IA (LLM) com crit&#233;rios padronizados: qualidade, esfor&#231;o, tempo de resposta, follow-up, escrita, severidade e motivo de perda</p>
   <p>Quality score: escala 0&#8211;10 por avalia&#231;&#227;o multidimensional automatizada</p>
-  <p>Gabriella Hille: apenas Abril (12 conversas) &#8212; dados insuficientes para tend&#234;ncia</p>
-  <p>Gerado por: DAI &#8212; Digital AI em 31/10/2026</p>
+  <p>Gerado por: DAI &#8212; Digital AI em 02/11/2026</p>
 </div>
 
 </div><!-- /container -->
@@ -627,15 +703,15 @@ tr:hover { background:var(--primary-bg); }
 <script>
   function initCharts() {
     // Chart 1: Esforço Daniela
-    var elEsforco = document.getElementById('chartEsforcoDaniela');
-    if (elEsforco) {
-      var ctxE = elEsforco.getContext('2d');
-      new Chart(ctxE, {
+    var elEsforcoDaniela = document.getElementById('chartEsforcoDaniela');
+    if (elEsforcoDaniela) {
+      var ctxED = elEsforcoDaniela.getContext('2d');
+      new Chart(ctxED, {
         type: 'doughnut',
         data: {
-          labels: ['Esforço Alto', 'Esforço Médio', 'Esforço Baixo'],
+          labels: ['Esfor\u00e7o Alto', 'Esfor\u00e7o M\u00e9dio', 'Esfor\u00e7o Baixo'],
           datasets: [{
-            data: [76, 471, 115],
+            data: [77, 474, 118],
             backgroundColor: ['#ef4444', '#f59e0b', '#22c55e'],
             borderColor: ['#ffffff', '#ffffff', '#ffffff'],
             borderWidth: 3,
@@ -662,16 +738,52 @@ tr:hover { background:var(--primary-bg); }
       });
     }
 
-    // Chart 2: Motivos de Perda
+    // Chart 2: Esforço Gabriela
+    var elEsforcoGabriela = document.getElementById('chartEsforcoGabriela');
+    if (elEsforcoGabriela) {
+      var ctxEG = elEsforcoGabriela.getContext('2d');
+      new Chart(ctxEG, {
+        type: 'doughnut',
+        data: {
+          labels: ['Esfor\u00e7o Alto', 'Esfor\u00e7o M\u00e9dio', 'Esfor\u00e7o Baixo'],
+          datasets: [{
+            data: [26, 154, 35],
+            backgroundColor: ['#ef4444', '#f59e0b', '#22c55e'],
+            borderColor: ['#ffffff', '#ffffff', '#ffffff'],
+            borderWidth: 3,
+            hoverOffset: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '65%',
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(c) {
+                  var total = c.dataset.data.reduce(function(a, b) { return a + b; }, 0);
+                  var pct = Math.round(c.parsed / total * 100);
+                  return ' ' + c.label + ': ' + c.parsed + ' (' + pct + '%)';
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Chart 3: Motivos de Perda
     var elPerda = document.getElementById('chartMotivoPerda');
     if (elPerda) {
       var ctxP = elPerda.getContext('2d');
       new Chart(ctxP, {
         type: 'doughnut',
         data: {
-          labels: ['Indefinido', 'Sem retorno', 'Preço', 'Convênio', 'Fora escopo', 'Outros'],
+          labels: ['Indefinido', 'Sem retorno', 'Pre\u00e7o', 'Conv\u00eanio', 'Fora escopo', 'Outros'],
           datasets: [{
-            data: [378, 109, 48, 12, 11, 9],
+            data: [459, 134, 67, 13, 17, 16],
             backgroundColor: ['#94a3b8', '#ef4444', '#f59e0b', '#3b82f6', '#8b5cf6', '#64748b'],
             borderColor: ['#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff'],
             borderWidth: 3,
@@ -709,7 +821,6 @@ tr:hover { background:var(--primary-bg); }
       onReady:     initCharts
     });
   } else {
-    // Fallback: auth gate not loaded, show content and init charts directly
     var gl = document.getElementById('gate-loading');
     var gd = document.getElementById('gate-direct');
     var ga = document.getElementById('app');
