@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DermaClinic &#8212; Funil de Leads e Convers&#227;o 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --primary: #2D52EF;
+  --primary-light: #4F6FF7;
+  --primary-bg: #EEF2FF;
+  --success: #22c55e;
+  --success-light: #dcfce7;
+  --warning: #f59e0b;
+  --warning-light: #fef3c7;
+  --danger: #ef4444;
+  --danger-light: #fee2e2;
+  --text: #1e293b;
+  --text-secondary: #64748b;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+.container { max-width:1200px; margin:0 auto; padding:24px 16px; }
+h1 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.75rem; font-weight:700; color:var(--primary); margin-bottom:4px; }
+h2 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.25rem; font-weight:600; color:var(--text); margin:32px 0 16px; padding-bottom:8px; border-bottom:2px solid var(--primary); }
+h3 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1rem; font-weight:600; margin:16px 0 8px; }
+.subtitle { color:var(--text-secondary); font-size:0.9rem; margin-bottom:24px; }
+.kpi-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:24px; }
+.kpi-card { background:var(--card); border-radius:12px; padding:16px; box-shadow:var(--shadow); border-left:4px solid var(--primary); }
+.kpi-value { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.6rem; font-weight:700; color:var(--primary); }
+.kpi-value.success { color:var(--success); }
+.kpi-value.warning { color:var(--warning); }
+.kpi-value.danger { color:var(--danger); }
+.kpi-label { font-size:0.8rem; color:var(--text-secondary); margin-top:4px; }
+.kpi-sub { font-size:0.72rem; color:var(--text-secondary); margin-top:2px; }
+.card { background:var(--card); border-radius:12px; padding:20px; box-shadow:var(--shadow); margin-bottom:16px; }
+.chart-container { position:relative; height:340px; margin:16px 0; width:100%; }
+.chart-container.tall { height:400px; }
+.insight-box { background:#FFFBEB; border-left:4px solid var(--warning); padding:12px 16px; border-radius:0 8px 8px 0; margin:12px 0; font-size:0.85rem; color:#334155; }
+.insight-box.critical { background:#FEF2F2; border-left-color:var(--danger); }
+.insight-box.positive { background:#F0FDF4; border-left-color:var(--success); }
+.insight-box.info { background:var(--primary-bg); border-left-color:var(--primary); }
+table { width:100%; border-collapse:collapse; font-size:0.8rem; }
+th { background:var(--primary); color:#fff; padding:8px 10px; text-align:left; font-weight:600; position:sticky; top:0; }
+td { padding:6px 10px; border-bottom:1px solid var(--border); }
+tr:hover { background:var(--primary-bg); }
+.table-wrapper { max-height:500px; overflow-y:auto; border-radius:8px; border:1px solid var(--border); }
+td.partial { opacity:0.5; font-style:italic; }
+.methodology { background:#f1f5f9; border-radius:8px; padding:16px; font-size:0.8rem; color:#475569; margin-top:24px; }
+.methodology p { margin-bottom:4px; }
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media (max-width:768px) {
+  .kpi-grid { grid-template-columns:repeat(2, 1fr); }
+  .two-col { grid-template-columns:1fr; }
+  h1 { font-size:1.3rem; }
+  table { font-size:0.7rem; }
+  .chart-container { height:280px; }
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+<div class="report-body">
+<div class="container">
+
+<h1>DermaClinic &#8212; Panorama 2026</h1>
+<p class="subtitle">Funil de Leads e Convers&#227;o | Janeiro a Outubro 2026 | Dermatologia | Gerado em 02/11/2026</p>
+
+<!-- KPI CARDS -->
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-value">7.958</div>
+    <div class="kpi-label">Leads Totais (Fev&#8211;Out)</div>
+    <div class="kpi-sub">M&#233;dia: 884/m&#234;s</div>
+  </div>
+  <div class="kpi-card" style="border-left-color:var(--success)">
+    <div class="kpi-value success">2.680</div>
+    <div class="kpi-label">Agendamentos (Jan&#8211;Out)</div>
+    <div class="kpi-sub">M&#233;dia: 268/m&#234;s</div>
+  </div>
+  <div class="kpi-card" style="border-left-color:var(--warning)">
+    <div class="kpi-value warning">1.773</div>
+    <div class="kpi-label">Consultas Realizadas</div>
+    <div class="kpi-sub">Taxa comparecimento: 66,2%</div>
+  </div>
+  <div class="kpi-card" style="border-left-color:#8b5cf6">
+    <div class="kpi-value" style="color:#8b5cf6">R$ 2.125.900</div>
+    <div class="kpi-label">Receita Dermatologia</div>
+    <div class="kpi-sub">Fev&#8211;Out | Fonte: financeiro executado</div>
+  </div>
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-value">527</div>
+    <div class="kpi-label">Pacientes Novos (Jan&#8211;Out)</div>
+    <div class="kpi-sub">1&#186; agendamento na cl&#237;nica</div>
+  </div>
+  <div class="kpi-card" style="border-left-color:var(--danger)">
+    <div class="kpi-value danger">116</div>
+    <div class="kpi-label">No-shows no Ano</div>
+    <div class="kpi-sub">4,3% dos agendamentos</div>
+  </div>
+  <div class="kpi-card" style="border-left-color:#06b6d4">
+    <div class="kpi-value" style="color:#06b6d4">1.106</div>
+    <div class="kpi-label">Leads de Tr&#225;fego Pago</div>
+    <div class="kpi-sub">13,9% do total de leads</div>
+  </div>
+  <div class="kpi-card" style="border-left-color:var(--success)">
+    <div class="kpi-value success">R$ 1.886</div>
+    <div class="kpi-label">Ticket M&#233;dio Geral</div>
+    <div class="kpi-sub">Receita / consultas realizadas</div>
+  </div>
+</div>
+
+<!-- SECTION 1: Evolucao Mensal de Leads -->
+<h2>1. Evolu&#231;&#227;o Mensal de Leads</h2>
+<div class="card">
+  <div class="chart-container tall">
+    <canvas id="chartLeads"></canvas>
+  </div>
+  <div class="insight-box info">
+    <strong>Leitura:</strong> Leads se estabilizaram entre 900&#8211;1.000/m&#234;s desde junho. O pico de maio (1.182) foi anomalia pontual. A base de leads &#233; consistente &#8212; o crescimento vem da melhoria na convers&#227;o, n&#227;o do volume.
+  </div>
+</div>
+
+<!-- SECTION 2: Agendamentos vs Realizados -->
+<h2>2. Agendamentos vs Consultas Realizadas</h2>
+<div class="card">
+  <div class="chart-container tall">
+    <canvas id="chartAgendamentos"></canvas>
+  </div>
+  <div class="insight-box positive">
+    <strong>Tend&#234;ncia positiva:</strong> Agendamentos subiram de 56 (Jan*) para 345 (Out). Consultas realizadas atingiram pico em agosto (259). A taxa de comparecimento melhorou no 2&#186; semestre, sugerindo efeito dos recalls autom&#225;ticos (Clara).
+  </div>
+</div>
+
+<!-- SECTION 3: Pacientes Novos vs Retorno -->
+<h2>3. Pacientes Novos vs Retorno</h2>
+<div class="card">
+  <div class="chart-container">
+    <canvas id="chartNovosRetorno"></canvas>
+  </div>
+  <div class="insight-box">
+    <strong>Insight:</strong> Pacientes novos est&#227;o est&#225;veis (~50&#8211;64/m&#234;s) desde abril. O crescimento dos agendamentos vem majoritariamente de pacientes em RETORNO. Isso indica boa reten&#231;&#227;o, mas baixa capta&#231;&#227;o de novos.
+  </div>
+</div>
+
+<!-- SECTION 4: Receita e Ticket Medio -->
+<h2>4. Receita Mensal e Ticket M&#233;dio</h2>
+<div class="card">
+  <div class="chart-container tall">
+    <canvas id="chartReceita"></canvas>
+  </div>
+  <div class="insight-box positive">
+    <strong>Crescimento de receita:</strong> De R$ 183.900 (Fev) para R$ 301.895 (Set), crescimento de 64%. O ticket m&#233;dio subiu de R$ 1.242 (Fev) para R$ 1.415 (Set). Receita &#233; fun&#231;&#227;o direta de agenda cheia &#8212; mais consultas realizadas = mais receita.
+  </div>
+</div>
+
+<!-- SECTION 5: Trafego Pago -->
+<h2>5. Contribui&#231;&#227;o do Tr&#225;fego Pago</h2>
+<div class="card">
+  <div class="chart-container">
+    <canvas id="chartPago"></canvas>
+  </div>
+  <div class="insight-box info">
+    <strong>Crescimento constante:</strong> Leads de tr&#225;fego pago subiram de 74 (Fev) para 184 (Out) &#8212; crescimento de 149%. A participa&#231;&#227;o no total de leads subiu de 10,6% para 18,4%. &#201; a &#250;nica fonte de leads com crescimento mon&#244;tono.
+  </div>
+</div>
+
+<!-- SECTION 6: No-Show e Cancelamentos -->
+<h2>6. No-Shows e Cancelamentos</h2>
+<div class="card">
+  <div class="chart-container">
+    <canvas id="chartNoShow"></canvas>
+  </div>
+  <div class="insight-box positive">
+    <strong>Melhoria no 2&#186; semestre:</strong> No-shows ca&#237;ram de 22&#8211;23 (Jun&#8211;Jul) para 9&#8211;12 (Set&#8211;Out). Prov&#225;vel efeito do sistema de confirma&#231;&#227;o autom&#225;tica (Clara). Cancelamentos aumentaram (reflexo do maior volume de agendamentos), mas a taxa relativa se manteve.
+  </div>
+</div>
+
+<!-- SECTION 7: Receita por Medica -->
+<h2>7. Receita por M&#233;dica</h2>
+<div class="card">
+  <div class="chart-container">
+    <canvas id="chartMedicas"></canvas>
+  </div>
+</div>
+
+<!-- SECTION 8: Tabela Resumo -->
+<h2>8. Tabela Consolidada Mensal</h2>
+<div class="table-wrapper">
+<table>
+  <thead>
+    <tr>
+      <th>M&#234;s</th>
+      <th>Leads</th>
+      <th>Novos</th>
+      <th>Retorno</th>
+      <th>Agend.</th>
+      <th>Realiz.</th>
+      <th>No-show</th>
+      <th>Cancel.</th>
+      <th>Pac. Novos</th>
+      <th>Receita</th>
+      <th>TM</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="partial">Jan*</td>
+      <td class="partial">&#8212;</td>
+      <td class="partial">&#8212;</td>
+      <td class="partial">&#8212;</td>
+      <td class="partial">56</td>
+      <td class="partial">25</td>
+      <td class="partial">5</td>
+      <td class="partial">24</td>
+      <td class="partial">19</td>
+      <td class="partial">&#8212;</td>
+      <td class="partial">&#8212;</td>
+    </tr>
+    <tr><td>Fev</td><td>696</td><td>546</td><td>150</td><td>222</td><td>148</td><td>5</td><td>17</td><td>57</td><td>R$ 183.900</td><td>R$ 1.243</td></tr>
+    <tr><td>Mar</td><td>736</td><td>477</td><td>167</td><td>274</td><td>180</td><td>9</td><td>20</td><td>56</td><td>R$ 241.830</td><td>R$ 1.343</td></tr>
+    <tr><td>Abr</td><td>602</td><td>404</td><td>115</td><td>270</td><td>195</td><td>6</td><td>18</td><td>59</td><td>R$ 265.684</td><td>R$ 1.362</td></tr>
+    <tr><td>Mai</td><td>1.182</td><td>553</td><td>432</td><td>221</td><td>151</td><td>12</td><td>35</td><td>49</td><td>R$ 169.880</td><td>R$ 1.125</td></tr>
+    <tr><td>Jun</td><td>940</td><td>445</td><td>330</td><td>296</td><td>181</td><td>22</td><td>61</td><td>57</td><td>R$ 224.445</td><td>R$ 1.240</td></tr>
+    <tr><td>Jul</td><td>926</td><td>510</td><td>273</td><td>306</td><td>175</td><td>23</td><td>69</td><td>64</td><td>R$ 194.725</td><td>R$ 1.113</td></tr>
+    <tr><td>Ago</td><td>951</td><td>518</td><td>275</td><td>367</td><td>259</td><td>13</td><td>67</td><td>64</td><td>R$ 275.480</td><td>R$ 1.064</td></tr>
+    <tr><td>Set</td><td>927</td><td>517</td><td>288</td><td>323</td><td>226</td><td>9</td><td>58</td><td>52</td><td>R$ 301.895</td><td>R$ 1.336</td></tr>
+    <tr><td>Out</td><td>998</td><td>621</td><td>303</td><td>345</td><td>233</td><td>12</td><td>73</td><td>50</td><td>R$ 268.061</td><td>R$ 1.150</td></tr>
+  </tbody>
+  <tfoot>
+    <tr style="font-weight:700; background:#EEF2FF;">
+      <td>Total</td>
+      <td>7.958</td>
+      <td>4.591</td>
+      <td>2.333</td>
+      <td>2.680</td>
+      <td>1.773</td>
+      <td>116</td>
+      <td>442</td>
+      <td>527</td>
+      <td>R$ 2.125.900</td>
+      <td>R$ 1.199</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+<p style="font-size:0.72rem; color:var(--text-secondary); margin-top:8px;">* Janeiro: dados parciais (rec&#233;s). Leads dispon&#237;veis a partir de Fevereiro. TM = Receita / Consultas Realizadas.</p>
+
+<!-- SECTION 9: Insights e Recomendacoes -->
+<h2>9. Insights e Recomenda&#231;&#245;es</h2>
+
+<div class="insight-box positive">
+  <strong>1. Reten&#231;&#227;o &#233; o motor do crescimento.</strong> Pacientes novos est&#227;o est&#225;veis (~53/m&#234;s), mas agendamentos cresceram 55% (222&#8594;345). O crescimento vem de pacientes retornando. Programa de fidelidade e recall p&#243;s-consulta s&#227;o mais eficientes que mais tr&#225;fego pago para escalar receita.
+</div>
+
+<div class="insight-box">
+  <strong>2. Tr&#225;fego pago n&#227;o pode parar.</strong> &#201; a &#250;nica fonte de leads com crescimento mon&#244;tono (+149% no ano). Represent 18,4% do total em outubro. Se parar, leads caem. Foco: otimizar para CONVERS&#195;O, n&#227;o volume.
+</div>
+
+<div class="insight-box critical">
+  <strong>3. Maio: volume sem qualidade.</strong> 1.182 leads (maior do ano) mas receita M&#205;NIMA (R$ 169.880). Leads de baixa qualidade n&#227;o convertem. Valida a import&#226;ncia de qualificar antes de agendar.
+</div>
+
+<div class="insight-box positive">
+  <strong>4. No-shows sob controle.</strong> De 22&#8211;23 (Jun&#8211;Jul) para 9&#8211;12 (Set&#8211;Out). O sistema de confirma&#231;&#227;o autom&#225;tica (Clara) est&#225; funcionando. ROI claro da automa&#231;&#227;o.
+</div>
+
+<div class="insight-box info">
+  <strong>5. Receita = agenda cheia.</strong> O ticket m&#233;dio oscila pouco (~R$ 1.100&#8211;1.400). Para aumentar receita, o caminho &#233; mais agendamentos realizados. O gargalo &#233; capacidade de atendimento, n&#227;o pre&#231;o.
+</div>
+
+<!-- Nota Metodologica -->
+<div class="methodology">
+  <h3 style="margin-top:0; font-size:0.9rem;">Nota Metodol&#243;gica</h3>
+  <p><strong>Leads:</strong> Total de entradas no topo do funil (conversas iniciadas via WhatsApp/Chatwoot). Fonte: <code>dashboard_metrics.funnel_topo</code>.</p>
+  <p><strong>Novos vs Retorno:</strong> Classificados pelo dashboard com base no hist&#243;rico de intera&#231;&#245;es. &#201; diferente de "paciente novo" no Feegow.</p>
+  <p><strong>Pacientes Novos:</strong> Pacientes com <code>primeiro_agendamento = 1</code> no Feegow (nunca agendaram antes). Fonte: <code>feegow_appointments</code>.</p>
+  <p><strong>Agendamentos:</strong> Total de agendamentos criados no Feegow (todos os status). Fonte: <code>feegow_appointments</code> excluindo profissional_id = 4 (fototerapia).</p>
+  <p><strong>Realizados:</strong> Agendamentos com status "Atendido" (status_id = 3). Fonte: <code>feegow_appointments</code>.</p>
+  <p><strong>Receita:</strong> Procedimentos executados (<code>is_executado = true</code>, <code>is_cancelado IS DISTINCT FROM true</code>). Regime de caixa por <code>data_execucao</code>. Fonte: <code>feegow_financial_records</code>.</p>
+  <p><strong>Ticket M&#233;dio:</strong> Receita total / consultas realizadas no m&#234;s.</p>
+  <p><strong>Janeiro:</strong> Dados parciais (per&#237;odo de recesso). Dashboard metrics indispon&#237;vel &#8212; dados de agendamentos via Feegow apenas.</p>
+</div>
+
+</div><!-- container -->
+</div><!-- report-body -->
+</div><!-- app -->
+
+<script>
+var MESES = ['Jan*','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out'];
+
+var DATA = {
+  leads:      [null, 696, 736, 602, 1182, 940, 926, 951, 927, 998],
+  novos:      [null, 546, 477, 404,  553, 445, 510, 518, 517, 621],
+  retorno:    [null, 150, 167, 115,  432, 330, 273, 275, 288, 303],
+  agendamentos: [56, 222, 274, 270, 221, 296, 306, 367, 323, 345],
+  realizados:   [25, 148, 180, 195, 151, 181, 175, 259, 226, 233],
+  noshow:       [ 5,   5,   9,   6,  12,  22,  23,  13,   9,  12],
+  cancelados:   [24,  17,  20,  18,  35,  61,  69,  67,  58,  73],
+  remarcados:   [ 2,  52,  54,  31,  16,  12,  29,  13,  20,  15],
+  pacNovos:     [19,  57,  56,  59,  49,  57,  64,  64,  52,  50],
+  receita:  [null, 183900, 241830, 265684, 169880, 224445, 194725, 275480, 301895, 268061],
+  raquel:   [null, 114840, 103280, 128750,  77215, 108090,  57162, 147050,  98770, 124580],
+  eoda:     [null,  68360, 131950, 130934,  85535, 115955, 127488, 111785, 188725, 140981],
+  pagos:    [null,  74, 80, 92, 116, 127, 148, 130, 155, 184]
+};
+
+function fmt(n) {
+  if (n == null) return '';
+  return n.toLocaleString('pt-BR');
+}
+function fmtBRL(n) {
+  if (n == null) return '';
+  return 'R$ ' + (n/1000).toFixed(0) + 'k';
+}
+
+var chartDefaults = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { position: 'bottom', labels: { usePointStyle: true, padding: 12, font: { size: 11 } } }
+  }
+};
+
+// 1. Leads
+(function(){
+  var ctx = document.getElementById('chartLeads');
+  if (!ctx) return;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: MESES.slice(1),
+      datasets: [
+        { label: 'Leads Novos', data: DATA.novos.slice(1), backgroundColor: '#4F6FF7', borderRadius: 4, stack: 'stack0' },
+        { label: 'Leads Retorno', data: DATA.retorno.slice(1), backgroundColor: '#93c5fd', borderRadius: 4, stack: 'stack0' }
+      ]
+    },
+    options: Object.assign({}, chartDefaults, {
+      scales: {
+        x: { stacked: true, grid: { display: false } },
+        y: { stacked: true, beginAtZero: true, title: { display: true, text: 'Leads' } }
+      },
+      plugins: Object.assign({}, chartDefaults.plugins, {
+        tooltip: {
+          callbacks: {
+            afterBody: function(items) {
+              var idx = items[0].dataIndex + 1;
+              var total = (DATA.novos[idx]||0) + (DATA.retorno[idx]||0);
+              return 'Total: ' + fmt(total);
+            }
+          }
+        }
+      })
+    })
+  });
+})();
+
+// 2. Agendamentos vs Realizados
+(function(){
+  var ctx = document.getElementById('chartAgendamentos');
+  if (!ctx) return;
+  var taxaComp = DATA.agendamentos.map(function(a, i) {
+    return a > 0 ? Math.round(DATA.realizados[i] / a * 100) : 0;
+  });
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: MESES,
+      datasets: [
+        { label: 'Agendamentos', data: DATA.agendamentos, backgroundColor: '#cbd5e1', borderRadius: 4, yAxisID: 'y' },
+        { label: 'Realizados', data: DATA.realizados, backgroundColor: '#22c55e', borderRadius: 4, yAxisID: 'y' },
+        { label: 'Taxa Comparec. %', data: taxaComp, type: 'line', borderColor: '#8b5cf6', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#8b5cf6', yAxisID: 'y1', tension: 0.3 }
+      ]
+    },
+    options: Object.assign({}, chartDefaults, {
+      scales: {
+        x: { grid: { display: false } },
+        y: { beginAtZero: true, title: { display: true, text: 'Quantidade' }, position: 'left' },
+        y1: { beginAtZero: true, max: 100, title: { display: true, text: '%' }, position: 'right', grid: { drawOnChartArea: false } }
+      }
+    })
+  });
+})();
+
+// 3. Pacientes Novos vs Retorno (agendamentos)
+(function(){
+  var ctx = document.getElementById('chartNovosRetorno');
+  if (!ctx) return;
+  var retornoCalc = DATA.agendamentos.map(function(a, i) {
+    return a - DATA.pacNovos[i];
+  });
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: MESES,
+      datasets: [
+        { label: 'Pac. Novos (1o agend.)', data: DATA.pacNovos, backgroundColor: '#f59e0b', borderRadius: 4, stack: 'stack0' },
+        { label: 'Retorno / Existentes', data: retornoCalc, backgroundColor: '#22c55e', borderRadius: 4, stack: 'stack0' }
+      ]
+    },
+    options: Object.assign({}, chartDefaults, {
+      scales: {
+        x: { stacked: true, grid: { display: false } },
+        y: { stacked: true, beginAtZero: true, title: { display: true, text: 'Agendamentos' } }
+      },
+      plugins: Object.assign({}, chartDefaults.plugins, {
+        tooltip: {
+          callbacks: {
+            afterBody: function(items) {
+              var idx = items[0].dataIndex;
+              return 'Total: ' + fmt(DATA.agendamentos[idx]);
+            }
+          }
+        }
+      })
+    })
+  });
+})();
+
+// 4. Receita + Ticket Medio
+(function(){
+  var ctx = document.getElementById('chartReceita');
+  if (!ctx) return;
+  var receitaClean = DATA.receita.slice(1);
+  var realizClean = DATA.realizados.slice(1);
+  var tm = receitaClean.map(function(r, i) {
+    return r && realizClean[i] ? Math.round(r / realizClean[i]) : 0;
+  });
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: MESES.slice(1),
+      datasets: [
+        { label: 'Receita (R$)', data: receitaClean, backgroundColor: '#8b5cf6', borderRadius: 4, yAxisID: 'y' },
+        { label: 'Ticket Medio (R$)', data: tm, type: 'line', borderColor: '#f59e0b', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#f59e0b', yAxisID: 'y1', tension: 0.3 }
+      ]
+    },
+    options: Object.assign({}, chartDefaults, {
+      scales: {
+        x: { grid: { display: false } },
+        y: { beginAtZero: true, title: { display: true, text: 'Receita (R$)' }, position: 'left',
+          ticks: { callback: function(v) { return 'R$' + (v/1000).toFixed(0) + 'k'; } }
+        },
+        y1: { beginAtZero: true, title: { display: true, text: 'Ticket Medio (R$)' }, position: 'right', grid: { drawOnChartArea: false },
+          ticks: { callback: function(v) { return 'R$' + fmt(v); } }
+        }
+      }
+    })
+  });
+})();
+
+// 5. Trafego Pago
+(function(){
+  var ctx = document.getElementById('chartPago');
+  if (!ctx) return;
+  var pagosClean = DATA.pagos.slice(1);
+  var leadsClean = DATA.leads.slice(1);
+  var pctPago = pagosClean.map(function(p, i) {
+    return leadsClean[i] ? Math.round(p / leadsClean[i] * 1000) / 10 : 0;
+  });
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: MESES.slice(1),
+      datasets: [
+        { label: 'Leads Trafego Pago', data: pagosClean, backgroundColor: '#06b6d4', borderRadius: 4, yAxisID: 'y' },
+        { label: '% do Total de Leads', data: pctPago, type: 'line', borderColor: '#ef4444', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#ef4444', yAxisID: 'y1', tension: 0.3 }
+      ]
+    },
+    options: Object.assign({}, chartDefaults, {
+      scales: {
+        x: { grid: { display: false } },
+        y: { beginAtZero: true, title: { display: true, text: 'Leads Pago' }, position: 'left' },
+        y1: { beginAtZero: true, max: 30, title: { display: true, text: '%' }, position: 'right', grid: { drawOnChartArea: false } }
+      }
+    })
+  });
+})();
+
+// 6. No-Show e Cancelamentos
+(function(){
+  var ctx = document.getElementById('chartNoShow');
+  if (!ctx) return;
+  var noshowRate = DATA.agendamentos.map(function(a, i) {
+    return a > 0 ? Math.round(DATA.noshow[i] / a * 1000) / 10 : 0;
+  });
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: MESES,
+      datasets: [
+        { label: 'No-shows', data: DATA.noshow, backgroundColor: '#ef4444', borderRadius: 4, yAxisID: 'y' },
+        { label: 'Cancelados', data: DATA.cancelados, backgroundColor: '#f59e0b', borderRadius: 4, yAxisID: 'y' },
+        { label: 'Remarcados', data: DATA.remarcados, backgroundColor: '#94a3b8', borderRadius: 4, yAxisID: 'y' },
+        { label: 'Taxa No-show %', data: noshowRate, type: 'line', borderColor: '#ef4444', backgroundColor: 'transparent', borderWidth: 2, borderDash: [5,3], pointRadius: 4, pointBackgroundColor: '#ef4444', yAxisID: 'y1', tension: 0.3 }
+      ]
+    },
+    options: Object.assign({}, chartDefaults, {
+      scales: {
+        x: { grid: { display: false } },
+        y: { beginAtZero: true, title: { display: true, text: 'Quantidade' }, position: 'left' },
+        y1: { beginAtZero: true, max: 15, title: { display: true, text: '%' }, position: 'right', grid: { drawOnChartArea: false } }
+      }
+    })
+  });
+})();
+
+// 7. Receita por Medica
+(function(){
+  var ctx = document.getElementById('chartMedicas');
+  if (!ctx) return;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: MESES.slice(1),
+      datasets: [
+        { label: 'Dra. Raquel', data: DATA.raquel.slice(1), backgroundColor: '#4F6FF7', borderRadius: 4, stack: 'stack0' },
+        { label: 'Dra. Eoda', data: DATA.eoda.slice(1), backgroundColor: '#f472b6', borderRadius: 4, stack: 'stack0' }
+      ]
+    },
+    options: Object.assign({}, chartDefaults, {
+      scales: {
+        x: { stacked: true, grid: { display: false } },
+        y: { stacked: true, beginAtZero: true, title: { display: true, text: 'Receita (R$)' },
+          ticks: { callback: function(v) { return 'R$' + (v/1000).toFixed(0) + 'k'; } }
+        }
+      },
+      plugins: Object.assign({}, chartDefaults.plugins, {
+        tooltip: {
+          callbacks: {
+            label: function(c) {
+              return c.dataset.label + ': R$ ' + c.parsed.y.toLocaleString('pt-BR');
+            },
+            afterBody: function(items) {
+              var idx = items[0].dataIndex + 1;
+              var total = (DATA.raquel[idx]||0) + (DATA.eoda[idx]||0);
+              return 'Total: R$ ' + total.toLocaleString('pt-BR');
+            }
+          }
+        }
+      })
+    })
+  });
+})();
+</script>
+
+</body>
+</html>
