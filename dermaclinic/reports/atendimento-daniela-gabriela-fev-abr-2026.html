@@ -41,7 +41,6 @@ h3 { font-family:'Plus Jakarta Sans',sans-serif; font-size:1rem; font-weight:600
 .insight-box.positive { background:#F0FDF4; border-left-color:var(--success); }
 .chart-container { position:relative; height:300px; margin:16px 0; width:100%; }
 .chart-container.small { height:260px; }
-.chart-container canvas { width:100% !important; height:100% !important; }
 table { width:100%; border-collapse:collapse; font-size:0.8rem; }
 th { background:var(--primary); color:#fff; padding:8px 10px; text-align:left; font-weight:600; position:sticky; top:0; }
 td { padding:6px 10px; border-bottom:1px solid var(--border); }
@@ -842,8 +841,8 @@ tr:hover { background:var(--primary-bg); }
 <script src="../../_shared/auth.js"></script>
 <script>
   function createCharts() {
-    // Destroy existing charts to avoid canvas reuse error
-    Chart.helpers.each(Chart.instances, function(instance) { instance.destroy(); });
+    // Destroy existing charts to avoid canvas reuse error (Chart.js v4 API)
+    Object.values(Chart.instances || {}).forEach(function(instance) { instance.destroy(); });
 
     // Chart 1: Esforço Daniela
     var elEsforcoDaniela = document.getElementById('chartEsforcoDaniela');
@@ -954,27 +953,6 @@ tr:hover { background:var(--primary-bg); }
     }
   }
 
-  // Wrapper robusto: espera o container ter layout real antes de criar charts
-  // Resolve o problema de charts com size 0 em iframes cross-origin (Chatwoot)
-  function initCharts() {
-    var container = document.querySelector('.chart-container');
-    if (!container || container.offsetWidth < 10) {
-      // Container ainda sem layout — retry com backoff
-      var retries = 0;
-      var maxRetries = 20;
-      var interval = setInterval(function() {
-        retries++;
-        var c = document.querySelector('.chart-container');
-        if ((c && c.offsetWidth >= 10) || retries >= maxRetries) {
-          clearInterval(interval);
-          createCharts();
-        }
-      }, 150);
-    } else {
-      createCharts();
-    }
-  }
-
   if (typeof initChatwootAuth === 'function') {
     initChatwootAuth({
       gateLoading: 'gate-loading',
@@ -982,7 +960,7 @@ tr:hover { background:var(--primary-bg); }
       gateApp:     'app',
       client:      'dermaclinic',
       report:      'atendimento-daniela-gabriela-fev-abr-2026',
-      onReady:     initCharts
+      onReady:     createCharts
     });
   } else {
     var gl = document.getElementById('gate-loading');
@@ -991,7 +969,7 @@ tr:hover { background:var(--primary-bg); }
     if (gl) gl.style.display = 'none';
     if (gd) gd.style.display = 'none';
     if (ga) ga.style.display = 'block';
-    initCharts();
+    createCharts();
   }
 </script>
 
