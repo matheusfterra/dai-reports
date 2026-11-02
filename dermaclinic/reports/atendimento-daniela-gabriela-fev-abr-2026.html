@@ -92,7 +92,7 @@ tr:hover { background:var(--primary-bg); }
   </div>
 </div>
 
-<div id="app" style="display:none;">
+<div id="app" class="hidden">
 <div class="report-body">
 <div class="container">
 
@@ -841,8 +841,6 @@ tr:hover { background:var(--primary-bg); }
 <script src="../../_shared/auth.js"></script>
 <script>
   function createCharts() {
-    // Destroy existing charts to avoid canvas reuse error (Chart.js v4 API)
-    Object.values(Chart.instances || {}).forEach(function(instance) { instance.destroy(); });
 
     // Chart 1: Esforço Daniela
     var elEsforcoDaniela = document.getElementById('chartEsforcoDaniela');
@@ -953,6 +951,21 @@ tr:hover { background:var(--primary-bg); }
     }
   }
 
+  // Wrapper: garante que #app fica visível antes de criar charts
+  function showAppAndCreateCharts(auth) {
+    var app = document.getElementById('app');
+    if (app) {
+      app.classList.remove('hidden');
+      app.style.display = 'block';
+    }
+    // Aguarda 1 frame para layout estabilizar, depois cria charts
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        createCharts();
+      });
+    });
+  }
+
   if (typeof initChatwootAuth === 'function') {
     initChatwootAuth({
       gateLoading: 'gate-loading',
@@ -960,16 +973,14 @@ tr:hover { background:var(--primary-bg); }
       gateApp:     'app',
       client:      'dermaclinic',
       report:      'atendimento-daniela-gabriela-fev-abr-2026',
-      onReady:     createCharts
+      onReady:     showAppAndCreateCharts
     });
   } else {
     var gl = document.getElementById('gate-loading');
     var gd = document.getElementById('gate-direct');
-    var ga = document.getElementById('app');
     if (gl) gl.style.display = 'none';
     if (gd) gd.style.display = 'none';
-    if (ga) ga.style.display = 'block';
-    createCharts();
+    showAppAndCreateCharts(null);
   }
 </script>
 
