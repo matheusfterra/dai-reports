@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sr. &#211;culos &#8212; Relat&#243;rio Trimestral Ago&#8211;Out 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --brand:#2D52EF; --brand-dark:#0F1F5C; --brand-mid:#1A39C4;
+  --brand-accent:#E8EEFF; --brand-light:#F0F4FF;
+  --bg:#F8FAFF; --surface:#FFFFFF; --border:#E2E8F0; --border-light:#EEF2F8;
+  --text-primary:#0F172A; --text-secondary:#475569; --text-muted:#94A3B8;
+  --success:#059669; --success-mid:#065F46; --iris-light:#ECFDF5;
+  --radius:12px; --radius-lg:16px;
+  --shadow-sm:0 1px 3px rgba(15,31,92,.06),0 1px 2px rgba(15,31,92,.04);
+  --shadow:0 4px 12px rgba(15,31,92,.08),0 2px 4px rgba(15,31,92,.04);
+  --shadow-lg:0 8px 24px rgba(15,31,92,.10),0 4px 8px rgba(15,31,92,.06);
+  --font-head:'Plus Jakarta Sans',sans-serif; --font-body:'DM Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px;scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,h5{font-family:var(--font-head)}
+.container{max-width:1180px;margin:0 auto;padding:0 24px}
+.section{margin-bottom:40px}
+
+/* Header */
+.header{background:var(--surface);border-bottom:1px solid var(--border);padding:20px 0;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.header-brand{display:flex;align-items:center;gap:14px}
+.header-logo{display:flex;align-items:center;flex-shrink:0}
+.header-logo img{height:34px;width:auto;display:block}
+.header-title{font-family:var(--font-head);font-weight:700;font-size:1.15rem;color:var(--brand-dark)}
+.header-sub{font-size:.82rem;color:var(--text-secondary);margin-top:1px}
+.header-badge{display:flex;align-items:center;gap:8px;background:var(--brand-light);border:1px solid #C7D7FD;border-radius:20px;padding:6px 14px;font-size:.78rem;font-family:var(--font-head);font-weight:600;color:var(--brand-dark)}
+.badge-dot{width:7px;height:7px;border-radius:50%;background:var(--brand);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* Period Banner */
+.period-banner{background:linear-gradient(135deg,var(--brand-dark) 0%,var(--brand-mid) 60%,var(--brand) 100%);color:#fff;padding:28px 0;margin-bottom:36px}
+.period-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}
+.period-title{font-size:1.45rem;font-weight:800;letter-spacing:-.5px}
+.period-sub{font-size:.88rem;opacity:.75;margin-top:4px}
+.period-pills{display:flex;gap:10px;flex-wrap:wrap}
+.period-pill{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:5px 14px;font-size:.78rem;font-weight:600;letter-spacing:.3px}
+
+/* Section header */
+.section-header{display:flex;align-items:baseline;gap:10px;margin-bottom:20px}
+.section-title{font-family:var(--font-head);font-size:1.05rem;font-weight:700;color:var(--brand-dark)}
+.section-divider{flex:1;height:1px;background:var(--border)}
+.section-meta{font-size:.78rem;color:var(--text-muted);font-weight:500}
+
+/* KPI Cards */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.kpi-grid{grid-template-columns:1fr}}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px 20px;box-shadow:var(--shadow-sm);position:relative;overflow:visible}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--brand);border-radius:var(--radius-lg) var(--radius-lg) 0 0}
+.kpi-label{font-size:.78rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.6px;display:flex;align-items:center;gap:6px}
+.kpi-value{font-family:var(--font-head);font-size:2rem;font-weight:800;color:var(--brand-dark);margin:8px 0 4px;line-height:1}
+.kpi-sub{font-size:.78rem;color:var(--text-secondary)}
+
+/* Tooltips */
+.tip{position:relative;display:inline-flex;align-items:center;cursor:help}
+.tip-icon{width:16px;height:16px;border-radius:50%;background:var(--border);color:var(--text-secondary);font-size:.65rem;font-weight:700;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-head);flex-shrink:0;transition:background .15s}
+.tip:hover .tip-icon{background:var(--brand);color:#fff}
+.tip-box{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:270px;background:var(--brand-dark);color:#fff;border-radius:var(--radius);padding:12px 14px;font-size:.75rem;line-height:1.55;pointer-events:none;opacity:0;transition:opacity .2s;z-index:9999;font-family:var(--font-body);font-weight:400;box-shadow:var(--shadow-lg)}
+.tip-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--brand-dark)}
+.tip:hover .tip-box{opacity:1}
+.tip.tip-right .tip-box{left:auto;right:0;transform:none}
+.tip.tip-right .tip-box::after{left:auto;right:14px;transform:none}
+
+/* Iris Strip */
+.iris-strip{background:linear-gradient(135deg,#047857 0%,var(--success) 100%);border-radius:var(--radius-lg);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:36px;box-shadow:0 4px 20px rgba(5,150,105,.20)}
+.iris-left{display:flex;align-items:center;gap:18px}
+.iris-avatar{width:54px;height:54px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
+.iris-name{font-family:var(--font-head);font-size:1.15rem;font-weight:800;color:#fff}
+.iris-desc{font-size:.82rem;color:rgba(255,255,255,.8);margin-top:2px}
+.iris-stats{display:flex;gap:32px;flex-wrap:wrap}
+.iris-stat{text-align:right}
+.iris-stat-val{font-family:var(--font-head);font-size:1.8rem;font-weight:800;color:#fff;line-height:1;display:flex;align-items:center;gap:6px;justify-content:flex-end}
+.iris-stat-label{font-size:.75rem;color:rgba(255,255,255,.75);margin-top:3px;font-weight:500}
+
+/* Chart card */
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm)}
+.chart-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap}
+.chart-card-title{font-family:var(--font-head);font-size:.95rem;font-weight:700;color:var(--brand-dark)}
+.chart-tabs{display:flex;gap:4px;background:var(--bg);border-radius:8px;padding:3px}
+.chart-tab{padding:5px 14px;border-radius:6px;border:none;background:transparent;font-family:var(--font-body);font-size:.78rem;font-weight:600;color:var(--text-secondary);cursor:pointer;transition:all .2s}
+.chart-tab.active{background:var(--surface);color:var(--brand);box-shadow:var(--shadow-sm)}
+.chart-wrap{position:relative;height:280px}
+
+/* Layout */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:768px){.two-col{grid-template-columns:1fr}}
+
+/* Table */
+.data-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.data-table th{font-family:var(--font-head);font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-secondary);padding:10px 14px;border-bottom:2px solid var(--border);text-align:left;white-space:nowrap}
+.data-table td{padding:12px 14px;border-bottom:1px solid var(--border-light);vertical-align:middle}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:var(--bg)}
+.num{text-align:right!important;font-variant-numeric:tabular-nums;font-weight:600}
+.hl{font-weight:700;color:var(--brand-dark)}
+.table-scroll{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border)}
+
+/* Agent avatars */
+.agent-name{display:flex;align-items:center;gap:10px}
+.agent-avatar{width:32px;height:32px;border-radius:50%;font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-head)}
+.av-iris{background:var(--iris-light);color:var(--success-mid)}
+.av-thais{background:#EDE9FE;color:#4C1D95}
+.av-laisa{background:#FEE2E2;color:#991B1B}
+
+/* Channel legend */
+.ch-legend{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.ch-item{display:flex;align-items:center;gap:10px}
+.ch-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.ch-label{font-size:.82rem;color:var(--text-secondary);flex:1}
+.ch-val{font-size:.82rem;font-weight:700;color:var(--brand-dark)}
+
+/* Info box */
+.info-box{background:var(--brand-light);border:1px solid #C7D7FD;border-radius:var(--radius);padding:14px 18px;font-size:.82rem;color:var(--brand-dark);margin-top:16px;display:flex;gap:10px;align-items:flex-start}
+
+/* Footer */
+.footer{background:var(--surface);border-top:1px solid var(--border);padding:24px 0;margin-top:60px}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.footer-brand{display:flex;align-items:center;gap:8px}
+.footer-logo{display:flex;align-items:center}
+.footer-logo img{height:22px;width:auto;display:block}
+.footer-meta{font-size:.75rem;color:var(--text-muted)}
+.footer-note{font-size:.72rem;color:var(--text-muted);text-align:right}
+.main-content{padding:36px 0 0}
+code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,92,.08);padding:1px 4px;border-radius:3px}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container">
+    <div class="header-inner">
+      <div class="header-brand">
+        <div class="header-logo"><img src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-horizontal.svg" alt="Digital AI" onerror="this.style.display='none'"></div>
+        <div>
+          <div class="header-title">Sr. &#211;culos &#8212; Relat&#243;rio Trimestral</div>
+          <div class="header-sub">Intelig&#234;ncia operacional &#183; Agosto a Outubro 2026</div>
+        </div>
+      </div>
+      <div class="header-badge"><div class="badge-dot"></div>Atualizado 03/11/2026</div>
+    </div>
+  </div>
+</header>
+
+<div class="period-banner">
+  <div class="container">
+    <div class="period-inner">
+      <div>
+        <img src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-negative.svg" alt="Digital AI" style="height:28px;width:auto;display:block;margin-bottom:12px;opacity:.9" onerror="this.style.display='none'">
+        <div class="period-title">01 Agosto &#8212; 31 Outubro 2026</div>
+        <div class="period-sub">92 dias monitorados &#183; 3 meses completos</div>
+      </div>
+      <div class="period-pills">
+        <div class="period-pill">7 canais ativos</div>
+        <div class="period-pill">WhatsApp + Instagram</div>
+        <div class="period-pill">Atendimento 24/7</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container"><div class="main-content">
+
+<!-- KPIs -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">Vis&#227;o Geral do Trimestre</span>
+    <div class="section-divider"></div>
+    <span class="section-meta">Ago&#8211;Out 2026 &#183; 92 dias</span>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Conversas <span class="tip"><span class="tip-icon">?</span><div class="tip-box">Total de conversas abertas no trimestre, considerando todos os canais de atendimento (WhatsApp + Instagram).</div></span></div>
+      <div class="kpi-value">29.850</div>
+      <div class="kpi-sub">conversas no trimestre</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Contatos &#218;nicos <span class="tip"><span class="tip-icon">?</span><div class="tip-box">N&#250;mero de contatos distintos que enviaram pelo menos uma mensagem no trimestre.</div></span></div>
+      <div class="kpi-value">29.731</div>
+      <div class="kpi-sub">contatos atendidos no trimestre</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Mensagens <span class="tip"><span class="tip-icon">?</span><div class="tip-box">Total de mensagens trocadas no trimestre (excluindo mensagens de sistema).<br>Recebidas: 171.640<br>Enviadas: 195.142</div></span></div>
+      <div class="kpi-value">366.782</div>
+      <div class="kpi-sub">171.640 recebidas + 195.142 enviadas</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">M&#233;dia Di&#225;ria <span class="tip tip-right"><span class="tip-icon">?</span><div class="tip-box">M&#233;dia de conversas abertas por dia ao longo do trimestre (29.850 &#247; 92 dias).</div></span></div>
+      <div class="kpi-value">324</div>
+      <div class="kpi-sub">conversas por dia em m&#233;dia</div>
+    </div>
+  </div>
+</div>
+
+<!-- Iris Strip -->
+<div class="iris-strip">
+  <div class="iris-left">
+    <div class="iris-avatar">&#129302;</div>
+    <div>
+      <div class="iris-name">Iris &#183; Agente de IA</div>
+      <div class="iris-desc">Atendimento autom&#225;tico &#183; dispon&#237;vel 24h por dia</div>
+    </div>
+  </div>
+  <div class="iris-stats">
+    <div class="iris-stat">
+      <div class="iris-stat-val">88.966</div>
+      <div class="iris-stat-label">mensagens enviadas pela Iris</div>
+    </div>
+    <div class="iris-stat">
+      <div class="iris-stat-val">45,6%</div>
+      <div class="iris-stat-label">das mensagens enviadas</div>
+    </div>
+    <div class="iris-stat">
+      <div class="iris-stat-val">90,8%</div>
+      <div class="iris-stat-label">das conversas com participa&#231;&#227;o da IA</div>
+    </div>
+  </div>
+</div>
+
+<!-- Volumetria -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">Volumetria</span>
+    <div class="section-divider"></div>
+    <span class="section-meta">Ago&#8211;Out 2026 &#183; 92 dias monitorados</span>
+  </div>
+  <div class="chart-card" style="margin-bottom:16px">
+    <div class="chart-card-header">
+      <div class="chart-card-title">Volume Di&#225;rio de Conversas &#8212; 92 dias</div>
+      <div style="display:flex;gap:14px;font-size:.78rem;align-items:center">
+        <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;border-radius:3px;background:#2D52EF;display:inline-block"></span>Di&#225;rio</span>
+        <span style="display:flex;align-items:center;gap:5px"><span style="width:18px;height:2px;background:#059669;display:inline-block"></span>M&#233;dia 7d</span>
+      </div>
+    </div>
+    <div class="chart-wrap" style="height:260px"><canvas id="dailyChart"></canvas></div>
+  </div>
+  <div class="chart-card">
+    <div class="chart-card-header">
+      <div class="chart-card-title">M&#233;tricas por M&#234;s <span style="font-weight:400;font-size:.78rem;color:var(--text-muted)">(3 meses completos)</span></div>
+      <div class="chart-tabs">
+        <button class="chart-tab active" onclick="switchTab(this,'conv')">Conversas</button>
+        <button class="chart-tab" onclick="switchTab(this,'msg')">Mensagens</button>
+        <button class="chart-tab" onclick="switchTab(this,'all')">Geral</button>
+      </div>
+    </div>
+    <div class="chart-wrap"><canvas id="monthlyChart"></canvas></div>
+  </div>
+  <div style="margin-top:16px">
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>M&#234;s</th>
+            <th class="num">Conversas</th>
+            <th class="num">Contatos</th>
+            <th class="num">Msgs Recebidas</th>
+            <th class="num">Msgs Enviadas</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Agosto/26</td><td class="num">9.178</td><td class="num">9.704</td><td class="num">54.130</td><td class="num">61.385</td></tr>
+          <tr><td>Setembro/26</td><td class="num">10.695</td><td class="num">11.242</td><td class="num">60.297</td><td class="num">71.173</td></tr>
+          <tr><td>Outubro/26</td><td class="num">9.977</td><td class="num">10.768</td><td class="num">57.213</td><td class="num">62.584</td></tr>
+          <tr style="font-weight:700;background:var(--brand-light)"><td><strong>Total Trimestre</strong></td><td class="num hl">29.850</td><td class="num hl">29.731</td><td class="num hl">171.640</td><td class="num hl">195.142</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Distribuicao por Canal -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">Distribui&#231;&#227;o por Canal</span>
+    <div class="section-divider"></div>
+    <span class="section-meta">7 canais &#183; Trimestre Ago&#8211;Out 2026</span>
+  </div>
+  <div class="two-col">
+    <div class="chart-card">
+      <div class="chart-card-header"><div class="chart-card-title">Conversas por Tipo de Canal</div></div>
+      <div class="chart-wrap" style="height:220px"><canvas id="channelChart"></canvas></div>
+      <div class="ch-legend">
+        <div class="ch-item"><div class="ch-dot" style="background:#2D52EF"></div><div class="ch-label">WhatsApp Vendas (4 n&#250;meros)</div><div class="ch-val">18.166 (60,9%)</div></div>
+        <div class="ch-item"><div class="ch-dot" style="background:#7C3AED"></div><div class="ch-label">WhatsApp P&#243;s-venda</div><div class="ch-val">7.164 (24,0%)</div></div>
+        <div class="ch-item"><div class="ch-dot" style="background:#ea580c"></div><div class="ch-label">Instagram DM (@sr.oculos)</div><div class="ch-val">4.517 (15,1%)</div></div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-card-header"><div class="chart-card-title">Top Canais por Volume (Inbox)</div></div>
+      <div style="overflow-x:auto;max-height:340px;overflow-y:auto">
+        <table class="data-table">
+          <thead><tr><th>Canal</th><th class="num">Conversas</th><th class="num">%</th></tr></thead>
+          <tbody>
+            <tr><td>POS_SrOculos_03</td><td class="num">7.164</td><td class="num">24,0%</td></tr>
+            <tr><td>PRE_SrOculos_13</td><td class="num">5.709</td><td class="num">19,1%</td></tr>
+            <tr><td>PRE_SrOculos_09</td><td class="num">5.618</td><td class="num">18,8%</td></tr>
+            <tr><td>Sr &#211;culos Cx 10</td><td class="num">4.854</td><td class="num">16,3%</td></tr>
+            <tr><td>Instagram DM (@sr.oculos)</td><td class="num">4.517</td><td class="num">15,1%</td></tr>
+            <tr><td>Sr &#211;culos Cx 5</td><td class="num">1.917</td><td class="num">6,4%</td></tr>
+            <tr><td>PRE_SrOculos_07</td><td class="num">68</td><td class="num">0,2%</td></tr>
+            <tr style="font-weight:700;background:var(--bg)"><td><strong>Total</strong></td><td class="num"><strong>29.850</strong></td><td class="num"><strong>100%</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Channel evolution by month -->
+  <div class="chart-card" style="margin-top:16px">
+    <div class="chart-card-header"><div class="chart-card-title">Evolu&#231;&#227;o Mensal por Tipo de Canal</div></div>
+    <div class="chart-wrap"><canvas id="channelMonthChart"></canvas></div>
+  </div>
+</div>
+
+<!-- Desempenho da IA -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">Desempenho da Intelig&#234;ncia Artificial</span>
+    <div class="section-divider"></div>
+    <span class="section-meta">Ago&#8211;Out 2026 &middot; Iris em destaque</span>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px">
+    <div style="background:linear-gradient(135deg,#1e3a8a 0%,#2D52EF 100%);border-radius:12px;padding:22px 20px;color:#fff;text-align:center">
+      <div style="font-size:.75rem;font-weight:600;letter-spacing:.08em;opacity:.8;text-transform:uppercase;margin-bottom:8px">Mensagens enviadas total</div>
+      <div style="font-size:2.2rem;font-weight:800;line-height:1">195.142</div>
+      <div style="font-size:.78rem;opacity:.75;margin-top:6px">no trimestre por todos os canais</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#065f46 0%,#059669 100%);border-radius:12px;padding:22px 20px;color:#fff;text-align:center">
+      <div style="font-size:.75rem;font-weight:600;letter-spacing:.08em;opacity:.8;text-transform:uppercase;margin-bottom:8px">Enviadas pela Iris</div>
+      <div style="font-size:2.2rem;font-weight:800;line-height:1">88.966</div>
+      <div style="font-size:.78rem;opacity:.75;margin-top:6px">respostas enviadas pela Iris</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#6d28d9 0%,#8b5cf6 100%);border-radius:12px;padding:22px 20px;color:#fff;text-align:center">
+      <div style="font-size:.75rem;font-weight:600;letter-spacing:.08em;opacity:.8;text-transform:uppercase;margin-bottom:8px">Participa&#231;&#227;o da IA</div>
+      <div style="font-size:2.2rem;font-weight:800;line-height:1">45,6%</div>
+      <div style="font-size:.78rem;opacity:.75;margin-top:6px">das mensagens enviadas s&#227;o da Iris</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#92400e 0%,#d97706 100%);border-radius:12px;padding:22px 20px;color:#fff;text-align:center">
+      <div style="font-size:.75rem;font-weight:600;letter-spacing:.08em;opacity:.8;text-transform:uppercase;margin-bottom:8px">Conversas com IA</div>
+      <div style="font-size:2.2rem;font-weight:800;line-height:1">90,8%</div>
+      <div style="font-size:.78rem;opacity:.75;margin-top:6px">das conversas tiveram participa&#231;&#227;o da Iris</div>
+    </div>
+  </div>
+
+  <div style="background:var(--brand-light);border:1px solid #C7D7FD;border-radius:var(--radius);padding:14px 18px;font-size:.82rem;color:var(--brand-dark);margin-bottom:20px;display:flex;gap:10px;align-items:flex-start">
+    <span style="font-size:1.1rem;flex-shrink:0">&#128161;</span>
+    <div>
+      <strong>Participa&#231;&#227;o da IA:</strong> Das <strong>195.142 mensagens enviadas</strong> no trimestre, <strong>88.966 (45,6%)</strong> foram respostas da Iris. A Iris participou de <strong>27.104 conversas (90,8%)</strong> do total, atuando como primeiro ponto de contato e resolvendo d&#250;vidas automaticamente. As demais <strong>105.898 mensagens</strong> foram enviadas por atendentes humanos.
+    </div>
+  </div>
+
+  <!-- Donut Bot vs Humano + Tabela Atendentes -->
+  <div class="two-col">
+    <div class="chart-card">
+      <div class="chart-card-header"><div class="chart-card-title">Mensagens: Iris vs Humanos</div></div>
+      <div class="chart-wrap" style="height:220px"><canvas id="donutBot"></canvas></div>
+      <div class="ch-legend" style="margin-top:14px">
+        <div class="ch-item"><div class="ch-dot" style="background:#059669"></div><div class="ch-label">Iris (Bot IA)</div><div class="ch-val">88.966 (45,6%)</div></div>
+        <div class="ch-item"><div class="ch-dot" style="background:#2D52EF"></div><div class="ch-label">Atendentes Humanos</div><div class="ch-val">105.898 (54,4%)</div></div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-card-header"><div class="chart-card-title">Desempenho por Atendente</div></div>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead><tr><th>Atendente</th><th class="num">Tipo</th><th class="num">Conversas</th><th class="num">Mensagens Enviadas</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="agent-name"><div class="agent-avatar av-iris">&#129302;</div>Iris</div></td>
+              <td class="num"><span style="background:#ECFDF5;color:#059669;padding:2px 8px;border-radius:10px;font-size:.72rem;font-weight:600">Bot IA</span></td>
+              <td class="num">27.104</td>
+              <td class="num">88.966</td>
+            </tr>
+            <tr>
+              <td><div class="agent-name"><div class="agent-avatar av-helen" style="background:#7C3AED;color:#fff">H</div>Helen</div></td>
+              <td class="num"><span style="background:#EFF6FF;color:#2D52EF;padding:2px 8px;border-radius:10px;font-size:.72rem;font-weight:600">Humana</span></td>
+              <td class="num">10.153</td>
+              <td class="num">62.850</td>
+            </tr>
+            <tr>
+              <td><div class="agent-name"><div class="agent-avatar av-thais">T</div>Thais</div></td>
+              <td class="num"><span style="background:#EFF6FF;color:#2D52EF;padding:2px 8px;border-radius:10px;font-size:.72rem;font-weight:600">Humana</span></td>
+              <td class="num">7.705</td>
+              <td class="num">33.467</td>
+            </tr>
+            <tr>
+              <td><div class="agent-name"><div class="agent-avatar av-laisa">L</div>La&#237;sa</div></td>
+              <td class="num"><span style="background:#EFF6FF;color:#2D52EF;padding:2px 8px;border-radius:10px;font-size:.72rem;font-weight:600">Humana</span></td>
+              <td class="num">2.369</td>
+              <td class="num">9.568</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Treinamentos & Ajustes da Iris -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">Treinamentos &amp; Ajustes da Iris</span>
+    <div class="section-divider"></div>
+    <span class="section-meta">Jul&#8211;Set 2026 &#183; 202 registros</span>
+  </div>
+
+  <!-- KPI cards treinamentos -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:24px">
+    <div class="kpi-card">
+      <div class="kpi-label">Total de Registros</div>
+      <div class="kpi-value" style="font-size:1.8rem">202</div>
+      <div class="kpi-sub">ocorr&#234;ncias identificadas</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Conclu&#237;dos <span class="tip"><span class="tip-icon">?</span><div class="tip-box">Ajustes aplicados e validados com sucesso.</div></span></div>
+      <div class="kpi-value" style="font-size:1.8rem;color:var(--success)">11</div>
+      <div class="kpi-sub">resolvidos e validados</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Em Observa&#231;&#227;o <span class="tip"><span class="tip-icon">?</span><div class="tip-box">Ajustes aplicados ou novos treinamentos em monitoramento para validar efic&#225;cia.</div></span></div>
+      <div class="kpi-value" style="font-size:1.8rem;color:#d97706">71</div>
+      <div class="kpi-sub">ajuste aplicado / novo treinamento</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Fix Pendente <span class="tip tip-right"><span class="tip-icon">?</span><div class="tip-box">Corre&#231;&#245;es estruturais identificadas que ainda ser&#227;o aplicadas.</div></span></div>
+      <div class="kpi-value" style="font-size:1.8rem;color:#dc2626">19</div>
+      <div class="kpi-sub">estrutural / n&#227;o iniciado</div>
+    </div>
+  </div>
+
+  <!-- Gráfico categorias + tabela status -->
+  <div class="two-col">
+    <div class="chart-card">
+      <div class="chart-card-header"><div class="chart-card-title">Categorias de Ocorr&#234;ncias</div></div>
+      <div class="chart-wrap" style="height:260px"><canvas id="trainCatChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-card-header"><div class="chart-card-title">Status por M&#234;s</div></div>
+      <div class="chart-wrap" style="height:260px"><canvas id="trainMonthChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Tabela detalhada -->
+  <div class="chart-card" style="margin-top:16px">
+    <div class="chart-card-header"><div class="chart-card-title">Principais Categorias de Ocorr&#234;ncias</div></div>
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead><tr><th>Categoria</th><th class="num">Qtd</th><th class="num">%</th><th>Descri&#231;&#227;o</th></tr></thead>
+        <tbody>
+          <tr><td class="hl">Informa&#231;&#245;es de lojas incorretas</td><td class="num">22</td><td class="num">15,7%</td><td>N&#250;meros, endere&#231;os ou dados errados sobre unidades</td></tr>
+          <tr><td class="hl">Transfer&#234;ncia indevida</td><td class="num">20</td><td class="num">14,3%</td><td>Iris transferiu atendimento para humano sem necessidade</td></tr>
+          <tr><td class="hl">Informa&#231;&#245;es de hor&#225;rios/exames</td><td class="num">16</td><td class="num">11,4%</td><td>Hor&#225;rios de exame ou oftalmologista incorretos</td></tr>
+          <tr><td class="hl">Contexto misturado (lentes/Rayban)</td><td class="num">8</td><td class="num">5,7%</td><td>Iris confundiu assunto de &#243;culos com lentes ou mencionou Rayban indevidamente</td></tr>
+          <tr><td class="hl">Instabilidade META / provedor IA</td><td class="num">17</td><td class="num">12,1%</td><td>Indisponibilidade tempor&#225;ria da META ou provedor OpenAI</td></tr>
+          <tr><td class="hl">Info pre&#231;os/valores</td><td class="num">5</td><td class="num">3,6%</td><td>Valores cobrados informados incorretamente</td></tr>
+          <tr><td class="hl">Treinamento ausente</td><td class="num">3</td><td class="num">2,1%</td><td>Iris n&#227;o possu&#237;a o treinamento para o cen&#225;rio</td></tr>
+          <tr><td class="hl">Outros (diversos)</td><td class="num">49</td><td class="num">35,0%</td><td>Repeti&#231;&#245;es, fluxo de agendamento, simpatia, lista duplicada, etc.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Info box -->
+  <div style="background:var(--brand-light);border:1px solid #C7D7FD;border-radius:var(--radius);padding:14px 18px;font-size:.82rem;color:var(--brand-dark);margin-top:16px;display:flex;gap:10px;align-items:flex-start">
+    <span style="font-size:1.1rem;flex-shrink:0">&#128200;</span>
+    <div>
+      <strong>An&#225;lise:</strong> Dos 202 registros de treinamentos e ajustes, <strong>82 (40,6%)</strong> j&#225; foram resolvidos ou est&#227;o em observa&#231;&#227;o ativa. Os principais tipos de erro s&#227;o <strong>informa&#231;&#245;es de lojas incorretas</strong> e <strong>transfer&#234;ncias indevidas</strong>, que juntos representam 30% das ocorr&#234;ncias. A maior concentra&#231;&#227;o de registros foi em <strong>julho/2026 (85 registros)</strong>, indicando que o per&#237;odo de calibra&#231;&#227;o inicial da Iris foi intenso. A redu&#231;&#227;o para 15 em agosto e 10 em setembro demonstra a <strong>evolu&#231;&#227;o cont&#237;nua</strong> do agente.
+      <br><strong>Fonte:</strong> Planilha &#8220;Treinamentos_e_Ajustes_Sr._Oculos.xlsx&#8221; (aba Iris, 202 linhas).
+    </div>
+  </div>
+</div>
+
+<!-- Notas -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">Notas</span>
+    <div class="section-divider"></div>
+  </div>
+  <div class="chart-card">
+    <div style="font-size:.82rem;color:var(--text-secondary);line-height:1.85">
+      <div>&#183; <strong>Per&#237;odo</strong> &#8212; 01 de agosto a 31 de outubro de 2026 (92 dias &#8212; 3 meses completos)</div>
+      <div>&#183; <strong>Total de mensagens (366.782)</strong> &#8212; inclui apenas mensagens de usu&#225;rios (incoming, type=0) e enviadas (outgoing, type=1). Exclui 158.475 mensagens de sistema/atividade (type=2)</div>
+      <div>&#183; <strong>Iris bot messages (88.966)</strong> &#8212; mensagens outgoing enviadas pelo bot Iris (sender_type = AgentBot ou Contact Bot)</div>
+      <div>&#183; <strong>Contatos &#250;nicos (29.731)</strong> &#8212; contatos distintos que enviaram pelo menos uma mensagem no trimestre. N&#227;o &#233; a soma dos meses (um contato pode aparecer em m&#250;ltiplos meses)</div>
+      <div>&#183; <strong>Conversas com IA (90,8%)</strong> &#8212; 27.104 conversas que tiveram pelo menos uma mensagem da Iris. A Iris participou de 27.104 conversas como remetente de mensagens outgoing</div>
+      <div>&#183; <strong>Atendentes</strong> &#8212; Iris &#233; o bot de IA (sender_type=AgentBot). Helen, Thais e La&#237;sa s&#227;o atendentes humanas (sender_type=User). Dados de conversas e mensagens consultados diretamente no banco</div>
+      <div>&#183; <strong>Fonte de dados</strong> &#8212; PostgreSQL <code>chat_prod</code>, account_id=6, queries diretas com filtro <code>message_type IN (0,1)</code></div>
+      <div>&#183; <strong>Treinamentos &amp; Ajustes</strong> &#8212; Fonte: planilha &#8220;Treinamentos_e_Ajustes_Sr._Oculos.xlsx&#8221; (aba Iris). 202 registros de jul a set/2026, com categoriza&#231;&#227;o e status de resolu&#231;&#227;o. 92 registros sem data expl&#237;cita (identificados via an&#225;lise retroativa)</div>
+    </div>
+  </div>
+</div>
+
+</div></div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo"><img src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-primary.svg" alt="Digital AI" onerror="this.style.display='none'"></div>
+      </div>
+      <div class="footer-meta">Relat&#243;rio trimestral de atendimento &#183; Sr. &#211;culos</div>
+      <div class="footer-note">Gerado em 03/11/2026</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── DATA ────────────────────────────────────────────────────────
+const months = ['Ago', 'Set', 'Out'];
+const conv   = [9178, 10695, 9977];
+const contacts = [9704, 11242, 10768];
+const msgIn  = [54130, 60297, 57213];
+const msgOut = [61385, 71173, 62584];
+
+// Daily data: Aug 1 - Oct 31 (92 days)
+const dailyLabels = ['01/Ago','02/Ago','03/Ago','04/Ago','05/Ago','06/Ago','07/Ago','08/Ago','09/Ago','10/Ago','11/Ago','12/Ago','13/Ago','14/Ago','15/Ago','16/Ago','17/Ago','18/Ago','19/Ago','20/Ago','21/Ago','22/Ago','23/Ago','24/Ago','25/Ago','26/Ago','27/Ago','28/Ago','29/Ago','30/Ago','31/Ago','01/Set','02/Set','03/Set','04/Set','05/Set','06/Set','07/Set','08/Set','09/Set','10/Set','11/Set','12/Set','13/Set','14/Set','15/Set','16/Set','17/Set','18/Set','19/Set','20/Set','21/Set','22/Set','23/Set','24/Set','25/Set','26/Set','27/Set','28/Set','29/Set','30/Set','01/Out','02/Out','03/Out','04/Out','05/Out','06/Out','07/Out','08/Out','09/Out','10/Out','11/Out','12/Out','13/Out','14/Out','15/Out','16/Out','17/Out','18/Out','19/Out','20/Out','21/Out','22/Out','23/Out','24/Out','25/Out','26/Out','27/Out','28/Out','29/Out','30/Out','31/Out'];
+const dailyData = [285,296,449,470,434,412,408,307,201,307,284,272,268,258,211,184,262,336,253,239,217,211,154,422,394,387,348,316,206,148,239,265,204,235,215,163,154,196,321,254,238,304,334,319,600,365,288,255,196,191,147,269,268,278,257,470,703,741,1063,642,760,538,264,205,124,272,320,275,268,217,231,183,423,704,453,346,211,201,127,258,277,283,230,162,144,190,456,413,511,980,483,228];
+
+// Channel monthly
+const chWppVendas = [5252, 6643, 6271];
+const chWppPos    = [2335, 2530, 2299];
+const chInstagram = [1591, 1520, 1406];
+
+// ── Chart.js DEFAULTS ────────────────────────────────────────────
+Chart.defaults.color = '#94A3B8';
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+
+const CHART_OPTS = (stacked) => ({
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      position: 'top',
+      labels: { font: { family: 'DM Sans', size: 12 }, color: '#475569', padding: 14, usePointStyle: true, pointStyleWidth: 8 }
+    },
+    tooltip: {
+      backgroundColor: '#0F1F5C',
+      titleFont: { family: 'Plus Jakarta Sans', size: 12, weight: '700' },
+      bodyFont: { family: 'DM Sans', size: 12 },
+      padding: 12, cornerRadius: 8,
+      callbacks: { label: c => ' ' + c.dataset.label + ': ' + c.parsed.y.toLocaleString('pt-BR') }
+    }
+  },
+  scales: {
+    x: { stacked: !!stacked, grid: { display: false }, ticks: { font: { family: 'DM Sans', size: 12 }, color: '#94A3B8' } },
+    y: { stacked: !!stacked, grid: { color: 'rgba(0,0,0,.04)' }, ticks: { font: { family: 'DM Sans', size: 11 }, color: '#94A3B8', callback: v => v >= 1000 ? (v/1000).toFixed(0)+'k' : v } }
+  }
+});
+
+// ── DAILY CHART ───────────────────────────────────────────────────
+const dCtx = document.getElementById('dailyChart').getContext('2d');
+
+// Compute 7-day moving average
+const movAvg = dailyData.map((_, i, arr) => {
+  const start = Math.max(0, i - 3);
+  const end = Math.min(arr.length - 1, i + 3);
+  const window = arr.slice(start, end + 1);
+  return Math.round(window.reduce((a, b) => a + b, 0) / window.length);
+});
+
+new Chart(dCtx, {
+  type: 'bar',
+  data: {
+    labels: dailyLabels,
+    datasets: [
+      {
+        label: 'Conversas por dia',
+        data: dailyData,
+        backgroundColor: 'rgba(45,82,239,0.65)',
+        borderColor: '#2D52EF',
+        borderWidth: 1,
+        borderRadius: 2,
+        borderSkipped: false,
+        order: 2
+      },
+      {
+        label: 'Media movel 7d',
+        data: movAvg,
+        type: 'line',
+        borderColor: '#059669',
+        backgroundColor: 'transparent',
+        borderWidth: 2.5,
+        pointRadius: 0,
+        tension: 0.4,
+        order: 1
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#0F1F5C',
+        titleFont: { family: 'Plus Jakarta Sans', size: 11, weight: '700' },
+        bodyFont: { family: 'DM Sans', size: 12 },
+        padding: 10, cornerRadius: 8,
+        callbacks: {
+          label: c => c.datasetIndex === 1 ? ' Media 7d: ' + c.raw : ' ' + c.raw + ' conversas'
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: {
+          color: '#94A3B8',
+          font: { size: 9 },
+          maxRotation: 45,
+          callback: function(val, idx) {
+            if (idx === 0 || idx === 15 || idx === 31 || idx === 45 || idx === 61 || idx === 75 || idx === 91) return this.getLabelForValue(val);
+            return '';
+          }
+        }
+      },
+      y: {
+        grid: { color: 'rgba(0,0,0,.04)' },
+        ticks: { color: '#94A3B8', font: { size: 11 }, callback: v => v }
+      }
+    }
+  }
+});
+
+// ── MONTHLY CHART ─────────────────────────────────────────────────
+const CTX = document.getElementById('monthlyChart').getContext('2d');
+let MC = null;
+
+function mkConv() {
+  return {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [{ label: 'Conversas', data: conv, backgroundColor: '#2D52EF', borderRadius: 6, borderSkipped: false }]
+    },
+    options: CHART_OPTS(false)
+  };
+}
+
+function mkMsg() {
+  return {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [
+        { label: 'Msgs Recebidas', data: msgIn, backgroundColor: 'rgba(45,82,239,.7)', borderRadius: 6, borderSkipped: false, stack: 'm' },
+        { label: 'Msgs Enviadas', data: msgOut, backgroundColor: 'rgba(45,82,239,.28)', borderRadius: 6, borderSkipped: false, stack: 'm' }
+      ]
+    },
+    options: CHART_OPTS(true)
+  };
+}
+
+function mkAll() {
+  return {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [
+        { label: 'Conversas', data: conv, backgroundColor: '#2D52EF', borderRadius: 4, borderSkipped: false },
+        { label: 'Msgs Recebidas', data: msgIn, backgroundColor: 'rgba(124,58,237,.5)', borderRadius: 4, borderSkipped: false },
+        { label: 'Msgs Enviadas', data: msgOut, backgroundColor: 'rgba(124,58,237,.28)', borderRadius: 4, borderSkipped: false }
+      ]
+    },
+    options: CHART_OPTS(false)
+  };
+}
+
+function initMC(cfg) { if (MC) MC.destroy(); MC = new Chart(CTX, cfg); }
+initMC(mkConv());
+
+function switchTab(el, mode) {
+  document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  if (mode === 'conv') initMC(mkConv());
+  else if (mode === 'msg') initMC(mkMsg());
+  else initMC(mkAll());
+}
+
+// ── CHANNEL DOUGHNUT ──────────────────────────────────────────────
+new Chart(document.getElementById('channelChart').getContext('2d'), {
+  type: 'doughnut',
+  data: {
+    labels: ['WA Vendas', 'WA Pos-venda', 'Instagram DM'],
+    datasets: [{ data: [18166, 7164, 4517], backgroundColor: ['#2D52EF', '#7C3AED', '#ea580c'], borderWidth: 0, hoverOffset: 8 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, cutout: '72%',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#0F1F5C',
+        titleFont: { family: 'Plus Jakarta Sans', size: 12, weight: '700' },
+        bodyFont: { family: 'DM Sans', size: 12 },
+        padding: 12, cornerRadius: 8,
+        callbacks: { label: c => { const t = c.dataset.data.reduce((a, b) => a + b, 0); return ' ' + c.parsed.toLocaleString('pt-BR') + ' conversas (' + (c.parsed / t * 100).toFixed(1) + '%)'; } }
+      }
+    }
+  }
+});
+
+// ── CHANNEL MONTHLY ──────────────────────────────────────────────
+new Chart(document.getElementById('channelMonthChart').getContext('2d'), {
+  type: 'bar',
+  data: {
+    labels: months,
+    datasets: [
+      { label: 'WA Vendas', data: chWppVendas, backgroundColor: '#2D52EF', borderRadius: 4, borderSkipped: false },
+      { label: 'WA Pos-venda', data: chWppPos, backgroundColor: '#7C3AED', borderRadius: 4, borderSkipped: false },
+      { label: 'Instagram DM', data: chInstagram, backgroundColor: '#ea580c', borderRadius: 4, borderSkipped: false }
+    ]
+  },
+  options: CHART_OPTS(false)
+});
+
+// ── TRAINING CATEGORIES CHART ────────────────────────────────────
+new Chart(document.getElementById('trainCatChart').getContext('2d'), {
+  type: 'bar',
+  data: {
+    labels: ['Info lojas', 'Transferência\nindevida', 'Horários/\nexames', 'Instabilidade\nMETA/IA', 'Contexto\nmisturado', 'Preços/\nvalores', 'Treinamento\nausente', 'Outros'],
+    datasets: [{
+      label: 'Ocorrências',
+      data: [22, 20, 16, 17, 8, 5, 3, 49],
+      backgroundColor: ['#2D52EF','#7C3AED','#ea580c','#dc2626','#d97706','#059669','#0891b2','#94A3B8'],
+      borderRadius: 6,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#0F1F5C',
+        titleFont: { family: 'Plus Jakarta Sans', size: 12, weight: '700' },
+        bodyFont: { family: 'DM Sans', size: 12 },
+        padding: 12, cornerRadius: 8
+      }
+    },
+    scales: {
+      x: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { color: '#94A3B8', font: { size: 11 } } },
+      y: { grid: { display: false }, ticks: { color: '#475569', font: { size: 11, family: 'DM Sans' } } }
+    }
+  }
+});
+
+// ── TRAINING MONTHLY STATUS CHART ───────────────────────────────
+new Chart(document.getElementById('trainMonthChart').getContext('2d'), {
+  type: 'bar',
+  data: {
+    labels: ['Jul', 'Ago', 'Set'],
+    datasets: [
+      { label: 'Concluído', data: [11, 0, 0], backgroundColor: '#059669', borderRadius: 4, borderSkipped: false },
+      { label: 'Em observação', data: [33, 0, 0], backgroundColor: '#d97706', borderRadius: 4, borderSkipped: false },
+      { label: 'Fix pendente', data: [11, 0, 0], backgroundColor: '#dc2626', borderRadius: 4, borderSkipped: false },
+      { label: 'Sem status', data: [30, 15, 10], backgroundColor: '#94A3B8', borderRadius: 4, borderSkipped: false }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: { boxWidth: 10, padding: 12, font: { size: 11, family: 'DM Sans' }, color: '#475569' }
+      },
+      tooltip: {
+        backgroundColor: '#0F1F5C',
+        titleFont: { family: 'Plus Jakarta Sans', size: 12, weight: '700' },
+        bodyFont: { family: 'DM Sans', size: 12 },
+        padding: 12, cornerRadius: 8
+      }
+    },
+    scales: {
+      x: { stacked: true, grid: { display: false }, ticks: { color: '#475569', font: { size: 12, family: 'DM Sans', weight: '600' } } },
+      y: { stacked: true, grid: { color: 'rgba(0,0,0,.04)' }, ticks: { color: '#94A3B8', font: { size: 11 } } }
+    }
+  }
+});
+
+// ── BOT DONUT ────────────────────────────────────────────────────
+new Chart(document.getElementById('donutBot').getContext('2d'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Iris (Bot IA)', 'Atendentes Humanos'],
+    datasets: [{ data: [88966, 105898], backgroundColor: ['#059669', '#2D52EF'], borderWidth: 0, hoverOffset: 8 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, cutout: '72%',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#0F1F5C',
+        titleFont: { family: 'Plus Jakarta Sans', size: 12, weight: '700' },
+        bodyFont: { family: 'DM Sans', size: 12 },
+        padding: 12, cornerRadius: 8,
+        callbacks: { label: c => { const t = c.dataset.data.reduce((a, b) => a + b, 0); return ' ' + c.parsed.toLocaleString('pt-BR') + ' msgs (' + (c.parsed / t * 100).toFixed(1) + '%)'; } }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
