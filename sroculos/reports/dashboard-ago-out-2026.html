@@ -413,41 +413,36 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
   <div class="section-header">
     <span class="section-title">Treinamentos &amp; Ajustes da Iris</span>
     <div class="section-divider"></div>
-    <span class="section-meta">Jul&#8211;Set 2026 &#183; 202 registros</span>
+    <span class="section-meta">Ago&#8211;Set 2026 &#183; 25 registros</span>
   </div>
 
   <!-- KPI cards treinamentos -->
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:24px">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px">
     <div class="kpi-card">
       <div class="kpi-label">Total de Registros</div>
-      <div class="kpi-value" style="font-size:1.8rem">202</div>
+      <div class="kpi-value" style="font-size:1.8rem">25</div>
+      <div class="kpi-sub">ocorr&#234;ncias em Ago&#8211;Set</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Agosto <span class="tip"><span class="tip-icon">?</span><div class="tip-box">Registros de erros e ajustes identificados em agosto/2026.</div></span></div>
+      <div class="kpi-value" style="font-size:1.8rem;color:var(--brand)">15</div>
       <div class="kpi-sub">ocorr&#234;ncias identificadas</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-label">Conclu&#237;dos <span class="tip"><span class="tip-icon">?</span><div class="tip-box">Ajustes aplicados e validados com sucesso.</div></span></div>
-      <div class="kpi-value" style="font-size:1.8rem;color:var(--success)">11</div>
-      <div class="kpi-sub">resolvidos e validados</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Em Observa&#231;&#227;o <span class="tip"><span class="tip-icon">?</span><div class="tip-box">Ajustes aplicados ou novos treinamentos em monitoramento para validar efic&#225;cia.</div></span></div>
-      <div class="kpi-value" style="font-size:1.8rem;color:#d97706">71</div>
-      <div class="kpi-sub">ajuste aplicado / novo treinamento</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Fix Pendente <span class="tip tip-right"><span class="tip-icon">?</span><div class="tip-box">Corre&#231;&#245;es estruturais identificadas que ainda ser&#227;o aplicadas.</div></span></div>
-      <div class="kpi-value" style="font-size:1.8rem;color:#dc2626">19</div>
-      <div class="kpi-sub">estrutural / n&#227;o iniciado</div>
+      <div class="kpi-label">Setembro <span class="tip tip-right"><span class="tip-icon">?</span><div class="tip-box">Registros de erros e ajustes identificados em setembro/2026. Redu&#231;&#227;o de 33% em rela&#231;&#227;o a agosto.</div></span></div>
+      <div class="kpi-value" style="font-size:1.8rem;color:var(--success)">10</div>
+      <div class="kpi-sub">&#8595; 33% vs agosto</div>
     </div>
   </div>
 
-  <!-- Gráfico categorias + tabela status -->
+  <!-- Gráfico categorias + tabela -->
   <div class="two-col">
     <div class="chart-card">
       <div class="chart-card-header"><div class="chart-card-title">Categorias de Ocorr&#234;ncias</div></div>
       <div class="chart-wrap" style="height:260px"><canvas id="trainCatChart"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-card-header"><div class="chart-card-title">Status por M&#234;s</div></div>
+      <div class="chart-card-header"><div class="chart-card-title">Distribui&#231;&#227;o Mensal</div></div>
       <div class="chart-wrap" style="height:260px"><canvas id="trainMonthChart"></canvas></div>
     </div>
   </div>
@@ -459,14 +454,12 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
       <table class="data-table">
         <thead><tr><th>Categoria</th><th class="num">Qtd</th><th class="num">%</th><th>Descri&#231;&#227;o</th></tr></thead>
         <tbody>
-          <tr><td class="hl">Informa&#231;&#245;es de lojas incorretas</td><td class="num">22</td><td class="num">15,7%</td><td>N&#250;meros, endere&#231;os ou dados errados sobre unidades</td></tr>
-          <tr><td class="hl">Transfer&#234;ncia indevida</td><td class="num">20</td><td class="num">14,3%</td><td>Iris transferiu atendimento para humano sem necessidade</td></tr>
-          <tr><td class="hl">Informa&#231;&#245;es de hor&#225;rios/exames</td><td class="num">16</td><td class="num">11,4%</td><td>Hor&#225;rios de exame ou oftalmologista incorretos</td></tr>
-          <tr><td class="hl">Contexto misturado (lentes/Rayban)</td><td class="num">8</td><td class="num">5,7%</td><td>Iris confundiu assunto de &#243;culos com lentes ou mencionou Rayban indevidamente</td></tr>
-          <tr><td class="hl">Instabilidade META / provedor IA</td><td class="num">17</td><td class="num">12,1%</td><td>Indisponibilidade tempor&#225;ria da META ou provedor OpenAI</td></tr>
-          <tr><td class="hl">Info pre&#231;os/valores</td><td class="num">5</td><td class="num">3,6%</td><td>Valores cobrados informados incorretamente</td></tr>
-          <tr><td class="hl">Treinamento ausente</td><td class="num">3</td><td class="num">2,1%</td><td>Iris n&#227;o possu&#237;a o treinamento para o cen&#225;rio</td></tr>
-          <tr><td class="hl">Outros (diversos)</td><td class="num">49</td><td class="num">35,0%</td><td>Repeti&#231;&#245;es, fluxo de agendamento, simpatia, lista duplicada, etc.</td></tr>
+          <tr><td class="hl">Informa&#231;&#245;es de lojas incorretas</td><td class="num">6</td><td class="num">24,0%</td><td>Localiza&#231;&#227;o, n&#250;meros ou dados errados sobre unidades</td></tr>
+          <tr><td class="hl">Transfer&#234;ncia indevida</td><td class="num">4</td><td class="num">16,0%</td><td>Iris transferiu para humano sem necessidade ou n&#227;o transferiu quando deveria</td></tr>
+          <tr><td class="hl">Informa&#231;&#245;es de hor&#225;rios/exames</td><td class="num">2</td><td class="num">8,0%</td><td>Hor&#225;rios de exame, feriados ou dias da semana incorretos</td></tr>
+          <tr><td class="hl">Info pre&#231;os/valores</td><td class="num">1</td><td class="num">4,0%</td><td>Valores informados incorretamente (ex: pre&#231;o do exame)</td></tr>
+          <tr><td class="hl">Contexto misturado (Rayban)</td><td class="num">1</td><td class="num">4,0%</td><td>Mencionou Rayban sem o cliente perguntar</td></tr>
+          <tr><td class="hl">Outros (diversos)</td><td class="num">11</td><td class="num">44,0%</td><td>Promo&#231;&#245;es, fluxo de status, respostas passivas, condu&#231;&#227;o de atendimento</td></tr>
         </tbody>
       </table>
     </div>
@@ -476,8 +469,8 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
   <div style="background:var(--brand-light);border:1px solid #C7D7FD;border-radius:var(--radius);padding:14px 18px;font-size:.82rem;color:var(--brand-dark);margin-top:16px;display:flex;gap:10px;align-items:flex-start">
     <span style="font-size:1.1rem;flex-shrink:0">&#128200;</span>
     <div>
-      <strong>An&#225;lise:</strong> Dos 202 registros de treinamentos e ajustes, <strong>82 (40,6%)</strong> j&#225; foram resolvidos ou est&#227;o em observa&#231;&#227;o ativa. Os principais tipos de erro s&#227;o <strong>informa&#231;&#245;es de lojas incorretas</strong> e <strong>transfer&#234;ncias indevidas</strong>, que juntos representam 30% das ocorr&#234;ncias. A maior concentra&#231;&#227;o de registros foi em <strong>julho/2026 (85 registros)</strong>, indicando que o per&#237;odo de calibra&#231;&#227;o inicial da Iris foi intenso. A redu&#231;&#227;o para 15 em agosto e 10 em setembro demonstra a <strong>evolu&#231;&#227;o cont&#237;nua</strong> do agente.
-      <br><strong>Fonte:</strong> Planilha &#8220;Treinamentos_e_Ajustes_Sr._Oculos.xlsx&#8221; (aba Iris, 202 linhas).
+      <strong>An&#225;lise:</strong> Foram registradas <strong>25 ocorr&#234;ncias</strong> no per&#237;odo Ago&#8211;Set 2026. Os principais tipos de erro s&#227;o <strong>informa&#231;&#245;es de lojas incorretas (24%)</strong> e <strong>transfer&#234;ncias indevidas (16%)</strong>, que juntos representam 40% das ocorr&#234;ncias. Houve <strong>redu&#231;&#227;o de 33%</strong> de agosto (15) para setembro (10), demonstrando a evolu&#231;&#227;o cont&#237;nua do agente com os ajustes aplicados.
+      <br><strong>Fonte:</strong> Planilha &#8220;Treinamentos_e_Ajustes_Sr._Oculos.xlsx&#8221; (aba Iris, filtro Ago&#8211;Set 2026).
     </div>
   </div>
 </div>
@@ -497,7 +490,7 @@ code{font-family:'Courier New',monospace;font-size:.7rem;background:rgba(15,31,9
       <div>&#183; <strong>Conversas com IA (90,8%)</strong> &#8212; 27.104 conversas que tiveram pelo menos uma mensagem da Iris. A Iris participou de 27.104 conversas como remetente de mensagens outgoing</div>
       <div>&#183; <strong>Atendentes</strong> &#8212; Iris &#233; o bot de IA (sender_type=AgentBot). Helen, Thais e La&#237;sa s&#227;o atendentes humanas (sender_type=User). Dados de conversas e mensagens consultados diretamente no banco</div>
       <div>&#183; <strong>Fonte de dados</strong> &#8212; PostgreSQL <code>chat_prod</code>, account_id=6, queries diretas com filtro <code>message_type IN (0,1)</code></div>
-      <div>&#183; <strong>Treinamentos &amp; Ajustes</strong> &#8212; Fonte: planilha &#8220;Treinamentos_e_Ajustes_Sr._Oculos.xlsx&#8221; (aba Iris). 202 registros de jul a set/2026, com categoriza&#231;&#227;o e status de resolu&#231;&#227;o. 92 registros sem data expl&#237;cita (identificados via an&#225;lise retroativa)</div>
+      <div>&#183; <strong>Treinamentos &amp; Ajustes</strong> &#8212; Fonte: planilha &#8220;Treinamentos_e_Ajustes_Sr._Oculos.xlsx&#8221; (aba Iris). Filtrados 25 registros com data em Ago&#8211;Set 2026, alinhados ao per&#237;odo do relat&#243;rio</div>
     </div>
   </div>
 </div>
@@ -729,11 +722,11 @@ new Chart(document.getElementById('channelMonthChart').getContext('2d'), {
 new Chart(document.getElementById('trainCatChart').getContext('2d'), {
   type: 'bar',
   data: {
-    labels: ['Info lojas', 'Transferência\nindevida', 'Horários/\nexames', 'Instabilidade\nMETA/IA', 'Contexto\nmisturado', 'Preços/\nvalores', 'Treinamento\nausente', 'Outros'],
+    labels: ['Info lojas', 'Transferência\nindevida', 'Horários/\nexames', 'Preços/\nvalores', 'Contexto\nmisturado', 'Outros'],
     datasets: [{
       label: 'Ocorrências',
-      data: [22, 20, 16, 17, 8, 5, 3, 49],
-      backgroundColor: ['#2D52EF','#7C3AED','#ea580c','#dc2626','#d97706','#059669','#0891b2','#94A3B8'],
+      data: [6, 4, 2, 1, 1, 11],
+      backgroundColor: ['#2D52EF','#7C3AED','#ea580c','#059669','#d97706','#94A3B8'],
       borderRadius: 6,
       borderSkipped: false
     }]
@@ -756,35 +749,35 @@ new Chart(document.getElementById('trainCatChart').getContext('2d'), {
   }
 });
 
-// ── TRAINING MONTHLY STATUS CHART ───────────────────────────────
+// ── TRAINING MONTHLY CHART ──────────────────────────────────────
 new Chart(document.getElementById('trainMonthChart').getContext('2d'), {
   type: 'bar',
   data: {
-    labels: ['Jul', 'Ago', 'Set'],
-    datasets: [
-      { label: 'Concluído', data: [11, 0, 0], backgroundColor: '#059669', borderRadius: 4, borderSkipped: false },
-      { label: 'Em observação', data: [33, 0, 0], backgroundColor: '#d97706', borderRadius: 4, borderSkipped: false },
-      { label: 'Fix pendente', data: [11, 0, 0], backgroundColor: '#dc2626', borderRadius: 4, borderSkipped: false },
-      { label: 'Sem status', data: [30, 15, 10], backgroundColor: '#94A3B8', borderRadius: 4, borderSkipped: false }
-    ]
+    labels: ['Agosto', 'Setembro'],
+    datasets: [{
+      label: 'Ocorrências',
+      data: [15, 10],
+      backgroundColor: ['#2D52EF', '#059669'],
+      borderRadius: 8,
+      borderSkipped: false,
+      barPercentage: 0.5
+    }]
   },
   options: {
     responsive: true, maintainAspectRatio: false,
     plugins: {
-      legend: {
-        position: 'bottom',
-        labels: { boxWidth: 10, padding: 12, font: { size: 11, family: 'DM Sans' }, color: '#475569' }
-      },
+      legend: { display: false },
       tooltip: {
         backgroundColor: '#0F1F5C',
         titleFont: { family: 'Plus Jakarta Sans', size: 12, weight: '700' },
         bodyFont: { family: 'DM Sans', size: 12 },
-        padding: 12, cornerRadius: 8
+        padding: 12, cornerRadius: 8,
+        callbacks: { label: c => ' ' + c.parsed.y + ' ocorrências' }
       }
     },
     scales: {
-      x: { stacked: true, grid: { display: false }, ticks: { color: '#475569', font: { size: 12, family: 'DM Sans', weight: '600' } } },
-      y: { stacked: true, grid: { color: 'rgba(0,0,0,.04)' }, ticks: { color: '#94A3B8', font: { size: 11 } } }
+      x: { grid: { display: false }, ticks: { color: '#475569', font: { size: 13, family: 'DM Sans', weight: '600' } } },
+      y: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { color: '#94A3B8', font: { size: 11 }, stepSize: 5 }, beginAtZero: true }
     }
   }
 });
