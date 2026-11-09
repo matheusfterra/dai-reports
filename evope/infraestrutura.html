@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="assets/favicon-32.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Process Studio - Infraestrutura - Documentacao Tecnica</title>
+  <title>Process Studio - Infraestrutura - Documentação Técnica</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
@@ -225,6 +225,17 @@
     li strong { color: var(--text); }
     li code { font-family: var(--font-mono); font-size: 12px; color: #93C5FD; background: rgba(147,197,253,.08); padding: 1px 6px; border-radius: 4px; }
 
+    .status-badge {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      padding: 2px 8px; border-radius: 100px;
+      margin-left: 10px; vertical-align: middle;
+      letter-spacing: .3px; text-transform: uppercase;
+    }
+    .status-done    { background: rgba(52,211,153,.12); color: #34D399; border: 1px solid rgba(52,211,153,.3); }
+    .status-partial { background: rgba(251,191,36,.12); color: #FBBF24; border: 1px solid rgba(251,191,36,.3); }
+    .status-planned { background: rgba(147,197,253,.1); color: #93C5FD; border: 1px solid rgba(147,197,253,.25); }
+    .status-pending { background: var(--surface2); color: var(--text-dim); border: 1px solid var(--border); }
+
     @media (max-width: 900px) {
       .sidebar { display: none; }
       .content { padding: 32px 20px; }
@@ -244,17 +255,21 @@
     </div>
 
     <div class="nav-section">
-      <div class="nav-label">Visao Geral</div>
+      <div class="nav-label">Visão Geral</div>
       <a href="#overview"      class="nav-link active">Arquitetura</a>
-      <a href="#servicos"      class="nav-link">Servicos</a>
+      <a href="#servicos"      class="nav-link">Serviços</a>
+      <a href="#status-map"    class="nav-link">Mapa de Status</a>
     </div>
 
     <div class="nav-section">
       <div class="nav-label">Backend API</div>
-      <a href="#stack"         class="nav-link">Stack Tecnica</a>
+      <a href="#stack"         class="nav-link">Stack Técnica</a>
       <a href="#endpoints"     class="nav-link">Endpoints</a>
-      <a href="#auth"          class="nav-link">Autenticacao</a>
-      <a href="#sync"          class="nav-link">Sincronizacao</a>
+      <a href="#auth"          class="nav-link">Autenticação</a>
+      <a href="#sync"          class="nav-link">Sincronização</a>
+      <a href="#users"         class="nav-link">Gestão de Usuários</a>
+      <a href="#errors"        class="nav-link">Erros e Monitoramento</a>
+      <a href="#activity"      class="nav-link">Auditoria</a>
     </div>
 
     <div class="nav-section">
@@ -269,14 +284,14 @@
       <a href="#docker"        class="nav-link">Docker Swarm</a>
       <a href="#traefik"       class="nav-link">Traefik / HTTPS</a>
       <a href="#cicd"          class="nav-link">CI/CD Pipeline</a>
-      <a href="#envvars"       class="nav-link">Variaveis de Ambiente</a>
+      <a href="#envvars"       class="nav-link">Variáveis de Ambiente</a>
     </div>
 
     <div class="nav-section">
-      <div class="nav-label">Operacoes</div>
+      <div class="nav-label">Operações</div>
       <a href="#health"        class="nav-link">Health Check</a>
       <a href="#updates"       class="nav-link">Auto-Update</a>
-      <a href="#metrics"       class="nav-link">Metricas</a>
+      <a href="#metrics"       class="nav-link">Métricas</a>
       <a href="#setup-local"   class="nav-link">Setup Local</a>
     </div>
   </aside>
@@ -286,7 +301,7 @@
 
     <!-- META BAR -->
     <div class="meta-bar">
-      <span class="meta-chip active">Em producao</span>
+      <span class="meta-chip active">Em produção</span>
       <span class="meta-chip">NestJS 11</span>
       <span class="meta-chip">Prisma 6</span>
       <span class="meta-chip">PostgreSQL</span>
@@ -300,29 +315,29 @@
         <div class="hero-badge">INFRAESTRUTURA</div>
         <h1>Process Studio <span>Backend &amp; Deploy</span></h1>
         <p class="lead">
-          Documentacao completa da infraestrutura server-side do Process Studio:
+          Documentação completa da infraestrutura server-side do Process Studio:
           API backend (NestJS), banco de dados (PostgreSQL/Prisma), deploy em Docker Swarm
-          com HTTPS automatico via Traefik, e pipeline CI/CD com GitHub Actions.
+          com HTTPS automático via Traefik, e pipeline CI/CD com GitHub Actions.
         </p>
       </div>
 
       <p>
-        O backend do Process Studio e responsavel por <strong>autenticacao de usuarios</strong>,
-        <strong>sincronizacao de dados</strong> entre dispositivos,
-        <strong>distribuicao de atualizacoes</strong> do app desktop,
-        e <strong>coleta de metricas</strong> de uso. O app desktop funciona 100% local
-        mesmo sem conexao com o backend - a API e complementar, nao essencial.
+        O backend do Process Studio é responsável por <strong>autenticação de usuários</strong>,
+        <strong>sincronização de dados</strong> entre dispositivos,
+        <strong>distribuição de atualizações</strong> do app desktop,
+        e <strong>coleta de métricas</strong> de uso. O app desktop funciona 100% local
+        mesmo sem conexão com o backend &mdash; a API é complementar, não essencial.
       </p>
 
       <div class="callout callout-info">
         <span class="callout-icon">i</span>
-        <p><strong>URL de producao:</strong> <code>https://api-process-studio.digital-ai.tech</code></p>
+        <p><strong>URL de produção:</strong> <code>https://api-process-studio.digital-ai.tech</code></p>
       </div>
     </section>
 
-    <!-- SERVICOS -->
+    <!-- SERVIÇOS -->
     <section id="servicos">
-      <h2><span class="sec-num">1</span>Servicos do Sistema <a class="anchor" href="#servicos">#</a></h2>
+      <h2><span class="sec-num">1</span>Serviços do Sistema <a class="anchor" href="#servicos">#</a></h2>
 
       <div class="flow">
         <div class="flow-node hi">App Desktop (Tauri)</div>
@@ -341,30 +356,30 @@
 
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Servico</th><th>Stack</th><th>Responsabilidade</th><th>URL</th></tr></thead>
+          <thead><tr><th>Serviço</th><th>Stack</th><th>Responsabilidade</th><th>URL</th></tr></thead>
           <tbody>
             <tr>
               <td><strong>Backend API</strong></td>
               <td><code>NestJS 11 + Prisma 6</code></td>
-              <td>Auth, sync, updates, metricas, activity logs</td>
+              <td>Auth, sync, updates, métricas, activity logs</td>
               <td><code>api-process-studio.digital-ai.tech</code></td>
             </tr>
             <tr>
               <td><strong>PostgreSQL</strong></td>
               <td><code>PostgreSQL 15+</code></td>
-              <td>Persistencia de usuarios, sessoes, processos, documentos</td>
+              <td>Persistência de usuários, sessões, processos, documentos</td>
               <td>Interno (Docker network)</td>
             </tr>
             <tr>
               <td><strong>App Desktop</strong></td>
               <td><code>Tauri v2 + React + Node.js</code></td>
-              <td>Gravacao, documentacao IA, exportacao - 100% local</td>
+              <td>Gravação, documentação IA, exportação &mdash; 100% local</td>
               <td>Local (instalado no PC)</td>
             </tr>
             <tr>
               <td><strong>Traefik</strong></td>
               <td><code>Traefik v2</code></td>
-              <td>Reverse proxy, TLS automatico (Let's Encrypt)</td>
+              <td>Reverse proxy, TLS automático (Let's Encrypt)</td>
               <td>Cluster Swarm</td>
             </tr>
           </tbody>
@@ -372,26 +387,130 @@
       </div>
     </section>
 
-    <!-- STACK -->
-    <section id="stack">
-      <h2><span class="sec-num">2</span>Stack Tecnica do Backend <a class="anchor" href="#stack">#</a></h2>
+    <!-- MAPA DE STATUS -->
+    <section id="status-map">
+      <h2><span class="sec-num">1.1</span>Mapa de Status da Implementação <a class="anchor" href="#status-map">#</a></h2>
+
+      <p>Visão geral do que está implementado, parcialmente implementado e planejado. Cada seção desta documentação indica o status correspondente.</p>
 
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Camada</th><th>Tecnologia</th><th>Versao</th><th>Uso</th></tr></thead>
+          <thead><tr><th>Módulo</th><th>Status</th><th>Rotas</th><th>Observações</th></tr></thead>
           <tbody>
-            <tr><td><strong>Framework</strong></td><td><code>NestJS</code></td><td>11.0</td><td>Framework HTTP principal</td></tr>
-            <tr><td><strong>ORM</strong></td><td><code>Prisma</code></td><td>6.19</td><td>Modelagem, migrations, queries type-safe</td></tr>
-            <tr><td><strong>Banco</strong></td><td><code>PostgreSQL</code></td><td>15+</td><td>Persistencia relacional</td></tr>
-            <tr><td><strong>Auth</strong></td><td><code>jsonwebtoken + bcrypt</code></td><td>9.0 / 5.1</td><td>JWT com refresh token rotation</td></tr>
-            <tr><td><strong>Validacao</strong></td><td><code>class-validator</code></td><td>0.14</td><td>DTOs com whitelist enforcement</td></tr>
-            <tr><td><strong>Runtime</strong></td><td><code>Node.js</code></td><td>20 LTS</td><td>Alpine-based Docker image</td></tr>
-            <tr><td><strong>Driver DB</strong></td><td><code>pg</code></td><td>8.23</td><td>Conexao PostgreSQL nativa</td></tr>
+            <tr>
+              <td><strong>Autenticação</strong></td>
+              <td><span class="pill pill-green">Implementado</span></td>
+              <td>6 rotas</td>
+              <td>JWT + refresh rotation + rate limiting + device tracking</td>
+            </tr>
+            <tr>
+              <td><strong>Gestão de Usuários</strong></td>
+              <td><span class="pill pill-green">Implementado</span></td>
+              <td>4 rotas</td>
+              <td>CRUD admin, busca, paginação, revogação de sessões</td>
+            </tr>
+            <tr>
+              <td><strong>Sincronização</strong></td>
+              <td><span class="pill pill-green">Implementado</span></td>
+              <td>1 rota</td>
+              <td>Batch de até 50 itens (5 entity types), idempotente</td>
+            </tr>
+            <tr>
+              <td><strong>Métricas</strong></td>
+              <td><span class="pill pill-green">Implementado</span></td>
+              <td>2 rotas</td>
+              <td>Telemetria por evento, filtros, resumo estatístico</td>
+            </tr>
+            <tr>
+              <td><strong>Documentos</strong></td>
+              <td><span class="pill pill-green">Implementado</span></td>
+              <td>2 rotas</td>
+              <td>9 tipos, revisão por hash, conteúdo JSON</td>
+            </tr>
+            <tr>
+              <td><strong>Erros e Monitoramento</strong></td>
+              <td><span class="pill pill-green">Implementado</span></td>
+              <td>4 rotas</td>
+              <td>Erros de processamento (client + server), por fase</td>
+            </tr>
+            <tr>
+              <td><strong>Auditoria (Activity Log)</strong></td>
+              <td><span class="pill pill-green">Implementado</span></td>
+              <td>2 rotas</td>
+              <td>13 tipos de evento, IP/UA, interceptor automático</td>
+            </tr>
+            <tr>
+              <td><strong>Auto-Update</strong></td>
+              <td><span class="pill pill-green">Implementado</span></td>
+              <td>5 rotas</td>
+              <td>Tauri v2 updater, download assinado, proxy GitHub</td>
+            </tr>
+            <tr>
+              <td><strong>Health Check</strong></td>
+              <td><span class="pill pill-green">Implementado</span></td>
+              <td>1 rota</td>
+              <td>Status do banco + uptime + versão</td>
+            </tr>
+            <tr>
+              <td><strong>CI/CD Pipeline</strong></td>
+              <td><span class="pill pill-green">Implementado</span></td>
+              <td>&mdash;</td>
+              <td>GitHub Actions: test &rarr; build &rarr; deploy Portainer</td>
+            </tr>
+            <tr>
+              <td><strong>Report de Erros no Client</strong></td>
+              <td><span class="pill pill-amber">Pendente no client</span></td>
+              <td>&mdash;</td>
+              <td>Backend aceita <code>processing_error</code> via sync; falta integrar no app Tauri</td>
+            </tr>
+            <tr>
+              <td><strong>Dashboard Admin (UI)</strong></td>
+              <td><span class="pill pill-gray">Planejado</span></td>
+              <td>&mdash;</td>
+              <td>Interface web para visualizar métricas, erros, usuários e atividade</td>
+            </tr>
+            <tr>
+              <td><strong>Notificações Push</strong></td>
+              <td><span class="pill pill-gray">Planejado</span></td>
+              <td>&mdash;</td>
+              <td>Avisar usuários sobre novas versões e comunicados</td>
+            </tr>
+            <tr>
+              <td><strong>Multi-tenancy</strong></td>
+              <td><span class="pill pill-gray">Planejado</span></td>
+              <td>&mdash;</td>
+              <td>Isolamento por organização (quando houver mais clientes)</td>
+            </tr>
           </tbody>
         </table>
       </div>
 
-      <h3>Dependencias Principais (package.json)</h3>
+      <div class="callout callout-info">
+        <span class="callout-icon">i</span>
+        <p><strong>27 rotas ativas em produção</strong> distribuídas em 9 módulos. O backend está funcional e completo para a operação atual. Os itens planejados são evolução futura.</p>
+      </div>
+    </section>
+
+    <!-- STACK -->
+    <section id="stack">
+      <h2><span class="sec-num">2</span>Stack Técnica do Backend <span class="status-badge status-done">Implementado</span> <a class="anchor" href="#stack">#</a></h2>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Camada</th><th>Tecnologia</th><th>Versão</th><th>Uso</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Framework</strong></td><td><code>NestJS</code></td><td>11.0</td><td>Framework HTTP principal</td></tr>
+            <tr><td><strong>ORM</strong></td><td><code>Prisma</code></td><td>6.19</td><td>Modelagem, migrations, queries type-safe</td></tr>
+            <tr><td><strong>Banco</strong></td><td><code>PostgreSQL</code></td><td>15+</td><td>Persistência relacional</td></tr>
+            <tr><td><strong>Auth</strong></td><td><code>jsonwebtoken + bcrypt</code></td><td>9.0 / 5.1</td><td>JWT com refresh token rotation</td></tr>
+            <tr><td><strong>Validação</strong></td><td><code>class-validator</code></td><td>0.14</td><td>DTOs com whitelist enforcement</td></tr>
+            <tr><td><strong>Runtime</strong></td><td><code>Node.js</code></td><td>20 LTS</td><td>Alpine-based Docker image</td></tr>
+            <tr><td><strong>Driver DB</strong></td><td><code>pg</code></td><td>8.23</td><td>Conexão PostgreSQL nativa</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Dependências Principais (package.json)</h3>
       <div class="code-wrap">
         <div class="code-header"><span class="code-lang">JSON</span></div>
         <pre>{
@@ -411,53 +530,101 @@
 
     <!-- ENDPOINTS -->
     <section id="endpoints">
-      <h2><span class="sec-num">3</span>Endpoints da API <a class="anchor" href="#endpoints">#</a></h2>
+      <h2><span class="sec-num">3</span>Endpoints da API <span class="status-badge status-done">Implementado</span> <a class="anchor" href="#endpoints">#</a></h2>
 
-      <h3>Autenticacao</h3>
+      <h3>Autenticação (6 rotas)</h3>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Metodo</th><th>Path</th><th>Descricao</th><th>Auth</th></tr></thead>
+          <thead><tr><th>Método</th><th>Path</th><th>Descrição</th><th>Auth</th></tr></thead>
           <tbody>
-            <tr><td><span class="pill pill-green">POST</span></td><td><code>/auth/login</code></td><td>Login com email + senha + deviceId</td><td>Publico</td></tr>
-            <tr><td><span class="pill pill-green">POST</span></td><td><code>/auth/refresh</code></td><td>Renovar JWT com refresh token</td><td>Publico</td></tr>
+            <tr><td><span class="pill pill-green">POST</span></td><td><code>/auth/login</code></td><td>Login com email + senha + deviceId</td><td>Público</td></tr>
+            <tr><td><span class="pill pill-green">POST</span></td><td><code>/auth/refresh</code></td><td>Renovar JWT com refresh token</td><td>Público</td></tr>
             <tr><td><span class="pill pill-green">POST</span></td><td><code>/auth/logout</code></td><td>Revogar refresh token</td><td>JWT</td></tr>
-            <tr><td><span class="pill pill-green">POST</span></td><td><code>/auth/heartbeat</code></td><td>Keep-alive de sessao</td><td>JWT</td></tr>
-            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/auth/me</code></td><td>Perfil do usuario logado</td><td>JWT</td></tr>
+            <tr><td><span class="pill pill-green">POST</span></td><td><code>/auth/heartbeat</code></td><td>Keep-alive de sessão</td><td>JWT</td></tr>
+            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/auth/me</code></td><td>Perfil do usuário logado</td><td>JWT</td></tr>
+            <tr><td><span class="pill pill-green">POST</span></td><td><code>/auth/cleanup-tokens</code></td><td>Limpeza de tokens expirados</td><td>JWT (admin)</td></tr>
           </tbody>
         </table>
       </div>
 
-      <h3>Sincronizacao</h3>
+      <h3>Sincronização (1 rota)</h3>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Metodo</th><th>Path</th><th>Descricao</th><th>Auth</th></tr></thead>
+          <thead><tr><th>Método</th><th>Path</th><th>Descrição</th><th>Auth</th></tr></thead>
           <tbody>
-            <tr><td><span class="pill pill-green">POST</span></td><td><code>/sync/batch</code></td><td>Sync de ate 50 itens (process, document, metric, session)</td><td>JWT</td></tr>
+            <tr><td><span class="pill pill-green">POST</span></td><td><code>/sync/batch</code></td><td>Sync de até 50 itens (process, document, metric, session, processing_error)</td><td>JWT</td></tr>
           </tbody>
         </table>
       </div>
 
-      <h3>Atualizacoes e Downloads</h3>
+      <h3>Gestão de Usuários (4 rotas)</h3>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Metodo</th><th>Path</th><th>Descricao</th><th>Auth</th></tr></thead>
+          <thead><tr><th>Método</th><th>Path</th><th>Descrição</th><th>Auth</th></tr></thead>
           <tbody>
-            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/updates/check</code></td><td>Verificar nova versao (query: current_version, target, arch)</td><td>JWT</td></tr>
-            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/updates/tauri/:target/:arch/:ver</code></td><td>Endpoint nativo do Tauri v2 updater</td><td>Publico</td></tr>
-            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/updates/download/:ver/:file</code></td><td>Proxy de download do GitHub Releases (repo privado)</td><td>Publico</td></tr>
-            <tr><td><span class="pill pill-green">POST</span></td><td><code>/updates/admin/versions</code></td><td>Publicar nova versao</td><td>JWT (admin)</td></tr>
+            <tr><td><span class="pill pill-green">POST</span></td><td><code>/admin/users</code></td><td>Criar novo usuário</td><td>JWT (admin)</td></tr>
+            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/admin/users</code></td><td>Listar usuários (paginação + busca)</td><td>JWT (admin)</td></tr>
+            <tr><td><span class="pill pill-amber">PATCH</span></td><td><code>/admin/users/:id</code></td><td>Atualizar usuário (role, nome, empresa, ativo)</td><td>JWT (admin)</td></tr>
+            <tr><td><span class="pill pill-red">DELETE</span></td><td><code>/admin/users/:id/sessions</code></td><td>Revogar todas as sessões de um usuário</td><td>JWT (admin)</td></tr>
           </tbody>
         </table>
       </div>
 
-      <h3>Metricas e Admin</h3>
+      <h3>Documentos (2 rotas)</h3>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Metodo</th><th>Path</th><th>Descricao</th><th>Auth</th></tr></thead>
+          <thead><tr><th>Método</th><th>Path</th><th>Descrição</th><th>Auth</th></tr></thead>
           <tbody>
-            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/admin/metrics</code></td><td>Metricas de uso (paginado, filtros por user/tipo/periodo)</td><td>JWT (admin)</td></tr>
-            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/admin/metrics/summary</code></td><td>Resumo estatistico de metricas</td><td>JWT (admin)</td></tr>
-            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/health</code></td><td>Status do sistema (status, versao, banco, uptime)</td><td>Publico</td></tr>
+            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/admin/documents</code></td><td>Listar documentos (filtros por userId, processId, docType)</td><td>JWT (admin)</td></tr>
+            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/admin/documents/:id</code></td><td>Detalhe do documento com conteúdo</td><td>JWT (admin)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Erros e Monitoramento (4 rotas)</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Método</th><th>Path</th><th>Descrição</th><th>Auth</th></tr></thead>
+          <tbody>
+            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/admin/errors</code></td><td>Erros de processamento (client-side)</td><td>JWT (admin)</td></tr>
+            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/admin/errors/summary</code></td><td>Estatísticas de erros por tipo/fase/versão</td><td>JWT (admin)</td></tr>
+            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/admin/errors/server</code></td><td>Erros do servidor (exceções não tratadas)</td><td>JWT (admin)</td></tr>
+            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/admin/errors/server/summary</code></td><td>Estatísticas de erros do servidor</td><td>JWT (admin)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Auditoria (2 rotas)</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Método</th><th>Path</th><th>Descrição</th><th>Auth</th></tr></thead>
+          <tbody>
+            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/admin/activity</code></td><td>Log de auditoria com filtros</td><td>JWT (admin)</td></tr>
+            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/admin/activity/summary</code></td><td>Estatísticas de atividade</td><td>JWT (admin)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Atualizações e Downloads (5 rotas)</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Método</th><th>Path</th><th>Descrição</th><th>Auth</th></tr></thead>
+          <tbody>
+            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/updates/check</code></td><td>Verificar nova versão (query: current_version, target, arch)</td><td>JWT</td></tr>
+            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/updates/tauri/:target/:arch/:ver</code></td><td>Endpoint nativo do Tauri v2 updater</td><td>Público</td></tr>
+            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/updates/download/:ver/:file</code></td><td>Proxy de download do GitHub Releases (repo privado)</td><td>Token assinado</td></tr>
+            <tr><td><span class="pill pill-green">POST</span></td><td><code>/admin/versions</code></td><td>Publicar nova versão</td><td>JWT (admin)</td></tr>
+            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/admin/versions</code></td><td>Listar versões publicadas</td><td>JWT (admin)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Saúde (1 rota)</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Método</th><th>Path</th><th>Descrição</th><th>Auth</th></tr></thead>
+          <tbody>
+            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/health</code></td><td>Status do sistema (status, versão, banco, uptime)</td><td>Público</td></tr>
           </tbody>
         </table>
       </div>
@@ -465,7 +632,7 @@
 
     <!-- AUTH -->
     <section id="auth">
-      <h2><span class="sec-num">4</span>Autenticacao <a class="anchor" href="#auth">#</a></h2>
+      <h2><span class="sec-num">4</span>Autenticação <span class="status-badge status-done">Implementado</span> <a class="anchor" href="#auth">#</a></h2>
 
       <div class="flow">
         <div class="flow-node hi">App (login)</div>
@@ -478,13 +645,13 @@
       </div>
 
       <ul>
-        <li><strong>JWT Access Token:</strong> expira em 15 minutos (configuravel via <code>JWT_EXPIRATION</code>)</li>
-        <li><strong>Refresh Token:</strong> expira em 30 dias (configuravel via <code>JWT_REFRESH_EXPIRATION</code>)</li>
-        <li><strong>Refresh Token Rotation:</strong> a cada refresh, o token antigo e revogado e um novo e emitido</li>
-        <li><strong>Device tracking:</strong> cada sessao e vinculada a um <code>deviceId</code> unico</li>
-        <li><strong>Senha:</strong> hash com <code>bcrypt</code> (salt rounds configuravel)</li>
+        <li><strong>JWT Access Token:</strong> expira em 15 minutos (configurável via <code>JWT_EXPIRATION</code>)</li>
+        <li><strong>Refresh Token:</strong> expira em 30 dias (configurável via <code>JWT_REFRESH_EXPIRATION</code>)</li>
+        <li><strong>Refresh Token Rotation:</strong> a cada refresh, o token antigo é revogado e um novo é emitido</li>
+        <li><strong>Device tracking:</strong> cada sessão é vinculada a um <code>deviceId</code> único</li>
+        <li><strong>Senha:</strong> hash com <code>bcrypt</code> (salt rounds configurável)</li>
         <li><strong>Rate limiting:</strong> guard ativo em todos os endpoints de auth</li>
-        <li><strong>Activity logging:</strong> toda acao de auth (login, logout, refresh, falha) e registrada com IP e user agent</li>
+        <li><strong>Activity logging:</strong> toda ação de auth (login, logout, refresh, falha) é registrada com IP e user agent</li>
       </ul>
 
       <h3>Roles</h3>
@@ -492,8 +659,8 @@
         <table>
           <thead><tr><th>Role</th><th>Acesso</th></tr></thead>
           <tbody>
-            <tr><td><span class="pill pill-blue">admin</span></td><td>Todos os endpoints, incluindo metricas, publicacao de versoes e gestao de usuarios</td></tr>
-            <tr><td><span class="pill pill-gray">user</span></td><td>Auth, sync dos proprios dados, check de updates, download</td></tr>
+            <tr><td><span class="pill pill-blue">admin</span></td><td>Todos os endpoints, incluindo métricas, publicação de versões e gestão de usuários</td></tr>
+            <tr><td><span class="pill pill-gray">user</span></td><td>Auth, sync dos próprios dados, check de updates, download</td></tr>
           </tbody>
         </table>
       </div>
@@ -501,36 +668,110 @@
 
     <!-- SYNC -->
     <section id="sync">
-      <h2><span class="sec-num">5</span>Sincronizacao de Dados <a class="anchor" href="#sync">#</a></h2>
+      <h2><span class="sec-num">5</span>Sincronização de Dados <span class="status-badge status-done">Implementado</span> <a class="anchor" href="#sync">#</a></h2>
 
-      <p>O endpoint <code>POST /sync/batch</code> aceita ate <strong>50 itens por request</strong>. Cada item tem um tipo de entidade e um payload JSON:</p>
+      <p>O endpoint <code>POST /sync/batch</code> aceita até <strong>50 itens por request</strong>. Cada item tem um tipo de entidade e um payload JSON:</p>
 
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Entity Type</th><th>Descricao</th><th>Campos Principais</th></tr></thead>
+          <thead><tr><th>Entity Type</th><th>Descrição</th><th>Campos Principais</th></tr></thead>
           <tbody>
             <tr><td><code>process</code></td><td>Processo gravado (trace)</td><td>title, lifecycle, source_type, metadata</td></tr>
             <tr><td><code>document</code></td><td>Documento compilado</td><td>doc_type, step_count, word_count, content, file_url</td></tr>
             <tr><td><code>metric</code></td><td>Evento de telemetria</td><td>event_type, payload, device_id, app_version</td></tr>
-            <tr><td><code>session</code></td><td>Sessao de uso</td><td>device_id, app_version, os_version, duration_ms</td></tr>
+            <tr><td><code>session</code></td><td>Sessão de uso</td><td>device_id, app_version, os_version, duration_ms</td></tr>
+            <tr><td><code>processing_error</code></td><td>Erro de processamento do client</td><td>error_type, phase, message, stack_trace, metadata</td></tr>
           </tbody>
         </table>
       </div>
 
+      <p>O sync é <strong>idempotente</strong> &mdash; itens com mesmo ID são atualizados (upsert). Documentos com mesmo <code>file_hash</code> são detectados como duplicatas. Validação de ownership garante que cada usuário só sincroniza seus próprios dados.</p>
+
       <div class="callout callout-info">
         <span class="callout-icon">i</span>
-        <p><strong>Local-first:</strong> o app funciona 100% offline. O sync e oportunista - envia dados quando ha conexao, sem bloquear o uso.</p>
+        <p><strong>Local-first:</strong> o app funciona 100% offline. O sync é oportunista &mdash; envia dados quando há conexão, sem bloquear o uso.</p>
       </div>
+    </section>
+
+    <!-- USERS -->
+    <section id="users">
+      <h2><span class="sec-num">5.1</span>Gestão de Usuários <span class="status-badge status-done">Implementado</span> <a class="anchor" href="#users">#</a></h2>
+
+      <p>Módulo admin para criar, listar, editar e desativar usuários. Todas as ações são registradas no log de auditoria automaticamente.</p>
+
+      <ul>
+        <li><strong>Criar usuário:</strong> <code>POST /admin/users</code> &mdash; email, nome, empresa, role (admin/user), senha</li>
+        <li><strong>Listar:</strong> <code>GET /admin/users</code> &mdash; paginação, busca por nome/email, filtro por role e status</li>
+        <li><strong>Editar:</strong> <code>PATCH /admin/users/:id</code> &mdash; alterar role, nome, empresa, ativar/desativar</li>
+        <li><strong>Revogar sessões:</strong> <code>DELETE /admin/users/:id/sessions</code> &mdash; invalida todos os refresh tokens do usuário</li>
+      </ul>
+    </section>
+
+    <!-- ERRORS -->
+    <section id="errors">
+      <h2><span class="sec-num">5.2</span>Erros e Monitoramento <span class="status-badge status-done">Implementado</span> <a class="anchor" href="#errors">#</a></h2>
+
+      <p>Sistema duplo de captura de erros: <strong>erros de processamento</strong> (enviados pelo client via sync) e <strong>erros do servidor</strong> (capturados automaticamente pelo exception filter).</p>
+
+      <h3>Erros de Processamento (client-side)</h3>
+      <ul>
+        <li>Enviados via <code>POST /sync/batch</code> com <code>entityType: "processing_error"</code></li>
+        <li>Rastreiam em qual <strong>fase</strong> o erro ocorreu (validação, geração, exportação, etc.)</li>
+        <li>Incluem stack trace, tipo de erro, versão do app e metadados</li>
+        <li>Consulta: <code>GET /admin/errors</code> e <code>GET /admin/errors/summary</code></li>
+      </ul>
+
+      <h3>Erros do Servidor</h3>
+      <ul>
+        <li>Capturados automaticamente pelo <code>HttpExceptionFilter</code> global</li>
+        <li>Registram método HTTP, URL, status code, stack trace completo</li>
+        <li>Consulta: <code>GET /admin/errors/server</code> e <code>GET /admin/errors/server/summary</code></li>
+      </ul>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">!</span>
+        <p><strong>Pendente no client:</strong> o backend já aceita <code>processing_error</code> no sync batch, mas o app desktop Tauri ainda não envia esses dados automaticamente. Essa integração está planejada.</p>
+      </div>
+    </section>
+
+    <!-- ACTIVITY -->
+    <section id="activity">
+      <h2><span class="sec-num">5.3</span>Auditoria (Activity Log) <span class="status-badge status-done">Implementado</span> <a class="anchor" href="#activity">#</a></h2>
+
+      <p>Todo evento administrativo e de autenticação é registrado automaticamente via interceptor. O admin consulta o log de auditoria para rastrear ações no sistema.</p>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Tipo de Evento</th><th>Descrição</th></tr></thead>
+          <tbody>
+            <tr><td><code>login</code></td><td>Usuário fez login com sucesso</td></tr>
+            <tr><td><code>logout</code></td><td>Usuário fez logout</td></tr>
+            <tr><td><code>login_failed</code></td><td>Tentativa de login falhou</td></tr>
+            <tr><td><code>refresh</code></td><td>Token JWT foi renovado</td></tr>
+            <tr><td><code>app_opened</code></td><td>App desktop foi aberto</td></tr>
+            <tr><td><code>user_created</code></td><td>Admin criou novo usuário</td></tr>
+            <tr><td><code>user_updated</code></td><td>Admin editou usuário</td></tr>
+            <tr><td><code>user_deactivated</code></td><td>Admin desativou usuário</td></tr>
+            <tr><td><code>sessions_revoked</code></td><td>Admin revogou sessões</td></tr>
+            <tr><td><code>version_published</code></td><td>Admin publicou nova versão</td></tr>
+            <tr><td><code>tokens_cleaned</code></td><td>Admin executou limpeza de tokens</td></tr>
+            <tr><td><code>data_accessed</code></td><td>Admin acessou dados de outro usuário</td></tr>
+            <tr><td><code>batch_completed</code></td><td>Sync batch processado com sucesso</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Cada registro inclui: <code>user_id</code>, <code>ip_address</code>, <code>user_agent</code>, <code>device_id</code> e <code>metadata</code> (JSON livre para contexto adicional).</p>
     </section>
 
     <!-- DATABASE -->
     <section id="database">
-      <h2><span class="sec-num">6</span>Banco de Dados - PostgreSQL <a class="anchor" href="#database">#</a></h2>
+      <h2><span class="sec-num">6</span>Banco de Dados &mdash; PostgreSQL <span class="status-badge status-done">Implementado</span> <a class="anchor" href="#database">#</a></h2>
 
       <div class="kpi-grid">
         <div class="kpi-card blue">
           <div class="kpi-label">Tabelas</div>
-          <div class="kpi-value">9</div>
+          <div class="kpi-value">11</div>
           <div class="kpi-sub">Schema Prisma</div>
         </div>
         <div class="kpi-card green">
@@ -546,8 +787,8 @@
       </div>
 
       <p>
-        Todos os IDs sao gerados via <code>lower(encode(gen_random_bytes(16), 'hex'))</code> - 32 caracteres hexadecimais, sem colisao, distribuidos.
-        Timestamps usam <code>timestamptz</code> (timezone-aware). Campos flexiveis usam <code>JsonB</code>.
+        Todos os IDs são gerados via <code>lower(encode(gen_random_bytes(16), 'hex'))</code> &mdash; 32 caracteres hexadecimais, sem colisão, distribuídos.
+        Timestamps usam <code>timestamptz</code> (timezone-aware). Campos flexíveis usam <code>JsonB</code>.
       </p>
     </section>
 
@@ -557,7 +798,7 @@
 
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Tabela</th><th>Campos Principais</th><th>Relacoes</th></tr></thead>
+          <thead><tr><th>Tabela</th><th>Campos Principais</th><th>Relações</th></tr></thead>
           <tbody>
             <tr>
               <td><strong>users</strong></td>
@@ -592,17 +833,27 @@
             <tr>
               <td><strong>app_versions</strong></td>
               <td><code>id</code>, <code>version</code> (unique), <code>target</code>, <code>arch</code>, <code>download_url</code>, <code>signature</code>, <code>release_notes</code>, <code>is_published</code></td>
-              <td>-</td>
+              <td>&mdash;</td>
             </tr>
             <tr>
               <td><strong>activity_logs</strong></td>
-              <td><code>id</code>, <code>user_id</code>, <code>event_type</code> (login/logout/login_failed/app_opened/refresh), <code>ip_address</code>, <code>user_agent</code>, <code>device_id</code></td>
+              <td><code>id</code>, <code>user_id</code>, <code>event_type</code> (13 tipos), <code>ip_address</code>, <code>user_agent</code>, <code>device_id</code>, <code>metadata</code> (JsonB)</td>
               <td>user</td>
             </tr>
             <tr>
               <td><strong>update_checks</strong></td>
               <td><code>id</code>, <code>user_id</code>, <code>current_version</code>, <code>latest_version</code>, <code>downloaded</code>, <code>checked_at</code></td>
               <td>user</td>
+            </tr>
+            <tr>
+              <td><strong>processing_errors</strong></td>
+              <td><code>id</code>, <code>user_id</code>, <code>error_type</code>, <code>phase</code>, <code>message</code>, <code>stack_trace</code>, <code>metadata</code> (JsonB), <code>app_version</code></td>
+              <td>user</td>
+            </tr>
+            <tr>
+              <td><strong>server_errors</strong></td>
+              <td><code>id</code>, <code>method</code>, <code>url</code>, <code>status_code</code>, <code>message</code>, <code>stack</code>, <code>user_id</code>, <code>ip_address</code></td>
+              <td>&mdash;</td>
             </tr>
           </tbody>
         </table>
@@ -615,7 +866,7 @@
           <tbody>
             <tr><td><code>Role</code></td><td><code>admin</code>, <code>user</code></td></tr>
             <tr><td><code>Lifecycle</code></td><td><code>active</code>, <code>archived</code>, <code>trashed</code></td></tr>
-            <tr><td><code>ActivityEventType</code></td><td><code>login</code>, <code>refresh</code>, <code>logout</code>, <code>login_failed</code>, <code>app_opened</code></td></tr>
+            <tr><td><code>ActivityEventType</code></td><td><code>login</code>, <code>refresh</code>, <code>logout</code>, <code>login_failed</code>, <code>app_opened</code>, <code>user_created</code>, <code>user_updated</code>, <code>user_deactivated</code>, <code>sessions_revoked</code>, <code>version_published</code>, <code>tokens_cleaned</code>, <code>data_accessed</code>, <code>batch_completed</code></td></tr>
           </tbody>
         </table>
       </div>
@@ -625,29 +876,29 @@
     <section id="migrations">
       <h2><span class="sec-num">6.2</span>Migrations <a class="anchor" href="#migrations">#</a></h2>
 
-      <p>Migrations sao gerenciadas pelo Prisma e aplicadas automaticamente no startup do container:</p>
+      <p>Migrations são gerenciadas pelo Prisma e aplicadas automaticamente no startup do container:</p>
 
       <div class="code-wrap">
         <div class="code-header"><span class="code-lang">BASH</span></div>
         <pre># Desenvolvimento - criar nova migration
 npx prisma migrate dev --name descricao_da_mudanca
 
-# Producao - aplicar migrations pendentes (roda no entrypoint do Docker)
+# Produção - aplicar migrations pendentes (roda no entrypoint do Docker)
 npx prisma migrate deploy
 
-# Gerar client apos mudanca no schema
+# Gerar client após mudança no schema
 npx prisma generate</pre>
       </div>
 
       <div class="callout callout-warn">
         <span class="callout-icon">!</span>
-        <p><strong>O container roda <code>prisma migrate deploy</code> antes de iniciar a aplicacao.</strong> Migrations destrutivas (drop column, drop table) devem ser feitas em duas etapas: primeiro remover o uso no codigo, depois a migration.</p>
+        <p><strong>O container roda <code>prisma migrate deploy</code> antes de iniciar a aplicação.</strong> Migrations destrutivas (drop column, drop table) devem ser feitas em duas etapas: primeiro remover o uso no código, depois a migration.</p>
       </div>
     </section>
 
     <!-- DOCKER -->
     <section id="docker">
-      <h2><span class="sec-num">7</span>Docker Swarm <a class="anchor" href="#docker">#</a></h2>
+      <h2><span class="sec-num">7</span>Docker Swarm <span class="status-badge status-done">Implementado</span> <a class="anchor" href="#docker">#</a></h2>
 
       <p>A API roda como service no Docker Swarm, orquestrado via Portainer.</p>
 
@@ -664,25 +915,25 @@ Traefik (HTTPS / Let's Encrypt)
 |                                           |
 |  [process-studio-api]   [postgresql]      |
 |   NestJS :3000           :5432            |
-|   1 replica              volume           |
+|   1 réplica              volume           |
 |   512 MB / 0.5 CPU       persistente      |
 +-------------------------------------------+</pre>
       </div>
 
-      <h3>Configuracao do Service (docker-stack.yml)</h3>
+      <h3>Configuração do Service (docker-stack.yml)</h3>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Parametro</th><th>Valor</th><th>Descricao</th></tr></thead>
+          <thead><tr><th>Parâmetro</th><th>Valor</th><th>Descrição</th></tr></thead>
           <tbody>
             <tr><td><strong>Image</strong></td><td><code>registry.digital-ai.tech/process-studio-api:latest</code></td><td>Registry privado da Digital AI</td></tr>
-            <tr><td><strong>Replicas</strong></td><td>1</td><td>Single instance</td></tr>
+            <tr><td><strong>Réplicas</strong></td><td>1</td><td>Single instance</td></tr>
             <tr><td><strong>CPU Limit</strong></td><td>0.5 cores</td><td>Meio core</td></tr>
             <tr><td><strong>Memory Limit</strong></td><td>512 MB</td><td>Limite hard</td></tr>
             <tr><td><strong>Memory Reservation</strong></td><td>256 MB</td><td>Reserva garantida</td></tr>
             <tr><td><strong>Network</strong></td><td><code>oraculusnet_v2</code></td><td>Rede overlay do Swarm</td></tr>
-            <tr><td><strong>Update Strategy</strong></td><td>Rolling (start-first)</td><td>Zero downtime - novo container sobe antes do antigo descer</td></tr>
-            <tr><td><strong>Failure Action</strong></td><td>Rollback</td><td>Rollback automatico se health check falhar</td></tr>
-            <tr><td><strong>Node Constraint</strong></td><td><code>vmi1215893.contaboserver.net</code></td><td>Pinado ao host especifico</td></tr>
+            <tr><td><strong>Update Strategy</strong></td><td>Rolling (start-first)</td><td>Zero downtime &mdash; novo container sobe antes do antigo descer</td></tr>
+            <tr><td><strong>Failure Action</strong></td><td>Rollback</td><td>Rollback automático se health check falhar</td></tr>
+            <tr><td><strong>Node Constraint</strong></td><td><code>vmi1215893.contaboserver.net</code></td><td>Pinado ao host específico</td></tr>
           </tbody>
         </table>
       </div>
@@ -702,13 +953,13 @@ RUN npm run build
 # Production stage
 FROM node:20-alpine
 WORKDIR /app
-RUN adduser -D -u 1001 appuser        # Usuario nao-root
+RUN adduser -D -u 1001 appuser        # Usuário não-root
 COPY --from=build /app/package*.json ./
-RUN npm ci --omit=dev                  # Apenas deps de producao
+RUN npm ci --omit=dev                  # Apenas deps de produção
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/prisma ./prisma
 RUN npx prisma generate
-USER appuser                           # Executa como nao-root
+USER appuser                           # Executa como não-root
 EXPOSE 3000
 CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]</pre>
       </div>
@@ -716,17 +967,17 @@ CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]</pre>
 
     <!-- TRAEFIK -->
     <section id="traefik">
-      <h2><span class="sec-num">8</span>Traefik / HTTPS <a class="anchor" href="#traefik">#</a></h2>
+      <h2><span class="sec-num">8</span>Traefik / HTTPS <span class="status-badge status-done">Implementado</span> <a class="anchor" href="#traefik">#</a></h2>
 
       <p>O Traefik atua como reverse proxy e gerencia certificados TLS automaticamente via Let's Encrypt.</p>
 
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Label</th><th>Valor</th><th>Funcao</th></tr></thead>
+          <thead><tr><th>Label</th><th>Valor</th><th>Função</th></tr></thead>
           <tbody>
             <tr><td><code>traefik.http.routers.ps-api.rule</code></td><td><code>Host(`api-process-studio.digital-ai.tech`)</code></td><td>Roteamento por hostname</td></tr>
             <tr><td><code>traefik.http.routers.ps-api.entrypoints</code></td><td><code>websecure</code></td><td>HTTPS (porta 443)</td></tr>
-            <tr><td><code>traefik.http.routers.ps-api.tls.certresolver</code></td><td><code>letsencryptresolver</code></td><td>Certificado automatico</td></tr>
+            <tr><td><code>traefik.http.routers.ps-api.tls.certresolver</code></td><td><code>letsencryptresolver</code></td><td>Certificado automático</td></tr>
             <tr><td><code>traefik.http.services.ps-api.loadbalancer.server.port</code></td><td><code>3000</code></td><td>Porta interna do container</td></tr>
           </tbody>
         </table>
@@ -737,7 +988,7 @@ CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]</pre>
 
     <!-- CI/CD -->
     <section id="cicd">
-      <h2><span class="sec-num">9</span>CI/CD Pipeline <a class="anchor" href="#cicd">#</a></h2>
+      <h2><span class="sec-num">9</span>CI/CD Pipeline <span class="status-badge status-done">Implementado</span> <a class="anchor" href="#cicd">#</a></h2>
 
       <p>Pipeline automatizado via <strong>GitHub Actions</strong>. Trigger: push na branch <code>main</code>.</p>
 
@@ -759,9 +1010,9 @@ CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]</pre>
       <ul>
         <li>Ubuntu latest + Node.js 20</li>
         <li><code>npm ci</code> + <code>npx prisma generate</code></li>
-        <li><code>npx tsc --noEmit</code> - type checking</li>
-        <li><code>npm run lint</code> - linting</li>
-        <li><code>npx jest --maxWorkers=2 --forceExit</code> - testes unitarios</li>
+        <li><code>npx tsc --noEmit</code> &mdash; type checking</li>
+        <li><code>npm run lint</code> &mdash; linting</li>
+        <li><code>npx jest --maxWorkers=2 --forceExit</code> &mdash; testes unitários</li>
       </ul>
 
       <h3>Stage 2: Build &amp; Push</h3>
@@ -774,34 +1025,34 @@ CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]</pre>
       <h3>Stage 3: Deploy</h3>
       <ul>
         <li>Deploy via <strong>Portainer API</strong> (nunca CLI)</li>
-        <li>Atualiza imagem para tag <code>:{SHORT_SHA}</code> (nao <code>:latest</code>)</li>
+        <li>Atualiza imagem para tag <code>:{SHORT_SHA}</code> (não <code>:latest</code>)</li>
         <li>Bump de <code>ForceUpdate</code> para recriar task</li>
-        <li>Monitora convergencia (uptime &lt; 120s)</li>
-        <li>Poll no health check por ate 180s</li>
-        <li>Verifica se nao houve rollback automatico</li>
+        <li>Monitora convergência (uptime &lt; 120s)</li>
+        <li>Poll no health check por até 180s</li>
+        <li>Verifica se não houve rollback automático</li>
       </ul>
 
-      <h3>Notificacoes</h3>
-      <p>Cada etapa envia notificacao para o Discord via webhook n8n:</p>
+      <h3>Notificações</h3>
+      <p>Cada etapa envia notificação para o Discord via webhook n8n:</p>
       <ul>
         <li>Pipeline iniciado</li>
         <li>Build de imagem (sucesso / falha)</li>
         <li>Deploy em andamento</li>
-        <li>Deploy concluido / falhou</li>
+        <li>Deploy concluído / falhou</li>
       </ul>
 
       <h3>Secrets do GitHub Actions</h3>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Secret</th><th>Descricao</th></tr></thead>
+          <thead><tr><th>Secret</th><th>Descrição</th></tr></thead>
           <tbody>
             <tr><td><code>REGISTRY_HOST</code></td><td>Host do registry privado</td></tr>
-            <tr><td><code>REGISTRY_USER</code></td><td>Usuario do registry</td></tr>
+            <tr><td><code>REGISTRY_USER</code></td><td>Usuário do registry</td></tr>
             <tr><td><code>REGISTRY_PASSWORD</code></td><td>Senha do registry</td></tr>
             <tr><td><code>PORTAINER_URL</code></td><td>URL da API do Portainer</td></tr>
-            <tr><td><code>PORTAINER_API_KEY</code></td><td>Token de autenticacao Portainer</td></tr>
+            <tr><td><code>PORTAINER_API_KEY</code></td><td>Token de autenticação Portainer</td></tr>
             <tr><td><code>SERVICE_ID</code></td><td>ID do service no Docker Swarm</td></tr>
-            <tr><td><code>N8N_NOTIFY_URL</code></td><td>Webhook n8n para notificacoes Discord</td></tr>
+            <tr><td><code>N8N_NOTIFY_URL</code></td><td>Webhook n8n para notificações Discord</td></tr>
           </tbody>
         </table>
       </div>
@@ -809,22 +1060,22 @@ CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]</pre>
 
     <!-- ENV VARS -->
     <section id="envvars">
-      <h2><span class="sec-num">10</span>Variaveis de Ambiente <a class="anchor" href="#envvars">#</a></h2>
+      <h2><span class="sec-num">10</span>Variáveis de Ambiente <a class="anchor" href="#envvars">#</a></h2>
 
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Variavel</th><th>Obrigatoria</th><th>Default</th><th>Descricao</th></tr></thead>
+          <thead><tr><th>Variável</th><th>Obrigatória</th><th>Default</th><th>Descrição</th></tr></thead>
           <tbody>
-            <tr><td><code>DATABASE_URL</code></td><td><span class="pill pill-red">Sim</span></td><td>-</td><td>Connection string PostgreSQL (<code>postgresql://user:pass@host:5432/db</code>)</td></tr>
-            <tr><td><code>JWT_SECRET</code></td><td><span class="pill pill-red">Sim</span></td><td>-</td><td>Chave secreta para JWT (min. 32 caracteres)</td></tr>
-            <tr><td><code>JWT_EXPIRATION</code></td><td>Nao</td><td><code>15m</code></td><td>Tempo de expiracao do access token</td></tr>
-            <tr><td><code>JWT_REFRESH_EXPIRATION</code></td><td>Nao</td><td><code>30d</code></td><td>Tempo de expiracao do refresh token</td></tr>
-            <tr><td><code>PORT</code></td><td>Nao</td><td><code>3000</code></td><td>Porta HTTP da aplicacao</td></tr>
-            <tr><td><code>NODE_ENV</code></td><td>Nao</td><td><code>development</code></td><td>Ambiente (production em deploy)</td></tr>
-            <tr><td><code>CORS_ORIGINS</code></td><td>Nao</td><td><code>tauri://localhost,...</code></td><td>Origins permitidos para CORS</td></tr>
-            <tr><td><code>ADMIN_EMAIL</code></td><td>Nao</td><td>-</td><td>Email do admin inicial (seed)</td></tr>
-            <tr><td><code>ADMIN_PASSWORD</code></td><td>Nao</td><td>-</td><td>Senha do admin inicial (min. 12 chars)</td></tr>
-            <tr><td><code>GITHUB_TOKEN</code></td><td>Nao</td><td>-</td><td>Token para download de releases privadas do GitHub</td></tr>
+            <tr><td><code>DATABASE_URL</code></td><td><span class="pill pill-red">Sim</span></td><td>&mdash;</td><td>Connection string PostgreSQL (<code>postgresql://user:pass@host:5432/db</code>)</td></tr>
+            <tr><td><code>JWT_SECRET</code></td><td><span class="pill pill-red">Sim</span></td><td>&mdash;</td><td>Chave secreta para JWT (mín. 32 caracteres)</td></tr>
+            <tr><td><code>JWT_EXPIRATION</code></td><td>Não</td><td><code>15m</code></td><td>Tempo de expiração do access token</td></tr>
+            <tr><td><code>JWT_REFRESH_EXPIRATION</code></td><td>Não</td><td><code>30d</code></td><td>Tempo de expiração do refresh token</td></tr>
+            <tr><td><code>PORT</code></td><td>Não</td><td><code>3000</code></td><td>Porta HTTP da aplicação</td></tr>
+            <tr><td><code>NODE_ENV</code></td><td>Não</td><td><code>development</code></td><td>Ambiente (production em deploy)</td></tr>
+            <tr><td><code>CORS_ORIGINS</code></td><td>Não</td><td><code>tauri://localhost,...</code></td><td>Origins permitidos para CORS</td></tr>
+            <tr><td><code>ADMIN_EMAIL</code></td><td>Não</td><td>&mdash;</td><td>Email do admin inicial (seed)</td></tr>
+            <tr><td><code>ADMIN_PASSWORD</code></td><td>Não</td><td>&mdash;</td><td>Senha do admin inicial (mín. 12 chars)</td></tr>
+            <tr><td><code>GITHUB_TOKEN</code></td><td>Não</td><td>&mdash;</td><td>Token para download de releases privadas do GitHub</td></tr>
           </tbody>
         </table>
       </div>
@@ -832,9 +1083,9 @@ CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]</pre>
 
     <!-- HEALTH -->
     <section id="health">
-      <h2><span class="sec-num">11</span>Health Check <a class="anchor" href="#health">#</a></h2>
+      <h2><span class="sec-num">11</span>Health Check <span class="status-badge status-done">Implementado</span> <a class="anchor" href="#health">#</a></h2>
 
-      <p>Endpoint: <code>GET /health</code> (publico, sem auth)</p>
+      <p>Endpoint: <code>GET /health</code> (público, sem auth)</p>
 
       <div class="code-wrap">
         <div class="code-header"><span class="code-lang">JSON - RESPOSTA</span></div>
@@ -846,19 +1097,19 @@ CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]</pre>
 }</pre>
       </div>
 
-      <p>O Docker Swarm verifica o health a cada <strong>30 segundos</strong> com timeout de 10s e 3 retries. Falha no health trigger rollback automatico.</p>
+      <p>O Docker Swarm verifica o health a cada <strong>30 segundos</strong> com timeout de 10s e 3 retries. Falha no health trigger rollback automático.</p>
     </section>
 
     <!-- UPDATES -->
     <section id="updates">
-      <h2><span class="sec-num">12</span>Sistema de Auto-Update <a class="anchor" href="#updates">#</a></h2>
+      <h2><span class="sec-num">12</span>Sistema de Auto-Update <span class="status-badge status-done">Implementado</span> <a class="anchor" href="#updates">#</a></h2>
 
       <div class="flow">
         <div class="flow-node hi">App Desktop</div>
         <span class="flow-arrow">&rarr;</span>
         <div class="flow-node ok">GET /updates/tauri/:target/:arch/:ver</div>
         <span class="flow-arrow">&rarr;</span>
-        <div class="flow-node">Versao nova?</div>
+        <div class="flow-node">Versão nova?</div>
         <span class="flow-arrow">&rarr;</span>
         <div class="flow-node amber">Download via API (proxy GitHub)</div>
         <span class="flow-arrow">&rarr;</span>
@@ -868,9 +1119,9 @@ CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]</pre>
       <ul>
         <li>O app verifica updates periodicamente usando o <strong>Tauri v2 updater</strong> nativo</li>
         <li>A API funciona como <strong>proxy</strong> para o GitHub Releases (repo privado)</li>
-        <li>O download e servido via <code>/updates/download/:ver/:file</code> usando o <code>GITHUB_TOKEN</code> do servidor</li>
-        <li>Admins publicam novas versoes via <code>POST /updates/admin/versions</code></li>
-        <li>Cada check de update e registrado na tabela <code>update_checks</code> para analytics</li>
+        <li>O download é servido via <code>/updates/download/:ver/:file</code> com <strong>token assinado HMAC-SHA256</strong> com expiração</li>
+        <li>Admins publicam novas versões via <code>POST /admin/versions</code></li>
+        <li>Cada check de update é registrado na tabela <code>update_checks</code> para analytics</li>
       </ul>
 
       <h3>Fluxo de Release</h3>
@@ -881,38 +1132,38 @@ CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]</pre>
    - Compila app (Tauri + NSIS installer)
    - Publica no GitHub Releases
 
-2. Registrar na API:  POST /updates/admin/versions
+2. Registrar na API:  POST /admin/versions
    - version, target, arch, download_url, signature, release_notes
 
 3. App detecta:  GET /updates/tauri/windows/x86_64/0.4.24
-   - Retorna JSON com url + signature da nova versao
+   - Retorna JSON com url + signature da nova versão
 
-4. Download + instalacao automatica pelo updater Tauri</pre>
+4. Download + instalação automática pelo updater Tauri</pre>
       </div>
     </section>
 
     <!-- METRICS -->
     <section id="metrics">
-      <h2><span class="sec-num">13</span>Metricas e Telemetria <a class="anchor" href="#metrics">#</a></h2>
+      <h2><span class="sec-num">13</span>Métricas e Telemetria <span class="status-badge status-done">Implementado</span> <a class="anchor" href="#metrics">#</a></h2>
 
       <p>O app envia eventos de telemetria via <code>POST /sync/batch</code> com <code>entityType: "metric"</code>. Admins consultam via:</p>
 
       <div class="code-wrap">
         <div class="code-header"><span class="code-lang">HTTP</span></div>
-        <pre># Metricas paginadas com filtros
+        <pre># Métricas paginadas com filtros
 GET /admin/metrics?userId=abc&amp;eventType=compile&amp;from=2026-01-01&amp;to=2026-12-31&amp;page=1&amp;limit=100
 
-# Resumo estatistico
+# Resumo estatístico
 GET /admin/metrics/summary?from=2026-01-01&amp;to=2026-12-31</pre>
       </div>
 
-      <p>Alem de metricas, a tabela <code>activity_logs</code> registra automaticamente:</p>
+      <p>Além de métricas, a tabela <code>activity_logs</code> registra automaticamente:</p>
       <ul>
-        <li><strong>login</strong> - usuario logou (IP, user agent, device)</li>
-        <li><strong>logout</strong> - usuario deslogou</li>
-        <li><strong>login_failed</strong> - tentativa de login falhou</li>
-        <li><strong>app_opened</strong> - app foi aberto</li>
-        <li><strong>refresh</strong> - token foi renovado</li>
+        <li><strong>login</strong> &mdash; usuário logou (IP, user agent, device)</li>
+        <li><strong>logout</strong> &mdash; usuário deslogou</li>
+        <li><strong>login_failed</strong> &mdash; tentativa de login falhou</li>
+        <li><strong>app_opened</strong> &mdash; app foi aberto</li>
+        <li><strong>refresh</strong> &mdash; token foi renovado</li>
       </ul>
     </section>
 
@@ -920,7 +1171,7 @@ GET /admin/metrics/summary?from=2026-01-01&amp;to=2026-12-31</pre>
     <section id="setup-local">
       <h2><span class="sec-num">14</span>Setup Local (Desenvolvimento) <a class="anchor" href="#setup-local">#</a></h2>
 
-      <h3>Pre-requisitos</h3>
+      <h3>Pré-requisitos</h3>
       <ul>
         <li>Node.js 20+ LTS</li>
         <li>PostgreSQL 15+ rodando localmente (ou via Docker)</li>
@@ -930,14 +1181,14 @@ GET /admin/metrics/summary?from=2026-01-01&amp;to=2026-12-31</pre>
       <h3>Passo a passo</h3>
       <div class="code-wrap">
         <div class="code-header"><span class="code-lang">BASH</span></div>
-        <pre># 1. Clonar o repositorio
+        <pre># 1. Clonar o repositório
 git clone https://github.com/DIGITAL-AI-TECH/process-studio-api.git
 cd process-studio-api
 
-# 2. Instalar dependencias
+# 2. Instalar dependências
 npm install
 
-# 3. Configurar variaveis de ambiente
+# 3. Configurar variáveis de ambiente
 cp .env.example .env
 # Editar .env com suas credenciais de banco local
 
@@ -950,19 +1201,19 @@ npx prisma migrate dev
 # 6. Rodar em modo desenvolvimento (hot-reload)
 npm run start:dev
 
-# A API estara disponivel em http://localhost:3000
+# A API estará disponível em http://localhost:3000
 # Health check: http://localhost:3000/health</pre>
       </div>
 
-      <h3>Comandos Uteis</h3>
+      <h3>Comandos Úteis</h3>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Comando</th><th>Descricao</th></tr></thead>
+          <thead><tr><th>Comando</th><th>Descrição</th></tr></thead>
           <tbody>
             <tr><td><code>npm run start:dev</code></td><td>Desenvolvimento com hot-reload</td></tr>
             <tr><td><code>npm run build</code></td><td>Compilar TypeScript para dist/</td></tr>
-            <tr><td><code>npm run start:prod</code></td><td>Rodar versao compilada</td></tr>
-            <tr><td><code>npm test</code></td><td>Rodar testes unitarios (Jest)</td></tr>
+            <tr><td><code>npm run start:prod</code></td><td>Rodar versão compilada</td></tr>
+            <tr><td><code>npm test</code></td><td>Rodar testes unitários (Jest)</td></tr>
             <tr><td><code>npm run test:e2e</code></td><td>Testes end-to-end</td></tr>
             <tr><td><code>npm run test:cov</code></td><td>Cobertura de testes</td></tr>
             <tr><td><code>npx prisma studio</code></td><td>Interface visual para o banco</td></tr>
@@ -973,7 +1224,7 @@ npm run start:dev
 
       <div class="callout callout-success">
         <span class="callout-icon">*</span>
-        <p><strong>Dica:</strong> Use <code>npx prisma studio</code> para visualizar e editar dados diretamente no banco via interface web. Muito util para debug.</p>
+        <p><strong>Dica:</strong> Use <code>npx prisma studio</code> para visualizar e editar dados diretamente no banco via interface web. Muito útil para debug.</p>
       </div>
     </section>
 
