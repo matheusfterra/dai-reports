@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="assets/favicon-32.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Process Studio - Infraestrutura - Documentacao Tecnica</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:   #2D52EF;
+      --secondary: #3B2FC9;
+      --bg:        #080E2A;
+      --surface:   #0D1736;
+      --surface2:  #111E42;
+      --surface3:  #172350;
+      --border:    rgba(45,82,239,.18);
+      --border2:   rgba(45,82,239,.10);
+      --text:      #F0F3FF;
+      --text-muted:#9AAAD4;
+      --text-dim:  #5B6FA4;
+      --green:  #34D399;
+      --amber:  #FBBF24;
+      --red:    #F87171;
+      --font-head: 'Plus Jakarta Sans', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --r: 10px; --rs: 6px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.65; }
+
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .layout { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: 268px; flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      position: sticky; top: 0; height: 100vh;
+      overflow-y: auto; padding: 0 0 32px;
+      display: flex; flex-direction: column;
+    }
+
+    .content { flex: 1; max-width: 860px; padding: 52px 60px; min-width: 0; }
+
+    .sidebar-top { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+    .back-link {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--text-dim);
+      text-decoration: none; margin-bottom: 16px;
+      transition: color .15s;
+    }
+    .back-link:hover { color: var(--primary); }
+    .sidebar-logo { height: 22px; width: auto; display: block; margin: 8px 0 10px; }
+    .logo-name { font-family: var(--font-head); font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.3; }
+    .logo-sub  { font-size: 11px; color: var(--text-dim); margin-top: 3px; line-height: 1.3; }
+
+    .nav-section { padding: 0 14px; margin-top: 6px; }
+    .nav-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.1px;
+      text-transform: uppercase; color: var(--text-dim);
+      padding: 8px 8px 4px;
+    }
+    .nav-link {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 8px;
+      font-size: 12.5px; color: var(--text-muted);
+      text-decoration: none; border-radius: var(--rs);
+      transition: color .15s, background .15s;
+      line-height: 1.3;
+    }
+    .nav-link:hover { color: var(--text); background: var(--surface3); }
+    .nav-link.active { color: #fff; background: rgba(45,82,239,.18); }
+    .nav-link.active::before {
+      content: ''; width: 3px; height: 14px;
+      background: var(--primary); border-radius: 2px; flex-shrink: 0;
+    }
+
+    .meta-bar {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border2);
+      margin-bottom: 0;
+    }
+    .meta-chip {
+      font-size: 11px; font-weight: 600;
+      padding: 3px 9px; border-radius: 100px;
+      background: var(--surface2); color: var(--text-muted);
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+    }
+    .meta-chip.active { background: rgba(52,211,153,.1); color: var(--green); border-color: rgba(52,211,153,.25); }
+
+    h1 {
+      font-family: var(--font-head);
+      font-size: 34px; font-weight: 800; letter-spacing: -.6px;
+      color: var(--text); margin-bottom: 10px; line-height: 1.2;
+    }
+    h1 span { color: var(--primary); }
+    h2 {
+      font-family: var(--font-head);
+      font-size: 20px; font-weight: 700;
+      margin: 52px 0 16px; padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    h2 .sec-num { color: var(--primary); font-size: 12px; font-weight: 600; letter-spacing: .5px; margin-right: 8px; }
+    h3 {
+      font-family: var(--font-head);
+      font-size: 14px; font-weight: 700;
+      margin: 28px 0 10px; color: var(--text);
+    }
+    h3::before { content: '> '; color: var(--primary); }
+    p { font-size: 14px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.75; }
+    p strong { color: var(--text); }
+    .lead { font-size: 15px; color: var(--text-muted); margin-bottom: 28px; line-height: 1.75; }
+
+    section { padding-top: 8px; }
+    .anchor { color: var(--text-dim); text-decoration: none; margin-left: 8px; font-size: 14px; opacity: 0; }
+    h2:hover .anchor { opacity: 1; }
+
+    .tbl-wrap { overflow-x: auto; margin: 12px 0 22px; border-radius: var(--r); border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead tr { background: var(--surface2); }
+    th {
+      text-align: left; padding: 9px 14px;
+      color: var(--text-dim); font-size: 10.5px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .8px;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-head);
+    }
+    td {
+      padding: 9px 14px; border-bottom: 1px solid var(--border2);
+      color: var(--text-muted); vertical-align: top; line-height: 1.55;
+    }
+    tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: var(--surface2); }
+    td code { font-family: var(--font-mono); font-size: 11.5px; color: #93C5FD; background: rgba(147,197,253,.08); padding: 1px 6px; border-radius: 4px; }
+    td strong { color: var(--text); }
+    .pill { display: inline-block; padding: 1px 8px; border-radius: 100px; font-size: 10.5px; font-weight: 700; white-space: nowrap; }
+    .pill-blue   { background: rgba(45,82,239,.15); color: #93C5FD; }
+    .pill-green  { background: rgba(52,211,153,.12); color: #34D399; }
+    .pill-amber  { background: rgba(251,191,36,.12); color: #FBBF24; }
+    .pill-red    { background: rgba(248,113,113,.12); color: #F87171; }
+    .pill-gray   { background: var(--surface2); color: var(--text-dim); }
+
+    .code-wrap { position: relative; margin: 14px 0 22px; border-radius: var(--r); overflow: hidden; border: 1px solid var(--border); }
+    .code-header {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--surface2); padding: 8px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .code-lang { font-family: var(--font-mono); font-size: 10.5px; color: var(--primary); }
+    pre {
+      background: var(--surface); padding: 16px 18px; overflow-x: auto;
+      font-family: var(--font-mono); font-size: 12.5px; line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    .callout {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 14px 16px; border-radius: var(--r); margin: 14px 0;
+      font-size: 13px; line-height: 1.65;
+    }
+    .callout-info    { background: rgba(45,82,239,.09);  border: 1px solid rgba(45,82,239,.25); }
+    .callout-warn    { background: rgba(251,191,36,.08);  border: 1px solid rgba(251,191,36,.25); }
+    .callout-success { background: rgba(52,211,153,.08);  border: 1px solid rgba(52,211,153,.25); }
+    .callout-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+    .callout p { margin: 0; color: var(--text-muted); }
+    .callout strong { color: var(--text); }
+    .callout code { font-family: var(--font-mono); font-size: 12px; color: #93C5FD; }
+
+    .flow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 18px 0; }
+    .flow-node {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--rs); padding: 7px 13px;
+      font-size: 12px; font-weight: 600; color: var(--text-muted); white-space: nowrap;
+    }
+    .flow-node.hi { border-color: rgba(45,82,239,.5); color: #93C5FD; background: rgba(45,82,239,.12); }
+    .flow-node.ok { border-color: rgba(52,211,153,.4); color: #34D399; background: rgba(52,211,153,.08); }
+    .flow-node.amber { border-color: rgba(251,191,36,.4); color: #FBBF24; background: rgba(251,191,36,.08); }
+    .flow-node.warn { border-color: rgba(248,113,113,.4); color: #F87171; background: rgba(248,113,113,.08); }
+    .flow-arrow { color: var(--text-dim); font-size: 15px; }
+
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 10px; margin: 14px 0 22px; }
+    .kpi-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; }
+    .kpi-card.blue  { border-top: 2px solid var(--primary); }
+    .kpi-card.green { border-top: 2px solid var(--green); }
+    .kpi-card.amber { border-top: 2px solid var(--amber); }
+    .kpi-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; color: var(--text-dim); margin-bottom: 6px; }
+    .kpi-value { font-family: var(--font-head); font-size: 26px; font-weight: 800; color: var(--text); line-height: 1.1; }
+    .kpi-sub   { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+
+    .hero-banner {
+      background: linear-gradient(135deg, var(--surface2) 0%, rgba(45,82,239,.1) 100%);
+      border: 1px solid rgba(45,82,239,.25);
+      border-radius: 14px; padding: 28px 32px;
+      margin-bottom: 36px; position: relative; overflow: hidden;
+    }
+    .hero-banner::before {
+      content: '';
+      position: absolute; top: -40px; right: -40px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(45,82,239,.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block; font-size: 10.5px; font-weight: 700;
+      padding: 3px 10px; border-radius: 100px;
+      background: rgba(45,82,239,.15); color: var(--primary);
+      border: 1px solid rgba(45,82,239,.3);
+      margin-bottom: 12px; font-family: var(--font-head); letter-spacing: .5px;
+    }
+
+    ul { padding-left: 20px; margin-bottom: 12px; }
+    li { font-size: 14px; color: var(--text-muted); margin-bottom: 4px; line-height: 1.65; }
+    li strong { color: var(--text); }
+    li code { font-family: var(--font-mono); font-size: 12px; color: #93C5FD; background: rgba(147,197,253,.08); padding: 1px 6px; border-radius: 4px; }
+
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .content { padding: 32px 20px; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <a href="index.html" class="back-link">&larr; EVOPE Docs</a>
+      <img src="assets/logo-negative.svg" alt="Digital AI" class="sidebar-logo" />
+      <div class="logo-name">Process Studio</div>
+      <div class="logo-sub">Infraestrutura &amp; Deploy</div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">Visao Geral</div>
+      <a href="#overview"      class="nav-link active">Arquitetura</a>
+      <a href="#servicos"      class="nav-link">Servicos</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">Backend API</div>
+      <a href="#stack"         class="nav-link">Stack Tecnica</a>
+      <a href="#endpoints"     class="nav-link">Endpoints</a>
+      <a href="#auth"          class="nav-link">Autenticacao</a>
+      <a href="#sync"          class="nav-link">Sincronizacao</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">Banco de Dados</div>
+      <a href="#database"      class="nav-link">PostgreSQL</a>
+      <a href="#schema"        class="nav-link">Schema (Prisma)</a>
+      <a href="#migrations"    class="nav-link">Migrations</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">Deploy &amp; Infra</div>
+      <a href="#docker"        class="nav-link">Docker Swarm</a>
+      <a href="#traefik"       class="nav-link">Traefik / HTTPS</a>
+      <a href="#cicd"          class="nav-link">CI/CD Pipeline</a>
+      <a href="#envvars"       class="nav-link">Variaveis de Ambiente</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">Operacoes</div>
+      <a href="#health"        class="nav-link">Health Check</a>
+      <a href="#updates"       class="nav-link">Auto-Update</a>
+      <a href="#metrics"       class="nav-link">Metricas</a>
+      <a href="#setup-local"   class="nav-link">Setup Local</a>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- META BAR -->
+    <div class="meta-bar">
+      <span class="meta-chip active">Em producao</span>
+      <span class="meta-chip">NestJS 11</span>
+      <span class="meta-chip">Prisma 6</span>
+      <span class="meta-chip">PostgreSQL</span>
+      <span class="meta-chip">Docker Swarm</span>
+      <span class="meta-chip">Traefik + TLS</span>
+    </div>
+
+    <!-- HERO -->
+    <section id="overview" style="padding-top: 40px;">
+      <div class="hero-banner">
+        <div class="hero-badge">INFRAESTRUTURA</div>
+        <h1>Process Studio <span>Backend &amp; Deploy</span></h1>
+        <p class="lead">
+          Documentacao completa da infraestrutura server-side do Process Studio:
+          API backend (NestJS), banco de dados (PostgreSQL/Prisma), deploy em Docker Swarm
+          com HTTPS automatico via Traefik, e pipeline CI/CD com GitHub Actions.
+        </p>
+      </div>
+
+      <p>
+        O backend do Process Studio e responsavel por <strong>autenticacao de usuarios</strong>,
+        <strong>sincronizacao de dados</strong> entre dispositivos,
+        <strong>distribuicao de atualizacoes</strong> do app desktop,
+        e <strong>coleta de metricas</strong> de uso. O app desktop funciona 100% local
+        mesmo sem conexao com o backend - a API e complementar, nao essencial.
+      </p>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">i</span>
+        <p><strong>URL de producao:</strong> <code>https://api-process-studio.digital-ai.tech</code></p>
+      </div>
+    </section>
+
+    <!-- SERVICOS -->
+    <section id="servicos">
+      <h2><span class="sec-num">1</span>Servicos do Sistema <a class="anchor" href="#servicos">#</a></h2>
+
+      <div class="flow">
+        <div class="flow-node hi">App Desktop (Tauri)</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node ok">Backend API (NestJS)</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node">PostgreSQL</div>
+      </div>
+      <div class="flow" style="margin-top: 8px;">
+        <div class="flow-node hi">App Desktop (Tauri)</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node amber">GitHub Releases</div>
+        <span class="flow-arrow">&larr;</span>
+        <div class="flow-node ok">Backend API (proxy)</div>
+      </div>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Servico</th><th>Stack</th><th>Responsabilidade</th><th>URL</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>Backend API</strong></td>
+              <td><code>NestJS 11 + Prisma 6</code></td>
+              <td>Auth, sync, updates, metricas, activity logs</td>
+              <td><code>api-process-studio.digital-ai.tech</code></td>
+            </tr>
+            <tr>
+              <td><strong>PostgreSQL</strong></td>
+              <td><code>PostgreSQL 15+</code></td>
+              <td>Persistencia de usuarios, sessoes, processos, documentos</td>
+              <td>Interno (Docker network)</td>
+            </tr>
+            <tr>
+              <td><strong>App Desktop</strong></td>
+              <td><code>Tauri v2 + React + Node.js</code></td>
+              <td>Gravacao, documentacao IA, exportacao - 100% local</td>
+              <td>Local (instalado no PC)</td>
+            </tr>
+            <tr>
+              <td><strong>Traefik</strong></td>
+              <td><code>Traefik v2</code></td>
+              <td>Reverse proxy, TLS automatico (Let's Encrypt)</td>
+              <td>Cluster Swarm</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- STACK -->
+    <section id="stack">
+      <h2><span class="sec-num">2</span>Stack Tecnica do Backend <a class="anchor" href="#stack">#</a></h2>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Camada</th><th>Tecnologia</th><th>Versao</th><th>Uso</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Framework</strong></td><td><code>NestJS</code></td><td>11.0</td><td>Framework HTTP principal</td></tr>
+            <tr><td><strong>ORM</strong></td><td><code>Prisma</code></td><td>6.19</td><td>Modelagem, migrations, queries type-safe</td></tr>
+            <tr><td><strong>Banco</strong></td><td><code>PostgreSQL</code></td><td>15+</td><td>Persistencia relacional</td></tr>
+            <tr><td><strong>Auth</strong></td><td><code>jsonwebtoken + bcrypt</code></td><td>9.0 / 5.1</td><td>JWT com refresh token rotation</td></tr>
+            <tr><td><strong>Validacao</strong></td><td><code>class-validator</code></td><td>0.14</td><td>DTOs com whitelist enforcement</td></tr>
+            <tr><td><strong>Runtime</strong></td><td><code>Node.js</code></td><td>20 LTS</td><td>Alpine-based Docker image</td></tr>
+            <tr><td><strong>Driver DB</strong></td><td><code>pg</code></td><td>8.23</td><td>Conexao PostgreSQL nativa</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Dependencias Principais (package.json)</h3>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">JSON</span></div>
+        <pre>{
+  "@nestjs/common": "^11.0.0",
+  "@nestjs/core": "^11.0.0",
+  "@nestjs/config": "^4.0.0",
+  "@nestjs/platform-express": "^11.0.0",
+  "@prisma/client": "^6.19.3",
+  "jsonwebtoken": "^9.0.2",
+  "bcrypt": "^5.1.1",
+  "class-validator": "^0.14.1",
+  "class-transformer": "^0.5.1",
+  "pg": "^8.23.1"
+}</pre>
+      </div>
+    </section>
+
+    <!-- ENDPOINTS -->
+    <section id="endpoints">
+      <h2><span class="sec-num">3</span>Endpoints da API <a class="anchor" href="#endpoints">#</a></h2>
+
+      <h3>Autenticacao</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Metodo</th><th>Path</th><th>Descricao</th><th>Auth</th></tr></thead>
+          <tbody>
+            <tr><td><span class="pill pill-green">POST</span></td><td><code>/auth/login</code></td><td>Login com email + senha + deviceId</td><td>Publico</td></tr>
+            <tr><td><span class="pill pill-green">POST</span></td><td><code>/auth/refresh</code></td><td>Renovar JWT com refresh token</td><td>Publico</td></tr>
+            <tr><td><span class="pill pill-green">POST</span></td><td><code>/auth/logout</code></td><td>Revogar refresh token</td><td>JWT</td></tr>
+            <tr><td><span class="pill pill-green">POST</span></td><td><code>/auth/heartbeat</code></td><td>Keep-alive de sessao</td><td>JWT</td></tr>
+            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/auth/me</code></td><td>Perfil do usuario logado</td><td>JWT</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Sincronizacao</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Metodo</th><th>Path</th><th>Descricao</th><th>Auth</th></tr></thead>
+          <tbody>
+            <tr><td><span class="pill pill-green">POST</span></td><td><code>/sync/batch</code></td><td>Sync de ate 50 itens (process, document, metric, session)</td><td>JWT</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Atualizacoes e Downloads</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Metodo</th><th>Path</th><th>Descricao</th><th>Auth</th></tr></thead>
+          <tbody>
+            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/updates/check</code></td><td>Verificar nova versao (query: current_version, target, arch)</td><td>JWT</td></tr>
+            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/updates/tauri/:target/:arch/:ver</code></td><td>Endpoint nativo do Tauri v2 updater</td><td>Publico</td></tr>
+            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/updates/download/:ver/:file</code></td><td>Proxy de download do GitHub Releases (repo privado)</td><td>Publico</td></tr>
+            <tr><td><span class="pill pill-green">POST</span></td><td><code>/updates/admin/versions</code></td><td>Publicar nova versao</td><td>JWT (admin)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Metricas e Admin</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Metodo</th><th>Path</th><th>Descricao</th><th>Auth</th></tr></thead>
+          <tbody>
+            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/admin/metrics</code></td><td>Metricas de uso (paginado, filtros por user/tipo/periodo)</td><td>JWT (admin)</td></tr>
+            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/admin/metrics/summary</code></td><td>Resumo estatistico de metricas</td><td>JWT (admin)</td></tr>
+            <tr><td><span class="pill pill-blue">GET</span></td><td><code>/health</code></td><td>Status do sistema (status, versao, banco, uptime)</td><td>Publico</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- AUTH -->
+    <section id="auth">
+      <h2><span class="sec-num">4</span>Autenticacao <a class="anchor" href="#auth">#</a></h2>
+
+      <div class="flow">
+        <div class="flow-node hi">App (login)</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node ok">POST /auth/login</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node">JWT (15min) + Refresh (30d)</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node amber">Device tracking</div>
+      </div>
+
+      <ul>
+        <li><strong>JWT Access Token:</strong> expira em 15 minutos (configuravel via <code>JWT_EXPIRATION</code>)</li>
+        <li><strong>Refresh Token:</strong> expira em 30 dias (configuravel via <code>JWT_REFRESH_EXPIRATION</code>)</li>
+        <li><strong>Refresh Token Rotation:</strong> a cada refresh, o token antigo e revogado e um novo e emitido</li>
+        <li><strong>Device tracking:</strong> cada sessao e vinculada a um <code>deviceId</code> unico</li>
+        <li><strong>Senha:</strong> hash com <code>bcrypt</code> (salt rounds configuravel)</li>
+        <li><strong>Rate limiting:</strong> guard ativo em todos os endpoints de auth</li>
+        <li><strong>Activity logging:</strong> toda acao de auth (login, logout, refresh, falha) e registrada com IP e user agent</li>
+      </ul>
+
+      <h3>Roles</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Role</th><th>Acesso</th></tr></thead>
+          <tbody>
+            <tr><td><span class="pill pill-blue">admin</span></td><td>Todos os endpoints, incluindo metricas, publicacao de versoes e gestao de usuarios</td></tr>
+            <tr><td><span class="pill pill-gray">user</span></td><td>Auth, sync dos proprios dados, check de updates, download</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SYNC -->
+    <section id="sync">
+      <h2><span class="sec-num">5</span>Sincronizacao de Dados <a class="anchor" href="#sync">#</a></h2>
+
+      <p>O endpoint <code>POST /sync/batch</code> aceita ate <strong>50 itens por request</strong>. Cada item tem um tipo de entidade e um payload JSON:</p>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Entity Type</th><th>Descricao</th><th>Campos Principais</th></tr></thead>
+          <tbody>
+            <tr><td><code>process</code></td><td>Processo gravado (trace)</td><td>title, lifecycle, source_type, metadata</td></tr>
+            <tr><td><code>document</code></td><td>Documento compilado</td><td>doc_type, step_count, word_count, content, file_url</td></tr>
+            <tr><td><code>metric</code></td><td>Evento de telemetria</td><td>event_type, payload, device_id, app_version</td></tr>
+            <tr><td><code>session</code></td><td>Sessao de uso</td><td>device_id, app_version, os_version, duration_ms</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">i</span>
+        <p><strong>Local-first:</strong> o app funciona 100% offline. O sync e oportunista - envia dados quando ha conexao, sem bloquear o uso.</p>
+      </div>
+    </section>
+
+    <!-- DATABASE -->
+    <section id="database">
+      <h2><span class="sec-num">6</span>Banco de Dados - PostgreSQL <a class="anchor" href="#database">#</a></h2>
+
+      <div class="kpi-grid">
+        <div class="kpi-card blue">
+          <div class="kpi-label">Tabelas</div>
+          <div class="kpi-value">9</div>
+          <div class="kpi-sub">Schema Prisma</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">Enums</div>
+          <div class="kpi-value">3</div>
+          <div class="kpi-sub">Role, Lifecycle, ActivityEventType</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">IDs</div>
+          <div class="kpi-value">hex(16)</div>
+          <div class="kpi-sub">gen_random_bytes</div>
+        </div>
+      </div>
+
+      <p>
+        Todos os IDs sao gerados via <code>lower(encode(gen_random_bytes(16), 'hex'))</code> - 32 caracteres hexadecimais, sem colisao, distribuidos.
+        Timestamps usam <code>timestamptz</code> (timezone-aware). Campos flexiveis usam <code>JsonB</code>.
+      </p>
+    </section>
+
+    <!-- SCHEMA -->
+    <section id="schema">
+      <h2><span class="sec-num">6.1</span>Schema Prisma <a class="anchor" href="#schema">#</a></h2>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Tabela</th><th>Campos Principais</th><th>Relacoes</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>users</strong></td>
+              <td><code>id</code>, <code>email</code> (unique), <code>password_hash</code>, <code>name</code>, <code>company</code>, <code>role</code> (admin/user), <code>is_active</code></td>
+              <td>refreshTokens, sessions, processes, documents, metrics, activityLogs</td>
+            </tr>
+            <tr>
+              <td><strong>refresh_tokens</strong></td>
+              <td><code>id</code>, <code>user_id</code>, <code>token_hash</code>, <code>device_id</code>, <code>expires_at</code>, <code>revoked_at</code></td>
+              <td>user (cascade delete)</td>
+            </tr>
+            <tr>
+              <td><strong>sessions</strong></td>
+              <td><code>id</code>, <code>user_id</code>, <code>device_id</code>, <code>app_version</code>, <code>os_version</code>, <code>started_at</code>, <code>ended_at</code>, <code>duration_ms</code></td>
+              <td>user</td>
+            </tr>
+            <tr>
+              <td><strong>processes</strong></td>
+              <td><code>id</code>, <code>user_id</code>, <code>title</code>, <code>lifecycle</code> (active/archived/trashed), <code>source_type</code>, <code>metadata</code> (JsonB)</td>
+              <td>user, documents</td>
+            </tr>
+            <tr>
+              <td><strong>documents</strong></td>
+              <td><code>id</code>, <code>process_id</code>, <code>user_id</code>, <code>doc_type</code>, <code>step_count</code>, <code>word_count</code>, <code>content</code> (JsonB), <code>file_url</code>, <code>file_size</code>, <code>file_hash</code></td>
+              <td>user, process</td>
+            </tr>
+            <tr>
+              <td><strong>metrics</strong></td>
+              <td><code>id</code>, <code>user_id</code>, <code>event_type</code>, <code>payload</code> (JsonB), <code>device_id</code>, <code>app_version</code>, <code>occurred_at</code></td>
+              <td>user</td>
+            </tr>
+            <tr>
+              <td><strong>app_versions</strong></td>
+              <td><code>id</code>, <code>version</code> (unique), <code>target</code>, <code>arch</code>, <code>download_url</code>, <code>signature</code>, <code>release_notes</code>, <code>is_published</code></td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td><strong>activity_logs</strong></td>
+              <td><code>id</code>, <code>user_id</code>, <code>event_type</code> (login/logout/login_failed/app_opened/refresh), <code>ip_address</code>, <code>user_agent</code>, <code>device_id</code></td>
+              <td>user</td>
+            </tr>
+            <tr>
+              <td><strong>update_checks</strong></td>
+              <td><code>id</code>, <code>user_id</code>, <code>current_version</code>, <code>latest_version</code>, <code>downloaded</code>, <code>checked_at</code></td>
+              <td>user</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Enums</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Enum</th><th>Valores</th></tr></thead>
+          <tbody>
+            <tr><td><code>Role</code></td><td><code>admin</code>, <code>user</code></td></tr>
+            <tr><td><code>Lifecycle</code></td><td><code>active</code>, <code>archived</code>, <code>trashed</code></td></tr>
+            <tr><td><code>ActivityEventType</code></td><td><code>login</code>, <code>refresh</code>, <code>logout</code>, <code>login_failed</code>, <code>app_opened</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- MIGRATIONS -->
+    <section id="migrations">
+      <h2><span class="sec-num">6.2</span>Migrations <a class="anchor" href="#migrations">#</a></h2>
+
+      <p>Migrations sao gerenciadas pelo Prisma e aplicadas automaticamente no startup do container:</p>
+
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">BASH</span></div>
+        <pre># Desenvolvimento - criar nova migration
+npx prisma migrate dev --name descricao_da_mudanca
+
+# Producao - aplicar migrations pendentes (roda no entrypoint do Docker)
+npx prisma migrate deploy
+
+# Gerar client apos mudanca no schema
+npx prisma generate</pre>
+      </div>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">!</span>
+        <p><strong>O container roda <code>prisma migrate deploy</code> antes de iniciar a aplicacao.</strong> Migrations destrutivas (drop column, drop table) devem ser feitas em duas etapas: primeiro remover o uso no codigo, depois a migration.</p>
+      </div>
+    </section>
+
+    <!-- DOCKER -->
+    <section id="docker">
+      <h2><span class="sec-num">7</span>Docker Swarm <a class="anchor" href="#docker">#</a></h2>
+
+      <p>A API roda como service no Docker Swarm, orquestrado via Portainer.</p>
+
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">DIAGRAMA DE DEPLOY</span></div>
+        <pre>Internet
+  |
+  v
+Traefik (HTTPS / Let's Encrypt)
+  |
+  v  api-process-studio.digital-ai.tech
++-------------------------------------------+
+|  Docker Swarm (oraculusnet_v2)            |
+|                                           |
+|  [process-studio-api]   [postgresql]      |
+|   NestJS :3000           :5432            |
+|   1 replica              volume           |
+|   512 MB / 0.5 CPU       persistente      |
++-------------------------------------------+</pre>
+      </div>
+
+      <h3>Configuracao do Service (docker-stack.yml)</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Parametro</th><th>Valor</th><th>Descricao</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Image</strong></td><td><code>registry.digital-ai.tech/process-studio-api:latest</code></td><td>Registry privado da Digital AI</td></tr>
+            <tr><td><strong>Replicas</strong></td><td>1</td><td>Single instance</td></tr>
+            <tr><td><strong>CPU Limit</strong></td><td>0.5 cores</td><td>Meio core</td></tr>
+            <tr><td><strong>Memory Limit</strong></td><td>512 MB</td><td>Limite hard</td></tr>
+            <tr><td><strong>Memory Reservation</strong></td><td>256 MB</td><td>Reserva garantida</td></tr>
+            <tr><td><strong>Network</strong></td><td><code>oraculusnet_v2</code></td><td>Rede overlay do Swarm</td></tr>
+            <tr><td><strong>Update Strategy</strong></td><td>Rolling (start-first)</td><td>Zero downtime - novo container sobe antes do antigo descer</td></tr>
+            <tr><td><strong>Failure Action</strong></td><td>Rollback</td><td>Rollback automatico se health check falhar</td></tr>
+            <tr><td><strong>Node Constraint</strong></td><td><code>vmi1215893.contaboserver.net</code></td><td>Pinado ao host especifico</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Dockerfile (Multi-stage)</h3>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">DOCKERFILE</span></div>
+        <pre># Build stage
+FROM node:20-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npx prisma generate
+RUN npm run build
+
+# Production stage
+FROM node:20-alpine
+WORKDIR /app
+RUN adduser -D -u 1001 appuser        # Usuario nao-root
+COPY --from=build /app/package*.json ./
+RUN npm ci --omit=dev                  # Apenas deps de producao
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/prisma ./prisma
+RUN npx prisma generate
+USER appuser                           # Executa como nao-root
+EXPOSE 3000
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]</pre>
+      </div>
+    </section>
+
+    <!-- TRAEFIK -->
+    <section id="traefik">
+      <h2><span class="sec-num">8</span>Traefik / HTTPS <a class="anchor" href="#traefik">#</a></h2>
+
+      <p>O Traefik atua como reverse proxy e gerencia certificados TLS automaticamente via Let's Encrypt.</p>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Label</th><th>Valor</th><th>Funcao</th></tr></thead>
+          <tbody>
+            <tr><td><code>traefik.http.routers.ps-api.rule</code></td><td><code>Host(`api-process-studio.digital-ai.tech`)</code></td><td>Roteamento por hostname</td></tr>
+            <tr><td><code>traefik.http.routers.ps-api.entrypoints</code></td><td><code>websecure</code></td><td>HTTPS (porta 443)</td></tr>
+            <tr><td><code>traefik.http.routers.ps-api.tls.certresolver</code></td><td><code>letsencryptresolver</code></td><td>Certificado automatico</td></tr>
+            <tr><td><code>traefik.http.services.ps-api.loadbalancer.server.port</code></td><td><code>3000</code></td><td>Porta interna do container</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>HTTP (porta 80) redireciona automaticamente para HTTPS via middleware <code>redirect-to-https</code>.</p>
+    </section>
+
+    <!-- CI/CD -->
+    <section id="cicd">
+      <h2><span class="sec-num">9</span>CI/CD Pipeline <a class="anchor" href="#cicd">#</a></h2>
+
+      <p>Pipeline automatizado via <strong>GitHub Actions</strong>. Trigger: push na branch <code>main</code>.</p>
+
+      <div class="flow">
+        <div class="flow-node hi">Push main</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node ok">Test</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node ok">Build Image</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node ok">Push Registry</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node amber">Deploy (Portainer)</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node ok">Health Check</div>
+      </div>
+
+      <h3>Stage 1: Test</h3>
+      <ul>
+        <li>Ubuntu latest + Node.js 20</li>
+        <li><code>npm ci</code> + <code>npx prisma generate</code></li>
+        <li><code>npx tsc --noEmit</code> - type checking</li>
+        <li><code>npm run lint</code> - linting</li>
+        <li><code>npx jest --maxWorkers=2 --forceExit</code> - testes unitarios</li>
+      </ul>
+
+      <h3>Stage 2: Build &amp; Push</h3>
+      <ul>
+        <li>Docker BuildX com cache de camadas</li>
+        <li>Push para <code>registry.digital-ai.tech/process-studio-api</code></li>
+        <li>Tags: <code>:latest</code> + <code>:{SHORT_SHA}</code></li>
+      </ul>
+
+      <h3>Stage 3: Deploy</h3>
+      <ul>
+        <li>Deploy via <strong>Portainer API</strong> (nunca CLI)</li>
+        <li>Atualiza imagem para tag <code>:{SHORT_SHA}</code> (nao <code>:latest</code>)</li>
+        <li>Bump de <code>ForceUpdate</code> para recriar task</li>
+        <li>Monitora convergencia (uptime &lt; 120s)</li>
+        <li>Poll no health check por ate 180s</li>
+        <li>Verifica se nao houve rollback automatico</li>
+      </ul>
+
+      <h3>Notificacoes</h3>
+      <p>Cada etapa envia notificacao para o Discord via webhook n8n:</p>
+      <ul>
+        <li>Pipeline iniciado</li>
+        <li>Build de imagem (sucesso / falha)</li>
+        <li>Deploy em andamento</li>
+        <li>Deploy concluido / falhou</li>
+      </ul>
+
+      <h3>Secrets do GitHub Actions</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Secret</th><th>Descricao</th></tr></thead>
+          <tbody>
+            <tr><td><code>REGISTRY_HOST</code></td><td>Host do registry privado</td></tr>
+            <tr><td><code>REGISTRY_USER</code></td><td>Usuario do registry</td></tr>
+            <tr><td><code>REGISTRY_PASSWORD</code></td><td>Senha do registry</td></tr>
+            <tr><td><code>PORTAINER_URL</code></td><td>URL da API do Portainer</td></tr>
+            <tr><td><code>PORTAINER_API_KEY</code></td><td>Token de autenticacao Portainer</td></tr>
+            <tr><td><code>SERVICE_ID</code></td><td>ID do service no Docker Swarm</td></tr>
+            <tr><td><code>N8N_NOTIFY_URL</code></td><td>Webhook n8n para notificacoes Discord</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ENV VARS -->
+    <section id="envvars">
+      <h2><span class="sec-num">10</span>Variaveis de Ambiente <a class="anchor" href="#envvars">#</a></h2>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Variavel</th><th>Obrigatoria</th><th>Default</th><th>Descricao</th></tr></thead>
+          <tbody>
+            <tr><td><code>DATABASE_URL</code></td><td><span class="pill pill-red">Sim</span></td><td>-</td><td>Connection string PostgreSQL (<code>postgresql://user:pass@host:5432/db</code>)</td></tr>
+            <tr><td><code>JWT_SECRET</code></td><td><span class="pill pill-red">Sim</span></td><td>-</td><td>Chave secreta para JWT (min. 32 caracteres)</td></tr>
+            <tr><td><code>JWT_EXPIRATION</code></td><td>Nao</td><td><code>15m</code></td><td>Tempo de expiracao do access token</td></tr>
+            <tr><td><code>JWT_REFRESH_EXPIRATION</code></td><td>Nao</td><td><code>30d</code></td><td>Tempo de expiracao do refresh token</td></tr>
+            <tr><td><code>PORT</code></td><td>Nao</td><td><code>3000</code></td><td>Porta HTTP da aplicacao</td></tr>
+            <tr><td><code>NODE_ENV</code></td><td>Nao</td><td><code>development</code></td><td>Ambiente (production em deploy)</td></tr>
+            <tr><td><code>CORS_ORIGINS</code></td><td>Nao</td><td><code>tauri://localhost,...</code></td><td>Origins permitidos para CORS</td></tr>
+            <tr><td><code>ADMIN_EMAIL</code></td><td>Nao</td><td>-</td><td>Email do admin inicial (seed)</td></tr>
+            <tr><td><code>ADMIN_PASSWORD</code></td><td>Nao</td><td>-</td><td>Senha do admin inicial (min. 12 chars)</td></tr>
+            <tr><td><code>GITHUB_TOKEN</code></td><td>Nao</td><td>-</td><td>Token para download de releases privadas do GitHub</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- HEALTH -->
+    <section id="health">
+      <h2><span class="sec-num">11</span>Health Check <a class="anchor" href="#health">#</a></h2>
+
+      <p>Endpoint: <code>GET /health</code> (publico, sem auth)</p>
+
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">JSON - RESPOSTA</span></div>
+        <pre>{
+  "status": "ok",           // "ok" ou "degraded"
+  "version": "0.4.25",
+  "database": "connected",  // "connected" ou "disconnected"
+  "uptime": 86400           // segundos
+}</pre>
+      </div>
+
+      <p>O Docker Swarm verifica o health a cada <strong>30 segundos</strong> com timeout de 10s e 3 retries. Falha no health trigger rollback automatico.</p>
+    </section>
+
+    <!-- UPDATES -->
+    <section id="updates">
+      <h2><span class="sec-num">12</span>Sistema de Auto-Update <a class="anchor" href="#updates">#</a></h2>
+
+      <div class="flow">
+        <div class="flow-node hi">App Desktop</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node ok">GET /updates/tauri/:target/:arch/:ver</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node">Versao nova?</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node amber">Download via API (proxy GitHub)</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node ok">Instala automaticamente</div>
+      </div>
+
+      <ul>
+        <li>O app verifica updates periodicamente usando o <strong>Tauri v2 updater</strong> nativo</li>
+        <li>A API funciona como <strong>proxy</strong> para o GitHub Releases (repo privado)</li>
+        <li>O download e servido via <code>/updates/download/:ver/:file</code> usando o <code>GITHUB_TOKEN</code> do servidor</li>
+        <li>Admins publicam novas versoes via <code>POST /updates/admin/versions</code></li>
+        <li>Cada check de update e registrado na tabela <code>update_checks</code> para analytics</li>
+      </ul>
+
+      <h3>Fluxo de Release</h3>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">PASSOS</span></div>
+        <pre>1. Build no Windows:  node release.cjs
+   - Compila sidecar (.exe via pkg)
+   - Compila app (Tauri + NSIS installer)
+   - Publica no GitHub Releases
+
+2. Registrar na API:  POST /updates/admin/versions
+   - version, target, arch, download_url, signature, release_notes
+
+3. App detecta:  GET /updates/tauri/windows/x86_64/0.4.24
+   - Retorna JSON com url + signature da nova versao
+
+4. Download + instalacao automatica pelo updater Tauri</pre>
+      </div>
+    </section>
+
+    <!-- METRICS -->
+    <section id="metrics">
+      <h2><span class="sec-num">13</span>Metricas e Telemetria <a class="anchor" href="#metrics">#</a></h2>
+
+      <p>O app envia eventos de telemetria via <code>POST /sync/batch</code> com <code>entityType: "metric"</code>. Admins consultam via:</p>
+
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">HTTP</span></div>
+        <pre># Metricas paginadas com filtros
+GET /admin/metrics?userId=abc&amp;eventType=compile&amp;from=2026-01-01&amp;to=2026-12-31&amp;page=1&amp;limit=100
+
+# Resumo estatistico
+GET /admin/metrics/summary?from=2026-01-01&amp;to=2026-12-31</pre>
+      </div>
+
+      <p>Alem de metricas, a tabela <code>activity_logs</code> registra automaticamente:</p>
+      <ul>
+        <li><strong>login</strong> - usuario logou (IP, user agent, device)</li>
+        <li><strong>logout</strong> - usuario deslogou</li>
+        <li><strong>login_failed</strong> - tentativa de login falhou</li>
+        <li><strong>app_opened</strong> - app foi aberto</li>
+        <li><strong>refresh</strong> - token foi renovado</li>
+      </ul>
+    </section>
+
+    <!-- SETUP LOCAL -->
+    <section id="setup-local">
+      <h2><span class="sec-num">14</span>Setup Local (Desenvolvimento) <a class="anchor" href="#setup-local">#</a></h2>
+
+      <h3>Pre-requisitos</h3>
+      <ul>
+        <li>Node.js 20+ LTS</li>
+        <li>PostgreSQL 15+ rodando localmente (ou via Docker)</li>
+        <li>npm (vem com Node.js)</li>
+      </ul>
+
+      <h3>Passo a passo</h3>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">BASH</span></div>
+        <pre># 1. Clonar o repositorio
+git clone https://github.com/DIGITAL-AI-TECH/process-studio-api.git
+cd process-studio-api
+
+# 2. Instalar dependencias
+npm install
+
+# 3. Configurar variaveis de ambiente
+cp .env.example .env
+# Editar .env com suas credenciais de banco local
+
+# 4. Gerar o Prisma Client
+npx prisma generate
+
+# 5. Aplicar migrations no banco
+npx prisma migrate dev
+
+# 6. Rodar em modo desenvolvimento (hot-reload)
+npm run start:dev
+
+# A API estara disponivel em http://localhost:3000
+# Health check: http://localhost:3000/health</pre>
+      </div>
+
+      <h3>Comandos Uteis</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Comando</th><th>Descricao</th></tr></thead>
+          <tbody>
+            <tr><td><code>npm run start:dev</code></td><td>Desenvolvimento com hot-reload</td></tr>
+            <tr><td><code>npm run build</code></td><td>Compilar TypeScript para dist/</td></tr>
+            <tr><td><code>npm run start:prod</code></td><td>Rodar versao compilada</td></tr>
+            <tr><td><code>npm test</code></td><td>Rodar testes unitarios (Jest)</td></tr>
+            <tr><td><code>npm run test:e2e</code></td><td>Testes end-to-end</td></tr>
+            <tr><td><code>npm run test:cov</code></td><td>Cobertura de testes</td></tr>
+            <tr><td><code>npx prisma studio</code></td><td>Interface visual para o banco</td></tr>
+            <tr><td><code>npx prisma migrate dev</code></td><td>Criar + aplicar migration</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout-success">
+        <span class="callout-icon">*</span>
+        <p><strong>Dica:</strong> Use <code>npx prisma studio</code> para visualizar e editar dados diretamente no banco via interface web. Muito util para debug.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  const links = document.querySelectorAll('.nav-link');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const match = document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+        if (match) match.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  document.querySelectorAll('section[id]').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
