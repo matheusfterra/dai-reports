@@ -48,6 +48,17 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 .period-pills{display:flex;gap:10px;flex-wrap:wrap}
 .period-pill{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:5px 14px;font-size:.78rem;font-weight:600;letter-spacing:.3px}
 
+/* Date Filter */
+.date-filter{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.date-filter select{appearance:none;-webkit-appearance:none;background:rgba(255,255,255,.15) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 5l3 3 3-3' fill='none' stroke='%23fff' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 12px center;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:8px 32px 8px 14px;color:#fff;font-family:var(--font-body);font-size:.85rem;font-weight:500;cursor:pointer;min-width:150px;transition:border-color .15s,background .15s}
+.date-filter select:hover{background-color:rgba(255,255,255,.25);border-color:rgba(255,255,255,.5)}
+.date-filter select:focus{outline:none;border-color:rgba(255,255,255,.6);box-shadow:0 0 0 3px rgba(255,255,255,.15)}
+.date-filter select option{background:var(--brand-dark);color:#fff}
+.date-filter label{font-size:.78rem;font-weight:600;opacity:.8;letter-spacing:.3px}
+.btn-today{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:8px 16px;color:#fff;font-family:var(--font-head);font-size:.78rem;font-weight:700;cursor:pointer;transition:all .15s;letter-spacing:.3px}
+.btn-today:hover{background:rgba(255,255,255,.35);border-color:rgba(255,255,255,.5)}
+.btn-today.active{background:rgba(255,255,255,.35);border-color:#fff}
+
 /* Section header */
 .section-header{display:flex;align-items:baseline;gap:10px;margin-bottom:20px}
 .section-title{font-family:var(--font-head);font-size:1.05rem;font-weight:700;color:var(--brand-dark)}
@@ -144,6 +155,25 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 .delta.up{background:var(--iris-light);color:var(--success-mid)}
 .delta.down{background:#FEF2F2;color:#991B1B}
 .delta.neutral{background:var(--brand-light);color:var(--brand-dark)}
+
+/* Outcome badge for conversations table */
+.outcome-badge{display:inline-block;font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:10px;white-space:nowrap}
+.outcome-badge.ia_sozinha{background:var(--iris-light);color:var(--success-mid)}
+.outcome-badge.ia_com_transbordo{background:var(--brand-light);color:var(--brand-dark)}
+.outcome-badge.humano_sozinho{background:#F3E8FF;color:#6B21A8}
+.outcome-badge.sem_resposta{background:var(--warning-light);color:#92400E}
+.outcome-badge.other{background:#F1F5F9;color:#475569}
+
+/* Chat link */
+.chat-link{color:var(--brand);text-decoration:none;font-weight:600;font-size:.82rem;display:inline-flex;align-items:center;gap:4px;transition:color .15s}
+.chat-link:hover{color:var(--brand-dark);text-decoration:underline}
+.chat-link svg{width:14px;height:14px;flex-shrink:0}
+
+/* Conversations table filter */
+.conv-filters{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.conv-filters select{appearance:none;-webkit-appearance:none;background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 5l3 3 3-3' fill='none' stroke='%23475569' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 10px center;border:1px solid var(--border);border-radius:8px;padding:6px 28px 6px 12px;font-family:var(--font-body);font-size:.82rem;color:var(--text-primary);cursor:pointer;transition:border-color .15s}
+.conv-filters select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(45,82,239,.1)}
+.conv-count{font-size:.78rem;color:var(--text-muted);font-weight:500}
 </style>
 </head>
 <body>
@@ -168,25 +198,31 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
     <div class="period-inner">
       <div>
         <img src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-negative.svg" alt="Digital AI" style="height:28px;width:auto;display:block;margin-bottom:12px;opacity:.9" onerror="this.style.display='none'">
-        <div class="period-title" id="banner-title">Painel Di&#225;rio de Atendimento</div>
+        <div class="period-title" id="banner-title">Painel de Atendimento</div>
         <div class="period-sub" id="banner-sub">Carregando dados...</div>
       </div>
-      <div class="period-pills">
-        <div class="period-pill">Atualiza&#231;&#227;o di&#225;ria</div>
-        <div class="period-pill">WhatsApp + Instagram</div>
-        <div class="period-pill">Atendimento 24/7</div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:12px">
+        <div class="date-filter">
+          <label>De</label>
+          <select id="filter-start"></select>
+          <label>At&#233;</label>
+          <select id="filter-end"></select>
+          <button class="btn-today" id="btn-today" title="Ir para a data mais recente">Hoje</button>
+        </div>
+        <div class="period-pills">
+          <div class="period-pill">WhatsApp + Instagram</div>
+          <div class="period-pill">Atendimento 24/7</div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <div class="container"><div class="main-content" id="main-content">
-
   <div class="loading" id="loading">
     <div class="loading-spinner"></div>
     <div class="loading-text">Carregando dados do painel...</div>
   </div>
-
 </div></div>
 
 <footer class="footer" id="footer" style="display:none">
@@ -240,42 +276,113 @@ const CHART_DEFAULTS = {
   }
 };
 
+// State
+let availableDates = [];
+let currentCharts = [];
+
 function fmtDate(iso) {
-  if (!iso) return '—';
+  if (!iso) return '\u2014';
   const [y, m, d] = iso.split('-');
   return d + '/' + m + '/' + y;
 }
-
-function fmtNum(n) {
-  return (n || 0).toLocaleString('pt-BR');
-}
-
+function fmtNum(n) { return (n || 0).toLocaleString('pt-BR'); }
 function fmtPct(n, total) {
   if (!total) return '0%';
   return (n / total * 100).toFixed(1).replace('.', ',') + '%';
 }
-
 function fmtTime(seconds) {
-  if (!seconds && seconds !== 0) return '—';
+  if (!seconds && seconds !== 0) return '\u2014';
   if (seconds < 60) return seconds + 's';
   const m = Math.floor(seconds / 60);
   const s = seconds % 60;
   return m + 'min ' + (s > 0 ? s + 's' : '');
 }
-
 function getVal(arr, key, val) {
   const row = (arr || []).find(r => r[key] === val);
   return row ? row.total : 0;
 }
 
-async function loadData() {
-  const resp = await fetch(API_URL);
+async function loadData(startDate, endDate) {
+  let url = API_URL;
+  const params = [];
+  if (startDate) params.push('start_date=' + startDate);
+  if (endDate) params.push('end_date=' + endDate);
+  if (params.length) url += '?' + params.join('&');
+  const resp = await fetch(url);
   if (!resp.ok) throw new Error('HTTP ' + resp.status);
   return resp.json();
 }
 
+function populateDateFilters(dates, startDate, endDate) {
+  availableDates = dates || [];
+  const selStart = document.getElementById('filter-start');
+  const selEnd = document.getElementById('filter-end');
+  selStart.innerHTML = '';
+  selEnd.innerHTML = '';
+  availableDates.forEach(function(d) {
+    const optS = document.createElement('option');
+    optS.value = d; optS.textContent = fmtDate(d);
+    if (d === startDate) optS.selected = true;
+    selStart.appendChild(optS);
+    const optE = document.createElement('option');
+    optE.value = d; optE.textContent = fmtDate(d);
+    if (d === endDate) optE.selected = true;
+    selEnd.appendChild(optE);
+  });
+
+  // Update "Hoje" button state
+  const btnToday = document.getElementById('btn-today');
+  const latestDate = availableDates.length > 0 ? availableDates[0] : null;
+  if (latestDate && startDate === latestDate && endDate === latestDate) {
+    btnToday.classList.add('active');
+  } else {
+    btnToday.classList.remove('active');
+  }
+}
+
+function onDateChange() {
+  const sd = document.getElementById('filter-start').value;
+  const ed = document.getElementById('filter-end').value;
+  if (sd > ed) {
+    document.getElementById('filter-end').value = sd;
+  }
+  fetchAndRender(document.getElementById('filter-start').value, document.getElementById('filter-end').value);
+}
+
+function onTodayClick() {
+  const latest = availableDates.length > 0 ? availableDates[0] : null;
+  if (latest) {
+    document.getElementById('filter-start').value = latest;
+    document.getElementById('filter-end').value = latest;
+    fetchAndRender(latest, latest);
+  }
+}
+
+function showLoading() {
+  document.getElementById('main-content').innerHTML = '<div class="loading"><div class="loading-spinner"></div><div class="loading-text">Carregando dados do painel...</div></div>';
+  document.getElementById('footer').style.display = 'none';
+}
+
+async function fetchAndRender(startDate, endDate) {
+  showLoading();
+  // Destroy existing charts
+  currentCharts.forEach(function(c) { c.destroy(); });
+  currentCharts = [];
+  try {
+    const data = await loadData(startDate, endDate);
+    populateDateFilters(data.availableDates, data.startDate, data.endDate);
+    render(data);
+  } catch (err) {
+    document.getElementById('main-content').innerHTML = '<div class="error-box">Erro ao carregar dados: ' + err.message + '<br>Tente recarregar a p\u00e1gina.</div>';
+    console.error('API Error:', err);
+  }
+}
+
 function render(data) {
-  const d = data.date;
+  const sd = data.startDate;
+  const ed = data.endDate;
+  const isRange = sd !== ed;
+  const dateLabel = isRange ? fmtDate(sd) + ' a ' + fmtDate(ed) : fmtDate(sd);
   const kpis = data.kpis || [];
   const attendants = data.attendants || [];
   const hourly = data.hourly || [];
@@ -283,6 +390,7 @@ function render(data) {
   const respTime = (data.responseTime || [])[0] || {};
   const firstResp = data.firstResponder || [];
   const history = data.history || [];
+  const conversations = data.conversations || [];
 
   // Compute KPI values
   const totalConvs = kpis.reduce((s, r) => s + (r.total || 0), 0);
@@ -294,37 +402,23 @@ function render(data) {
   const iaTotal = iaSozinha + iaTransbordo;
   const iaParticipacao = totalConvs > 0 ? ((iaTotal / totalConvs) * 100).toFixed(1) : '0';
 
-  // History (previous day)
-  const prevDate = history.length > 0 ? history[0].metric_date : null;
-  const prevTotal = history.reduce((s, r) => s + (r.total || 0), 0);
-
-  // Delta
-  let deltaHtml = '';
-  if (prevTotal > 0) {
-    const diff = totalConvs - prevTotal;
-    const pct = ((diff / prevTotal) * 100).toFixed(0);
-    if (diff > 0) deltaHtml = '<span class="delta up">+' + pct + '%</span>';
-    else if (diff < 0) deltaHtml = '<span class="delta down">' + pct + '%</span>';
-    else deltaHtml = '<span class="delta neutral">0%</span>';
-  }
-
   // First responder
   const frIa = getVal(firstResp, 'first_responder_kind', 'ia');
-  const frAtt = getVal(firstResp, 'first_responder_kind', 'atendente');
   const frTotal = firstResp.reduce((s, r) => s + (r.total || 0), 0);
 
   // Update header
-  document.getElementById('badge-date').textContent = 'Dados de ' + fmtDate(d);
-  document.getElementById('banner-sub').textContent = fmtDate(d) + ' \u2014 M\u00e9tricas do dia processadas pelo pipeline autom\u00e1tico';
+  document.getElementById('badge-date').textContent = dateLabel;
+  document.getElementById('banner-title').textContent = isRange ? 'Painel de Atendimento' : 'Painel Di\u00e1rio de Atendimento';
+  document.getElementById('banner-sub').textContent = dateLabel + ' \u2014 M\u00e9tricas processadas pelo pipeline autom\u00e1tico';
 
   // Build HTML
   let html = '';
 
   // === KPIs ===
   html += '<div class="section">';
-  html += '<div class="section-header"><span class="section-title">Vis\u00e3o do Dia</span><div class="section-divider"></div><span class="section-meta">' + fmtDate(d) + '</span></div>';
+  html += '<div class="section-header"><span class="section-title">Vis\u00e3o ' + (isRange ? 'do Per\u00edodo' : 'do Dia') + '</span><div class="section-divider"></div><span class="section-meta">' + dateLabel + '</span></div>';
   html += '<div class="kpi-grid">';
-  html += '<div class="kpi-card brand"><div class="kpi-label">Conversas ' + deltaHtml + '</div><div class="kpi-value">' + fmtNum(totalConvs) + '</div><div class="kpi-sub">conversas no dia' + (prevTotal > 0 ? ' (ontem: ' + fmtNum(prevTotal) + ')' : '') + '</div></div>';
+  html += '<div class="kpi-card brand"><div class="kpi-label">Conversas</div><div class="kpi-value">' + fmtNum(totalConvs) + '</div><div class="kpi-sub">conversas no per\u00edodo</div></div>';
   html += '<div class="kpi-card success"><div class="kpi-label">IA Sozinha <span class="tip"><span class="tip-icon">?</span><div class="tip-box">Conversas resolvidas 100% pela Iris, sem interven\u00e7\u00e3o humana.</div></span></div><div class="kpi-value">' + fmtNum(iaSozinha) + '</div><div class="kpi-sub">' + fmtPct(iaSozinha, totalConvs) + ' do total</div></div>';
   html += '<div class="kpi-card brand"><div class="kpi-label">IA + Transbordo <span class="tip"><span class="tip-icon">?</span><div class="tip-box">Conversas iniciadas pela Iris que precisaram de atendente humano.</div></span></div><div class="kpi-value">' + fmtNum(iaTransbordo) + '</div><div class="kpi-sub">' + fmtPct(iaTransbordo, totalConvs) + ' do total</div></div>';
   html += '<div class="kpi-card warning"><div class="kpi-label">Sem Resposta <span class="tip tip-right"><span class="tip-icon">?</span><div class="tip-box">Conversas onde o cliente n\u00e3o recebeu resposta (IA nem humano).</div></span></div><div class="kpi-value">' + fmtNum(semResposta) + '</div><div class="kpi-sub">' + fmtPct(semResposta, totalConvs) + ' do total</div></div>';
@@ -334,18 +428,14 @@ function render(data) {
   html += '<div class="iris-strip"><div class="iris-left"><div class="iris-avatar">\uD83E\uDD16</div><div><div class="iris-name">Iris \u00b7 Agente de IA</div><div class="iris-desc">Atendimento autom\u00e1tico \u00b7 dispon\u00edvel 24h por dia</div></div></div>';
   html += '<div class="iris-stats">';
   html += '<div class="iris-stat"><div class="iris-stat-val">' + fmtNum(iaTotal) + '</div><div class="iris-stat-label">conversas com participa\u00e7\u00e3o da IA</div></div>';
-  html += '<div class="iris-stat"><div class="iris-stat-val">' + iaParticipacao.replace('.', ',') + '%</div><div class="iris-stat-label">das conversas do dia</div></div>';
+  html += '<div class="iris-stat"><div class="iris-stat-val">' + iaParticipacao.replace('.', ',') + '%</div><div class="iris-stat-label">das conversas</div></div>';
   html += '<div class="iris-stat"><div class="iris-stat-val">' + fmtPct(frIa, frTotal) + '</div><div class="iris-stat-label">1\u00aa resposta pela IA</div></div>';
   html += '</div></div>';
 
   // === Distribuicao por Outcome (donut) + Tempo de Resposta ===
   html += '<div class="section"><div class="section-header"><span class="section-title">Distribui\u00e7\u00e3o de Atendimento</span><div class="section-divider"></div></div>';
   html += '<div class="two-col">';
-
-  // Donut chart
   html += '<div class="chart-card"><div class="chart-card-header"><span class="chart-card-title">Por Tipo de Atendimento</span></div><div class="chart-wrap"><canvas id="chart-outcome"></canvas></div></div>';
-
-  // Response time + first responder
   html += '<div class="chart-card"><div class="chart-card-header"><span class="chart-card-title">Tempo de Resposta</span></div>';
   html += '<div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:24px">';
   html += '<div><div class="kpi-label">M\u00e9dia</div><div class="kpi-value" style="font-size:1.5rem">' + fmtTime(respTime.avg_sec) + '</div><div class="kpi-sub">primeira resposta</div></div>';
@@ -365,15 +455,11 @@ function render(data) {
     const label = r.first_responder_kind === 'ia' ? 'IA' : r.first_responder_kind === 'atendente' ? 'Atendente' : r.first_responder_kind === 'celular' ? 'Celular' : 'Indefinido';
     html += '<span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:' + (frColors[r.first_responder_kind] || '#94A3B8') + '"></span>' + label + ': <b>' + r.total + '</b> (' + fmtPct(r.total, frTotal) + ')</span>';
   });
-  html += '</div>';
-  html += '</div>';
-  html += '</div></div>';
+  html += '</div></div></div></div>';
 
   // === Atendentes ===
   html += '<div class="section"><div class="section-header"><span class="section-title">Atendentes</span><div class="section-divider"></div></div>';
   html += '<div class="two-col">';
-
-  // Table
   html += '<div class="chart-card"><div class="chart-card-header"><span class="chart-card-title">Conversas por Atendente</span></div>';
   html += '<div class="table-scroll"><table class="data-table"><thead><tr><th>Atendente</th><th class="num">Conversas</th><th class="num">% do Total</th></tr></thead><tbody>';
   const totalAtt = attendants.reduce((s, r) => s + (r.convs || 0), 0);
@@ -385,8 +471,6 @@ function render(data) {
     html += '<td class="num">' + fmtPct(r.convs, totalAtt) + '</td></tr>';
   });
   html += '</tbody></table></div></div>';
-
-  // Bar chart
   html += '<div class="chart-card"><div class="chart-card-header"><span class="chart-card-title">Volume por Atendente</span></div><div class="chart-wrap"><canvas id="chart-attendants"></canvas></div></div>';
   html += '</div></div>';
 
@@ -398,7 +482,6 @@ function render(data) {
   html += '<div class="section"><div class="section-header"><span class="section-title">Por Canal (Inbox)</span><div class="section-divider"></div></div>';
   html += '<div class="chart-card"><div class="chart-card-header"><span class="chart-card-title">Distribui\u00e7\u00e3o por Inbox e Tipo</span></div>';
   html += '<div class="table-scroll"><table class="data-table"><thead><tr><th>Inbox</th><th class="num">IA Sozinha</th><th class="num">IA+Transb.</th><th class="num">Humano</th><th class="num">Sem Resp.</th><th class="num">Total</th></tr></thead><tbody>';
-
   const inboxMap = {};
   inboxes.forEach(function(r) {
     if (!inboxMap[r.inbox_id]) inboxMap[r.inbox_id] = { ia_sozinha: 0, ia_com_transbordo: 0, humano_sozinho: 0, sem_resposta: 0, other: 0 };
@@ -423,11 +506,56 @@ function render(data) {
   });
   html += '</tbody></table></div></div></div>';
 
-  // === History ===
-  if (history.length > 0 && prevDate) {
-    html += '<div class="section"><div class="section-header"><span class="section-title">Comparativo com Dia Anterior</span><div class="section-divider"></div><span class="section-meta">' + fmtDate(prevDate) + '</span></div>';
-    html += '<div class="chart-card"><div class="chart-card-header"><span class="chart-card-title">Ontem vs Hoje</span></div>';
-    html += '<div class="chart-wrap"><canvas id="chart-history"></canvas></div></div></div>';
+  // === History (timeline chart for range or comparison for single day) ===
+  if (history.length > 0) {
+    html += '<div class="section"><div class="section-header"><span class="section-title">Evolu\u00e7\u00e3o Di\u00e1ria</span><div class="section-divider"></div></div>';
+    html += '<div class="chart-card"><div class="chart-card-header"><span class="chart-card-title">Conversas por Dia e Tipo</span></div>';
+    html += '<div class="chart-wrap" style="height:320px"><canvas id="chart-history"></canvas></div></div></div>';
+  }
+
+  // === Conversations Table ===
+  if (conversations.length > 0) {
+    html += '<div class="section"><div class="section-header"><span class="section-title">Conversas Detalhadas</span><div class="section-divider"></div><span class="section-meta">' + fmtNum(conversations.length) + ' conversas</span></div>';
+    html += '<div class="chart-card">';
+    html += '<div class="chart-card-header"><div class="conv-filters">';
+    html += '<select id="conv-filter-outcome"><option value="">Todos os tipos</option>';
+    html += '<option value="ia_sozinha">IA Sozinha</option>';
+    html += '<option value="ia_com_transbordo">IA + Transbordo</option>';
+    html += '<option value="humano_sozinho">Humano Sozinho</option>';
+    html += '<option value="sem_resposta">Sem Resposta</option>';
+    html += '</select>';
+    html += '<select id="conv-filter-inbox"><option value="">Todos os canais</option>';
+    inboxIds.forEach(function(id) {
+      html += '<option value="' + id + '">' + (INBOX_NAMES[id] || 'Inbox ' + id) + '</option>';
+    });
+    html += '</select>';
+    html += '<span class="conv-count" id="conv-count">' + conversations.length + ' conversas</span>';
+    html += '</div></div>';
+    html += '<div class="table-scroll"><table class="data-table" id="conv-table"><thead><tr>';
+    html += '<th>Conv</th><th>Hora</th>';
+    if (isRange) html += '<th>Data</th>';
+    html += '<th>Canal</th><th>Tipo</th><th>1\u00ba Resp.</th><th class="num">Tempo</th><th>Atendente</th><th class="num">Msgs</th><th>Chat</th>';
+    html += '</tr></thead><tbody id="conv-tbody">';
+    conversations.forEach(function(c) {
+      const outLabel = OUTCOME_LABELS[c.ai_outcome] || c.ai_outcome || 'Outro';
+      const outClass = c.ai_outcome || 'other';
+      const frLabel = c.first_responder_kind === 'ia' ? 'IA' : c.first_responder_kind === 'atendente' ? 'Atend.' : c.first_responder_kind === 'celular' ? 'Cel.' : '\u2014';
+      const attNames = (c.attendant_names || []).join(', ') || '\u2014';
+      const totalMsgs = (c.client_msgs || 0) + (c.ai_msgs || 0) + (c.attendant_msgs || 0);
+      html += '<tr data-outcome="' + (c.ai_outcome || '') + '" data-inbox="' + c.inbox_id + '">';
+      html += '<td class="hl">#' + c.conversation_id + '</td>';
+      html += '<td>' + (c.hora || '\u2014') + '</td>';
+      if (isRange) html += '<td>' + fmtDate(c.metric_date) + '</td>';
+      html += '<td>' + (INBOX_NAMES[c.inbox_id] || 'Inbox ' + c.inbox_id) + '</td>';
+      html += '<td><span class="outcome-badge ' + outClass + '">' + outLabel + '</span></td>';
+      html += '<td>' + frLabel + '</td>';
+      html += '<td class="num">' + fmtTime(c.first_response_seconds) + '</td>';
+      html += '<td>' + attNames + '</td>';
+      html += '<td class="num">' + totalMsgs + '</td>';
+      html += '<td><a href="' + c.chat_url + '" target="_blank" class="chat-link"><svg viewBox="0 0 16 16" fill="none"><path d="M6 12l-2 2V12H3a1 1 0 01-1-1V3a1 1 0 011-1h10a1 1 0 011 1v8a1 1 0 01-1 1H6z" stroke="currentColor" stroke-width="1.5"/></svg>Abrir</a></td>';
+      html += '</tr>';
+    });
+    html += '</tbody></table></div></div></div>';
   }
 
   // Render
@@ -435,12 +563,34 @@ function render(data) {
   document.getElementById('footer').style.display = '';
 
   // === Charts ===
-  renderCharts(data, totalConvs, iaSozinha, iaTransbordo, humanoSozinho, semResposta, nullOutcome, attendants, hourly, history, prevDate);
+  renderCharts(data, totalConvs, iaSozinha, iaTransbordo, humanoSozinho, semResposta, nullOutcome, attendants, hourly, history);
+
+  // === Conversation table filters ===
+  if (conversations.length > 0) {
+    var filterOutcome = document.getElementById('conv-filter-outcome');
+    var filterInbox = document.getElementById('conv-filter-inbox');
+    function applyConvFilters() {
+      var ov = filterOutcome.value;
+      var iv = filterInbox.value;
+      var rows = document.querySelectorAll('#conv-tbody tr');
+      var visible = 0;
+      rows.forEach(function(row) {
+        var show = true;
+        if (ov && row.dataset.outcome !== ov) show = false;
+        if (iv && row.dataset.inbox !== iv) show = false;
+        row.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      document.getElementById('conv-count').textContent = visible + ' conversa' + (visible !== 1 ? 's' : '');
+    }
+    filterOutcome.addEventListener('change', applyConvFilters);
+    filterInbox.addEventListener('change', applyConvFilters);
+  }
 }
 
-function renderCharts(data, totalConvs, iaSozinha, iaTransbordo, humanoSozinho, semResposta, nullOutcome, attendants, hourly, history, prevDate) {
+function renderCharts(data, totalConvs, iaSozinha, iaTransbordo, humanoSozinho, semResposta, nullOutcome, attendants, hourly, history) {
   // Outcome donut
-  new Chart(document.getElementById('chart-outcome'), {
+  currentCharts.push(new Chart(document.getElementById('chart-outcome'), {
     type: 'doughnut',
     data: {
       labels: ['IA Sozinha', 'IA + Transbordo', 'Humano Sozinho', 'Sem Resposta', 'Outros'],
@@ -462,11 +612,11 @@ function renderCharts(data, totalConvs, iaSozinha, iaTransbordo, humanoSozinho, 
         }
       }
     }
-  });
+  }));
 
   // Attendants bar
   if (attendants.length > 0) {
-    new Chart(document.getElementById('chart-attendants'), {
+    currentCharts.push(new Chart(document.getElementById('chart-attendants'), {
       type: 'bar',
       data: {
         labels: attendants.map(function(r) { return r.att_name; }),
@@ -486,7 +636,7 @@ function renderCharts(data, totalConvs, iaSozinha, iaTransbordo, humanoSozinho, 
           y: { grid: { display: false }, ticks: { font: { family: "'Plus Jakarta Sans',sans-serif", weight: 600 } } }
         }
       }
-    });
+    }));
   }
 
   // Hourly stacked bar
@@ -497,14 +647,11 @@ function renderCharts(data, totalConvs, iaSozinha, iaTransbordo, humanoSozinho, 
     const senderLabels = { cliente: 'Cliente', ia: 'IA', atendente: 'Atendente', celular: 'Celular', outro_humano: 'Outro', sem_remetente: 'Indefinido' };
     const senderColors = { cliente: '#64748B', ia: '#059669', atendente: '#7C3AED', celular: '#3B82F6', outro_humano: '#F59E0B', sem_remetente: '#CBD5E1' };
     const hourlyMap = {};
-    hourly.forEach(function(r) {
-      var key = r.hour_of_day + '_' + r.sender_kind;
-      hourlyMap[key] = r.total_msgs;
-    });
+    hourly.forEach(function(r) { hourlyMap[r.hour_of_day + '_' + r.sender_kind] = r.total_msgs; });
     var activeSenders = senderKinds.filter(function(sk) {
       return hours.some(function(h) { return (hourlyMap[h + '_' + sk] || 0) > 0; });
     });
-    new Chart(document.getElementById('chart-hourly'), {
+    currentCharts.push(new Chart(document.getElementById('chart-hourly'), {
       type: 'bar',
       data: {
         labels: hours.map(function(h) { return h + 'h'; }),
@@ -525,43 +672,45 @@ function renderCharts(data, totalConvs, iaSozinha, iaTransbordo, humanoSozinho, 
           y: { stacked: true, grid: { color: 'rgba(0,0,0,.04)' }, ticks: { font: { family: "'DM Sans',sans-serif" } } }
         }
       }
-    });
+    }));
   }
 
-  // History comparison
-  if (history.length > 0 && prevDate && document.getElementById('chart-history')) {
+  // History — stacked bar by day
+  if (history.length > 0 && document.getElementById('chart-history')) {
+    const dateSet = [...new Set(history.map(r => r.metric_date))].sort();
     const outcomes = ['ia_sozinha', 'ia_com_transbordo', 'humano_sozinho', 'sem_resposta'];
-    const labels = outcomes.map(function(o) { return OUTCOME_LABELS[o] || o; });
-    const todayVals = [iaSozinha, iaTransbordo, humanoSozinho, semResposta];
-    const prevVals = outcomes.map(function(o) { return getVal(history, 'ai_outcome', o); });
-    new Chart(document.getElementById('chart-history'), {
+    const histMap = {};
+    history.forEach(function(r) { histMap[r.metric_date + '_' + r.ai_outcome] = r.total; });
+    currentCharts.push(new Chart(document.getElementById('chart-history'), {
       type: 'bar',
       data: {
-        labels: labels,
-        datasets: [
-          { label: 'Ontem (' + fmtDate(prevDate) + ')', data: prevVals, backgroundColor: 'rgba(45,82,239,.25)', borderColor: '#2D52EF', borderWidth: 1, borderRadius: 4, maxBarThickness: 50 },
-          { label: 'Hoje (' + fmtDate(data.date) + ')', data: todayVals, backgroundColor: 'rgba(5,150,105,.7)', borderColor: '#059669', borderWidth: 1, borderRadius: 4, maxBarThickness: 50 }
-        ]
+        labels: dateSet.map(fmtDate),
+        datasets: outcomes.map(function(o) {
+          return {
+            label: OUTCOME_LABELS[o] || o,
+            data: dateSet.map(function(d) { return histMap[d + '_' + o] || 0; }),
+            backgroundColor: OUTCOME_COLORS[o] || '#94A3B8',
+            borderRadius: 2, maxBarThickness: 50
+          };
+        })
       },
       options: {
         ...CHART_DEFAULTS,
         plugins: { ...CHART_DEFAULTS.plugins, legend: { ...CHART_DEFAULTS.plugins.legend, position: 'top' } },
         scales: {
-          x: { grid: { display: false }, ticks: { font: { family: "'DM Sans',sans-serif" } } },
-          y: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { font: { family: "'DM Sans',sans-serif" } } }
+          x: { stacked: true, grid: { display: false }, ticks: { font: { family: "'DM Sans',sans-serif" }, maxRotation: 45 } },
+          y: { stacked: true, grid: { color: 'rgba(0,0,0,.04)' }, ticks: { font: { family: "'DM Sans',sans-serif" } } }
         }
       }
-    });
+    }));
   }
 }
 
 // Init
-loadData()
-  .then(render)
-  .catch(function(err) {
-    document.getElementById('main-content').innerHTML = '<div class="error-box">Erro ao carregar dados: ' + err.message + '<br>Tente recarregar a p\u00e1gina.</div>';
-    console.error('API Error:', err);
-  });
+document.getElementById('filter-start').addEventListener('change', onDateChange);
+document.getElementById('filter-end').addEventListener('change', onDateChange);
+document.getElementById('btn-today').addEventListener('click', onTodayClick);
+fetchAndRender();
 </script>
 </body>
 </html>
