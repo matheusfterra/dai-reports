@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sr. &#211;culos &#8212; Painel de Atendimento</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --brand:#2D52EF; --brand-dark:#0F1F5C; --brand-mid:#1A39C4;
+  --brand-accent:#E8EEFF; --brand-light:#F0F4FF;
+  --bg:#F8FAFF; --surface:#FFFFFF; --border:#E2E8F0; --border-light:#EEF2F8;
+  --text-primary:#0F172A; --text-secondary:#475569; --text-muted:#94A3B8;
+  --success:#059669; --success-mid:#065F46; --iris-light:#ECFDF5;
+  --warning:#D97706; --warning-light:#FFFBEB;
+  --radius:12px; --radius-lg:16px;
+  --shadow-sm:0 1px 3px rgba(15,31,92,.06),0 1px 2px rgba(15,31,92,.04);
+  --shadow:0 4px 12px rgba(15,31,92,.08),0 2px 4px rgba(15,31,92,.04);
+  --shadow-lg:0 8px 24px rgba(15,31,92,.10),0 4px 8px rgba(15,31,92,.06);
+  --font-head:'Plus Jakarta Sans',sans-serif; --font-body:'DM Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px;scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,h5{font-family:var(--font-head)}
+.container{max-width:1180px;margin:0 auto;padding:0 24px}
+.section{margin-bottom:40px}
+
+/* Header */
+.header{background:var(--surface);border-bottom:1px solid var(--border);padding:20px 0;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.header-brand{display:flex;align-items:center;gap:14px}
+.header-logo{display:flex;align-items:center;flex-shrink:0}
+.header-logo img{height:34px;width:auto;display:block}
+.header-title{font-family:var(--font-head);font-weight:700;font-size:1.15rem;color:var(--brand-dark)}
+.header-sub{font-size:.82rem;color:var(--text-secondary);margin-top:1px}
+.header-badge{display:flex;align-items:center;gap:8px;background:var(--brand-light);border:1px solid #C7D7FD;border-radius:20px;padding:6px 14px;font-size:.78rem;font-family:var(--font-head);font-weight:600;color:var(--brand-dark)}
+.badge-dot{width:7px;height:7px;border-radius:50%;background:var(--brand);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* Period Banner */
+.period-banner{background:linear-gradient(135deg,var(--brand-dark) 0%,var(--brand-mid) 60%,var(--brand) 100%);color:#fff;padding:28px 0;margin-bottom:36px}
+.period-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}
+.period-title{font-size:1.45rem;font-weight:800;letter-spacing:-.5px}
+.period-sub{font-size:.88rem;opacity:.75;margin-top:4px}
+.period-pills{display:flex;gap:10px;flex-wrap:wrap}
+.period-pill{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:5px 14px;font-size:.78rem;font-weight:600;letter-spacing:.3px}
+
+/* Section header */
+.section-header{display:flex;align-items:baseline;gap:10px;margin-bottom:20px}
+.section-title{font-family:var(--font-head);font-size:1.05rem;font-weight:700;color:var(--brand-dark)}
+.section-divider{flex:1;height:1px;background:var(--border)}
+.section-meta{font-size:.78rem;color:var(--text-muted);font-weight:500}
+
+/* KPI Cards */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.kpi-grid{grid-template-columns:1fr}}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px 20px;box-shadow:var(--shadow-sm);position:relative;overflow:visible}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--radius-lg) var(--radius-lg) 0 0}
+.kpi-card.brand::before{background:var(--brand)}
+.kpi-card.success::before{background:var(--success)}
+.kpi-card.warning::before{background:var(--warning)}
+.kpi-label{font-size:.78rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.6px;display:flex;align-items:center;gap:6px}
+.kpi-value{font-family:var(--font-head);font-size:2rem;font-weight:800;color:var(--brand-dark);margin:8px 0 4px;line-height:1}
+.kpi-sub{font-size:.78rem;color:var(--text-secondary)}
+
+/* Tooltips */
+.tip{position:relative;display:inline-flex;align-items:center;cursor:help}
+.tip-icon{width:16px;height:16px;border-radius:50%;background:var(--border);color:var(--text-secondary);font-size:.65rem;font-weight:700;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-head);flex-shrink:0;transition:background .15s}
+.tip:hover .tip-icon{background:var(--brand);color:#fff}
+.tip-box{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:270px;background:var(--brand-dark);color:#fff;border-radius:var(--radius);padding:12px 14px;font-size:.75rem;line-height:1.55;pointer-events:none;opacity:0;transition:opacity .2s;z-index:9999;font-family:var(--font-body);font-weight:400;box-shadow:var(--shadow-lg)}
+.tip-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--brand-dark)}
+.tip:hover .tip-box{opacity:1}
+.tip.tip-right .tip-box{left:auto;right:0;transform:none}
+.tip.tip-right .tip-box::after{left:auto;right:14px;transform:none}
+
+/* Iris Strip */
+.iris-strip{background:linear-gradient(135deg,#047857 0%,var(--success) 100%);border-radius:var(--radius-lg);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:36px;box-shadow:0 4px 20px rgba(5,150,105,.20)}
+.iris-left{display:flex;align-items:center;gap:18px}
+.iris-avatar{width:54px;height:54px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
+.iris-name{font-family:var(--font-head);font-size:1.15rem;font-weight:800;color:#fff}
+.iris-desc{font-size:.82rem;color:rgba(255,255,255,.8);margin-top:2px}
+.iris-stats{display:flex;gap:32px;flex-wrap:wrap}
+.iris-stat{text-align:right}
+.iris-stat-val{font-family:var(--font-head);font-size:1.8rem;font-weight:800;color:#fff;line-height:1;display:flex;align-items:center;gap:6px;justify-content:flex-end}
+.iris-stat-label{font-size:.75rem;color:rgba(255,255,255,.75);margin-top:3px;font-weight:500}
+
+/* Chart card */
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm)}
+.chart-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap}
+.chart-card-title{font-family:var(--font-head);font-size:.95rem;font-weight:700;color:var(--brand-dark)}
+.chart-wrap{position:relative;height:280px}
+
+/* Layout */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:768px){.two-col{grid-template-columns:1fr}}
+
+/* Table */
+.data-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.data-table th{font-family:var(--font-head);font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-secondary);padding:10px 14px;border-bottom:2px solid var(--border);text-align:left;white-space:nowrap}
+.data-table td{padding:12px 14px;border-bottom:1px solid var(--border-light);vertical-align:middle}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:var(--bg)}
+.num{text-align:right!important;font-variant-numeric:tabular-nums;font-weight:600}
+.hl{font-weight:700;color:var(--brand-dark)}
+.table-scroll{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border)}
+
+/* Agent avatars */
+.agent-name{display:flex;align-items:center;gap:10px}
+.agent-avatar{width:32px;height:32px;border-radius:50%;font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-head)}
+.av-iris{background:var(--iris-light);color:var(--success-mid)}
+.av-thais{background:#EDE9FE;color:#4C1D95}
+.av-helen{background:#DBEAFE;color:#1E40AF}
+.av-laisa{background:#FEE2E2;color:#991B1B}
+
+/* Progress bar */
+.progress-bar{height:8px;background:var(--border-light);border-radius:4px;overflow:hidden;display:flex}
+.progress-seg{height:100%;transition:width .5s ease}
+
+/* Loading */
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:400px;gap:16px}
+.loading-spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--brand);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:.88rem;color:var(--text-secondary)}
+
+/* Error */
+.error-box{background:#FEF2F2;border:1px solid #FECACA;border-radius:var(--radius);padding:20px;text-align:center;color:#991B1B;font-size:.88rem}
+
+/* Footer */
+.footer{background:var(--surface);border-top:1px solid var(--border);padding:24px 0;margin-top:60px}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.footer-brand{display:flex;align-items:center;gap:8px}
+.footer-logo{display:flex;align-items:center}
+.footer-logo img{height:22px;width:auto;display:block}
+.footer-meta{font-size:.75rem;color:var(--text-muted)}
+.footer-note{font-size:.72rem;color:var(--text-muted);text-align:right}
+.main-content{padding:36px 0 0}
+
+/* Delta badge */
+.delta{font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:10px;margin-left:6px}
+.delta.up{background:var(--iris-light);color:var(--success-mid)}
+.delta.down{background:#FEF2F2;color:#991B1B}
+.delta.neutral{background:var(--brand-light);color:var(--brand-dark)}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container">
+    <div class="header-inner">
+      <div class="header-brand">
+        <div class="header-logo"><img src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-horizontal.svg" alt="Digital AI" onerror="this.style.display='none'"></div>
+        <div>
+          <div class="header-title">Sr. &#211;culos &#8212; Painel de Atendimento</div>
+          <div class="header-sub">Intelig&#234;ncia operacional &#183; Atualizado diariamente</div>
+        </div>
+      </div>
+      <div class="header-badge"><div class="badge-dot"></div><span id="badge-date">Carregando...</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="period-banner">
+  <div class="container">
+    <div class="period-inner">
+      <div>
+        <img src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-negative.svg" alt="Digital AI" style="height:28px;width:auto;display:block;margin-bottom:12px;opacity:.9" onerror="this.style.display='none'">
+        <div class="period-title" id="banner-title">Painel Di&#225;rio de Atendimento</div>
+        <div class="period-sub" id="banner-sub">Carregando dados...</div>
+      </div>
+      <div class="period-pills">
+        <div class="period-pill">Atualiza&#231;&#227;o di&#225;ria</div>
+        <div class="period-pill">WhatsApp + Instagram</div>
+        <div class="period-pill">Atendimento 24/7</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container"><div class="main-content" id="main-content">
+
+  <div class="loading" id="loading">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Carregando dados do painel...</div>
+  </div>
+
+</div></div>
+
+<footer class="footer" id="footer" style="display:none">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo"><img src="https://s3.amazonaws.com/cdn.digital-ai.tech/uploads/media-cortex/identity/digital-ai/logos/logo-horizontal.svg" alt="Digital AI" onerror="this.style.display='none'"></div>
+        <span class="footer-meta">Powered by Digital AI</span>
+      </div>
+      <div class="footer-note">Dados processados automaticamente pelo pipeline de m&#233;tricas Sr. &#211;culos</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const API_URL = 'https://webhook.digital-ai.tech/webhook/sroculos-painel-atendimento';
+
+const OUTCOME_LABELS = {
+  ia_sozinha: 'IA Sozinha',
+  ia_com_transbordo: 'IA + Transbordo',
+  humano_sozinho: 'Humano Sozinho',
+  sem_resposta: 'Sem Resposta',
+  campanha_sem_resposta: 'Campanha s/ Resp.'
+};
+
+const OUTCOME_COLORS = {
+  ia_sozinha: '#059669',
+  ia_com_transbordo: '#2D52EF',
+  humano_sozinho: '#7C3AED',
+  sem_resposta: '#D97706',
+  campanha_sem_resposta: '#94A3B8'
+};
+
+const ATT_COLORS = {
+  'Thais': { bg: '#EDE9FE', fg: '#4C1D95', chart: '#7C3AED' },
+  'Helen': { bg: '#DBEAFE', fg: '#1E40AF', chart: '#3B82F6' },
+  'La\u00edsa': { bg: '#FEE2E2', fg: '#991B1B', chart: '#EF4444' }
+};
+
+const INBOX_NAMES = {
+  66: 'Inbox 66', 70: 'Inbox 70', 86: 'Inbox 86',
+  93: 'Inbox 93', 95: 'Inbox 95', 110: 'Inbox 110', 130: 'Inbox 130'
+};
+
+const CHART_DEFAULTS = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { labels: { font: { family: "'DM Sans',sans-serif", size: 12 }, padding: 16, usePointStyle: true, pointStyleWidth: 8 } },
+    tooltip: { backgroundColor: '#0F1F5C', titleFont: { family: "'Plus Jakarta Sans',sans-serif", weight: 700 }, bodyFont: { family: "'DM Sans',sans-serif" }, padding: 12, cornerRadius: 8, displayColors: true }
+  }
+};
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  const [y, m, d] = iso.split('-');
+  return d + '/' + m + '/' + y;
+}
+
+function fmtNum(n) {
+  return (n || 0).toLocaleString('pt-BR');
+}
+
+function fmtPct(n, total) {
+  if (!total) return '0%';
+  return (n / total * 100).toFixed(1).replace('.', ',') + '%';
+}
+
+function fmtTime(seconds) {
+  if (!seconds && seconds !== 0) return '—';
+  if (seconds < 60) return seconds + 's';
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return m + 'min ' + (s > 0 ? s + 's' : '');
+}
+
+function getVal(arr, key, val) {
+  const row = (arr || []).find(r => r[key] === val);
+  return row ? row.total : 0;
+}
+
+async function loadData() {
+  const resp = await fetch(API_URL);
+  if (!resp.ok) throw new Error('HTTP ' + resp.status);
+  return resp.json();
+}
+
+function render(data) {
+  const d = data.date;
+  const kpis = data.kpis || [];
+  const attendants = data.attendants || [];
+  const hourly = data.hourly || [];
+  const inboxes = data.inboxes || [];
+  const respTime = (data.responseTime || [])[0] || {};
+  const firstResp = data.firstResponder || [];
+  const history = data.history || [];
+
+  // Compute KPI values
+  const totalConvs = kpis.reduce((s, r) => s + (r.total || 0), 0);
+  const iaSozinha = getVal(kpis, 'ai_outcome', 'ia_sozinha');
+  const iaTransbordo = getVal(kpis, 'ai_outcome', 'ia_com_transbordo');
+  const humanoSozinho = getVal(kpis, 'ai_outcome', 'humano_sozinho');
+  const semResposta = getVal(kpis, 'ai_outcome', 'sem_resposta');
+  const nullOutcome = getVal(kpis, 'ai_outcome', null);
+  const iaTotal = iaSozinha + iaTransbordo;
+  const iaParticipacao = totalConvs > 0 ? ((iaTotal / totalConvs) * 100).toFixed(1) : '0';
+
+  // History (previous day)
+  const prevDate = history.length > 0 ? history[0].metric_date : null;
+  const prevTotal = history.reduce((s, r) => s + (r.total || 0), 0);
+
+  // Delta
+  let deltaHtml = '';
+  if (prevTotal > 0) {
+    const diff = totalConvs - prevTotal;
+    const pct = ((diff / prevTotal) * 100).toFixed(0);
+    if (diff > 0) deltaHtml = '<span class="delta up">+' + pct + '%</span>';
+    else if (diff < 0) deltaHtml = '<span class="delta down">' + pct + '%</span>';
+    else deltaHtml = '<span class="delta neutral">0%</span>';
+  }
+
+  // First responder
+  const frIa = getVal(firstResp, 'first_responder_kind', 'ia');
+  const frAtt = getVal(firstResp, 'first_responder_kind', 'atendente');
+  const frTotal = firstResp.reduce((s, r) => s + (r.total || 0), 0);
+
+  // Update header
+  document.getElementById('badge-date').textContent = 'Dados de ' + fmtDate(d);
+  document.getElementById('banner-sub').textContent = fmtDate(d) + ' \u2014 M\u00e9tricas do dia processadas pelo pipeline autom\u00e1tico';
+
+  // Build HTML
+  let html = '';
+
+  // === KPIs ===
+  html += '<div class="section">';
+  html += '<div class="section-header"><span class="section-title">Vis\u00e3o do Dia</span><div class="section-divider"></div><span class="section-meta">' + fmtDate(d) + '</span></div>';
+  html += '<div class="kpi-grid">';
+  html += '<div class="kpi-card brand"><div class="kpi-label">Conversas ' + deltaHtml + '</div><div class="kpi-value">' + fmtNum(totalConvs) + '</div><div class="kpi-sub">conversas no dia' + (prevTotal > 0 ? ' (ontem: ' + fmtNum(prevTotal) + ')' : '') + '</div></div>';
+  html += '<div class="kpi-card success"><div class="kpi-label">IA Sozinha <span class="tip"><span class="tip-icon">?</span><div class="tip-box">Conversas resolvidas 100% pela Iris, sem interven\u00e7\u00e3o humana.</div></span></div><div class="kpi-value">' + fmtNum(iaSozinha) + '</div><div class="kpi-sub">' + fmtPct(iaSozinha, totalConvs) + ' do total</div></div>';
+  html += '<div class="kpi-card brand"><div class="kpi-label">IA + Transbordo <span class="tip"><span class="tip-icon">?</span><div class="tip-box">Conversas iniciadas pela Iris que precisaram de atendente humano.</div></span></div><div class="kpi-value">' + fmtNum(iaTransbordo) + '</div><div class="kpi-sub">' + fmtPct(iaTransbordo, totalConvs) + ' do total</div></div>';
+  html += '<div class="kpi-card warning"><div class="kpi-label">Sem Resposta <span class="tip tip-right"><span class="tip-icon">?</span><div class="tip-box">Conversas onde o cliente n\u00e3o recebeu resposta (IA nem humano).</div></span></div><div class="kpi-value">' + fmtNum(semResposta) + '</div><div class="kpi-sub">' + fmtPct(semResposta, totalConvs) + ' do total</div></div>';
+  html += '</div></div>';
+
+  // === Iris Strip ===
+  html += '<div class="iris-strip"><div class="iris-left"><div class="iris-avatar">\uD83E\uDD16</div><div><div class="iris-name">Iris \u00b7 Agente de IA</div><div class="iris-desc">Atendimento autom\u00e1tico \u00b7 dispon\u00edvel 24h por dia</div></div></div>';
+  html += '<div class="iris-stats">';
+  html += '<div class="iris-stat"><div class="iris-stat-val">' + fmtNum(iaTotal) + '</div><div class="iris-stat-label">conversas com participa\u00e7\u00e3o da IA</div></div>';
+  html += '<div class="iris-stat"><div class="iris-stat-val">' + iaParticipacao.replace('.', ',') + '%</div><div class="iris-stat-label">das conversas do dia</div></div>';
+  html += '<div class="iris-stat"><div class="iris-stat-val">' + fmtPct(frIa, frTotal) + '</div><div class="iris-stat-label">1\u00aa resposta pela IA</div></div>';
+  html += '</div></div>';
+
+  // === Distribuicao por Outcome (donut) + Tempo de Resposta ===
+  html += '<div class="section"><div class="section-header"><span class="section-title">Distribui\u00e7\u00e3o de Atendimento</span><div class="section-divider"></div></div>';
+  html += '<div class="two-col">';
+
+  // Donut chart
+  html += '<div class="chart-card"><div class="chart-card-header"><span class="chart-card-title">Por Tipo de Atendimento</span></div><div class="chart-wrap"><canvas id="chart-outcome"></canvas></div></div>';
+
+  // Response time + first responder
+  html += '<div class="chart-card"><div class="chart-card-header"><span class="chart-card-title">Tempo de Resposta</span></div>';
+  html += '<div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:24px">';
+  html += '<div><div class="kpi-label">M\u00e9dia</div><div class="kpi-value" style="font-size:1.5rem">' + fmtTime(respTime.avg_sec) + '</div><div class="kpi-sub">primeira resposta</div></div>';
+  html += '<div><div class="kpi-label">Mediana</div><div class="kpi-value" style="font-size:1.5rem">' + fmtTime(respTime.median_sec) + '</div><div class="kpi-sub">' + fmtNum(respTime.sample) + ' conversas</div></div>';
+  html += '</div>';
+  html += '<div class="chart-card-title" style="margin-bottom:12px">Primeiro Respondedor</div>';
+  html += '<div class="progress-bar" style="height:12px;margin-bottom:8px">';
+  const frColors = { ia: '#059669', atendente: '#7C3AED', celular: '#3B82F6', null: '#94A3B8' };
+  firstResp.forEach(function(r) {
+    const w = frTotal > 0 ? (r.total / frTotal * 100) : 0;
+    const label = r.first_responder_kind || 'indefinido';
+    html += '<div class="progress-seg" style="width:' + w.toFixed(1) + '%;background:' + (frColors[r.first_responder_kind] || '#94A3B8') + '" title="' + label + ': ' + r.total + '"></div>';
+  });
+  html += '</div>';
+  html += '<div style="display:flex;gap:16px;flex-wrap:wrap;font-size:.78rem">';
+  firstResp.forEach(function(r) {
+    const label = r.first_responder_kind === 'ia' ? 'IA' : r.first_responder_kind === 'atendente' ? 'Atendente' : r.first_responder_kind === 'celular' ? 'Celular' : 'Indefinido';
+    html += '<span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:' + (frColors[r.first_responder_kind] || '#94A3B8') + '"></span>' + label + ': <b>' + r.total + '</b> (' + fmtPct(r.total, frTotal) + ')</span>';
+  });
+  html += '</div>';
+  html += '</div>';
+  html += '</div></div>';
+
+  // === Atendentes ===
+  html += '<div class="section"><div class="section-header"><span class="section-title">Atendentes</span><div class="section-divider"></div></div>';
+  html += '<div class="two-col">';
+
+  // Table
+  html += '<div class="chart-card"><div class="chart-card-header"><span class="chart-card-title">Conversas por Atendente</span></div>';
+  html += '<div class="table-scroll"><table class="data-table"><thead><tr><th>Atendente</th><th class="num">Conversas</th><th class="num">% do Total</th></tr></thead><tbody>';
+  const totalAtt = attendants.reduce((s, r) => s + (r.convs || 0), 0);
+  attendants.forEach(function(r) {
+    const ac = ATT_COLORS[r.att_name] || { bg: '#F1F5F9', fg: '#334155' };
+    const initials = r.att_name.charAt(0);
+    html += '<tr><td><div class="agent-name"><div class="agent-avatar" style="background:' + ac.bg + ';color:' + ac.fg + '">' + initials + '</div><span class="hl">' + r.att_name + '</span></div></td>';
+    html += '<td class="num">' + fmtNum(r.convs) + '</td>';
+    html += '<td class="num">' + fmtPct(r.convs, totalAtt) + '</td></tr>';
+  });
+  html += '</tbody></table></div></div>';
+
+  // Bar chart
+  html += '<div class="chart-card"><div class="chart-card-header"><span class="chart-card-title">Volume por Atendente</span></div><div class="chart-wrap"><canvas id="chart-attendants"></canvas></div></div>';
+  html += '</div></div>';
+
+  // === Atividade por Hora ===
+  html += '<div class="section"><div class="section-header"><span class="section-title">Atividade por Hora</span><div class="section-divider"></div></div>';
+  html += '<div class="chart-card"><div class="chart-card-header"><span class="chart-card-title">Mensagens por Hora do Dia</span></div><div class="chart-wrap" style="height:320px"><canvas id="chart-hourly"></canvas></div></div></div>';
+
+  // === Inboxes ===
+  html += '<div class="section"><div class="section-header"><span class="section-title">Por Canal (Inbox)</span><div class="section-divider"></div></div>';
+  html += '<div class="chart-card"><div class="chart-card-header"><span class="chart-card-title">Distribui\u00e7\u00e3o por Inbox e Tipo</span></div>';
+  html += '<div class="table-scroll"><table class="data-table"><thead><tr><th>Inbox</th><th class="num">IA Sozinha</th><th class="num">IA+Transb.</th><th class="num">Humano</th><th class="num">Sem Resp.</th><th class="num">Total</th></tr></thead><tbody>';
+
+  const inboxMap = {};
+  inboxes.forEach(function(r) {
+    if (!inboxMap[r.inbox_id]) inboxMap[r.inbox_id] = { ia_sozinha: 0, ia_com_transbordo: 0, humano_sozinho: 0, sem_resposta: 0, other: 0 };
+    const o = r.ai_outcome || 'other';
+    if (inboxMap[r.inbox_id][o] !== undefined) inboxMap[r.inbox_id][o] += r.total;
+    else inboxMap[r.inbox_id].other += r.total;
+  });
+  const inboxIds = Object.keys(inboxMap).map(Number).sort(function(a, b) {
+    const ta = inboxMap[a].ia_sozinha + inboxMap[a].ia_com_transbordo + inboxMap[a].humano_sozinho + inboxMap[a].sem_resposta + inboxMap[a].other;
+    const tb = inboxMap[b].ia_sozinha + inboxMap[b].ia_com_transbordo + inboxMap[b].humano_sozinho + inboxMap[b].sem_resposta + inboxMap[b].other;
+    return tb - ta;
+  });
+  inboxIds.forEach(function(id) {
+    const r = inboxMap[id];
+    const t = r.ia_sozinha + r.ia_com_transbordo + r.humano_sozinho + r.sem_resposta + r.other;
+    html += '<tr><td class="hl">' + (INBOX_NAMES[id] || 'Inbox ' + id) + '</td>';
+    html += '<td class="num">' + fmtNum(r.ia_sozinha) + '</td>';
+    html += '<td class="num">' + fmtNum(r.ia_com_transbordo) + '</td>';
+    html += '<td class="num">' + fmtNum(r.humano_sozinho) + '</td>';
+    html += '<td class="num">' + fmtNum(r.sem_resposta) + '</td>';
+    html += '<td class="num hl">' + fmtNum(t) + '</td></tr>';
+  });
+  html += '</tbody></table></div></div></div>';
+
+  // === History ===
+  if (history.length > 0 && prevDate) {
+    html += '<div class="section"><div class="section-header"><span class="section-title">Comparativo com Dia Anterior</span><div class="section-divider"></div><span class="section-meta">' + fmtDate(prevDate) + '</span></div>';
+    html += '<div class="chart-card"><div class="chart-card-header"><span class="chart-card-title">Ontem vs Hoje</span></div>';
+    html += '<div class="chart-wrap"><canvas id="chart-history"></canvas></div></div></div>';
+  }
+
+  // Render
+  document.getElementById('main-content').innerHTML = html;
+  document.getElementById('footer').style.display = '';
+
+  // === Charts ===
+  renderCharts(data, totalConvs, iaSozinha, iaTransbordo, humanoSozinho, semResposta, nullOutcome, attendants, hourly, history, prevDate);
+}
+
+function renderCharts(data, totalConvs, iaSozinha, iaTransbordo, humanoSozinho, semResposta, nullOutcome, attendants, hourly, history, prevDate) {
+  // Outcome donut
+  new Chart(document.getElementById('chart-outcome'), {
+    type: 'doughnut',
+    data: {
+      labels: ['IA Sozinha', 'IA + Transbordo', 'Humano Sozinho', 'Sem Resposta', 'Outros'],
+      datasets: [{
+        data: [iaSozinha, iaTransbordo, humanoSozinho, semResposta, nullOutcome],
+        backgroundColor: ['#059669', '#2D52EF', '#7C3AED', '#D97706', '#94A3B8'],
+        borderWidth: 0, hoverOffset: 6
+      }]
+    },
+    options: {
+      ...CHART_DEFAULTS,
+      cutout: '65%',
+      plugins: {
+        ...CHART_DEFAULTS.plugins,
+        legend: { ...CHART_DEFAULTS.plugins.legend, position: 'bottom' },
+        tooltip: {
+          ...CHART_DEFAULTS.plugins.tooltip,
+          callbacks: { label: function(ctx) { return ctx.label + ': ' + ctx.parsed + ' (' + (totalConvs > 0 ? (ctx.parsed / totalConvs * 100).toFixed(1) : 0) + '%)'; } }
+        }
+      }
+    }
+  });
+
+  // Attendants bar
+  if (attendants.length > 0) {
+    new Chart(document.getElementById('chart-attendants'), {
+      type: 'bar',
+      data: {
+        labels: attendants.map(function(r) { return r.att_name; }),
+        datasets: [{
+          label: 'Conversas',
+          data: attendants.map(function(r) { return r.convs; }),
+          backgroundColor: attendants.map(function(r) { return (ATT_COLORS[r.att_name] || {}).chart || '#94A3B8'; }),
+          borderRadius: 6, maxBarThickness: 60
+        }]
+      },
+      options: {
+        ...CHART_DEFAULTS,
+        indexAxis: 'y',
+        plugins: { ...CHART_DEFAULTS.plugins, legend: { display: false } },
+        scales: {
+          x: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { font: { family: "'DM Sans',sans-serif" } } },
+          y: { grid: { display: false }, ticks: { font: { family: "'Plus Jakarta Sans',sans-serif", weight: 600 } } }
+        }
+      }
+    });
+  }
+
+  // Hourly stacked bar
+  if (hourly.length > 0) {
+    const hours = [];
+    for (var h = 0; h < 24; h++) hours.push(h);
+    const senderKinds = ['cliente', 'ia', 'atendente', 'celular', 'outro_humano', 'sem_remetente'];
+    const senderLabels = { cliente: 'Cliente', ia: 'IA', atendente: 'Atendente', celular: 'Celular', outro_humano: 'Outro', sem_remetente: 'Indefinido' };
+    const senderColors = { cliente: '#64748B', ia: '#059669', atendente: '#7C3AED', celular: '#3B82F6', outro_humano: '#F59E0B', sem_remetente: '#CBD5E1' };
+    const hourlyMap = {};
+    hourly.forEach(function(r) {
+      var key = r.hour_of_day + '_' + r.sender_kind;
+      hourlyMap[key] = r.total_msgs;
+    });
+    var activeSenders = senderKinds.filter(function(sk) {
+      return hours.some(function(h) { return (hourlyMap[h + '_' + sk] || 0) > 0; });
+    });
+    new Chart(document.getElementById('chart-hourly'), {
+      type: 'bar',
+      data: {
+        labels: hours.map(function(h) { return h + 'h'; }),
+        datasets: activeSenders.map(function(sk) {
+          return {
+            label: senderLabels[sk] || sk,
+            data: hours.map(function(h) { return hourlyMap[h + '_' + sk] || 0; }),
+            backgroundColor: senderColors[sk] || '#94A3B8',
+            borderRadius: 2, maxBarThickness: 28
+          };
+        })
+      },
+      options: {
+        ...CHART_DEFAULTS,
+        plugins: { ...CHART_DEFAULTS.plugins, legend: { ...CHART_DEFAULTS.plugins.legend, position: 'top' } },
+        scales: {
+          x: { stacked: true, grid: { display: false }, ticks: { font: { family: "'DM Sans',sans-serif", size: 11 } } },
+          y: { stacked: true, grid: { color: 'rgba(0,0,0,.04)' }, ticks: { font: { family: "'DM Sans',sans-serif" } } }
+        }
+      }
+    });
+  }
+
+  // History comparison
+  if (history.length > 0 && prevDate && document.getElementById('chart-history')) {
+    const outcomes = ['ia_sozinha', 'ia_com_transbordo', 'humano_sozinho', 'sem_resposta'];
+    const labels = outcomes.map(function(o) { return OUTCOME_LABELS[o] || o; });
+    const todayVals = [iaSozinha, iaTransbordo, humanoSozinho, semResposta];
+    const prevVals = outcomes.map(function(o) { return getVal(history, 'ai_outcome', o); });
+    new Chart(document.getElementById('chart-history'), {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          { label: 'Ontem (' + fmtDate(prevDate) + ')', data: prevVals, backgroundColor: 'rgba(45,82,239,.25)', borderColor: '#2D52EF', borderWidth: 1, borderRadius: 4, maxBarThickness: 50 },
+          { label: 'Hoje (' + fmtDate(data.date) + ')', data: todayVals, backgroundColor: 'rgba(5,150,105,.7)', borderColor: '#059669', borderWidth: 1, borderRadius: 4, maxBarThickness: 50 }
+        ]
+      },
+      options: {
+        ...CHART_DEFAULTS,
+        plugins: { ...CHART_DEFAULTS.plugins, legend: { ...CHART_DEFAULTS.plugins.legend, position: 'top' } },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { family: "'DM Sans',sans-serif" } } },
+          y: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { font: { family: "'DM Sans',sans-serif" } } }
+        }
+      }
+    });
+  }
+}
+
+// Init
+loadData()
+  .then(render)
+  .catch(function(err) {
+    document.getElementById('main-content').innerHTML = '<div class="error-box">Erro ao carregar dados: ' + err.message + '<br>Tente recarregar a p\u00e1gina.</div>';
+    console.error('API Error:', err);
+  });
+</script>
+</body>
+</html>
