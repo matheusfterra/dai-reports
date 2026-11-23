@@ -48,16 +48,20 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
 .period-pills{display:flex;gap:10px;flex-wrap:wrap}
 .period-pill{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:5px 14px;font-size:.78rem;font-weight:600;letter-spacing:.3px}
 
-/* Date Filter */
-.date-filter{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.date-filter select{appearance:none;-webkit-appearance:none;background:rgba(255,255,255,.15) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 5l3 3 3-3' fill='none' stroke='%23fff' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 12px center;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:8px 32px 8px 14px;color:#fff;font-family:var(--font-body);font-size:.85rem;font-weight:500;cursor:pointer;min-width:150px;transition:border-color .15s,background .15s}
-.date-filter select:hover{background-color:rgba(255,255,255,.25);border-color:rgba(255,255,255,.5)}
-.date-filter select:focus{outline:none;border-color:rgba(255,255,255,.6);box-shadow:0 0 0 3px rgba(255,255,255,.15)}
-.date-filter select option{background:var(--brand-dark);color:#fff}
-.date-filter label{font-size:.78rem;font-weight:600;opacity:.8;letter-spacing:.3px}
-.btn-today{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:8px 16px;color:#fff;font-family:var(--font-head);font-size:.78rem;font-weight:700;cursor:pointer;transition:all .15s;letter-spacing:.3px}
-.btn-today:hover{background:rgba(255,255,255,.35);border-color:rgba(255,255,255,.5)}
-.btn-today.active{background:rgba(255,255,255,.35);border-color:#fff}
+/* Date Filter — Presets */
+.date-filter{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.date-presets{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.preset-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:7px 14px;color:#fff;font-family:var(--font-head);font-size:.75rem;font-weight:600;cursor:pointer;transition:all .15s;letter-spacing:.2px;white-space:nowrap}
+.preset-btn:hover{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.5)}
+.preset-btn.active{background:rgba(255,255,255,.35);border-color:#fff;font-weight:700}
+.custom-range{display:none;align-items:center;gap:8px;flex-wrap:wrap}
+.custom-range.visible{display:flex}
+.custom-range label{font-size:.75rem;font-weight:600;opacity:.8;letter-spacing:.3px;color:#fff}
+.custom-range input[type="date"]{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:7px 12px;color:#fff;font-family:var(--font-body);font-size:.82rem;font-weight:500;cursor:pointer;transition:border-color .15s,background .15s;color-scheme:dark}
+.custom-range input[type="date"]:hover{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.5)}
+.custom-range input[type="date"]:focus{outline:none;border-color:rgba(255,255,255,.6);box-shadow:0 0 0 3px rgba(255,255,255,.15)}
+.custom-range .btn-apply{background:rgba(255,255,255,.25);border:1px solid rgba(255,255,255,.4);border-radius:8px;padding:7px 16px;color:#fff;font-family:var(--font-head);font-size:.75rem;font-weight:700;cursor:pointer;transition:all .15s;letter-spacing:.2px}
+.custom-range .btn-apply:hover{background:rgba(255,255,255,.4);border-color:#fff}
 
 /* Section header */
 .section-header{display:flex;align-items:baseline;gap:10px;margin-bottom:20px}
@@ -203,11 +207,24 @@ h1,h2,h3,h4,h5{font-family:var(--font-head)}
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:12px">
         <div class="date-filter">
-          <label>De</label>
-          <select id="filter-start"></select>
-          <label>At&#233;</label>
-          <select id="filter-end"></select>
-          <button class="btn-today" id="btn-today" title="Ir para a data mais recente">Hoje</button>
+          <div class="date-presets" id="date-presets">
+            <button class="preset-btn" data-preset="today">Hoje</button>
+            <button class="preset-btn" data-preset="yesterday">Ontem</button>
+            <button class="preset-btn" data-preset="this_week">Esta Semana</button>
+            <button class="preset-btn" data-preset="last_week">Semana Passada</button>
+            <button class="preset-btn" data-preset="this_month">Este M&#234;s</button>
+            <button class="preset-btn" data-preset="last_month">M&#234;s Passado</button>
+            <button class="preset-btn" data-preset="last_7">&#218;ltimos 7 dias</button>
+            <button class="preset-btn" data-preset="last_30">&#218;ltimos 30 dias</button>
+            <button class="preset-btn" data-preset="custom">Personalizado</button>
+          </div>
+          <div class="custom-range" id="custom-range">
+            <label>De</label>
+            <input type="date" id="filter-start">
+            <label>At&#233;</label>
+            <input type="date" id="filter-end">
+            <button class="btn-apply" id="btn-apply">Aplicar</button>
+          </div>
         </div>
         <div class="period-pills">
           <div class="period-pill">WhatsApp + Instagram</div>
@@ -279,6 +296,7 @@ const CHART_DEFAULTS = {
 // State
 let availableDates = [];
 let currentCharts = [];
+let activePreset = 'today';
 
 function fmtDate(iso) {
   if (!iso) return '\u2014';
@@ -302,6 +320,94 @@ function getVal(arr, key, val) {
   return row ? row.total : 0;
 }
 
+function isoDate(d) { return d.toISOString().slice(0, 10); }
+
+function calcPresetRange(preset) {
+  // All dates in BRT (America/Sao_Paulo)
+  var now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+  var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var dow = today.getDay(); // 0=Sun
+  var sd, ed;
+
+  switch (preset) {
+    case 'today':
+      sd = ed = today;
+      break;
+    case 'yesterday':
+      sd = ed = new Date(today); sd.setDate(sd.getDate() - 1);
+      break;
+    case 'this_week':
+      sd = new Date(today); sd.setDate(sd.getDate() - (dow === 0 ? 6 : dow - 1)); // Monday
+      ed = today;
+      break;
+    case 'last_week':
+      sd = new Date(today); sd.setDate(sd.getDate() - (dow === 0 ? 6 : dow - 1) - 7);
+      ed = new Date(sd); ed.setDate(ed.getDate() + 6);
+      break;
+    case 'this_month':
+      sd = new Date(today.getFullYear(), today.getMonth(), 1);
+      ed = today;
+      break;
+    case 'last_month':
+      sd = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+      ed = new Date(today.getFullYear(), today.getMonth(), 0); // last day prev month
+      break;
+    case 'last_7':
+      sd = new Date(today); sd.setDate(sd.getDate() - 6);
+      ed = today;
+      break;
+    case 'last_30':
+      sd = new Date(today); sd.setDate(sd.getDate() - 29);
+      ed = today;
+      break;
+    default:
+      return null;
+  }
+  return { start: isoDate(sd), end: isoDate(ed) };
+}
+
+function clampToAvailable(start, end) {
+  if (!availableDates.length) return { start: start, end: end };
+  var sorted = availableDates.slice().sort();
+  var minD = sorted[0], maxD = sorted[sorted.length - 1];
+  if (start < minD) start = minD;
+  if (end > maxD) end = maxD;
+  if (start > end) start = end;
+  return { start: start, end: end };
+}
+
+function setActivePresetBtn(preset) {
+  activePreset = preset;
+  document.querySelectorAll('.preset-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.preset === preset);
+  });
+  var cr = document.getElementById('custom-range');
+  if (preset === 'custom') {
+    cr.classList.add('visible');
+  } else {
+    cr.classList.remove('visible');
+  }
+}
+
+function onPresetClick(preset) {
+  setActivePresetBtn(preset);
+  if (preset === 'custom') return; // just show the inputs
+  var range = calcPresetRange(preset);
+  if (!range) return;
+  var clamped = clampToAvailable(range.start, range.end);
+  document.getElementById('filter-start').value = clamped.start;
+  document.getElementById('filter-end').value = clamped.end;
+  fetchAndRender(clamped.start, clamped.end);
+}
+
+function onApplyCustom() {
+  var sd = document.getElementById('filter-start').value;
+  var ed = document.getElementById('filter-end').value;
+  if (!sd || !ed) return;
+  if (sd > ed) { var tmp = sd; sd = ed; ed = tmp; }
+  fetchAndRender(sd, ed);
+}
+
 async function loadData(startDate, endDate) {
   let url = API_URL;
   const params = [];
@@ -315,46 +421,16 @@ async function loadData(startDate, endDate) {
 
 function populateDateFilters(dates, startDate, endDate) {
   availableDates = dates || [];
-  const selStart = document.getElementById('filter-start');
-  const selEnd = document.getElementById('filter-end');
-  selStart.innerHTML = '';
-  selEnd.innerHTML = '';
-  availableDates.forEach(function(d) {
-    const optS = document.createElement('option');
-    optS.value = d; optS.textContent = fmtDate(d);
-    if (d === startDate) optS.selected = true;
-    selStart.appendChild(optS);
-    const optE = document.createElement('option');
-    optE.value = d; optE.textContent = fmtDate(d);
-    if (d === endDate) optE.selected = true;
-    selEnd.appendChild(optE);
-  });
-
-  // Update "Hoje" button state
-  const btnToday = document.getElementById('btn-today');
-  const latestDate = availableDates.length > 0 ? availableDates[0] : null;
-  if (latestDate && startDate === latestDate && endDate === latestDate) {
-    btnToday.classList.add('active');
-  } else {
-    btnToday.classList.remove('active');
-  }
-}
-
-function onDateChange() {
-  const sd = document.getElementById('filter-start').value;
-  const ed = document.getElementById('filter-end').value;
-  if (sd > ed) {
-    document.getElementById('filter-end').value = sd;
-  }
-  fetchAndRender(document.getElementById('filter-start').value, document.getElementById('filter-end').value);
-}
-
-function onTodayClick() {
-  const latest = availableDates.length > 0 ? availableDates[0] : null;
-  if (latest) {
-    document.getElementById('filter-start').value = latest;
-    document.getElementById('filter-end').value = latest;
-    fetchAndRender(latest, latest);
+  document.getElementById('filter-start').value = startDate || '';
+  document.getElementById('filter-end').value = endDate || '';
+  // Set min/max on date inputs
+  if (availableDates.length) {
+    var sorted = availableDates.slice().sort();
+    var minD = sorted[0], maxD = sorted[sorted.length - 1];
+    document.getElementById('filter-start').min = minD;
+    document.getElementById('filter-start').max = maxD;
+    document.getElementById('filter-end').min = minD;
+    document.getElementById('filter-end').max = maxD;
   }
 }
 
@@ -706,10 +782,13 @@ function renderCharts(data, totalConvs, iaSozinha, iaTransbordo, humanoSozinho, 
   }
 }
 
-// Init
-document.getElementById('filter-start').addEventListener('change', onDateChange);
-document.getElementById('filter-end').addEventListener('change', onDateChange);
-document.getElementById('btn-today').addEventListener('click', onTodayClick);
+// Init — preset buttons
+document.querySelectorAll('.preset-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() { onPresetClick(btn.dataset.preset); });
+});
+document.getElementById('btn-apply').addEventListener('click', onApplyCustom);
+// Default: load today
+setActivePresetBtn('today');
 fetchAndRender();
 </script>
 </body>
